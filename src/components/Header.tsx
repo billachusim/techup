@@ -28,10 +28,13 @@ const Header = () => {
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex items-center justify-center gap-3">
-          <img src={logo} alt="Tech Faculty Logo" className="h-8 w-8" />
-          <span className="text-lg font-semibold">Tech Faculty</span>
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex items-center gap-3">
+          <img src={logo} alt="Tech Faculty Logo" className="h-10 w-10" />
+          <div>
+            <div className="text-xl font-bold">Tech Faculty</div>
+            <div className="text-xs text-muted-foreground">Get Trained, Certified, and Employed</div>
+          </div>
         </div>
       </div>
     </header>

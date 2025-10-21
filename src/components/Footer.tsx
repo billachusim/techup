@@ -1,167 +1,61 @@
-import { Facebook, Twitter, Linkedin, Instagram, Youtube } from "lucide-react";
-import logo from "@/assets/tech-faculty-logo.png";
+import { Facebook, Linkedin, MessageCircle, Mail } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-secondary border-t border-border py-12">
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-4 gap-8 mb-8">
+    <footer className="py-16 px-4 border-t border-border">
+      <div className="container mx-auto max-w-4xl">
+        <div className="text-center space-y-8">
           {/* Brand */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <img src={logo} alt="Tech Faculty Logo" className="h-10 w-10" />
-              <span className="text-xl font-bold text-gradient">Tech Faculty</span>
-            </div>
+          <div className="space-y-2">
+            <h3 className="text-2xl font-bold">Tech Faculty</h3>
             <p className="text-sm text-muted-foreground">
-              Empowering Africa's next generation of tech leaders. Get trained,
-              certified, and employed.
+              Get trained, certified, and employed.
             </p>
-            <div className="flex gap-3">
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all"
-              >
-                <Facebook size={20} />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all"
-              >
-                <Twitter size={20} />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all"
-              >
-                <Linkedin size={20} />
-              </a>
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all"
-              >
-                <Instagram size={20} />
-              </a>
-              <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all"
-              >
-                <Youtube size={20} />
-              </a>
-            </div>
           </div>
 
-          {/* Departments */}
-          <div>
-            <h4 className="font-semibold mb-4 text-primary">Departments</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>
-                <a href="#departments" className="hover:text-primary transition-colors">
-                  Web Development
-                </a>
-              </li>
-              <li>
-                <a href="#departments" className="hover:text-primary transition-colors">
-                  Data Science
-                </a>
-              </li>
-              <li>
-                <a href="#departments" className="hover:text-primary transition-colors">
-                  Cybersecurity
-                </a>
-              </li>
-              <li>
-                <a href="#departments" className="hover:text-primary transition-colors">
-                  AI & Machine Learning
-                </a>
-              </li>
-              <li>
-                <a href="#departments" className="hover:text-primary transition-colors">
-                  Cloud Computing
-                </a>
-              </li>
-            </ul>
+          {/* Contact */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center text-sm">
+            <a
+              href="mailto:hello@techfaculty.com"
+              className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+            >
+              <Mail size={16} />
+              hello@techfaculty.com
+            </a>
+            <a
+              href="https://wa.me/1234567890"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+            >
+              <MessageCircle size={16} />
+              WhatsApp
+            </a>
           </div>
 
-          {/* Company */}
-          <div>
-            <h4 className="font-semibold mb-4 text-primary">Company</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Our Story
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Careers
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Partner Companies
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Contact Us
-                </a>
-              </li>
-            </ul>
+          {/* Social Links */}
+          <div className="flex gap-4 justify-center">
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              <Facebook size={20} />
+            </a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              <Linkedin size={20} />
+            </a>
           </div>
 
-          {/* Resources */}
-          <div>
-            <h4 className="font-semibold mb-4 text-primary">Resources</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Success Stories
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  FAQs
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Terms & Conditions
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  Privacy Policy
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-border text-center text-sm text-muted-foreground">
-          <p>
-            © {new Date().getFullYear()} Tech Faculty. All rights reserved. Empowering
-            Africa's Tech Future.
+          {/* Copyright */}
+          <p className="text-sm text-muted-foreground">
+            © Tech Faculty {new Date().getFullYear()}. All rights reserved.
           </p>
         </div>
       </div>

@@ -60,22 +60,22 @@ const testimonials = [
 
 const Testimonials = () => {
   return (
-    <section id="testimonials" className="py-20 bg-background">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+    <section id="testimonials" className="py-24 px-4 bg-secondary">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            Success <span className="text-gradient">Stories</span>
+            Success Stories
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Hear from our alumni who are now thriving in top tech companies worldwide.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial, idx) => (
             <Card
               key={idx}
-              className="bg-card border-border hover:border-primary/50 transition-all hover:shadow-lg"
+              className="bg-card border-border"
             >
               <CardContent className="p-6 space-y-4">
                 {/* Rating */}
@@ -86,7 +86,7 @@ const Testimonials = () => {
                 </div>
 
                 {/* Content */}
-                <p className="text-muted-foreground italic">
+                <p className="text-muted-foreground">
                   &quot;{testimonial.content}&quot;
                 </p>
 

@@ -119,30 +119,26 @@ const pricingPlans = [
 
 const Pricing = () => {
   return (
-    <section id="pricing" className="py-20 bg-secondary/30">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+    <section id="pricing" className="py-24 px-4">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            Choose Your <span className="text-gradient">Path</span>
+            Choose Your Path
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Flexible packages designed for every career goal. All paid plans include
             our 100% ROI guarantee.
           </p>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium">
-            <Zap size={16} />
-            <span>Earn back your tuition starting from month 3!</span>
-          </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {pricingPlans.map((plan, idx) => {
             const Icon = plan.icon;
             return (
               <Card
                 key={idx}
-                className={`relative bg-card border-border hover:border-primary/50 transition-all ${
-                  plan.popular ? "border-primary shadow-lg scale-105" : ""
+                className={`relative bg-card border-border ${
+                  plan.popular ? "border-primary" : ""
                 }`}
               >
                 {plan.popular && (
@@ -180,7 +176,7 @@ const Pricing = () => {
 
                 <CardFooter>
                   <Button
-                    variant={plan.popular ? "hero" : "outline"}
+                    variant="outline"
                     className="w-full"
                     size="lg"
                     onClick={() => window.open("https://forms.gle/example", "_blank")}
@@ -194,8 +190,8 @@ const Pricing = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="mt-16 text-center max-w-3xl mx-auto">
-          <Card className="bg-gradient-to-r from-card to-primary/5 border-primary/20">
+        <div className="mt-16 text-center max-w-2xl mx-auto">
+          <Card className="bg-card border-border">
             <CardContent className="p-8">
               <h3 className="text-2xl md:text-3xl font-bold mb-4">
                 Need a Custom Package?
@@ -205,8 +201,8 @@ const Pricing = () => {
                 call with our team to create the perfect plan for your goals.
               </p>
               <Button
-                variant="hero"
                 size="lg"
+                className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-primary-foreground hover:opacity-90"
                 onClick={() => window.open("https://calendly.com/example", "_blank")}
               >
                 Book a Call

@@ -43,13 +43,13 @@ const Hero = () => {
       <div className="container mx-auto max-w-4xl text-center space-y-8 relative z-10">
         {/* Main Heading */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-          Get trained. Get certified.{" "}
-          <span className="text-gradient">Get employed.</span>
+          Get Trained, Certified and{" "}
+          <span className="text-gradient">Employed.</span>
         </h1>
 
         {/* Subheading */}
         <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Tech Faculty transforms Nigeria and Africa's youth into world-class tech professionals. Learn cutting-edge skills, earn globally recognized certifications, and start working with top companies—all while earning from month 3. Your tech career starts here.
+          Transform your future with Tech Faculty—Africa's premier tech training platform. We equip you with industry-relevant skills, globally recognized certifications, and direct employment pathways with leading companies. Start earning from month 3 with our paid internship model and enjoy a 100% return on your tuition investment within your first year of employment. Your journey from learner to earner starts here.
         </p>
 
         {/* CTAs */}

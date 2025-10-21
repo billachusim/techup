@@ -8,6 +8,8 @@ import {
   Cloud,
   Cpu,
   ChevronDown,
+  Smartphone,
+  Globe,
 } from "lucide-react";
 import {
   Accordion,
@@ -29,6 +31,20 @@ const departments = [
       "Node.js & Express",
       "Full-Stack Development",
       "UI/UX Design Basics",
+    ],
+  },
+  {
+    id: "mobile-dev",
+    title: "Mobile App Development",
+    icon: Smartphone,
+    description:
+      "Create powerful mobile applications for iOS and Android platforms.",
+    courses: [
+      "React Native Development",
+      "Flutter & Dart",
+      "iOS Development with Swift",
+      "Android Development with Kotlin",
+      "Mobile UI/UX Design",
     ],
   },
   {
@@ -71,6 +87,20 @@ const departments = [
       "Natural Language Processing",
       "Computer Vision",
       "AI Model Deployment",
+    ],
+  },
+  {
+    id: "basic-internet-ai",
+    title: "Basic Internet & AI Studies",
+    icon: Globe,
+    description:
+      "Start your digital journey with foundational internet skills and AI literacy.",
+    courses: [
+      "Internet Basics & Digital Literacy",
+      "AI Tools for Everyday Use",
+      "ChatGPT & AI Assistants",
+      "Online Safety & Privacy",
+      "Digital Communication Skills",
     ],
   },
   {
@@ -140,7 +170,7 @@ const Departments = () => {
             Our Departments
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Everything you need to build, grow, and scale your tech career.
+            Join a thriving community of innovators. Each department is more than just courses—it's your tribe, your co-working space, your alumni network, and a hub of extracurricular activities. Build skills, forge connections, and grow together.
           </p>
         </div>
 

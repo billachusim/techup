@@ -74,30 +74,32 @@ const Companies = () => {
           </p>
         </div>
 
-        {/* Job Cards Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {jobs.map((job, index) => (
-            <div
-              key={index}
-              className="bg-card border border-border rounded-lg p-6 space-y-4 hover:shadow-lg transition-all hover:-translate-y-1"
-            >
-              <div className="flex items-start justify-between">
-                <div className="text-4xl">{job.logo}</div>
-                <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-medium">
-                  {job.type}
-                </span>
-              </div>
-              
-              <div className="space-y-2">
-                <h3 className="font-semibold text-lg">{job.company}</h3>
-                <p className="text-sm font-medium text-foreground">{job.role}</p>
-                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <MapPin size={12} />
-                  <span>{job.location}</span>
+        {/* Job Cards Scrollable */}
+        <div className="relative mb-12">
+          <div className="overflow-y-auto max-h-[600px] px-2 pb-20 -mb-16 space-y-6">
+            {jobs.map((job, index) => (
+              <div
+                key={index}
+                className="bg-card border border-border rounded-lg p-6 space-y-4 hover:shadow-lg transition-all hover:-translate-y-1"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="text-4xl">{job.logo}</div>
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-medium">
+                    {job.type}
+                  </span>
+                </div>
+                
+                <div className="space-y-2">
+                  <h3 className="font-semibold text-lg">{job.company}</h3>
+                  <p className="text-sm font-medium text-foreground">{job.role}</p>
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <MapPin size={12} />
+                    <span>{job.location}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* CTA */}

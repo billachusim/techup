@@ -6,6 +6,7 @@ const testimonials = [
     name: "Sarah Okafor",
     role: "Frontend Developer",
     company: "Microsoft",
+    department: "Web Development",
     image: "👩🏾‍💻",
     content:
       "Tech Faculty transformed my career. The hands-on training and internship program helped me land my dream job at Microsoft within 6 months!",
@@ -15,6 +16,7 @@ const testimonials = [
     name: "David Mensah",
     role: "Data Analyst",
     company: "Google",
+    department: "Data Science & Analytics",
     image: "👨🏿‍💼",
     content:
       "The Work & Earn program was a game-changer. I recovered my tuition by month 4 and now work full-time at Google. Highly recommend!",
@@ -24,6 +26,7 @@ const testimonials = [
     name: "Amina Hassan",
     role: "Cybersecurity Specialist",
     company: "Deloitte",
+    department: "Cybersecurity",
     image: "👩🏽‍💻",
     content:
       "The instructors are world-class, and the curriculum is always up-to-date with industry demands. Best investment I ever made.",
@@ -33,6 +36,7 @@ const testimonials = [
     name: "James Njoroge",
     role: "Cloud Engineer",
     company: "Amazon Web Services",
+    department: "Cloud Computing",
     image: "👨🏾‍💻",
     content:
       "From zero knowledge to AWS certified in 6 months. The practical approach and career support made all the difference.",
@@ -42,6 +46,7 @@ const testimonials = [
     name: "Zainab Ibrahim",
     role: "AI Engineer",
     company: "IBM",
+    department: "AI & Machine Learning",
     image: "👩🏾‍🔬",
     content:
       "Tech Faculty's AI program is comprehensive and practical. Now I'm building ML models at IBM and loving every moment!",
@@ -51,6 +56,7 @@ const testimonials = [
     name: "Kwame Asante",
     role: "Full-Stack Developer",
     company: "Stripe",
+    department: "Web Development",
     image: "👨🏿‍💻",
     content:
       "The training was intense but worth it. Secured an internship that turned into a full-time offer at Stripe. Forever grateful!",
@@ -97,6 +103,9 @@ const Testimonials = () => {
                     <div className="font-semibold">{testimonial.name}</div>
                     <div className="text-sm text-muted-foreground">
                       {testimonial.role} at {testimonial.company}
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-1">
+                      {testimonial.department} Alumni
                     </div>
                   </div>
                 </div>

@@ -10,6 +10,7 @@ import {
   ChevronDown,
   Smartphone,
   Globe,
+  ExternalLink,
 } from "lucide-react";
 import {
   Accordion,
@@ -17,6 +18,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 
 const departments = [
   {
@@ -191,15 +193,33 @@ const Departments = () => {
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="px-6 pb-6">
-                  <div className="pt-4 space-y-2">
-                    {dept.courses.map((course, idx) => (
-                      <div
-                        key={idx}
-                        className="text-sm text-muted-foreground py-1"
+                  <div className="pt-4 space-y-4">
+                    <div className="space-y-2">
+                      {dept.courses.map((course, idx) => (
+                        <div
+                          key={idx}
+                          className="text-sm text-muted-foreground py-1"
+                        >
+                          • {course}
+                        </div>
+                      ))}
+                    </div>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      className="w-full sm:w-auto"
+                      asChild
+                    >
+                      <a 
+                        href="https://join.slack.com/t/techfaculty/shared_invite/your-invite-link" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2"
                       >
-                        • {course}
-                      </div>
-                    ))}
+                        Join Community
+                        <ExternalLink size={14} />
+                      </a>
+                    </Button>
                   </div>
                 </AccordionContent>
               </AccordionItem>

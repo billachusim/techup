@@ -1,7 +1,36 @@
-import { Briefcase, MapPin } from "lucide-react";
+import { Briefcase, MapPin, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const Companies = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [facultyId, setFacultyId] = useState("");
+  const [selectedJob, setSelectedJob] = useState<string>("");
+
+  const handleApply = (company: string) => {
+    setSelectedJob(company);
+    setIsDialogOpen(true);
+  };
+
+  const handleSubmit = () => {
+    if (facultyId.trim()) {
+      // Here you would handle the application submission
+      window.open("https://forms.gle/example", "_blank");
+      setIsDialogOpen(false);
+      setFacultyId("");
+    }
+  };
+
   const jobs = [
     {
       company: "Flutterwave",
@@ -90,13 +119,24 @@ const Companies = () => {
                     </span>
                   </div>
                   
-                  <div className="space-y-2">
-                    <h3 className="font-semibold text-lg">{job.company}</h3>
-                    <p className="text-sm font-medium text-foreground">{job.role}</p>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <MapPin size={12} />
-                      <span>{job.location}</span>
+                  <div className="space-y-3">
+                    <div>
+                      <h3 className="font-semibold text-lg">{job.company}</h3>
+                      <p className="text-sm font-medium text-foreground">{job.role}</p>
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+                        <MapPin size={12} />
+                        <span>{job.location}</span>
+                      </div>
                     </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => handleApply(job.company)}
+                    >
+                      Apply Now
+                      <ExternalLink size={14} className="ml-2" />
+                    </Button>
                   </div>
                 </div>
               ))}
@@ -119,6 +159,43 @@ const Companies = () => {
           </Button>
         </div>
       </div>
+
+      {/* Faculty ID Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Apply to {selectedJob}</DialogTitle>
+            <DialogDescription>
+              Enter your Faculty ID to proceed with your application.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="facultyId">Faculty ID</Label>
+              <Input
+                id="facultyId"
+                placeholder="Enter your Faculty ID"
+                value={facultyId}
+                onChange={(e) => setFacultyId(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsDialogOpen(false);
+                setFacultyId("");
+              }}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleSubmit} disabled={!facultyId.trim()}>
+              Continue to Application
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

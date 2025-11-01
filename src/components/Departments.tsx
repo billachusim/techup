@@ -211,7 +211,7 @@ const Departments = () => {
                       asChild
                     >
                       <a 
-                        href="https://join.slack.com/t/techfaculty/shared_invite/your-invite-link" 
+                        href="https://chat.whatsapp.com/GCnw88T0nxs5oabYgcqXKt" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="flex items-center gap-2"

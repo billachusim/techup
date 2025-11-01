@@ -2,6 +2,8 @@ import { Check, Sparkles, Zap, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
 const pricingPlans = [
   {
@@ -11,14 +13,16 @@ const pricingPlans = [
     description: "Perfect for beginners exploring tech careers",
     features: [
       "Intro to Programming",
-      "HTML & CSS Basics",
+      "Intro to AI & ChatGPT",
       "Git & GitHub Fundamentals",
       "Tech Career Guidance",
       "Community Access",
       "Self-Paced Learning",
+      "Basic Digital Literacy",
     ],
     cta: "Start Free",
     popular: false,
+    isFree: true,
   },
   {
     name: "Developer Pro",
@@ -27,6 +31,7 @@ const pricingPlans = [
     period: "/3 months",
     description: "Comprehensive web development mastery",
     features: [
+      "Everything in Bootcamp Plan plus:",
       "Full-Stack Web Development",
       "React & Node.js",
       "Database Management",
@@ -38,6 +43,7 @@ const pricingPlans = [
     ],
     cta: "Enrol Now",
     popular: true,
+    isFree: false,
   },
   {
     name: "Data Wizard",
@@ -46,6 +52,7 @@ const pricingPlans = [
     period: "/3 months",
     description: "Master data science and analytics",
     features: [
+      "Everything in Bootcamp Plan plus:",
       "Python & SQL Mastery",
       "Data Visualization",
       "Statistical Analysis",
@@ -57,6 +64,7 @@ const pricingPlans = [
     ],
     cta: "Start Learning",
     popular: false,
+    isFree: false,
   },
   {
     name: "Security Shield",
@@ -65,6 +73,7 @@ const pricingPlans = [
     period: "/4 months",
     description: "Become a cybersecurity expert",
     features: [
+      "Everything in Bootcamp Plan plus:",
       "Network Security",
       "Ethical Hacking",
       "SOC Operations",
@@ -76,6 +85,7 @@ const pricingPlans = [
     ],
     cta: "Tech Up",
     popular: false,
+    isFree: false,
   },
   {
     name: "AI Innovator",
@@ -84,6 +94,7 @@ const pricingPlans = [
     period: "/4 months",
     description: "Build cutting-edge AI solutions",
     features: [
+      "Everything in Bootcamp Plan plus:",
       "Deep Learning & Neural Networks",
       "TensorFlow & PyTorch",
       "NLP & Computer Vision",
@@ -95,6 +106,7 @@ const pricingPlans = [
     ],
     cta: "Start Now",
     popular: false,
+    isFree: false,
   },
   {
     name: "Cloud Architect",
@@ -103,6 +115,7 @@ const pricingPlans = [
     period: "/3 months",
     description: "Master cloud platforms and DevOps",
     features: [
+      "Everything in Bootcamp Plan plus:",
       "AWS, Azure & GCP",
       "Cloud Architecture",
       "DevOps & CI/CD",
@@ -114,10 +127,17 @@ const pricingPlans = [
     ],
     cta: "Register",
     popular: false,
+    isFree: false,
   },
 ];
 
 const Pricing = () => {
+  const [couponCodes, setCouponCodes] = useState<Record<string, string>>({});
+
+  const handleCouponChange = (planName: string, value: string) => {
+    setCouponCodes({ ...couponCodes, [planName]: value });
+  };
+
   return (
     <section id="pricing" className="py-24 px-4">
       <div className="container mx-auto max-w-6xl">
@@ -131,16 +151,18 @@ const Pricing = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {pricingPlans.map((plan, idx) => {
-            const Icon = plan.icon;
-            return (
-              <Card
-                key={idx}
-                className={`relative bg-card border-border ${
-                  plan.popular ? "border-primary" : ""
-                }`}
-              >
+        <div className="relative">
+          <div className="overflow-x-auto pb-4 -mx-4 px-4">
+            <div className="flex gap-8 min-w-max">
+              {pricingPlans.map((plan, idx) => {
+                const Icon = plan.icon;
+                return (
+                  <Card
+                    key={idx}
+                    className={`relative bg-card border-border w-[350px] flex-shrink-0 ${
+                      plan.popular ? "border-primary" : ""
+                    }`}
+                  >
                 {plan.popular && (
                   <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
                     Most Popular
@@ -169,12 +191,27 @@ const Pricing = () => {
                   {plan.features.map((feature, fIdx) => (
                     <div key={fIdx} className="flex items-start gap-2">
                       <Check size={20} className="text-primary flex-shrink-0 mt-0.5" />
-                      <span className="text-sm text-muted-foreground">{feature}</span>
+                      <span className={`text-sm ${fIdx === 0 && !plan.isFree ? "font-semibold text-foreground" : "text-muted-foreground"}`}>
+                        {feature}
+                      </span>
                     </div>
                   ))}
                 </CardContent>
 
-                <CardFooter>
+                <CardFooter className="flex-col gap-3">
+                  {!plan.isFree && (
+                    <div className="w-full">
+                      <Input
+                        placeholder="Have a coupon? Enter here"
+                        value={couponCodes[plan.name] || ""}
+                        onChange={(e) => handleCouponChange(plan.name, e.target.value)}
+                        className="text-sm"
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Apply coupon for 50% off
+                      </p>
+                    </div>
+                  )}
                   <Button
                     variant="outline"
                     className="w-full"
@@ -184,9 +221,11 @@ const Pricing = () => {
                     {plan.cta}
                   </Button>
                 </CardFooter>
-              </Card>
-            );
-          })}
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
         {/* CTA Section */}

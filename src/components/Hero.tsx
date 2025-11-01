@@ -43,8 +43,10 @@ const Hero = () => {
       <div className="container mx-auto max-w-4xl text-center space-y-8 relative z-10">
         {/* Main Heading */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-          Get Trained, Certified and{" "}
-          <span className="text-gradient">Employed.</span>
+          Learn Today.{" "}
+          <span className="bg-gradient-to-r from-primary via-[hsl(170,100%,47%)] to-[hsl(180,100%,45%)] bg-clip-text text-transparent">
+            Earn Tomorrow.
+          </span>
         </h1>
 
         {/* Subheading */}
@@ -57,7 +59,7 @@ const Hero = () => {
           <Button
             size="lg"
             onClick={() => window.open("https://forms.gle/example", "_blank")}
-            className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-white hover:opacity-90 shadow-lg"
+            className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] hover:opacity-90 shadow-lg font-semibold text-background"
           >
             Tech Up Now
             <ArrowRight className="ml-2" size={20} />

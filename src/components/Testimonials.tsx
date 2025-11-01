@@ -78,41 +78,43 @@ const Testimonials = () => {
         </div>
 
         <div className="relative">
-          <div className="overflow-y-auto max-h-[600px] px-2 pb-20 -mb-16 space-y-6">
-            {testimonials.map((testimonial, idx) => (
-              <Card
-                key={idx}
-                className="bg-card border-border"
-              >
-                <CardContent className="p-6 space-y-4">
-                  {/* Rating */}
-                  <div className="flex gap-1">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star key={i} size={16} className="fill-primary text-primary" />
-                    ))}
-                  </div>
+          <div className="overflow-x-auto pb-4 -mx-4 px-4">
+            <div className="flex gap-6 min-w-max">
+              {testimonials.map((testimonial, idx) => (
+                <Card
+                  key={idx}
+                  className="bg-card border-border w-[350px] flex-shrink-0"
+                >
+                  <CardContent className="p-6 space-y-4">
+                    {/* Rating */}
+                    <div className="flex gap-1">
+                      {Array.from({ length: testimonial.rating }).map((_, i) => (
+                        <Star key={i} size={16} className="fill-primary text-primary" />
+                      ))}
+                    </div>
 
-                  {/* Content */}
-                  <p className="text-muted-foreground">
-                    &quot;{testimonial.content}&quot;
-                  </p>
+                    {/* Content */}
+                    <p className="text-muted-foreground">
+                      &quot;{testimonial.content}&quot;
+                    </p>
 
-                  {/* Profile */}
-                  <div className="flex items-center gap-3 pt-4 border-t border-border">
-                    <div className="text-4xl">{testimonial.image}</div>
-                    <div>
-                      <div className="font-semibold">{testimonial.name}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {testimonial.role} at {testimonial.company}
-                      </div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        {testimonial.department} Alumni
+                    {/* Profile */}
+                    <div className="flex items-center gap-3 pt-4 border-t border-border">
+                      <div className="text-4xl">{testimonial.image}</div>
+                      <div>
+                        <div className="font-semibold">{testimonial.name}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {testimonial.role} at {testimonial.company}
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          {testimonial.department} Alumni
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
       </div>

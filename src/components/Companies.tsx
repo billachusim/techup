@@ -25,7 +25,7 @@ const Companies = () => {
   const handleSubmit = () => {
     if (facultyId.trim()) {
       // Here you would handle the application submission
-      window.open("https://calendly.com/techfacultyafrica/clarity-call", "_blank");
+      window.open("https://calendly.com/techfaculty/30min", "_blank");
       setIsDialogOpen(false);
       setFacultyId("");
     }
@@ -151,7 +151,7 @@ const Companies = () => {
           </p>
           <Button
             size="lg"
-            onClick={() => window.open("https://calendly.com/techfacultyafrica/clarity-call", "_blank")}
+            onClick={() => window.open("https://calendly.com/techfaculty/30min", "_blank")}
             className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-white hover:opacity-90"
           >
             <Briefcase className="mr-2" size={20} />

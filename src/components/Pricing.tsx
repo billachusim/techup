@@ -247,7 +247,7 @@ const Pricing = () => {
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-primary-foreground hover:opacity-90"
-                onClick={() => window.open("https://calendly.com/techfacultyafrica/clarity-call", "_blank")}
+                onClick={() => window.open("https://calendly.com/techfaculty/30min", "_blank")}
               >
                 Book a Call
               </Button>

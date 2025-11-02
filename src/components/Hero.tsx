@@ -81,7 +81,7 @@ const Hero = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
           <Button
             size="lg"
-            onClick={() => window.open("https://calendly.com/techfacultyafrica/clarity-call", "_blank")}
+            onClick={() => window.open("https://calendly.com/techfaculty/30min", "_blank")}
             className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] hover:opacity-90 shadow-lg font-semibold text-background"
           >
             Tech Up Now

@@ -1,4 +1,5 @@
-import { GraduationCap, Award, Briefcase } from "lucide-react";
+import { GraduationCap, Award, Briefcase, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const HowItWorks = () => {
   const features = [
@@ -63,6 +64,18 @@ const HowItWorks = () => {
               </p>
             </div>
           ))}
+        </div>
+
+        {/* CTA Button */}
+        <div className="text-center mt-12">
+          <Button
+            size="lg"
+            onClick={() => window.open("https://forms.gle/Mk9PiAcoY9ykW6LZ7", "_blank")}
+            className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] hover:opacity-90 shadow-lg font-semibold text-background"
+          >
+            Get Started Today
+            <ArrowRight className="ml-2" size={20} />
+          </Button>
         </div>
       </div>
     </section>

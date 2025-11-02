@@ -13,16 +13,6 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Email Display */}
-          <div className="text-sm text-muted-foreground">
-            <a
-              href="mailto:thetechfaculty@gmail.com"
-              className="hover:text-primary transition-colors"
-            >
-              thetechfaculty@gmail.com
-            </a>
-          </div>
-
           {/* Contact Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center text-sm">
             <a

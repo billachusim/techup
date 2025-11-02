@@ -216,7 +216,12 @@ const Pricing = () => {
                     variant="outline"
                     className="w-full"
                     size="lg"
-                    onClick={() => window.open("https://forms.gle/example", "_blank")}
+                    onClick={() => window.open(
+                      plan.isFree 
+                        ? "https://forms.gle/Mk9PiAcoY9ykW6LZ7" 
+                        : "https://calendly.com/techfaculty/30min", 
+                      "_blank"
+                    )}
                   >
                     {plan.cta}
                   </Button>

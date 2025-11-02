@@ -1,7 +1,25 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+
+const taglines = [
+  "Learn Today. Earn Tomorrow.",
+  "Train. Certify. Get Hired.",
+  "Your Future in Tech Starts Here.",
+  "Build Skills. Build Wealth.",
+  "From Student to Professional.",
+];
 
 const Hero = () => {
+  const [currentTagline, setCurrentTagline] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTagline((prev) => (prev + 1) % taglines.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   const scrollToDepartments = () => {
     const element = document.getElementById("departments");
     element?.scrollIntoView({ behavior: "smooth" });
@@ -41,11 +59,16 @@ const Hero = () => {
       </div>
 
       <div className="container mx-auto max-w-4xl text-center space-y-8 relative z-10">
-        {/* Main Heading */}
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-          Learn Today.{" "}
-          <span className="bg-gradient-to-r from-primary via-[hsl(170,100%,47%)] to-[hsl(180,100%,45%)] bg-clip-text text-transparent">
-            Earn Tomorrow.
+        {/* Main Heading with Animated Taglines */}
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight min-h-[120px] md:min-h-[140px] lg:min-h-[160px] flex items-center justify-center">
+          <span 
+            key={currentTagline}
+            className="animate-fade-in"
+          >
+            {taglines[currentTagline].split(' ').slice(0, -2).join(' ')}{" "}
+            <span className="bg-gradient-to-r from-primary via-[hsl(170,100%,47%)] to-[hsl(180,100%,45%)] bg-clip-text text-transparent">
+              {taglines[currentTagline].split(' ').slice(-2).join(' ')}
+            </span>
           </span>
         </h1>
 

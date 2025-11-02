@@ -25,7 +25,7 @@ const HowItWorks = () => {
         {/* Header */}
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-3xl md:text-5xl font-bold">
-            Your journey to a tech career starts here
+            From Learner to Professional in 3 Steps
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Tech Faculty has trained over 1,000 students across dozens of physical campuses in Africa. 

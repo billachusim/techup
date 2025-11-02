@@ -10,7 +10,7 @@ import {
   ChevronDown,
   Smartphone,
   Globe,
-  ExternalLink,
+  MessageCircle,
 } from "lucide-react";
 import {
   Accordion,
@@ -216,7 +216,7 @@ const Departments = () => {
                         className="flex items-center gap-2"
                       >
                         Join Community
-                        <ExternalLink size={14} />
+                        <MessageCircle size={14} />
                       </a>
                     </Button>
                   </div>

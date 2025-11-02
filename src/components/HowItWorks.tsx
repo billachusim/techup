@@ -25,7 +25,13 @@ const HowItWorks = () => {
         {/* Header */}
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-3xl md:text-5xl font-bold">
-            From Learner to Professional in 3 Steps
+            From Learner to{" "}
+            <span className="bg-gradient-to-r from-primary via-[hsl(170,100%,47%)] to-[hsl(180,100%,45%)] bg-clip-text text-transparent">
+              Earner
+            </span>
+            ;{" "}
+            <span className="text-primary">3</span> Steps in{" "}
+            <span className="text-primary">3</span> Months.
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Tech Faculty has trained over 1,000 students across dozens of physical campuses in Africa. 

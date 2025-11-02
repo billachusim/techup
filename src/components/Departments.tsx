@@ -206,8 +206,7 @@ const Departments = () => {
                     </div>
                     <Button 
                       size="sm" 
-                      variant="outline"
-                      className="w-full sm:w-auto"
+                      className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
                       asChild
                     >
                       <a 

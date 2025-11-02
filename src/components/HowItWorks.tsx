@@ -25,11 +25,15 @@ const HowItWorks = () => {
         {/* Header */}
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-3xl md:text-5xl font-bold">
-            From Learner to{" "}
+            From L
             <span className="bg-gradient-to-r from-primary via-[hsl(170,100%,47%)] to-[hsl(180,100%,45%)] bg-clip-text text-transparent">
-              Earner
+              earn
             </span>
-            ;{" "}
+            er to{" "}
+            <span className="bg-gradient-to-r from-primary via-[hsl(170,100%,47%)] to-[hsl(180,100%,45%)] bg-clip-text text-transparent">
+              Earn
+            </span>
+            er;{" "}
             <span className="text-primary">3</span> Steps in{" "}
             <span className="text-primary">3</span> Months.
           </h2>

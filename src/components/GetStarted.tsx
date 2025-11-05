@@ -19,6 +19,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { UserPlus, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const courses = [
   "Full-Stack Web Development",
@@ -56,7 +57,7 @@ const GetStarted = () => {
     return `TF-${timestamp}-${random}`;
   };
 
-  const handleFacultyIdSubmit = () => {
+  const handleFacultyIdSubmit = async () => {
     if (!facultyId.trim()) {
       toast({
         title: "Faculty ID Required",
@@ -75,13 +76,45 @@ const GetStarted = () => {
       return;
     }
 
+    // Verify Faculty ID exists in database
+    const { data: facultyData, error } = await supabase
+      .from('faculty_ids')
+      .select('*')
+      .eq('faculty_id', facultyId.trim())
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error verifying Faculty ID:', error);
+      toast({
+        title: "Verification Error",
+        description: "Unable to verify Faculty ID. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!facultyData) {
+      toast({
+        title: "Faculty ID Not Found",
+        description: "This Faculty ID doesn't exist. Please sign up to get one.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Faculty ID verified, send to WhatsApp
     const message = `Hi! I'm ready to access Tech Faculty benefits. My Faculty ID is: ${facultyId.trim()}`;
     const whatsappUrl = `https://wa.me/2348145607519?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
     setFacultyId("");
+    
+    toast({
+      title: "Faculty ID Verified!",
+      description: `Welcome back, ${facultyData.name}!`,
+    });
   };
 
-  const handleSignUpSubmit = () => {
+  const handleSignUpSubmit = async () => {
     // Validate form
     if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim() || !formData.course || !formData.hearAbout) {
       toast({
@@ -114,6 +147,30 @@ const GetStarted = () => {
     }
 
     const newFacultyId = generateFacultyId();
+
+    // Save to database
+    const { error } = await supabase
+      .from('faculty_ids')
+      .insert({
+        faculty_id: newFacultyId,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        course_interest: formData.course,
+        hear_about_us: formData.hearAbout,
+        status: 'active'
+      });
+
+    if (error) {
+      console.error('Error saving Faculty ID:', error);
+      toast({
+        title: "Registration Error",
+        description: "Unable to complete registration. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const message = `Hi! I'd like to register for Tech Faculty.
 
 *My Details:*
@@ -138,8 +195,8 @@ How I heard about you: ${formData.hearAbout}
     });
 
     toast({
-      title: "Registration Submitted!",
-      description: `Your Faculty ID (${newFacultyId}) has been sent to WhatsApp.`,
+      title: "Registration Successful!",
+      description: `Your Faculty ID (${newFacultyId}) has been saved and sent to WhatsApp.`,
     });
   };
 

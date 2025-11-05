@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const pricingPlans = [
   {
@@ -195,7 +196,7 @@ const Pricing = () => {
     setShowFacultyIdDialog(true);
   };
 
-  const handleFacultyIdSubmit = () => {
+  const handleFacultyIdSubmit = async () => {
     if (!facultyId.trim()) {
       toast({
         title: "Faculty ID Required",
@@ -214,7 +215,48 @@ const Pricing = () => {
       return;
     }
 
+    // Verify Faculty ID exists in database
+    const { data: facultyData, error } = await supabase
+      .from('faculty_ids')
+      .select('*')
+      .eq('faculty_id', facultyId.trim())
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error verifying Faculty ID:', error);
+      toast({
+        title: "Verification Error",
+        description: "Unable to verify Faculty ID. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!facultyData) {
+      toast({
+        title: "Faculty ID Not Found",
+        description: "This Faculty ID doesn't exist. Please sign up to get one.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const plan = pricingPlans.find((p) => p.name === selectedPlan);
+    
+    // Save enrollment to database
+    const { error: enrollmentError } = await supabase
+      .from('enrollments')
+      .insert({
+        faculty_id: facultyId.trim(),
+        plan_name: selectedPlan,
+        coupon_code: couponCodes[selectedPlan] || null,
+        status: 'pending'
+      });
+
+    if (enrollmentError) {
+      console.error('Error saving enrollment:', enrollmentError);
+    }
+
     const message = plan?.isFree
       ? `Hi! I'm registering for the *${selectedPlan}* (Free Bootcamp). My Faculty ID is: ${facultyId.trim()}`
       : `Hi! I'm ready to pay for *${selectedPlan}*. My Faculty ID is: ${facultyId.trim()}`;
@@ -224,9 +266,14 @@ const Pricing = () => {
     
     setShowFacultyIdDialog(false);
     setFacultyId("");
+    
+    toast({
+      title: "Enrollment Submitted!",
+      description: `Welcome back, ${facultyData.name}! Your enrollment for ${selectedPlan} has been recorded.`,
+    });
   };
 
-  const handleSignUpSubmit = () => {
+  const handleSignUpSubmit = async () => {
     // Validate form
     if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim() || !formData.course || !formData.hearAbout) {
       toast({
@@ -259,6 +306,44 @@ const Pricing = () => {
     }
 
     const newFacultyId = generateFacultyId();
+    
+    // Save to database
+    const { error: facultyError } = await supabase
+      .from('faculty_ids')
+      .insert({
+        faculty_id: newFacultyId,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        course_interest: formData.course,
+        hear_about_us: formData.hearAbout,
+        status: 'active'
+      });
+
+    if (facultyError) {
+      console.error('Error saving Faculty ID:', facultyError);
+      toast({
+        title: "Registration Error",
+        description: "Unable to complete registration. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Save enrollment to database
+    const { error: enrollmentError } = await supabase
+      .from('enrollments')
+      .insert({
+        faculty_id: newFacultyId,
+        plan_name: selectedPlan,
+        coupon_code: couponCodes[selectedPlan] || null,
+        status: 'pending'
+      });
+
+    if (enrollmentError) {
+      console.error('Error saving enrollment:', enrollmentError);
+    }
+
     const plan = pricingPlans.find((p) => p.name === selectedPlan);
     const planMessage = plan?.isFree
       ? `I'm registering for the *${selectedPlan}* (Free Bootcamp).`
@@ -289,8 +374,8 @@ How I heard about you: ${formData.hearAbout}
     });
 
     toast({
-      title: "Registration Submitted!",
-      description: `Your Faculty ID (${newFacultyId}) has been sent to WhatsApp.`,
+      title: "Registration Successful!",
+      description: `Your Faculty ID (${newFacultyId}) has been saved and sent to WhatsApp.`,
     });
   };
 

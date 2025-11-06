@@ -18,10 +18,12 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { UserPlus, Sparkles, LogOut, Calendar, Users, BookOpen, ExternalLink, MessageCircle } from "lucide-react";
+import { UserPlus, Sparkles, LogOut, Calendar, Users, BookOpen, ExternalLink, MessageCircle, CheckCircle2, Circle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Progress } from "@/components/ui/progress";
+import { useUser } from "@/contexts/UserContext";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const courses = [
   "Full-Stack Web Development",
@@ -44,10 +46,9 @@ const hearAboutUs = [
 const GetStarted = () => {
   const [facultyId, setFacultyId] = useState("");
   const [showSignUpForm, setShowSignUpForm] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userData, setUserData] = useState<any>(null);
   const [enrollmentData, setEnrollmentData] = useState<any>(null);
   const [coursesData, setCoursesData] = useState<any[]>([]);
+  const [lecturesData, setLecturesData] = useState<any[]>([]);
   const [nextLecture, setNextLecture] = useState<any>(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -57,6 +58,7 @@ const GetStarted = () => {
     hearAbout: "",
   });
   const { toast } = useToast();
+  const { isLoggedIn, userData, login, logout, setUserData } = useUser();
 
   const generateFacultyId = () => {
     const timestamp = Date.now().toString(36).toUpperCase();
@@ -88,7 +90,20 @@ const GetStarted = () => {
 
       setEnrollmentData(enrollment);
 
-      // Fetch course enrollments with progress
+      const planName = enrollment?.plan_name || "Free Bootcamp";
+
+      // Fetch courses filtered by plan
+      const { data: courses } = await supabase
+        .from('courses')
+        .select('*')
+        .eq('plan_required', planName.toLowerCase().replace(' ', '_'));
+
+      // If no courses found for specific plan, try free courses
+      const coursesAvailable = courses && courses.length > 0 
+        ? courses 
+        : await supabase.from('courses').select('*').eq('plan_required', 'free').then(r => r.data || []);
+
+      // Fetch enrollments for these courses
       const { data: courseEnrollments } = await supabase
         .from('course_enrollments')
         .select(`
@@ -96,28 +111,49 @@ const GetStarted = () => {
           courses (*),
           course_progress (*)
         `)
-        .eq('faculty_id', facultyIdToFetch);
+        .eq('faculty_id', facultyIdToFetch)
+        .in('course_id', coursesAvailable.map((c: any) => c.id));
 
       setCoursesData(courseEnrollments || []);
 
-      // Fetch next lecture
+      // Fetch all lectures for enrolled courses
       if (courseEnrollments && courseEnrollments.length > 0) {
         const courseIds = courseEnrollments.map((ce: any) => ce.course_id);
-        const { data: lecture } = await supabase
+        
+        const { data: allLectures } = await supabase
           .from('lectures')
           .select('*, courses (*)')
           .in('course_id', courseIds)
-          .gte('scheduled_at', new Date().toISOString())
-          .order('scheduled_at', { ascending: true })
-          .limit(1)
-          .maybeSingle();
+          .order('scheduled_at', { ascending: true });
 
-        setNextLecture(lecture);
+        setLecturesData(allLectures || []);
+
+        // Find next uncompleted lecture
+        const { data: progressRecords } = await supabase
+          .from('course_progress')
+          .select('*')
+          .eq('faculty_id', facultyIdToFetch);
+
+        const completedLectures = new Set(
+          progressRecords?.map((p: any) => p.last_accessed) || []
+        );
+
+        const nextUncompletedLecture = allLectures?.find(
+          (lecture: any) => !completedLectures.has(lecture.id)
+        );
+
+        setNextLecture(nextUncompletedLecture || allLectures?.[0] || null);
       }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
     }
   };
+
+  useEffect(() => {
+    if (isLoggedIn && userData?.faculty_id) {
+      fetchUserDashboardData(userData.faculty_id);
+    }
+  }, [isLoggedIn, userData?.faculty_id]);
 
   const handleFacultyIdSubmit = async () => {
     if (!facultyId.trim()) {
@@ -164,9 +200,9 @@ const GetStarted = () => {
       return;
     }
 
-    // Faculty ID verified, fetch dashboard data
+    // Faculty ID verified, login and fetch dashboard data
+    login(facultyId.trim(), facultyData);
     await fetchUserDashboardData(facultyId.trim());
-    setIsLoggedIn(true);
     
     toast({
       title: "Welcome Back!",
@@ -175,10 +211,10 @@ const GetStarted = () => {
   };
 
   const handleSignOut = () => {
-    setIsLoggedIn(false);
-    setUserData(null);
+    logout();
     setEnrollmentData(null);
     setCoursesData([]);
+    setLecturesData([]);
     setNextLecture(null);
     setFacultyId("");
     
@@ -186,6 +222,62 @@ const GetStarted = () => {
       title: "Signed Out",
       description: "You've been signed out successfully.",
     });
+  };
+
+  const handleLectureComplete = async (lectureId: string, courseId: string) => {
+    if (!userData?.faculty_id) return;
+
+    try {
+      // Get or create course progress record
+      const { data: existingProgress } = await supabase
+        .from('course_progress')
+        .select('*')
+        .eq('faculty_id', userData.faculty_id)
+        .eq('course_id', courseId)
+        .maybeSingle();
+
+      // Calculate new progress percentage
+      const totalLectures = lecturesData.filter((l: any) => l.course_id === courseId).length;
+      const completedCount = existingProgress ? existingProgress.progress_percentage / 100 * totalLectures + 1 : 1;
+      const newProgress = Math.min(Math.round((completedCount / totalLectures) * 100), 100);
+
+      if (existingProgress) {
+        await supabase
+          .from('course_progress')
+          .update({
+            progress_percentage: newProgress,
+            last_accessed: lectureId,
+            updated_at: new Date().toISOString(),
+            ...(newProgress === 100 ? { completed_at: new Date().toISOString() } : {})
+          })
+          .eq('id', existingProgress.id);
+      } else {
+        await supabase
+          .from('course_progress')
+          .insert({
+            faculty_id: userData.faculty_id,
+            course_id: courseId,
+            progress_percentage: newProgress,
+            last_accessed: lectureId,
+            ...(newProgress === 100 ? { completed_at: new Date().toISOString() } : {})
+          });
+      }
+
+      // Refresh dashboard data
+      await fetchUserDashboardData(userData.faculty_id);
+
+      toast({
+        title: "Progress Updated",
+        description: "Lecture marked as completed!",
+      });
+    } catch (error) {
+      console.error('Error updating progress:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update progress. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleSignUpSubmit = async () => {
@@ -478,11 +570,14 @@ How I heard about you: ${formData.hearAbout}
                   Your Courses
                 </h3>
                 {coursesData.length > 0 ? (
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {coursesData.map((enrollment: any) => {
                       const progress = enrollment.course_progress?.[0]?.progress_percentage || 0;
+                      const courseLectures = lecturesData.filter((l: any) => l.course_id === enrollment.course_id);
+                      const completedLectureId = enrollment.course_progress?.[0]?.last_accessed;
+                      
                       return (
-                        <div key={enrollment.id} className="border rounded-lg p-4 space-y-3">
+                        <div key={enrollment.id} className="border rounded-lg p-4 space-y-4">
                           <div className="flex justify-between items-start">
                             <div>
                               <h4 className="font-semibold">{enrollment.courses?.name}</h4>
@@ -490,9 +585,49 @@ How I heard about you: ${formData.hearAbout}
                             </div>
                             <Badge variant="outline">{progress}%</Badge>
                           </div>
+                          
                           <div className="space-y-2">
                             <Progress value={progress} className="h-2" />
-                            <div className="flex gap-2">
+                            
+                            {/* Lectures List */}
+                            {courseLectures.length > 0 && (
+                              <div className="mt-4 space-y-2">
+                                <h5 className="font-medium text-sm mb-3">Course Lectures</h5>
+                                {courseLectures.map((lecture: any, index: number) => {
+                                  const isCompleted = lecture.id === completedLectureId || 
+                                    courseLectures.findIndex((l: any) => l.id === completedLectureId) > index;
+                                  
+                                  return (
+                                    <div key={lecture.id} className="flex items-center gap-3 p-3 border rounded hover:bg-accent/50 transition-colors">
+                                      <Checkbox
+                                        checked={isCompleted}
+                                        onCheckedChange={(checked) => {
+                                          if (checked) {
+                                            handleLectureComplete(lecture.id, enrollment.course_id);
+                                          }
+                                        }}
+                                        disabled={isCompleted}
+                                      />
+                                      <div className="flex-1 min-w-0">
+                                        <p className={`text-sm font-medium ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
+                                          {lecture.title}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground">
+                                          {new Date(lecture.scheduled_at).toLocaleDateString()} at {new Date(lecture.scheduled_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </p>
+                                      </div>
+                                      {isCompleted ? (
+                                        <CheckCircle2 className="text-primary shrink-0" size={18} />
+                                      ) : (
+                                        <Circle className="text-muted-foreground shrink-0" size={18} />
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
+                            
+                            <div className="flex gap-2 pt-2">
                               {enrollment.courses?.whatsapp_group_link && (
                                 <Button
                                   variant="outline"

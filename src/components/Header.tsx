@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useUser } from "@/contexts/UserContext";
 
 const Header = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -21,6 +22,7 @@ const Header = () => {
   const [showCommunityDialog, setShowCommunityDialog] = useState(false);
   const [facultyId, setFacultyId] = useState("");
   const { toast } = useToast();
+  const { isLoggedIn, userData } = useUser();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,6 +40,21 @@ const Header = () => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
+
+  const handleCommunityClick = () => {
+    // If user is logged in, go directly to community
+    if (isLoggedIn && userData) {
+      const message = `Hi! I'm ${userData.name} (Faculty ID: ${userData.faculty_id}). I'd like to join the Tech Faculty community.`;
+      window.open(`https://chat.whatsapp.com/GCnw88T0nxs5oabYgcqXKt?text=${encodeURIComponent(message)}`, "_blank");
+      toast({
+        title: "Opening Community",
+        description: "Welcome to the Tech Faculty community!",
+      });
+    } else {
+      // If not logged in, show dialog to enter Faculty ID
+      setShowCommunityDialog(true);
+    }
+  };
 
   const handleCommunityAccess = async () => {
     if (!facultyId.trim()) {
@@ -97,7 +114,7 @@ const Header = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setShowCommunityDialog(true)}
+              onClick={handleCommunityClick}
               className="hidden sm:flex"
             >
               <MessageCircle className="mr-2" size={16} />

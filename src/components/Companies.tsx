@@ -151,7 +151,10 @@ const Companies = () => {
           </p>
           <Button
             size="lg"
-            onClick={() => window.open("https://forms.gle/Mk9PiAcoY9ykW6LZ7", "_blank")}
+            onClick={() => {
+              const element = document.getElementById("see-how-you-are-doing");
+              element?.scrollIntoView({ behavior: "smooth" });
+            }}
             className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-white hover:opacity-90"
           >
             <Briefcase className="mr-2" size={20} />

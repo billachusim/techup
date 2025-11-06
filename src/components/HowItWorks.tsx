@@ -70,7 +70,10 @@ const HowItWorks = () => {
         <div className="text-center mt-12">
           <Button
             size="lg"
-            onClick={() => window.open("https://forms.gle/Mk9PiAcoY9ykW6LZ7", "_blank")}
+            onClick={() => {
+              const element = document.getElementById("see-how-you-are-doing");
+              element?.scrollIntoView({ behavior: "smooth" });
+            }}
             className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] hover:opacity-90 shadow-lg font-semibold text-background"
           >
             Get Started Today

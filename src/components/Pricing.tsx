@@ -261,7 +261,7 @@ const Pricing = () => {
       ? `Hi! I'm registering for the *${selectedPlan}* (Free Bootcamp). My Faculty ID is: ${facultyId.trim()}`
       : `Hi! I'm ready to pay for *${selectedPlan}*. My Faculty ID is: ${facultyId.trim()}`;
 
-    const whatsappUrl = `https://wa.me/2348145607519?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
     
     setShowFacultyIdDialog(false);
@@ -360,7 +360,7 @@ How I heard about you: ${formData.hearAbout}
 
 *My Faculty ID: ${newFacultyId}*`;
 
-    const whatsappUrl = `https://wa.me/2348145607519?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
     
     setShowSignUpForm(false);

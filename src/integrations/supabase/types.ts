@@ -14,6 +14,132 @@ export type Database = {
   }
   public: {
     Tables: {
+      course_enrollments: {
+        Row: {
+          course_id: string
+          created_at: string
+          enrollment_date: string
+          faculty_id: string
+          id: string
+          status: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          enrollment_date?: string
+          faculty_id: string
+          id?: string
+          status?: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          enrollment_date?: string
+          faculty_id?: string
+          id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_enrollments_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_enrollments_faculty_id_fkey"
+            columns: ["faculty_id"]
+            isOneToOne: false
+            referencedRelation: "faculty_ids"
+            referencedColumns: ["faculty_id"]
+          },
+        ]
+      }
+      course_progress: {
+        Row: {
+          completed_at: string | null
+          course_id: string
+          created_at: string
+          faculty_id: string
+          id: string
+          last_accessed: string
+          progress_percentage: number
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          course_id: string
+          created_at?: string
+          faculty_id: string
+          id?: string
+          last_accessed?: string
+          progress_percentage?: number
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          course_id?: string
+          created_at?: string
+          faculty_id?: string
+          id?: string
+          last_accessed?: string
+          progress_percentage?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_progress_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_progress_faculty_id_fkey"
+            columns: ["faculty_id"]
+            isOneToOne: false
+            referencedRelation: "faculty_ids"
+            referencedColumns: ["faculty_id"]
+          },
+        ]
+      }
+      courses: {
+        Row: {
+          created_at: string
+          department: string
+          description: string | null
+          duration_weeks: number | null
+          id: string
+          name: string
+          plan_required: string
+          updated_at: string
+          whatsapp_group_link: string | null
+        }
+        Insert: {
+          created_at?: string
+          department: string
+          description?: string | null
+          duration_weeks?: number | null
+          id?: string
+          name: string
+          plan_required?: string
+          updated_at?: string
+          whatsapp_group_link?: string | null
+        }
+        Update: {
+          created_at?: string
+          department?: string
+          description?: string | null
+          duration_weeks?: number | null
+          id?: string
+          name?: string
+          plan_required?: string
+          updated_at?: string
+          whatsapp_group_link?: string | null
+        }
+        Relationships: []
+      }
       enrollments: {
         Row: {
           coupon_code: string | null
@@ -56,6 +182,7 @@ export type Database = {
         Row: {
           course_interest: string
           created_at: string
+          department: string | null
           email: string
           faculty_id: string
           hear_about_us: string
@@ -68,6 +195,7 @@ export type Database = {
         Insert: {
           course_interest: string
           created_at?: string
+          department?: string | null
           email: string
           faculty_id: string
           hear_about_us: string
@@ -80,6 +208,7 @@ export type Database = {
         Update: {
           course_interest?: string
           created_at?: string
+          department?: string | null
           email?: string
           faculty_id?: string
           hear_about_us?: string
@@ -90,6 +219,53 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      lectures: {
+        Row: {
+          course_id: string
+          created_at: string
+          description: string | null
+          duration_minutes: number | null
+          id: string
+          meeting_link: string | null
+          scheduled_at: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          meeting_link?: string | null
+          scheduled_at: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          meeting_link?: string | null
+          scheduled_at?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lectures_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

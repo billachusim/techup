@@ -391,7 +391,7 @@ How I heard about you: ${formData.hearAbout}
                     <Label htmlFor="facultyId" className="text-lg font-semibold">
                       Enter Your Faculty ID
                     </Label>
-                    <div className="flex gap-3">
+                    <div className="flex flex-col sm:flex-row gap-3">
                       <Input
                         id="facultyId"
                         placeholder="e.g., TF-ABC123XYZ"
@@ -403,12 +403,13 @@ How I heard about you: ${formData.hearAbout}
                       <Button
                         size="lg"
                         onClick={handleFacultyIdSubmit}
-                        className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90"
+                        className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90 w-full sm:w-auto"
                       >
                         <Sparkles className="mr-2" size={20} />
                         Access Now
                       </Button>
                     </div>
+
                   </div>
 
                   {/* Divider */}

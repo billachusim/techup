@@ -97,45 +97,23 @@ const GetStarted = () => {
       const coursesAvailable = courses || [];
       console.log('Courses available for plan:', { dbPlanName, userDepartment, coursesAvailable });
 
-      // Auto-enroll user in plan courses if not already enrolled
-      if (coursesAvailable.length > 0) {
-        for (const course of coursesAvailable) {
-          const { data: existingEnrollment } = await supabase
-            .from('course_enrollments')
-            .select('id')
-            .eq('faculty_id', facultyIdToFetch)
-            .eq('course_id', course.id)
-            .maybeSingle();
+      // Auto-enroll handled by backend function
 
-          if (!existingEnrollment) {
-            await supabase
-              .from('course_enrollments')
-              .insert({
-                faculty_id: facultyIdToFetch,
-                course_id: course.id,
-                status: 'active',
-              });
-          }
-        }
+      // Sync and fetch enrollments via backend (bypasses RLS safely)
+      let courseEnrollments: any[] = [];
+      try {
+        const { data: userCourses, error: userCoursesError } = await supabase.functions.invoke('user-courses', {
+          body: { facultyId: facultyIdToFetch }
+        });
+        if (userCoursesError) throw userCoursesError;
+
+        courseEnrollments = userCourses?.enrollments || [];
+        console.log('User courses from function:', userCourses);
+        setCoursesData(courseEnrollments);
+      } catch (fnErr) {
+        console.error('Error fetching user courses via function:', fnErr);
+        setCoursesData([]);
       }
-
-      // Fetch enrollments for courses in the current plan
-      const { data: courseEnrollments, error: enrollmentError } = await supabase
-        .from('course_enrollments')
-        .select(`
-          *,
-          courses!inner (
-            *
-          ),
-          course_progress (*)
-        `)
-        .eq('faculty_id', facultyIdToFetch)
-        .eq('courses.plan_required', dbPlanName)
-        .eq('courses.department', userDepartment);
-
-      console.log('Course enrollments query result:', { courseEnrollments, enrollmentError, dbPlanName, userDepartment });
-
-      setCoursesData(courseEnrollments || []);
 
       // Fetch all lectures for enrolled courses
       if (courseEnrollments && courseEnrollments.length > 0) {

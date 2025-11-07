@@ -21,7 +21,7 @@ const Footer = () => {
               className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
             >
               <ShoppingBag size={16} />
-              <span>Tech Store - <span className="font-semibold text-primary">Get 50% off with FACULTY50</span></span>
+              <span>Tech Store - <span className="font-semibold text-primary">Get 50% off with your faculty ID</span></span>
             </Link>
             <a
               href="mailto:thetechfaculty@gmail.com"

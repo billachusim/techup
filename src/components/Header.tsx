@@ -9,16 +9,28 @@ const Header = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
+    let ticking = false;
+    
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          const scrollDifference = Math.abs(currentScrollY - lastScrollY);
+          
+          // Only update if scroll difference is significant (prevents jitter from animations)
+          if (scrollDifference > 5) {
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+              setIsVisible(false);
+            } else if (currentScrollY < lastScrollY) {
+              setIsVisible(true);
+            }
+            setLastScrollY(currentScrollY);
+          }
+          
+          ticking = false;
+        });
+        ticking = true;
       }
-      
-      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });

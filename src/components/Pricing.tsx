@@ -511,28 +511,6 @@ How I heard about you: ${formData.hearAbout}
           </div>
         </div>
 
-        {/* CTA Section */}
-        <div className="mt-16 text-center max-w-2xl mx-auto">
-          <Card className="bg-card border-border">
-            <CardContent className="p-8">
-              <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                Need a Custom Package?
-              </h3>
-              <p className="text-muted-foreground mb-6">
-                Looking for corporate training or a personalized learning path? Book a
-                call with our team to create the perfect plan for your goals.
-              </p>
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-primary-foreground hover:opacity-90"
-                onClick={() => window.open("https://calendly.com/techfaculty/30min", "_blank")}
-              >
-                Book a Call
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-
         {/* Faculty ID Dialog */}
         <Dialog open={showFacultyIdDialog} onOpenChange={setShowFacultyIdDialog}>
           <DialogContent className="sm:max-w-[425px]">

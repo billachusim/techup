@@ -1,9 +1,10 @@
-import { Check, Sparkles, Zap, Rocket } from "lucide-react";
+import { Check, GraduationCap, Code, BarChart, Shield, Brain, Cloud, Palette, Megaphone, Star, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -16,12 +17,17 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { SignupForm } from "@/components/Auth/SignupForm";
 
+type PlanCategory = "all" | "beginner" | "development" | "data-ai" | "creative" | "security";
+
 const pricingPlans = [
   {
     name: "Bootcamp Starter",
-    icon: Sparkles,
+    icon: GraduationCap,
     price: "Free",
     description: "Perfect for beginners exploring tech careers",
+    category: "beginner" as PlanCategory,
+    gradient: "var(--gradient-beginner)",
+    colorClass: "text-gradient",
     features: [
       "Intro to Programming",
       "Intro to AI & ChatGPT",
@@ -33,14 +39,18 @@ const pricingPlans = [
     ],
     cta: "Start Free",
     popular: false,
+    badge: "Best for Beginners",
     isFree: true,
   },
   {
     name: "Developer Pro",
-    icon: Zap,
+    icon: Code,
     price: "$299",
     period: "/3 months",
     description: "Comprehensive web development mastery",
+    category: "development" as PlanCategory,
+    gradient: "var(--gradient-development)",
+    colorClass: "text-gradient-blue",
     features: [
       "Everything in Bootcamp Plan plus:",
       "Full-Stack Web Development",
@@ -54,14 +64,18 @@ const pricingPlans = [
     ],
     cta: "Enrol Now",
     popular: true,
+    badge: "Most Popular",
     isFree: false,
   },
   {
     name: "Data Wizard",
-    icon: Rocket,
+    icon: BarChart,
     price: "$349",
     period: "/3 months",
     description: "Master data science and analytics",
+    category: "data-ai" as PlanCategory,
+    gradient: "var(--gradient-data)",
+    colorClass: "text-gradient-purple",
     features: [
       "Everything in Bootcamp Plan plus:",
       "Python & SQL Mastery",
@@ -75,14 +89,18 @@ const pricingPlans = [
     ],
     cta: "Start Learning",
     popular: false,
+    badge: "High Demand",
     isFree: false,
   },
   {
     name: "Security Shield",
-    icon: Rocket,
+    icon: Shield,
     price: "$399",
     period: "/4 months",
     description: "Become a cybersecurity expert",
+    category: "security" as PlanCategory,
+    gradient: "var(--gradient-security)",
+    colorClass: "text-gradient-orange",
     features: [
       "Everything in Bootcamp Plan plus:",
       "Network Security",
@@ -96,14 +114,18 @@ const pricingPlans = [
     ],
     cta: "Tech Up",
     popular: false,
+    badge: "Critical Skills",
     isFree: false,
   },
   {
     name: "AI Innovator",
-    icon: Rocket,
+    icon: Brain,
     price: "$449",
     period: "/4 months",
     description: "Build cutting-edge AI solutions",
+    category: "data-ai" as PlanCategory,
+    gradient: "var(--gradient-data)",
+    colorClass: "text-gradient-purple",
     features: [
       "Everything in Bootcamp Plan plus:",
       "Deep Learning & Neural Networks",
@@ -117,14 +139,18 @@ const pricingPlans = [
     ],
     cta: "Start Now",
     popular: false,
+    badge: "Future Tech",
     isFree: false,
   },
   {
     name: "Cloud Architect",
-    icon: Rocket,
+    icon: Cloud,
     price: "$379",
     period: "/3 months",
     description: "Master cloud platforms and DevOps",
+    category: "development" as PlanCategory,
+    gradient: "var(--gradient-development)",
+    colorClass: "text-gradient-blue",
     features: [
       "Everything in Bootcamp Plan plus:",
       "AWS, Azure & GCP",
@@ -138,14 +164,18 @@ const pricingPlans = [
     ],
     cta: "Register",
     popular: false,
+    badge: "Enterprise Ready",
     isFree: false,
   },
   {
     name: "Design Master",
-    icon: Sparkles,
+    icon: Palette,
     price: "$279",
     period: "/3 months",
     description: "Master visual design and user experience",
+    category: "creative" as PlanCategory,
+    gradient: "var(--gradient-creative)",
+    colorClass: "text-gradient-pink",
     features: [
       "Everything in Bootcamp Plan plus:",
       "UI/UX Design Principles",
@@ -159,14 +189,18 @@ const pricingPlans = [
     ],
     cta: "Start Designing",
     popular: false,
+    badge: "Creative Track",
     isFree: false,
   },
   {
     name: "Digital Marketing Pro",
-    icon: Zap,
+    icon: Megaphone,
     price: "$259",
     period: "/3 months",
     description: "Master digital marketing and content creation",
+    category: "creative" as PlanCategory,
+    gradient: "var(--gradient-creative)",
+    colorClass: "text-gradient-pink",
     features: [
       "Everything in Bootcamp Plan plus:",
       "Social Media Strategy",
@@ -180,6 +214,7 @@ const pricingPlans = [
     ],
     cta: "Go Digital",
     popular: false,
+    badge: "Business Growth",
     isFree: false,
   },
 ];
@@ -208,7 +243,12 @@ const Pricing = () => {
   const [showSignUpForm, setShowSignUpForm] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<string>("");
   const [facultyId, setFacultyId] = useState("");
+  const [activeCategory, setActiveCategory] = useState<PlanCategory>("all");
   const { toast } = useToast();
+
+  const filteredPlans = activeCategory === "all" 
+    ? pricingPlans 
+    : pricingPlans.filter(plan => plan.category === activeCategory);
 
   const handleCouponChange = (planName: string, value: string) => {
     setCouponCodes({ ...couponCodes, [planName]: value });
@@ -326,163 +366,231 @@ const Pricing = () => {
     });
   };
 
+  const renderPlanCard = (plan: typeof pricingPlans[0], idx: number) => {
+    const Icon = plan.icon;
+    return (
+      <Card
+        key={idx}
+        className={`relative bg-card border-border hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group ${
+          plan.popular ? "border-primary shadow-lg" : ""
+        }`}
+      >
+        {plan.popular && (
+          <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+            <Badge className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background border-none px-4 py-1 shadow-lg animate-pulse">
+              <Star className="w-3 h-3 mr-1 inline" />
+              {plan.badge}
+            </Badge>
+          </div>
+        )}
+        {!plan.popular && plan.badge && (
+          <Badge 
+            className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 border-border bg-background text-foreground"
+            variant="outline"
+          >
+            {plan.badge}
+          </Badge>
+        )}
+
+        <CardHeader className="text-center pb-8 pt-8">
+          <div 
+            className="mx-auto p-4 rounded-xl w-fit mb-4 transition-transform duration-300 group-hover:scale-110"
+            style={{ background: plan.gradient }}
+          >
+            <Icon size={36} className="text-background" />
+          </div>
+          <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
+          <p className="text-sm text-muted-foreground mb-4 min-h-[40px]">
+            {plan.description}
+          </p>
+          <div className={`text-4xl font-bold ${plan.colorClass}`}>
+            {plan.price}
+            {plan.period && (
+              <span className="text-lg text-muted-foreground font-normal">
+                {plan.period}
+              </span>
+            )}
+          </div>
+        </CardHeader>
+
+        <CardContent className="space-y-3 pb-6">
+          {plan.features.map((feature, fIdx) => (
+            <div key={fIdx} className="flex items-start gap-2">
+              <div 
+                className="p-0.5 rounded-full mt-0.5"
+                style={{ background: plan.gradient }}
+              >
+                <Check size={14} className="text-background" />
+              </div>
+              <span className={`text-sm ${fIdx === 0 && !plan.isFree ? "font-semibold text-foreground" : "text-muted-foreground"}`}>
+                {feature}
+              </span>
+            </div>
+          ))}
+        </CardContent>
+
+        <CardFooter className="flex-col gap-3">
+          {!plan.isFree && (
+            <div className="w-full">
+              <Input
+                placeholder="Have a coupon? Enter here"
+                value={couponCodes[plan.name] || ""}
+                onChange={(e) => handleCouponChange(plan.name, e.target.value)}
+                className="text-sm"
+              />
+              <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                <TrendingUp className="w-3 h-3" />
+                Apply coupon for 50% off
+              </p>
+            </div>
+          )}
+          <Button
+            className="w-full group/btn"
+            size="lg"
+            onClick={() => handlePlanClick(plan.name)}
+            style={{ 
+              background: plan.popular ? plan.gradient : undefined,
+            }}
+            variant={plan.popular ? "default" : "outline"}
+          >
+            {plan.cta}
+            <TrendingUp className="w-4 h-4 ml-2 transition-transform group-hover/btn:translate-x-1" />
+          </Button>
+        </CardFooter>
+      </Card>
+    );
+  };
+
   return (
-    <section id="pricing" className="py-24 px-4">
-      <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+    <section id="pricing" className="py-24 px-4 relative overflow-hidden">
+      {/* Animated background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 pointer-events-none" />
+      
+      <div className="container mx-auto max-w-7xl relative">
+        <div className="text-center mb-12">
+          <Badge className="mb-4 bg-primary/10 text-primary border-primary/20" variant="outline">
+            100% ROI Guarantee on Paid Plans
+          </Badge>
+          <h2 className="text-4xl md:text-6xl font-bold mb-4 text-gradient">
             Choose Your Path
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Flexible packages designed for every career goal. All paid plans include
-            our 100% ROI guarantee.
+            Flexible packages designed for every career goal. Start free or accelerate your journey with premium tracks.
           </p>
         </div>
 
-        <div className="relative">
-          <div className="overflow-x-auto pb-4 -mx-4 px-4">
-            <div className="flex gap-8 min-w-max">
-              {pricingPlans.map((plan, idx) => {
-                const Icon = plan.icon;
-                return (
-                  <Card
-                    key={idx}
-                    className={`relative bg-card border-border w-[350px] flex-shrink-0 ${
-                      plan.popular ? "border-primary" : ""
-                    }`}
-                  >
-                {plan.popular && (
-                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
-                    Most Popular
-                  </Badge>
-                )}
+        <Tabs value={activeCategory} onValueChange={(v) => setActiveCategory(v as PlanCategory)} className="w-full">
+          <TabsList className="grid w-full max-w-3xl mx-auto grid-cols-3 md:grid-cols-6 mb-12 h-auto p-1">
+            <TabsTrigger value="all" className="text-xs md:text-sm">
+              All Plans
+            </TabsTrigger>
+            <TabsTrigger value="beginner" className="text-xs md:text-sm">
+              Beginner
+            </TabsTrigger>
+            <TabsTrigger value="development" className="text-xs md:text-sm">
+              Development
+            </TabsTrigger>
+            <TabsTrigger value="data-ai" className="text-xs md:text-sm">
+              Data & AI
+            </TabsTrigger>
+            <TabsTrigger value="creative" className="text-xs md:text-sm">
+              Creative
+            </TabsTrigger>
+            <TabsTrigger value="security" className="text-xs md:text-sm">
+              Security
+            </TabsTrigger>
+          </TabsList>
 
-                <CardHeader className="text-center pb-8">
-                  <div className="mx-auto p-3 rounded-lg bg-primary/10 text-primary w-fit mb-4">
-                    <Icon size={32} />
-                  </div>
-                  <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {plan.description}
-                  </p>
-                  <div className="text-4xl font-bold text-gradient">
-                    {plan.price}
-                    {plan.period && (
-                      <span className="text-lg text-muted-foreground font-normal">
-                        {plan.period}
-                      </span>
-                    )}
-                  </div>
-                </CardHeader>
-
-                <CardContent className="space-y-3 pb-6">
-                  {plan.features.map((feature, fIdx) => (
-                    <div key={fIdx} className="flex items-start gap-2">
-                      <Check size={20} className="text-primary flex-shrink-0 mt-0.5" />
-                      <span className={`text-sm ${fIdx === 0 && !plan.isFree ? "font-semibold text-foreground" : "text-muted-foreground"}`}>
-                        {feature}
-                      </span>
-                    </div>
-                  ))}
-                </CardContent>
-
-                <CardFooter className="flex-col gap-3">
-                  {!plan.isFree && (
-                    <div className="w-full">
-                      <Input
-                        placeholder="Have a coupon? Enter here"
-                        value={couponCodes[plan.name] || ""}
-                        onChange={(e) => handleCouponChange(plan.name, e.target.value)}
-                        className="text-sm"
-                      />
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Apply coupon for 50% off
-                      </p>
-                    </div>
-                  )}
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    size="lg"
-                    onClick={() => handlePlanClick(plan.name)}
-                  >
-                    {plan.cta}
-                  </Button>
-                </CardFooter>
-                  </Card>
-                );
-              })}
+          <TabsContent value={activeCategory} className="mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fade-in">
+              {filteredPlans.map((plan, idx) => renderPlanCard(plan, idx))}
             </div>
+          </TabsContent>
+        </Tabs>
+
+        {/* Trust indicators */}
+        <div className="mt-16 flex flex-wrap justify-center items-center gap-8 text-center text-sm text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <Check className="w-4 h-4 text-primary" />
+            <span>500+ Students Enrolled</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Check className="w-4 h-4 text-primary" />
+            <span>85% Job Placement Rate</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Check className="w-4 h-4 text-primary" />
+            <span>Money-Back Guarantee</span>
           </div>
         </div>
-
-        {/* Faculty ID Dialog */}
-        <Dialog open={showFacultyIdDialog} onOpenChange={setShowFacultyIdDialog}>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Enter Your Faculty ID</DialogTitle>
-              <DialogDescription>
-                Please enter your Faculty ID to proceed with {selectedPlan}.
-              </DialogDescription>
-            </DialogHeader>
-
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="facultyIdInput">Faculty ID</Label>
-                <Input
-                  id="facultyIdInput"
-                  placeholder="e.g., TF-ABC123XYZ"
-                  value={facultyId}
-                  onChange={(e) => setFacultyId(e.target.value.toUpperCase())}
-                  maxLength={50}
-                />
-              </div>
-
-              <Button
-                onClick={handleFacultyIdSubmit}
-                className="w-full bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90"
-              >
-                Submit
-              </Button>
-
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-border"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-background text-muted-foreground">
-                    Don't have a Faculty ID?
-                  </span>
-                </div>
-              </div>
-
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowFacultyIdDialog(false);
-                  setShowSignUpForm(true);
-                }}
-                className="w-full"
-              >
-                Sign Up Here
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-
-        {/* Sign Up Form Dialog */}
-        <Dialog open={showSignUpForm} onOpenChange={setShowSignUpForm}>
-          <DialogContent className="sm:max-w-[500px]">
-            <DialogHeader>
-              <DialogTitle>Create Your Account</DialogTitle>
-              <DialogDescription>
-                Sign up to get your Faculty ID and enroll in {selectedPlan}.
-              </DialogDescription>
-            </DialogHeader>
-            <SignupForm onSuccess={handleSignUpSuccess} />
-          </DialogContent>
-        </Dialog>
       </div>
+
+      {/* Faculty ID Dialog */}
+      <Dialog open={showFacultyIdDialog} onOpenChange={setShowFacultyIdDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Enter Your Faculty ID</DialogTitle>
+            <DialogDescription>
+              Please enter your Faculty ID to proceed with {selectedPlan}.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="facultyIdInput">Faculty ID</Label>
+              <Input
+                id="facultyIdInput"
+                placeholder="e.g., TF-ABC123XYZ"
+                value={facultyId}
+                onChange={(e) => setFacultyId(e.target.value.toUpperCase())}
+                maxLength={50}
+              />
+            </div>
+
+            <Button
+              onClick={handleFacultyIdSubmit}
+              className="w-full bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90"
+            >
+              Submit
+            </Button>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-border"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-background text-muted-foreground">
+                  Don't have a Faculty ID?
+                </span>
+              </div>
+            </div>
+
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowFacultyIdDialog(false);
+                setShowSignUpForm(true);
+              }}
+              className="w-full"
+            >
+              Sign Up Here
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Sign Up Form Dialog */}
+      <Dialog open={showSignUpForm} onOpenChange={setShowSignUpForm}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Create Your Account</DialogTitle>
+            <DialogDescription>
+              Sign up to get your Faculty ID and enroll in {selectedPlan}.
+            </DialogDescription>
+          </DialogHeader>
+          <SignupForm onSuccess={handleSignUpSuccess} />
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

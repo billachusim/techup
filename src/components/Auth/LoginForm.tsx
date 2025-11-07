@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { useUser } from "@/contexts/UserContext";
 
 interface LoginFormProps {
   onSuccess: () => void;
@@ -12,18 +11,18 @@ interface LoginFormProps {
 }
 
 export const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
-  const [facultyId, setFacultyId] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const { login } = useUser();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!facultyId.trim()) {
+
+    if (!email.trim() || !password.trim()) {
       toast({
-        title: "Faculty ID Required",
-        description: "Please enter your Faculty ID.",
+        title: "Missing Credentials",
+        description: "Please enter your email and password.",
         variant: "destructive",
       });
       return;
@@ -32,51 +31,24 @@ export const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
     setIsLoading(true);
 
     try {
-      // Fetch profile by faculty_id
-      const { data: profile, error: profileError } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("faculty_id", facultyId.trim())
-        .single();
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password,
+      });
 
-      if (profileError || !profile) {
-        toast({
-          title: "Invalid Faculty ID",
-          description: "No account found with this Faculty ID. Please check and try again.",
-          variant: "destructive",
-        });
-        return;
-      }
+      if (error) throw error;
 
-      // Get the authenticated user
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      toast({
+        title: "Welcome Back!",
+        description: "You've been signed in successfully.",
+      });
 
-      if (userError || !user) {
-        toast({
-          title: "Authentication Error",
-          description: "Please sign in with your email and password first.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      // Verify the profile belongs to the authenticated user
-      if (profile.id !== user.id) {
-        toast({
-          title: "Access Denied",
-          description: "This Faculty ID does not match your account.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      login(user, profile);
       onSuccess();
     } catch (error: any) {
       console.error("Login error:", error);
       toast({
-        title: "Login Error",
-        description: error.message || "Unable to login. Please try again.",
+        title: "Login Failed",
+        description: error.message || "Invalid email or password.",
         variant: "destructive",
       });
     } finally {
@@ -87,27 +59,41 @@ export const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <Label htmlFor="facultyId">Faculty ID</Label>
+        <Label htmlFor="login-email">Email</Label>
         <Input
-          id="facultyId"
-          value={facultyId}
-          onChange={(e) => setFacultyId(e.target.value)}
-          placeholder="TF-XXXXX-XXXX"
-          className="font-mono"
+          id="login-email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="john@example.com"
+          autoComplete="email"
         />
       </div>
 
-      <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading ? "Accessing Profile..." : "Access Profile"}
-      </Button>
+      <div>
+        <Label htmlFor="login-password">Password</Label>
+        <Input
+          id="login-password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter your password"
+          autoComplete="current-password"
+        />
+      </div>
 
-      <Button
-        type="button"
-        variant="link"
-        className="w-full"
-        onClick={onForgotPassword}
-      >
-        Forgot your Faculty ID?
+      <div className="text-right">
+        <button
+          type="button"
+          onClick={onForgotPassword}
+          className="text-sm text-primary hover:underline"
+        >
+          Forgot your Faculty ID?
+        </button>
+      </div>
+
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading ? "Signing In..." : "Sign In"}
       </Button>
     </form>
   );

@@ -49,7 +49,7 @@ const Header = () => {
             <img src={logo} alt="Tech Faculty Logo" className="h-10 w-10" />
             <div>
               <div className="text-xl font-bold">Tech Faculty</div>
-              <div className="text-xs text-muted-foreground">Get Trained, Certified, and Employed</div>
+              <div className="text-xs text-muted-foreground">Train, Certify and Employ</div>
             </div>
           </Link>
           

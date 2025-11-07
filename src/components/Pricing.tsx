@@ -243,7 +243,7 @@ const Pricing = () => {
   const [showSignUpForm, setShowSignUpForm] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<string>("");
   const [facultyId, setFacultyId] = useState("");
-  const [activeCategory, setActiveCategory] = useState<PlanCategory>("all");
+  const [activeCategory, setActiveCategory] = useState<PlanCategory>("beginner");
   const { toast } = useToast();
 
   const filteredPlans = activeCategory === "all" 

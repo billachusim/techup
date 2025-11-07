@@ -574,10 +574,22 @@ Please confirm my Faculty ID. Thank you!`;
                 </h3>
                  {coursesData.length > 0 ? (
                   <div className="space-y-6">
-                    {(showAllCourses ? coursesData : coursesData.slice(0, 3)).map((enrollment: any) => {
+                    {(showAllCourses ? coursesData : coursesData.slice(0, 3)).map((enrollment: any, index: number) => {
                       const progress = enrollment.course_progress?.[0];
                       const classesCompleted = progress?.classes_completed || 0;
                       const progressPercentage = classesCompleted * 25;
+                      
+                      // Check if all previous courses are completed
+                      const allCoursesToDisplay = showAllCourses ? coursesData : coursesData.slice(0, 3);
+                      const isPreviousCourseIncomplete = index > 0 && allCoursesToDisplay
+                        .slice(0, index)
+                        .some((prevEnrollment: any) => {
+                          const prevProgress = prevEnrollment.course_progress?.[0];
+                          const prevCompleted = prevProgress?.classes_completed || 0;
+                          return prevCompleted < 4;
+                        });
+                      
+                      const isCourseActive = !isPreviousCourseIncomplete;
                       
                       return (
                         <div key={enrollment.id} className="border rounded-lg p-4 space-y-4">
@@ -606,22 +618,26 @@ Please confirm my Faculty ID. Thank you!`;
                                   const isCompleted = classesCompleted >= checkpoint;
                                   const isNext = checkpoint === classesCompleted + 1;
                                   const isCurrentLast = checkpoint === classesCompleted;
-                                  const canInteract = isNext || isCurrentLast;
+                                  const canInteract = isCourseActive && (isNext || isCurrentLast);
                                   
                                   return (
                                     <button
                                       key={checkpoint}
-                                      onClick={() => handleCheckpointComplete(enrollment.course_id, checkpoint)}
+                                      onClick={() => canInteract && handleCheckpointComplete(enrollment.course_id, checkpoint)}
                                       disabled={!canInteract}
                                       className={`flex-1 h-8 rounded-md border-2 transition-all flex items-center justify-center ${
-                                        isCompleted
+                                        !isCourseActive
+                                          ? "bg-background border-muted-foreground/20 cursor-not-allowed opacity-40"
+                                          : isCompleted
                                           ? "bg-primary border-primary text-primary-foreground"
                                           : isNext
                                           ? "bg-background border-primary/50 hover:border-primary hover:bg-primary/5 cursor-pointer"
                                           : "bg-background border-muted-foreground/20 cursor-not-allowed opacity-50"
-                                      } ${isCurrentLast && isCompleted ? "cursor-pointer hover:opacity-80" : ""}`}
+                                      } ${isCourseActive && isCurrentLast && isCompleted ? "cursor-pointer hover:opacity-80" : ""}`}
                                       title={
-                                        isCurrentLast && isCompleted 
+                                        !isCourseActive
+                                          ? "Complete previous course first"
+                                          : isCurrentLast && isCompleted 
                                           ? "Click to undo" 
                                           : isNext 
                                           ? "Click to complete" 
@@ -636,6 +652,12 @@ Please confirm my Faculty ID. Thank you!`;
                                  })}
                               </div>
                             </div>
+                            
+                            {!isCourseActive && (
+                              <p className="text-xs text-muted-foreground italic pt-2">
+                                Complete the previous course to unlock this one
+                              </p>
+                            )}
                             
                             <div className="flex gap-2 pt-2">{enrollment.courses?.whatsapp_group_link && (
                                 <Button

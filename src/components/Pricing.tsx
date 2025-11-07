@@ -11,16 +11,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { SignupForm } from "@/components/Auth/SignupForm";
 
 const pricingPlans = [
   {
@@ -214,13 +208,6 @@ const Pricing = () => {
   const [showSignUpForm, setShowSignUpForm] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<string>("");
   const [facultyId, setFacultyId] = useState("");
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    course: "",
-    hearAbout: "",
-  });
   const { toast } = useToast();
 
   const handleCouponChange = (planName: string, value: string) => {
@@ -315,68 +302,12 @@ const Pricing = () => {
     });
   };
 
-  const handleSignUpSubmit = async () => {
-    // Validate form
-    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim() || !formData.course || !formData.hearAbout) {
-      toast({
-        title: "Incomplete Form",
-        description: "Please fill in all required fields.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Validate email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      toast({
-        title: "Invalid Email",
-        description: "Please enter a valid email address.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Validate phone
-    if (formData.phone.length < 10) {
-      toast({
-        title: "Invalid Phone Number",
-        description: "Please enter a valid phone number.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const newFacultyId = generateFacultyId();
-    
-    // Save to database
-    const { error: facultyError } = await supabase
-      .from('faculty_ids')
-      .insert({
-        faculty_id: newFacultyId,
-        name: formData.name.trim(),
-        email: formData.email.trim(),
-        phone: formData.phone.trim(),
-        course_interest: formData.course,
-        hear_about_us: formData.hearAbout,
-        status: 'active'
-      });
-
-    if (facultyError) {
-      console.error('Error saving Faculty ID:', facultyError);
-      toast({
-        title: "Registration Error",
-        description: "Unable to complete registration. Please try again.",
-        variant: "destructive",
-      });
-      return;
-    }
-
+  const handleSignUpSuccess = async (facultyId: string) => {
     // Save enrollment to database
     const { error: enrollmentError } = await supabase
       .from('enrollments')
       .insert({
-        faculty_id: newFacultyId,
+        faculty_id: facultyId,
         plan_name: selectedPlan,
         coupon_code: couponCodes[selectedPlan] || null,
         status: 'pending'
@@ -386,38 +317,12 @@ const Pricing = () => {
       console.error('Error saving enrollment:', enrollmentError);
     }
 
-    const plan = pricingPlans.find((p) => p.name === selectedPlan);
-    const planMessage = plan?.isFree
-      ? `I'm registering for the *${selectedPlan}* (Free Bootcamp).`
-      : `I'm ready to pay for *${selectedPlan}*.`;
-
-    const message = `Hi! ${planMessage}
-
-*My Details:*
-Name: ${formData.name.trim()}
-Email: ${formData.email.trim()}
-Phone: ${formData.phone.trim()}
-Interested in: ${formData.course}
-How I heard about you: ${formData.hearAbout}
-
-*My Faculty ID: ${newFacultyId}*`;
-
-    const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
-    
     setShowSignUpForm(false);
     setShowFacultyIdDialog(false);
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      course: "",
-      hearAbout: "",
-    });
-
+    
     toast({
       title: "Registration Successful!",
-      description: `Your Faculty ID (${newFacultyId}) has been saved and sent to WhatsApp.`,
+      description: `You're enrolled in ${selectedPlan}. Your Faculty ID has been saved.`,
     });
   };
 
@@ -569,93 +474,12 @@ How I heard about you: ${formData.hearAbout}
         <Dialog open={showSignUpForm} onOpenChange={setShowSignUpForm}>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
-              <DialogTitle>Get Your Faculty ID</DialogTitle>
+              <DialogTitle>Create Your Account</DialogTitle>
               <DialogDescription>
-                Fill in your details to receive your unique Faculty ID.
+                Sign up to get your Faculty ID and enroll in {selectedPlan}.
               </DialogDescription>
             </DialogHeader>
-
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Full Name *</Label>
-                <Input
-                  id="name"
-                  placeholder="Enter your full name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  maxLength={100}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email">Email Address *</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="your.email@example.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  maxLength={255}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="phone">WhatsApp Number *</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="+234 XXX XXX XXXX"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  maxLength={20}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="course">Course Interest *</Label>
-                <Select
-                  value={formData.course}
-                  onValueChange={(value) => setFormData({ ...formData, course: value })}
-                >
-                  <SelectTrigger id="course">
-                    <SelectValue placeholder="Select a course" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {courses.map((course) => (
-                      <SelectItem key={course} value={course}>
-                        {course}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="hearAbout">How did you hear about us? *</Label>
-                <Select
-                  value={formData.hearAbout}
-                  onValueChange={(value) => setFormData({ ...formData, hearAbout: value })}
-                >
-                  <SelectTrigger id="hearAbout">
-                    <SelectValue placeholder="Select an option" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {hearAboutUs.map((option) => (
-                      <SelectItem key={option} value={option}>
-                        {option}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <Button
-                onClick={handleSignUpSubmit}
-                className="w-full bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90"
-              >
-                Submit & Get Faculty ID
-              </Button>
-            </div>
+            <SignupForm onSuccess={handleSignUpSuccess} />
           </DialogContent>
         </Dialog>
       </div>

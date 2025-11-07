@@ -67,13 +67,38 @@ const testimonials = [
 
 const Testimonials = () => {
   const [currentCard, setCurrentCard] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   useEffect(() => {
+    if (isPaused) return;
+    
     const interval = setInterval(() => {
       setCurrentCard((prev) => (prev + 1) % testimonials.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isPaused]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 75) {
+      // Swiped left
+      setCurrentCard((prev) => (prev + 1) % testimonials.length);
+    }
+
+    if (touchStart - touchEnd < -75) {
+      // Swiped right
+      setCurrentCard((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    }
+  };
 
   return (
     <section id="testimonials" className="py-24 px-4 bg-secondary">
@@ -87,7 +112,14 @@ const Testimonials = () => {
           </p>
         </div>
 
-        <div className="relative overflow-hidden">
+        <div 
+          className="relative overflow-hidden"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <div className="flex justify-center">
             {testimonials.map((testimonial, idx) => (
               <Card

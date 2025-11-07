@@ -23,7 +23,7 @@ const hearAboutUs = [
 ];
 
 interface SignupFormProps {
-  onSuccess: () => void;
+  onSuccess: (facultyId: string) => void;
 }
 
 export const SignupForm = ({ onSuccess }: SignupFormProps) => {
@@ -132,7 +132,7 @@ Phone: ${formData.phone.trim()}
         description: `Your Faculty ID is ${newFacultyId}. Welcome to Tech Faculty!`,
       });
 
-      onSuccess();
+      onSuccess(newFacultyId);
     } catch (error: any) {
       console.error("Signup error:", error);
       toast({

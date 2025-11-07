@@ -73,33 +73,43 @@ const GetStarted = () => {
         "Bootcamp Starter": "bootcamp_starter",
         "Developer Pro": "developer_pro",
         "Data Wizard": "data_wizard",
+        "Security Shield": "security_shield",
+        "AI Innovator": "ai_innovator",
+        "Cloud Architect": "cloud_architect",
+        "Design Master": "design_master",
+        "Digital Marketing Pro": "digital_marketing_pro",
       };
 
       const departmentMapping: { [key: string]: string } = {
+        "Free Bootcamp": "General Tech",
+        "Bootcamp Starter": "General Tech",
         "Developer Pro": "Web Development",
         "Data Wizard": "Data Science",
-        "Bootcamp Starter": "General Tech",
-        "Free Bootcamp": "General Tech",
+        "Security Shield": "Cyber Security",
+        "AI Innovator": "Machine Learning",
+        "Cloud Architect": "Cloud Computing",
+        "Design Master": "UI/UX Design",
+        "Digital Marketing Pro": "Digital Marketing",
       };
 
-      const dbPlanName = planMapping[enrollment?.plan_name] || "free_bootcamp";
-      const userDepartment = departmentMapping[enrollment?.plan_name] || "General Tech";
+      const dbPlanName = planMapping[enrollment?.plan_name || ""] || "free_bootcamp";
+      const resolvedDepartment = profileData?.department || departmentMapping[enrollment?.plan_name || ""] || "General Tech";
 
-      // Update profile with department
+      // Initialize user data with profile, preferring server department when available
       setUserData({
         ...profileData,
-        department: userDepartment
+        department: resolvedDepartment,
       });
 
-      // Fetch courses filtered by plan
+      // Fetch courses filtered by plan (used for client-side hints)
       const { data: courses } = await supabase
         .from('courses')
         .select('*')
         .eq('plan_required', dbPlanName)
-        .eq('department', userDepartment);
+        .eq('department', resolvedDepartment);
 
       const coursesAvailable = courses || [];
-      console.log('Courses available for plan:', { dbPlanName, userDepartment, coursesAvailable });
+      console.log('Courses available for plan:', { dbPlanName, resolvedDepartment, coursesAvailable });
 
       // Auto-enroll handled by backend function
 
@@ -114,6 +124,20 @@ const GetStarted = () => {
         courseEnrollments = userCourses?.enrollments || [];
         console.log('User courses from function:', userCourses);
         setCoursesData(courseEnrollments);
+
+        // Refresh profile to ensure department reflects current plan
+        try {
+          const { data: refreshedProfile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('faculty_id', facultyIdToFetch)
+            .single();
+          if (refreshedProfile) {
+            setUserData(refreshedProfile);
+          }
+        } catch (e) {
+          console.warn('Could not refresh profile after syncing courses:', e);
+        }
       } catch (fnErr) {
         console.error('Error fetching user courses via function:', fnErr);
         setCoursesData([]);

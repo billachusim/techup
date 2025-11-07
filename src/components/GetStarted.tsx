@@ -91,9 +91,11 @@ const GetStarted = () => {
       const { data: courses } = await supabase
         .from('courses')
         .select('*')
-        .eq('plan_required', dbPlanName);
+        .eq('plan_required', dbPlanName)
+        .eq('department', userDepartment);
 
       const coursesAvailable = courses || [];
+      console.log('Courses available for plan:', { dbPlanName, userDepartment, coursesAvailable });
 
       // Auto-enroll user in plan courses if not already enrolled
       if (coursesAvailable.length > 0) {
@@ -117,16 +119,21 @@ const GetStarted = () => {
         }
       }
 
-      // Fetch enrollments for these courses
-      const { data: courseEnrollments } = await supabase
+      // Fetch enrollments for courses in the current plan
+      const { data: courseEnrollments, error: enrollmentError } = await supabase
         .from('course_enrollments')
         .select(`
           *,
-          courses (*),
+          courses!inner (
+            *
+          ),
           course_progress (*)
         `)
         .eq('faculty_id', facultyIdToFetch)
-        .in('course_id', coursesAvailable.map((c: any) => c.id));
+        .eq('courses.plan_required', dbPlanName)
+        .eq('courses.department', userDepartment);
+
+      console.log('Course enrollments query result:', { courseEnrollments, enrollmentError, dbPlanName, userDepartment });
 
       setCoursesData(courseEnrollments || []);
 

@@ -58,6 +58,7 @@ export type Database = {
       }
       course_progress: {
         Row: {
+          classes_completed: number | null
           completed_at: string | null
           course_id: string
           created_at: string
@@ -68,6 +69,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          classes_completed?: number | null
           completed_at?: string | null
           course_id: string
           created_at?: string
@@ -78,6 +80,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          classes_completed?: number | null
           completed_at?: string | null
           course_id?: string
           created_at?: string

@@ -148,7 +148,7 @@ const GetStarted = () => {
         if (!allLectures || allLectures.length === 0) {
           try {
             const { data: aiData, error: aiError } = await supabase.functions.invoke('generate-next-class', {
-              body: { courses: coursesAvailable }
+              body: { courses: courseEnrollments }
             });
 
             if (aiError) throw aiError;
@@ -194,54 +194,58 @@ const GetStarted = () => {
     });
   };
 
-  const handleLectureComplete = async (lectureId: string, courseId: string) => {
+  // Handle class checkpoint completion
+  const handleCheckpointComplete = async (courseId: string, checkpointNumber: number) => {
     if (!userData?.faculty_id) return;
 
     try {
-      // Get or create course progress record
-      const { data: existingProgress } = await supabase
-        .from('course_progress')
-        .select('*')
-        .eq('faculty_id', userData.faculty_id)
-        .eq('course_id', courseId)
+      // Get current progress for this course
+      const { data: progressData } = await supabase
+        .from("course_progress")
+        .select("*")
+        .eq("faculty_id", userData.faculty_id)
+        .eq("course_id", courseId)
         .maybeSingle();
 
-      // Calculate new progress percentage
-      const totalLectures = lecturesData.filter((l: any) => l.course_id === courseId).length;
-      const completedCount = existingProgress ? existingProgress.progress_percentage / 100 * totalLectures + 1 : 1;
-      const newProgress = Math.min(Math.round((completedCount / totalLectures) * 100), 100);
+      const newClassesCompleted = checkpointNumber;
+      const newProgress = newClassesCompleted * 25;
 
-      if (existingProgress) {
-        await supabase
-          .from('course_progress')
-          .update({
+      if (progressData) {
+        const { error } = await supabase
+          .from("course_progress")
+          .update({ 
+            classes_completed: newClassesCompleted,
             progress_percentage: newProgress,
-            last_accessed: lectureId,
-            updated_at: new Date().toISOString(),
+            last_accessed: new Date().toISOString(),
             ...(newProgress === 100 ? { completed_at: new Date().toISOString() } : {})
           })
-          .eq('id', existingProgress.id);
+          .eq("id", progressData.id);
+
+        if (error) throw error;
       } else {
-        await supabase
-          .from('course_progress')
+        // Create new progress record
+        const { error } = await supabase
+          .from("course_progress")
           .insert({
             faculty_id: userData.faculty_id,
             course_id: courseId,
+            classes_completed: newClassesCompleted,
             progress_percentage: newProgress,
-            last_accessed: lectureId,
-            ...(newProgress === 100 ? { completed_at: new Date().toISOString() } : {})
+            last_accessed: new Date().toISOString()
           });
-      }
 
-      // Refresh dashboard data
-      await fetchUserDashboardData(userData.faculty_id);
+        if (error) throw error;
+      }
 
       toast({
         title: "Progress Updated",
-        description: "Lecture marked as completed!",
+        description: `Class ${newClassesCompleted} of 4 completed!`,
       });
+      
+      // Refresh dashboard data
+      await fetchUserDashboardData(userData.faculty_id);
     } catch (error) {
-      console.error('Error updating progress:', error);
+      console.error("Error updating progress:", error);
       toast({
         title: "Error",
         description: "Failed to update progress. Please try again.",
@@ -487,12 +491,12 @@ Please confirm my Faculty ID. Thank you!`;
                   <BookOpen className="text-primary" size={20} />
                   Your Courses
                 </h3>
-                {coursesData.length > 0 ? (
+                 {coursesData.length > 0 ? (
                   <div className="space-y-6">
                     {(showAllCourses ? coursesData : coursesData.slice(0, 3)).map((enrollment: any) => {
-                      const progress = enrollment.course_progress?.[0]?.progress_percentage || 0;
-                      const courseLectures = lecturesData.filter((l: any) => l.course_id === enrollment.course_id);
-                      const completedLectureId = enrollment.course_progress?.[0]?.last_accessed;
+                      const progress = enrollment.course_progress?.[0];
+                      const classesCompleted = progress?.classes_completed || 0;
+                      const progressPercentage = classesCompleted * 25;
                       
                       return (
                         <div key={enrollment.id} className="border rounded-lg p-4 space-y-4">
@@ -501,49 +505,38 @@ Please confirm my Faculty ID. Thank you!`;
                               <h4 className="font-semibold">{enrollment.courses?.name}</h4>
                               <p className="text-sm text-muted-foreground">{enrollment.courses?.description}</p>
                             </div>
-                            <Badge variant="outline">{progress}%</Badge>
+                            <Badge variant={classesCompleted === 4 ? "default" : "outline"}>
+                              {classesCompleted}/4 Classes
+                            </Badge>
                           </div>
                           
-                          <div className="space-y-2">
-                            <Progress value={progress} className="h-2" />
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center text-sm">
+                              <span className="text-muted-foreground">Progress</span>
+                              <span className="font-medium">{progressPercentage}%</span>
+                            </div>
+                            <Progress value={progressPercentage} className="h-2" />
                             
-                            {/* Lectures List */}
-                            {courseLectures.length > 0 && (
-                              <div className="mt-4 space-y-2">
-                                <h5 className="font-medium text-sm mb-3">Course Lectures</h5>
-                                {courseLectures.map((lecture: any, index: number) => {
-                                  const isCompleted = lecture.id === completedLectureId || 
-                                    courseLectures.findIndex((l: any) => l.id === completedLectureId) > index;
-                                  
-                                  return (
-                                    <div key={lecture.id} className="flex items-center gap-3 p-3 border rounded hover:bg-accent/50 transition-colors">
-                                      <Checkbox
-                                        checked={isCompleted}
-                                        onCheckedChange={(checked) => {
-                                          if (checked) {
-                                            handleLectureComplete(lecture.id, enrollment.course_id);
-                                          }
-                                        }}
-                                        disabled={isCompleted}
-                                      />
-                                      <div className="flex-1 min-w-0">
-                                        <p className={`text-sm font-medium ${isCompleted ? 'text-muted-foreground line-through' : ''}`}>
-                                          {lecture.title}
-                                        </p>
-                                        <p className="text-xs text-muted-foreground">
-                                          {new Date(lecture.scheduled_at).toLocaleDateString()} at {new Date(lecture.scheduled_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        </p>
-                                      </div>
-                                      {isCompleted ? (
-                                        <CheckCircle2 className="text-primary shrink-0" size={18} />
-                                      ) : (
-                                        <Circle className="text-muted-foreground shrink-0" size={18} />
-                                      )}
-                                    </div>
-                                  );
-                                })}
+                            {/* Checkpoint Markers */}
+                            <div className="flex items-center gap-2 pt-1">
+                              <span className="text-xs text-muted-foreground min-w-fit">Mark class:</span>
+                              <div className="flex gap-2 flex-1">
+                                {[1, 2, 3, 4].map((checkpoint) => (
+                                  <button
+                                    key={checkpoint}
+                                    onClick={() => handleCheckpointComplete(enrollment.course_id, checkpoint)}
+                                    disabled={classesCompleted >= checkpoint}
+                                    className={`flex-1 h-8 rounded-md border-2 transition-all flex items-center justify-center ${
+                                      classesCompleted >= checkpoint
+                                        ? "bg-primary border-primary text-primary-foreground cursor-default"
+                                        : "bg-background border-muted-foreground/30 hover:border-primary hover:bg-primary/5 cursor-pointer"
+                                    }`}
+                                  >
+                                    <span className="text-xs font-medium">{checkpoint}</span>
+                                  </button>
+                                ))}
                               </div>
-                            )}
+                            </div>
                             
                             <div className="flex gap-2 pt-2">
                               {enrollment.courses?.whatsapp_group_link && (

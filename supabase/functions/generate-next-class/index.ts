@@ -34,12 +34,24 @@ serve(async (req) => {
       );
     }
 
-    const courseList = courses.map((c: any) => `- ${c.name}: ${c.description}`).join("\n");
+    // Filter to find incomplete courses (less than 4 classes completed)
+    const incompleteCourses = courses.filter((c: any) => {
+      const classesCompleted = c.course_progress?.[0]?.classes_completed || 0;
+      return classesCompleted < 4;
+    });
+
+    // Use incomplete courses if available, otherwise use all courses
+    const coursesToConsider = incompleteCourses.length > 0 ? incompleteCourses : courses;
+
+    const courseList = coursesToConsider.map((c: any) => {
+      const classesCompleted = c.courses?.course_progress?.[0]?.classes_completed || 0;
+      return `- ${c.courses?.name}: ${c.courses?.description} [Progress: ${classesCompleted}/4 classes]`;
+    }).join("\n");
     
-    const prompt = `Based on these courses:
+    const prompt = `Based on these courses (prioritize those with fewer completed classes):
 ${courseList}
 
-Generate a detailed next class/lecture for the first course. The class should be relevant, engaging, and build upon foundational concepts. Return ONLY a JSON object with this exact structure (no markdown, no code blocks, just the JSON):
+Generate a detailed next class/lecture for the course that needs it most. The class should be relevant, engaging, and build upon foundational concepts. Return ONLY a JSON object with this exact structure (no markdown, no code blocks, just the JSON):
 {
   "title": "specific lecture title",
   "description": "detailed 2-3 sentence description of what will be covered",

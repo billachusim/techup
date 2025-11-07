@@ -5,3 +5,7 @@ verify_jwt = false
 
 [functions.user-courses]
 verify_jwt = false
+
+[functions.faculty-ai-chat]
+verify_jwt = false
+

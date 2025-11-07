@@ -8,8 +8,11 @@ import Clarity from "@/components/Clarity";
 import Pricing from "@/components/Pricing";
 import GetStarted from "@/components/GetStarted";
 import Footer from "@/components/Footer";
+import { useUser } from "@/contexts/UserContext";
 
 const Index = () => {
+  const { isLoggedIn } = useUser();
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -20,7 +23,7 @@ const Index = () => {
         <Companies />
         <Testimonials />
         <Clarity />
-        <Pricing />
+        {!isLoggedIn && <Pricing />}
         <GetStarted />
       </main>
       <Footer />

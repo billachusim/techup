@@ -51,23 +51,9 @@ serve(async (req) => {
     const prompt = `Based on these courses (prioritize those with fewer completed classes):
 ${courseList}
 
-Generate a detailed next class/lecture for the course that needs it most. The class should be relevant, engaging, and build upon foundational concepts. Return ONLY a JSON object with this exact structure (no markdown, no code blocks, just the JSON):
-{
-  "title": "specific lecture title",
-  "description": "detailed 2-3 sentence description of what will be covered",
-  "date": "date in format YYYY-MM-DD that is within the next 7 days from today",
-  "duration": "90",
-  "course": "name of the course this lecture belongs to",
-  "classNumber": "the class number (1-4) based on current progress + 1",
-  "resources": [
-    {"type": "youtube", "title": "resource title", "url": "youtube link"},
-    {"type": "website", "title": "resource title", "url": "website link"},
-    {"type": "article", "title": "resource title", "url": "article link"}
-  ],
-  "handoutContent": "A detailed 2-page summary of what will be covered in this class, including key concepts, learning objectives, practical exercises, and takeaways. Format it in markdown with sections."
-}`;
+Generate a detailed next class/lecture for the course that needs it most. The class should be relevant, engaging, and build upon foundational concepts.`;
 
-    console.log("Calling Lovable AI with prompt:", prompt);
+    console.log("Calling Lovable AI with structured output");
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -80,10 +66,74 @@ Generate a detailed next class/lecture for the course that needs it most. The cl
         messages: [
           { 
             role: "system", 
-            content: "You are a curriculum assistant. Generate realistic and engaging lecture details. Always respond with valid JSON only, no markdown formatting." 
+            content: "You are a curriculum assistant. Generate realistic and engaging lecture details with comprehensive resources and handouts." 
           },
           { role: "user", content: prompt }
         ],
+        tools: [
+          {
+            type: "function",
+            function: {
+              name: "generate_next_class",
+              description: "Generate a detailed next class for a bootcamp course",
+              parameters: {
+                type: "object",
+                properties: {
+                  title: {
+                    type: "string",
+                    description: "Specific, engaging lecture title"
+                  },
+                  description: {
+                    type: "string",
+                    description: "Detailed 2-3 sentence description of what will be covered"
+                  },
+                  date: {
+                    type: "string",
+                    description: "Date in format YYYY-MM-DD within next 7 days from today"
+                  },
+                  duration: {
+                    type: "string",
+                    description: "Duration in minutes (default 90)"
+                  },
+                  course: {
+                    type: "string",
+                    description: "Name of the course this lecture belongs to"
+                  },
+                  classNumber: {
+                    type: "number",
+                    description: "The class number (1-4) based on current progress + 1"
+                  },
+                  resources: {
+                    type: "array",
+                    description: "Array of 3-5 educational resources",
+                    items: {
+                      type: "object",
+                      properties: {
+                        type: {
+                          type: "string",
+                          enum: ["youtube", "website", "article", "documentation"]
+                        },
+                        title: {
+                          type: "string"
+                        },
+                        url: {
+                          type: "string"
+                        }
+                      },
+                      required: ["type", "title", "url"]
+                    }
+                  },
+                  handoutContent: {
+                    type: "string",
+                    description: "A detailed 2-page summary in markdown format with sections for: Overview, Key Concepts, Learning Objectives, Practical Exercises, and Key Takeaways"
+                  }
+                },
+                required: ["title", "description", "date", "duration", "course", "classNumber", "resources", "handoutContent"]
+              }
+            }
+          }
+        ],
+        tool_choice: { type: "function", function: { name: "generate_next_class" } }
       }),
     });
 
@@ -108,23 +158,18 @@ Generate a detailed next class/lecture for the course that needs it most. The cl
     }
 
     const data = await response.json();
-    const content = data.choices?.[0]?.message?.content;
+    const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
     
-    console.log("AI Response content:", content);
+    console.log("AI Response:", JSON.stringify(data, null, 2));
 
-    if (!content) {
-      throw new Error("No content in AI response");
+    if (!toolCall || !toolCall.function?.arguments) {
+      throw new Error("No tool call in AI response");
     }
 
-    // Parse the JSON response, removing any markdown code blocks if present
-    let jsonContent = content.trim();
-    if (jsonContent.startsWith("```json")) {
-      jsonContent = jsonContent.replace(/```json\n?/g, "").replace(/```\n?/g, "");
-    } else if (jsonContent.startsWith("```")) {
-      jsonContent = jsonContent.replace(/```\n?/g, "");
-    }
+    // Parse the structured output from tool calling
+    const nextClass = JSON.parse(toolCall.function.arguments);
     
-    const nextClass = JSON.parse(jsonContent);
+    console.log("Parsed next class:", JSON.stringify(nextClass, null, 2));
 
     return new Response(
       JSON.stringify({ nextClass }),

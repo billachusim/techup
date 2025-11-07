@@ -21,17 +21,9 @@ const FacultyDiscount = () => {
             </div>
 
             {/* Content Section */}
-            <div className="flex-1 text-center md:text-left space-y-4">
-              <h2 className="text-3xl md:text-4xl font-bold">
-                Exclusive Faculty Member{" "}
-                <span className="bg-gradient-to-r from-primary via-[hsl(170,100%,47%)] to-[hsl(180,100%,45%)] bg-clip-text text-transparent">
-                  50% Discount
-                </span>
-              </h2>
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                As a Tech Faculty student, get <span className="font-semibold text-primary">50% off</span> on all tech gadgets in our store! 
-                Simply use your faculty ID at checkout to unlock this exclusive benefit. From laptops to accessories, 
-                we've got everything you need for your tech journey.
+            <div className="flex-1 text-center md:text-left">
+              <p className="text-xl md:text-2xl font-semibold text-foreground">
+                Buy recommended laptops, gadgets and accessories at 50% discount from our tech store.
               </p>
             </div>
 
@@ -46,24 +38,6 @@ const FacultyDiscount = () => {
                   Shop Now
                 </Button>
               </Link>
-            </div>
-          </div>
-
-          {/* Additional Info */}
-          <div className="mt-8 pt-6 border-t border-border/50">
-            <div className="flex flex-wrap gap-4 justify-center md:justify-start text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-primary"></div>
-                <span>All products eligible</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-primary"></div>
-                <span>Valid for all faculty members</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-primary"></div>
-                <span>No minimum purchase required</span>
-              </div>
             </div>
           </div>
         </div>

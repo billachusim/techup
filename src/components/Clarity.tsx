@@ -28,13 +28,18 @@ const Clarity = () => {
   const [showAIChat, setShowAIChat] = useState(false);
   const [showClarityCall, setShowClarityCall] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   useEffect(() => {
+    if (isPaused) return;
+    
     const interval = setInterval(() => {
       setCurrentCard((prev) => (prev + 1) % cards.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isPaused]);
 
   const handleButtonClick = (action: string) => {
     if (action === "ai") {
@@ -47,10 +52,37 @@ const Clarity = () => {
     }
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 75) {
+      // Swiped left
+      setCurrentCard((prev) => (prev + 1) % cards.length);
+    }
+
+    if (touchStart - touchEnd < -75) {
+      // Swiped right
+      setCurrentCard((prev) => (prev - 1 + cards.length) % cards.length);
+    }
+  };
+
   return (
     <section className="py-24 px-4 bg-muted/30">
       <div className="container mx-auto max-w-4xl">
-        <div className="relative overflow-hidden">
+        <div 
+          className="relative overflow-hidden"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           {cards.map((card, index) => (
             <Card
               key={index}

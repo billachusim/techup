@@ -17,13 +17,18 @@ const Companies = () => {
   const [facultyId, setFacultyId] = useState("");
   const [selectedJob, setSelectedJob] = useState<string>("");
   const [currentCard, setCurrentCard] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   useEffect(() => {
+    if (isPaused) return;
+    
     const interval = setInterval(() => {
       setCurrentCard((prev) => (prev + 1) % jobs.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isPaused]);
 
   const handleApply = (company: string) => {
     setSelectedJob(company);
@@ -36,6 +41,26 @@ const Companies = () => {
       window.open("https://forms.gle/Mk9PiAcoY9ykW6LZ7", "_blank");
       setIsDialogOpen(false);
       setFacultyId("");
+    }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 75) {
+      // Swiped left
+      setCurrentCard((prev) => (prev + 1) % jobs.length);
+    }
+
+    if (touchStart - touchEnd < -75) {
+      // Swiped right
+      setCurrentCard((prev) => (prev - 1 + jobs.length) % jobs.length);
     }
   };
 
@@ -112,7 +137,14 @@ const Companies = () => {
         </div>
 
         {/* Job Cards Slider */}
-        <div className="relative mb-12 overflow-hidden">
+        <div 
+          className="relative mb-12 overflow-hidden"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <div className="flex justify-center">
             {jobs.map((job, index) => (
               <div

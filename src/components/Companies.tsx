@@ -1,6 +1,6 @@
 import { Briefcase, MapPin, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +16,23 @@ const Companies = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [facultyId, setFacultyId] = useState("");
   const [selectedJob, setSelectedJob] = useState<string>("");
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
+
+    const scroll = () => {
+      if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth / 2) {
+        scrollContainer.scrollLeft = 0;
+      } else {
+        scrollContainer.scrollLeft += 1;
+      }
+    };
+
+    const interval = setInterval(scroll, 30);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleApply = (company: string) => {
     setSelectedJob(company);
@@ -105,9 +122,9 @@ const Companies = () => {
 
         {/* Job Cards Scrollable */}
         <div className="relative mb-12">
-          <div className="overflow-x-auto pb-4 -mx-4 px-4">
+          <div ref={scrollRef} className="overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
             <div className="flex gap-6 min-w-max">
-              {jobs.map((job, index) => (
+              {[...jobs, ...jobs].map((job, index) => (
                 <div
                   key={index}
                   className="bg-card border border-border rounded-lg p-6 space-y-4 hover:shadow-lg transition-all hover:-translate-y-1 w-[280px] flex-shrink-0"

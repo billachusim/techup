@@ -1,49 +1,110 @@
-import { useState } from "react";
-import { PhoneCall, MessageSquare, Calendar } from "lucide-react";
+import { useState, useEffect } from "react";
+import { PhoneCall, MessageSquare, Calendar, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AIChatModal } from "@/components/AIChatModal";
 
+const cards = [
+  {
+    icon: PhoneCall,
+    title: "Not Sure Where to Start?",
+    buttons: [
+      { label: "Talk to Faculty AI", icon: MessageSquare, action: "ai" },
+      { label: "Book a Clarity Call", icon: Calendar, action: "call" },
+    ],
+  },
+  {
+    icon: Sparkles,
+    title: "Need A Custom Package?",
+    description: "We can design a training plan that fits your specific needs and goals.",
+    buttons: [
+      { label: "Contact Us for Custom Package", icon: MessageSquare, action: "custom" },
+    ],
+  },
+];
+
 const Clarity = () => {
   const [showAIChat, setShowAIChat] = useState(false);
   const [showClarityCall, setShowClarityCall] = useState(false);
+  const [currentCard, setCurrentCard] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentCard((prev) => (prev + 1) % cards.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleButtonClick = (action: string) => {
+    if (action === "ai") {
+      setShowAIChat(true);
+    } else if (action === "call") {
+      setShowClarityCall(true);
+    } else if (action === "custom") {
+      const message = `Hi! I'd like to discuss a custom training package tailored to my needs.`;
+      window.open(`https://wa.me/2348068597140?text=${encodeURIComponent(message)}`, "_blank");
+    }
+  };
 
   return (
     <section className="py-24 px-4 bg-muted/30">
       <div className="container mx-auto max-w-4xl">
-        <Card className="p-8 md:p-12 text-center space-y-6 bg-gradient-to-br from-background to-muted/50 border-2">
-          <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-              <PhoneCall className="w-8 h-8 text-primary" />
-            </div>
-          </div>
-          
-          <h2 className="text-3xl md:text-4xl font-bold">
-            Not Sure Where to Start?
-          </h2>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <Button
-              size="lg"
-              onClick={() => setShowAIChat(true)}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg"
+        <div className="relative overflow-hidden">
+          {cards.map((card, index) => (
+            <Card
+              key={index}
+              className={`p-8 md:p-12 text-center space-y-6 bg-gradient-to-br from-background to-muted/50 border-2 transition-all duration-500 ${
+                index === currentCard
+                  ? "opacity-100 translate-x-0"
+                  : index < currentCard
+                  ? "opacity-0 -translate-x-full absolute inset-0"
+                  : "opacity-0 translate-x-full absolute inset-0"
+              }`}
             >
-              <MessageSquare className="mr-2" size={20} />
-              Talk to Faculty AI
-            </Button>
-            
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => setShowClarityCall(true)}
-              className="shadow-lg"
-            >
-              <Calendar className="mr-2" size={20} />
-              Book a Clarity Call
-            </Button>
-          </div>
-        </Card>
+              <div className="flex justify-center mb-4">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                  <card.icon className="w-8 h-8 text-primary" />
+                </div>
+              </div>
+              
+              <h2 className="text-3xl md:text-4xl font-bold">{card.title}</h2>
+              
+              {card.description && (
+                <p className="text-muted-foreground max-w-2xl mx-auto">{card.description}</p>
+              )}
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+                {card.buttons.map((button, btnIndex) => (
+                  <Button
+                    key={btnIndex}
+                    size="lg"
+                    variant={btnIndex === 0 ? "default" : "outline"}
+                    onClick={() => handleButtonClick(button.action)}
+                    className={btnIndex === 0 ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg" : "shadow-lg"}
+                  >
+                    <button.icon className="mr-2" size={20} />
+                    {button.label}
+                  </Button>
+                ))}
+              </div>
+            </Card>
+          ))}
+        </div>
+        
+        {/* Slide indicators */}
+        <div className="flex justify-center gap-2 mt-6">
+          {cards.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentCard(index)}
+              className={`w-2 h-2 rounded-full transition-all ${
+                index === currentCard ? "bg-primary w-8" : "bg-muted-foreground/30"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
 
       <AIChatModal open={showAIChat} onOpenChange={setShowAIChat} />

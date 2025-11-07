@@ -1,5 +1,6 @@
 import { Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useEffect, useRef } from "react";
 
 const testimonials = [
   {
@@ -65,6 +66,24 @@ const testimonials = [
 ];
 
 const Testimonials = () => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
+
+    const scroll = () => {
+      if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth / 2) {
+        scrollContainer.scrollLeft = 0;
+      } else {
+        scrollContainer.scrollLeft += 1;
+      }
+    };
+
+    const interval = setInterval(scroll, 30);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section id="testimonials" className="py-24 px-4 bg-secondary">
       <div className="container mx-auto max-w-6xl">
@@ -78,9 +97,9 @@ const Testimonials = () => {
         </div>
 
         <div className="relative">
-          <div className="overflow-x-auto pb-4 -mx-4 px-4">
+          <div ref={scrollRef} className="overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
             <div className="flex gap-6 min-w-max">
-              {testimonials.map((testimonial, idx) => (
+              {[...testimonials, ...testimonials].map((testimonial, idx) => (
                 <Card
                   key={idx}
                   className="bg-card border-border w-[350px] flex-shrink-0"

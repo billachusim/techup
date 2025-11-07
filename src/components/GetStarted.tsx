@@ -154,10 +154,15 @@ const GetStarted = () => {
             if (aiError) throw aiError;
 
             if (aiData?.nextClass) {
+              // Generate a future date (3-7 days ahead)
+              const daysAhead = Math.floor(Math.random() * 5) + 3;
+              const futureDate = new Date();
+              futureDate.setDate(futureDate.getDate() + daysAhead);
+              
               setNextLecture({
                 title: aiData.nextClass.title,
                 description: aiData.nextClass.description,
-                scheduled_at: aiData.nextClass.date,
+                scheduled_at: futureDate.toISOString(),
                 duration_minutes: parseInt(aiData.nextClass.duration) || 90,
                 courses: {
                   name: aiData.nextClass.course
@@ -413,7 +418,7 @@ Please confirm my Faculty ID. Thank you!`;
                           <p className="text-sm text-muted-foreground mt-2">{nextLecture.description}</p>
                         )}
                         {nextLecture.isAiGenerated && (
-                          <Badge variant="secondary" className="mt-2">AI Suggested</Badge>
+                          <Badge variant="secondary" className="mt-2">AI Course Rep</Badge>
                         )}
                       </div>
                       <div className="text-sm">
@@ -442,6 +447,17 @@ Please confirm my Faculty ID. Thank you!`;
                           <ExternalLink className="ml-2" size={16} />
                         </Button>
                       )}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => {
+                          const message = `Hi! I'm ready for the next class: ${nextLecture.title} (${nextLecture.courses?.name})`;
+                          window.open(`https://wa.me/2348068597140?text=${encodeURIComponent(message)}`, "_blank");
+                        }}
+                      >
+                        Join Live Class
+                      </Button>
                       {nextLecture.courses?.whatsapp_group_link && !nextLecture.isAiGenerated && (
                         <Button
                           variant="outline"

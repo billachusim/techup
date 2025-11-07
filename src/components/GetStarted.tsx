@@ -52,8 +52,6 @@ const GetStarted = () => {
 
       if (profileError) throw profileError;
 
-      setUserData(profileData);
-
       // Fetch enrollment data
       const { data: enrollment } = await supabase
         .from('enrollments')
@@ -65,16 +63,29 @@ const GetStarted = () => {
 
       setEnrollmentData(enrollment);
 
-      const planName = enrollment?.plan_name || "free_bootcamp";
-      
-      // Map plan names to database format
+      // Map plan names to database format and departments
       const planMapping: { [key: string]: string } = {
         "Free Bootcamp": "free_bootcamp",
         "Bootcamp Starter": "bootcamp_starter",
         "Developer Pro": "developer_pro",
+        "Data Wizard": "data_wizard",
+      };
+
+      const departmentMapping: { [key: string]: string } = {
+        "Developer Pro": "Web Development",
+        "Data Wizard": "Data Science",
+        "Bootcamp Starter": "General Tech",
+        "Free Bootcamp": "General Tech",
       };
 
       const dbPlanName = planMapping[enrollment?.plan_name] || "free_bootcamp";
+      const userDepartment = departmentMapping[enrollment?.plan_name] || "General Tech";
+
+      // Update profile with department
+      setUserData({
+        ...profileData,
+        department: userDepartment
+      });
 
       // Fetch courses filtered by plan
       const { data: courses } = await supabase
@@ -312,23 +323,6 @@ Please confirm my Faculty ID. Thank you!`;
         ) : (
           /* Profile Dashboard */
           <div className="space-y-6">
-            {/* Header with Sign Out */}
-            <div className="flex justify-between items-center">
-              <div>
-                <h2 className="text-3xl md:text-4xl font-bold mb-2">
-                  Welcome Back, {userData?.name}!
-                </h2>
-                <p className="text-muted-foreground">
-                  Your Faculty ID: <span className="font-mono font-semibold text-foreground">{userData?.faculty_id}</span>
-                </p>
-              </div>
-              <Button variant="outline" onClick={handleSignOut}>
-                <LogOut className="mr-2" size={18} />
-                Sign Out
-              </Button>
-            </div>
-
-            {/* ... keep existing code */}
             {/* Header with Sign Out */}
             <div className="flex justify-between items-center">
               <div>

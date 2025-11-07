@@ -1,4 +1,5 @@
-import { Facebook, Linkedin, MessageCircle, Mail } from "lucide-react";
+import { Facebook, Linkedin, MessageCircle, Mail, ShoppingBag } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -15,6 +16,13 @@ const Footer = () => {
 
           {/* Contact Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center text-sm">
+            <Link
+              to="/tech-store"
+              className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+            >
+              <ShoppingBag size={16} />
+              <span>Tech Store - <span className="font-semibold text-primary">Get 50% off with FACULTY50</span></span>
+            </Link>
             <a
               href="mailto:thetechfaculty@gmail.com"
               className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"

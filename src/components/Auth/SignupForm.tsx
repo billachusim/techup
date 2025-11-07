@@ -13,15 +13,6 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useUser } from "@/contexts/UserContext";
 
-const courses = [
-  "Full-Stack Web Development",
-  "Data Science & Analytics",
-  "Cybersecurity",
-  "AI & Machine Learning",
-  "Cloud Architecture & DevOps",
-  "Mobile App Development",
-];
-
 const hearAboutUs = [
   "Social Media",
   "Friend/Colleague",
@@ -41,7 +32,6 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
     email: "",
     phone: "",
     password: "",
-    course: "",
     hearAbout: "",
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +48,7 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
     e.preventDefault();
     
     if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim() || 
-        !formData.password.trim() || !formData.course || !formData.hearAbout) {
+        !formData.password.trim() || !formData.hearAbout) {
       toast({
         title: "Incomplete Form",
         description: "Please fill in all required fields.",
@@ -119,7 +109,7 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
         name: formData.name.trim(),
         email: formData.email.trim(),
         phone: formData.phone.trim(),
-        course_interest: formData.course,
+        course_interest: "Not selected",
         hear_about_us: formData.hearAbout,
         status: "active",
       });
@@ -131,7 +121,6 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
 Name: ${formData.name.trim()}
 Email: ${formData.email.trim()}
 Phone: ${formData.phone.trim()}
-Interested in: ${formData.course}
 
 *My Faculty ID: ${newFacultyId}*`;
 
@@ -203,25 +192,6 @@ Interested in: ${formData.course}
           placeholder="Minimum 6 characters"
           minLength={6}
         />
-      </div>
-
-      <div>
-        <Label htmlFor="course">Course Interest</Label>
-        <Select
-          value={formData.course}
-          onValueChange={(value) => setFormData({ ...formData, course: value })}
-        >
-          <SelectTrigger id="course">
-            <SelectValue placeholder="Select a course" />
-          </SelectTrigger>
-          <SelectContent>
-            {courses.map((course) => (
-              <SelectItem key={course} value={course}>
-                {course}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
       </div>
 
       <div>

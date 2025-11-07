@@ -22,6 +22,7 @@ import { SignupForm } from "@/components/Auth/SignupForm";
 import { LoginForm } from "@/components/Auth/LoginForm";
 
 const GetStarted = () => {
+  const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
   const [showForgotIdDialog, setShowForgotIdDialog] = useState(false);
   const [enrollmentData, setEnrollmentData] = useState<any>(null);
   const [coursesData, setCoursesData] = useState<any[]>([]);
@@ -32,7 +33,13 @@ const GetStarted = () => {
     phone: "",
   });
   const { toast } = useToast();
-  const { isLoggedIn, userData, logout, setUserData } = useUser();
+  const { isLoggedIn, userData, logout, setUserData, facultyId } = useUser();
+
+  const handleSignupSuccess = async () => {
+    // Sign out the user after signup so they need to enter Faculty ID
+    await supabase.auth.signOut();
+    setActiveTab("login");
+  };
 
   const fetchUserDashboardData = async (facultyIdToFetch: string) => {
     try {
@@ -254,6 +261,12 @@ Please confirm my Faculty ID. Thank you!`;
     });
   };
 
+  useEffect(() => {
+    if (isLoggedIn && facultyId) {
+      fetchUserDashboardData(facultyId);
+    }
+  }, [isLoggedIn, facultyId]);
+
   return (
     <section id="see-how-you-are-doing" className="py-24 px-4 bg-gradient-to-b from-background to-accent/5">
       <div className="container mx-auto max-w-6xl">
@@ -273,7 +286,7 @@ Please confirm my Faculty ID. Thank you!`;
 
             <Card className="bg-card border-border max-w-2xl mx-auto">
               <CardContent className="p-8">
-                <Tabs defaultValue="login" className="w-full">
+                <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as "login" | "signup")} className="w-full">
                   <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="login">Login</TabsTrigger>
                     <TabsTrigger value="signup">Sign Up</TabsTrigger>
@@ -290,14 +303,7 @@ Please confirm my Faculty ID. Thank you!`;
                     />
                   </TabsContent>
                   <TabsContent value="signup" className="mt-6">
-                    <SignupForm
-                      onSuccess={() => {
-                        toast({
-                          title: "Welcome to Tech Faculty!",
-                          description: "Your account has been created successfully.",
-                        });
-                      }}
-                    />
+                    <SignupForm onSuccess={handleSignupSuccess} />
                   </TabsContent>
                 </Tabs>
               </CardContent>

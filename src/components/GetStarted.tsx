@@ -392,7 +392,7 @@ Please confirm my Faculty ID. Thank you!`;
                       className="w-full"
                       onClick={() => {
                         const message = `Hi! I'm ${userData?.name}. My Faculty ID is: ${userData?.faculty_id}. I'd like to join the Tech Faculty community.`;
-                        window.open(`https://chat.whatsapp.com/GCnw88T0nxs5oabYgcqXKt?text=${encodeURIComponent(message)}`, "_blank");
+                        window.open(`https://chat.whatsapp.com/D8kuxWVZRTKKeAx6ERjSqc?text=${encodeURIComponent(message)}`, "_blank");
                       }}
                     >
                       <MessageCircle className="mr-2" size={16} />
@@ -609,7 +609,7 @@ Please confirm my Faculty ID. Thank you!`;
                   </Button>
                   <Button
                     variant="outline"
-                    onClick={() => window.open("https://chat.whatsapp.com/GCnw88T0nxs5oabYgcqXKt", "_blank")}
+                    onClick={() => window.open("https://chat.whatsapp.com/D8kuxWVZRTKKeAx6ERjSqc", "_blank")}
                   >
                     <Users className="mr-2" size={18} />
                     Community Hub

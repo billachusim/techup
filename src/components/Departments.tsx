@@ -215,8 +215,8 @@ const Departments = () => {
                       asChild
                     >
                       <a 
-                        href="https://chat.whatsapp.com/GCnw88T0nxs5oabYgcqXKt" 
-                        target="_blank" 
+                        href="https://chat.whatsapp.com/D8kuxWVZRTKKeAx6ERjSqc" 
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-2"
                       >

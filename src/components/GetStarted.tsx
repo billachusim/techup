@@ -46,6 +46,7 @@ const hearAboutUs = [
 const GetStarted = () => {
   const [facultyId, setFacultyId] = useState("");
   const [showSignUpForm, setShowSignUpForm] = useState(false);
+  const [showForgotIdDialog, setShowForgotIdDialog] = useState(false);
   const [enrollmentData, setEnrollmentData] = useState<any>(null);
   const [coursesData, setCoursesData] = useState<any[]>([]);
   const [lecturesData, setLecturesData] = useState<any[]>([]);
@@ -56,6 +57,10 @@ const GetStarted = () => {
     phone: "",
     course: "",
     hearAbout: "",
+  });
+  const [forgotIdData, setForgotIdData] = useState({
+    email: "",
+    phone: "",
   });
   const { toast } = useToast();
   const { isLoggedIn, userData, login, logout, setUserData } = useUser();
@@ -90,18 +95,46 @@ const GetStarted = () => {
 
       setEnrollmentData(enrollment);
 
-      const planName = enrollment?.plan_name || "Free Bootcamp";
+      const planName = enrollment?.plan_name || "free_bootcamp";
+      
+      // Map plan names to database format
+      const planMapping: { [key: string]: string } = {
+        "Free Bootcamp": "free_bootcamp",
+        "Bootcamp Starter": "bootcamp_starter",
+        "Developer Pro": "developer_pro",
+      };
+
+      const dbPlanName = planMapping[enrollment?.plan_name] || "free_bootcamp";
 
       // Fetch courses filtered by plan
       const { data: courses } = await supabase
         .from('courses')
         .select('*')
-        .eq('plan_required', planName.toLowerCase().replace(' ', '_'));
+        .eq('plan_required', dbPlanName);
 
-      // If no courses found for specific plan, try free courses
-      const coursesAvailable = courses && courses.length > 0 
-        ? courses 
-        : await supabase.from('courses').select('*').eq('plan_required', 'free').then(r => r.data || []);
+      const coursesAvailable = courses || [];
+
+      // Auto-enroll user in plan courses if not already enrolled
+      if (coursesAvailable.length > 0) {
+        for (const course of coursesAvailable) {
+          const { data: existingEnrollment } = await supabase
+            .from('course_enrollments')
+            .select('id')
+            .eq('faculty_id', facultyIdToFetch)
+            .eq('course_id', course.id)
+            .maybeSingle();
+
+          if (!existingEnrollment) {
+            await supabase
+              .from('course_enrollments')
+              .insert({
+                faculty_id: facultyIdToFetch,
+                course_id: course.id,
+                status: 'active',
+              });
+          }
+        }
+      }
 
       // Fetch enrollments for these courses
       const { data: courseEnrollments } = await supabase
@@ -280,6 +313,46 @@ const GetStarted = () => {
     }
   };
 
+  const handleForgotIdSubmit = () => {
+    if (!forgotIdData.email.trim() || !forgotIdData.phone.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please provide both email and phone number.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(forgotIdData.email)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const message = `Hi! I forgot my Faculty ID. Please help me recover it.
+
+*My Details:*
+Email: ${forgotIdData.email.trim()}
+Phone: ${forgotIdData.phone.trim()}
+
+Please confirm my Faculty ID. Thank you!`;
+
+    const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
+    
+    setShowForgotIdDialog(false);
+    setForgotIdData({ email: "", phone: "" });
+    
+    toast({
+      title: "Request Sent",
+      description: "Your Faculty ID recovery request has been sent via WhatsApp.",
+    });
+  };
+
   const handleSignUpSubmit = async () => {
     // Validate form
     if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim() || !formData.course || !formData.hearAbout) {
@@ -409,7 +482,14 @@ How I heard about you: ${formData.hearAbout}
                         Access Now
                       </Button>
                     </div>
-
+                    <div className="text-right">
+                      <button
+                        onClick={() => setShowForgotIdDialog(true)}
+                        className="text-sm text-primary hover:underline"
+                      >
+                        Forgot your Faculty ID?
+                      </button>
+                    </div>
                   </div>
 
                   {/* Divider */}
@@ -692,6 +772,53 @@ How I heard about you: ${formData.hearAbout}
             </Card>
           </div>
         )}
+
+        {/* Forgot ID Dialog */}
+        <Dialog open={showForgotIdDialog} onOpenChange={setShowForgotIdDialog}>
+          <DialogContent className="sm:max-w-[450px]">
+            <DialogHeader>
+              <DialogTitle>Recover Your Faculty ID</DialogTitle>
+              <DialogDescription>
+                Provide your email and phone number. We'll verify your information and send your Faculty ID via WhatsApp.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="forgot-email">Email Address *</Label>
+                <Input
+                  id="forgot-email"
+                  type="email"
+                  placeholder="your.email@example.com"
+                  value={forgotIdData.email}
+                  onChange={(e) => setForgotIdData({ ...forgotIdData, email: e.target.value })}
+                  maxLength={255}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="forgot-phone">Phone Number *</Label>
+                <Input
+                  id="forgot-phone"
+                  type="tel"
+                  placeholder="+234 XXX XXX XXXX"
+                  value={forgotIdData.phone}
+                  onChange={(e) => setForgotIdData({ ...forgotIdData, phone: e.target.value })}
+                  maxLength={20}
+                />
+              </div>
+
+              <Button
+                onClick={handleForgotIdSubmit}
+                className="w-full bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90"
+                size="lg"
+              >
+                <MessageCircle className="mr-2" size={18} />
+                Send Recovery Request
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* Sign Up Form Dialog */}
         <Dialog open={showSignUpForm} onOpenChange={setShowSignUpForm}>

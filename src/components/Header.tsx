@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import logo from "@/assets/tech-faculty-logo.png";
 import { Button } from "@/components/ui/button";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Menu, X, ShoppingBag } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   Dialog,
   DialogContent,
@@ -20,6 +22,7 @@ const Header = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [showCommunityDialog, setShowCommunityDialog] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [facultyId, setFacultyId] = useState("");
   const { toast } = useToast();
   const { isLoggedIn, userData } = useUser();
@@ -104,22 +107,62 @@ const Header = () => {
       >
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-3">
               <img src={logo} alt="Tech Faculty Logo" className="h-10 w-10" />
               <div>
                 <div className="text-xl font-bold">Tech Faculty</div>
                 <div className="text-xs text-muted-foreground">Get Trained, Certified, and Employed</div>
               </div>
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleCommunityClick}
-              className="hidden sm:flex"
-            >
-              <MessageCircle className="mr-2" size={16} />
-              Join Community
-            </Button>
+            </Link>
+            
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-4">
+              <Link to="/tech-store">
+                <Button variant="ghost" size="sm">
+                  <ShoppingBag className="mr-2" size={16} />
+                  Tech Store
+                </Button>
+              </Link>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleCommunityClick}
+              >
+                <MessageCircle className="mr-2" size={16} />
+                Join Community
+              </Button>
+            </nav>
+
+            {/* Mobile Navigation */}
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild className="md:hidden">
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right">
+                <nav className="flex flex-col gap-4 mt-8">
+                  <Link to="/tech-store" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start" size="lg">
+                      <ShoppingBag className="mr-2" size={20} />
+                      Tech Store
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    size="lg"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      handleCommunityClick();
+                    }}
+                  >
+                    <MessageCircle className="mr-2" size={20} />
+                    Join Community
+                  </Button>
+                </nav>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </header>

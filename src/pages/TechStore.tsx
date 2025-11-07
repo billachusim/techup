@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ShoppingBag, Package } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ShoppingBag, Package, Ticket } from "lucide-react";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
@@ -58,6 +59,16 @@ const TechStore = () => {
               <CartDrawer />
             </div>
           </div>
+
+          {/* Faculty Discount Banner */}
+          <Alert className="mb-8 border-primary bg-primary/5">
+            <Ticket className="h-5 w-5 text-primary" />
+            <AlertTitle className="text-lg font-semibold">🎉 Faculty Members Get 50% OFF!</AlertTitle>
+            <AlertDescription className="text-base">
+              Use code <span className="font-mono font-bold bg-primary/20 px-2 py-1 rounded">FACULTY50</span> at checkout to get 50% discount on all products. 
+              This exclusive offer is available to all Tech Faculty members.
+            </AlertDescription>
+          </Alert>
 
           {/* Products Grid */}
           <div className="mt-12">

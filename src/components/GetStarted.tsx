@@ -144,35 +144,68 @@ const GetStarted = () => {
 
         setNextLecture(nextUncompletedLecture || allLectures?.[0] || null);
 
-        // If no lectures exist in database, generate one using AI
+        // If no lectures exist in database, generate one using AI or use cached
         if (!allLectures || allLectures.length === 0) {
-          try {
-            const { data: aiData, error: aiError } = await supabase.functions.invoke('generate-next-class', {
-              body: { courses: courseEnrollments }
-            });
-
-            if (aiError) throw aiError;
-
-            if (aiData?.nextClass) {
-              // Generate a future date (3-7 days ahead)
-              const daysAhead = Math.floor(Math.random() * 5) + 3;
-              const futureDate = new Date();
-              futureDate.setDate(futureDate.getDate() + daysAhead);
-              
-              setNextLecture({
-                title: aiData.nextClass.title,
-                description: aiData.nextClass.description,
-                scheduled_at: futureDate.toISOString(),
-                duration_minutes: parseInt(aiData.nextClass.duration) || 90,
-                courses: {
-                  name: aiData.nextClass.course
-                },
-                meeting_link: null,
-                isAiGenerated: true
-              });
+          // Check for cached AI suggestion
+          const cacheKey = `aiNextClass_${facultyIdToFetch}`;
+          const cachedData = localStorage.getItem(cacheKey);
+          
+          if (cachedData) {
+            try {
+              const parsed = JSON.parse(cachedData);
+              // Check if cache is still valid (within 24 hours)
+              const cacheAge = Date.now() - parsed.timestamp;
+              if (cacheAge < 24 * 60 * 60 * 1000) {
+                setNextLecture(parsed.lecture);
+                console.log('Using cached AI suggestion');
+              } else {
+                localStorage.removeItem(cacheKey);
+              }
+            } catch (e) {
+              console.error('Error parsing cached AI data:', e);
+              localStorage.removeItem(cacheKey);
             }
-          } catch (aiError) {
-            console.error('Error generating next class with AI:', aiError);
+          }
+          
+          // If no valid cache, generate new suggestion
+          if (!cachedData || !nextLecture) {
+            try {
+              const { data: aiData, error: aiError } = await supabase.functions.invoke('generate-next-class', {
+                body: { courses: courseEnrollments }
+              });
+
+              if (aiError) throw aiError;
+
+              if (aiData?.nextClass) {
+                // Generate a future date (3-7 days ahead)
+                const daysAhead = Math.floor(Math.random() * 5) + 3;
+                const futureDate = new Date();
+                futureDate.setDate(futureDate.getDate() + daysAhead);
+                
+                const lecture = {
+                  title: aiData.nextClass.title,
+                  description: aiData.nextClass.description,
+                  scheduled_at: futureDate.toISOString(),
+                  duration_minutes: parseInt(aiData.nextClass.duration) || 90,
+                  courses: {
+                    name: aiData.nextClass.course
+                  },
+                  meeting_link: null,
+                  isAiGenerated: true
+                };
+                
+                setNextLecture(lecture);
+                
+                // Cache the suggestion
+                localStorage.setItem(cacheKey, JSON.stringify({
+                  lecture,
+                  timestamp: Date.now()
+                }));
+                console.log('Generated and cached new AI suggestion');
+              }
+            } catch (aiError) {
+              console.error('Error generating next class with AI:', aiError);
+            }
           }
         }
       }
@@ -194,7 +227,7 @@ const GetStarted = () => {
     });
   };
 
-  // Handle class checkpoint completion
+  // Handle class checkpoint completion with undo support
   const handleCheckpointComplete = async (courseId: string, checkpointNumber: number) => {
     if (!userData?.faculty_id) return;
 
@@ -207,7 +240,26 @@ const GetStarted = () => {
         .eq("course_id", courseId)
         .maybeSingle();
 
-      const newClassesCompleted = checkpointNumber;
+      const currentCompleted = progressData?.classes_completed || 0;
+      
+      // Allow clicking the same checkpoint to undo, or the next one to progress
+      let newClassesCompleted: number;
+      if (checkpointNumber === currentCompleted) {
+        // Undo: go back one checkpoint
+        newClassesCompleted = Math.max(0, currentCompleted - 1);
+      } else if (checkpointNumber === currentCompleted + 1) {
+        // Progress to next checkpoint
+        newClassesCompleted = checkpointNumber;
+      } else {
+        // Don't allow skipping checkpoints
+        toast({
+          title: "Complete in Order",
+          description: "Please complete classes in order.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const newProgress = newClassesCompleted * 25;
 
       if (progressData) {
@@ -217,7 +269,7 @@ const GetStarted = () => {
             classes_completed: newClassesCompleted,
             progress_percentage: newProgress,
             last_accessed: new Date().toISOString(),
-            ...(newProgress === 100 ? { completed_at: new Date().toISOString() } : {})
+            ...(newProgress === 100 ? { completed_at: new Date().toISOString() } : { completed_at: null })
           })
           .eq("id", progressData.id);
 
@@ -239,7 +291,9 @@ const GetStarted = () => {
 
       toast({
         title: "Progress Updated",
-        description: `Class ${newClassesCompleted} of 4 completed!`,
+        description: newClassesCompleted > currentCompleted 
+          ? `Class ${newClassesCompleted} of 4 completed!`
+          : `Progress reset to ${newClassesCompleted} of 4 classes`,
       });
       
       // Refresh dashboard data
@@ -521,25 +575,42 @@ Please confirm my Faculty ID. Thank you!`;
                             <div className="flex items-center gap-2 pt-1">
                               <span className="text-xs text-muted-foreground min-w-fit">Mark class:</span>
                               <div className="flex gap-2 flex-1">
-                                {[1, 2, 3, 4].map((checkpoint) => (
-                                  <button
-                                    key={checkpoint}
-                                    onClick={() => handleCheckpointComplete(enrollment.course_id, checkpoint)}
-                                    disabled={classesCompleted >= checkpoint}
-                                    className={`flex-1 h-8 rounded-md border-2 transition-all flex items-center justify-center ${
-                                      classesCompleted >= checkpoint
-                                        ? "bg-primary border-primary text-primary-foreground cursor-default"
-                                        : "bg-background border-muted-foreground/30 hover:border-primary hover:bg-primary/5 cursor-pointer"
-                                    }`}
-                                  >
-                                    <span className="text-xs font-medium">{checkpoint}</span>
-                                  </button>
-                                ))}
+                                {[1, 2, 3, 4].map((checkpoint) => {
+                                  const isCompleted = classesCompleted >= checkpoint;
+                                  const isNext = checkpoint === classesCompleted + 1;
+                                  const isCurrentLast = checkpoint === classesCompleted;
+                                  const canInteract = isNext || isCurrentLast;
+                                  
+                                  return (
+                                    <button
+                                      key={checkpoint}
+                                      onClick={() => handleCheckpointComplete(enrollment.course_id, checkpoint)}
+                                      disabled={!canInteract}
+                                      className={`flex-1 h-8 rounded-md border-2 transition-all flex items-center justify-center ${
+                                        isCompleted
+                                          ? "bg-primary border-primary text-primary-foreground"
+                                          : isNext
+                                          ? "bg-background border-primary/50 hover:border-primary hover:bg-primary/5 cursor-pointer"
+                                          : "bg-background border-muted-foreground/20 cursor-not-allowed opacity-50"
+                                      } ${isCurrentLast && isCompleted ? "cursor-pointer hover:opacity-80" : ""}`}
+                                      title={
+                                        isCurrentLast && isCompleted 
+                                          ? "Click to undo" 
+                                          : isNext 
+                                          ? "Click to complete" 
+                                          : isCompleted 
+                                          ? "Completed" 
+                                          : "Complete previous classes first"
+                                      }
+                                    >
+                                      <span className="text-xs font-medium">{checkpoint}</span>
+                                    </button>
+                                  );
+                                 })}
                               </div>
                             </div>
                             
-                            <div className="flex gap-2 pt-2">
-                              {enrollment.courses?.whatsapp_group_link && (
+                            <div className="flex gap-2 pt-2">{enrollment.courses?.whatsapp_group_link && (
                                 <Button
                                   variant="outline"
                                   size="sm"

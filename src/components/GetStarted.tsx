@@ -566,11 +566,10 @@ Please confirm my Faculty ID. Thank you!`;
                       size="sm"
                       className="mt-4"
                       onClick={() => {
-                        const message = `Hi! I'm ${userData?.name} (Faculty ID: ${userData?.faculty_id}). I'd like to enroll in a course.`;
-                        window.open(`https://wa.me/2348068597140?text=${encodeURIComponent(message)}`, "_blank");
+                        document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
                       }}
                     >
-                      Contact Us to Enroll
+                      Choose Your Plan
                     </Button>
                   </div>
                 )}

@@ -23,7 +23,7 @@ const Index = () => {
         <Companies />
         <Testimonials />
         <Clarity />
-        {!isLoggedIn && <Pricing />}
+        <Pricing />
         <GetStarted />
       </main>
       <Footer />

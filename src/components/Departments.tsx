@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Code,
   Database,
@@ -169,6 +170,9 @@ const departments = [
 ];
 
 const Departments = () => {
+  const [showAll, setShowAll] = useState(false);
+  const displayedDepartments = showAll ? departments : departments.slice(0, 4);
+
   return (
     <section id="departments" className="py-24 px-4">
       <div className="container mx-auto max-w-3xl">
@@ -183,7 +187,7 @@ const Departments = () => {
 
         <div className="space-y-4">
           <Accordion type="single" collapsible>
-            {departments.map((dept) => (
+            {displayedDepartments.map((dept) => (
               <AccordionItem
                 key={dept.id}
                 value={dept.id}
@@ -229,6 +233,18 @@ const Departments = () => {
               </AccordionItem>
             ))}
           </Accordion>
+          
+          {departments.length > 4 && (
+            <div className="flex justify-center mt-6">
+              <Button
+                variant="outline"
+                onClick={() => setShowAll(!showAll)}
+                className="w-full sm:w-auto"
+              >
+                {showAll ? "Show Less" : `Show ${departments.length - 4} More Departments`}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </section>

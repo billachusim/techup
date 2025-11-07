@@ -75,20 +75,36 @@ serve(async (req) => {
       }
     }
 
-    // 4) Return course_enrollments with nested courses and progress
+    // 4) Return course_enrollments with nested courses only
     const { data: enrollments, error: enrollmentsErr } = await admin
       .from("course_enrollments")
       .select(`
         *,
-        courses (*),
-        course_progress (*)
+        courses (*)
       `)
       .eq("faculty_id", facultyId);
 
     if (enrollmentsErr) throw enrollmentsErr;
 
+    // 5) Fetch course_progress separately for this faculty
+    const { data: progressRecords } = await admin
+      .from("course_progress")
+      .select("*")
+      .eq("faculty_id", facultyId);
+
+    // 6) Manually attach progress to each enrollment
+    const enrichedEnrollments = (enrollments || []).map((enrollment: any) => {
+      const progress = (progressRecords || []).filter(
+        (p: any) => p.course_id === enrollment.course_id
+      );
+      return {
+        ...enrollment,
+        course_progress: progress
+      };
+    });
+
     return new Response(
-      JSON.stringify({ plan: planName, planKey: dbPlan, enrollments }),
+      JSON.stringify({ plan: planName, planKey: dbPlan, enrollments: enrichedEnrollments }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (e) {

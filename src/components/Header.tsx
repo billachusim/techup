@@ -3,19 +3,6 @@ import { Link } from "react-router-dom";
 import logo from "@/assets/tech-faculty-logo.png";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { useUser } from "@/contexts/UserContext";
 
 const Header = () => {
   const [isVisible, setIsVisible] = useState(true);

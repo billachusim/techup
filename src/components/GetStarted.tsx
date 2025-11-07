@@ -28,6 +28,7 @@ const GetStarted = () => {
   const [coursesData, setCoursesData] = useState<any[]>([]);
   const [lecturesData, setLecturesData] = useState<any[]>([]);
   const [nextLecture, setNextLecture] = useState<any>(null);
+  const [showAllCourses, setShowAllCourses] = useState(false);
   const [forgotIdData, setForgotIdData] = useState({
     email: "",
     phone: "",
@@ -472,7 +473,7 @@ Please confirm my Faculty ID. Thank you!`;
                 </h3>
                 {coursesData.length > 0 ? (
                   <div className="space-y-6">
-                    {coursesData.map((enrollment: any) => {
+                    {(showAllCourses ? coursesData : coursesData.slice(0, 3)).map((enrollment: any) => {
                       const progress = enrollment.course_progress?.[0]?.progress_percentage || 0;
                       const courseLectures = lecturesData.filter((l: any) => l.course_id === enrollment.course_id);
                       const completedLectureId = enrollment.course_progress?.[0]?.last_accessed;
@@ -544,6 +545,17 @@ Please confirm my Faculty ID. Thank you!`;
                         </div>
                       );
                     })}
+                    
+                    {coursesData.length > 3 && (
+                      <div className="flex justify-center pt-2">
+                        <Button
+                          variant="outline"
+                          onClick={() => setShowAllCourses(!showAllCourses)}
+                        >
+                          {showAllCourses ? "See Less Courses" : `See More Courses (${coursesData.length - 3} more)`}
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className="text-center py-8 text-muted-foreground">

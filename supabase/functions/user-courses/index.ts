@@ -7,13 +7,18 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-type PlanKey = "free_bootcamp" | "bootcamp_starter" | "developer_pro" | "data_wizard";
+type PlanKey = "free_bootcamp" | "bootcamp_starter" | "developer_pro" | "data_wizard" | "security_shield" | "ai_innovator" | "cloud_architect" | "design_master" | "digital_marketing_pro";
 
 const planMapping: Record<string, PlanKey> = {
   "Free Bootcamp": "free_bootcamp",
   "Bootcamp Starter": "bootcamp_starter",
   "Developer Pro": "developer_pro",
   "Data Wizard": "data_wizard",
+  "Security Shield": "security_shield",
+  "AI Innovator": "ai_innovator",
+  "Cloud Architect": "cloud_architect",
+  "Design Master": "design_master",
+  "Digital Marketing Pro": "digital_marketing_pro",
 };
 
 serve(async (req) => {

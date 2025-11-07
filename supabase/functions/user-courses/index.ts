@@ -53,6 +53,41 @@ serve(async (req) => {
     const planName = enrollment?.plan_name ?? "Free Bootcamp";
     const dbPlan: PlanKey = planMapping[planName] || "free_bootcamp";
 
+    // Map plans to their departments
+    const planDepartments: Record<PlanKey, string> = {
+      "free_bootcamp": "General Tech",
+      "bootcamp_starter": "General Tech",
+      "developer_pro": "Web Development",
+      "data_wizard": "Data Science",
+      "security_shield": "Cyber Security",
+      "ai_innovator": "Machine Learning",
+      "cloud_architect": "Cloud Computing",
+      "design_master": "UI/UX Design",
+      "digital_marketing_pro": "Digital Marketing"
+    };
+
+    const departmentForPlan = planDepartments[dbPlan] || "General Tech";
+
+    // Update profile department if needed
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("id, faculty_id")
+      .eq("faculty_id", facultyId)
+      .maybeSingle();
+
+    if (profile) {
+      const { error: updateErr } = await admin
+        .from("profiles")
+        .update({ department: departmentForPlan })
+        .eq("id", profile.id);
+      
+      if (updateErr) {
+        console.error("Failed to update profile department:", updateErr);
+      } else {
+        console.log(`Updated profile department to: ${departmentForPlan}`);
+      }
+    }
+
     // 2) Fetch courses for this plan
     const { data: planCourses, error: coursesErr } = await admin
       .from("courses")

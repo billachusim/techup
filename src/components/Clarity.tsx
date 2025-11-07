@@ -17,7 +17,7 @@ const cards = [
   {
     icon: Sparkles,
     title: "Need A Custom Package?",
-    description: "We can design a training plan that fits your specific needs and goals.",
+    description: "Looking for corporate training or personalized learning paths?",
     buttons: [
       { label: "Contact Us for Custom Package", icon: MessageSquare, action: "custom" },
     ],

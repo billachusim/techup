@@ -1,6 +1,6 @@
 import { Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
 const testimonials = [
   {
@@ -66,21 +66,12 @@ const testimonials = [
 ];
 
 const Testimonials = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [currentCard, setCurrentCard] = useState(0);
 
   useEffect(() => {
-    const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
-
-    const scroll = () => {
-      if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth / 2) {
-        scrollContainer.scrollLeft = 0;
-      } else {
-        scrollContainer.scrollLeft += 1;
-      }
-    };
-
-    const interval = setInterval(scroll, 30);
+    const interval = setInterval(() => {
+      setCurrentCard((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -96,44 +87,62 @@ const Testimonials = () => {
           </p>
         </div>
 
-        <div className="relative">
-          <div ref={scrollRef} className="overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-            <div className="flex gap-6 min-w-max">
-              {[...testimonials, ...testimonials].map((testimonial, idx) => (
-                <Card
-                  key={idx}
-                  className="bg-card border-border w-[350px] flex-shrink-0"
-                >
-                  <CardContent className="p-6 space-y-4">
-                    {/* Rating */}
-                    <div className="flex gap-1">
-                      {Array.from({ length: testimonial.rating }).map((_, i) => (
-                        <Star key={i} size={16} className="fill-primary text-primary" />
-                      ))}
-                    </div>
+        <div className="relative overflow-hidden">
+          <div className="flex justify-center">
+            {testimonials.map((testimonial, idx) => (
+              <Card
+                key={idx}
+                className={`bg-card border-border w-full max-w-[400px] md:max-w-[500px] transition-all duration-500 ${
+                  idx === currentCard
+                    ? "opacity-100 translate-x-0 relative"
+                    : idx < currentCard
+                    ? "opacity-0 -translate-x-full absolute inset-0"
+                    : "opacity-0 translate-x-full absolute inset-0"
+                }`}
+              >
+                <CardContent className="p-6 space-y-4">
+                  {/* Rating */}
+                  <div className="flex gap-1">
+                    {Array.from({ length: testimonial.rating }).map((_, i) => (
+                      <Star key={i} size={16} className="fill-primary text-primary" />
+                    ))}
+                  </div>
 
-                    {/* Content */}
-                    <p className="text-muted-foreground">
-                      &quot;{testimonial.content}&quot;
-                    </p>
+                  {/* Content */}
+                  <p className="text-muted-foreground">
+                    &quot;{testimonial.content}&quot;
+                  </p>
 
-                    {/* Profile */}
-                    <div className="flex items-center gap-3 pt-4 border-t border-border">
-                      <div className="text-4xl">{testimonial.image}</div>
-                      <div>
-                        <div className="font-semibold">{testimonial.name}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {testimonial.role} at {testimonial.company}
-                        </div>
-                        <div className="text-xs text-muted-foreground mt-1">
-                          {testimonial.department} Alumni
-                        </div>
+                  {/* Profile */}
+                  <div className="flex items-center gap-3 pt-4 border-t border-border">
+                    <div className="text-4xl">{testimonial.image}</div>
+                    <div>
+                      <div className="font-semibold">{testimonial.name}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {testimonial.role} at {testimonial.company}
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-1">
+                        {testimonial.department} Alumni
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Slide indicators */}
+          <div className="flex justify-center gap-2 mt-6">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentCard(index)}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  index === currentCard ? "bg-primary w-8" : "bg-muted-foreground/30"
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
           </div>
         </div>
       </div>

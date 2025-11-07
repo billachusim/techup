@@ -1,6 +1,6 @@
 import { Briefcase, MapPin, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -16,21 +16,12 @@ const Companies = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [facultyId, setFacultyId] = useState("");
   const [selectedJob, setSelectedJob] = useState<string>("");
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [currentCard, setCurrentCard] = useState(0);
 
   useEffect(() => {
-    const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
-
-    const scroll = () => {
-      if (scrollContainer.scrollLeft >= scrollContainer.scrollWidth / 2) {
-        scrollContainer.scrollLeft = 0;
-      } else {
-        scrollContainer.scrollLeft += 1;
-      }
-    };
-
-    const interval = setInterval(scroll, 30);
+    const interval = setInterval(() => {
+      setCurrentCard((prev) => (prev + 1) % jobs.length);
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
@@ -120,15 +111,21 @@ const Companies = () => {
           </p>
         </div>
 
-        {/* Job Cards Scrollable */}
-        <div className="relative mb-12">
-          <div ref={scrollRef} className="overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-            <div className="flex gap-6 min-w-max">
-              {[...jobs, ...jobs].map((job, index) => (
-                <div
-                  key={index}
-                  className="bg-card border border-border rounded-lg p-6 space-y-4 hover:shadow-lg transition-all hover:-translate-y-1 w-[280px] flex-shrink-0"
-                >
+        {/* Job Cards Slider */}
+        <div className="relative mb-12 overflow-hidden">
+          <div className="flex justify-center">
+            {jobs.map((job, index) => (
+              <div
+                key={index}
+                className={`w-full max-w-[320px] md:max-w-[400px] transition-all duration-500 ${
+                  index === currentCard
+                    ? "opacity-100 translate-x-0 relative"
+                    : index < currentCard
+                    ? "opacity-0 -translate-x-full absolute inset-0"
+                    : "opacity-0 translate-x-full absolute inset-0"
+                }`}
+              >
+                <div className="bg-card border border-border rounded-lg p-6 space-y-4 shadow-lg mx-auto">
                   <div className="flex items-start justify-between">
                     <div className="text-4xl">{job.logo}</div>
                     <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-medium">
@@ -156,8 +153,22 @@ const Companies = () => {
                     </Button>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Slide indicators */}
+          <div className="flex justify-center gap-2 mt-6">
+            {jobs.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentCard(index)}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  index === currentCard ? "bg-primary w-8" : "bg-muted-foreground/30"
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
           </div>
         </div>
 

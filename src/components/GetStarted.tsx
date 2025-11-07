@@ -11,7 +11,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { LogOut, Calendar, Users, BookOpen, ExternalLink, MessageCircle, CheckCircle2, Circle } from "lucide-react";
+import { LogOut, Calendar, Users, BookOpen, ExternalLink, MessageCircle, CheckCircle2, Circle, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Progress } from "@/components/ui/progress";
@@ -20,6 +20,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SignupForm } from "@/components/Auth/SignupForm";
 import { LoginForm } from "@/components/Auth/LoginForm";
+import { HandoutModal } from "./HandoutModal";
 
 const GetStarted = () => {
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
@@ -29,6 +30,7 @@ const GetStarted = () => {
   const [lecturesData, setLecturesData] = useState<any[]>([]);
   const [nextLecture, setNextLecture] = useState<any>(null);
   const [showAllCourses, setShowAllCourses] = useState(false);
+  const [handoutModalOpen, setHandoutModalOpen] = useState(false);
   const [forgotIdData, setForgotIdData] = useState({
     email: "",
     phone: "",
@@ -191,7 +193,10 @@ const GetStarted = () => {
                     name: aiData.nextClass.course
                   },
                   meeting_link: null,
-                  isAiGenerated: true
+                  isAiGenerated: true,
+                  classNumber: aiData.nextClass.classNumber || 1,
+                  resources: aiData.nextClass.resources || [],
+                  handoutContent: aiData.nextClass.handoutContent || ""
                 };
                 
                 setNextLecture(lecture);
@@ -295,6 +300,10 @@ const GetStarted = () => {
           ? `Class ${newClassesCompleted} of 4 completed!`
           : `Progress reset to ${newClassesCompleted} of 4 classes`,
       });
+      
+      // Clear AI suggestion cache to force refresh
+      const cacheKey = `aiNextClass_${userData.faculty_id}`;
+      localStorage.removeItem(cacheKey);
       
       // Refresh dashboard data
       await fetchUserDashboardData(userData.faculty_id);
@@ -463,10 +472,17 @@ Please confirm my Faculty ID. Thank you!`;
               {/* Next Lecture Card */}
               <Card>
                 <CardContent className="p-6 space-y-4">
-                  <h3 className="text-xl font-semibold flex items-center gap-2">
-                    <Calendar className="text-primary" size={20} />
-                    Next Class
-                  </h3>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-semibold flex items-center gap-2">
+                      <Calendar className="text-primary" size={20} />
+                      Next Class
+                    </h3>
+                    {nextLecture?.isAiGenerated && nextLecture.classNumber && (
+                      <Badge variant="outline" className="text-sm">
+                        Class {nextLecture.classNumber} of 4
+                      </Badge>
+                    )}
+                  </div>
                   {nextLecture ? (
                     <div className="space-y-3">
                       <div>
@@ -495,6 +511,17 @@ Please confirm my Faculty ID. Thank you!`;
                           </div>
                         )}
                       </div>
+                      {nextLecture.isAiGenerated && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="w-full"
+                          onClick={() => setHandoutModalOpen(true)}
+                        >
+                          <FileText className="mr-2" size={16} />
+                          View Class Handout
+                        </Button>
+                      )}
                       {nextLecture.meeting_link && !nextLecture.isAiGenerated && (
                         <Button
                           size="sm"
@@ -730,6 +757,19 @@ Please confirm my Faculty ID. Thank you!`;
             </div>
           </DialogContent>
         </Dialog>
+
+        {/* Handout Modal */}
+        {nextLecture?.isAiGenerated && (
+          <HandoutModal
+            open={handoutModalOpen}
+            onOpenChange={setHandoutModalOpen}
+            classTitle={nextLecture.title || ""}
+            classNumber={nextLecture.classNumber || 1}
+            course={nextLecture.courses?.name || ""}
+            resources={nextLecture.resources || []}
+            handoutContent={nextLecture.handoutContent || "No handout content available."}
+          />
+        )}
       </div>
     </section>
   );

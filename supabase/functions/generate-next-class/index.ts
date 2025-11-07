@@ -57,7 +57,14 @@ Generate a detailed next class/lecture for the course that needs it most. The cl
   "description": "detailed 2-3 sentence description of what will be covered",
   "date": "date in format YYYY-MM-DD that is within the next 7 days from today",
   "duration": "90",
-  "course": "name of the course this lecture belongs to"
+  "course": "name of the course this lecture belongs to",
+  "classNumber": "the class number (1-4) based on current progress + 1",
+  "resources": [
+    {"type": "youtube", "title": "resource title", "url": "youtube link"},
+    {"type": "website", "title": "resource title", "url": "website link"},
+    {"type": "article", "title": "resource title", "url": "article link"}
+  ],
+  "handoutContent": "A detailed 2-page summary of what will be covered in this class, including key concepts, learning objectives, practical exercises, and takeaways. Format it in markdown with sections."
 }`;
 
     console.log("Calling Lovable AI with prompt:", prompt);

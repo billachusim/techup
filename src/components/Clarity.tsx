@@ -23,6 +23,10 @@ const Clarity = () => {
             Not Sure Where to Start?
           </h2>
           
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Get personalized guidance to find the perfect learning path for your goals
+          </p>
+          
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <Button
               size="lg"
@@ -41,6 +45,24 @@ const Clarity = () => {
             >
               <Calendar className="mr-2" size={20} />
               Book a Clarity Call
+            </Button>
+          </div>
+          
+          <div className="mt-8 pt-8 border-t border-border">
+            <h3 className="text-xl font-semibold mb-3">Need a Custom Package?</h3>
+            <p className="text-muted-foreground mb-4">
+              Looking for a tailored learning experience? We can create a custom package that fits your specific needs, timeline, and career goals.
+            </p>
+            <Button
+              size="lg"
+              variant="secondary"
+              onClick={() => {
+                const message = "Hi! I'm interested in creating a custom learning package. Can we discuss my specific needs?";
+                window.open(`https://wa.me/2348068597140?text=${encodeURIComponent(message)}`, "_blank");
+              }}
+            >
+              <MessageSquare className="mr-2" size={20} />
+              Contact Us for Custom Package
             </Button>
           </div>
         </Card>

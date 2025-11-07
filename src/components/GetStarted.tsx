@@ -29,6 +29,7 @@ const GetStarted = () => {
   const [coursesData, setCoursesData] = useState<any[]>([]);
   const [lecturesData, setLecturesData] = useState<any[]>([]);
   const [nextLecture, setNextLecture] = useState<any>(null);
+  const [nextClassNumber, setNextClassNumber] = useState<number>(1);
   const [showAllCourses, setShowAllCourses] = useState(false);
   const [handoutModalOpen, setHandoutModalOpen] = useState(false);
   const [forgotIdData, setForgotIdData] = useState({
@@ -144,7 +145,23 @@ const GetStarted = () => {
           (lecture: any) => !completedLectures.has(lecture.id)
         );
 
-        setNextLecture(nextUncompletedLecture || allLectures?.[0] || null);
+        const lectureTouse = nextUncompletedLecture || allLectures?.[0] || null;
+        setNextLecture(lectureTouse);
+
+        // Calculate the actual next class number based on progress
+        if (lectureTouse && courseEnrollments.length > 0) {
+          // Find the course for this lecture
+          const courseForLecture = courseEnrollments.find(
+            (ce: any) => ce.course_id === lectureTouse.course_id
+          );
+          
+          if (courseForLecture?.course_progress?.[0]) {
+            const classesCompleted = courseForLecture.course_progress[0].classes_completed || 0;
+            setNextClassNumber(Math.min(classesCompleted + 1, 4));
+          } else {
+            setNextClassNumber(1);
+          }
+        }
 
         // If no lectures exist in database, generate one using AI or use cached
         if (!allLectures || allLectures.length === 0) {
@@ -196,10 +213,19 @@ const GetStarted = () => {
                   isAiGenerated: true,
                   classNumber: aiData.nextClass.classNumber || 1,
                   resources: aiData.nextClass.resources || [],
-                  handoutContent: aiData.nextClass.handoutContent || ""
+                  handoutContent: aiData.nextClass.handoutContent || "",
+                  course_id: courseEnrollments[0]?.course_id // Add course_id for progress tracking
                 };
                 
                 setNextLecture(lecture);
+                
+                // Calculate the actual next class number based on progress
+                if (courseEnrollments[0]?.course_progress?.[0]) {
+                  const classesCompleted = courseEnrollments[0].course_progress[0].classes_completed || 0;
+                  setNextClassNumber(Math.min(classesCompleted + 1, 4));
+                } else {
+                  setNextClassNumber(1);
+                }
                 
                 // Cache the suggestion
                 localStorage.setItem(cacheKey, JSON.stringify({
@@ -225,6 +251,7 @@ const GetStarted = () => {
     setCoursesData([]);
     setLecturesData([]);
     setNextLecture(null);
+    setNextClassNumber(1);
     
     toast({
       title: "Signed Out",
@@ -477,9 +504,9 @@ Please confirm my Faculty ID. Thank you!`;
                       <Calendar className="text-primary" size={20} />
                       Next Class
                     </h3>
-                    {nextLecture?.isAiGenerated && nextLecture.classNumber && (
+                    {nextLecture?.isAiGenerated && (
                       <Badge variant="outline" className="text-sm">
-                        Class {nextLecture.classNumber} of 4
+                        Class {nextClassNumber} of 4
                       </Badge>
                     )}
                   </div>
@@ -786,7 +813,7 @@ Please confirm my Faculty ID. Thank you!`;
             open={handoutModalOpen}
             onOpenChange={setHandoutModalOpen}
             classTitle={nextLecture.title || ""}
-            classNumber={nextLecture.classNumber || 1}
+            classNumber={nextClassNumber}
             course={nextLecture.courses?.name || ""}
             resources={nextLecture.resources || []}
             handoutContent={nextLecture.handoutContent || "No handout content available."}

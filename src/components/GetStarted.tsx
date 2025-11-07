@@ -157,6 +157,33 @@ const GetStarted = () => {
         );
 
         setNextLecture(nextUncompletedLecture || allLectures?.[0] || null);
+
+        // If no lectures exist in database, generate one using AI
+        if (!allLectures || allLectures.length === 0) {
+          try {
+            const { data: aiData, error: aiError } = await supabase.functions.invoke('generate-next-class', {
+              body: { courses: coursesAvailable }
+            });
+
+            if (aiError) throw aiError;
+
+            if (aiData?.nextClass) {
+              setNextLecture({
+                title: aiData.nextClass.title,
+                description: aiData.nextClass.description,
+                scheduled_at: aiData.nextClass.date,
+                duration_minutes: parseInt(aiData.nextClass.duration) || 90,
+                courses: {
+                  name: aiData.nextClass.course
+                },
+                meeting_link: null,
+                isAiGenerated: true
+              });
+            }
+          } catch (aiError) {
+            console.error('Error generating next class with AI:', aiError);
+          }
+        }
       }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -396,6 +423,12 @@ Please confirm my Faculty ID. Thank you!`;
                       <div>
                         <h4 className="font-semibold">{nextLecture.title}</h4>
                         <p className="text-sm text-muted-foreground">{nextLecture.courses?.name}</p>
+                        {nextLecture.description && (
+                          <p className="text-sm text-muted-foreground mt-2">{nextLecture.description}</p>
+                        )}
+                        {nextLecture.isAiGenerated && (
+                          <Badge variant="secondary" className="mt-2">AI Suggested</Badge>
+                        )}
                       </div>
                       <div className="text-sm">
                         <div>
@@ -404,14 +437,16 @@ Please confirm my Faculty ID. Thank you!`;
                             {new Date(nextLecture.scheduled_at).toLocaleDateString()}
                           </span>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground">Time:</span>{" "}
-                          <span className="font-medium">
-                            {new Date(nextLecture.scheduled_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                          </span>
-                        </div>
+                        {!nextLecture.isAiGenerated && (
+                          <div>
+                            <span className="text-muted-foreground">Time:</span>{" "}
+                            <span className="font-medium">
+                              {new Date(nextLecture.scheduled_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          </div>
+                        )}
                       </div>
-                      {nextLecture.meeting_link && (
+                      {nextLecture.meeting_link && !nextLecture.isAiGenerated && (
                         <Button
                           size="sm"
                           className="w-full"
@@ -421,7 +456,7 @@ Please confirm my Faculty ID. Thank you!`;
                           <ExternalLink className="ml-2" size={16} />
                         </Button>
                       )}
-                      {nextLecture.courses?.whatsapp_group_link && (
+                      {nextLecture.courses?.whatsapp_group_link && !nextLecture.isAiGenerated && (
                         <Button
                           variant="outline"
                           size="sm"

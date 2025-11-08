@@ -12,10 +12,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { SignupForm } from "@/components/Auth/SignupForm";
+import { useUser } from "@/contexts/UserContext";
+import { MessageCircle } from "lucide-react";
 
 type PlanCategory = "all" | "beginner" | "development" | "data-ai" | "creative" | "security";
 
@@ -244,11 +246,34 @@ const Pricing = () => {
   const [selectedPlan, setSelectedPlan] = useState<string>("");
   const [facultyId, setFacultyId] = useState("");
   const [activeCategory, setActiveCategory] = useState<PlanCategory>("beginner");
+  const [currentEnrollment, setCurrentEnrollment] = useState<any>(null);
   const { toast } = useToast();
+  const { isLoggedIn, userData } = useUser();
 
   const filteredPlans = activeCategory === "all" 
     ? pricingPlans 
     : pricingPlans.filter(plan => plan.category === activeCategory);
+
+  // Fetch current enrollment when user is logged in
+  useEffect(() => {
+    const fetchCurrentEnrollment = async () => {
+      if (isLoggedIn && userData?.faculty_id) {
+        const { data, error } = await supabase
+          .from('enrollments')
+          .select('*')
+          .eq('faculty_id', userData.faculty_id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (!error && data) {
+          setCurrentEnrollment(data);
+        }
+      }
+    };
+
+    fetchCurrentEnrollment();
+  }, [isLoggedIn, userData]);
 
   const handleCouponChange = (planName: string, value: string) => {
     setCouponCodes({ ...couponCodes, [planName]: value });
@@ -261,6 +286,28 @@ const Pricing = () => {
   };
 
   const handlePlanClick = (planName: string) => {
+    const clickedPlan = pricingPlans.find(p => p.name === planName);
+    
+    // Check if user is logged in and on a paid plan
+    if (isLoggedIn && userData?.faculty_id && currentEnrollment) {
+      const currentPlan = pricingPlans.find(p => p.name === currentEnrollment.plan_name);
+      
+      // If current plan is paid and trying to switch to another paid plan (not free)
+      if (currentPlan && !currentPlan.isFree && clickedPlan && !clickedPlan.isFree) {
+        // Send to WhatsApp for plan change request
+        const message = `Hi! I'm currently on *${currentEnrollment.plan_name}* and would like to switch to *${planName}*. My Faculty ID is: ${userData.faculty_id}. Please help me with the plan change process.`;
+        const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, "_blank");
+        
+        toast({
+          title: "Plan Change Request Sent",
+          description: "An admin will contact you to process your plan change after payment verification.",
+        });
+        return;
+      }
+    }
+    
+    // Normal flow for free plan switches or new enrollments
     setSelectedPlan(planName);
     setShowFacultyIdDialog(true);
   };
@@ -368,14 +415,25 @@ const Pricing = () => {
 
   const renderPlanCard = (plan: typeof pricingPlans[0], idx: number) => {
     const Icon = plan.icon;
+    const isCurrentPlan = currentEnrollment?.plan_name === plan.name;
+    const currentPlanData = currentEnrollment ? pricingPlans.find(p => p.name === currentEnrollment.plan_name) : null;
+    const isPaidToAnotherPaid = isLoggedIn && currentPlanData && !currentPlanData.isFree && !plan.isFree && !isCurrentPlan;
+    
     return (
       <Card
         key={idx}
         className={`relative bg-card border-border hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group ${
           plan.popular ? "border-primary shadow-lg" : ""
-        }`}
+        } ${isCurrentPlan ? "border-primary/70 shadow-lg" : ""}`}
       >
-        {plan.popular && (
+        {isCurrentPlan && (
+          <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+            <Badge className="bg-primary text-background border-none px-4 py-1 shadow-lg">
+              Your Current Plan
+            </Badge>
+          </div>
+        )}
+        {!isCurrentPlan && plan.popular && (
           <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
             <Badge className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background border-none px-4 py-1 shadow-lg animate-pulse">
               <Star className="w-3 h-3 mr-1 inline" />
@@ -383,7 +441,7 @@ const Pricing = () => {
             </Badge>
           </div>
         )}
-        {!plan.popular && plan.badge && (
+        {!isCurrentPlan && !plan.popular && plan.badge && (
           <Badge 
             className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 border-border bg-background text-foreground"
             variant="outline"
@@ -449,12 +507,22 @@ const Pricing = () => {
             size="lg"
             onClick={() => handlePlanClick(plan.name)}
             style={{ 
-              background: plan.popular ? plan.gradient : undefined,
+              background: plan.popular && !isPaidToAnotherPaid ? plan.gradient : undefined,
             }}
-            variant={plan.popular ? "default" : "outline"}
+            variant={plan.popular && !isPaidToAnotherPaid ? "default" : "outline"}
+            disabled={isCurrentPlan}
           >
-            {plan.cta}
-            <TrendingUp className="w-4 h-4 ml-2 transition-transform group-hover/btn:translate-x-1" />
+            {isCurrentPlan ? "Current Plan" : isPaidToAnotherPaid ? (
+              <>
+                Request Change
+                <MessageCircle className="w-4 h-4 ml-2" />
+              </>
+            ) : (
+              <>
+                {plan.cta}
+                <TrendingUp className="w-4 h-4 ml-2 transition-transform group-hover/btn:translate-x-1" />
+              </>
+            )}
           </Button>
         </CardFooter>
       </Card>

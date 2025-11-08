@@ -17,6 +17,7 @@ import {
   Users,
   Clock,
   TrendingUp,
+  Download,
 } from "lucide-react";
 import {
   Accordion,
@@ -29,6 +30,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import jsPDF from "jspdf";
 
 const departments = [
   {
@@ -272,6 +274,80 @@ const Departments = () => {
     return matchesSearch && matchesCategory;
   });
 
+  const generateCurriculumPDF = (dept: typeof departments[0]) => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 20;
+    const maxWidth = pageWidth - 2 * margin;
+
+    // Header with logo/title
+    doc.setFontSize(24);
+    doc.text("Tech Faculty", margin, 20);
+    
+    doc.setFontSize(20);
+    doc.text(`${dept.title} Department`, margin, 35);
+    
+    // Description
+    doc.setFontSize(11);
+    const descLines = doc.splitTextToSize(dept.description, maxWidth);
+    let yPosition = 50;
+    descLines.forEach((line: string) => {
+      doc.text(line, margin, yPosition);
+      yPosition += 7;
+    });
+
+    // Metadata section
+    yPosition += 10;
+    doc.setFontSize(12);
+    doc.text("Program Details", margin, yPosition);
+    yPosition += 10;
+
+    doc.setFontSize(10);
+    doc.text(`• Enrollment: ${dept.enrollment} students`, margin, yPosition);
+    yPosition += 7;
+    doc.text(`• Duration: ${dept.duration}`, margin, yPosition);
+    yPosition += 7;
+    doc.text(`• Difficulty Level: ${dept.difficulty}`, margin, yPosition);
+    yPosition += 7;
+    if (dept.trending) {
+      doc.text("• Status: Trending 🔥", margin, yPosition);
+      yPosition += 7;
+    }
+
+    // Curriculum section
+    yPosition += 10;
+    doc.setFontSize(14);
+    doc.text("Curriculum Overview", margin, yPosition);
+    yPosition += 10;
+
+    doc.setFontSize(11);
+    dept.courses.forEach((course, idx) => {
+      if (yPosition > 270) {
+        doc.addPage();
+        yPosition = 20;
+      }
+      const courseLines = doc.splitTextToSize(`${idx + 1}. ${course}`, maxWidth - 10);
+      courseLines.forEach((line: string) => {
+        doc.text(line, margin + 5, yPosition);
+        yPosition += 7;
+      });
+      yPosition += 2;
+    });
+
+    // Footer
+    if (yPosition > 250) {
+      doc.addPage();
+      yPosition = 20;
+    }
+    yPosition += 15;
+    doc.setFontSize(10);
+    doc.text("Join our WhatsApp community to get started!", margin, yPosition);
+    yPosition += 7;
+    doc.text("Contact: https://chat.whatsapp.com/D8kuxWVZRTKKeAx6ERjSqc", margin, yPosition);
+
+    doc.save(`${dept.title.replace(/\s+/g, "-")}-Curriculum.pdf`);
+  };
+
   return (
     <section id="departments" className="py-24 px-4">
       <div className="container mx-auto max-w-6xl">
@@ -395,25 +471,36 @@ const Departments = () => {
                                 ))}
                               </div>
                             </div>
-                            <Button
-                              size="sm"
-                              className="w-full"
-                              style={{
-                                backgroundColor: dept.color,
-                                color: "white",
-                              }}
-                              asChild
-                            >
-                              <a
-                                href="https://chat.whatsapp.com/D8kuxWVZRTKKeAx6ERjSqc"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center justify-center gap-2"
+                            <div className="flex gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="flex-1"
+                                onClick={() => generateCurriculumPDF(dept)}
                               >
-                                Join {dept.title} Community
-                                <MessageCircle size={14} />
-                              </a>
-                            </Button>
+                                <Download size={14} className="mr-2" />
+                                Download Curriculum
+                              </Button>
+                              <Button
+                                size="sm"
+                                className="flex-1"
+                                style={{
+                                  backgroundColor: dept.color,
+                                  color: "white",
+                                }}
+                                asChild
+                              >
+                                <a
+                                  href="https://chat.whatsapp.com/D8kuxWVZRTKKeAx6ERjSqc"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center justify-center gap-2"
+                                >
+                                  Join Community
+                                  <MessageCircle size={14} />
+                                </a>
+                              </Button>
+                            </div>
                           </div>
                         </AccordionContent>
                       </AccordionItem>

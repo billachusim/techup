@@ -101,23 +101,23 @@ export const HandoutModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[80vh]">
+      <DialogContent className="max-w-2xl w-[95vw] max-h-[90vh] sm:max-h-[80vh] flex flex-col">
         <DialogHeader>
-          <DialogTitle className="text-2xl">
+          <DialogTitle className="text-lg sm:text-2xl leading-tight">
             Class {classNumber} - {classTitle}
           </DialogTitle>
-          <p className="text-sm text-muted-foreground">{course}</p>
+          <p className="text-xs sm:text-sm text-muted-foreground">{course}</p>
         </DialogHeader>
         
-        <ScrollArea className="h-[60vh] pr-4">
+        <ScrollArea className="flex-1 pr-2 sm:pr-4">
           {!showFullHandout ? (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div>
-                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                  <ExternalLink className="h-5 w-5" />
+                <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
+                  <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5" />
                   Resources
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-2 sm:space-y-3">
                   {resources && resources.length > 0 ? (
                     resources.map((resource, index) => (
                       <a
@@ -125,11 +125,11 @@ export const HandoutModal = ({
                         href={resource.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-accent transition-colors"
+                        className="flex items-center gap-2 sm:gap-3 p-3 sm:p-3 rounded-lg border border-border hover:bg-accent transition-colors active:bg-accent min-h-[44px]"
                       >
                         {getResourceIcon(resource.type)}
-                        <span className="flex-1">{resource.title}</span>
-                        <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                        <span className="flex-1 text-sm sm:text-base break-words">{resource.title}</span>
+                        <ExternalLink className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                       </a>
                     ))
                   ) : (
@@ -138,36 +138,39 @@ export const HandoutModal = ({
                 </div>
               </div>
               
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <Button
                   onClick={() => setShowFullHandout(true)}
-                  className="flex-1"
+                  className="w-full sm:flex-1"
                   variant="outline"
+                  size="lg"
                 >
                   <FileText className="h-4 w-4 mr-2" />
-                  Show Full Class Handout
+                  <span className="text-sm sm:text-base">Show Full Handout</span>
                 </Button>
                 <Button
                   onClick={generatePDF}
-                  className="flex-1"
+                  className="w-full sm:flex-1"
+                  size="lg"
                 >
                   <Download className="h-4 w-4 mr-2" />
-                  Download Handout (PDF)
+                  <span className="text-sm sm:text-base">Download PDF</span>
                 </Button>
               </div>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <Button
                 onClick={() => setShowFullHandout(false)}
                 variant="outline"
-                size="sm"
+                size="default"
+                className="min-h-[44px]"
               >
                 ← Back to Resources
               </Button>
               
               <div className="prose prose-sm max-w-none">
-                <div className="whitespace-pre-wrap text-sm leading-relaxed">
+                <div className="whitespace-pre-wrap text-xs sm:text-sm leading-relaxed">
                   {handoutContent}
                 </div>
               </div>
@@ -175,9 +178,10 @@ export const HandoutModal = ({
               <Button
                 onClick={generatePDF}
                 className="w-full"
+                size="lg"
               >
                 <Download className="h-4 w-4 mr-2" />
-                Download Handout (PDF)
+                <span className="text-sm sm:text-base">Download PDF</span>
               </Button>
             </div>
           )}

@@ -393,123 +393,120 @@ const Departments = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Accordion type="single" collapsible className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {filteredDepartments.map((dept) => {
               const Icon = dept.icon;
               return (
-                <Card
-                  key={dept.id}
-                  className={`group relative overflow-hidden border-2 transition-all duration-300 hover:shadow-xl hover:scale-[1.02] bg-gradient-to-br ${dept.gradient}`}
-                >
-                  <CardContent className="p-6">
-                    <Accordion type="single" collapsible>
-                      <AccordionItem value={dept.id} className="border-none">
-                        <AccordionTrigger className="hover:no-underline pb-4">
-                          <div className="flex items-start gap-4 text-left flex-1">
-                            <div
-                              className="p-3 rounded-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
-                              style={{ backgroundColor: `${dept.color}20` }}
-                            >
-                              <Icon
-                                className="h-6 w-6 transition-colors duration-300"
-                                style={{ color: dept.color }}
-                              />
-                            </div>
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
-                                <h3 className="text-xl font-bold">
-                                  {dept.title}
-                                </h3>
-                                {dept.trending && (
-                                  <Badge
-                                    variant="secondary"
-                                    className="gap-1 text-xs"
-                                  >
-                                    <TrendingUp className="h-3 w-3" />
-                                    Trending
-                                  </Badge>
-                                )}
-                              </div>
-                              <p className="text-sm text-muted-foreground mb-3">
-                                {dept.description}
-                              </p>
-                              {/* Metadata */}
-                              <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
-                                <div className="flex items-center gap-1">
-                                  <Users className="h-3 w-3" />
-                                  {dept.enrollment}
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <Clock className="h-3 w-3" />
-                                  {dept.duration}
-                                </div>
-                                <Badge variant="outline" className="text-xs">
-                                  {dept.difficulty}
-                                </Badge>
-                              </div>
-                            </div>
+                <AccordionItem key={dept.id} value={dept.id} className="border-none">
+                  <Card
+                    className={`group relative overflow-hidden border-2 transition-all duration-300 hover:shadow-xl bg-gradient-to-br ${dept.gradient}`}
+                  >
+                    <CardContent className="p-6">
+                      <AccordionTrigger className="hover:no-underline pb-4">
+                        <div className="flex items-start gap-4 text-left flex-1">
+                          <div
+                            className="p-3 rounded-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
+                            style={{ backgroundColor: `${dept.color}20` }}
+                          >
+                            <Icon
+                              className="h-6 w-6 transition-colors duration-300"
+                              style={{ color: dept.color }}
+                            />
                           </div>
-                        </AccordionTrigger>
-                        <AccordionContent>
-                          <div className="pt-4 space-y-4 border-t">
-                            <div>
-                              <p className="text-sm font-semibold mb-3">
-                                What You'll Learn:
-                              </p>
-                              <div className="space-y-2">
-                                {dept.courses.map((course, idx) => (
-                                  <div
-                                    key={idx}
-                                    className="flex items-start gap-2 text-sm"
-                                  >
-                                    <CheckCircle2
-                                      className="h-4 w-4 mt-0.5 flex-shrink-0"
-                                      style={{ color: dept.color }}
-                                    />
-                                    <span>{course}</span>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                            <div className="flex gap-2">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="flex-1"
-                                onClick={() => generateCurriculumPDF(dept)}
-                              >
-                                <Download size={14} className="mr-2" />
-                                Download Curriculum
-                              </Button>
-                              <Button
-                                size="sm"
-                                className="flex-1"
-                                style={{
-                                  backgroundColor: dept.color,
-                                  color: "white",
-                                }}
-                                asChild
-                              >
-                                <a
-                                  href="https://chat.whatsapp.com/D8kuxWVZRTKKeAx6ERjSqc"
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex items-center justify-center gap-2"
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <h3 className="text-xl font-bold">
+                                {dept.title}
+                              </h3>
+                              {dept.trending && (
+                                <Badge
+                                  variant="secondary"
+                                  className="gap-1 text-xs"
                                 >
-                                  Join Community
-                                  <MessageCircle size={14} />
-                                </a>
-                              </Button>
+                                  <TrendingUp className="h-3 w-3" />
+                                  Trending
+                                </Badge>
+                              )}
+                            </div>
+                            <p className="text-sm text-muted-foreground mb-3">
+                              {dept.description}
+                            </p>
+                            {/* Metadata */}
+                            <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
+                              <div className="flex items-center gap-1">
+                                <Users className="h-3 w-3" />
+                                {dept.enrollment}
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                {dept.duration}
+                              </div>
+                              <Badge variant="outline" className="text-xs">
+                                {dept.difficulty}
+                              </Badge>
                             </div>
                           </div>
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
-                  </CardContent>
-                </Card>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="pt-4 space-y-4 border-t">
+                          <div>
+                            <p className="text-sm font-semibold mb-3">
+                              What You'll Learn:
+                            </p>
+                            <div className="space-y-2">
+                              {dept.courses.map((course, idx) => (
+                                <div
+                                  key={idx}
+                                  className="flex items-start gap-2 text-sm"
+                                >
+                                  <CheckCircle2
+                                    className="h-4 w-4 mt-0.5 flex-shrink-0"
+                                    style={{ color: dept.color }}
+                                  />
+                                  <span>{course}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="flex-1"
+                              onClick={() => generateCurriculumPDF(dept)}
+                            >
+                              <Download size={14} className="mr-2" />
+                              Download Curriculum
+                            </Button>
+                            <Button
+                              size="sm"
+                              className="flex-1"
+                              style={{
+                                backgroundColor: dept.color,
+                                color: "white",
+                              }}
+                              asChild
+                            >
+                              <a
+                                href="https://chat.whatsapp.com/D8kuxWVZRTKKeAx6ERjSqc"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-center gap-2"
+                              >
+                                Join Community
+                                <MessageCircle size={14} />
+                              </a>
+                            </Button>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </CardContent>
+                  </Card>
+                </AccordionItem>
               );
             })}
-          </div>
+          </Accordion>
         )}
       </div>
     </section>

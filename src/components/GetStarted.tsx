@@ -21,6 +21,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SignupForm } from "@/components/Auth/SignupForm";
 import { LoginForm } from "@/components/Auth/LoginForm";
 import { HandoutModal } from "./HandoutModal";
+import techFacultyLogo from "@/assets/tech-faculty-logo.png";
+import googleLogo from "@/assets/partners/google-logo.png";
+import microsoftLogo from "@/assets/partners/microsoft-logo.png";
+import fmstiLogo from "@/assets/partners/fmsti-logo.png";
 
 const GetStarted = () => {
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
@@ -499,7 +503,7 @@ const GetStarted = () => {
                   {/* Tech Faculty Logo */}
                   <div className="flex justify-center pt-4">
                     <img 
-                      src="/src/assets/tech-faculty-logo.png" 
+                      src={techFacultyLogo} 
                       alt="Tech Faculty" 
                       className="h-16 w-auto object-contain"
                     />
@@ -546,18 +550,18 @@ const GetStarted = () => {
                     <p className="text-xs text-center text-muted-foreground mb-3 uppercase tracking-wide">In Partnership With</p>
                     <div className="flex justify-center items-center gap-4 flex-wrap">
                       <img 
-                        src="/src/assets/partners/google-logo.png" 
+                        src={googleLogo} 
                         alt="Google" 
                         className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
                       />
                       <img 
-                        src="/src/assets/partners/microsoft-logo.png" 
+                        src={microsoftLogo} 
                         alt="Microsoft" 
                         className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
                       />
                       <img 
-                        src="/src/assets/partners/fmsti-logo.png" 
-                        alt="Federal Ministry of Science Technology and Innovation" 
+                        src={fmstiLogo} 
+                        alt="Federal Ministry of Science Technology and Innovation"
                         className="h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
                       />
                     </div>

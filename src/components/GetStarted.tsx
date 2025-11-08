@@ -514,7 +514,7 @@ const GetStarted = () => {
                     <h3 className="text-2xl font-bold bg-gradient-to-r from-primary via-[hsl(170,100%,47%)] to-[hsl(180,100%,45%)] bg-clip-text text-transparent">
                       Student Profile
                     </h3>
-                    <p className="text-xs text-muted-foreground uppercase tracking-widest">Tech Faculty Bootcamp</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-widest">Tech Faculty NG</p>
                   </div>
 
                   {/* Student Details */}

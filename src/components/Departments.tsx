@@ -261,6 +261,7 @@ const categories = [
 const Departments = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+  const [showAllDepartments, setShowAllDepartments] = useState(false);
 
   const filteredDepartments = departments.filter((dept) => {
     const matchesSearch =
@@ -273,6 +274,13 @@ const Departments = () => {
       activeCategory === "all" || dept.category === activeCategory;
     return matchesSearch && matchesCategory;
   });
+
+  const displayedDepartments = 
+    activeCategory === "all" && !showAllDepartments 
+      ? filteredDepartments.slice(0, 4) 
+      : filteredDepartments;
+
+  const hasMoreDepartments = activeCategory === "all" && filteredDepartments.length > 4;
 
   const generateCurriculumPDF = (dept: typeof departments[0]) => {
     const doc = new jsPDF();
@@ -393,8 +401,9 @@ const Departments = () => {
             </p>
           </div>
         ) : (
-          <Accordion type="single" collapsible className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredDepartments.map((dept) => {
+          <>
+            <Accordion type="single" collapsible className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {displayedDepartments.map((dept) => {
               const Icon = dept.icon;
               return (
                 <AccordionItem key={dept.id} value={dept.id} className="border-none">
@@ -507,6 +516,23 @@ const Departments = () => {
               );
             })}
           </Accordion>
+          
+          {hasMoreDepartments && (
+            <div className="flex justify-center mt-8">
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => setShowAllDepartments(!showAllDepartments)}
+                className="min-w-[200px]"
+              >
+                {showAllDepartments ? "Show Less" : `Show More (${filteredDepartments.length - 4} more)`}
+                <ChevronDown 
+                  className={`ml-2 h-4 w-4 transition-transform ${showAllDepartments ? 'rotate-180' : ''}`} 
+                />
+              </Button>
+            </div>
+          )}
+        </>
         )}
       </div>
     </section>

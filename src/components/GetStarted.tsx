@@ -11,7 +11,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { LogOut, Calendar, Users, BookOpen, ExternalLink, MessageCircle, CheckCircle2, Circle, FileText } from "lucide-react";
+import { LogOut, Calendar, Users, BookOpen, ExternalLink, MessageCircle, CheckCircle2, Circle, FileText, BadgeCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Progress } from "@/components/ui/progress";
@@ -479,6 +479,11 @@ Please confirm my Faculty ID. Thank you!`;
               {/* Profile Certificate Card */}
               <Card className="bg-gradient-to-br from-card via-background to-card border-2 border-primary/20 shadow-xl">
                 <CardContent className="p-8 space-y-6 relative overflow-hidden">
+                  {/* Watermark Seal */}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none">
+                    <BadgeCheck size={300} className="text-primary" />
+                  </div>
+                  
                   {/* Decorative corners */}
                   <div className="absolute top-0 left-0 w-20 h-20 border-t-4 border-l-4 border-primary/30 rounded-tl-lg" />
                   <div className="absolute top-0 right-0 w-20 h-20 border-t-4 border-r-4 border-primary/30 rounded-tr-lg" />

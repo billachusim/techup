@@ -476,34 +476,84 @@ Please confirm my Faculty ID. Thank you!`;
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              {/* Profile Info Card */}
-              <Card>
-                <CardContent className="p-6 space-y-4">
-                  <h3 className="text-xl font-semibold flex items-center gap-2">
-                    <Users className="text-primary" size={20} />
-                    Your Profile
-                  </h3>
-                  <div className="space-y-2 text-sm">
-                    <div>
-                      <span className="text-muted-foreground">Email:</span>{" "}
-                      <span className="font-medium">{userData?.email}</span>
+              {/* Profile Certificate Card */}
+              <Card className="bg-gradient-to-br from-card via-background to-card border-2 border-primary/20 shadow-xl">
+                <CardContent className="p-8 space-y-6 relative overflow-hidden">
+                  {/* Decorative corners */}
+                  <div className="absolute top-0 left-0 w-20 h-20 border-t-4 border-l-4 border-primary/30 rounded-tl-lg" />
+                  <div className="absolute top-0 right-0 w-20 h-20 border-t-4 border-r-4 border-primary/30 rounded-tr-lg" />
+                  <div className="absolute bottom-0 left-0 w-20 h-20 border-b-4 border-l-4 border-primary/30 rounded-bl-lg" />
+                  <div className="absolute bottom-0 right-0 w-20 h-20 border-b-4 border-r-4 border-primary/30 rounded-br-lg" />
+                  
+                  {/* Tech Faculty Logo */}
+                  <div className="flex justify-center pt-4">
+                    <img 
+                      src="/src/assets/tech-faculty-logo.png" 
+                      alt="Tech Faculty" 
+                      className="h-16 w-auto object-contain"
+                    />
+                  </div>
+
+                  {/* Certificate Title */}
+                  <div className="text-center space-y-2">
+                    <h3 className="text-2xl font-bold bg-gradient-to-r from-primary via-[hsl(170,100%,47%)] to-[hsl(180,100%,45%)] bg-clip-text text-transparent">
+                      Student Profile
+                    </h3>
+                    <p className="text-xs text-muted-foreground uppercase tracking-widest">Tech Faculty Bootcamp</p>
+                  </div>
+
+                  {/* Student Details */}
+                  <div className="space-y-4 py-4">
+                    <div className="text-center border-b border-border/50 pb-2">
+                      <p className="text-2xl font-bold text-foreground">{userData?.name}</p>
+                      <p className="text-sm text-muted-foreground mt-1">Student Name</p>
                     </div>
-                    <div>
-                      <span className="text-muted-foreground">Phone:</span>{" "}
-                      <span className="font-medium">{userData?.phone}</span>
+                    
+                    <div className="grid grid-cols-2 gap-4 text-center">
+                      <div className="border-r border-border/50">
+                        <p className="font-mono text-sm font-semibold text-primary">{userData?.faculty_id}</p>
+                        <p className="text-xs text-muted-foreground mt-1">Faculty ID</p>
+                      </div>
+                      <div>
+                        <Badge variant={enrollmentData?.plan_name === "Developer Pro" ? "default" : "secondary"} className="text-xs">
+                          {enrollmentData?.plan_name || "Free Bootcamp"}
+                        </Badge>
+                        <p className="text-xs text-muted-foreground mt-1">Plan</p>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-muted-foreground">Department:</span>{" "}
-                      <span className="font-medium">{userData?.department || "Not assigned"}</span>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">Plan:</span>{" "}
-                      <Badge variant={enrollmentData?.plan_name === "Developer Pro" ? "default" : "secondary"}>
-                        {enrollmentData?.plan_name || "Free Bootcamp"}
-                      </Badge>
+
+                    <div className="text-center border-t border-border/50 pt-4 space-y-2">
+                      <div>
+                        <p className="text-xs text-muted-foreground">Department</p>
+                        <p className="font-medium text-sm">{userData?.department || "Not assigned"}</p>
+                      </div>
                     </div>
                   </div>
-                  <div className="pt-4 border-t">
+
+                  {/* Partner Logos */}
+                  <div className="border-t border-border/50 pt-4">
+                    <p className="text-xs text-center text-muted-foreground mb-3 uppercase tracking-wide">In Partnership With</p>
+                    <div className="flex justify-center items-center gap-4 flex-wrap">
+                      <img 
+                        src="/src/assets/partners/google-logo.png" 
+                        alt="Google" 
+                        className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
+                      />
+                      <img 
+                        src="/src/assets/partners/microsoft-logo.png" 
+                        alt="Microsoft" 
+                        className="h-8 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
+                      />
+                      <img 
+                        src="/src/assets/partners/fmsti-logo.png" 
+                        alt="Federal Ministry of Science Technology and Innovation" 
+                        className="h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity"
+                      />
+                    </div>
+                  </div>
+
+                  {/* WhatsApp Button */}
+                  <div className="pt-2">
                     <Button
                       variant="outline"
                       size="sm"

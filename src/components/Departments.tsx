@@ -376,9 +376,9 @@ const Departments = () => {
 
         {/* Category Tabs */}
         <Tabs value={activeCategory} onValueChange={setActiveCategory} className="mb-8">
-          <TabsList className="grid w-full grid-cols-5 max-w-3xl mx-auto">
+          <TabsList className="flex flex-wrap sm:grid sm:grid-cols-5 w-full max-w-3xl mx-auto gap-1">
             {categories.map((cat) => (
-              <TabsTrigger key={cat.id} value={cat.id} className="text-xs sm:text-sm">
+              <TabsTrigger key={cat.id} value={cat.id} className="text-xs sm:text-sm flex-1 min-w-[100px]">
                 {cat.label}
               </TabsTrigger>
             ))}
@@ -469,7 +469,7 @@ const Departments = () => {
                               ))}
                             </div>
                           </div>
-                          <div className="flex gap-2">
+                          <div className="flex flex-col sm:flex-row gap-2">
                             <Button
                               size="sm"
                               variant="outline"

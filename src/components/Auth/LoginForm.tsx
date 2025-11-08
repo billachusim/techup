@@ -88,7 +88,7 @@ export const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
           onClick={onForgotPassword}
           className="text-sm text-primary hover:underline"
         >
-          Forgot your Faculty ID?
+          Forgot your password?
         </button>
       </div>
 

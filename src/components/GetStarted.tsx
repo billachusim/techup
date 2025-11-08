@@ -24,7 +24,7 @@ import { HandoutModal } from "./HandoutModal";
 
 const GetStarted = () => {
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
-  const [showForgotIdDialog, setShowForgotIdDialog] = useState(false);
+  const [showForgotPasswordDialog, setShowForgotPasswordDialog] = useState(false);
   const [enrollmentData, setEnrollmentData] = useState<any>(null);
   const [coursesData, setCoursesData] = useState<any[]>([]);
   const [lecturesData, setLecturesData] = useState<any[]>([]);
@@ -32,10 +32,8 @@ const GetStarted = () => {
   const [nextClassNumber, setNextClassNumber] = useState<number>(1);
   const [showAllCourses, setShowAllCourses] = useState(false);
   const [handoutModalOpen, setHandoutModalOpen] = useState(false);
-  const [forgotIdData, setForgotIdData] = useState({
-    email: "",
-    phone: "",
-  });
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
+  const [isResettingPassword, setIsResettingPassword] = useState(false);
   const { toast } = useToast();
   const { isLoggedIn, userData, logout, setUserData, facultyId } = useUser();
 
@@ -368,18 +366,18 @@ const GetStarted = () => {
     }
   };
 
-  const handleForgotIdSubmit = () => {
-    if (!forgotIdData.email.trim() || !forgotIdData.phone.trim()) {
+  const handleForgotPasswordSubmit = async () => {
+    if (!forgotPasswordEmail.trim()) {
       toast({
-        title: "Missing Information",
-        description: "Please provide both email and phone number.",
+        title: "Email Required",
+        description: "Please enter your email address.",
         variant: "destructive",
       });
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(forgotIdData.email)) {
+    if (!emailRegex.test(forgotPasswordEmail)) {
       toast({
         title: "Invalid Email",
         description: "Please enter a valid email address.",
@@ -388,24 +386,32 @@ const GetStarted = () => {
       return;
     }
 
-    const message = `Hi! I forgot my Faculty ID. Please help me recover it.
+    setIsResettingPassword(true);
 
-*My Details:*
-Email: ${forgotIdData.email.trim()}
-Phone: ${forgotIdData.phone.trim()}
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(forgotPasswordEmail.trim(), {
+        redirectTo: `${window.location.origin}/`,
+      });
 
-Please confirm my Faculty ID. Thank you!`;
+      if (error) throw error;
 
-    const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
-    
-    setShowForgotIdDialog(false);
-    setForgotIdData({ email: "", phone: "" });
-    
-    toast({
-      title: "Request Sent",
-      description: "Your Faculty ID recovery request has been sent via WhatsApp.",
-    });
+      toast({
+        title: "Password Reset Email Sent",
+        description: "Check your email for a password reset link.",
+      });
+
+      setShowForgotPasswordDialog(false);
+      setForgotPasswordEmail("");
+    } catch (error: any) {
+      console.error("Password reset error:", error);
+      toast({
+        title: "Reset Failed",
+        description: error.message || "Unable to send password reset email. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsResettingPassword(false);
+    }
   };
 
   useEffect(() => {
@@ -427,7 +433,7 @@ Please confirm my Faculty ID. Thank you!`;
                 </span>
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Login with your Faculty ID to see your progress, join communities, and know when is your next class. Already part of the Tech Faculty family? Access your personalized dashboard now!
+                Access your personalized dashboard to see your progress, join communities, and know when is your next class. Already part of the Tech Faculty family? Login now!
               </p>
             </div>
 
@@ -446,7 +452,7 @@ Please confirm my Faculty ID. Thank you!`;
                           description: "You've been logged in successfully.",
                         });
                       }}
-                      onForgotPassword={() => setShowForgotIdDialog(true)}
+                      onForgotPassword={() => setShowForgotPasswordDialog(true)}
                     />
                   </TabsContent>
                   <TabsContent value="signup" className="mt-6">
@@ -823,48 +829,36 @@ Please confirm my Faculty ID. Thank you!`;
           </div>
         )}
 
-        {/* Forgot ID Dialog */}
-        <Dialog open={showForgotIdDialog} onOpenChange={setShowForgotIdDialog}>
+        {/* Forgot Password Dialog */}
+        <Dialog open={showForgotPasswordDialog} onOpenChange={setShowForgotPasswordDialog}>
           <DialogContent className="sm:max-w-[450px]">
             <DialogHeader>
-              <DialogTitle>Recover Your Faculty ID</DialogTitle>
+              <DialogTitle>Reset Your Password</DialogTitle>
               <DialogDescription>
-                Provide your email and phone number. We'll verify your information and send your Faculty ID via WhatsApp.
+                Enter your email address and we'll send you a link to reset your password.
               </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="forgot-email">Email Address *</Label>
+                <Label htmlFor="forgot-password-email">Email Address</Label>
                 <Input
-                  id="forgot-email"
+                  id="forgot-password-email"
                   type="email"
                   placeholder="your.email@example.com"
-                  value={forgotIdData.email}
-                  onChange={(e) => setForgotIdData({ ...forgotIdData, email: e.target.value })}
+                  value={forgotPasswordEmail}
+                  onChange={(e) => setForgotPasswordEmail(e.target.value)}
                   maxLength={255}
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="forgot-phone">Phone Number *</Label>
-                <Input
-                  id="forgot-phone"
-                  type="tel"
-                  placeholder="+234 XXX XXX XXXX"
-                  value={forgotIdData.phone}
-                  onChange={(e) => setForgotIdData({ ...forgotIdData, phone: e.target.value })}
-                  maxLength={20}
-                />
-              </div>
-
               <Button
-                onClick={handleForgotIdSubmit}
+                onClick={handleForgotPasswordSubmit}
                 className="w-full bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90"
                 size="lg"
+                disabled={isResettingPassword}
               >
-                <MessageCircle className="mr-2" size={18} />
-                Send Recovery Request
+                {isResettingPassword ? "Sending..." : "Send Reset Link"}
               </Button>
             </div>
           </DialogContent>

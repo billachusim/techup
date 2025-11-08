@@ -551,22 +551,6 @@ Please confirm my Faculty ID. Thank you!`;
                       />
                     </div>
                   </div>
-
-                  {/* WhatsApp Button */}
-                  <div className="pt-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full"
-                      onClick={() => {
-                        const message = `Hi! I'm ${userData?.name}. My Faculty ID is: ${userData?.faculty_id}. I'd like to join the Tech Faculty community.`;
-                        window.open(`https://chat.whatsapp.com/D8kuxWVZRTKKeAx6ERjSqc?text=${encodeURIComponent(message)}`, "_blank");
-                      }}
-                    >
-                      <MessageCircle className="mr-2" size={16} />
-                      Join Community WhatsApp
-                    </Button>
-                  </div>
                 </CardContent>
               </Card>
 

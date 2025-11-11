@@ -26,6 +26,7 @@ const pricingPlans = [
     name: "Bootcamp Starter",
     icon: GraduationCap,
     price: "Free",
+    basePrice: 0,
     description: "Perfect for beginners exploring tech careers",
     category: "beginner" as PlanCategory,
     gradient: "var(--gradient-beginner)",
@@ -45,9 +46,62 @@ const pricingPlans = [
     isFree: true,
   },
   {
+    name: "Digital Marketing Pro",
+    icon: Megaphone,
+    price: "₦90,000",
+    basePrice: 90000,
+    period: "/3 months",
+    description: "Master digital marketing and content creation",
+    category: "creative" as PlanCategory,
+    gradient: "var(--gradient-creative)",
+    colorClass: "text-gradient-pink",
+    features: [
+      "Everything in Bootcamp Plan plus:",
+      "Social Media Strategy",
+      "Content Marketing",
+      "SEO & SEM Mastery",
+      "Video & Photo Editing",
+      "Analytics & Growth",
+      "Work & Earn Program",
+      "Job Placement Support",
+      "Certification Prep",
+    ],
+    cta: "Go Digital",
+    popular: false,
+    badge: "Business Growth",
+    isFree: false,
+  },
+  {
+    name: "Design Master",
+    icon: Palette,
+    price: "₦100,000",
+    basePrice: 100000,
+    period: "/3 months",
+    description: "Master visual design and user experience",
+    category: "creative" as PlanCategory,
+    gradient: "var(--gradient-creative)",
+    colorClass: "text-gradient-pink",
+    features: [
+      "Everything in Bootcamp Plan plus:",
+      "UI/UX Design Principles",
+      "Figma & Adobe Suite",
+      "Product Design",
+      "Design Systems",
+      "Portfolio Development",
+      "Work & Earn Program",
+      "Job Placement Support",
+      "Real Client Projects",
+    ],
+    cta: "Start Designing",
+    popular: false,
+    badge: "Creative Track",
+    isFree: false,
+  },
+  {
     name: "Developer Pro",
     icon: Code,
-    price: "$299",
+    price: "₦150,000",
+    basePrice: 150000,
     period: "/3 months",
     description: "Comprehensive web development mastery",
     category: "development" as PlanCategory,
@@ -72,7 +126,8 @@ const pricingPlans = [
   {
     name: "Data Wizard",
     icon: BarChart,
-    price: "$349",
+    price: "₦175,000",
+    basePrice: 175000,
     period: "/3 months",
     description: "Master data science and analytics",
     category: "data-ai" as PlanCategory,
@@ -95,9 +150,36 @@ const pricingPlans = [
     isFree: false,
   },
   {
+    name: "Cloud Architect",
+    icon: Cloud,
+    price: "₦180,000",
+    basePrice: 180000,
+    period: "/3 months",
+    description: "Master cloud platforms and DevOps",
+    category: "development" as PlanCategory,
+    gradient: "var(--gradient-development)",
+    colorClass: "text-gradient-blue",
+    features: [
+      "Everything in Bootcamp Plan plus:",
+      "AWS, Azure & GCP",
+      "Cloud Architecture",
+      "DevOps & CI/CD",
+      "Kubernetes & Docker",
+      "Cloud Certifications",
+      "Work & Earn Program",
+      "Job Placement Support",
+      "Hands-On Projects",
+    ],
+    cta: "Register",
+    popular: false,
+    badge: "Enterprise Ready",
+    isFree: false,
+  },
+  {
     name: "Security Shield",
     icon: Shield,
-    price: "$399",
+    price: "₦200,000",
+    basePrice: 200000,
     period: "/4 months",
     description: "Become a cybersecurity expert",
     category: "security" as PlanCategory,
@@ -122,7 +204,8 @@ const pricingPlans = [
   {
     name: "AI Innovator",
     icon: Brain,
-    price: "$449",
+    price: "₦250,000",
+    basePrice: 250000,
     period: "/4 months",
     description: "Build cutting-edge AI solutions",
     category: "data-ai" as PlanCategory,
@@ -142,81 +225,6 @@ const pricingPlans = [
     cta: "Start Now",
     popular: false,
     badge: "Future Tech",
-    isFree: false,
-  },
-  {
-    name: "Cloud Architect",
-    icon: Cloud,
-    price: "$379",
-    period: "/3 months",
-    description: "Master cloud platforms and DevOps",
-    category: "development" as PlanCategory,
-    gradient: "var(--gradient-development)",
-    colorClass: "text-gradient-blue",
-    features: [
-      "Everything in Bootcamp Plan plus:",
-      "AWS, Azure & GCP",
-      "Cloud Architecture",
-      "DevOps & CI/CD",
-      "Kubernetes & Docker",
-      "Cloud Certifications",
-      "Work & Earn Program",
-      "Job Placement Support",
-      "Hands-On Projects",
-    ],
-    cta: "Register",
-    popular: false,
-    badge: "Enterprise Ready",
-    isFree: false,
-  },
-  {
-    name: "Design Master",
-    icon: Palette,
-    price: "$279",
-    period: "/3 months",
-    description: "Master visual design and user experience",
-    category: "creative" as PlanCategory,
-    gradient: "var(--gradient-creative)",
-    colorClass: "text-gradient-pink",
-    features: [
-      "Everything in Bootcamp Plan plus:",
-      "UI/UX Design Principles",
-      "Figma & Adobe Suite",
-      "Product Design",
-      "Design Systems",
-      "Portfolio Development",
-      "Work & Earn Program",
-      "Job Placement Support",
-      "Real Client Projects",
-    ],
-    cta: "Start Designing",
-    popular: false,
-    badge: "Creative Track",
-    isFree: false,
-  },
-  {
-    name: "Digital Marketing Pro",
-    icon: Megaphone,
-    price: "$259",
-    period: "/3 months",
-    description: "Master digital marketing and content creation",
-    category: "creative" as PlanCategory,
-    gradient: "var(--gradient-creative)",
-    colorClass: "text-gradient-pink",
-    features: [
-      "Everything in Bootcamp Plan plus:",
-      "Social Media Strategy",
-      "Content Marketing",
-      "SEO & SEM Mastery",
-      "Video & Photo Editing",
-      "Analytics & Growth",
-      "Work & Earn Program",
-      "Job Placement Support",
-      "Certification Prep",
-    ],
-    cta: "Go Digital",
-    popular: false,
-    badge: "Business Growth",
     isFree: false,
   },
 ];
@@ -247,8 +255,63 @@ const Pricing = () => {
   const [facultyId, setFacultyId] = useState("");
   const [activeCategory, setActiveCategory] = useState<PlanCategory>("beginner");
   const [currentEnrollment, setCurrentEnrollment] = useState<any>(null);
+  const [dynamicPrices, setDynamicPrices] = useState<Record<string, number>>({});
+  const [appliedDiscounts, setAppliedDiscounts] = useState<Record<string, number>>({});
   const { toast } = useToast();
   const { isLoggedIn, userData } = useUser();
+
+  // Calculate dynamic pricing based on various factors
+  useEffect(() => {
+    const calculateDynamicPrices = () => {
+      const prices: Record<string, number> = {};
+      const discounts: Record<string, number> = {};
+
+      pricingPlans.forEach(plan => {
+        if (plan.isFree) {
+          prices[plan.name] = 0;
+          discounts[plan.name] = 0;
+          return;
+        }
+
+        let finalPrice = plan.basePrice;
+        let discountPercentage = 0;
+
+        // Early bird discount (example: 15% off)
+        const now = new Date();
+        const isEarlyBird = now.getMonth() < 3; // Q1 discount
+        if (isEarlyBird) {
+          discountPercentage = 15;
+        }
+
+        // Group enrollment discount (could be expanded with actual group logic)
+        // For now, this is a placeholder for future implementation
+        const hasGroupDiscount = false;
+        if (hasGroupDiscount) {
+          discountPercentage = Math.max(discountPercentage, 20);
+        }
+
+        // Apply coupon if exists
+        const coupon = couponCodes[plan.name]?.toUpperCase();
+        if (coupon === 'TECH50') {
+          discountPercentage = Math.max(discountPercentage, 50);
+        } else if (coupon === 'SAVE25') {
+          discountPercentage = Math.max(discountPercentage, 25);
+        }
+
+        // Calculate final price
+        const discountAmount = (finalPrice * discountPercentage) / 100;
+        finalPrice = Math.max(50000, finalPrice - discountAmount); // Minimum ₦50,000
+
+        prices[plan.name] = finalPrice;
+        discounts[plan.name] = discountPercentage;
+      });
+
+      setDynamicPrices(prices);
+      setAppliedDiscounts(discounts);
+    };
+
+    calculateDynamicPrices();
+  }, [couponCodes]);
 
   const filteredPlans = activeCategory === "all" 
     ? pricingPlans 
@@ -418,6 +481,9 @@ const Pricing = () => {
     const isCurrentPlan = currentEnrollment?.plan_name === plan.name;
     const currentPlanData = currentEnrollment ? pricingPlans.find(p => p.name === currentEnrollment.plan_name) : null;
     const isPaidToAnotherPaid = isLoggedIn && currentPlanData && !currentPlanData.isFree && !plan.isFree && !isCurrentPlan;
+    const dynamicPrice = dynamicPrices[plan.name];
+    const discount = appliedDiscounts[plan.name];
+    const hasDiscount = discount > 0;
     
     return (
       <Card
@@ -461,13 +527,25 @@ const Pricing = () => {
           <p className="text-sm text-muted-foreground mb-4 min-h-[40px]">
             {plan.description}
           </p>
-          <div className={`text-4xl font-bold ${plan.colorClass}`}>
-            {plan.price}
-            {plan.period && (
-              <span className="text-lg text-muted-foreground font-normal">
-                {plan.period}
-              </span>
+          <div className="space-y-2">
+            {!plan.isFree && hasDiscount && (
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-lg line-through text-muted-foreground">
+                  {plan.price}
+                </span>
+                <Badge className="bg-primary/10 text-primary border-primary/20">
+                  {discount}% OFF
+                </Badge>
+              </div>
             )}
+            <div className={`text-4xl font-bold ${plan.colorClass}`}>
+              {plan.isFree ? plan.price : `₦${dynamicPrice?.toLocaleString() || plan.basePrice.toLocaleString()}`}
+              {plan.period && (
+                <span className="text-lg text-muted-foreground font-normal">
+                  {plan.period}
+                </span>
+              )}
+            </div>
           </div>
         </CardHeader>
 
@@ -498,7 +576,7 @@ const Pricing = () => {
               />
               <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
                 <TrendingUp className="w-3 h-3" />
-                Apply coupon for 50% off
+                Try TECH50 for 50% off or SAVE25 for 25% off
               </p>
             </div>
           )}
@@ -536,14 +614,22 @@ const Pricing = () => {
       
       <div className="container mx-auto max-w-7xl relative">
         <div className="text-center mb-12">
-          <Badge className="mb-4 bg-primary/10 text-primary border-primary/20" variant="outline">
-            100% ROI Guarantee on Paid Plans
-          </Badge>
+          <div className="flex flex-wrap justify-center gap-2 mb-4">
+            <Badge className="bg-primary/10 text-primary border-primary/20" variant="outline">
+              100% ROI Guarantee on Paid Plans
+            </Badge>
+            <Badge className="bg-accent/10 text-accent-foreground border-accent/20" variant="outline">
+              Minimum Investment: ₦50,000
+            </Badge>
+            <Badge className="bg-secondary/10 text-secondary-foreground border-secondary/20" variant="outline">
+              Dynamic Pricing Active
+            </Badge>
+          </div>
           <h2 className="text-4xl md:text-6xl font-bold mb-4 text-gradient">
             Choose Your Path
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Flexible packages designed for every career goal. Start free or accelerate your journey with premium tracks.
+            Flexible packages designed for every career goal. Start free or accelerate your journey with premium tracks. Payment processing coming soon!
           </p>
         </div>
 

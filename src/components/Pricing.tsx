@@ -1,750 +1,688 @@
-import { Check, GraduationCap, Code, BarChart, Shield, Brain, Cloud, Palette, Megaphone, Star, TrendingUp } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { useState, useEffect } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { SignupForm } from "@/components/Auth/SignupForm";
-import { useUser } from "@/contexts/UserContext";
-import { MessageCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { SignupForm } from "./Auth/SignupForm";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Check, ShieldCheck, Users, Trophy, AlertCircle } from "lucide-react";
+import { CourseSelector } from "./Pricing/CourseSelector";
+import { BenefitSelector } from "./Pricing/BenefitSelector";
+import { LearningModeSelector } from "./Pricing/LearningModeSelector";
+import { CheckoutDialog } from "./Pricing/CheckoutDialog";
 
-type PlanCategory = "all" | "beginner" | "development" | "data-ai" | "creative" | "security";
+type PlanCategory = "beginner" | "development" | "data-ai" | "creative" | "security";
 
-const pricingPlans = [
+interface Course {
+  id: string;
+  name: string;
+  price: number;
+}
+
+interface Benefit {
+  id: string;
+  name: string;
+  price: number;
+  description?: string;
+}
+
+interface LearningMode {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+}
+
+interface DepartmentPlan {
+  id: string;
+  name: string;
+  fancyName: string;
+  icon: any;
+  category: PlanCategory;
+  description: string;
+  courses: Course[];
+  learningModes: LearningMode[];
+  benefits: Benefit[];
+  isFree?: boolean;
+}
+
+interface Selection {
+  selectedCourses: string[];
+  selectedBenefits: string[];
+  learningMode: string;
+}
+
+const departmentPlans: DepartmentPlan[] = [
   {
+    id: "bootcamp-starter",
     name: "Bootcamp Starter",
-    icon: GraduationCap,
-    price: "Free",
-    basePrice: 0,
-    description: "Perfect for beginners exploring tech careers",
-    category: "beginner" as PlanCategory,
-    gradient: "var(--gradient-beginner)",
-    colorClass: "text-gradient",
-    features: [
-      "Intro to Programming",
-      "Intro to AI & ChatGPT",
-      "Git & GitHub Fundamentals",
-      "Tech Career Guidance",
-      "Community Access",
-      "Self-Paced Learning",
-      "Basic Digital Literacy",
-    ],
-    cta: "Start Free",
-    popular: false,
-    badge: "Best for Beginners",
+    fancyName: "Free Foundation",
+    icon: Users,
+    category: "beginner",
+    description: "Start your tech journey with essential free courses",
     isFree: true,
-  },
-  {
-    name: "Digital Marketing Pro",
-    icon: Megaphone,
-    price: "₦90,000",
-    basePrice: 90000,
-    period: "/3 months",
-    description: "Master digital marketing and content creation",
-    category: "creative" as PlanCategory,
-    gradient: "var(--gradient-creative)",
-    colorClass: "text-gradient-pink",
-    features: [
-      "Everything in Bootcamp Plan plus:",
-      "Social Media Strategy",
-      "Content Marketing",
-      "SEO & SEM Mastery",
-      "Video & Photo Editing",
-      "Analytics & Growth",
-      "Work & Earn Program",
-      "Job Placement Support",
-      "Certification Prep",
+    courses: [
+      { id: "intro-programming", name: "Intro to Programming", price: 0 },
+      { id: "intro-ai-chatgpt", name: "Intro to AI & ChatGPT", price: 0 },
+      { id: "git-github", name: "Git & GitHub Basics", price: 0 },
+      { id: "tech-career", name: "Tech Career Guidance", price: 0 },
     ],
-    cta: "Go Digital",
-    popular: false,
-    badge: "Business Growth",
-    isFree: false,
-  },
-  {
-    name: "Design Master",
-    icon: Palette,
-    price: "₦100,000",
-    basePrice: 100000,
-    period: "/3 months",
-    description: "Master visual design and user experience",
-    category: "creative" as PlanCategory,
-    gradient: "var(--gradient-creative)",
-    colorClass: "text-gradient-pink",
-    features: [
-      "Everything in Bootcamp Plan plus:",
-      "UI/UX Design Principles",
-      "Figma & Adobe Suite",
-      "Product Design",
-      "Design Systems",
-      "Portfolio Development",
-      "Work & Earn Program",
-      "Job Placement Support",
-      "Real Client Projects",
+    learningModes: [
+      { id: "online-only", name: "Online Only", price: 0, description: "Self-paced learning" }
     ],
-    cta: "Start Designing",
-    popular: false,
-    badge: "Creative Track",
-    isFree: false,
+    benefits: [
+      { id: "community", name: "Community Access", price: 0 },
+      { id: "self-paced", name: "Self-Paced Learning", price: 0 },
+    ],
   },
   {
+    id: "developer-pro",
     name: "Developer Pro",
-    icon: Code,
-    price: "₦150,000",
-    basePrice: 150000,
-    period: "/3 months",
-    description: "Comprehensive web development mastery",
-    category: "development" as PlanCategory,
-    gradient: "var(--gradient-development)",
-    colorClass: "text-gradient-blue",
-    features: [
-      "Everything in Bootcamp Plan plus:",
-      "Full-Stack Web Development",
-      "React & Node.js",
-      "Database Management",
-      "REST APIs & GraphQL",
-      "Portfolio Projects",
-      "Work & Earn Program",
-      "Job Placement Support",
-      "Industry Certifications",
+    fancyName: "Web Development",
+    icon: Trophy,
+    category: "development",
+    description: "Master full-stack web development",
+    courses: [
+      { id: "html-css", name: "HTML/CSS Fundamentals", price: 5000 },
+      { id: "javascript", name: "JavaScript Mastery", price: 8000 },
+      { id: "react", name: "React Development", price: 12000 },
+      { id: "nodejs", name: "Node.js & Backend", price: 12000 },
+      { id: "database", name: "Database Management", price: 8000 },
+      { id: "fullstack-projects", name: "Full-Stack Projects", price: 10000 },
     ],
-    cta: "Enrol Now",
-    popular: true,
-    badge: "Most Popular",
-    isFree: false,
+    learningModes: [
+      { id: "online-only", name: "Online Only", price: 0, description: "Self-paced learning with recorded lectures" },
+      { id: "hybrid", name: "Hybrid Mode", price: 8000, description: "Online + Monthly physical meetups" },
+      { id: "physical", name: "Physical Classes", price: 15000, description: "Weekly on-site classes" },
+    ],
+    benefits: [
+      { id: "job-placement", name: "Job Placement Support", price: 10000 },
+      { id: "internship", name: "Internship Access", price: 8000 },
+      { id: "mentor-network", name: "Mentor Network Access", price: 12000 },
+      { id: "certification-prep", name: "Industry Certification Prep", price: 15000 },
+      { id: "tech-certificate", name: "Tech Faculty Certificate", price: 0 },
+    ],
   },
   {
+    id: "data-wizard",
     name: "Data Wizard",
-    icon: BarChart,
-    price: "₦175,000",
-    basePrice: 175000,
-    period: "/3 months",
-    description: "Master data science and analytics",
-    category: "data-ai" as PlanCategory,
-    gradient: "var(--gradient-data)",
-    colorClass: "text-gradient-purple",
-    features: [
-      "Everything in Bootcamp Plan plus:",
-      "Python & SQL Mastery",
-      "Data Visualization",
-      "Statistical Analysis",
-      "Machine Learning Basics",
-      "Real-World Projects",
-      "Work & Earn Program",
-      "Job Placement Support",
-      "Certifications Included",
+    fancyName: "Data Science",
+    icon: ShieldCheck,
+    category: "data-ai",
+    description: "Become a data science expert",
+    courses: [
+      { id: "python", name: "Python Programming", price: 7000 },
+      { id: "sql", name: "SQL & Databases", price: 6000 },
+      { id: "data-viz", name: "Data Visualization", price: 8000 },
+      { id: "statistics", name: "Statistical Analysis", price: 9000 },
+      { id: "ml-basics", name: "Machine Learning Basics", price: 15000 },
+      { id: "data-projects", name: "Real-world Projects", price: 10000 },
     ],
-    cta: "Start Learning",
-    popular: false,
-    badge: "High Demand",
-    isFree: false,
+    learningModes: [
+      { id: "online-only", name: "Online Only", price: 0, description: "Self-paced learning with recorded lectures" },
+      { id: "hybrid", name: "Hybrid Mode", price: 8000, description: "Online + Monthly physical meetups" },
+      { id: "physical", name: "Physical Classes", price: 15000, description: "Weekly on-site classes" },
+    ],
+    benefits: [
+      { id: "job-placement", name: "Job Placement Support", price: 10000 },
+      { id: "internship", name: "Internship Access", price: 8000 },
+      { id: "mentor-network", name: "Mentor Network Access", price: 12000 },
+      { id: "one-on-one", name: "One-on-One Mentorship (1hr/week)", price: 20000 },
+      { id: "tech-certificate", name: "Tech Faculty Certificate", price: 0 },
+    ],
   },
   {
-    name: "Cloud Architect",
-    icon: Cloud,
-    price: "₦180,000",
-    basePrice: 180000,
-    period: "/3 months",
-    description: "Master cloud platforms and DevOps",
-    category: "development" as PlanCategory,
-    gradient: "var(--gradient-development)",
-    colorClass: "text-gradient-blue",
-    features: [
-      "Everything in Bootcamp Plan plus:",
-      "AWS, Azure & GCP",
-      "Cloud Architecture",
-      "DevOps & CI/CD",
-      "Kubernetes & Docker",
-      "Cloud Certifications",
-      "Work & Earn Program",
-      "Job Placement Support",
-      "Hands-On Projects",
-    ],
-    cta: "Register",
-    popular: false,
-    badge: "Enterprise Ready",
-    isFree: false,
-  },
-  {
+    id: "security-shield",
     name: "Security Shield",
-    icon: Shield,
-    price: "₦200,000",
-    basePrice: 200000,
-    period: "/4 months",
-    description: "Become a cybersecurity expert",
-    category: "security" as PlanCategory,
-    gradient: "var(--gradient-security)",
-    colorClass: "text-gradient-orange",
-    features: [
-      "Everything in Bootcamp Plan plus:",
-      "Network Security",
-      "Ethical Hacking",
-      "SOC Operations",
-      "Incident Response",
-      "CompTIA & CEH Prep",
-      "Work & Earn Program",
-      "Job Placement Support",
-      "Hands-On Labs",
+    fancyName: "Cybersecurity",
+    icon: ShieldCheck,
+    category: "security",
+    description: "Master cybersecurity and ethical hacking",
+    courses: [
+      { id: "network-security", name: "Network Security", price: 10000 },
+      { id: "ethical-hacking", name: "Ethical Hacking", price: 15000 },
+      { id: "soc-ops", name: "SOC Operations", price: 12000 },
+      { id: "incident-response", name: "Incident Response", price: 8000 },
+      { id: "comptia-prep", name: "CompTIA Prep", price: 10000 },
+      { id: "ceh-prep", name: "CEH Prep", price: 12000 },
     ],
-    cta: "Tech Up",
-    popular: false,
-    badge: "Critical Skills",
-    isFree: false,
+    learningModes: [
+      { id: "online-only", name: "Online Only", price: 0, description: "Self-paced learning with recorded lectures" },
+      { id: "hybrid", name: "Hybrid Mode", price: 8000, description: "Online + Monthly physical meetups" },
+      { id: "physical", name: "Physical Classes", price: 15000, description: "Weekly on-site classes" },
+    ],
+    benefits: [
+      { id: "job-placement", name: "Job Placement Support", price: 10000 },
+      { id: "internship", name: "Internship Access", price: 8000 },
+      { id: "mentor-network", name: "Mentor Network Access", price: 12000 },
+      { id: "certification-prep", name: "Industry Certification Prep", price: 15000 },
+      { id: "tech-certificate", name: "Tech Faculty Certificate", price: 0 },
+    ],
   },
   {
+    id: "ai-innovator",
     name: "AI Innovator",
-    icon: Brain,
-    price: "₦250,000",
-    basePrice: 250000,
-    period: "/4 months",
-    description: "Build cutting-edge AI solutions",
-    category: "data-ai" as PlanCategory,
-    gradient: "var(--gradient-data)",
-    colorClass: "text-gradient-purple",
-    features: [
-      "Everything in Bootcamp Plan plus:",
-      "Deep Learning & Neural Networks",
-      "TensorFlow & PyTorch",
-      "NLP & Computer Vision",
-      "AI Model Deployment",
-      "Real AI Projects",
-      "Work & Earn Program",
-      "Job Placement Support",
-      "Research Papers Access",
+    fancyName: "AI & Machine Learning",
+    icon: Trophy,
+    category: "data-ai",
+    description: "Lead the AI revolution",
+    courses: [
+      { id: "deep-learning", name: "Deep Learning", price: 18000 },
+      { id: "neural-networks", name: "Neural Networks", price: 15000 },
+      { id: "tensorflow-pytorch", name: "TensorFlow/PyTorch", price: 12000 },
+      { id: "nlp", name: "NLP Fundamentals", price: 14000 },
+      { id: "computer-vision", name: "Computer Vision", price: 14000 },
+      { id: "ai-deployment", name: "AI Deployment", price: 10000 },
     ],
-    cta: "Start Now",
-    popular: false,
-    badge: "Future Tech",
-    isFree: false,
+    learningModes: [
+      { id: "online-only", name: "Online Only", price: 0, description: "Self-paced learning with recorded lectures" },
+      { id: "hybrid", name: "Hybrid Mode", price: 8000, description: "Online + Monthly physical meetups" },
+      { id: "physical", name: "Physical Classes", price: 15000, description: "Weekly on-site classes" },
+    ],
+    benefits: [
+      { id: "job-placement", name: "Job Placement Support", price: 10000 },
+      { id: "internship", name: "Internship Access", price: 8000 },
+      { id: "mentor-network", name: "Mentor Network Access", price: 12000 },
+      { id: "one-on-one", name: "One-on-One Mentorship (1hr/week)", price: 20000 },
+      { id: "vip-classes", name: "VIP Classes at Chosen Location", price: 50000 },
+      { id: "tech-certificate", name: "Tech Faculty Certificate", price: 0 },
+    ],
   },
-];
-
-const courses = [
-  "Full-Stack Web Development",
-  "Data Science & Analytics",
-  "Cybersecurity",
-  "AI & Machine Learning",
-  "Cloud Architecture & DevOps",
-  "Mobile App Development",
-];
-
-const hearAboutUs = [
-  "Social Media",
-  "Friend/Colleague",
-  "Google Search",
-  "University/School",
-  "Tech Event",
-  "Other",
+  {
+    id: "design-master",
+    name: "Design Master",
+    fancyName: "UI/UX Design",
+    icon: Trophy,
+    category: "creative",
+    description: "Create stunning user experiences",
+    courses: [
+      { id: "design-principles", name: "Design Principles", price: 6000 },
+      { id: "figma", name: "Figma Mastery", price: 8000 },
+      { id: "adobe-suite", name: "Adobe Suite", price: 10000 },
+      { id: "product-design", name: "Product Design", price: 12000 },
+      { id: "design-systems", name: "Design Systems", price: 9000 },
+      { id: "portfolio-projects", name: "Portfolio Projects", price: 7000 },
+    ],
+    learningModes: [
+      { id: "online-only", name: "Online Only", price: 0, description: "Self-paced learning with recorded lectures" },
+      { id: "hybrid", name: "Hybrid Mode", price: 8000, description: "Online + Monthly physical meetups" },
+      { id: "physical", name: "Physical Classes", price: 15000, description: "Weekly on-site classes" },
+    ],
+    benefits: [
+      { id: "job-placement", name: "Job Placement Support", price: 10000 },
+      { id: "internship", name: "Internship Access", price: 8000 },
+      { id: "mentor-network", name: "Mentor Network Access", price: 12000 },
+      { id: "tech-certificate", name: "Tech Faculty Certificate", price: 0 },
+    ],
+  },
+  {
+    id: "digital-marketing-pro",
+    name: "Digital Marketing Pro",
+    fancyName: "Digital Marketing",
+    icon: Trophy,
+    category: "creative",
+    description: "Master digital marketing",
+    courses: [
+      { id: "social-media", name: "Social Media Strategy", price: 7000 },
+      { id: "content-marketing", name: "Content Marketing", price: 8000 },
+      { id: "seo-sem", name: "SEO/SEM", price: 10000 },
+      { id: "video-editing", name: "Video Editing", price: 9000 },
+      { id: "photo-editing", name: "Photo Editing", price: 6000 },
+      { id: "analytics", name: "Analytics & Growth", price: 8000 },
+    ],
+    learningModes: [
+      { id: "online-only", name: "Online Only", price: 0, description: "Self-paced learning with recorded lectures" },
+      { id: "hybrid", name: "Hybrid Mode", price: 8000, description: "Online + Monthly physical meetups" },
+      { id: "physical", name: "Physical Classes", price: 15000, description: "Weekly on-site classes" },
+    ],
+    benefits: [
+      { id: "job-placement", name: "Job Placement Support", price: 10000 },
+      { id: "internship", name: "Internship Access", price: 8000 },
+      { id: "mentor-network", name: "Mentor Network Access", price: 12000 },
+      { id: "tech-certificate", name: "Tech Faculty Certificate", price: 0 },
+    ],
+  },
 ];
 
 const Pricing = () => {
-  const [couponCodes, setCouponCodes] = useState<Record<string, string>>({});
-  const [showFacultyIdDialog, setShowFacultyIdDialog] = useState(false);
-  const [showSignUpForm, setShowSignUpForm] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState<string>("");
-  const [facultyId, setFacultyId] = useState("");
   const [activeCategory, setActiveCategory] = useState<PlanCategory>("beginner");
-  const [currentEnrollment, setCurrentEnrollment] = useState<any>(null);
-  const [dynamicPrices, setDynamicPrices] = useState<Record<string, number>>({});
-  const [appliedDiscounts, setAppliedDiscounts] = useState<Record<string, number>>({});
+  const [facultyIdDialogOpen, setFacultyIdDialogOpen] = useState(false);
+  const [signupDialogOpen, setSignupDialogOpen] = useState(false);
+  const [checkoutDialogOpen, setCheckoutDialogOpen] = useState(false);
+  const [facultyId, setFacultyId] = useState("");
+  const [selectedPlanId, setSelectedPlanId] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const { isLoggedIn, userData } = useUser();
 
-  // Calculate dynamic pricing based on various factors
+  // State for selections per department
+  const [selections, setSelections] = useState<Record<string, Selection>>({});
+  const [totalPrices, setTotalPrices] = useState<Record<string, number>>({});
+
+  const MINIMUM_AMOUNT = 50000;
+
   useEffect(() => {
-    const calculateDynamicPrices = () => {
-      const prices: Record<string, number> = {};
-      const discounts: Record<string, number> = {};
+    // Initialize selections for all departments
+    const initialSelections: Record<string, Selection> = {};
+    departmentPlans.forEach((plan) => {
+      initialSelections[plan.id] = {
+        selectedCourses: [],
+        selectedBenefits: [],
+        learningMode: plan.learningModes[0]?.id || "",
+      };
+    });
+    setSelections(initialSelections);
+  }, []);
 
-      pricingPlans.forEach(plan => {
-        if (plan.isFree) {
-          prices[plan.name] = 0;
-          discounts[plan.name] = 0;
-          return;
-        }
+  useEffect(() => {
+    // Calculate total prices for each department
+    const newTotalPrices: Record<string, number> = {};
+    
+    Object.keys(selections).forEach((planId) => {
+      const plan = departmentPlans.find((p) => p.id === planId);
+      if (!plan) return;
 
-        let finalPrice = plan.basePrice;
-        let discountPercentage = 0;
+      const selection = selections[planId];
+      let total = 0;
 
-        // Early bird discount (example: 15% off)
-        const now = new Date();
-        const isEarlyBird = now.getMonth() < 3; // Q1 discount
-        if (isEarlyBird) {
-          discountPercentage = 15;
-        }
-
-        // Group enrollment discount (could be expanded with actual group logic)
-        // For now, this is a placeholder for future implementation
-        const hasGroupDiscount = false;
-        if (hasGroupDiscount) {
-          discountPercentage = Math.max(discountPercentage, 20);
-        }
-
-        // Apply coupon if exists
-        const coupon = couponCodes[plan.name]?.toUpperCase();
-        if (coupon === 'TECH50') {
-          discountPercentage = Math.max(discountPercentage, 50);
-        } else if (coupon === 'SAVE25') {
-          discountPercentage = Math.max(discountPercentage, 25);
-        }
-
-        // Calculate final price
-        const discountAmount = (finalPrice * discountPercentage) / 100;
-        finalPrice = Math.max(50000, finalPrice - discountAmount); // Minimum ₦50,000
-
-        prices[plan.name] = finalPrice;
-        discounts[plan.name] = discountPercentage;
+      // Add course prices
+      selection.selectedCourses.forEach((courseId) => {
+        const course = plan.courses.find((c) => c.id === courseId);
+        if (course) total += course.price;
       });
 
-      setDynamicPrices(prices);
-      setAppliedDiscounts(discounts);
-    };
+      // Add learning mode price
+      const mode = plan.learningModes.find((m) => m.id === selection.learningMode);
+      if (mode) total += mode.price;
 
-    calculateDynamicPrices();
-  }, [couponCodes]);
+      // Add benefit prices
+      selection.selectedBenefits.forEach((benefitId) => {
+        const benefit = plan.benefits.find((b) => b.id === benefitId);
+        if (benefit) total += benefit.price;
+      });
 
-  const filteredPlans = activeCategory === "all" 
-    ? pricingPlans 
-    : pricingPlans.filter(plan => plan.category === activeCategory);
+      newTotalPrices[planId] = total;
+    });
 
-  // Fetch current enrollment when user is logged in
-  useEffect(() => {
-    const fetchCurrentEnrollment = async () => {
-      if (isLoggedIn && userData?.faculty_id) {
-        const { data, error } = await supabase
-          .from('enrollments')
-          .select('*')
-          .eq('faculty_id', userData.faculty_id)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .maybeSingle();
+    setTotalPrices(newTotalPrices);
+  }, [selections]);
 
-        if (!error && data) {
-          setCurrentEnrollment(data);
-        }
-      }
-    };
-
-    fetchCurrentEnrollment();
-  }, [isLoggedIn, userData]);
-
-  const handleCouponChange = (planName: string, value: string) => {
-    setCouponCodes({ ...couponCodes, [planName]: value });
+  const handleToggleCourse = (planId: string, courseId: string) => {
+    setSelections((prev) => {
+      const current = prev[planId] || { selectedCourses: [], selectedBenefits: [], learningMode: "" };
+      const selectedCourses = current.selectedCourses.includes(courseId)
+        ? current.selectedCourses.filter((id) => id !== courseId)
+        : [...current.selectedCourses, courseId];
+      return { ...prev, [planId]: { ...current, selectedCourses } };
+    });
   };
 
-  const generateFacultyId = () => {
-    const timestamp = Date.now().toString(36).toUpperCase();
-    const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-    return `TF-${timestamp}-${random}`;
+  const handleToggleBenefit = (planId: string, benefitId: string) => {
+    setSelections((prev) => {
+      const current = prev[planId] || { selectedCourses: [], selectedBenefits: [], learningMode: "" };
+      const selectedBenefits = current.selectedBenefits.includes(benefitId)
+        ? current.selectedBenefits.filter((id) => id !== benefitId)
+        : [...current.selectedBenefits, benefitId];
+      return { ...prev, [planId]: { ...current, selectedBenefits } };
+    });
   };
 
-  const handlePlanClick = (planName: string) => {
-    const clickedPlan = pricingPlans.find(p => p.name === planName);
+  const handleSelectLearningMode = (planId: string, modeId: string) => {
+    setSelections((prev) => {
+      const current = prev[planId] || { selectedCourses: [], selectedBenefits: [], learningMode: "" };
+      return { ...prev, [planId]: { ...current, learningMode: modeId } };
+    });
+  };
+
+  const handleStartFree = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
     
-    // Check if user is logged in and on a paid plan
-    if (isLoggedIn && userData?.faculty_id && currentEnrollment) {
-      const currentPlan = pricingPlans.find(p => p.name === currentEnrollment.plan_name);
-      
-      // If current plan is paid and trying to switch to another paid plan (not free)
-      if (currentPlan && !currentPlan.isFree && clickedPlan && !clickedPlan.isFree) {
-        // Send to WhatsApp for plan change request
-        const message = `Hi! I'm currently on *${currentEnrollment.plan_name}* and would like to switch to *${planName}*. My Faculty ID is: ${userData.faculty_id}. Please help me with the plan change process.`;
-        const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, "_blank");
-        
-        toast({
-          title: "Plan Change Request Sent",
-          description: "An admin will contact you to process your plan change after payment verification.",
-        });
-        return;
-      }
+    if (!user) {
+      setSignupDialogOpen(true);
+      return;
     }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("faculty_id")
+      .eq("id", user.id)
+      .single();
+
+    if (!profile?.faculty_id) {
+      toast({
+        title: "Faculty ID Required",
+        description: "Please complete your profile with a faculty ID",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      await supabase.from("enrollments").insert({
+        faculty_id: profile.faculty_id,
+        plan_name: "Bootcamp Starter",
+        status: "active",
+      });
+
+      toast({
+        title: "Enrolled Successfully!",
+        description: "Welcome to Tech Faculty! Check your email for next steps.",
+      });
+    } catch (error) {
+      toast({
+        title: "Enrollment Failed",
+        description: "Please try again later",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleSubmitRequest = (planId: string) => {
+    const total = totalPrices[planId] || 0;
     
-    // Normal flow for free plan switches or new enrollments
-    setSelectedPlan(planName);
-    setShowFacultyIdDialog(true);
+    if (total < MINIMUM_AMOUNT) {
+      toast({
+        title: "Minimum Amount Required",
+        description: `Please select courses totaling at least ₦${MINIMUM_AMOUNT.toLocaleString()}`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setSelectedPlanId(planId);
+    setFacultyIdDialogOpen(true);
   };
 
   const handleFacultyIdSubmit = async () => {
     if (!facultyId.trim()) {
       toast({
         title: "Faculty ID Required",
-        description: "Please enter your Faculty ID to continue.",
+        description: "Please enter your faculty ID",
         variant: "destructive",
       });
       return;
     }
 
-    if (facultyId.trim().length < 5) {
-      toast({
-        title: "Invalid Faculty ID",
-        description: "Please enter a valid Faculty ID.",
-        variant: "destructive",
-      });
-      return;
-    }
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("faculty_id")
+      .eq("faculty_id", facultyId)
+      .single();
 
-    // Verify Faculty ID exists in database
-    const { data: facultyData, error } = await supabase
-      .from('faculty_ids')
-      .select('*')
-      .eq('faculty_id', facultyId.trim())
-      .maybeSingle();
-
-    if (error) {
-      console.error('Error verifying Faculty ID:', error);
-      toast({
-        title: "Verification Error",
-        description: "Unable to verify Faculty ID. Please try again.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!facultyData) {
+    if (error || !data) {
       toast({
         title: "Faculty ID Not Found",
-        description: "This Faculty ID doesn't exist. Please sign up to get one.",
+        description: "Please sign up first to get your faculty ID",
         variant: "destructive",
       });
+      setFacultyIdDialogOpen(false);
+      setSignupDialogOpen(true);
       return;
     }
 
-    const plan = pricingPlans.find((p) => p.name === selectedPlan);
-    
-    // Save enrollment to database
-    const { error: enrollmentError } = await supabase
-      .from('enrollments')
-      .insert({
-        faculty_id: facultyId.trim(),
-        plan_name: selectedPlan,
-        coupon_code: couponCodes[selectedPlan] || null,
-        status: 'pending'
-      });
+    setFacultyIdDialogOpen(false);
+    setCheckoutDialogOpen(true);
+  };
 
-    if (enrollmentError) {
-      console.error('Error saving enrollment:', enrollmentError);
+  const handleCheckoutSubmit = async (method: 'email' | 'whatsapp') => {
+    setIsSubmitting(true);
+    
+    const plan = departmentPlans.find((p) => p.id === selectedPlanId);
+    if (!plan) return;
+
+    const selection = selections[selectedPlanId];
+    const total = totalPrices[selectedPlanId];
+
+    const selectedCourseDetails = selection.selectedCourses.map((id) => {
+      const course = plan.courses.find((c) => c.id === id);
+      return course ? `${course.name} - ₦${course.price.toLocaleString()}` : '';
+    }).filter(Boolean);
+
+    const selectedBenefitDetails = selection.selectedBenefits.map((id) => {
+      const benefit = plan.benefits.find((b) => b.id === id);
+      return benefit ? `${benefit.name} - ₦${benefit.price.toLocaleString()}` : '';
+    }).filter(Boolean);
+
+    const learningModeDetail = plan.learningModes.find((m) => m.id === selection.learningMode);
+
+    const message = `Hi Tech Faculty NG Team! 👋
+
+I'm ready to enroll in *${plan.fancyName}*
+
+*Faculty ID:* ${facultyId}
+*Total Amount:* ₦${total.toLocaleString()}
+
+*Selected Courses:*
+${selectedCourseDetails.map(c => `✓ ${c}`).join('\n')}
+
+*Learning Mode:* ${learningModeDetail?.name} - ₦${learningModeDetail?.price.toLocaleString()}
+
+*Additional Benefits:*
+${selectedBenefitDetails.map(b => `✓ ${b}`).join('\n')}
+
+*Payment Status:* Pending Payment
+
+Please process my enrollment!`;
+
+    if (method === 'whatsapp') {
+      const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+      
+      toast({
+        title: "Request Sent!",
+        description: "Complete your enrollment request on WhatsApp",
+      });
+    } else {
+      try {
+        const { error } = await supabase.functions.invoke('send-enrollment-request', {
+          body: {
+            facultyId,
+            planName: plan.fancyName,
+            totalAmount: total,
+            selectedCourses: selectedCourseDetails,
+            learningMode: `${learningModeDetail?.name} - ₦${learningModeDetail?.price.toLocaleString()}`,
+            selectedBenefits: selectedBenefitDetails,
+          },
+        });
+
+        if (error) throw error;
+
+        toast({
+          title: "Request Sent!",
+          description: "Check your email for confirmation",
+        });
+      } catch (error) {
+        toast({
+          title: "Failed to Send Request",
+          description: "Please try WhatsApp instead",
+          variant: "destructive",
+        });
+      }
     }
 
-    const message = plan?.isFree
-      ? `Hi! I'm registering for the *${selectedPlan}* (Free Bootcamp). My Faculty ID is: ${facultyId.trim()}`
-      : `Hi! I'm ready to pay for *${selectedPlan}*. My Faculty ID is: ${facultyId.trim()}`;
-
-    const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
-    
-    setShowFacultyIdDialog(false);
+    setIsSubmitting(false);
+    setCheckoutDialogOpen(false);
     setFacultyId("");
-    
-    toast({
-      title: "Enrollment Submitted!",
-      description: `Welcome back, ${facultyData.name}! Your enrollment for ${selectedPlan} has been recorded.`,
-    });
+    setSelectedPlanId("");
   };
 
-  const handleSignUpSuccess = async (facultyId: string) => {
-    // Save enrollment to database
-    const { error: enrollmentError } = await supabase
-      .from('enrollments')
-      .insert({
-        faculty_id: facultyId,
-        plan_name: selectedPlan,
-        coupon_code: couponCodes[selectedPlan] || null,
-        status: 'pending'
-      });
-
-    if (enrollmentError) {
-      console.error('Error saving enrollment:', enrollmentError);
-    }
-
-    setShowSignUpForm(false);
-    setShowFacultyIdDialog(false);
-    
-    toast({
-      title: "Registration Successful!",
-      description: `You're enrolled in ${selectedPlan}. Your Faculty ID has been saved.`,
-    });
-  };
-
-  const renderPlanCard = (plan: typeof pricingPlans[0], idx: number) => {
-    const Icon = plan.icon;
-    const isCurrentPlan = currentEnrollment?.plan_name === plan.name;
-    const currentPlanData = currentEnrollment ? pricingPlans.find(p => p.name === currentEnrollment.plan_name) : null;
-    const isPaidToAnotherPaid = isLoggedIn && currentPlanData && !currentPlanData.isFree && !plan.isFree && !isCurrentPlan;
-    const dynamicPrice = dynamicPrices[plan.name];
-    const discount = appliedDiscounts[plan.name];
-    const hasDiscount = discount > 0;
-    
-    return (
-      <Card
-        key={idx}
-        className={`relative bg-card border-border hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group ${
-          plan.popular ? "border-primary shadow-lg" : ""
-        } ${isCurrentPlan ? "border-primary/70 shadow-lg" : ""}`}
-      >
-        {isCurrentPlan && (
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-            <Badge className="bg-primary text-background border-none px-4 py-1 shadow-lg">
-              Your Current Plan
-            </Badge>
-          </div>
-        )}
-        {!isCurrentPlan && plan.popular && (
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-            <Badge className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background border-none px-4 py-1 shadow-lg animate-pulse">
-              <Star className="w-3 h-3 mr-1 inline" />
-              {plan.badge}
-            </Badge>
-          </div>
-        )}
-        {!isCurrentPlan && !plan.popular && plan.badge && (
-          <Badge 
-            className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 border-border bg-background text-foreground"
-            variant="outline"
-          >
-            {plan.badge}
-          </Badge>
-        )}
-
-        <CardHeader className="text-center pb-8 pt-8">
-          <div 
-            className="mx-auto p-4 rounded-xl w-fit mb-4 transition-transform duration-300 group-hover:scale-110"
-            style={{ background: plan.gradient }}
-          >
-            <Icon size={36} className="text-background" />
-          </div>
-          <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-          <p className="text-sm text-muted-foreground mb-4 min-h-[40px]">
-            {plan.description}
-          </p>
-          <div className="space-y-2">
-            {!plan.isFree && hasDiscount && (
-              <div className="flex items-center justify-center gap-2">
-                <span className="text-lg line-through text-muted-foreground">
-                  {plan.price}
-                </span>
-                <Badge className="bg-primary/10 text-primary border-primary/20">
-                  {discount}% OFF
-                </Badge>
-              </div>
-            )}
-            <div className={`text-4xl font-bold ${plan.colorClass}`}>
-              {plan.isFree ? plan.price : `₦${dynamicPrice?.toLocaleString() || plan.basePrice.toLocaleString()}`}
-              {plan.period && (
-                <span className="text-lg text-muted-foreground font-normal">
-                  {plan.period}
-                </span>
-              )}
-            </div>
-          </div>
-        </CardHeader>
-
-        <CardContent className="space-y-3 pb-6">
-          {plan.features.map((feature, fIdx) => (
-            <div key={fIdx} className="flex items-start gap-2">
-              <div 
-                className="p-0.5 rounded-full mt-0.5"
-                style={{ background: plan.gradient }}
-              >
-                <Check size={14} className="text-background" />
-              </div>
-              <span className={`text-sm ${fIdx === 0 && !plan.isFree ? "font-semibold text-foreground" : "text-muted-foreground"}`}>
-                {feature}
-              </span>
-            </div>
-          ))}
-        </CardContent>
-
-        <CardFooter className="flex-col gap-3">
-          {!plan.isFree && (
-            <div className="w-full">
-              <Input
-                placeholder="Have a coupon? Enter here"
-                value={couponCodes[plan.name] || ""}
-                onChange={(e) => handleCouponChange(plan.name, e.target.value)}
-                className="text-sm"
-              />
-              <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                <TrendingUp className="w-3 h-3" />
-                Try TECH50 for 50% off or SAVE25 for 25% off
-              </p>
-            </div>
-          )}
-          <Button
-            className="w-full group/btn"
-            size="lg"
-            onClick={() => handlePlanClick(plan.name)}
-            style={{ 
-              background: plan.popular && !isPaidToAnotherPaid ? plan.gradient : undefined,
-            }}
-            variant={plan.popular && !isPaidToAnotherPaid ? "default" : "outline"}
-            disabled={isCurrentPlan}
-          >
-            {isCurrentPlan ? "Current Plan" : isPaidToAnotherPaid ? (
-              <>
-                Request Change
-                <MessageCircle className="w-4 h-4 ml-2" />
-              </>
-            ) : (
-              <>
-                {plan.cta}
-                <TrendingUp className="w-4 h-4 ml-2 transition-transform group-hover/btn:translate-x-1" />
-              </>
-            )}
-          </Button>
-        </CardFooter>
-      </Card>
-    );
-  };
+  const filteredPlans = departmentPlans.filter((plan) => plan.category === activeCategory);
 
   return (
-    <section id="pricing" className="py-24 px-4 relative overflow-hidden">
-      {/* Animated background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 pointer-events-none" />
-      
-      <div className="container mx-auto max-w-7xl relative">
+    <section id="pricing" className="py-20 bg-gradient-to-b from-background to-muted/20">
+      <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <div className="flex flex-wrap justify-center gap-2 mb-4">
-            <Badge className="bg-primary/10 text-primary border-primary/20" variant="outline">
-              100% ROI Guarantee on Paid Plans
-            </Badge>
-            <Badge className="bg-accent/10 text-accent-foreground border-accent/20" variant="outline">
-              Minimum Investment: ₦50,000
-            </Badge>
-            <Badge className="bg-secondary/10 text-secondary-foreground border-secondary/20" variant="outline">
-              Dynamic Pricing Active
-            </Badge>
-          </div>
-          <h2 className="text-4xl md:text-6xl font-bold mb-4 text-gradient">
-            Choose Your Path
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Flexible packages designed for every career goal. Start free or accelerate your journey with premium tracks. Payment processing coming soon!
+          <h2 className="text-4xl font-bold mb-4 text-foreground">Build Your Learning Path</h2>
+          <p className="text-xl text-muted-foreground mb-6">
+            Choose your courses, benefits, and learning mode. Pay for exactly what you need.
           </p>
+          <div className="flex flex-wrap justify-center gap-3 mb-6">
+            <Badge variant="outline" className="text-sm">
+              Minimum Investment: ₦{MINIMUM_AMOUNT.toLocaleString()}
+            </Badge>
+            <Badge variant="secondary" className="text-sm">Dynamic Pricing Active</Badge>
+          </div>
         </div>
 
-        <Tabs value={activeCategory} onValueChange={(v) => setActiveCategory(v as PlanCategory)} className="w-full">
-          <TabsList className="grid w-full max-w-3xl mx-auto grid-cols-3 md:grid-cols-6 mb-12 h-auto p-1">
-            <TabsTrigger value="all" className="text-xs md:text-sm">
-              All Plans
-            </TabsTrigger>
-            <TabsTrigger value="beginner" className="text-xs md:text-sm">
-              Beginner
-            </TabsTrigger>
-            <TabsTrigger value="development" className="text-xs md:text-sm">
-              Development
-            </TabsTrigger>
-            <TabsTrigger value="data-ai" className="text-xs md:text-sm">
-              Data & AI
-            </TabsTrigger>
-            <TabsTrigger value="creative" className="text-xs md:text-sm">
-              Creative
-            </TabsTrigger>
-            <TabsTrigger value="security" className="text-xs md:text-sm">
-              Security
-            </TabsTrigger>
+        <Tabs value={activeCategory} onValueChange={(value) => setActiveCategory(value as PlanCategory)} className="mb-8">
+          <TabsList className="grid w-full grid-cols-5 max-w-3xl mx-auto">
+            <TabsTrigger value="beginner">Beginner</TabsTrigger>
+            <TabsTrigger value="development">Development</TabsTrigger>
+            <TabsTrigger value="data-ai">Data & AI</TabsTrigger>
+            <TabsTrigger value="creative">Creative</TabsTrigger>
+            <TabsTrigger value="security">Security</TabsTrigger>
           </TabsList>
-
-          <TabsContent value={activeCategory} className="mt-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fade-in">
-              {filteredPlans.map((plan, idx) => renderPlanCard(plan, idx))}
-            </div>
-          </TabsContent>
         </Tabs>
 
-        {/* Trust indicators */}
-        <div className="mt-16 flex flex-wrap justify-center items-center gap-8 text-center text-sm text-muted-foreground">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          {filteredPlans.map((plan) => {
+            const Icon = plan.icon;
+            const total = totalPrices[plan.id] || 0;
+            const meetsMinimum = plan.isFree || total >= MINIMUM_AMOUNT;
+
+            if (plan.isFree) {
+              return (
+                <Card key={plan.id} className="border-2 border-primary/20">
+                  <CardHeader>
+                    <div className="flex items-center justify-between mb-2">
+                      <Icon className="h-8 w-8 text-primary" />
+                      <Badge variant="secondary">Free</Badge>
+                    </div>
+                    <CardTitle>{plan.fancyName}</CardTitle>
+                    <CardDescription>{plan.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2">
+                      {plan.courses.map((course) => (
+                        <li key={course.id} className="flex items-start gap-2 text-sm">
+                          <Check className="h-4 w-4 text-primary mt-0.5" />
+                          <span className="text-muted-foreground">{course.name}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Button onClick={handleStartFree} className="w-full">
+                      Start Free
+                    </Button>
+                  </CardFooter>
+                </Card>
+              );
+            }
+
+            return (
+              <Card key={plan.id} className="border-2 border-border hover:border-primary/50 transition-colors">
+                <CardHeader>
+                  <div className="flex items-center justify-between mb-2">
+                    <Icon className="h-8 w-8 text-primary" />
+                    <div className="text-right">
+                      <p className="text-2xl font-bold text-primary">₦{total.toLocaleString()}</p>
+                      {!meetsMinimum && (
+                        <p className="text-xs text-destructive flex items-center gap-1">
+                          <AlertCircle className="h-3 w-3" />
+                          Min: ₦{MINIMUM_AMOUNT.toLocaleString()}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <CardTitle>{plan.fancyName}</CardTitle>
+                  <CardDescription>{plan.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <CourseSelector
+                    courses={plan.courses}
+                    selectedCourses={selections[plan.id]?.selectedCourses || []}
+                    onToggleCourse={(courseId) => handleToggleCourse(plan.id, courseId)}
+                  />
+                  <LearningModeSelector
+                    modes={plan.learningModes}
+                    selectedMode={selections[plan.id]?.learningMode || plan.learningModes[0]?.id}
+                    onSelectMode={(modeId) => handleSelectLearningMode(plan.id, modeId)}
+                  />
+                  <BenefitSelector
+                    benefits={plan.benefits}
+                    selectedBenefits={selections[plan.id]?.selectedBenefits || []}
+                    onToggleBenefit={(benefitId) => handleToggleBenefit(plan.id, benefitId)}
+                  />
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    onClick={() => handleSubmitRequest(plan.id)}
+                    disabled={!meetsMinimum}
+                    className="w-full"
+                  >
+                    Submit Request
+                  </Button>
+                </CardFooter>
+              </Card>
+            );
+          })}
+        </div>
+
+        <div className="mt-12 flex flex-wrap justify-center gap-8 text-center">
           <div className="flex items-center gap-2">
-            <Check className="w-4 h-4 text-primary" />
-            <span>500+ Students Enrolled</span>
+            <ShieldCheck className="h-5 w-5 text-primary" />
+            <span className="text-sm text-muted-foreground">Flexible Payment Plans</span>
           </div>
           <div className="flex items-center gap-2">
-            <Check className="w-4 h-4 text-primary" />
-            <span>85% Job Placement Rate</span>
+            <Users className="h-5 w-5 text-primary" />
+            <span className="text-sm text-muted-foreground">Expert Instructors</span>
           </div>
           <div className="flex items-center gap-2">
-            <Check className="w-4 h-4 text-primary" />
-            <span>Money-Back Guarantee</span>
+            <Trophy className="h-5 w-5 text-primary" />
+            <span className="text-sm text-muted-foreground">Industry Certifications</span>
           </div>
         </div>
       </div>
 
-      {/* Faculty ID Dialog */}
-      <Dialog open={showFacultyIdDialog} onOpenChange={setShowFacultyIdDialog}>
-        <DialogContent className="sm:max-w-[425px]">
+      <Dialog open={facultyIdDialogOpen} onOpenChange={setFacultyIdDialogOpen}>
+        <DialogContent>
           <DialogHeader>
-            <DialogTitle>Enter Your Faculty ID</DialogTitle>
-            <DialogDescription>
-              Please enter your Faculty ID to proceed with {selectedPlan}.
-            </DialogDescription>
+            <DialogTitle>Enter Faculty ID</DialogTitle>
+            <DialogDescription>Please enter your faculty ID to continue</DialogDescription>
           </DialogHeader>
-
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="facultyIdInput">Faculty ID</Label>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="faculty-id">Faculty ID</Label>
               <Input
-                id="facultyIdInput"
-                placeholder="e.g., TF-ABC123XYZ"
+                id="faculty-id"
                 value={facultyId}
-                onChange={(e) => setFacultyId(e.target.value.toUpperCase())}
-                maxLength={50}
+                onChange={(e) => setFacultyId(e.target.value)}
+                placeholder="TF-XXXX-XXXX"
               />
             </div>
-
-            <Button
-              onClick={handleFacultyIdSubmit}
-              className="w-full bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90"
-            >
-              Submit
-            </Button>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-border"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-background text-muted-foreground">
-                  Don't have a Faculty ID?
-                </span>
-              </div>
+            <div className="flex gap-3">
+              <Button variant="outline" onClick={() => setFacultyIdDialogOpen(false)} className="flex-1">
+                Cancel
+              </Button>
+              <Button onClick={handleFacultyIdSubmit} className="flex-1">
+                Continue
+              </Button>
             </div>
-
-            <Button
-              variant="outline"
-              onClick={() => {
-                setShowFacultyIdDialog(false);
-                setShowSignUpForm(true);
-              }}
-              className="w-full"
-            >
-              Sign Up Here
-            </Button>
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* Sign Up Form Dialog */}
-      <Dialog open={showSignUpForm} onOpenChange={setShowSignUpForm}>
-        <DialogContent className="sm:max-w-[500px]">
+      <Dialog open={signupDialogOpen} onOpenChange={setSignupDialogOpen}>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Create Your Account</DialogTitle>
-            <DialogDescription>
-              Sign up to get your Faculty ID and enroll in {selectedPlan}.
-            </DialogDescription>
+            <DialogDescription>Sign up to get your faculty ID and enroll</DialogDescription>
           </DialogHeader>
-          <SignupForm onSuccess={handleSignUpSuccess} />
+          <SignupForm onSuccess={() => setSignupDialogOpen(false)} />
         </DialogContent>
       </Dialog>
+
+      <CheckoutDialog
+        open={checkoutDialogOpen}
+        onOpenChange={setCheckoutDialogOpen}
+        onSubmit={handleCheckoutSubmit}
+        totalAmount={totalPrices[selectedPlanId] || 0}
+        isLoading={isSubmitting}
+      />
     </section>
   );
 };

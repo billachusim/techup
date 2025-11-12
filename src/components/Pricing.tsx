@@ -603,7 +603,7 @@ ${selectedBenefitDetails.length > 0 ? selectedBenefitDetails.map(b => `✓ ${b}`
 Please process my enrollment!`;
 
     if (method === 'whatsapp') {
-      const whatsappUrl = `https://wa.me/2347025116657?text=${encodeURIComponent(message)}`;
+      const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, '_blank');
       
       toast({

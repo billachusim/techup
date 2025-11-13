@@ -616,7 +616,7 @@ const GetStarted = () => {
                     <div className="space-y-3">
                        <div>
                         <div className="flex items-center justify-between">
-                          <h4 className="font-semibold">{nextLecture.title.replace(/\s*-?\s*(Session|Class)\s+\d+/gi, '')}</h4>
+                          <h4 className="font-semibold">{(aiGeneratedContent?.title || nextLecture.title).replace(/\s*-?\s*(Session|Class)\s+\d+/gi, '')}</h4>
                           <Badge variant="secondary" className="ml-2">
                             <BadgeCheck className="mr-1" size={14} />
                             AI Course Rep
@@ -624,11 +624,13 @@ const GetStarted = () => {
                         </div>
                         <p className="text-sm text-muted-foreground">{nextLecture.courses?.name}</p>
                         {isLoadingAiContent ? (
-                          <p className="text-sm text-muted-foreground mt-2 italic">Loading class description...</p>
+                          <p className="text-sm text-muted-foreground mt-2 italic">Loading class summary...</p>
+                        ) : aiGeneratedContent?.summary ? (
+                          <p className="text-sm text-muted-foreground mt-2">{aiGeneratedContent.summary}</p>
                         ) : aiGeneratedContent?.description ? (
-                          <p className="text-sm text-muted-foreground mt-2 line-clamp-3">{aiGeneratedContent.description.substring(0, Math.floor(aiGeneratedContent.description.length / 2))}...</p>
+                          <p className="text-sm text-muted-foreground mt-2">{(aiGeneratedContent.description.split(/(?<=[.!?])\s+/).slice(0,2).join(' ') + (aiGeneratedContent.description.match(/[.!?]$/) ? '' : '.'))}</p>
                         ) : nextLecture.description ? (
-                          <p className="text-sm text-muted-foreground mt-2 line-clamp-3">{nextLecture.description.substring(0, Math.floor(nextLecture.description.length / 2))}...</p>
+                          <p className="text-sm text-muted-foreground mt-2">{nextLecture.description}</p>
                         ) : null}
                       </div>
                       <div className="text-sm">
@@ -906,11 +908,11 @@ const GetStarted = () => {
         <HandoutModal
           open={handoutModalOpen}
           onOpenChange={setHandoutModalOpen}
-          classTitle={nextLecture?.title.replace(/\s*-?\s*(Session|Class)\s+\d+/gi, '') || ""}
+          classTitle={(aiGeneratedContent?.title || nextLecture?.title || '').replace(/\s*-?\s*(Session|Class)\s+\d+/gi, '')}
           classNumber={nextClassNumber}
-          course={nextLecture?.courses?.name || ""}
+          course={nextLecture?.courses?.name || ''}
           resources={aiGeneratedContent?.resources || []}
-          handoutContent={aiGeneratedContent?.handoutContent || "No handout content available yet. Check back later or contact your instructor."}
+          handoutContent={aiGeneratedContent?.handoutContent || 'No handout content available yet. Check back later or contact your instructor.'}
           description={aiGeneratedContent?.description || nextLecture?.description}
         />
       </div>

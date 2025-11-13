@@ -34,6 +34,16 @@ async function fetchWithRetry(url: string, options: RequestInit, maxRetries = 3)
   throw new Error("Max retries reached");
 }
 
+function summarize(text: string): string {
+  if (!text) return "";
+  // Split by sentence terminators
+  const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+  const firstTwo = sentences.slice(0, 2).join(" ").trim();
+  let result = firstTwo || text.slice(0, 320);
+  if (result.length > 400) result = result.slice(0, 400) + "…";
+  return result;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -90,6 +100,40 @@ serve(async (req) => {
     } catch (error) {
       console.error("Failed to generate description:", error);
       description = `Welcome to ${classTitle}! In this ${courseName} class (${classNumber} of 4), you'll explore key concepts and develop practical skills essential for your technology career. This hands-on session combines theory with real-world applications, preparing you for professional challenges in the field.`;
+    }
+
+    // Build a concise summary (2 sentences or ~300-400 chars)
+    const summary = summarize(description);
+
+    // Generate a concise class title (no numbers like Session/Class)
+    let aiTitle = "";
+    try {
+      const titleResponse = await fetchWithRetry("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash",
+          messages: [
+            { role: "system", content: "Return only a 3-6 word class title. No numbering like Session or Class. Title case. No punctuation." },
+            { role: "user", content: `Course: ${courseName}. Class number: ${classNumber}. Original: ${classTitle}. Suggest a concise topic-focused title.` }
+          ],
+        }),
+      });
+
+      if (titleResponse.ok) {
+        const titleData = await titleResponse.json();
+        aiTitle = (titleData.choices?.[0]?.message?.content || "").trim();
+      }
+    } catch (e) {
+      console.error("Failed to generate title:", e);
+    }
+
+    if (!aiTitle) {
+      // Fallback: strip any trailing `- Session X` or `Class X` from original
+      aiTitle = classTitle.replace(/\s*-?\s*(Session|Class)\s+\d+/gi, '').trim() || classTitle;
     }
 
     // Generate resources with tool calling for structured output
@@ -222,6 +266,8 @@ Prepare for the next class by reviewing today's materials and completing any ass
 
     return new Response(
       JSON.stringify({ 
+        title: aiTitle,
+        summary,
         description,
         resources,
         handoutContent

@@ -123,7 +123,7 @@ export const HandoutModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl w-[95vw] max-h-[90vh] sm:max-h-[80vh] flex flex-col">
+      <DialogContent className="max-w-2xl w-[95vw] max-h-[90vh] sm:max-h-[80vh] flex flex-col min-h-0">
         <DialogHeader>
           <DialogTitle className="text-lg sm:text-2xl leading-tight">
             Class {classNumber} - {classTitle}
@@ -131,7 +131,7 @@ export const HandoutModal = ({
           <p className="text-xs sm:text-sm text-muted-foreground">{course}</p>
         </DialogHeader>
         
-        <ScrollArea className="flex-1 pr-2 sm:pr-4">
+        <ScrollArea className="flex-1 min-h-0 pr-2 sm:pr-4">
           {!showFullHandout ? (
             <div className="space-y-4 sm:space-y-6">
               <div>

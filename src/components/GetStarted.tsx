@@ -157,37 +157,38 @@ const GetStarted = () => {
 
         setLecturesData(allLectures || []);
 
-        // Find next uncompleted lecture
+        // Find next lecture based on progress
         const { data: progressRecords } = await supabase
           .from('course_progress')
           .select('*')
           .eq('faculty_id', facultyIdToFetch);
 
-        const completedLectures = new Set(
-          progressRecords?.map((p: any) => p.last_accessed) || []
-        );
+        // Find the first course with incomplete progress
+        let nextLectureToShow = null;
+        let calculatedNextClassNumber = 1;
 
-        const nextUncompletedLecture = allLectures?.find(
-          (lecture: any) => !completedLectures.has(lecture.id)
-        );
-
-        const lectureTouse = nextUncompletedLecture || allLectures?.[0] || null;
-        setNextLecture(lectureTouse);
-
-        // Calculate the actual next class number based on progress
-        if (lectureTouse && courseEnrollments.length > 0) {
-          // Find the course for this lecture
-          const courseForLecture = courseEnrollments.find(
-            (ce: any) => ce.course_id === lectureTouse.course_id
-          );
+        for (const enrollment of courseEnrollments) {
+          const progress = enrollment.course_progress?.[0];
+          const classesCompleted = progress?.classes_completed || 0;
           
-          if (courseForLecture?.course_progress?.[0]) {
-            const classesCompleted = courseForLecture.course_progress[0].classes_completed || 0;
-            setNextClassNumber(Math.min(classesCompleted + 1, 4));
-          } else {
-            setNextClassNumber(1);
+          // If this course isn't complete (has less than 4 classes done)
+          if (classesCompleted < 4) {
+            // Get lectures for this specific course
+            const courseLectures = (allLectures || []).filter(
+              (l: any) => l.course_id === enrollment.course_id
+            );
+            
+            // The next class is classesCompleted + 1 (e.g., if 2 completed, show class 3)
+            const nextClassIndex = classesCompleted; // 0-indexed, so 0 = class 1, 1 = class 2, etc.
+            nextLectureToShow = courseLectures[nextClassIndex] || courseLectures[0];
+            calculatedNextClassNumber = classesCompleted + 1;
+            
+            if (nextLectureToShow) break;
           }
         }
+
+        setNextLecture(nextLectureToShow);
+        setNextClassNumber(calculatedNextClassNumber);
 
         // If no lectures exist in database, generate one using AI or use cached
         if (!allLectures || allLectures.length === 0) {
@@ -577,11 +578,9 @@ const GetStarted = () => {
                       <Calendar className="text-primary" size={20} />
                       Next Class
                     </h3>
-                    {nextLecture?.isAiGenerated && (
-                      <Badge variant="outline" className="text-sm">
-                        Class {nextClassNumber} of 4
-                      </Badge>
-                    )}
+                    <Badge variant="outline" className="text-sm">
+                      Class {nextClassNumber} of 4
+                    </Badge>
                   </div>
                   {nextLecture ? (
                     <div className="space-y-3">
@@ -611,17 +610,15 @@ const GetStarted = () => {
                           </div>
                         )}
                       </div>
-                      {nextLecture.isAiGenerated && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="w-full"
-                          onClick={() => setHandoutModalOpen(true)}
-                        >
-                          <FileText className="mr-2" size={16} />
-                          View Class Handout
-                        </Button>
-                      )}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => setHandoutModalOpen(true)}
+                      >
+                        <FileText className="mr-2" size={16} />
+                        View Class Handout
+                      </Button>
                       {nextLecture.meeting_link && !nextLecture.isAiGenerated && (
                         <Button
                           size="sm"
@@ -869,17 +866,15 @@ const GetStarted = () => {
         </Dialog>
 
         {/* Handout Modal */}
-        {nextLecture?.isAiGenerated && (
-          <HandoutModal
-            open={handoutModalOpen}
-            onOpenChange={setHandoutModalOpen}
-            classTitle={nextLecture.title || ""}
-            classNumber={nextClassNumber}
-            course={nextLecture.courses?.name || ""}
-            resources={nextLecture.resources || []}
-            handoutContent={nextLecture.handoutContent || "No handout content available."}
-          />
-        )}
+        <HandoutModal
+          open={handoutModalOpen}
+          onOpenChange={setHandoutModalOpen}
+          classTitle={nextLecture?.title || ""}
+          classNumber={nextClassNumber}
+          course={nextLecture?.courses?.name || ""}
+          resources={nextLecture?.resources || []}
+          handoutContent={nextLecture?.handoutContent || nextLecture?.description || "No handout content available yet. Check back later or contact your instructor."}
+        />
       </div>
     </section>
   );

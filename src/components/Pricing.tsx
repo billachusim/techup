@@ -342,12 +342,13 @@ const Pricing = () => {
   const [requestDiscount, setRequestDiscount] = useState(false);
   const [customCourseSearch, setCustomCourseSearch] = useState("");
   const [userHasPaidPlan, setUserHasPaidPlan] = useState(false);
+  const [enrollmentData, setEnrollmentData] = useState<any>(null);
   const { toast } = useToast();
 
   const [selections, setSelections] = useState<Record<string, Selection>>({});
   const [totalPrices, setTotalPrices] = useState<Record<string, number>>({});
 
-  // Check if user has paid plan
+  // Check if user has paid plan and fetch enrollment data
   useEffect(() => {
     const checkUserPlan = async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -361,11 +362,17 @@ const Pricing = () => {
         if (profile?.faculty_id) {
           const { data: enrollments } = await supabase
             .from("enrollments")
-            .select("plan_name")
-            .eq("faculty_id", profile.faculty_id);
+            .select("*")
+            .eq("faculty_id", profile.faculty_id)
+            .order("created_at", { ascending: false });
 
           const hasPaidPlan = enrollments?.some(e => e.plan_name !== "Bootcamp Starter");
           setUserHasPaidPlan(hasPaidPlan || false);
+          
+          // Set latest enrollment
+          if (enrollments && enrollments.length > 0) {
+            setEnrollmentData(enrollments[0]);
+          }
         }
       }
     };
@@ -733,13 +740,20 @@ Please process my enrollment!`;
 
   const renderFreePlan = (plan: DepartmentPlan) => {
     const Icon = plan.icon;
+    const isUserOnThisPlan = enrollmentData?.plan_name === plan.name || 
+                             (enrollmentData?.plan_name === "Bootcamp Starter" && plan.name === "Free Bootcamp");
     
     return (
-      <Card key={plan.id} className="border-2 border-primary/30 hover:border-primary/50 transition-colors">
+      <Card key={plan.id} className={`border-2 ${isUserOnThisPlan ? 'border-primary' : 'border-primary/30'} hover:border-primary/50 transition-colors`}>
         <CardHeader>
           <div className="flex items-center justify-between mb-2">
             <Icon className="h-8 w-8 text-primary" />
-            <Badge variant="secondary">Free</Badge>
+            <div className="flex gap-2">
+              {isUserOnThisPlan && (
+                <Badge variant="default" className="bg-primary">Active</Badge>
+              )}
+              <Badge variant="secondary">Free</Badge>
+            </div>
           </div>
           <CardTitle>{plan.fancyName}</CardTitle>
           <CardDescription>{plan.description}</CardDescription>
@@ -774,9 +788,9 @@ Please process my enrollment!`;
             onClick={() => handleSubmitRequest(plan.id)} 
             className="w-full"
             size="lg"
-            disabled={userHasPaidPlan}
+            disabled={userHasPaidPlan || isUserOnThisPlan}
           >
-            {userHasPaidPlan ? "Already Have Paid Plan" : "Start Free Journey"}
+            {isUserOnThisPlan ? "Current Plan" : userHasPaidPlan ? "Already Have Paid Plan" : "Start Free Journey"}
           </Button>
         </CardFooter>
       </Card>
@@ -912,13 +926,17 @@ Please process my enrollment!`;
     const selection = selections[plan.id] || { selectedCourses: [], selectedBenefits: [], learningMode: "online-only" };
     const total = totalPrices[plan.id] || 0;
     const meetsMinimum = total >= plan.minimumAmount;
+    const isUserOnThisPlan = enrollmentData?.plan_name === plan.name;
 
     return (
-      <Card key={plan.id} className="border-2 border-border hover:border-primary/50 transition-colors">
+      <Card key={plan.id} className={`border-2 ${isUserOnThisPlan ? 'border-primary' : 'border-border'} hover:border-primary/50 transition-colors`}>
         <CardHeader>
           <div className="flex items-center justify-between mb-2">
             <Icon className="h-8 w-8 text-primary" />
-            <div className="text-right">
+            <div className="text-right flex flex-col items-end gap-2">
+              {isUserOnThisPlan && (
+                <Badge variant="default" className="bg-primary">Active Plan</Badge>
+              )}
               <Badge variant={meetsMinimum ? "default" : "destructive"} className="text-lg px-3 py-1">
                 ₦{total.toLocaleString()}
               </Badge>
@@ -964,11 +982,11 @@ Please process my enrollment!`;
         <CardFooter>
           <Button
             onClick={() => handleSubmitRequest(plan.id)}
-            disabled={!meetsMinimum}
+            disabled={!meetsMinimum || isUserOnThisPlan}
             className="w-full"
             size="lg"
           >
-            Submit Request
+            {isUserOnThisPlan ? "Current Plan" : "Submit Request"}
           </Button>
         </CardFooter>
       </Card>

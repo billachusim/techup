@@ -616,7 +616,7 @@ const GetStarted = () => {
                     <div className="space-y-3">
                        <div>
                         <div className="flex items-center justify-between">
-                          <h4 className="font-semibold">{nextLecture.title.replace(/^(Session|Class)\s+\d+\s*[-:]\s*/i, '')}</h4>
+                          <h4 className="font-semibold">{nextLecture.title.replace(/\s*-?\s*(Session|Class)\s+\d+/gi, '')}</h4>
                           <Badge variant="secondary" className="ml-2">
                             <BadgeCheck className="mr-1" size={14} />
                             AI Course Rep
@@ -906,7 +906,7 @@ const GetStarted = () => {
         <HandoutModal
           open={handoutModalOpen}
           onOpenChange={setHandoutModalOpen}
-          classTitle={nextLecture?.title.replace(/^(Session|Class)\s+\d+\s*[-:]\s*/i, '') || ""}
+          classTitle={nextLecture?.title.replace(/\s*-?\s*(Session|Class)\s+\d+/gi, '') || ""}
           classNumber={nextClassNumber}
           course={nextLecture?.courses?.name || ""}
           resources={aiGeneratedContent?.resources || []}

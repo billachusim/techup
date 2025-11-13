@@ -181,7 +181,7 @@ export const HandoutModal = ({
               </div>
             </div>
           ) : (
-            <div className="space-y-3 sm:space-y-4">
+            <div className="space-y-3 sm:space-y-4 h-full flex flex-col">
               <Button
                 onClick={() => setShowFullHandout(false)}
                 variant="outline"
@@ -191,7 +191,7 @@ export const HandoutModal = ({
                 ← Back to Resources
               </Button>
               
-              <div className="prose prose-sm max-w-none space-y-4">
+              <div className="prose prose-sm max-w-none space-y-4 overflow-y-auto flex-1 pr-2">
                 {description && (
                   <div className="space-y-2">
                     <h3 className="text-base font-semibold">Description</h3>

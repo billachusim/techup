@@ -36,6 +36,8 @@ const GetStarted = () => {
   const [nextClassNumber, setNextClassNumber] = useState<number>(1);
   const [showAllCourses, setShowAllCourses] = useState(false);
   const [handoutModalOpen, setHandoutModalOpen] = useState(false);
+  const [aiGeneratedContent, setAiGeneratedContent] = useState<any>(null);
+  const [isLoadingAiContent, setIsLoadingAiContent] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const [isResettingPassword, setIsResettingPassword] = useState(false);
   const { toast } = useToast();
@@ -189,6 +191,34 @@ const GetStarted = () => {
 
         setNextLecture(nextLectureToShow);
         setNextClassNumber(calculatedNextClassNumber);
+
+        // Generate AI content for the next lecture
+        if (nextLectureToShow && courseEnrollments.length > 0) {
+          setIsLoadingAiContent(true);
+          try {
+            // Find the enrollment for this lecture's course
+            const enrollmentForCourse = courseEnrollments.find(
+              (ce: any) => ce.course_id === nextLectureToShow.course_id
+            );
+            const courseName = enrollmentForCourse?.courses?.name || nextLectureToShow.courses?.name || 'General Tech Course';
+
+            const { data: aiContent, error: aiError } = await supabase.functions.invoke('generate-class-content', {
+              body: {
+                classTitle: nextLectureToShow.title,
+                courseName: courseName,
+                classNumber: calculatedNextClassNumber
+              }
+            });
+
+            if (!aiError && aiContent) {
+              setAiGeneratedContent(aiContent);
+            }
+          } catch (error) {
+            console.error("Error generating AI content:", error);
+          } finally {
+            setIsLoadingAiContent(false);
+          }
+        }
 
         // If no lectures exist in database, generate one using AI or use cached
         if (!allLectures || allLectures.length === 0) {
@@ -585,14 +615,21 @@ const GetStarted = () => {
                   {nextLecture ? (
                     <div className="space-y-3">
                       <div>
-                        <h4 className="font-semibold">{nextLecture.title}</h4>
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-semibold">{nextLecture.title}</h4>
+                          <Badge variant="secondary" className="ml-2">
+                            <BadgeCheck className="mr-1" size={14} />
+                            AI Course Rep
+                          </Badge>
+                        </div>
                         <p className="text-sm text-muted-foreground">{nextLecture.courses?.name}</p>
-                        {nextLecture.description && (
+                        {isLoadingAiContent ? (
+                          <p className="text-sm text-muted-foreground mt-2 italic">Loading class description...</p>
+                        ) : aiGeneratedContent?.description ? (
+                          <p className="text-sm text-muted-foreground mt-2">{aiGeneratedContent.description}</p>
+                        ) : nextLecture.description ? (
                           <p className="text-sm text-muted-foreground mt-2">{nextLecture.description}</p>
-                        )}
-                        {nextLecture.isAiGenerated && (
-                          <Badge variant="secondary" className="mt-2">AI Course Rep</Badge>
-                        )}
+                        ) : null}
                       </div>
                       <div className="text-sm">
                         <div>
@@ -872,8 +909,8 @@ const GetStarted = () => {
           classTitle={nextLecture?.title || ""}
           classNumber={nextClassNumber}
           course={nextLecture?.courses?.name || ""}
-          resources={nextLecture?.resources || []}
-          handoutContent={nextLecture?.handoutContent || nextLecture?.description || "No handout content available yet. Check back later or contact your instructor."}
+          resources={aiGeneratedContent?.resources || []}
+          handoutContent={aiGeneratedContent?.handoutContent || "No handout content available yet. Check back later or contact your instructor."}
         />
       </div>
     </section>

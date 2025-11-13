@@ -150,6 +150,7 @@ export type Database = {
           enrollment_date: string
           faculty_id: string
           id: string
+          learning_mode: string | null
           plan_name: string
           status: string
         }
@@ -159,6 +160,7 @@ export type Database = {
           enrollment_date?: string
           faculty_id: string
           id?: string
+          learning_mode?: string | null
           plan_name: string
           status?: string
         }
@@ -168,6 +170,7 @@ export type Database = {
           enrollment_date?: string
           faculty_id?: string
           id?: string
+          learning_mode?: string | null
           plan_name?: string
           status?: string
         }
@@ -272,31 +275,40 @@ export type Database = {
       }
       profiles: {
         Row: {
+          cohort_month: number | null
+          cohort_year: number | null
           created_at: string
           department: string | null
           email: string
           faculty_id: string
           id: string
+          learning_mode: string | null
           name: string
           phone: string
           updated_at: string
         }
         Insert: {
+          cohort_month?: number | null
+          cohort_year?: number | null
           created_at?: string
           department?: string | null
           email: string
           faculty_id: string
           id: string
+          learning_mode?: string | null
           name: string
           phone: string
           updated_at?: string
         }
         Update: {
+          cohort_month?: number | null
+          cohort_year?: number | null
           created_at?: string
           department?: string | null
           email?: string
           faculty_id?: string
           id?: string
+          learning_mode?: string | null
           name?: string
           phone?: string
           updated_at?: string
@@ -308,7 +320,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_faculty_id: {
+        Args: {
+          cohort_mo: number
+          cohort_yr: number
+          dept_name: string
+          learn_mode: string
+        }
+        Returns: string
+      }
+      get_department_code: { Args: { dept: string }; Returns: string }
     }
     Enums: {
       [_ in never]: never

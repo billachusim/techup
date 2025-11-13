@@ -614,9 +614,9 @@ const GetStarted = () => {
                   </div>
                   {nextLecture ? (
                     <div className="space-y-3">
-                      <div>
+                       <div>
                         <div className="flex items-center justify-between">
-                          <h4 className="font-semibold">{nextLecture.title}</h4>
+                          <h4 className="font-semibold">{nextLecture.title.replace(/^(Session|Class)\s+\d+\s*[-:]\s*/i, '')}</h4>
                           <Badge variant="secondary" className="ml-2">
                             <BadgeCheck className="mr-1" size={14} />
                             AI Course Rep
@@ -626,9 +626,9 @@ const GetStarted = () => {
                         {isLoadingAiContent ? (
                           <p className="text-sm text-muted-foreground mt-2 italic">Loading class description...</p>
                         ) : aiGeneratedContent?.description ? (
-                          <p className="text-sm text-muted-foreground mt-2">{aiGeneratedContent.description}</p>
+                          <p className="text-sm text-muted-foreground mt-2 line-clamp-3">{aiGeneratedContent.description.substring(0, Math.floor(aiGeneratedContent.description.length / 2))}...</p>
                         ) : nextLecture.description ? (
-                          <p className="text-sm text-muted-foreground mt-2">{nextLecture.description}</p>
+                          <p className="text-sm text-muted-foreground mt-2 line-clamp-3">{nextLecture.description.substring(0, Math.floor(nextLecture.description.length / 2))}...</p>
                         ) : null}
                       </div>
                       <div className="text-sm">
@@ -906,11 +906,12 @@ const GetStarted = () => {
         <HandoutModal
           open={handoutModalOpen}
           onOpenChange={setHandoutModalOpen}
-          classTitle={nextLecture?.title || ""}
+          classTitle={nextLecture?.title.replace(/^(Session|Class)\s+\d+\s*[-:]\s*/i, '') || ""}
           classNumber={nextClassNumber}
           course={nextLecture?.courses?.name || ""}
           resources={aiGeneratedContent?.resources || []}
           handoutContent={aiGeneratedContent?.handoutContent || "No handout content available yet. Check back later or contact your instructor."}
+          description={aiGeneratedContent?.description || nextLecture?.description}
         />
       </div>
     </section>

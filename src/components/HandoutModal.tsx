@@ -19,6 +19,7 @@ interface HandoutModalProps {
   course: string;
   resources: Resource[];
   handoutContent: string;
+  description?: string;
 }
 
 export const HandoutModal = ({
@@ -29,6 +30,7 @@ export const HandoutModal = ({
   course,
   resources,
   handoutContent,
+  description,
 }: HandoutModalProps) => {
   const [showFullHandout, setShowFullHandout] = useState(false);
 
@@ -61,9 +63,29 @@ export const HandoutModal = ({
     
     // Content
     doc.setFontSize(11);
-    const lines = doc.splitTextToSize(handoutContent.replace(/[#*]/g, ''), maxWidth);
     
     let yPosition = 50;
+    
+    // Add description if available
+    if (description) {
+      doc.setFontSize(12);
+      doc.text("Description:", margin, yPosition);
+      yPosition += 8;
+      doc.setFontSize(11);
+      const descLines = doc.splitTextToSize(description, maxWidth);
+      descLines.forEach((line: string) => {
+        if (yPosition > 280) {
+          doc.addPage();
+          yPosition = 20;
+        }
+        doc.text(line, margin, yPosition);
+        yPosition += 7;
+      });
+      yPosition += 10;
+    }
+    
+    const lines = doc.splitTextToSize(handoutContent.replace(/[#*]/g, ''), maxWidth);
+    
     lines.forEach((line: string) => {
       if (yPosition > 280) {
         doc.addPage();
@@ -169,7 +191,16 @@ export const HandoutModal = ({
                 ← Back to Resources
               </Button>
               
-              <div className="prose prose-sm max-w-none">
+              <div className="prose prose-sm max-w-none space-y-4">
+                {description && (
+                  <div className="space-y-2">
+                    <h3 className="text-base font-semibold">Description</h3>
+                    <div className="whitespace-pre-wrap text-xs sm:text-sm leading-relaxed text-muted-foreground">
+                      {description}
+                    </div>
+                  </div>
+                )}
+                
                 <div className="whitespace-pre-wrap text-xs sm:text-sm leading-relaxed">
                   {handoutContent}
                 </div>

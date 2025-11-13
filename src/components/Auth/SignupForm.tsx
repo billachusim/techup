@@ -131,6 +131,15 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
         course_interest: "Not selected",
         hear_about_us: formData.hearAbout,
         status: "active",
+        department: "General Tech",
+      });
+
+      // Create initial enrollment for free bootcamp
+      await supabase.from("enrollments").insert({
+        faculty_id: newFacultyId,
+        plan_name: "Bootcamp Starter",
+        status: "active",
+        learning_mode: "online-only",
       });
 
       // Send WhatsApp message

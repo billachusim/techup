@@ -502,7 +502,17 @@ const Pricing = () => {
     if (plan?.isFree && userHasPaidPlan) {
       toast({
         title: "Action Not Allowed",
-        description: "You already have a paid plan. Contact support to downgrade.",
+        description: "You already have a paid plan. Contact support via WhatsApp to make changes.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Prevent paid users from switching to other paid plans
+    if (!plan?.isFree && userHasPaidPlan) {
+      toast({
+        title: "Plan Change Restricted",
+        description: "To change your paid plan, please contact us via WhatsApp.",
         variant: "destructive",
       });
       return;
@@ -510,7 +520,7 @@ const Pricing = () => {
 
     const total = totalPrices[planId] || 0;
     
-    if (total < (plan?.minimumAmount || 0)) {
+    if (!plan?.isFree && total < (plan?.minimumAmount || 0)) {
       toast({
         title: "Minimum Amount Required",
         description: `Please select items totaling at least ₦${plan?.minimumAmount.toLocaleString()}`,
@@ -631,13 +641,13 @@ const Pricing = () => {
         supabase.from("course_progress").update({ faculty_id: newFacultyId }).eq('faculty_id', currentFacultyId),
       ]);
 
-      // Create new enrollment
+      // Create new enrollment with status based on plan type
+      const enrollmentStatus = plan.isFree ? "active" : "pending";
       await supabase.from("enrollments").insert({
         faculty_id: newFacultyId,
         plan_name: plan.name,
-        status: "pending",
+        status: enrollmentStatus,
         learning_mode: selectedMode,
-        total_amount: total,
       });
 
     const courses = plan.isCustom 

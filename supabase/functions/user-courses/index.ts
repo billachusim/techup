@@ -10,7 +10,7 @@ const corsHeaders = {
 type PlanKey = "free_bootcamp" | "bootcamp_starter" | "developer_pro" | "data_wizard" | "security_shield" | "ai_innovator" | "cloud_architect" | "design_master" | "digital_marketing_pro";
 
 const planMapping: Record<string, PlanKey> = {
-  "Free Bootcamp": "free_bootcamp",
+  "Free Bootcamp": "bootcamp_starter",
   "Bootcamp Starter": "bootcamp_starter",
   "Developer Pro": "developer_pro",
   "Data Wizard": "data_wizard",
@@ -50,20 +50,20 @@ serve(async (req) => {
 
     if (enrollmentErr) throw enrollmentErr;
 
-    const planName = enrollment?.plan_name ?? "Free Bootcamp";
-    const dbPlan: PlanKey = planMapping[planName] || "free_bootcamp";
+    const planName = enrollment?.plan_name ?? "Bootcamp Starter";
+    const dbPlan: PlanKey = planMapping[planName] || "bootcamp_starter";
 
     // Map plans to their departments
     const planDepartments: Record<PlanKey, string> = {
       "free_bootcamp": "General Tech",
       "bootcamp_starter": "General Tech",
-      "developer_pro": "Web Development",
-      "data_wizard": "Data Science",
-      "security_shield": "Cyber Security",
-      "ai_innovator": "Machine Learning",
-      "cloud_architect": "Cloud Computing",
-      "design_master": "UI/UX Design",
-      "digital_marketing_pro": "Digital Marketing"
+      "developer_pro": "Developer Pro",
+      "data_wizard": "Data Wizard",
+      "security_shield": "Security Shield",
+      "ai_innovator": "AI Innovator",
+      "cloud_architect": "Cloud Architect",
+      "design_master": "Design Master",
+      "digital_marketing_pro": "Digital Marketing Pro"
     };
 
     const departmentForPlan = planDepartments[dbPlan] || "General Tech";

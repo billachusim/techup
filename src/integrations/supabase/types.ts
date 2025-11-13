@@ -320,6 +320,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      ensure_course_lectures: {
+        Args: { course_uuid: string }
+        Returns: undefined
+      }
       generate_faculty_id: {
         Args: {
           cohort_mo: number
@@ -330,6 +334,7 @@ export type Database = {
         Returns: string
       }
       get_department_code: { Args: { dept: string }; Returns: string }
+      seed_all_course_lectures: { Args: never; Returns: undefined }
     }
     Enums: {
       [_ in never]: never

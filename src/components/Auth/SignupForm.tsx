@@ -38,25 +38,10 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
   const { toast } = useToast();
   const { login } = useUser();
 
-  const generateFacultyId = async (department: string = "General Tech", learningMode: string = "online-only") => {
-    const currentMonth = new Date().getMonth() + 1;
-    const currentYear = new Date().getFullYear();
-    
-    // Call the database function to generate ID
-    const { data, error } = await (supabase.rpc as any)('generate_faculty_id', {
-      dept_name: department,
-      learn_mode: learningMode,
-      cohort_mo: currentMonth,
-      cohort_yr: currentYear
-    });
-    
-    if (error) {
-      console.error('Error generating faculty ID:', error);
-      // Fallback to simple format if function fails
-      return `TF-GEN-ONL-${String(currentMonth).padStart(2, '0')}${String(currentYear).slice(-2)}-${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`;
-    }
-    
-    return data as string;
+  const generateFacultyId = () => {
+    const timestamp = Date.now().toString(36).toUpperCase();
+    const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+    return `TF-${timestamp}-${random}`;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -94,8 +79,7 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
     setIsLoading(true);
 
     try {
-      // Generate faculty ID with default values (will be updated on enrollment)
-      const newFacultyId = await generateFacultyId();
+      const newFacultyId = generateFacultyId();
 
       // Create auth user
       const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -115,9 +99,6 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
           name: formData.name.trim(),
           email: formData.email.trim(),
           phone: formData.phone.trim(),
-          learning_mode: 'online-only',
-          cohort_month: new Date().getMonth() + 1,
-          cohort_year: new Date().getFullYear(),
         });
 
       if (profileError) throw profileError;

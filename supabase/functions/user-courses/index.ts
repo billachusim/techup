@@ -147,9 +147,6 @@ serve(async (req) => {
             .insert({ faculty_id: facultyId, course_id: course.id, status: "active" });
           if (insertErr) throw insertErr;
         }
-
-        // Ensure lectures exist for this course
-        await admin.rpc('ensure_course_lectures', { course_uuid: course.id });
       }
     }
 
@@ -170,26 +167,14 @@ serve(async (req) => {
       .select("*")
       .eq("faculty_id", facultyId);
 
-    // 8) Fetch lectures for all courses
-    const courseIds = (enrollments || []).map((e: any) => e.course_id);
-    const { data: lecturesData } = await admin
-      .from("lectures")
-      .select("*")
-      .in("course_id", courseIds)
-      .order("scheduled_at", { ascending: true });
-
-    // 9) Manually attach progress and lectures to each enrollment
+    // 8) Manually attach progress to each enrollment
     const enrichedEnrollments = (enrollments || []).map((enrollment: any) => {
       const progress = (progressRecords || []).filter(
         (p: any) => p.course_id === enrollment.course_id
       );
-      const lectures = (lecturesData || []).filter(
-        (l: any) => l.course_id === enrollment.course_id
-      );
       return {
         ...enrollment,
-        course_progress: progress,
-        lectures: lectures
+        course_progress: progress
       };
     });
 

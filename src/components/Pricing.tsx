@@ -557,88 +557,11 @@ const Pricing = () => {
   const handleCheckoutSubmit = async (method: 'email' | 'whatsapp') => {
     setIsSubmitting(true);
     
-    try {
-      const plan = departmentPlans.find((p) => p.id === selectedPlanId);
-      if (!plan) return;
+    const plan = departmentPlans.find((p) => p.id === selectedPlanId);
+    if (!plan) return;
 
-      const selection = selections[selectedPlanId];
-      const total = totalPrices[selectedPlanId];
-
-      // Get current user profile
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        throw new Error('User not authenticated');
-      }
-
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-
-      if (!profile) {
-        throw new Error('Profile not found');
-      }
-
-      const currentFacultyId = profile.faculty_id;
-      
-      // Get the selected learning mode
-      const selectedMode = LEARNING_MODES.find(m => m.id === selection?.learningMode)?.name || 'online-only';
-      
-      // Generate new faculty ID with enrollment details
-      const { data: newFacultyId, error: idError } = await (supabase.rpc as any)('generate_faculty_id', {
-        dept_name: plan.name,
-        learn_mode: selectedMode,
-        cohort_mo: new Date().getMonth() + 1,
-        cohort_yr: new Date().getFullYear()
-      });
-
-      if (idError || !newFacultyId) {
-        console.error('Error generating new faculty ID:', idError);
-        throw new Error('Failed to generate faculty ID');
-      }
-
-      // Update profile with new faculty ID and enrollment details
-      const { error: updateError } = await supabase
-        .from("profiles")
-        .update({
-          faculty_id: newFacultyId,
-          department: plan.name,
-          learning_mode: selectedMode,
-          cohort_month: new Date().getMonth() + 1,
-          cohort_year: new Date().getFullYear(),
-        })
-        .eq('id', user.id);
-
-      if (updateError) {
-        console.error('Error updating profile:', updateError);
-        throw new Error('Failed to update profile');
-      }
-
-      // Update faculty_ids table
-      await supabase
-        .from("faculty_ids")
-        .update({
-          faculty_id: newFacultyId,
-          department: plan.name,
-        })
-        .eq('faculty_id', currentFacultyId);
-
-      // Update all related records with new faculty ID
-      await Promise.all([
-        supabase.from("enrollments").update({ faculty_id: newFacultyId, learning_mode: selectedMode }).eq('faculty_id', currentFacultyId),
-        supabase.from("course_enrollments").update({ faculty_id: newFacultyId }).eq('faculty_id', currentFacultyId),
-        supabase.from("course_progress").update({ faculty_id: newFacultyId }).eq('faculty_id', currentFacultyId),
-      ]);
-
-      // Create new enrollment
-      await supabase.from("enrollments").insert({
-        faculty_id: newFacultyId,
-        plan_name: plan.name,
-        status: "pending",
-        learning_mode: selectedMode,
-        total_amount: total,
-      });
+    const selection = selections[selectedPlanId];
+    const total = totalPrices[selectedPlanId];
 
     const courses = plan.isCustom 
       ? allAvailableCourses.filter(c => selection.selectedCourses.includes(c.id))
@@ -660,12 +583,11 @@ const Pricing = () => {
       ? "\n*Requesting Discount Code*" 
       : (discountCode ? `\n*Discount Code Applied:* ${discountCode.toUpperCase()}` : "");
 
-      const message = `Hi Tech Faculty NG Team! 👋
+    const message = `Hi Tech Faculty NG Team! 👋
 
 I'm ready to enroll in *${plan.fancyName}*
 
-*New Faculty ID:* ${newFacultyId}
-*(Previous ID: ${currentFacultyId})*
+*Faculty ID:* ${facultyId}
 *Total Amount:* ₦${total.toLocaleString()}${discountInfo}
 
 *Selected Courses:*
@@ -680,43 +602,30 @@ ${selectedBenefitDetails.length > 0 ? selectedBenefitDetails.map(b => `✓ ${b}`
 
 Please process my enrollment!`;
 
-      if (method === 'whatsapp') {
-        const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
-        
-        toast({
-          title: "Enrollment Successful!",
-          description: `Your new Faculty ID is ${newFacultyId}. Complete the request on WhatsApp.`,
-        });
-      } else {
-        const emailSubject = `Enrollment Request - ${newFacultyId} - ${plan.fancyName}`;
-        const emailBody = message.replace(/\*/g, '').replace(/✓/g, '-');
-        const mailtoUrl = `mailto:thetechfaculty@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-        window.location.href = mailtoUrl;
-
-        toast({
-          title: "Enrollment Successful!",
-          description: `Your new Faculty ID is ${newFacultyId}. Complete the request via email.`,
-        });
-      }
-
-      setIsSubmitting(false);
-      setCheckoutDialogOpen(false);
-      setFacultyId("");
-      setSelectedPlanId("");
+    if (method === 'whatsapp') {
+      const whatsappUrl = `https://wa.me/2347025116657?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
       
-      // Reload to refresh user context with new faculty ID
-      setTimeout(() => window.location.reload(), 2000);
-      
-    } catch (error: any) {
-      console.error('Enrollment error:', error);
       toast({
-        title: "Enrollment Failed",
-        description: error.message || "An error occurred during enrollment",
-        variant: "destructive",
+        title: "Request Sent!",
+        description: "Complete your enrollment request on WhatsApp",
       });
-      setIsSubmitting(false);
+    } else {
+      const emailSubject = `Enrollment Request - ${facultyId} - ${plan.fancyName}`;
+      const emailBody = message.replace(/\*/g, '').replace(/✓/g, '-');
+      const mailtoUrl = `mailto:thetechfaculty@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+      window.location.href = mailtoUrl;
+
+      toast({
+        title: "Opening Email App",
+        description: "Complete your enrollment via email to thetechfaculty@gmail.com",
+      });
     }
+
+    setIsSubmitting(false);
+    setCheckoutDialogOpen(false);
+    setFacultyId("");
+    setSelectedPlanId("");
   };
 
   const filteredPlans = departmentPlans.filter((plan) => plan.category === activeCategory);

@@ -9,17 +9,18 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { JobApplicationForm } from "@/components/JobApplicationForm";
+import { useUser } from "@/contexts/UserContext";
 
 const Companies = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [facultyId, setFacultyId] = useState("");
+  const [showJobForm, setShowJobForm] = useState(false);
   const [selectedJob, setSelectedJob] = useState<string>("");
   const [currentCard, setCurrentCard] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const { isLoggedIn, facultyId } = useUser();
 
   useEffect(() => {
     if (isPaused) return;
@@ -32,16 +33,16 @@ const Companies = () => {
 
   const handleApply = (company: string) => {
     setSelectedJob(company);
-    setIsDialogOpen(true);
+    if (isLoggedIn && facultyId) {
+      setShowJobForm(true);
+    } else {
+      setIsDialogOpen(true);
+    }
   };
 
-  const handleSubmit = () => {
-    if (facultyId.trim()) {
-      // Here you would handle the application submission
-      window.open("https://forms.gle/Mk9PiAcoY9ykW6LZ7", "_blank");
-      setIsDialogOpen(false);
-      setFacultyId("");
-    }
+  const handleJobApplicationSuccess = () => {
+    setShowJobForm(false);
+    setSelectedJob("");
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -223,42 +224,46 @@ const Companies = () => {
         </div>
       </div>
 
-      {/* Faculty ID Dialog */}
+      {/* Login Prompt Dialog for non-logged-in users */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Apply to {selectedJob}</DialogTitle>
             <DialogDescription>
-              Enter your Faculty ID to proceed with your application.
+              Please log in to apply for this position.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="facultyId">Faculty ID</Label>
-              <Input
-                id="facultyId"
-                placeholder="Enter your Faculty ID"
-                value={facultyId}
-                onChange={(e) => setFacultyId(e.target.value)}
-              />
-            </div>
+            <p className="text-sm text-muted-foreground">
+              You need to be logged in with your Faculty ID to submit job applications.
+              If you don't have an account yet, you can sign up and get started!
+            </p>
           </div>
           <DialogFooter>
             <Button
               variant="outline"
-              onClick={() => {
-                setIsDialogOpen(false);
-                setFacultyId("");
-              }}
+              onClick={() => setIsDialogOpen(false)}
             >
               Cancel
             </Button>
-            <Button onClick={handleSubmit} disabled={!facultyId.trim()}>
-              Continue to Application
+            <Button onClick={() => {
+              setIsDialogOpen(false);
+              document.getElementById("see-how-you-are-doing")?.scrollIntoView({ behavior: "smooth" });
+            }}>
+              Go to Login/Signup
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Job Application Form */}
+      {showJobForm && facultyId && (
+        <JobApplicationForm
+          facultyId={facultyId}
+          onClose={() => setShowJobForm(false)}
+          onSuccess={handleJobApplicationSuccess}
+        />
+      )}
     </section>
   );
 };

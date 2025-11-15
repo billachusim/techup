@@ -50,7 +50,52 @@ serve(async (req) => {
   }
 
   try {
-    const { classTitle, courseName, classNumber } = await req.json();
+    const { classTitle, courseName, classNumber, courseId, forceRefresh } = await req.json();
+    
+    // Check cache first unless forceRefresh is true
+    if (!forceRefresh && courseId && classNumber) {
+      const supabaseUrl = Deno.env.get("SUPABASE_URL");
+      const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      
+      if (supabaseUrl && supabaseKey) {
+        try {
+          const cacheResponse = await fetch(
+            `${supabaseUrl}/rest/v1/ai_class_content?course_id=eq.${courseId}&class_number=eq.${classNumber}&select=*`,
+            {
+              headers: {
+                'apikey': supabaseKey,
+                'Authorization': `Bearer ${supabaseKey}`,
+              }
+            }
+          );
+          
+          if (cacheResponse.ok) {
+            const cachedData = await cacheResponse.json();
+            if (cachedData && cachedData.length > 0) {
+              const cache = cachedData[0];
+              console.log(`Returning cached content for course ${courseId}, class ${classNumber}`);
+              return new Response(
+                JSON.stringify({
+                  title: cache.title,
+                  summary: cache.summary,
+                  description: cache.description,
+                  resources: cache.resources || [],
+                  handoutContent: cache.handout_content,
+                  cached: true
+                }),
+                { 
+                  status: 200, 
+                  headers: { ...corsHeaders, "Content-Type": "application/json" } 
+                }
+              );
+            }
+          }
+        } catch (cacheError) {
+          console.error("Cache lookup error:", cacheError);
+          // Continue to generate new content
+        }
+      }
+    }
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
@@ -264,14 +309,52 @@ Content coming soon.
 Prepare for the next class by reviewing today's materials and completing any assigned exercises.`;
     }
 
+    const finalResponse = {
+      title: aiTitle,
+      summary,
+      description,
+      resources,
+      handoutContent
+    };
+
+    // Cache the generated content
+    if (courseId && classNumber) {
+      const supabaseUrl = Deno.env.get("SUPABASE_URL");
+      const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      
+      if (supabaseUrl && supabaseKey) {
+        try {
+          await fetch(
+            `${supabaseUrl}/rest/v1/ai_class_content`,
+            {
+              method: 'POST',
+              headers: {
+                'apikey': supabaseKey,
+                'Authorization': `Bearer ${supabaseKey}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'resolution=merge-duplicates'
+              },
+              body: JSON.stringify({
+                course_id: courseId,
+                class_number: classNumber,
+                title: aiTitle,
+                summary: summary,
+                description: description,
+                resources: resources,
+                handout_content: handoutContent
+              })
+            }
+          );
+          console.log(`Cached content for course ${courseId}, class ${classNumber}`);
+        } catch (cacheError) {
+          console.error("Failed to cache content:", cacheError);
+          // Don't fail the request if caching fails
+        }
+      }
+    }
+
     return new Response(
-      JSON.stringify({ 
-        title: aiTitle,
-        summary,
-        description,
-        resources,
-        handoutContent
-      }),
+      JSON.stringify(finalResponse),
       {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

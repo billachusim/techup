@@ -11,7 +11,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { LogOut, Calendar, Users, BookOpen, ExternalLink, MessageCircle, CheckCircle2, Circle, FileText, BadgeCheck } from "lucide-react";
+import { LogOut, Calendar, Users, BookOpen, ExternalLink, MessageCircle, CheckCircle2, Circle, FileText, BadgeCheck, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Progress } from "@/components/ui/progress";
@@ -21,6 +21,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SignupForm } from "@/components/Auth/SignupForm";
 import { LoginForm } from "@/components/Auth/LoginForm";
 import { HandoutModal } from "./HandoutModal";
+import { CertificateCard } from "./CertificateCard";
 import techFacultyLogo from "@/assets/tech-faculty-logo.png";
 import googleLogo from "@/assets/partners/google-logo.png";
 import microsoftLogo from "@/assets/partners/microsoft-logo.png";
@@ -40,6 +41,8 @@ const GetStarted = () => {
   const [isLoadingAiContent, setIsLoadingAiContent] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
   const [isResettingPassword, setIsResettingPassword] = useState(false);
+  const [certificates, setCertificates] = useState<any[]>([]);
+  const [isRefreshingContent, setIsRefreshingContent] = useState(false);
   const { toast } = useToast();
   const { isLoggedIn, userData, logout, setUserData, facultyId } = useUser();
 
@@ -147,6 +150,21 @@ const GetStarted = () => {
         setCoursesData([]);
       }
 
+      // Fetch user certificates
+      try {
+        const { data: certs, error: certsError } = await supabase
+          .from('certificates')
+          .select('*')
+          .eq('faculty_id', facultyIdToFetch)
+          .order('issued_at', { ascending: false });
+        
+        if (!certsError && certs) {
+          setCertificates(certs);
+        }
+      } catch (certErr) {
+        console.error('Error fetching certificates:', certErr);
+      }
+
       // Fetch all lectures for enrolled courses
       if (courseEnrollments && courseEnrollments.length > 0) {
         const courseIds = courseEnrollments.map((ce: any) => ce.course_id);
@@ -206,7 +224,9 @@ const GetStarted = () => {
               body: {
                 classTitle: nextLectureToShow.title,
                 courseName: courseName,
-                classNumber: calculatedNextClassNumber
+                classNumber: calculatedNextClassNumber,
+                courseId: nextLectureToShow.course_id,
+                forceRefresh: false
               }
             });
 
@@ -449,6 +469,43 @@ const GetStarted = () => {
     }
   };
 
+  const handleRefreshContent = async () => {
+    if (!nextLecture?.course_id || !facultyId) return;
+    
+    setIsRefreshingContent(true);
+    try {
+      const courseName = nextLecture?.courses?.name || 'General Tech Course';
+      const { data: aiContent, error: aiError } = await supabase.functions.invoke('generate-class-content', {
+        body: {
+          classTitle: nextLecture.title,
+          courseName: courseName,
+          classNumber: nextClassNumber,
+          courseId: nextLecture.course_id,
+          forceRefresh: true
+        }
+      });
+
+      if (!aiError && aiContent) {
+        setAiGeneratedContent(aiContent);
+        toast({
+          title: "Content Refreshed",
+          description: "Class content has been regenerated successfully.",
+        });
+      } else {
+        throw aiError;
+      }
+    } catch (error) {
+      console.error("Error refreshing content:", error);
+      toast({
+        title: "Refresh Failed",
+        description: "Could not refresh content. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsRefreshingContent(false);
+    }
+  };
+
   useEffect(() => {
     if (isLoggedIn && facultyId) {
       fetchUserDashboardData(facultyId);
@@ -658,6 +715,16 @@ const GetStarted = () => {
                         <FileText className="mr-2" size={16} />
                         View Class Handout
                       </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="w-full"
+                        onClick={handleRefreshContent}
+                        disabled={isRefreshingContent}
+                      >
+                        <RefreshCw className={`mr-2 ${isRefreshingContent ? 'animate-spin' : ''}`} size={16} />
+                        {isRefreshingContent ? 'Refreshing...' : 'Refresh Content'}
+                      </Button>
                       {nextLecture.meeting_link && !nextLecture.isAiGenerated && (
                         <Button
                           size="sm"
@@ -840,6 +907,27 @@ const GetStarted = () => {
                 )}
               </CardContent>
             </Card>
+
+            {/* Certificates Section */}
+            {certificates.length > 0 && (
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                    <BadgeCheck className="text-primary" size={20} />
+                    Your Certificates
+                  </h3>
+                  <div className="space-y-3">
+                    {certificates.map((cert) => (
+                      <CertificateCard
+                        key={cert.id}
+                        certificate={cert}
+                        studentName={userData?.name || ''}
+                      />
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Quick Actions */}
             <Card>

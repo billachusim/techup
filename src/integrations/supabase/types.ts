@@ -14,6 +14,91 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_class_content: {
+        Row: {
+          class_number: number
+          course_id: string
+          created_at: string | null
+          description: string
+          handout_content: string
+          id: string
+          resources: Json | null
+          summary: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          class_number: number
+          course_id: string
+          created_at?: string | null
+          description: string
+          handout_content: string
+          id?: string
+          resources?: Json | null
+          summary: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          class_number?: number
+          course_id?: string
+          created_at?: string | null
+          description?: string
+          handout_content?: string
+          id?: string
+          resources?: Json | null
+          summary?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_class_content_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      certificates: {
+        Row: {
+          certificate_number: string
+          course_id: string
+          course_name: string
+          created_at: string | null
+          faculty_id: string
+          id: string
+          issued_at: string | null
+        }
+        Insert: {
+          certificate_number: string
+          course_id: string
+          course_name: string
+          created_at?: string | null
+          faculty_id: string
+          id?: string
+          issued_at?: string | null
+        }
+        Update: {
+          certificate_number?: string
+          course_id?: string
+          course_name?: string
+          created_at?: string | null
+          faculty_id?: string
+          id?: string
+          issued_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificates_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       course_enrollments: {
         Row: {
           course_id: string
@@ -223,6 +308,45 @@ export type Database = {
           phone?: string
           status?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      job_applications: {
+        Row: {
+          applied_at: string | null
+          company: string
+          cover_letter: string | null
+          created_at: string | null
+          faculty_id: string
+          id: string
+          position: string
+          resume_url: string | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          applied_at?: string | null
+          company: string
+          cover_letter?: string | null
+          created_at?: string | null
+          faculty_id: string
+          id?: string
+          position: string
+          resume_url?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          applied_at?: string | null
+          company?: string
+          cover_letter?: string | null
+          created_at?: string | null
+          faculty_id?: string
+          id?: string
+          position?: string
+          resume_url?: string | null
+          status?: string
+          updated_at?: string | null
         }
         Relationships: []
       }

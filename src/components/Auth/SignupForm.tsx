@@ -12,6 +12,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useUser } from "@/contexts/UserContext";
+import { SignupConfirmationDialog } from "./SignupConfirmationDialog";
 
 const hearAboutUs = [
   "Social Media",
@@ -35,6 +36,13 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
     hearAbout: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [registeredData, setRegisteredData] = useState<{
+    name: string;
+    email: string;
+    phone: string;
+    facultyId: string;
+  } | null>(null);
   const { toast } = useToast();
   const { login } = useUser();
 
@@ -142,23 +150,19 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
         learning_mode: "online-only",
       });
 
-      // Send WhatsApp message
-      const message = `Hi! I've registered for Tech Faculty.
-
-*My Details:*
-Name: ${formData.name.trim()}
-Email: ${formData.email.trim()}
-Phone: ${formData.phone.trim()}
-
-*My Faculty ID: ${newFacultyId}*`;
-
-      const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, "_blank");
-
       toast({
         title: "Registration Successful!",
         description: `Your Faculty ID is ${newFacultyId}. Welcome to Tech Faculty!`,
       });
+
+      // Store registration data and show confirmation dialog
+      setRegisteredData({
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        facultyId: newFacultyId,
+      });
+      setShowConfirmDialog(true);
 
       onSuccess(newFacultyId);
     } catch (error: any) {
@@ -174,7 +178,8 @@ Phone: ${formData.phone.trim()}
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <>
+      <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <Label htmlFor="name">Full Name</Label>
         <Input
@@ -245,5 +250,14 @@ Phone: ${formData.phone.trim()}
         {isLoading ? "Creating Account..." : "Sign Up"}
       </Button>
     </form>
+
+    {registeredData && (
+      <SignupConfirmationDialog
+        open={showConfirmDialog}
+        onOpenChange={setShowConfirmDialog}
+        userData={registeredData}
+      />
+    )}
+    </>
   );
 };

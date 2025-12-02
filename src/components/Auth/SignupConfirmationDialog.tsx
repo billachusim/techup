@@ -17,12 +17,14 @@ interface SignupConfirmationDialogProps {
     phone: string;
     facultyId: string;
   };
+  onComplete: (facultyId: string) => void;
 }
 
 export const SignupConfirmationDialog = ({
   open,
   onOpenChange,
   userData,
+  onComplete,
 }: SignupConfirmationDialogProps) => {
   const message = `Hi! I've registered for Tech Faculty.
 
@@ -36,20 +38,22 @@ Phone: ${userData.phone}
   const handleWhatsApp = () => {
     const whatsappUrl = `https://wa.me/2347065238418?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
+    onComplete(userData.facultyId);
     onOpenChange(false);
   };
 
   const handleEmail = () => {
     const subject = encodeURIComponent("Tech Faculty Registration Confirmation");
     const body = encodeURIComponent(message);
-    const mailtoUrl = `mailto:hello@techfaculty.ng?subject=${subject}&body=${body}`;
+    const mailtoUrl = `mailto:support@techfaculty.ng?subject=${subject}&body=${body}`;
     window.location.href = mailtoUrl;
+    onComplete(userData.facultyId);
     onOpenChange(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+    <Dialog open={open} onOpenChange={() => {}}>
+      <DialogContent className="sm:max-w-md" onPointerDownOutside={(e) => e.preventDefault()} onEscapeKeyDown={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>Send Registration Confirmation</DialogTitle>
           <DialogDescription>

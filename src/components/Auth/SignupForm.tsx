@@ -152,7 +152,7 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
 
       toast({
         title: "Registration Successful!",
-        description: `Your Faculty ID is ${newFacultyId}. Welcome to Tech Faculty!`,
+        description: `Your Faculty ID is ${newFacultyId}. Please choose how to complete your onboarding.`,
       });
 
       // Store registration data and show confirmation dialog
@@ -163,8 +163,7 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
         facultyId: newFacultyId,
       });
       setShowConfirmDialog(true);
-
-      onSuccess(newFacultyId);
+      // onSuccess will be called after user chooses WhatsApp or Email
     } catch (error: any) {
       console.error("Signup error:", error);
       toast({
@@ -256,6 +255,7 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
         open={showConfirmDialog}
         onOpenChange={setShowConfirmDialog}
         userData={registeredData}
+        onComplete={onSuccess}
       />
     )}
     </>

@@ -10,6 +10,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useUser } from "@/contexts/UserContext";
 
 const hearAboutUs = [
   "Social Media",
@@ -21,13 +23,7 @@ const hearAboutUs = [
 ];
 
 interface SignupFormProps {
-  onSuccess: (userData: { 
-    name: string; 
-    email: string; 
-    phone: string; 
-    password: string;
-    hearAbout: string;
-  }) => void;
+  onSuccess: (facultyId: string) => void;
 }
 
 export const SignupForm = ({ onSuccess }: SignupFormProps) => {
@@ -38,12 +34,34 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
     password: "",
     hearAbout: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { login } = useUser();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const generateFacultyId = async (department: string = "General Tech", learningMode: string = "online-only") => {
+    const currentMonth = new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
+    
+    // Call the database function to generate ID
+    const { data, error } = await (supabase.rpc as any)('generate_faculty_id', {
+      dept_name: department,
+      learn_mode: learningMode,
+      cohort_mo: currentMonth,
+      cohort_yr: currentYear
+    });
+    
+    if (error) {
+      console.error('Error generating faculty ID:', error);
+      // Fallback to simple format if function fails
+      return `TF-GEN-ONL-${String(currentMonth).padStart(2, '0')}${String(currentYear).slice(-2)}-${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`;
+    }
+    
+    return data as string;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate all required fields
     if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim() || 
         !formData.password.trim() || !formData.hearAbout) {
       toast({
@@ -54,7 +72,6 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
       return;
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       toast({
@@ -65,7 +82,6 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
       return;
     }
 
-    // Validate password length
     if (formData.password.length < 6) {
       toast({
         title: "Weak Password",
@@ -75,19 +91,90 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
       return;
     }
 
-    // If validation passes, immediately call onSuccess with form data
-    // Modal will appear instantly, then signup happens when user confirms
-    onSuccess({
-      name: formData.name.trim(),
-      email: formData.email.trim(),
-      phone: formData.phone.trim(),
-      password: formData.password,
-      hearAbout: formData.hearAbout,
-    });
+    setIsLoading(true);
+
+    try {
+      // Generate faculty ID with default values (will be updated on enrollment)
+      const newFacultyId = await generateFacultyId();
+
+      // Create auth user
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: formData.email.trim(),
+        password: formData.password,
+      });
+
+      if (authError) throw authError;
+      if (!authData.user) throw new Error("User creation failed");
+
+      // Create profile
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .insert({
+          id: authData.user.id,
+          faculty_id: newFacultyId,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          learning_mode: 'online-only',
+          cohort_month: new Date().getMonth() + 1,
+          cohort_year: new Date().getFullYear(),
+        });
+
+      if (profileError) throw profileError;
+
+      // Create faculty_ids record
+      await supabase.from("faculty_ids").insert({
+        faculty_id: newFacultyId,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        course_interest: "Not selected",
+        hear_about_us: formData.hearAbout,
+        status: "active",
+        department: "General Tech",
+      });
+
+      // Create initial enrollment for free bootcamp
+      await supabase.from("enrollments").insert({
+        faculty_id: newFacultyId,
+        plan_name: "Bootcamp Starter",
+        status: "active",
+        learning_mode: "online-only",
+      });
+
+      // Send WhatsApp message
+      const message = `Hi! I've registered for Tech Faculty.
+
+*My Details:*
+Name: ${formData.name.trim()}
+Email: ${formData.email.trim()}
+Phone: ${formData.phone.trim()}
+
+*My Faculty ID: ${newFacultyId}*`;
+
+      const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, "_blank");
+
+      toast({
+        title: "Registration Successful!",
+        description: `Your Faculty ID is ${newFacultyId}. Welcome to Tech Faculty!`,
+      });
+
+      onSuccess(newFacultyId);
+    } catch (error: any) {
+      console.error("Signup error:", error);
+      toast({
+        title: "Registration Error",
+        description: error.message || "Unable to complete registration. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">{/* ... keep existing code */}
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <Label htmlFor="name">Full Name</Label>
         <Input
@@ -154,8 +241,8 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
         </Select>
       </div>
 
-      <Button type="submit" className="w-full">
-        Sign Up
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading ? "Creating Account..." : "Sign Up"}
       </Button>
     </form>
   );

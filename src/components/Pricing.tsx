@@ -1105,11 +1105,7 @@ Please process my enrollment!`;
             <DialogTitle>Create Your Account</DialogTitle>
             <DialogDescription>Sign up to get your faculty ID and enroll</DialogDescription>
           </DialogHeader>
-          <SignupForm onSuccess={(userData) => {
-            console.log("Pricing: signup successful", userData);
-            // Just close the dialog - parent will handle confirmation
-            setSignupDialogOpen(false);
-          }} />
+          <SignupForm onSuccess={() => setSignupDialogOpen(false)} />
         </DialogContent>
       </Dialog>
 

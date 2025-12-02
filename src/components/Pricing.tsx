@@ -1107,6 +1107,7 @@ Please process my enrollment!`;
           </DialogHeader>
           <SignupForm onSuccess={(userData) => {
             console.log("Pricing: signup successful", userData);
+            // Just close the dialog - parent will handle confirmation
             setSignupDialogOpen(false);
           }} />
         </DialogContent>

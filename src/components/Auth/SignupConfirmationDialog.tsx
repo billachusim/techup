@@ -45,7 +45,7 @@ Phone: ${userData.phone}
   const handleEmail = () => {
     const subject = encodeURIComponent("Tech Faculty Registration Confirmation");
     const body = encodeURIComponent(message);
-    const mailtoUrl = `mailto:support@techfaculty.ng?subject=${subject}&body=${body}`;
+    const mailtoUrl = `mailto:thetechfaculty@gmail.com?subject=${subject}&body=${body}`;
     window.location.href = mailtoUrl;
     onComplete(userData.facultyId);
     onOpenChange(false);

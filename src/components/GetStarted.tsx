@@ -49,12 +49,19 @@ const GetStarted = () => {
     name: string;
     email: string;
     phone: string;
-    facultyId: string;
+    password: string;
+    hearAbout: string;
   } | null>(null);
   const { toast } = useToast();
   const { isLoggedIn, userData, logout, setUserData, facultyId } = useUser();
 
-  const handleSignupSuccess = (userData: { name: string; email: string; phone: string; facultyId: string }) => {
+  const handleSignupSuccess = (userData: { 
+    name: string; 
+    email: string; 
+    phone: string; 
+    password: string;
+    hearAbout: string;
+  }) => {
     console.log("GetStarted: handleSignupSuccess called", userData);
     setSignupRegisteredData(userData);
     setShowSignupConfirmDialog(true);

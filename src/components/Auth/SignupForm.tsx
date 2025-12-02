@@ -12,7 +12,6 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useUser } from "@/contexts/UserContext";
-import { SignupConfirmationDialog } from "./SignupConfirmationDialog";
 
 const hearAboutUs = [
   "Social Media",
@@ -24,7 +23,7 @@ const hearAboutUs = [
 ];
 
 interface SignupFormProps {
-  onSuccess: (facultyId: string) => void;
+  onSuccess: (userData: { name: string; email: string; phone: string; facultyId: string }) => void;
 }
 
 export const SignupForm = ({ onSuccess }: SignupFormProps) => {
@@ -36,13 +35,6 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
     hearAbout: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [registeredData, setRegisteredData] = useState<{
-    name: string;
-    email: string;
-    phone: string;
-    facultyId: string;
-  } | null>(null);
   const { toast } = useToast();
   const { login } = useUser();
 
@@ -156,15 +148,15 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
       });
 
       // Store registration data and show confirmation dialog
-      setRegisteredData({
+      console.log("SignupForm: calling onSuccess with userData", { facultyId: newFacultyId });
+      
+      // Call onSuccess with user data - parent will handle confirmation dialog
+      onSuccess({
         name: formData.name.trim(),
         email: formData.email.trim(),
         phone: formData.phone.trim(),
         facultyId: newFacultyId,
       });
-      setShowConfirmDialog(true);
-      console.log("SignupForm: showing confirmation dialog", { facultyId: newFacultyId });
-      // onSuccess will be called after user chooses WhatsApp or Email
     } catch (error: any) {
       console.error("Signup error:", error);
       toast({
@@ -178,8 +170,7 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">{/* ... keep existing code */}
       <div>
         <Label htmlFor="name">Full Name</Label>
         <Input
@@ -250,15 +241,5 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
         {isLoading ? "Creating Account..." : "Sign Up"}
       </Button>
     </form>
-
-    {registeredData && (
-      <SignupConfirmationDialog
-        open={showConfirmDialog}
-        onOpenChange={setShowConfirmDialog}
-        userData={registeredData}
-        onComplete={onSuccess}
-      />
-    )}
-    </>
   );
 };

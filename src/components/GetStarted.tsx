@@ -22,6 +22,7 @@ import { SignupForm } from "@/components/Auth/SignupForm";
 import { LoginForm } from "@/components/Auth/LoginForm";
 import { HandoutModal } from "./HandoutModal";
 import { CertificateCard } from "./CertificateCard";
+import { SignupConfirmationDialog } from "@/components/Auth/SignupConfirmationDialog";
 import techFacultyLogo from "@/assets/tech-faculty-logo.png";
 import googleLogo from "@/assets/partners/google-logo.png";
 import microsoftLogo from "@/assets/partners/microsoft-logo.png";
@@ -43,13 +44,28 @@ const GetStarted = () => {
   const [isResettingPassword, setIsResettingPassword] = useState(false);
   const [certificates, setCertificates] = useState<any[]>([]);
   const [isRefreshingContent, setIsRefreshingContent] = useState(false);
+  const [showSignupConfirmDialog, setShowSignupConfirmDialog] = useState(false);
+  const [signupRegisteredData, setSignupRegisteredData] = useState<{
+    name: string;
+    email: string;
+    phone: string;
+    facultyId: string;
+  } | null>(null);
   const { toast } = useToast();
   const { isLoggedIn, userData, logout, setUserData, facultyId } = useUser();
 
-  const handleSignupSuccess = async () => {
-    // Sign out the user after signup so they need to enter Faculty ID
+  const handleSignupSuccess = (userData: { name: string; email: string; phone: string; facultyId: string }) => {
+    console.log("GetStarted: handleSignupSuccess called", userData);
+    setSignupRegisteredData(userData);
+    setShowSignupConfirmDialog(true);
+  };
+
+  const handleSignupConfirmationComplete = async (facultyId: string) => {
+    console.log("GetStarted: handleSignupConfirmationComplete called", facultyId);
     await supabase.auth.signOut();
     setActiveTab("login");
+    setShowSignupConfirmDialog(false);
+    setSignupRegisteredData(null);
   };
 
   const fetchUserDashboardData = async (facultyIdToFetch: string) => {
@@ -1003,6 +1019,16 @@ const GetStarted = () => {
           handoutContent={aiGeneratedContent?.handoutContent || 'No handout content available yet. Check back later or contact your instructor.'}
           description={aiGeneratedContent?.description || nextLecture?.description}
         />
+
+        {/* Signup Confirmation Dialog - Persists through auth state changes */}
+        {signupRegisteredData && (
+          <SignupConfirmationDialog
+            open={showSignupConfirmDialog}
+            onOpenChange={setShowSignupConfirmDialog}
+            userData={signupRegisteredData}
+            onComplete={handleSignupConfirmationComplete}
+          />
+        )}
       </div>
     </section>
   );

@@ -152,7 +152,7 @@ Phone: ${formData.phone.trim()}
 
 *My Faculty ID: ${newFacultyId}*`;
 
-      const whatsappUrl = `https://wa.me/2347065238418?text=${encodeURIComponent(message)}`;
+      const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, "_blank");
 
       toast({

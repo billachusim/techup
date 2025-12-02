@@ -26,6 +26,7 @@ export const SignupConfirmationDialog = ({
   userData,
   onComplete,
 }: SignupConfirmationDialogProps) => {
+  console.log("SignupConfirmationDialog: render", { open, userData });
   const message = `Hi! I've registered for Tech Faculty.
 
 *My Details:*

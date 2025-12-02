@@ -163,6 +163,7 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
         facultyId: newFacultyId,
       });
       setShowConfirmDialog(true);
+      console.log("SignupForm: showing confirmation dialog", { facultyId: newFacultyId });
       // onSuccess will be called after user chooses WhatsApp or Email
     } catch (error: any) {
       console.error("Signup error:", error);

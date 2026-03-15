@@ -1,23 +1,45 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/tech-faculty-logo.png";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu, ShoppingBag, ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+const navLinks = [
+  { label: "Home", href: "/" },
+  { label: "Departments", href: "/#departments" },
+  {
+    label: "Partnerships",
+    children: [
+      { label: "Business Partnerships", href: "/business-partnerships" },
+      { label: "School Collaborations", href: "/school-collaborations" },
+    ],
+  },
+  { label: "Events", href: "/events" },
+  { label: "SIWES / IT", href: "/siwes" },
+  { label: "Tech Store", href: "/tech-store" },
+  { label: "About", href: "/about" },
+];
 
 const Header = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     let ticking = false;
-    
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const currentScrollY = window.scrollY;
           const scrollDifference = Math.abs(currentScrollY - lastScrollY);
-          
-          // Only update if scroll difference is significant (prevents jitter from animations)
           if (scrollDifference > 5) {
             if (currentScrollY > lastScrollY && currentScrollY > 100) {
               setIsVisible(false);
@@ -26,39 +48,124 @@ const Header = () => {
             }
             setLastScrollY(currentScrollY);
           }
-          
           ticking = false;
         });
         ticking = true;
       }
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
+  const handleNavClick = (href: string) => {
+    setMobileOpen(false);
+    if (href.startsWith("/#")) {
+      const id = href.replace("/#", "");
+      if (location.pathname === "/") {
+        const el = document.getElementById(id);
+        el?.scrollIntoView({ behavior: "smooth" });
+      }
+      // If not on home page, Link will navigate to / and the hash will be handled
+    }
+  };
+
+  const isActive = (href: string) => {
+    if (href === "/") return location.pathname === "/";
+    if (href.startsWith("/#")) return false;
+    return location.pathname === href;
+  };
+
   return (
-    <header 
+    <header
       className={`fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border transition-transform duration-300 ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="Tech Faculty Logo" className="h-10 w-10" />
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2 shrink-0">
+            <img src={logo} alt="Tech Faculty Logo" className="h-9 w-9" />
             <div>
-              <div className="text-xl font-bold">Tech Faculty</div>
-              <div className="text-xs text-muted-foreground">Train, Certify and Employ</div>
+              <div className="text-lg font-bold leading-tight">Tech Faculty</div>
+              <div className="text-[10px] text-muted-foreground leading-tight">Train, Certify and Employ</div>
             </div>
           </Link>
-          
-          <Link to="/tech-store">
-            <Button variant="ghost" size="sm">
-              <ShoppingBag className="mr-2" size={16} />
-              Tech Store
-            </Button>
-          </Link>
+
+          {/* Desktop Nav */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {navLinks.map((link) =>
+              link.children ? (
+                <DropdownMenu key={link.label}>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="text-sm gap-1">
+                      {link.label} <ChevronDown size={14} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    {link.children.map((child) => (
+                      <DropdownMenuItem key={child.href} asChild>
+                        <Link to={child.href} className={isActive(child.href) ? "font-semibold text-primary" : ""}>
+                          {child.label}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Link key={link.href} to={link.href} onClick={() => handleNavClick(link.href!)}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className={`text-sm ${isActive(link.href!) ? "text-primary font-semibold" : ""}`}
+                  >
+                    {link.label === "Tech Store" && <ShoppingBag className="mr-1" size={14} />}
+                    {link.label}
+                  </Button>
+                </Link>
+              )
+            )}
+          </nav>
+
+          {/* Mobile Menu */}
+          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+            <SheetTrigger asChild className="lg:hidden">
+              <Button variant="ghost" size="icon">
+                <Menu size={22} />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-72 pt-12">
+              <nav className="flex flex-col gap-1">
+                {navLinks.map((link) =>
+                  link.children ? (
+                    <div key={link.label} className="space-y-1">
+                      <p className="text-sm font-semibold text-muted-foreground px-3 pt-3">{link.label}</p>
+                      {link.children.map((child) => (
+                        <Link key={child.href} to={child.href} onClick={() => setMobileOpen(false)}>
+                          <Button
+                            variant="ghost"
+                            className={`w-full justify-start pl-6 text-sm ${isActive(child.href) ? "text-primary font-semibold" : ""}`}
+                          >
+                            {child.label}
+                          </Button>
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <Link key={link.href} to={link.href!} onClick={() => handleNavClick(link.href!)}>
+                      <Button
+                        variant="ghost"
+                        className={`w-full justify-start text-sm ${isActive(link.href!) ? "text-primary font-semibold" : ""}`}
+                      >
+                        {link.label === "Tech Store" && <ShoppingBag className="mr-2" size={16} />}
+                        {link.label}
+                      </Button>
+                    </Link>
+                  )
+                )}
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>

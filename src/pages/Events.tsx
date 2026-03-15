@@ -65,6 +65,15 @@ const upcomingEvents = [
 const Events = () => {
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Events - Tech Faculty NG | Workshops, Hackathons & Meetups</title>
+        <meta name="description" content="Join Tech Faculty NG community events — workshops, hackathons, speaker sessions, and networking meetups in Nnewi, Anambra State and beyond." />
+        <meta property="og:title" content="Events - Tech Faculty NG | Workshops & Hackathons" />
+        <meta property="og:description" content="Community tech events — workshops, hackathons, speaker sessions, and networking meetups in Nnewi and South-East Nigeria." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://techfaculty.ng/events" />
+        <link rel="canonical" href="https://techfaculty.ng/events" />
+      </Helmet>
       <Header />
       <main className="pt-20">
         {/* Hero */}

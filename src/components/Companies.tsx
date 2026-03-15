@@ -1,269 +1,37 @@
-import { Briefcase, MapPin, ExternalLink } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { JobApplicationForm } from "@/components/JobApplicationForm";
-import { useUser } from "@/contexts/UserContext";
+
+const companies = [
+  { name: "Flutterwave", logo: "🦋" },
+  { name: "Paystack", logo: "💳" },
+  { name: "Andela", logo: "🚀" },
+  { name: "Kuda Bank", logo: "🏦" },
+  { name: "Interswitch", logo: "💼" },
+  { name: "Microsoft", logo: "☁️" },
+  { name: "Google", logo: "🌐" },
+  { name: "MTN", logo: "📱" },
+];
 
 const Companies = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [showJobForm, setShowJobForm] = useState(false);
-  const [selectedJob, setSelectedJob] = useState<string>("");
-  const [currentCard, setCurrentCard] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [touchStart, setTouchStart] = useState(0);
-  const [touchEnd, setTouchEnd] = useState(0);
-  const { isLoggedIn, facultyId } = useUser();
-
-  useEffect(() => {
-    if (isPaused) return;
-    
-    const interval = setInterval(() => {
-      setCurrentCard((prev) => (prev + 1) % jobs.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [isPaused]);
-
-  const handleApply = (company: string) => {
-    setSelectedJob(company);
-    if (isLoggedIn && facultyId) {
-      setShowJobForm(true);
-    } else {
-      setIsDialogOpen(true);
-    }
-  };
-
-  const handleJobApplicationSuccess = () => {
-    setShowJobForm(false);
-    setSelectedJob("");
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = () => {
-    if (touchStart - touchEnd > 75) {
-      // Swiped left
-      setCurrentCard((prev) => (prev + 1) % jobs.length);
-    }
-
-    if (touchStart - touchEnd < -75) {
-      // Swiped right
-      setCurrentCard((prev) => (prev - 1 + jobs.length) % jobs.length);
-    }
-  };
-
-  const jobs = [
-    {
-      company: "Flutterwave",
-      role: "Junior Software Engineer",
-      location: "Lagos, Nigeria",
-      type: "Full-time Internship",
-      logo: "🦋"
-    },
-    {
-      company: "Paystack",
-      role: "Frontend Developer",
-      location: "Lagos, Nigeria",
-      type: "Full-time",
-      logo: "💳"
-    },
-    {
-      company: "Andela",
-      role: "Software Developer",
-      location: "Remote (Africa)",
-      type: "Full-time",
-      logo: "🚀"
-    },
-    {
-      company: "Kuda Bank",
-      role: "Mobile App Developer",
-      location: "Lagos, Nigeria",
-      type: "Full-time Internship",
-      logo: "🏦"
-    },
-    {
-      company: "Interswitch",
-      role: "Backend Engineer",
-      location: "Lagos, Nigeria",
-      type: "Full-time",
-      logo: "💼"
-    },
-    {
-      company: "Microsoft Africa",
-      role: "Cloud Solutions Developer",
-      location: "Lagos, Nigeria",
-      type: "Full-time",
-      logo: "☁️"
-    },
-    {
-      company: "Google Developer",
-      role: "Associate Developer",
-      location: "Remote (Global)",
-      type: "Contract",
-      logo: "🌐"
-    },
-    {
-      company: "MTN Nigeria",
-      role: "Systems Engineer",
-      location: "Abuja, Nigeria",
-      type: "Full-time Internship",
-      logo: "📱"
-    }
-  ];
-
   return (
-    <section className="py-24 px-4 bg-secondary/20">
-      <div className="container mx-auto max-w-6xl">
-        {/* Header */}
-        <div className="text-center mb-16 space-y-4">
-          <h2 className="text-3xl md:text-5xl font-bold">
-            Companies Ready to Hire You
-          </h2>
-          <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Our graduates are hired by top Nigerian, African, and global companies. These are just some of the opportunities waiting for you upon graduation.
-          </p>
+    <section className="py-16 px-4 bg-secondary/20">
+      <div className="container mx-auto max-w-5xl text-center space-y-8">
+        <h2 className="text-2xl md:text-3xl font-bold">Our Graduates Get Hired By</h2>
+        <div className="flex flex-wrap justify-center gap-6 md:gap-10">
+          {companies.map((company) => (
+            <div key={company.name} className="flex flex-col items-center gap-1">
+              <span className="text-3xl">{company.logo}</span>
+              <span className="text-xs text-muted-foreground font-medium">{company.name}</span>
+            </div>
+          ))}
         </div>
-
-        {/* Job Cards Slider */}
-        <div 
-          className="relative mb-12 overflow-hidden"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          <div className="flex justify-center">
-            {jobs.map((job, index) => (
-              <div
-                key={index}
-                className={`w-full max-w-[320px] md:max-w-[400px] transition-all duration-500 ${
-                  index === currentCard
-                    ? "opacity-100 translate-x-0 relative"
-                    : index < currentCard
-                    ? "opacity-0 -translate-x-full absolute inset-0"
-                    : "opacity-0 translate-x-full absolute inset-0"
-                }`}
-              >
-                <div className="bg-card border border-border rounded-lg p-6 space-y-4 shadow-lg mx-auto">
-                  <div className="flex items-start justify-between">
-                    <div className="text-4xl">{job.logo}</div>
-                    <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-medium">
-                      {job.type}
-                    </span>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <div>
-                      <h3 className="font-semibold text-lg">{job.company}</h3>
-                      <p className="text-sm font-medium text-foreground">{job.role}</p>
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
-                        <MapPin size={12} />
-                        <span>{job.location}</span>
-                      </div>
-                    </div>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => handleApply(job.company)}
-                    >
-                      Apply Now
-                      <ExternalLink size={14} className="ml-2" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Slide indicators */}
-          <div className="flex justify-center gap-2 mt-6">
-            {jobs.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentCard(index)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  index === currentCard ? "bg-primary w-8" : "bg-muted-foreground/30"
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* CTA */}
-        <div className="text-center">
-          <p className="text-muted-foreground mb-6">
-            These opportunities and hundreds more are available to our graduates
-          </p>
-          <Button
-            size="lg"
-            onClick={() => {
-              const element = document.getElementById("see-how-you-are-doing");
-              element?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-white hover:opacity-90"
-          >
-            <Briefcase className="mr-2" size={20} />
-            Start Your Journey Today
+        <Link to="/careers">
+          <Button variant="outline" size="sm" className="gap-2">
+            View Opportunities <ArrowRight size={16} />
           </Button>
-        </div>
+        </Link>
       </div>
-
-      {/* Login Prompt Dialog for non-logged-in users */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Apply to {selectedJob}</DialogTitle>
-            <DialogDescription>
-              Please log in to apply for this position.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <p className="text-sm text-muted-foreground">
-              You need to be logged in with your Faculty ID to submit job applications.
-              If you don't have an account yet, you can sign up and get started!
-            </p>
-          </div>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsDialogOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button onClick={() => {
-              setIsDialogOpen(false);
-              document.getElementById("see-how-you-are-doing")?.scrollIntoView({ behavior: "smooth" });
-            }}>
-              Go to Login/Signup
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Job Application Form */}
-      {showJobForm && facultyId && (
-        <JobApplicationForm
-          facultyId={facultyId}
-          onClose={() => setShowJobForm(false)}
-          onSuccess={handleJobApplicationSuccess}
-        />
-      )}
     </section>
   );
 };

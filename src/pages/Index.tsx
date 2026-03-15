@@ -11,11 +11,8 @@ import ServicesSection from "@/components/ServicesSection";
 import Pricing from "@/components/Pricing";
 import GetStarted from "@/components/GetStarted";
 import Footer from "@/components/Footer";
-import { useUser } from "@/contexts/UserContext";
 
 const Index = () => {
-  const { isLoggedIn } = useUser();
-
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
@@ -46,11 +43,11 @@ const Index = () => {
         <HowItWorks />
         <Departments />
         <Companies />
-        <ServicesSection />
         <Testimonials />
+        <ServicesSection />
+        <Pricing />
         <Clarity />
         <FacultyDiscount />
-        <Pricing />
         <GetStarted />
       </main>
       <Footer />

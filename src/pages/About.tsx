@@ -45,12 +45,26 @@ const About = () => {
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>About Us - Tech Faculty NG | Our Mission & Story</title>
-        <meta name="description" content="Learn about Tech Faculty NG — licensed by the Federal Ministry of Science, Technology & Innovation via NBTI. Training the next generation of tech professionals from Nnewi, Anambra State." />
+        <meta name="description" content="Learn about Tech Faculty NG — licensed by the Federal Ministry of Science, Technology & Innovation via NBTI. Training the next generation of tech professionals from Nnewi, Anambra State, Nigeria." />
         <meta property="og:title" content="About Us - Tech Faculty NG | Our Mission & Story" />
         <meta property="og:description" content="Licensed by FMSTI via NBTI. Training the next generation of tech professionals in Nigeria from Nnewi, Anambra State." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://techfaculty.ng/about" />
         <link rel="canonical" href="https://techfaculty.ng/about" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "AboutPage",
+          "name": "About Tech Faculty NG",
+          "description": "Tech Faculty NG is licensed by the Federal Ministry of Science, Technology and Innovation via the National Board for Technology Incubation (NBTI). Based in Nnewi, Anambra State, we train, certify, and employ the next generation of tech professionals.",
+          "mainEntity": {
+            "@type": "EducationalOrganization",
+            "name": "Tech Faculty NG",
+            "url": "https://techfaculty.ng",
+            "foundingDate": "2022",
+            "address": { "@type": "PostalAddress", "addressLocality": "Nnewi", "addressRegion": "Anambra State", "addressCountry": "NG" }
+          },
+          "url": "https://techfaculty.ng/about"
+        })}</script>
       </Helmet>
       <Header />
       <main className="pt-20">

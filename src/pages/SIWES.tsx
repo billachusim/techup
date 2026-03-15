@@ -63,12 +63,23 @@ const SIWES = () => {
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>SIWES & Industrial Training - Tech Faculty NG | IT Placement</title>
-        <meta name="description" content="Complete your SIWES/IT placement at Tech Faculty NG. Choose Learn & Pay for mentored experience or Tutor & Earn to teach and get paid. Licensed by FMSTI via NBTI." />
+        <meta name="description" content="Complete your SIWES/IT placement at Tech Faculty NG in Nnewi. Choose Learn & Pay for mentored real-world experience or Tutor & Earn to teach and get paid. Licensed by FMSTI via NBTI." />
         <meta property="og:title" content="SIWES & Industrial Training - Tech Faculty NG" />
-        <meta property="og:description" content="SIWES & IT placements — Learn & Pay for real-world experience or Tutor & Earn while completing your industrial training." />
+        <meta property="og:description" content="SIWES & IT placements — Learn & Pay for real-world experience or Tutor & Earn while completing your industrial training in Nnewi." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://techfaculty.ng/siwes" />
         <link rel="canonical" href="https://techfaculty.ng/siwes" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "EducationalOccupationalProgram",
+          "name": "SIWES & Industrial Training Placement",
+          "provider": { "@type": "Organization", "name": "Tech Faculty NG" },
+          "description": "Student Industrial Work Experience Scheme (SIWES) placements with two tracks: Learn & Pay for structured mentorship, or Tutor & Earn for skilled students to teach and get paid.",
+          "educationalProgramMode": "onsite",
+          "occupationalCategory": ["Software Development", "Data Science", "Cybersecurity", "AI/ML"],
+          "programType": "Internship",
+          "url": "https://techfaculty.ng/siwes"
+        })}</script>
       </Helmet>
       <Header />
       <main className="pt-20">

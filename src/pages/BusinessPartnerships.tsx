@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CredibilityBanner from "@/components/CredibilityBanner";
@@ -60,6 +61,15 @@ const benefits = [
 const BusinessPartnerships = () => {
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Business Partnerships - Tech Faculty NG | Corporate Training & AI</title>
+        <meta name="description" content="Partner with Tech Faculty NG for corporate training, AI workshops, business digitization, and talent pipelines. Licensed by FMSTI via NBTI." />
+        <meta property="og:title" content="Business Partnerships - Tech Faculty NG" />
+        <meta property="og:description" content="Corporate training, AI workshops, and business digitization. Licensed by the Federal Ministry of Science, Technology & Innovation." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://techfaculty.ng/business-partnerships" />
+        <link rel="canonical" href="https://techfaculty.ng/business-partnerships" />
+      </Helmet>
       <Header />
       <main className="pt-20">
         {/* Hero */}

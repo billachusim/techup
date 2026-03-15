@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CredibilityBanner from "@/components/CredibilityBanner";
@@ -60,6 +61,15 @@ const whatYouGet = [
 const SIWES = () => {
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>SIWES & Industrial Training - Tech Faculty NG | IT Placement</title>
+        <meta name="description" content="Complete your SIWES/IT placement at Tech Faculty NG. Choose Learn & Pay for mentored experience or Tutor & Earn to teach and get paid. Licensed by FMSTI via NBTI." />
+        <meta property="og:title" content="SIWES & Industrial Training - Tech Faculty NG" />
+        <meta property="og:description" content="SIWES & IT placements — Learn & Pay for real-world experience or Tutor & Earn while completing your industrial training." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://techfaculty.ng/siwes" />
+        <link rel="canonical" href="https://techfaculty.ng/siwes" />
+      </Helmet>
       <Header />
       <main className="pt-20">
         {/* Hero */}

@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CredibilityBanner from "@/components/CredibilityBanner";
@@ -42,6 +43,15 @@ const values = [
 const About = () => {
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>About Us - Tech Faculty NG | Our Mission & Story</title>
+        <meta name="description" content="Learn about Tech Faculty NG — licensed by the Federal Ministry of Science, Technology & Innovation via NBTI. Training the next generation of tech professionals from Nnewi, Anambra State." />
+        <meta property="og:title" content="About Us - Tech Faculty NG | Our Mission & Story" />
+        <meta property="og:description" content="Licensed by FMSTI via NBTI. Training the next generation of tech professionals in Nigeria from Nnewi, Anambra State." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://techfaculty.ng/about" />
+        <link rel="canonical" href="https://techfaculty.ng/about" />
+      </Helmet>
       <Header />
       <main className="pt-20">
         {/* Hero */}

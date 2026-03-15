@@ -73,6 +73,15 @@ const Events = () => {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://techfaculty.ng/events" />
         <link rel="canonical" href="https://techfaculty.ng/events" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "EventSeries",
+          "name": "Tech Faculty NG Community Events",
+          "description": "Workshops, hackathons, speaker sessions, and networking meetups organized by Tech Faculty NG in Nnewi, Anambra State.",
+          "organizer": { "@type": "Organization", "name": "Tech Faculty NG", "url": "https://techfaculty.ng" },
+          "location": { "@type": "Place", "name": "Digital Village, NBTI Zonal Office", "address": { "@type": "PostalAddress", "addressLocality": "Nnewi", "addressRegion": "Anambra State", "addressCountry": "NG" } },
+          "url": "https://techfaculty.ng/events"
+        })}</script>
       </Helmet>
       <Header />
       <main className="pt-20">

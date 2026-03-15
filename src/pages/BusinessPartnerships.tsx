@@ -63,12 +63,22 @@ const BusinessPartnerships = () => {
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>Business Partnerships - Tech Faculty NG | Corporate Training & AI</title>
-        <meta name="description" content="Partner with Tech Faculty NG for corporate training, AI workshops, business digitization, and talent pipelines. Licensed by FMSTI via NBTI." />
+        <meta name="description" content="Partner with Tech Faculty NG for corporate training, AI workshops, business digitization, and talent pipelines. Licensed by FMSTI via NBTI in Nnewi, Anambra State." />
         <meta property="og:title" content="Business Partnerships - Tech Faculty NG" />
         <meta property="og:description" content="Corporate training, AI workshops, and business digitization. Licensed by the Federal Ministry of Science, Technology & Innovation." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://techfaculty.ng/business-partnerships" />
         <link rel="canonical" href="https://techfaculty.ng/business-partnerships" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "name": "Business Partnerships & Corporate Training",
+          "provider": { "@type": "Organization", "name": "Tech Faculty NG" },
+          "description": "Corporate training programs, AI integration workshops, business digitization services, and talent pipeline solutions for Nigerian businesses.",
+          "areaServed": { "@type": "Country", "name": "Nigeria" },
+          "serviceType": ["Corporate Training", "AI Workshops", "Business Digitization", "Talent Pipeline"],
+          "url": "https://techfaculty.ng/business-partnerships"
+        })}</script>
       </Helmet>
       <Header />
       <main className="pt-20">

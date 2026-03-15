@@ -20,12 +20,25 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>Tech Faculty NG - Get Trained, Certified & Employed</title>
-        <meta name="description" content="Tech Faculty NG is an accredited technology training institute in Nnewi, Anambra State. Learn Software Engineering, Data Science, Cyber Security, AI & more. We train, certify, and employ you!" />
+        <meta name="description" content="Tech Faculty NG is an accredited technology training institute in Nnewi, Anambra State. Learn Software Engineering, Data Science, Cyber Security, AI & more. Licensed by FMSTI via NBTI. We train, certify, and employ you!" />
         <meta property="og:title" content="Tech Faculty NG - Get Trained, Certified & Employed" />
         <meta property="og:description" content="Accredited tech training institute in Nigeria. Learn Software Engineering, Data Science, Cyber Security, AI & more. International certifications and job placement." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://techfaculty.ng/" />
         <link rel="canonical" href="https://techfaculty.ng/" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "name": "Tech Faculty NG Courses",
+          "description": "Technology bootcamp courses offered by Tech Faculty NG",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "item": { "@type": "Course", "name": "Data Analytics & Data Science", "provider": { "@type": "Organization", "name": "Tech Faculty NG" }, "description": "Learn data analytics and data science with hands-on projects" } },
+            { "@type": "ListItem", "position": 2, "item": { "@type": "Course", "name": "Web Development", "provider": { "@type": "Organization", "name": "Tech Faculty NG" }, "description": "Full-stack web development bootcamp" } },
+            { "@type": "ListItem", "position": 3, "item": { "@type": "Course", "name": "Cybersecurity", "provider": { "@type": "Organization", "name": "Tech Faculty NG" }, "description": "Cybersecurity training and certification" } },
+            { "@type": "ListItem", "position": 4, "item": { "@type": "Course", "name": "Artificial Intelligence & Machine Learning", "provider": { "@type": "Organization", "name": "Tech Faculty NG" }, "description": "AI and ML bootcamp with real-world applications" } },
+            { "@type": "ListItem", "position": 5, "item": { "@type": "Course", "name": "Digital Marketing", "provider": { "@type": "Organization", "name": "Tech Faculty NG" }, "description": "Digital marketing strategies and tools" } }
+          ]
+        })}</script>
       </Helmet>
       <Header />
       <main>

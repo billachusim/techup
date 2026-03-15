@@ -4,88 +4,72 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="py-16 px-4 border-t border-border">
-      <div className="container mx-auto max-w-4xl">
-        <div className="text-center space-y-8">
+      <div className="container mx-auto max-w-5xl">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
-          <div className="space-y-2">
-            <h3 className="text-2xl font-bold">Tech Faculty</h3>
+          <div className="md:col-span-1 space-y-3">
+            <h3 className="text-xl font-bold">Tech Faculty</h3>
             <p className="text-sm text-muted-foreground">
               Get trained, certified, and employed.
             </p>
+            {/* Social */}
+            <div className="flex gap-3 pt-2">
+              <a href="https://x.com/TechFacultyNG" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors" aria-label="X (Twitter)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
+                  <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
+                </svg>
+              </a>
+              <a href="https://facebook.com/TechFacultyNG" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors" aria-label="Facebook">
+                <Facebook size={18} />
+              </a>
+              <a href="https://linkedin.com/company/tech-faculty" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors" aria-label="LinkedIn">
+                <Linkedin size={18} />
+              </a>
+            </div>
           </div>
 
-          {/* Contact Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center text-sm">
-            <Link
-              to="/tech-store"
-              className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
-            >
-              <ShoppingBag size={16} />
-              <span>Tech Store - <span className="font-semibold text-primary">Get 50% off with your faculty ID</span></span>
-            </Link>
-            <a
-              href="mailto:thetechfaculty@gmail.com"
-              className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
-            >
-              <Mail size={16} />
-              Email Us
-            </a>
-            <a
-              href="https://wa.me/2348068597140"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
-            >
-              <MessageCircle size={16} />
-              WhatsApp
-            </a>
+          {/* Training */}
+          <div className="space-y-3">
+            <h4 className="text-sm font-semibold">Training</h4>
+            <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
+              <Link to="/#departments" className="hover:text-primary transition-colors">Departments</Link>
+              <Link to="/#pricing" className="hover:text-primary transition-colors">Pricing</Link>
+              <Link to="/#see-how-you-are-doing" className="hover:text-primary transition-colors">Get Started</Link>
+            </nav>
           </div>
 
-          {/* Social Links */}
-          <div className="flex gap-4 justify-center">
-            <a
-              href="https://x.com/TechFacultyNG"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-primary transition-colors"
-              aria-label="X (Twitter)"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
-                <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
-              </svg>
-            </a>
-            <a
-              href="https://facebook.com/TechFacultyNG"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-primary transition-colors"
-              aria-label="Facebook"
-            >
-              <Facebook size={20} />
-            </a>
-            <a
-              href="https://linkedin.com/company/tech-faculty"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-primary transition-colors"
-              aria-label="LinkedIn"
-            >
-              <Linkedin size={20} />
-            </a>
+          {/* Services */}
+          <div className="space-y-3">
+            <h4 className="text-sm font-semibold">Services</h4>
+            <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
+              <Link to="/business-partnerships" className="hover:text-primary transition-colors">Business Partnerships</Link>
+              <Link to="/school-collaborations" className="hover:text-primary transition-colors">School Collaborations</Link>
+              <Link to="/events" className="hover:text-primary transition-colors">Events</Link>
+              <Link to="/siwes" className="hover:text-primary transition-colors">SIWES / IT</Link>
+            </nav>
           </div>
 
-          {/* Copyright */}
+          {/* Company */}
+          <div className="space-y-3">
+            <h4 className="text-sm font-semibold">Company</h4>
+            <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
+              <Link to="/about" className="hover:text-primary transition-colors">About</Link>
+              <Link to="/tech-store" className="hover:text-primary transition-colors flex items-center gap-1">
+                <ShoppingBag size={14} /> Tech Store
+              </Link>
+              <a href="mailto:thetechfaculty@gmail.com" className="hover:text-primary transition-colors flex items-center gap-1">
+                <Mail size={14} /> Email Us
+              </a>
+              <a href="https://wa.me/2348068597140" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors flex items-center gap-1">
+                <MessageCircle size={14} /> WhatsApp
+              </a>
+            </nav>
+          </div>
+        </div>
+
+        {/* Copyright */}
+        <div className="border-t border-border pt-6 text-center">
           <p className="text-sm text-muted-foreground">
             © Tech Faculty {new Date().getFullYear()}. All rights reserved.
           </p>

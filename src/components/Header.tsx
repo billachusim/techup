@@ -24,6 +24,7 @@ const navLinks = [
   { label: "Events", href: "/events" },
   { label: "SIWES / IT", href: "/siwes" },
   { label: "Tech Store", href: "/tech-store" },
+  { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
 ];
 

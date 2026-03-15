@@ -55,6 +55,7 @@ const Footer = () => {
             <h4 className="text-sm font-semibold">Company</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
               <Link to="/about" className="hover:text-primary transition-colors">About</Link>
+              <Link to="/blog" className="hover:text-primary transition-colors">Blog</Link>
               <Link to="/tech-store" className="hover:text-primary transition-colors flex items-center gap-1">
                 <ShoppingBag size={14} /> Tech Store
               </Link>

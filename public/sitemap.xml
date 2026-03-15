@@ -35,4 +35,39 @@
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
+  <url>
+    <loc>https://techfaculty.ng/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/how-to-start-tech-career-nigeria-2026</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/top-5-in-demand-tech-skills-nigeria</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/what-is-siwes-nigeria-complete-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/why-businesses-need-ai-integration-nigeria</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/web-development-bootcamp-what-you-learn</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/how-universities-integrate-tech-bootcamps</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>

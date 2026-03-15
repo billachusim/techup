@@ -21,6 +21,7 @@ const navLinks = [
       { label: "School Collaborations", href: "/school-collaborations" },
     ],
   },
+  { label: "Careers", href: "/careers" },
   { label: "Events", href: "/events" },
   { label: "SIWES / IT", href: "/siwes" },
   { label: "Tech Store", href: "/tech-store" },

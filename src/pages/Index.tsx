@@ -6,6 +6,7 @@ import Companies from "@/components/Companies";
 import Testimonials from "@/components/Testimonials";
 import Clarity from "@/components/Clarity";
 import FacultyDiscount from "@/components/FacultyDiscount";
+import ServicesSection from "@/components/ServicesSection";
 import Pricing from "@/components/Pricing";
 import GetStarted from "@/components/GetStarted";
 import Footer from "@/components/Footer";

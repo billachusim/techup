@@ -61,7 +61,15 @@ const About = () => {
             "name": "Tech Faculty NG",
             "url": "https://techfaculty.ng",
             "foundingDate": "2022",
-            "address": { "@type": "PostalAddress", "addressLocality": "Nnewi", "addressRegion": "Anambra State", "addressCountry": "NG" }
+            "numberOfEmployees": { "@type": "QuantitativeValue", "value": 25 },
+            "alumni": { "@type": "QuantitativeValue", "name": "Graduates", "value": 500 },
+            "areaServed": { "@type": "Country", "name": "Nigeria" },
+            "address": { "@type": "PostalAddress", "addressLocality": "Nnewi", "addressRegion": "Anambra State", "addressCountry": "NG" },
+            "accreditation": "Licensed by the Federal Ministry of Science, Technology and Innovation (FMSTI) via the National Board for Technology Incubation (NBTI)",
+            "sameAs": [
+              "https://twitter.com/TechFacultyNG",
+              "https://www.linkedin.com/company/techfaculty"
+            ]
           },
           "url": "https://techfaculty.ng/about"
         })}</script>

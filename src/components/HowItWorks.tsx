@@ -39,7 +39,7 @@ const HowItWorks = () => {
             <span className="text-primary">3</span> Months.
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Tech Faculty has trained over 1,000 students across dozens of physical campuses in Africa. 
+            Tech Faculty has trained over 5,000 students across dozens of physical campuses in Africa. 
             Now we're bringing that proven success online. Our structured program takes you from beginner 
             to employed professional with a 100% Return on Tuition guarantee. Through our Work & Earn 
             internship program, our best students start earning back their tuition by month 3.

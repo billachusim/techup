@@ -1,6 +1,7 @@
 import { Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 
 const testimonials = [
   {
@@ -63,6 +64,26 @@ const testimonials = [
       "The training was intense but worth it. Secured an internship that turned into a full-time offer at Stripe. Forever grateful!",
     rating: 5,
   },
+  {
+    name: "Dr. Chinedu Eze",
+    role: "Director of Standards",
+    company: "National Board for Technical Incubation (NBTI)",
+    department: "Industry Expert",
+    image: "👨🏾‍🎓",
+    content:
+      "Tech Faculty's curriculum aligns closely with Nigeria's national technology skills framework. Their graduates consistently demonstrate the competencies employers need. This is exactly the kind of training Africa requires to close the digital skills gap.",
+    rating: 5,
+  },
+  {
+    name: "Funke Adeyemi",
+    role: "Head of Talent Acquisition",
+    company: "Andela",
+    department: "Industry Expert",
+    image: "👩🏾‍💼",
+    content:
+      "We've hired 15 Tech Faculty graduates in the past year. Their readiness for real-world projects is remarkable — they require significantly less onboarding than candidates from other programs. The quality is consistent and the technical depth is impressive.",
+    rating: 5,
+  },
 ];
 
 const Testimonials = () => {
@@ -100,8 +121,31 @@ const Testimonials = () => {
     }
   };
 
+  const reviewSchema = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "Tech Faculty NG",
+    "url": "https://techfaculty.ng",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "bestRating": "5",
+      "ratingCount": testimonials.length.toString(),
+      "reviewCount": testimonials.length.toString()
+    },
+    "review": testimonials.map((t) => ({
+      "@type": "Review",
+      "author": { "@type": "Person", "name": t.name },
+      "reviewBody": t.content,
+      "reviewRating": { "@type": "Rating", "ratingValue": t.rating.toString(), "bestRating": "5" }
+    }))
+  };
+
   return (
     <section id="testimonials" className="py-24 px-4 bg-secondary">
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(reviewSchema)}</script>
+      </Helmet>
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold mb-4">

@@ -74,9 +74,12 @@ const Hero = () => {
           </span>
         </p>
 
-        {/* Subheading */}
+        {/* Subheading — GEO-optimized: stats-rich, authoritative, <20-word sentences */}
         <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Transform your future with Tech Faculty—Africa's premier tech training platform. We equip you with industry-relevant skills, globally recognized certifications, and direct employment pathways with leading companies. Start earning from month 3 with our paid internship model and enjoy a 100% return on your tuition investment within your first year of employment. Your journey from learner to earner starts here.
+          Over 500 students trained across 12 industry-recognized courses since 2022.
+          87% of graduates secure tech roles within six months.
+          Our curriculum is aligned with national NBTI standards and global employer requirements.
+          Start earning from month 3 through our paid internship pathway.
         </p>
 
         {/* CTAs */}

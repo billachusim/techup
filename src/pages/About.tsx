@@ -88,7 +88,7 @@ const About = () => {
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Licensed by the Federal Ministry of Science, Technology & Innovation via NBTI.
-              Over 500 graduates trained since 2022. 87% employed within six months.
+              Over 5,000 students trained since 2022. 87% of graduates employed within six months.
               We build Africa's tech workforce from Nnewi, Anambra State.
             </p>
           </div>

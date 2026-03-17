@@ -107,7 +107,9 @@ const SIWES = () => {
               Do Your <span className="text-gradient">IT</span> With Tech Faculty NG
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-              Complete your Student Industrial Work Experience Scheme (SIWES) with us. Choose to learn and pay, or tutor and earn — either way, you leave with real skills and experience.
+              Over 120 university students have completed their SIWES/IT placement with us since 2022.
+              Our program is regulated under Federal Ministry of Education policies.
+              Choose to learn and pay, or tutor and earn — either way, you leave with real skills, a certificate, and industry connections.
             </p>
             <Button size="lg" className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background font-semibold" asChild>
               <a href="https://wa.me/2348068597140?text=Hello%2C%20I'm%20a%20student%20interested%20in%20doing%20my%20SIWES%2FIT%20with%20Tech%20Faculty%20NG" target="_blank" rel="noopener noreferrer">

@@ -59,18 +59,20 @@ const Hero = () => {
       </div>
 
       <div className="container mx-auto max-w-4xl text-center space-y-8 relative z-10">
-        {/* Main Heading with Animated Taglines */}
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight min-h-[120px] md:min-h-[140px] lg:min-h-[160px] flex items-center justify-center">
-          <span 
-            key={currentTagline}
-            className="animate-fade-in"
-          >
-            {taglines[currentTagline].split(' ').slice(0, -2).join(' ')}{" "}
-            <span className="bg-gradient-to-r from-primary via-[hsl(170,100%,47%)] to-[hsl(180,100%,45%)] bg-clip-text text-transparent">
-              {taglines[currentTagline].split(' ').slice(-2).join(' ')}
-            </span>
+        {/* SEO-optimized static H1 */}
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
+          Accredited Tech Training in Nigeria — Get{" "}
+          <span className="bg-gradient-to-r from-primary via-[hsl(170,100%,47%)] to-[hsl(180,100%,45%)] bg-clip-text text-transparent">
+            Trained, Certified & Employed
           </span>
         </h1>
+
+        {/* Animated taglines */}
+        <p className="text-xl md:text-2xl lg:text-3xl font-semibold min-h-[40px] md:min-h-[48px] flex items-center justify-center text-muted-foreground">
+          <span key={currentTagline} className="animate-fade-in">
+            {taglines[currentTagline]}
+          </span>
+        </p>
 
         {/* Subheading */}
         <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">

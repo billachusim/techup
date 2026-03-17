@@ -73,11 +73,21 @@ const SIWES = () => {
           "@context": "https://schema.org",
           "@type": "EducationalOccupationalProgram",
           "name": "SIWES & Industrial Training Placement",
-          "provider": { "@type": "Organization", "name": "Tech Faculty NG" },
-          "description": "Student Industrial Work Experience Scheme (SIWES) placements with two tracks: Learn & Pay for structured mentorship, or Tutor & Earn for skilled students to teach and get paid.",
+          "provider": {
+            "@type": "EducationalOrganization",
+            "name": "Tech Faculty NG",
+            "url": "https://techfaculty.ng",
+            "accreditation": "Licensed by the Federal Ministry of Science, Technology and Innovation (FMSTI) via NBTI"
+          },
+          "description": "Student Industrial Work Experience Scheme (SIWES) placements with two tracks: Learn & Pay for structured mentorship, or Tutor & Earn for skilled students to teach and get paid. Over 120 interns placed since 2022.",
           "educationalProgramMode": "onsite",
-          "occupationalCategory": ["Software Development", "Data Science", "Cybersecurity", "AI/ML"],
+          "occupationalCategory": ["Software Development", "Data Science", "Cybersecurity", "AI/ML", "Digital Marketing"],
           "programType": "Internship",
+          "timeToComplete": "P3M",
+          "offers": [
+            { "@type": "Offer", "name": "Learn & Pay Track", "description": "Structured mentorship with hands-on projects" },
+            { "@type": "Offer", "name": "Tutor & Earn Track", "description": "Teach other students and earn during your IT placement" }
+          ],
           "url": "https://techfaculty.ng/siwes"
         })}</script>
       </Helmet>

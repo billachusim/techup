@@ -121,8 +121,31 @@ const Testimonials = () => {
     }
   };
 
+  const reviewSchema = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "Tech Faculty NG",
+    "url": "https://techfaculty.ng",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "bestRating": "5",
+      "ratingCount": testimonials.length.toString(),
+      "reviewCount": testimonials.length.toString()
+    },
+    "review": testimonials.map((t) => ({
+      "@type": "Review",
+      "author": { "@type": "Person", "name": t.name },
+      "reviewBody": t.content,
+      "reviewRating": { "@type": "Rating", "ratingValue": t.rating.toString(), "bestRating": "5" }
+    }))
+  };
+
   return (
     <section id="testimonials" className="py-24 px-4 bg-secondary">
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(reviewSchema)}</script>
+      </Helmet>
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold mb-4">

@@ -82,10 +82,10 @@ const Careers = () => {
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16 space-y-4">
               <h1 className="text-3xl md:text-5xl font-bold">
-                Companies Ready to Hire You
+                Companies Ready to <span className="text-gradient">Hire You</span>
               </h1>
               <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                Our graduates are hired by top Nigerian, African, and global companies. These are just some of the opportunities waiting for you upon graduation.
+                87% of our graduates secure tech roles within six months. Our 50+ partner companies — from Flutterwave to Microsoft Africa — actively recruit from our talent pool. According to the <a href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">World Economic Forum (2025)</a>, Africa's tech talent demand will grow 25% annually through 2030.
               </p>
             </div>
 

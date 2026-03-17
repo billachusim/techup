@@ -209,7 +209,7 @@ const SIWES = () => {
           <div className="container mx-auto max-w-2xl">
             <h2 className="text-3xl font-bold mb-4">Ready to Start Your IT?</h2>
             <p className="text-muted-foreground mb-8">
-              Join dozens of students who've completed their industrial training with Tech Faculty NG and launched their tech careers.
+              Join 120+ students who've completed their industrial training with Tech Faculty NG and launched their tech careers. The <a href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">World Economic Forum (2025)</a> projects Africa's tech talent demand will grow 25% annually — start building your career now.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background font-semibold" asChild>

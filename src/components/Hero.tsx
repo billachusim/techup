@@ -76,7 +76,7 @@ const Hero = () => {
 
         {/* Subheading — GEO-optimized: stats-rich, authoritative, <20-word sentences */}
         <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Over 500 students trained across 12 industry-recognized courses since 2022.
+          Over 5,000 students trained across 12 industry-recognized courses since 2022.
           87% of graduates secure tech roles within six months.
           Our curriculum is aligned with national NBTI standards and global employer requirements.
           Start earning from month 3 through our paid internship pathway.

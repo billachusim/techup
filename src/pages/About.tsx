@@ -117,7 +117,7 @@ const About = () => {
                 Tech Faculty NG was founded in 2022 at the Digital Village in Nnewi, Anambra State. South-East Nigeria is rich in entrepreneurial energy, but many young people lack access to quality tech education. We set out to change that.
               </p>
               <p>
-                In three years, we've trained over 500 students across 12 departments — from Web Development and Data Science to AI, Cybersecurity, and Digital Marketing. 87% of our graduates secure tech roles within six months of completing their program.
+                In three years, we've trained over 5,000 students across 12 departments — from Web Development and Data Science to AI, Cybersecurity, and Digital Marketing. 87% of our graduates secure tech roles within six months of completing their program.
               </p>
               <p>
                 According to the <a href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">World Economic Forum Future of Jobs Report (2025)</a>, digital skills demand in Africa is projected to rise 25% annually. We're positioning our students at the forefront of this growth.

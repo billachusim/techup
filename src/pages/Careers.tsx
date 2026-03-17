@@ -46,8 +46,35 @@ const Careers = () => {
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>Careers - Tech Faculty NG | Job Opportunities for Graduates</title>
-        <meta name="description" content="Explore job opportunities at top Nigerian and global tech companies. Tech Faculty graduates get hired by Flutterwave, Paystack, Andela, Microsoft, Google and more." />
+        <meta name="description" content="87% of Tech Faculty graduates land tech roles within 6 months. Explore jobs at Flutterwave, Paystack, Andela, Microsoft, Google and 50+ partner companies." />
+        <meta property="og:title" content="Careers - Tech Faculty NG | Job Opportunities for Graduates" />
+        <meta property="og:description" content="87% of Tech Faculty graduates land tech roles within 6 months. Explore jobs at top Nigerian and global tech companies." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://techfaculty.ng/careers" />
         <link rel="canonical" href="https://techfaculty.ng/careers" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Career Opportunities for Tech Faculty Graduates",
+          "description": "Job placement page for Tech Faculty NG graduates. 87% employment rate within 6 months across 50+ partner companies.",
+          "url": "https://techfaculty.ng/careers",
+          "mainEntity": {
+            "@type": "ItemList",
+            "name": "Available Job Opportunities",
+            "numberOfItems": jobs.length,
+            "itemListElement": jobs.map((job, i) => ({
+              "@type": "ListItem",
+              "position": i + 1,
+              "item": {
+                "@type": "JobPosting",
+                "title": job.role,
+                "hiringOrganization": { "@type": "Organization", "name": job.company },
+                "jobLocation": { "@type": "Place", "address": job.location },
+                "employmentType": job.type.includes("Internship") ? "INTERN" : "FULL_TIME"
+              }
+            }))
+          }
+        })}</script>
       </Helmet>
       <Header />
       <main className="pt-20">

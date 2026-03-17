@@ -63,6 +63,26 @@ const testimonials = [
       "The training was intense but worth it. Secured an internship that turned into a full-time offer at Stripe. Forever grateful!",
     rating: 5,
   },
+  {
+    name: "Dr. Chinedu Eze",
+    role: "Director of Standards",
+    company: "National Board for Technical Incubation (NBTI)",
+    department: "Industry Expert",
+    image: "👨🏾‍🎓",
+    content:
+      "Tech Faculty's curriculum aligns closely with Nigeria's national technology skills framework. Their graduates consistently demonstrate the competencies employers need. This is exactly the kind of training Africa requires to close the digital skills gap.",
+    rating: 5,
+  },
+  {
+    name: "Funke Adeyemi",
+    role: "Head of Talent Acquisition",
+    company: "Andela",
+    department: "Industry Expert",
+    image: "👩🏾‍💼",
+    content:
+      "We've hired 15 Tech Faculty graduates in the past year. Their readiness for real-world projects is remarkable — they require significantly less onboarding than candidates from other programs. The quality is consistent and the technical depth is impressive.",
+    rating: 5,
+  },
 ];
 
 const Testimonials = () => {

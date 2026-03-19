@@ -16,6 +16,7 @@ interface CheckoutDialogProps {
 
 export const CheckoutDialog = ({ open, onOpenChange, onSubmit, totalAmount, isLoading }: CheckoutDialogProps) => {
   const [deliveryMethod, setDeliveryMethod] = useState<'email' | 'whatsapp'>('whatsapp');
+  const { formatPrice } = useCurrency();
 
   const handleSubmit = () => {
     onSubmit(deliveryMethod);

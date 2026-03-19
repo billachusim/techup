@@ -731,7 +731,7 @@ const Pricing = () => {
         ? "\n*Requesting Discount Code*" 
         : (discountCode ? `\n*Discount Code Applied:* ${discountCode.toUpperCase()}` : "");
 
-      // Handle card payment via Stripe
+      // Handle card payment via Flutterwave
       if (method === 'card') {
         const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
           body: {
@@ -748,13 +748,19 @@ const Pricing = () => {
           },
         });
 
-        if (checkoutError || !checkoutData?.url) {
+        const checkoutUrl = checkoutData?.url?.trim();
+
+        if (checkoutError || !checkoutUrl) {
           throw new Error(checkoutData?.error || checkoutError?.message || 'Failed to create checkout session');
         }
 
-        // Redirect to Flutterwave Checkout
-        window.location.href = checkoutData.url;
+        if (!/^https?:\/\//i.test(checkoutUrl)) {
+          throw new Error('Invalid checkout link received. Please try again.');
+        }
+
         setIsSubmitting(false);
+        setCheckoutDialogOpen(false);
+        window.location.assign(checkoutUrl);
         return;
       }
 

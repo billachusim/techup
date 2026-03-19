@@ -627,7 +627,10 @@ const Pricing = () => {
     
     try {
       const plan = departmentPlans.find((p) => p.id === selectedPlanId);
-      if (!plan) return;
+      if (!plan) {
+        setIsSubmitting(false);
+        return;
+      }
 
       const selection = selections[selectedPlanId];
       const total = totalPrices[selectedPlanId];

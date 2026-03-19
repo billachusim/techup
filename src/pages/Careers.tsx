@@ -151,7 +151,7 @@ const Careers = () => {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-            <Link to="/#see-how-you-are-doing">
+            <Link to="/#get-started">
               <Button onClick={() => setIsDialogOpen(false)}>Go to Login/Signup</Button>
             </Link>
           </DialogFooter>

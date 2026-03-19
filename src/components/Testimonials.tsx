@@ -9,7 +9,6 @@ const testimonials = [
     role: "Frontend Developer",
     company: "Microsoft",
     department: "Web Development",
-    image: "👩🏾‍💻",
     content:
       "Tech Faculty transformed my career. The hands-on training and internship program helped me land my dream job at Microsoft within 6 months!",
     rating: 5,
@@ -19,7 +18,6 @@ const testimonials = [
     role: "Data Analyst",
     company: "Google",
     department: "Data Science & Analytics",
-    image: "👨🏿‍💼",
     content:
       "The Work & Earn program was a game-changer. I recovered my tuition by month 4 and now work full-time at Google. Highly recommend!",
     rating: 5,
@@ -29,7 +27,6 @@ const testimonials = [
     role: "Cybersecurity Specialist",
     company: "Deloitte",
     department: "Cybersecurity",
-    image: "👩🏽‍💻",
     content:
       "The instructors are world-class, and the curriculum is always up-to-date with industry demands. Best investment I ever made.",
     rating: 5,
@@ -39,17 +36,15 @@ const testimonials = [
     role: "Cloud Engineer",
     company: "Amazon Web Services",
     department: "Cloud Computing",
-    image: "👨🏾‍💻",
     content:
       "From zero knowledge to AWS certified in 6 months. The practical approach and career support made all the difference.",
-    rating: 5,
+    rating: 4,
   },
   {
     name: "Zainab Ibrahim",
     role: "AI Engineer",
     company: "IBM",
     department: "AI & Machine Learning",
-    image: "👩🏾‍🔬",
     content:
       "Tech Faculty's AI program is comprehensive and practical. Now I'm building ML models at IBM and loving every moment!",
     rating: 5,
@@ -59,17 +54,15 @@ const testimonials = [
     role: "Full-Stack Developer",
     company: "Stripe",
     department: "Web Development",
-    image: "👨🏿‍💻",
     content:
       "The training was intense but worth it. Secured an internship that turned into a full-time offer at Stripe. Forever grateful!",
-    rating: 5,
+    rating: 4,
   },
   {
     name: "Dr. Chinedu Eze",
     role: "Director of Standards",
     company: "National Board for Technical Incubation (NBTI)",
     department: "Industry Expert",
-    image: "👨🏾‍🎓",
     content:
       "Tech Faculty's curriculum aligns closely with Nigeria's national technology skills framework. Their graduates consistently demonstrate the competencies employers need. This is exactly the kind of training Africa requires to close the digital skills gap.",
     rating: 5,
@@ -79,12 +72,22 @@ const testimonials = [
     role: "Head of Talent Acquisition",
     company: "Andela",
     department: "Industry Expert",
-    image: "👩🏾‍💼",
     content:
       "We've hired 15 Tech Faculty graduates in the past year. Their readiness for real-world projects is remarkable — they require significantly less onboarding than candidates from other programs. The quality is consistent and the technical depth is impressive.",
     rating: 5,
   },
 ];
+
+const getInitialColor = (name: string) => {
+  const colors = [
+    "bg-primary", "bg-[hsl(200,70%,50%)]", "bg-[hsl(270,60%,50%)]",
+    "bg-[hsl(340,65%,50%)]", "bg-[hsl(30,80%,50%)]", "bg-[hsl(145,60%,40%)]",
+    "bg-[hsl(210,60%,45%)]", "bg-[hsl(0,65%,50%)]",
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return colors[Math.abs(hash) % colors.length];
+};
 
 const Testimonials = () => {
   const [currentCard, setCurrentCard] = useState(0);
@@ -94,32 +97,20 @@ const Testimonials = () => {
 
   useEffect(() => {
     if (isPaused) return;
-    
     const interval = setInterval(() => {
       setCurrentCard((prev) => (prev + 1) % testimonials.length);
     }, 5000);
     return () => clearInterval(interval);
   }, [isPaused]);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
+  const handleTouchStart = (e: React.TouchEvent) => setTouchStart(e.targetTouches[0].clientX);
+  const handleTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX);
   const handleTouchEnd = () => {
-    if (touchStart - touchEnd > 75) {
-      // Swiped left
-      setCurrentCard((prev) => (prev + 1) % testimonials.length);
-    }
-
-    if (touchStart - touchEnd < -75) {
-      // Swiped right
-      setCurrentCard((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-    }
+    if (touchStart - touchEnd > 75) setCurrentCard((prev) => (prev + 1) % testimonials.length);
+    if (touchStart - touchEnd < -75) setCurrentCard((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
+
+  const avgRating = (testimonials.reduce((sum, t) => sum + t.rating, 0) / testimonials.length).toFixed(1);
 
   const reviewSchema = {
     "@context": "https://schema.org",
@@ -128,7 +119,7 @@ const Testimonials = () => {
     "url": "https://techfaculty.ng",
     "aggregateRating": {
       "@type": "AggregateRating",
-      "ratingValue": "4.9",
+      "ratingValue": avgRating,
       "bestRating": "5",
       "ratingCount": testimonials.length.toString(),
       "reviewCount": testimonials.length.toString()
@@ -148,9 +139,7 @@ const Testimonials = () => {
       </Helmet>
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            Success Stories
-          </h2>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">Success Stories</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Hear from our alumni who are now thriving in top tech companies worldwide.
           </p>
@@ -179,8 +168,12 @@ const Testimonials = () => {
                 <CardContent className="p-6 space-y-4">
                   {/* Rating */}
                   <div className="flex gap-1">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star key={i} size={16} className="fill-primary text-primary" />
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        size={16}
+                        className={i < testimonial.rating ? "fill-primary text-primary" : "text-muted-foreground/30"}
+                      />
                     ))}
                   </div>
 
@@ -189,9 +182,13 @@ const Testimonials = () => {
                     &quot;{testimonial.content}&quot;
                   </p>
 
-                  {/* Profile */}
+                  {/* Profile with initial avatar */}
                   <div className="flex items-center gap-3 pt-4 border-t border-border">
-                    <div className="text-4xl">{testimonial.image}</div>
+                    <div className={`w-10 h-10 rounded-full ${getInitialColor(testimonial.name)} flex items-center justify-center`}>
+                      <span className="text-sm font-bold text-white">
+                        {testimonial.name.charAt(0)}
+                      </span>
+                    </div>
                     <div>
                       <div className="font-semibold">{testimonial.name}</div>
                       <div className="text-sm text-muted-foreground">
@@ -207,7 +204,6 @@ const Testimonials = () => {
             ))}
           </div>
 
-          {/* Slide indicators */}
           <div className="flex justify-center gap-2 mt-6">
             {testimonials.map((_, index) => (
               <button

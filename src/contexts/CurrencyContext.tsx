@@ -6,6 +6,7 @@ interface CurrencyContextType {
   isNigeria: boolean;
   convertPrice: (ngnAmount: number) => number;
   formatPrice: (ngnAmount: number) => string;
+  toggleCurrency: () => void;
 }
 
 const CurrencyContext = createContext<CurrencyContextType>({
@@ -14,14 +15,17 @@ const CurrencyContext = createContext<CurrencyContextType>({
   isNigeria: true,
   convertPrice: (amount) => amount,
   formatPrice: (amount) => `₦${amount.toLocaleString()}`,
+  toggleCurrency: () => {},
 });
 
-const NGN_TO_USD_RATE = 1400; // Slightly premium over market rate (~₦1,600)
+const NGN_TO_USD_RATE = 1400;
 
 export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
   const [isNigeria, setIsNigeria] = useState(true);
+  const [manualOverride, setManualOverride] = useState(false);
 
   useEffect(() => {
+    if (manualOverride) return;
     const detectCountry = async () => {
       try {
         const res = await fetch("https://ipapi.co/json/", { signal: AbortSignal.timeout(5000) });
@@ -30,12 +34,16 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
           setIsNigeria(false);
         }
       } catch {
-        // Default to Nigeria on error
         setIsNigeria(true);
       }
     };
     detectCountry();
-  }, []);
+  }, [manualOverride]);
+
+  const toggleCurrency = () => {
+    setManualOverride(true);
+    setIsNigeria((prev) => !prev);
+  };
 
   const convertPrice = (ngnAmount: number): number => {
     if (isNigeria || ngnAmount === 0) return ngnAmount;
@@ -53,7 +61,7 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
   const currencyCode = isNigeria ? "NGN" : "USD";
 
   return (
-    <CurrencyContext.Provider value={{ symbol, currencyCode, isNigeria, convertPrice, formatPrice }}>
+    <CurrencyContext.Provider value={{ symbol, currencyCode, isNigeria, convertPrice, formatPrice, toggleCurrency }}>
       {children}
     </CurrencyContext.Provider>
   );

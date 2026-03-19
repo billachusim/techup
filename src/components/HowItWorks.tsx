@@ -16,14 +16,13 @@ const HowItWorks = () => {
     {
       icon: Briefcase,
       title: "Get Employed",
-      description: "Access our network of 100+ partner companies ready to hire. Start earning from month 3 with our Work & Earn program.",
+      description: "Access our network of 100+ partner companies ready to hire. Our top students start earning through internships as early as month 3.",
     },
   ];
 
   return (
     <section className="py-24 px-4 bg-secondary/30">
       <div className="container mx-auto max-w-5xl">
-        {/* Header */}
         <div className="text-center mb-16 space-y-4">
           <h2 className="text-3xl md:text-5xl font-bold">
             From L
@@ -42,11 +41,10 @@ const HowItWorks = () => {
             Tech Faculty has trained over 5,000 students across dozens of physical campuses in Africa. 
             Now we're bringing that proven success online. Our structured program takes you from beginner 
             to employed professional with a 100% Return on Tuition guarantee. Through our Work & Earn 
-            internship program, our best students start earning back their tuition by month 3.
+            internship program, our top students start earning back their tuition as early as month 3.
           </p>
         </div>
 
-        {/* Feature Cards */}
         <div className="grid md:grid-cols-3 gap-6">
           {features.map((feature) => (
             <div
@@ -66,12 +64,11 @@ const HowItWorks = () => {
           ))}
         </div>
 
-        {/* CTA Button */}
         <div className="text-center mt-12">
           <Button
             size="lg"
             onClick={() => {
-              const element = document.getElementById("see-how-you-are-doing");
+              const element = document.getElementById("get-started");
               element?.scrollIntoView({ behavior: "smooth" });
             }}
             className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] hover:opacity-90 shadow-lg font-semibold text-background"

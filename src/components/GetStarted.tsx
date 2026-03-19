@@ -59,7 +59,7 @@ const GetStarted = () => {
   };
 
   return (
-    <section id="see-how-you-are-doing" className="py-24 px-4 bg-gradient-to-b from-background to-accent/5">
+    <section id="get-started" className="py-24 px-4 bg-gradient-to-b from-background to-accent/5">
       <div className="container mx-auto max-w-6xl">
         {isLoggedIn ? (
           <div className="text-center space-y-6">
@@ -80,13 +80,13 @@ const GetStarted = () => {
           <>
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-5xl font-bold mb-4">
-                See How You Are{" "}
+                Join the{" "}
                 <span className="bg-gradient-to-r from-primary via-[hsl(170,100%,47%)] to-[hsl(180,100%,45%)] bg-clip-text text-transparent">
-                  Doing
+                  Faculty
                 </span>
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Access your personalized dashboard to see your progress, join communities, and know when is your next class. Already part of the Tech Faculty family? Login now!
+                Create your account to access courses, track your progress, join communities, and start your tech career journey. Already a member? Log in below.
               </p>
             </div>
 

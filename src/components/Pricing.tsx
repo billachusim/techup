@@ -604,7 +604,7 @@ const Pricing = () => {
     setCheckoutDialogOpen(true);
   };
 
-  const handleCheckoutSubmit = async (method: 'email' | 'whatsapp') => {
+  const handleCheckoutSubmit = async (method: 'email' | 'whatsapp' | 'card') => {
     setIsSubmitting(true);
     
     try {
@@ -681,8 +681,8 @@ const Pricing = () => {
         supabase.from("course_progress").update({ faculty_id: newFacultyId }).eq('faculty_id', currentFacultyId),
       ]);
 
-      // Create new enrollment with status based on plan type
-      const enrollmentStatus = plan.isFree ? "active" : "pending";
+      // Create new enrollment with status based on payment method
+      const enrollmentStatus = plan.isFree ? "active" : (method === 'card' ? "active" : "pending");
       await supabase.from("enrollments").insert({
         faculty_id: newFacultyId,
         plan_name: plan.name,
@@ -690,52 +690,85 @@ const Pricing = () => {
         learning_mode: selectedMode,
       });
 
-    const courses = plan.isCustom 
-      ? allAvailableCourses.filter(c => selection.selectedCourses.includes(c.id))
-      : plan.courses;
+      const courses = plan.isCustom 
+        ? allAvailableCourses.filter(c => selection.selectedCourses.includes(c.id))
+        : plan.courses;
 
-    const selectedCourseDetails = selection.selectedCourses.map((id) => {
-      const course = courses.find((c) => c.id === id);
-      return course ? `${course.name} - ${formatPrice(course.price)}` : '';
-    }).filter(Boolean);
+      const selectedCourseDetails = selection.selectedCourses.map((id) => {
+        const course = courses.find((c) => c.id === id);
+        return course ? { name: course.name, price: course.price } : null;
+      }).filter(Boolean) as { name: string; price: number }[];
 
-    const selectedBenefitDetails = selection.selectedBenefits.map((id) => {
-      const benefit = plan.benefits.find((b) => b.id === id);
-      return benefit ? `${benefit.name} - ${formatPrice(benefit.price)}` : '';
-    }).filter(Boolean);
+      const selectedBenefitDetails = selection.selectedBenefits.map((id) => {
+        const benefit = plan.benefits.find((b) => b.id === id);
+        return benefit ? { name: benefit.name, price: benefit.price, description: benefit.description } : null;
+      }).filter(Boolean) as { name: string; price: number; description?: string }[];
 
-    const learningModeDetail = plan.learningModes.find((m) => m.id === selection.learningMode);
+      const learningModeDetail = plan.learningModes.find((m) => m.id === selection.learningMode);
 
-    const discountInfo = requestDiscount 
-      ? "\n*Requesting Discount Code*" 
-      : (discountCode ? `\n*Discount Code Applied:* ${discountCode.toUpperCase()}` : "");
+      const discountInfo = requestDiscount 
+        ? "\n*Requesting Discount Code*" 
+        : (discountCode ? `\n*Discount Code Applied:* ${discountCode.toUpperCase()}` : "");
 
-      const message = `Hi Tech Faculty NG Team! 👋
+      // Handle card payment via Stripe
+      if (method === 'card') {
+        const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
+          body: {
+            planName: plan.fancyName,
+            facultyId: newFacultyId,
+            courses: selectedCourseDetails,
+            benefits: selectedBenefitDetails,
+            learningMode: learningModeDetail ? { name: learningModeDetail.name, price: learningModeDetail.price, description: learningModeDetail.description } : null,
+            totalAmountNGN: total,
+            currencyCode: isNigeria ? 'ngn' : 'usd',
+            discountCode: discountCode || '',
+            successUrl: `${window.location.origin}/payment-success`,
+            cancelUrl: `${window.location.origin}/#pricing`,
+          },
+        });
 
-I'm ready to enroll in *${plan.fancyName}*
+        if (checkoutError || !checkoutData?.url) {
+          throw new Error(checkoutData?.error || checkoutError?.message || 'Failed to create checkout session');
+        }
 
-*New Faculty ID:* ${newFacultyId}
+        // Redirect to Stripe Checkout
+        window.location.href = checkoutData.url;
+        return; // Don't close dialog, user is being redirected
+      }
+
+      // Build enriched message for WhatsApp/Email
+      const message = `Welcome to Tech Faculty! 🎓
+
+Dear ${profile.name},
+
+Your enrollment request has been received.
+
+*Faculty ID:* ${newFacultyId}
 *(Previous ID: ${currentFacultyId})*
-*Total Amount:* ${formatPrice(total)}${discountInfo}
+*Plan:* ${plan.fancyName}
+*Total:* ${formatPrice(total)}${discountInfo}
 
 *Selected Courses:*
-${selectedCourseDetails.length > 0 ? selectedCourseDetails.map(c => `✓ ${c}`).join('\n') : 'No courses selected'}
+${selectedCourseDetails.length > 0 ? selectedCourseDetails.map(c => `✓ ${c.name} - ${formatPrice(c.price)}`).join('\n') : 'No courses selected'}
 
 *Learning Mode:* ${learningModeDetail?.name} - ${learningModeDetail?.price === 0 ? 'Included' : formatPrice(learningModeDetail?.price || 0)}
 
 *Additional Benefits:*
-${selectedBenefitDetails.length > 0 ? selectedBenefitDetails.map(b => `✓ ${b}`).join('\n') : 'No benefits selected'}
+${selectedBenefitDetails.length > 0 ? selectedBenefitDetails.map(b => `✓ ${b.name} - ${formatPrice(b.price)}`).join('\n') : 'No benefits selected'}
+
+*Payment Instructions:*
+${isNigeria ? 'Bank Transfer: Contact us for bank details' : 'Pay online via card at techfaculty.ng'}
 
 *Payment Status:* Pending Payment
 
-Please process my enrollment!`;
+Questions? Reply to this message or email thetechfaculty@gmail.com`;
 
       if (method === 'whatsapp') {
         const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
         
         toast({
-          title: "Enrollment Successful!",
+          title: "Enrollment Submitted!",
           description: `Your new Faculty ID is ${newFacultyId}. Complete the request on WhatsApp.`,
         });
       } else {
@@ -745,7 +778,7 @@ Please process my enrollment!`;
         window.location.href = mailtoUrl;
 
         toast({
-          title: "Enrollment Successful!",
+          title: "Enrollment Submitted!",
           description: `Your new Faculty ID is ${newFacultyId}. Complete the request via email.`,
         });
       }

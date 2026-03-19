@@ -12,7 +12,6 @@ const Footer = () => {
             <p className="text-sm text-muted-foreground">
               Get trained, certified, and employed.
             </p>
-            {/* Social */}
             <div className="flex gap-3 pt-2">
               <a href="https://x.com/TechFacultyNG" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors" aria-label="X (Twitter)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -35,7 +34,7 @@ const Footer = () => {
             <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
               <Link to="/#departments" className="hover:text-primary transition-colors">Departments</Link>
               <Link to="/#pricing" className="hover:text-primary transition-colors">Pricing</Link>
-              <Link to="/#see-how-you-are-doing" className="hover:text-primary transition-colors">Get Started</Link>
+              <Link to="/#get-started" className="hover:text-primary transition-colors">Get Started</Link>
             </nav>
           </div>
 
@@ -46,7 +45,7 @@ const Footer = () => {
               <Link to="/business-partnerships" className="hover:text-primary transition-colors">Business Partnerships</Link>
               <Link to="/school-collaborations" className="hover:text-primary transition-colors">School Collaborations</Link>
               <Link to="/events" className="hover:text-primary transition-colors">Events</Link>
-              <Link to="/siwes" className="hover:text-primary transition-colors">SIWES / IT</Link>
+              <Link to="/siwes" className="hover:text-primary transition-colors">Internships</Link>
             </nav>
           </div>
 
@@ -70,7 +69,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Copyright */}
         <div className="border-t border-border pt-6 text-center">
           <p className="text-sm text-muted-foreground">
             © Tech Faculty {new Date().getFullYear()}. All rights reserved.

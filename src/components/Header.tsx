@@ -3,7 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/tech-faculty-logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ShoppingBag, ChevronDown, ArrowRight } from "lucide-react";
+import { Menu, ShoppingBag, ChevronDown, ArrowRight, LogOut } from "lucide-react";
+import { useUser } from "@/contexts/UserContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,6 +36,7 @@ const Header = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { isLoggedIn, logout } = useUser();
 
   useEffect(() => {
     let ticking = false;
@@ -138,13 +140,24 @@ const Header = () => {
               )
             )}
             <CurrencyToggle />
-            <Button
-              size="sm"
-              onClick={handleSignUpClick}
-              className="ml-2 bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90 gap-1"
-            >
-              Sign Up Free <ArrowRight size={14} />
-            </Button>
+            {isLoggedIn ? (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={logout}
+                className="ml-2 gap-1"
+              >
+                Log Out <LogOut size={14} />
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                onClick={handleSignUpClick}
+                className="ml-2 bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90 gap-1"
+              >
+                Sign Up Free <ArrowRight size={14} />
+              </Button>
+            )}
           </nav>
 
           {/* Mobile Menu */}
@@ -185,12 +198,22 @@ const Header = () => {
                       </Link>
                     )
                   )}
-                  <Button
-                    onClick={handleSignUpClick}
-                    className="mt-4 bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90 gap-1"
-                  >
-                    Sign Up Free <ArrowRight size={14} />
-                  </Button>
+                  {isLoggedIn ? (
+                    <Button
+                      variant="outline"
+                      onClick={() => { setMobileOpen(false); logout(); }}
+                      className="mt-4 gap-1"
+                    >
+                      Log Out <LogOut size={14} />
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={handleSignUpClick}
+                      className="mt-4 bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90 gap-1"
+                    >
+                      Sign Up Free <ArrowRight size={14} />
+                    </Button>
+                  )}
                 </nav>
               </SheetContent>
             </Sheet>

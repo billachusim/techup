@@ -891,7 +891,7 @@ Please process my enrollment!`;
                         <p className="text-sm font-medium">{course.name}</p>
                         <p className="text-xs text-muted-foreground">{course.category}</p>
                       </div>
-                      <span className="text-sm font-semibold">₦{course.price.toLocaleString()}</span>
+                      <span className="text-sm font-semibold">{formatPrice(course.price)}</span>
                     </div>
                   </div>
                 );

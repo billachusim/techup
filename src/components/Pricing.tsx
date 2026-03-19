@@ -790,7 +790,7 @@ Please process my enrollment!`;
           </div>
           <CardTitle>{plan.fancyName}</CardTitle>
           <CardDescription>{plan.description}</CardDescription>
-          <div className="text-3xl font-bold text-primary mt-4">₦0</div>
+          <div className="text-3xl font-bold text-primary mt-4">{formatPrice(0)}</div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-3">

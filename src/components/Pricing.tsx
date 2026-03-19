@@ -721,7 +721,7 @@ I'm ready to enroll in *${plan.fancyName}*
 *Selected Courses:*
 ${selectedCourseDetails.length > 0 ? selectedCourseDetails.map(c => `✓ ${c}`).join('\n') : 'No courses selected'}
 
-*Learning Mode:* ${learningModeDetail?.name} - ${learningModeDetail?.price === 0 ? 'Included' : '₦' + learningModeDetail?.price.toLocaleString()}
+*Learning Mode:* ${learningModeDetail?.name} - ${learningModeDetail?.price === 0 ? 'Included' : formatPrice(learningModeDetail?.price || 0)}
 
 *Additional Benefits:*
 ${selectedBenefitDetails.length > 0 ? selectedBenefitDetails.map(b => `✓ ${b}`).join('\n') : 'No benefits selected'}

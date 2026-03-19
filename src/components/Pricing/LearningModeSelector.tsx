@@ -41,7 +41,7 @@ export const LearningModeSelector = ({ modes, selectedMode, onSelectMode }: Lear
                 </div>
               </div>
               <span className="text-sm font-semibold text-primary">
-                {mode.price === 0 ? 'Included' : `₦${mode.price.toLocaleString()}`}
+                {mode.price === 0 ? 'Included' : formatPrice(mode.price)}
               </span>
             </div>
           ))}

@@ -39,7 +39,7 @@ export const CourseSelector = ({ courses, selectedCourses, onToggleCourse }: Cou
                 {course.name}
               </Label>
             </div>
-            <span className="text-sm font-semibold text-primary">₦{course.price.toLocaleString()}</span>
+            <span className="text-sm font-semibold text-primary">{formatPrice(course.price)}</span>
           </div>
         ))}
       </CollapsibleContent>

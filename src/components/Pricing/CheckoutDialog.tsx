@@ -35,7 +35,7 @@ export const CheckoutDialog = ({ open, onOpenChange, onSubmit, totalAmount, isLo
         <div className="space-y-4 py-4">
           <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
             <p className="text-sm text-muted-foreground">Total Amount</p>
-            <p className="text-2xl font-bold text-primary">₦{totalAmount.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-primary">{formatPrice(totalAmount)}</p>
           </div>
 
           <RadioGroup value={deliveryMethod} onValueChange={(value) => setDeliveryMethod(value as 'email' | 'whatsapp')}>

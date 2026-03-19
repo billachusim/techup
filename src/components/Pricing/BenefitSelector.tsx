@@ -46,7 +46,7 @@ export const BenefitSelector = ({ benefits, selectedBenefits, onToggleBenefit }:
               </div>
             </div>
             <span className="text-sm font-semibold text-primary">
-              {benefit.price === 0 ? 'Free' : `₦${benefit.price.toLocaleString()}`}
+              {benefit.price === 0 ? 'Free' : formatPrice(benefit.price)}
             </span>
           </div>
         ))}

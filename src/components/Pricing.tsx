@@ -376,6 +376,7 @@ const Pricing = () => {
   const [userHasPaidPlan, setUserHasPaidPlan] = useState(false);
   const [enrollmentData, setEnrollmentData] = useState<any>(null);
   const { toast } = useToast();
+  const { formatPrice, symbol, convertPrice, isNigeria } = useCurrency();
 
   const [selections, setSelections] = useState<Record<string, Selection>>({});
   const [totalPrices, setTotalPrices] = useState<Record<string, number>>({});

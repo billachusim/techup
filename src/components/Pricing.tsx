@@ -759,11 +759,11 @@ const Pricing = () => {
       }
 
       // Build enriched message for WhatsApp/Email
-      const message = `Welcome to Tech Faculty! 🎓
+      const message = `Hello Tech Faculty! 👋
 
-Dear ${profile.name},
+My name is ${profile.name} and I am ready to make payment for the *${plan.fancyName}* plan.
 
-Your enrollment request has been received.
+Here are my enrollment details:
 
 *Faculty ID:* ${newFacultyId}
 *(Previous ID: ${currentFacultyId})*
@@ -778,12 +778,7 @@ ${selectedCourseDetails.length > 0 ? selectedCourseDetails.map(c => `✓ ${c.nam
 *Additional Benefits:*
 ${selectedBenefitDetails.length > 0 ? selectedBenefitDetails.map(b => `✓ ${b.name} - ${formatPrice(b.price)}`).join('\n') : 'No benefits selected'}
 
-*Payment Instructions:*
-${isNigeria ? 'Bank Transfer: Contact us for bank details' : 'Pay online via card at techfaculty.ng'}
-
-*Payment Status:* Pending Payment
-
-Questions? Reply to this message or email thetechfaculty@gmail.com`;
+Please share the payment details so I can complete my enrollment. Thank you!`;
 
       if (method === 'whatsapp') {
         const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;

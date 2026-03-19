@@ -971,7 +971,7 @@ Please process my enrollment!`;
                 <Badge variant="default" className="bg-primary">Active Plan</Badge>
               )}
               <Badge variant={meetsMinimum ? "default" : "destructive"} className="text-lg px-3 py-1">
-                ₦{total.toLocaleString()}
+                {formatPrice(total)}
               </Badge>
               {!meetsMinimum && (
                 <p className="text-xs text-destructive flex items-center gap-1 justify-end mt-1">

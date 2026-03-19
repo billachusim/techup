@@ -11,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { SignupForm } from "./Auth/SignupForm";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, ShieldCheck, Users, Trophy, AlertCircle, Code, Database, Shield, Cloud, Palette, TrendingUp, Sparkles } from "lucide-react";
+import { Check, ShieldCheck, Users, Trophy, AlertCircle, Code, Database, Shield, Cloud, Palette, TrendingUp, Sparkles, Smartphone } from "lucide-react";
 import { CourseSelector } from "./Pricing/CourseSelector";
 import { BenefitSelector } from "./Pricing/BenefitSelector";
 import { LearningModeSelector } from "./Pricing/LearningModeSelector";

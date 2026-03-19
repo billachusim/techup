@@ -696,7 +696,7 @@ const Pricing = () => {
 
     const selectedCourseDetails = selection.selectedCourses.map((id) => {
       const course = courses.find((c) => c.id === id);
-      return course ? `${course.name} - ₦${course.price.toLocaleString()}` : '';
+      return course ? `${course.name} - ${formatPrice(course.price)}` : '';
     }).filter(Boolean);
 
     const selectedBenefitDetails = selection.selectedBenefits.map((id) => {

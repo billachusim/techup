@@ -716,7 +716,7 @@ I'm ready to enroll in *${plan.fancyName}*
 
 *New Faculty ID:* ${newFacultyId}
 *(Previous ID: ${currentFacultyId})*
-*Total Amount:* ₦${total.toLocaleString()}${discountInfo}
+*Total Amount:* ${formatPrice(total)}${discountInfo}
 
 *Selected Courses:*
 ${selectedCourseDetails.length > 0 ? selectedCourseDetails.map(c => `✓ ${c}`).join('\n') : 'No courses selected'}

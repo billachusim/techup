@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/tech-faculty-logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ShoppingBag, ChevronDown, ArrowRight, LogOut } from "lucide-react";
+import { Menu, ShoppingBag, ChevronDown, ArrowRight, LogOut, LayoutDashboard } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import {
   DropdownMenu,

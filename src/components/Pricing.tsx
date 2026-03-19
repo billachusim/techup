@@ -752,9 +752,10 @@ const Pricing = () => {
           throw new Error(checkoutData?.error || checkoutError?.message || 'Failed to create checkout session');
         }
 
-        // Redirect to Stripe Checkout
+        // Redirect to Flutterwave Checkout
         window.location.href = checkoutData.url;
-        return; // Don't close dialog, user is being redirected
+        setIsSubmitting(false);
+        return;
       }
 
       // Build enriched message for WhatsApp/Email

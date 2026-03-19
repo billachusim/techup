@@ -32,6 +32,8 @@ serve(async (req) => {
       cancelUrl,
     } = await req.json();
 
+    const currencyCode = (rawCurrencyCode || 'NGN').toUpperCase();
+
     // Calculate total amount from items
     let totalAmount = 0;
 

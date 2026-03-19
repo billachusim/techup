@@ -109,6 +109,12 @@ const allAvailableCourses: Course[] = [
   { id: "video-editing", name: "Video Editing", price: 13500, category: "Marketing" },
   { id: "photo-editing", name: "Photo Editing", price: 9000, category: "Marketing" },
   { id: "analytics", name: "Analytics & Growth", price: 12000, category: "Marketing" },
+  { id: "react-native", name: "React Native Development", price: 18000, category: "Mobile Development" },
+  { id: "flutter-dart", name: "Flutter & Dart", price: 18000, category: "Mobile Development" },
+  { id: "ios-swift", name: "iOS with Swift", price: 21000, category: "Mobile Development" },
+  { id: "android-kotlin", name: "Android with Kotlin", price: 21000, category: "Mobile Development" },
+  { id: "mobile-uiux", name: "Mobile UI/UX Design", price: 12000, category: "Mobile Development" },
+  { id: "cross-platform-projects", name: "Cross-Platform Projects", price: 15000, category: "Mobile Development" },
 ];
 
 const departmentPlans: DepartmentPlan[] = [

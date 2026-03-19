@@ -741,7 +741,7 @@ const Pricing = () => {
             benefits: selectedBenefitDetails,
             learningMode: learningModeDetail ? { name: learningModeDetail.name, price: learningModeDetail.price, description: learningModeDetail.description } : null,
             totalAmountNGN: total,
-            currencyCode: isNigeria ? 'ngn' : 'usd',
+            currencyCode: isNigeria ? 'NGN' : 'USD',
             discountCode: discountCode || '',
             successUrl: `${window.location.origin}/payment-success`,
             cancelUrl: `${window.location.origin}/#pricing`,

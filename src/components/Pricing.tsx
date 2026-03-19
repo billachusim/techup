@@ -701,7 +701,7 @@ const Pricing = () => {
 
     const selectedBenefitDetails = selection.selectedBenefits.map((id) => {
       const benefit = plan.benefits.find((b) => b.id === id);
-      return benefit ? `${benefit.name} - ₦${benefit.price.toLocaleString()}` : '';
+      return benefit ? `${benefit.name} - ${formatPrice(benefit.price)}` : '';
     }).filter(Boolean);
 
     const learningModeDetail = plan.learningModes.find((m) => m.id === selection.learningMode);

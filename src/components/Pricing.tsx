@@ -563,7 +563,7 @@ const Pricing = () => {
     if (!plan?.isFree && total < (plan?.minimumAmount || 0)) {
       toast({
         title: "Minimum Amount Required",
-        description: `Please select items totaling at least ₦${plan?.minimumAmount.toLocaleString()}`,
+        description: `Please select items totaling at least ${formatPrice(plan?.minimumAmount || 0)}`,
         variant: "destructive",
       });
       return;

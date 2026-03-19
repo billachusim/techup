@@ -3,12 +3,12 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 
 const taglines = [
-"Learn Today. Earn Tomorrow.",
-"Train. Certify. Get Hired.",
-"Your Future in Tech Starts Here.",
-"Build Skills. Build Wealth.",
-"From Student to Professional."];
-
+  "Learn Today. Earn Tomorrow.",
+  "Train. Certify. Get Hired.",
+  "Your Future in Tech Starts Here.",
+  "Build Skills. Build Wealth.",
+  "From Student to Professional.",
+];
 
 const Hero = () => {
   const [currentTagline, setCurrentTagline] = useState(0);
@@ -20,16 +20,11 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const scrollToDepartments = () => {
-    const element = document.getElementById("departments");
-    element?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <section
       id="hero"
-      className="min-h-screen flex items-center justify-center py-20 px-4 relative overflow-hidden">
-      
+      className="min-h-screen flex items-center justify-center py-20 px-4 relative overflow-hidden"
+    >
       {/* White grid pattern background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0" style={{
@@ -61,11 +56,15 @@ const Hero = () => {
       <div className="container mx-auto max-w-4xl text-center space-y-8 relative z-10">
         {/* SEO-optimized static H1 */}
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-          Accredited Tech Training in Nigeria — Get{" "}
+          Accredited Tech Training in Africa — Get{" "}
           <span className="bg-gradient-to-r from-primary via-[hsl(170,100%,47%)] to-[hsl(180,100%,45%)] bg-clip-text text-transparent">
-
+            Trained, Certified & Employed
           </span>
         </h1>
+
+        <p className="text-sm md:text-base text-muted-foreground font-medium">
+          Headquartered in Nigeria. Training the continent.
+        </p>
 
         {/* Animated taglines */}
         <p className="text-xl md:text-2xl lg:text-3xl font-semibold min-h-[40px] md:min-h-[48px] flex items-center justify-center text-muted-foreground">
@@ -74,12 +73,12 @@ const Hero = () => {
           </span>
         </p>
 
-        {/* Subheading — GEO-optimized: stats-rich, authoritative, <20-word sentences */}
+        {/* Subheading */}
         <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
           Over 5,000 students trained across 12 industry-recognized courses since 2022.
           87% of graduates secure tech roles within six months.
           Our curriculum is aligned with national NBTI standards and global employer requirements.
-          Start earning from month 3 through our paid internship pathway.
+          Our top students start earning through internships as early as month 3.
         </p>
 
         {/* CTAs */}
@@ -87,18 +86,18 @@ const Hero = () => {
           <Button
             size="lg"
             onClick={() => {
-              const element = document.getElementById("see-how-you-are-doing");
+              const element = document.getElementById("get-started");
               element?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] hover:opacity-90 shadow-lg font-semibold text-background">
-            
+            className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] hover:opacity-90 shadow-lg font-semibold text-background"
+          >
             Tech Up Now
             <ArrowRight className="ml-2" size={20} />
           </Button>
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 };
 
 export default Hero;

@@ -11,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { SignupForm } from "./Auth/SignupForm";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, ShieldCheck, Users, Trophy, AlertCircle, Code, Database, Shield, Cloud, Palette, TrendingUp, Sparkles } from "lucide-react";
+import { Check, ShieldCheck, Users, Trophy, AlertCircle, Code, Database, Shield, Cloud, Palette, TrendingUp, Sparkles, Smartphone } from "lucide-react";
 import { CourseSelector } from "./Pricing/CourseSelector";
 import { BenefitSelector } from "./Pricing/BenefitSelector";
 import { LearningModeSelector } from "./Pricing/LearningModeSelector";
@@ -109,6 +109,12 @@ const allAvailableCourses: Course[] = [
   { id: "video-editing", name: "Video Editing", price: 13500, category: "Marketing" },
   { id: "photo-editing", name: "Photo Editing", price: 9000, category: "Marketing" },
   { id: "analytics", name: "Analytics & Growth", price: 12000, category: "Marketing" },
+  { id: "react-native", name: "React Native Development", price: 18000, category: "Mobile Development" },
+  { id: "flutter-dart", name: "Flutter & Dart", price: 18000, category: "Mobile Development" },
+  { id: "ios-swift", name: "iOS with Swift", price: 21000, category: "Mobile Development" },
+  { id: "android-kotlin", name: "Android with Kotlin", price: 21000, category: "Mobile Development" },
+  { id: "mobile-uiux", name: "Mobile UI/UX Design", price: 12000, category: "Mobile Development" },
+  { id: "cross-platform-projects", name: "Cross-Platform Projects", price: 15000, category: "Mobile Development" },
 ];
 
 const departmentPlans: DepartmentPlan[] = [
@@ -227,6 +233,31 @@ const departmentPlans: DepartmentPlan[] = [
       { id: "incident-response", name: "Incident Response", price: 12000 },
       { id: "comptia-prep", name: "CompTIA Prep", price: 15000 },
       { id: "ceh-prep", name: "CEH Prep", price: 18000 },
+    ],
+    learningModes: LEARNING_MODES,
+    benefits: [
+      { id: "job-placement", name: "Job Placement Support", price: 15000, description: "Get help finding your first job" },
+      { id: "internship", name: "Internship Access", price: 12000, description: "Access to partner internships" },
+      { id: "mentor-network", name: "Mentor Network Access", price: 18000, description: "Connect with industry mentors" },
+      { id: "certification-prep", name: "Industry Certification Prep", price: 22500, description: "Prepare for industry certifications" },
+      { id: "tech-certificate", name: "Tech Faculty Certificate", price: 0, description: "Official completion certificate" },
+    ],
+  },
+  {
+    id: "mobile-app-developer",
+    name: "Mobile App Developer",
+    fancyName: "Mobile App Development",
+    icon: Smartphone,
+    category: "development",
+    description: "Build powerful mobile apps for iOS and Android",
+    minimumAmount: 80000,
+    courses: [
+      { id: "react-native", name: "React Native Development", price: 18000 },
+      { id: "flutter-dart", name: "Flutter & Dart", price: 18000 },
+      { id: "ios-swift", name: "iOS with Swift", price: 21000 },
+      { id: "android-kotlin", name: "Android with Kotlin", price: 21000 },
+      { id: "mobile-uiux", name: "Mobile UI/UX Design", price: 12000 },
+      { id: "cross-platform-projects", name: "Cross-Platform Projects", price: 15000 },
     ],
     learningModes: LEARNING_MODES,
     benefits: [

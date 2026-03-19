@@ -198,12 +198,22 @@ const Header = () => {
                       </Link>
                     )
                   )}
-                  <Button
-                    onClick={handleSignUpClick}
-                    className="mt-4 bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90 gap-1"
-                  >
-                    Sign Up Free <ArrowRight size={14} />
-                  </Button>
+                  {isLoggedIn ? (
+                    <Button
+                      variant="outline"
+                      onClick={() => { setMobileOpen(false); logout(); }}
+                      className="mt-4 gap-1"
+                    >
+                      Log Out <LogOut size={14} />
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={handleSignUpClick}
+                      className="mt-4 bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90 gap-1"
+                    >
+                      Sign Up Free <ArrowRight size={14} />
+                    </Button>
+                  )}
                 </nav>
               </SheetContent>
             </Sheet>

@@ -63,7 +63,6 @@ const Hero = () => {
         </h1>
 
         <p className="text-sm md:text-base text-muted-foreground font-medium">
-          Headquartered in Nigeria. Training the continent.
         </p>
 
         {/* Animated taglines */}

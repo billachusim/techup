@@ -535,7 +535,7 @@ const Pricing = () => {
     });
   };
 
-  const handleSubmitRequest = (planId: string) => {
+  const handleSubmitRequest = async (planId: string) => {
     const plan = departmentPlans.find(p => p.id === planId);
     
     // Prevent switching from paid to free
@@ -570,6 +570,24 @@ const Pricing = () => {
     }
 
     setSelectedPlanId(planId);
+
+    // If user is logged in, skip the faculty ID dialog
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("faculty_id")
+        .eq("id", user.id)
+        .single();
+
+      if (profile?.faculty_id) {
+        setFacultyId(profile.faculty_id);
+        setCheckoutDialogOpen(true);
+        return;
+      }
+    }
+
+    // Fallback: show faculty ID dialog for unauthenticated users
     setFacultyIdDialogOpen(true);
   };
 

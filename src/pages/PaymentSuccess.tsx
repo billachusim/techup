@@ -11,6 +11,8 @@ const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const facultyId = searchParams.get("faculty_id") || "";
   const plan = searchParams.get("plan") || "";
+  const txRef = searchParams.get("tx_ref") || "";
+  const transactionId = searchParams.get("transaction_id") || "";
 
   return (
     <div className="min-h-screen bg-background">

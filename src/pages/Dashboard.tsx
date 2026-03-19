@@ -309,7 +309,7 @@ const Dashboard = () => {
           <div className="container mx-auto max-w-2xl py-24 px-4 text-center space-y-6">
             <h1 className="text-3xl font-bold">Student Dashboard</h1>
             <p className="text-muted-foreground">Please log in to access your dashboard.</p>
-            <Link to="/#see-how-you-are-doing">
+            <Link to="/#get-started">
               <Button size="lg">Go to Login</Button>
             </Link>
           </div>

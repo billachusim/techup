@@ -9,6 +9,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { MessageCircle, Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useUser } from "@/contexts/UserContext";
@@ -35,6 +43,8 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
     hearAbout: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [pendingFacultyId, setPendingFacultyId] = useState("");
   const { toast } = useToast();
   const { login } = useUser();
 
@@ -42,7 +52,6 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
     const currentMonth = new Date().getMonth() + 1;
     const currentYear = new Date().getFullYear();
     
-    // Call the database function to generate ID
     const { data, error } = await (supabase.rpc as any)('generate_faculty_id', {
       dept_name: department,
       learn_mode: learningMode,
@@ -52,7 +61,6 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
     
     if (error) {
       console.error('Error generating faculty ID:', error);
-      // Fallback to simple format if function fails
       return `TF-GEN-ONL-${String(currentMonth).padStart(2, '0')}${String(currentYear).slice(-2)}-${String(Math.floor(Math.random() * 10000)).padStart(4, '0')}`;
     }
     
@@ -74,30 +82,20 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      toast({
-        title: "Invalid Email",
-        description: "Please enter a valid email address.",
-        variant: "destructive",
-      });
+      toast({ title: "Invalid Email", description: "Please enter a valid email address.", variant: "destructive" });
       return;
     }
 
     if (formData.password.length < 6) {
-      toast({
-        title: "Weak Password",
-        description: "Password must be at least 6 characters long.",
-        variant: "destructive",
-      });
+      toast({ title: "Weak Password", description: "Password must be at least 6 characters long.", variant: "destructive" });
       return;
     }
 
     setIsLoading(true);
 
     try {
-      // Generate faculty ID with default values (will be updated on enrollment)
       const newFacultyId = await generateFacultyId();
 
-      // Create auth user
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email.trim(),
         password: formData.password,
@@ -106,7 +104,6 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
       if (authError) throw authError;
       if (!authData.user) throw new Error("User creation failed");
 
-      // Create profile
       const { error: profileError } = await supabase
         .from("profiles")
         .insert({
@@ -122,7 +119,6 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
 
       if (profileError) throw profileError;
 
-      // Create faculty_ids record
       await supabase.from("faculty_ids").insert({
         faculty_id: newFacultyId,
         name: formData.name.trim(),
@@ -134,7 +130,6 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
         department: "General Tech",
       });
 
-      // Create initial enrollment for free bootcamp
       await supabase.from("enrollments").insert({
         faculty_id: newFacultyId,
         plan_name: "Bootcamp Starter",
@@ -142,25 +137,9 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
         learning_mode: "online-only",
       });
 
-      // Send WhatsApp message
-      const message = `Hi! I've registered for Tech Faculty.
+      setPendingFacultyId(newFacultyId);
+      setShowConfirmModal(true);
 
-*My Details:*
-Name: ${formData.name.trim()}
-Email: ${formData.email.trim()}
-Phone: ${formData.phone.trim()}
-
-*My Faculty ID: ${newFacultyId}*`;
-
-      const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, "_blank");
-
-      toast({
-        title: "Registration Successful!",
-        description: `Your Faculty ID is ${newFacultyId}. Welcome to Tech Faculty!`,
-      });
-
-      onSuccess(newFacultyId);
     } catch (error: any) {
       console.error("Signup error:", error);
       toast({
@@ -173,77 +152,154 @@ Phone: ${formData.phone.trim()}
     }
   };
 
+  const handleConfirmMethod = (method: 'whatsapp' | 'email') => {
+    const message = `Welcome to Tech Faculty! 🎓
+
+*Registration Confirmed*
+
+Name: ${formData.name.trim()}
+Email: ${formData.email.trim()}
+Phone: ${formData.phone.trim()}
+Faculty ID: ${pendingFacultyId}
+
+Thank you for joining Tech Faculty. Your account has been created successfully.
+
+Next Steps:
+1. Log in with your email and password
+2. Explore courses in the Pricing section
+3. Join your cohort's WhatsApp group
+
+Questions? We're here to help!`;
+
+    if (method === 'whatsapp') {
+      const whatsappUrl = `https://wa.me/2348068597140?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, "_blank");
+    } else {
+      const subject = `Registration Confirmed - ${pendingFacultyId}`;
+      const body = message.replace(/\*/g, '');
+      const mailtoUrl = `mailto:thetechfaculty@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailtoUrl;
+    }
+
+    toast({
+      title: "Registration Successful!",
+      description: `Your Faculty ID is ${pendingFacultyId}. Welcome to Tech Faculty!`,
+    });
+
+    setShowConfirmModal(false);
+    onSuccess(pendingFacultyId);
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <Label htmlFor="name">Full Name</Label>
-        <Input
-          id="name"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          placeholder="John Doe"
-          maxLength={100}
-        />
-      </div>
+    <>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <Label htmlFor="name">Full Name</Label>
+          <Input
+            id="name"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            placeholder="John Doe"
+            maxLength={100}
+          />
+        </div>
 
-      <div>
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          placeholder="john@example.com"
-          maxLength={255}
-        />
-      </div>
+        <div>
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            type="email"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            placeholder="john@example.com"
+            maxLength={255}
+          />
+        </div>
 
-      <div>
-        <Label htmlFor="phone">Phone Number</Label>
-        <Input
-          id="phone"
-          type="tel"
-          value={formData.phone}
-          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          placeholder="+234 800 000 0000"
-          maxLength={20}
-        />
-      </div>
+        <div>
+          <Label htmlFor="phone">Phone Number</Label>
+          <Input
+            id="phone"
+            type="tel"
+            value={formData.phone}
+            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            placeholder="Your phone number"
+            maxLength={20}
+          />
+        </div>
 
-      <div>
-        <Label htmlFor="password">Password</Label>
-        <Input
-          id="password"
-          type="password"
-          value={formData.password}
-          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-          placeholder="Minimum 6 characters"
-          minLength={6}
-        />
-      </div>
+        <div>
+          <Label htmlFor="password">Password</Label>
+          <Input
+            id="password"
+            type="password"
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            placeholder="Minimum 6 characters"
+            minLength={6}
+          />
+        </div>
 
-      <div>
-        <Label htmlFor="hearAbout">How did you hear about us?</Label>
-        <Select
-          value={formData.hearAbout}
-          onValueChange={(value) => setFormData({ ...formData, hearAbout: value })}
-        >
-          <SelectTrigger id="hearAbout">
-            <SelectValue placeholder="Select an option" />
-          </SelectTrigger>
-          <SelectContent>
-            {hearAboutUs.map((option) => (
-              <SelectItem key={option} value={option}>
-                {option}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+        <div>
+          <Label htmlFor="hearAbout">How did you hear about us?</Label>
+          <Select
+            value={formData.hearAbout}
+            onValueChange={(value) => setFormData({ ...formData, hearAbout: value })}
+          >
+            <SelectTrigger id="hearAbout">
+              <SelectValue placeholder="Select an option" />
+            </SelectTrigger>
+            <SelectContent>
+              {hearAboutUs.map((option) => (
+                <SelectItem key={option} value={option}>
+                  {option}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-      <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading ? "Creating Account..." : "Sign Up"}
-      </Button>
-    </form>
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? "Creating Account..." : "Sign Up"}
+        </Button>
+      </form>
+
+      {/* Post-signup confirmation modal - non-dismissible */}
+      <Dialog open={showConfirmModal} onOpenChange={() => {}}>
+        <DialogContent className="sm:max-w-md" onPointerDownOutside={(e) => e.preventDefault()} onEscapeKeyDown={(e) => e.preventDefault()}>
+          <DialogHeader>
+            <DialogTitle>Registration Successful! 🎉</DialogTitle>
+            <DialogDescription>
+              Your Faculty ID is <span className="font-bold text-primary">{pendingFacultyId}</span>.
+              Choose how to receive your welcome confirmation.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 pt-4">
+            <Button
+              onClick={() => handleConfirmMethod('whatsapp')}
+              className="w-full justify-start gap-3 h-14"
+              variant="outline"
+            >
+              <MessageCircle className="h-5 w-5 text-green-600" />
+              <div className="text-left">
+                <p className="font-medium">Confirm via WhatsApp</p>
+                <p className="text-xs text-muted-foreground">Instant confirmation message</p>
+              </div>
+            </Button>
+            <Button
+              onClick={() => handleConfirmMethod('email')}
+              className="w-full justify-start gap-3 h-14"
+              variant="outline"
+            >
+              <Mail className="h-5 w-5 text-primary" />
+              <div className="text-left">
+                <p className="font-medium">Confirm via Email</p>
+                <p className="text-xs text-muted-foreground">Detailed confirmation email</p>
+              </div>
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };

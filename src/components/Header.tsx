@@ -3,13 +3,14 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/tech-faculty-logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ShoppingBag, ChevronDown } from "lucide-react";
+import { Menu, ShoppingBag, ChevronDown, ArrowRight } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { CurrencyToggle } from "@/components/CurrencyToggle";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -23,7 +24,7 @@ const navLinks = [
   },
   { label: "Careers", href: "/careers" },
   { label: "Events", href: "/events" },
-  { label: "SIWES / IT", href: "/siwes" },
+  { label: "Internships", href: "/siwes" },
   { label: "Tech Store", href: "/tech-store" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
@@ -67,7 +68,16 @@ const Header = () => {
         const el = document.getElementById(id);
         el?.scrollIntoView({ behavior: "smooth" });
       }
-      // If not on home page, Link will navigate to / and the hash will be handled
+    }
+  };
+
+  const handleSignUpClick = () => {
+    setMobileOpen(false);
+    if (location.pathname === "/") {
+      const el = document.getElementById("get-started");
+      el?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.location.href = "/#get-started";
     }
   };
 
@@ -127,47 +137,64 @@ const Header = () => {
                 </Link>
               )
             )}
+            <CurrencyToggle />
+            <Button
+              size="sm"
+              onClick={handleSignUpClick}
+              className="ml-2 bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90 gap-1"
+            >
+              Sign Up Free <ArrowRight size={14} />
+            </Button>
           </nav>
 
           {/* Mobile Menu */}
-          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon">
-                <Menu size={22} />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-72 pt-12">
-              <nav className="flex flex-col gap-1">
-                {navLinks.map((link) =>
-                  link.children ? (
-                    <div key={link.label} className="space-y-1">
-                      <p className="text-sm font-semibold text-muted-foreground px-3 pt-3">{link.label}</p>
-                      {link.children.map((child) => (
-                        <Link key={child.href} to={child.href} onClick={() => setMobileOpen(false)}>
-                          <Button
-                            variant="ghost"
-                            className={`w-full justify-start pl-6 text-sm ${isActive(child.href) ? "text-primary font-semibold" : ""}`}
-                          >
-                            {child.label}
-                          </Button>
-                        </Link>
-                      ))}
-                    </div>
-                  ) : (
-                    <Link key={link.href} to={link.href!} onClick={() => handleNavClick(link.href!)}>
-                      <Button
-                        variant="ghost"
-                        className={`w-full justify-start text-sm ${isActive(link.href!) ? "text-primary font-semibold" : ""}`}
-                      >
-                        {link.label === "Tech Store" && <ShoppingBag className="mr-2" size={16} />}
-                        {link.label}
-                      </Button>
-                    </Link>
-                  )
-                )}
-              </nav>
-            </SheetContent>
-          </Sheet>
+          <div className="flex items-center gap-2 lg:hidden">
+            <CurrencyToggle />
+            <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Menu size={22} />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-72 pt-12">
+                <nav className="flex flex-col gap-1">
+                  {navLinks.map((link) =>
+                    link.children ? (
+                      <div key={link.label} className="space-y-1">
+                        <p className="text-sm font-semibold text-muted-foreground px-3 pt-3">{link.label}</p>
+                        {link.children.map((child) => (
+                          <Link key={child.href} to={child.href} onClick={() => setMobileOpen(false)}>
+                            <Button
+                              variant="ghost"
+                              className={`w-full justify-start pl-6 text-sm ${isActive(child.href) ? "text-primary font-semibold" : ""}`}
+                            >
+                              {child.label}
+                            </Button>
+                          </Link>
+                        ))}
+                      </div>
+                    ) : (
+                      <Link key={link.href} to={link.href!} onClick={() => handleNavClick(link.href!)}>
+                        <Button
+                          variant="ghost"
+                          className={`w-full justify-start text-sm ${isActive(link.href!) ? "text-primary font-semibold" : ""}`}
+                        >
+                          {link.label === "Tech Store" && <ShoppingBag className="mr-2" size={16} />}
+                          {link.label}
+                        </Button>
+                      </Link>
+                    )
+                  )}
+                  <Button
+                    onClick={handleSignUpClick}
+                    className="mt-4 bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background hover:opacity-90 gap-1"
+                  >
+                    Sign Up Free <ArrowRight size={14} />
+                  </Button>
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
     </header>

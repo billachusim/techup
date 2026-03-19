@@ -14,9 +14,9 @@ const CredibilityBanner = ({ compact = false }: CredibilityBannerProps) => {
           <img src={nbtiLogo} alt="National Board for Technology Incubation" className="h-14 w-14 md:h-16 md:w-16 object-contain" />
         </div>
         <p className={`text-sm md:text-base text-muted-foreground ${compact ? "text-left" : "text-center"} leading-relaxed`}>
-          <span className="font-semibold text-foreground">Tech Faculty NG</span> is licensed and partnered by the{" "}
+          <span className="font-semibold text-foreground">Tech Faculty</span> is licensed and partnered by the{" "}
           <span className="font-semibold text-foreground">Federal Ministry of Science, Technology and Innovation</span> via the{" "}
-          <span className="font-semibold text-foreground">National Board for Technology Incubation (NBTI)</span>, with Zonal HQ in Nnewi, Anambra State — to assist schools and businesses integrate standard and regulated use of AI and Technology.
+          <span className="font-semibold text-foreground">National Board for Technology Incubation (NBTI)</span> — to assist schools and businesses integrate standard and regulated use of AI and Technology across Africa.
         </p>
       </div>
     </div>

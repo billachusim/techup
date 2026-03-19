@@ -206,13 +206,20 @@ const Header = () => {
                     )
                   )}
                   {isLoggedIn ? (
-                    <Button
-                      variant="outline"
-                      onClick={() => { setMobileOpen(false); logout(); }}
-                      className="mt-4 gap-1"
-                    >
-                      Log Out <LogOut size={14} />
-                    </Button>
+                    <>
+                      <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
+                        <Button variant="ghost" className="w-full justify-start gap-2 mt-2">
+                          <LayoutDashboard size={16} /> Dashboard
+                        </Button>
+                      </Link>
+                      <Button
+                        variant="outline"
+                        onClick={() => { setMobileOpen(false); logout(); }}
+                        className="mt-2 gap-1"
+                      >
+                        Log Out <LogOut size={14} />
+                      </Button>
+                    </>
                   ) : (
                     <Button
                       onClick={handleSignUpClick}

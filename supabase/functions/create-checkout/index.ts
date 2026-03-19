@@ -26,11 +26,13 @@ serve(async (req) => {
       benefits,
       learningMode,
       totalAmountNGN,
-      currencyCode,
+      currencyCode: rawCurrencyCode,
       discountCode,
       successUrl,
       cancelUrl,
     } = await req.json();
+
+    const currencyCode = (rawCurrencyCode || 'NGN').toUpperCase();
 
     // Calculate total amount from items
     let totalAmount = 0;

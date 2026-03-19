@@ -25,6 +25,7 @@ const App = () => (
   <HelmetProvider>
   <QueryClientProvider client={queryClient}>
     <UserProvider>
+      <CurrencyProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />

@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/tech-faculty-logo.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ShoppingBag, ChevronDown, ArrowRight, LogOut } from "lucide-react";
+import { Menu, ShoppingBag, ChevronDown, ArrowRight, LogOut, LayoutDashboard } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import {
   DropdownMenu,
@@ -141,14 +141,21 @@ const Header = () => {
             )}
             <CurrencyToggle />
             {isLoggedIn ? (
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={logout}
-                className="ml-2 gap-1"
-              >
-                Log Out <LogOut size={14} />
-              </Button>
+              <>
+                <Link to="/dashboard">
+                  <Button size="sm" variant="ghost" className="ml-1 gap-1 text-sm">
+                    <LayoutDashboard size={14} /> Dashboard
+                  </Button>
+                </Link>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={logout}
+                  className="ml-1 gap-1"
+                >
+                  Log Out <LogOut size={14} />
+                </Button>
+              </>
             ) : (
               <Button
                 size="sm"
@@ -199,13 +206,20 @@ const Header = () => {
                     )
                   )}
                   {isLoggedIn ? (
-                    <Button
-                      variant="outline"
-                      onClick={() => { setMobileOpen(false); logout(); }}
-                      className="mt-4 gap-1"
-                    >
-                      Log Out <LogOut size={14} />
-                    </Button>
+                    <>
+                      <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
+                        <Button variant="ghost" className="w-full justify-start gap-2 mt-2">
+                          <LayoutDashboard size={16} /> Dashboard
+                        </Button>
+                      </Link>
+                      <Button
+                        variant="outline"
+                        onClick={() => { setMobileOpen(false); logout(); }}
+                        className="mt-2 gap-1"
+                      >
+                        Log Out <LogOut size={14} />
+                      </Button>
+                    </>
                   ) : (
                     <Button
                       onClick={handleSignUpClick}

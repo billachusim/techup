@@ -20,7 +20,7 @@ interface BenefitSelectorProps {
 
 export const BenefitSelector = ({ benefits, selectedBenefits, onToggleBenefit }: BenefitSelectorProps) => {
   const [isOpen, setIsOpen] = useState(true);
-
+  const { formatPrice } = useCurrency();
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-muted/50 rounded-lg hover:bg-muted transition-colors">

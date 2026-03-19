@@ -5,6 +5,12 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
+const jsonResponse = (body: Record<string, unknown>, status = 200) =>
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -13,10 +19,7 @@ serve(async (req) => {
   try {
     const flutterwaveKey = Deno.env.get('FLUTTERWAVE_SECRET_KEY');
     if (!flutterwaveKey) {
-      return new Response(
-        JSON.stringify({ error: 'Flutterwave is not configured yet. Please add your Flutterwave secret key.' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return jsonResponse({ error: 'Flutterwave is not configured yet. Please add your Flutterwave secret key.' }, 500);
     }
 
     const {
@@ -25,16 +28,13 @@ serve(async (req) => {
       courses,
       benefits,
       learningMode,
-      totalAmountNGN,
       currencyCode: rawCurrencyCode,
       discountCode,
       successUrl,
-      cancelUrl,
     } = await req.json();
 
     const currencyCode = (rawCurrencyCode || 'NGN').toUpperCase();
 
-    // Calculate total amount from items
     let totalAmount = 0;
 
     if (courses && courses.length > 0) {
@@ -56,13 +56,9 @@ serve(async (req) => {
     }
 
     if (totalAmount <= 0) {
-      return new Response(
-        JSON.stringify({ error: 'No items selected for checkout' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      return jsonResponse({ error: 'No items selected for checkout' }, 400);
     }
 
-    // Apply discount if valid
     if (discountCode) {
       const code = discountCode.toUpperCase();
       if (code === 'TECHUP50') {
@@ -72,12 +68,10 @@ serve(async (req) => {
       }
     }
 
-    // Convert to USD if needed
     const amount = currencyCode === 'USD'
-      ? Math.round(totalAmount / 1400 * 100) / 100  // NGN to USD with 2 decimal places
+      ? Math.round(totalAmount / 1400 * 100) / 100
       : totalAmount;
 
-    // Build description from items
     const itemNames: string[] = [];
     if (courses) courses.forEach((c: any) => itemNames.push(c.name));
     if (learningMode?.name) itemNames.push(`Mode: ${learningMode.name}`);
@@ -110,29 +104,45 @@ serve(async (req) => {
       headers: {
         'Authorization': `Bearer ${flutterwaveKey}`,
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
       body: JSON.stringify(flutterwavePayload),
     });
 
-    const flwData = await flwResponse.json();
+    const rawResponse = await flwResponse.text();
+    let flwData: any = null;
 
-    if (flwData.status !== 'success') {
-      console.error('Flutterwave error:', flwData);
-      return new Response(
-        JSON.stringify({ error: flwData.message || 'Failed to create payment link' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    try {
+      flwData = rawResponse ? JSON.parse(rawResponse) : null;
+    } catch {
+      console.error('Flutterwave returned non-JSON response', {
+        status: flwResponse.status,
+        contentType: flwResponse.headers.get('content-type'),
+        bodyPreview: rawResponse.slice(0, 300),
+      });
+
+      return jsonResponse(
+        { error: 'Payment provider returned an unexpected response. Please try again or use WhatsApp or Email enrollment.' },
+        502,
       );
     }
 
-    return new Response(
-      JSON.stringify({ url: flwData.data.link }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    if (!flwResponse.ok || flwData?.status !== 'success' || !flwData?.data?.link) {
+      console.error('Flutterwave error:', {
+        status: flwResponse.status,
+        data: flwData,
+      });
+
+      return jsonResponse(
+        { error: flwData?.message || 'Failed to create payment link' },
+        flwResponse.ok ? 500 : 502,
+      );
+    }
+
+    return jsonResponse({ url: flwData.data.link });
   } catch (error) {
+    const message = error instanceof Error ? error.message : 'Failed to create checkout session';
     console.error('Flutterwave checkout error:', error);
-    return new Response(
-      JSON.stringify({ error: error.message || 'Failed to create checkout session' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    return jsonResponse({ error: message }, 500);
   }
 });

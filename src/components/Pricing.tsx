@@ -852,7 +852,7 @@ Please process my enrollment!`;
             <Icon className="h-8 w-8 text-primary" />
             <div className="text-right">
               <Badge variant={meetsMinimum ? "default" : "destructive"} className="text-lg px-3 py-1">
-                ₦{total.toLocaleString()}
+                {formatPrice(total)}
               </Badge>
               {!meetsMinimum && (
                 <p className="text-xs text-destructive flex items-center gap-1 justify-end mt-1">

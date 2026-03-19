@@ -141,14 +141,21 @@ const Header = () => {
             )}
             <CurrencyToggle />
             {isLoggedIn ? (
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={logout}
-                className="ml-2 gap-1"
-              >
-                Log Out <LogOut size={14} />
-              </Button>
+              <>
+                <Link to="/dashboard">
+                  <Button size="sm" variant="ghost" className="ml-1 gap-1 text-sm">
+                    <LayoutDashboard size={14} /> Dashboard
+                  </Button>
+                </Link>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={logout}
+                  className="ml-1 gap-1"
+                >
+                  Log Out <LogOut size={14} />
+                </Button>
+              </>
             ) : (
               <Button
                 size="sm"

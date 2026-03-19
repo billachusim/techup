@@ -16,6 +16,7 @@ import { CourseSelector } from "./Pricing/CourseSelector";
 import { BenefitSelector } from "./Pricing/BenefitSelector";
 import { LearningModeSelector } from "./Pricing/LearningModeSelector";
 import { CheckoutDialog } from "./Pricing/CheckoutDialog";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 type PlanCategory = "beginner" | "development" | "data-ai" | "creative" | "security" | "custom";
 

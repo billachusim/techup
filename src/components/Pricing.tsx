@@ -857,7 +857,7 @@ Please process my enrollment!`;
               {!meetsMinimum && (
                 <p className="text-xs text-destructive flex items-center gap-1 justify-end mt-1">
                   <AlertCircle className="h-3 w-3" />
-                  Min: ₦{plan.minimumAmount.toLocaleString()}
+                  Min: {formatPrice(plan.minimumAmount)}
                 </p>
               )}
             </div>

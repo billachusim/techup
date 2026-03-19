@@ -1,5 +1,4 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import Stripe from "https://esm.sh/stripe@14.21.0";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -12,15 +11,13 @@ serve(async (req) => {
   }
 
   try {
-    const stripeKey = Deno.env.get('STRIPE_SECRET_KEY');
-    if (!stripeKey) {
+    const flutterwaveKey = Deno.env.get('FLUTTERWAVE_SECRET_KEY');
+    if (!flutterwaveKey) {
       return new Response(
-        JSON.stringify({ error: 'Stripe is not configured yet. Please add your Stripe secret key.' }),
+        JSON.stringify({ error: 'Flutterwave is not configured yet. Please add your Flutterwave secret key.' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-
-    const stripe = new Stripe(stripeKey, { apiVersion: '2023-10-16' });
 
     const {
       planName,
@@ -35,117 +32,102 @@ serve(async (req) => {
       cancelUrl,
     } = await req.json();
 
-    // Build line items
-    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
+    // Calculate total amount from items
+    let totalAmount = 0;
 
-    // Add courses
     if (courses && courses.length > 0) {
       for (const course of courses) {
-        const amount = currencyCode === 'USD'
-          ? Math.round(course.price / 1400 * 100) // Convert NGN to USD cents
-          : course.price * 100; // NGN to kobo
-
-        lineItems.push({
-          price_data: {
-            currency: currencyCode.toLowerCase(),
-            product_data: {
-              name: course.name,
-              description: `Tech Faculty - ${planName}`,
-            },
-            unit_amount: Math.max(amount, currencyCode === 'USD' ? 50 : 5000), // Stripe minimums
-          },
-          quantity: 1,
-        });
+        totalAmount += course.price;
       }
     }
 
-    // Add learning mode if it has a price
     if (learningMode && learningMode.price > 0) {
-      const modeAmount = currencyCode === 'USD'
-        ? Math.round(learningMode.price / 1400 * 100)
-        : learningMode.price * 100;
-
-      lineItems.push({
-        price_data: {
-          currency: currencyCode.toLowerCase(),
-          product_data: {
-            name: `Learning Mode: ${learningMode.name}`,
-            description: learningMode.description || '',
-          },
-          unit_amount: Math.max(modeAmount, currencyCode === 'USD' ? 50 : 5000),
-        },
-        quantity: 1,
-      });
+      totalAmount += learningMode.price;
     }
 
-    // Add benefits
     if (benefits && benefits.length > 0) {
       for (const benefit of benefits) {
-        if (benefit.price <= 0) continue;
-        const benefitAmount = currencyCode === 'USD'
-          ? Math.round(benefit.price / 1400 * 100)
-          : benefit.price * 100;
-
-        lineItems.push({
-          price_data: {
-            currency: currencyCode.toLowerCase(),
-            product_data: {
-              name: benefit.name,
-              description: benefit.description || '',
-            },
-            unit_amount: Math.max(benefitAmount, currencyCode === 'USD' ? 50 : 5000),
-          },
-          quantity: 1,
-        });
+        if (benefit.price > 0) {
+          totalAmount += benefit.price;
+        }
       }
     }
 
-    if (lineItems.length === 0) {
+    if (totalAmount <= 0) {
       return new Response(
         JSON.stringify({ error: 'No items selected for checkout' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Create checkout session params
-    const sessionParams: Stripe.Checkout.SessionCreateParams = {
-      payment_method_types: ['card'],
-      line_items: lineItems,
-      mode: 'payment',
-      success_url: `${successUrl}?session_id={CHECKOUT_SESSION_ID}&faculty_id=${encodeURIComponent(facultyId)}&plan=${encodeURIComponent(planName)}`,
-      cancel_url: cancelUrl,
-      metadata: {
-        faculty_id: facultyId,
-        plan_name: planName,
-        discount_code: discountCode || '',
-        currency: currencyCode,
-      },
-      customer_email: undefined, // Will be filled if we can look it up
-    };
-
     // Apply discount if valid
     if (discountCode) {
       const code = discountCode.toUpperCase();
-      if (code === 'TECHUP50' || code === 'TECHUP25') {
-        const percent = code === 'TECHUP50' ? 50 : 25;
-        // Create a one-time coupon
-        const coupon = await stripe.coupons.create({
-          percent_off: percent,
-          duration: 'once',
-          name: `${code} - ${percent}% OFF`,
-        });
-        sessionParams.discounts = [{ coupon: coupon.id }];
+      if (code === 'TECHUP50') {
+        totalAmount = Math.round(totalAmount * 0.5);
+      } else if (code === 'TECHUP25') {
+        totalAmount = Math.round(totalAmount * 0.75);
       }
     }
 
-    const session = await stripe.checkout.sessions.create(sessionParams);
+    // Convert to USD if needed
+    const amount = currencyCode === 'USD'
+      ? Math.round(totalAmount / 1400 * 100) / 100  // NGN to USD with 2 decimal places
+      : totalAmount;
+
+    // Build description from items
+    const itemNames: string[] = [];
+    if (courses) courses.forEach((c: any) => itemNames.push(c.name));
+    if (learningMode?.name) itemNames.push(`Mode: ${learningMode.name}`);
+    if (benefits) benefits.forEach((b: any) => { if (b.price > 0) itemNames.push(b.name); });
+
+    const txRef = `TF-${facultyId}-${Date.now()}`;
+
+    const flutterwavePayload = {
+      tx_ref: txRef,
+      amount,
+      currency: currencyCode === 'USD' ? 'USD' : 'NGN',
+      redirect_url: `${successUrl}?tx_ref=${encodeURIComponent(txRef)}&faculty_id=${encodeURIComponent(facultyId)}&plan=${encodeURIComponent(planName)}`,
+      meta: {
+        faculty_id: facultyId,
+        plan_name: planName,
+        discount_code: discountCode || '',
+      },
+      customer: {
+        email: `${facultyId}@techfaculty.ng`,
+      },
+      customizations: {
+        title: 'Tech Faculty',
+        description: `${planName} Plan — ${itemNames.join(', ')}`,
+        logo: 'https://techup.lovable.app/favicon.ico',
+      },
+    };
+
+    const flwResponse = await fetch('https://api.flutterwave.com/v3/payments', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${flutterwaveKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(flutterwavePayload),
+    });
+
+    const flwData = await flwResponse.json();
+
+    if (flwData.status !== 'success') {
+      console.error('Flutterwave error:', flwData);
+      return new Response(
+        JSON.stringify({ error: flwData.message || 'Failed to create payment link' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     return new Response(
-      JSON.stringify({ url: session.url }),
+      JSON.stringify({ url: flwData.data.link }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
-    console.error('Stripe checkout error:', error);
+    console.error('Flutterwave checkout error:', error);
     return new Response(
       JSON.stringify({ error: error.message || 'Failed to create checkout session' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

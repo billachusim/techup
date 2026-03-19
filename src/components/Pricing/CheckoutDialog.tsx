@@ -45,7 +45,7 @@ export const CheckoutDialog = ({ open, onOpenChange, onSubmit, totalAmount, isLo
                 <CreditCard className="h-5 w-5 text-primary" />
                 <div>
                   <p className="font-medium text-foreground">Pay with Card</p>
-                  <p className="text-xs text-muted-foreground">Visa, Mastercard — Secure checkout via Stripe</p>
+                  <p className="text-xs text-muted-foreground">Visa, Mastercard, Bank Transfer, USSD, Mobile Money</p>
                 </div>
               </Label>
             </div>

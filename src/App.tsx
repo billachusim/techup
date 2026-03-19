@@ -5,6 +5,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserProvider } from "@/contexts/UserContext";
+import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import Index from "./pages/Index";
 import TechStore from "./pages/TechStore";
 import BusinessPartnerships from "./pages/BusinessPartnerships";
@@ -24,6 +25,7 @@ const App = () => (
   <HelmetProvider>
   <QueryClientProvider client={queryClient}>
     <UserProvider>
+      <CurrencyProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -45,6 +47,7 @@ const App = () => (
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
+      </CurrencyProvider>
     </UserProvider>
   </QueryClientProvider>
   </HelmetProvider>

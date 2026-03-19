@@ -3,6 +3,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 interface LearningMode {
   id: string;
@@ -19,7 +20,7 @@ interface LearningModeSelectorProps {
 
 export const LearningModeSelector = ({ modes, selectedMode, onSelectMode }: LearningModeSelectorProps) => {
   const [isOpen, setIsOpen] = useState(true);
-
+  const { formatPrice } = useCurrency();
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-muted/50 rounded-lg hover:bg-muted transition-colors">
@@ -40,7 +41,7 @@ export const LearningModeSelector = ({ modes, selectedMode, onSelectMode }: Lear
                 </div>
               </div>
               <span className="text-sm font-semibold text-primary">
-                {mode.price === 0 ? 'Included' : `₦${mode.price.toLocaleString()}`}
+                {mode.price === 0 ? 'Included' : formatPrice(mode.price)}
               </span>
             </div>
           ))}

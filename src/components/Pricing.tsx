@@ -16,6 +16,7 @@ import { CourseSelector } from "./Pricing/CourseSelector";
 import { BenefitSelector } from "./Pricing/BenefitSelector";
 import { LearningModeSelector } from "./Pricing/LearningModeSelector";
 import { CheckoutDialog } from "./Pricing/CheckoutDialog";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 type PlanCategory = "beginner" | "development" | "data-ai" | "creative" | "security" | "custom";
 
@@ -375,6 +376,7 @@ const Pricing = () => {
   const [userHasPaidPlan, setUserHasPaidPlan] = useState(false);
   const [enrollmentData, setEnrollmentData] = useState<any>(null);
   const { toast } = useToast();
+  const { formatPrice, symbol, convertPrice, isNigeria } = useCurrency();
 
   const [selections, setSelections] = useState<Record<string, Selection>>({});
   const [totalPrices, setTotalPrices] = useState<Record<string, number>>({});
@@ -561,7 +563,7 @@ const Pricing = () => {
     if (!plan?.isFree && total < (plan?.minimumAmount || 0)) {
       toast({
         title: "Minimum Amount Required",
-        description: `Please select items totaling at least ₦${plan?.minimumAmount.toLocaleString()}`,
+        description: `Please select items totaling at least ${formatPrice(plan?.minimumAmount || 0)}`,
         variant: "destructive",
       });
       return;
@@ -694,12 +696,12 @@ const Pricing = () => {
 
     const selectedCourseDetails = selection.selectedCourses.map((id) => {
       const course = courses.find((c) => c.id === id);
-      return course ? `${course.name} - ₦${course.price.toLocaleString()}` : '';
+      return course ? `${course.name} - ${formatPrice(course.price)}` : '';
     }).filter(Boolean);
 
     const selectedBenefitDetails = selection.selectedBenefits.map((id) => {
       const benefit = plan.benefits.find((b) => b.id === id);
-      return benefit ? `${benefit.name} - ₦${benefit.price.toLocaleString()}` : '';
+      return benefit ? `${benefit.name} - ${formatPrice(benefit.price)}` : '';
     }).filter(Boolean);
 
     const learningModeDetail = plan.learningModes.find((m) => m.id === selection.learningMode);
@@ -714,12 +716,12 @@ I'm ready to enroll in *${plan.fancyName}*
 
 *New Faculty ID:* ${newFacultyId}
 *(Previous ID: ${currentFacultyId})*
-*Total Amount:* ₦${total.toLocaleString()}${discountInfo}
+*Total Amount:* ${formatPrice(total)}${discountInfo}
 
 *Selected Courses:*
 ${selectedCourseDetails.length > 0 ? selectedCourseDetails.map(c => `✓ ${c}`).join('\n') : 'No courses selected'}
 
-*Learning Mode:* ${learningModeDetail?.name} - ${learningModeDetail?.price === 0 ? 'Included' : '₦' + learningModeDetail?.price.toLocaleString()}
+*Learning Mode:* ${learningModeDetail?.name} - ${learningModeDetail?.price === 0 ? 'Included' : formatPrice(learningModeDetail?.price || 0)}
 
 *Additional Benefits:*
 ${selectedBenefitDetails.length > 0 ? selectedBenefitDetails.map(b => `✓ ${b}`).join('\n') : 'No benefits selected'}
@@ -788,7 +790,7 @@ Please process my enrollment!`;
           </div>
           <CardTitle>{plan.fancyName}</CardTitle>
           <CardDescription>{plan.description}</CardDescription>
-          <div className="text-3xl font-bold text-primary mt-4">₦0</div>
+          <div className="text-3xl font-bold text-primary mt-4">{formatPrice(0)}</div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-3">
@@ -850,12 +852,12 @@ Please process my enrollment!`;
             <Icon className="h-8 w-8 text-primary" />
             <div className="text-right">
               <Badge variant={meetsMinimum ? "default" : "destructive"} className="text-lg px-3 py-1">
-                ₦{total.toLocaleString()}
+                {formatPrice(total)}
               </Badge>
               {!meetsMinimum && (
                 <p className="text-xs text-destructive flex items-center gap-1 justify-end mt-1">
                   <AlertCircle className="h-3 w-3" />
-                  Min: ₦{plan.minimumAmount.toLocaleString()}
+                  Min: {formatPrice(plan.minimumAmount)}
                 </p>
               )}
             </div>
@@ -889,7 +891,7 @@ Please process my enrollment!`;
                         <p className="text-sm font-medium">{course.name}</p>
                         <p className="text-xs text-muted-foreground">{course.category}</p>
                       </div>
-                      <span className="text-sm font-semibold">₦{course.price.toLocaleString()}</span>
+                      <span className="text-sm font-semibold">{formatPrice(course.price)}</span>
                     </div>
                   </div>
                 );
@@ -969,12 +971,12 @@ Please process my enrollment!`;
                 <Badge variant="default" className="bg-primary">Active Plan</Badge>
               )}
               <Badge variant={meetsMinimum ? "default" : "destructive"} className="text-lg px-3 py-1">
-                ₦{total.toLocaleString()}
+                {formatPrice(total)}
               </Badge>
               {!meetsMinimum && (
                 <p className="text-xs text-destructive flex items-center gap-1 justify-end mt-1">
                   <AlertCircle className="h-3 w-3" />
-                  Min: ₦{plan.minimumAmount.toLocaleString()}
+                  Min: {formatPrice(plan.minimumAmount)}
                 </p>
               )}
             </div>

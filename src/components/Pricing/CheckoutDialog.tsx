@@ -4,6 +4,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Mail, MessageCircle } from "lucide-react";
 import { useState } from "react";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 interface CheckoutDialogProps {
   open: boolean;
@@ -15,6 +16,7 @@ interface CheckoutDialogProps {
 
 export const CheckoutDialog = ({ open, onOpenChange, onSubmit, totalAmount, isLoading }: CheckoutDialogProps) => {
   const [deliveryMethod, setDeliveryMethod] = useState<'email' | 'whatsapp'>('whatsapp');
+  const { formatPrice } = useCurrency();
 
   const handleSubmit = () => {
     onSubmit(deliveryMethod);
@@ -33,7 +35,7 @@ export const CheckoutDialog = ({ open, onOpenChange, onSubmit, totalAmount, isLo
         <div className="space-y-4 py-4">
           <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
             <p className="text-sm text-muted-foreground">Total Amount</p>
-            <p className="text-2xl font-bold text-primary">₦{totalAmount.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-primary">{formatPrice(totalAmount)}</p>
           </div>
 
           <RadioGroup value={deliveryMethod} onValueChange={(value) => setDeliveryMethod(value as 'email' | 'whatsapp')}>

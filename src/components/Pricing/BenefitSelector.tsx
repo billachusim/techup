@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 interface Benefit {
   id: string;
@@ -19,7 +20,7 @@ interface BenefitSelectorProps {
 
 export const BenefitSelector = ({ benefits, selectedBenefits, onToggleBenefit }: BenefitSelectorProps) => {
   const [isOpen, setIsOpen] = useState(true);
-
+  const { formatPrice } = useCurrency();
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-muted/50 rounded-lg hover:bg-muted transition-colors">
@@ -45,7 +46,7 @@ export const BenefitSelector = ({ benefits, selectedBenefits, onToggleBenefit }:
               </div>
             </div>
             <span className="text-sm font-semibold text-primary">
-              {benefit.price === 0 ? 'Free' : `₦${benefit.price.toLocaleString()}`}
+              {benefit.price === 0 ? 'Free' : formatPrice(benefit.price)}
             </span>
           </div>
         ))}

@@ -26,7 +26,7 @@ serve(async (req) => {
       benefits,
       learningMode,
       totalAmountNGN,
-      currencyCode,
+      currencyCode: rawCurrencyCode,
       discountCode,
       successUrl,
       cancelUrl,

@@ -36,6 +36,7 @@ const Header = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { isLoggedIn, logout } = useUser();
 
   useEffect(() => {
     let ticking = false;

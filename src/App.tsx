@@ -54,6 +54,11 @@ const App = () => (
             <Route path="/careers" element={<Careers />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
+            {/* Legacy WordPress redirects */}
+            <Route path="/category/*" element={<Navigate to="/blog" replace />} />
+            <Route path="/tag/*" element={<Navigate to="/blog" replace />} />
+            <Route path="/tech" element={<Navigate to="/" replace />} />
+            <Route path="/why-90-of-tech-learners-quit-but-you-dont-have-to" element={<Navigate to="/blog" replace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

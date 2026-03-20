@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { HelmetProvider } from "react-helmet-async";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
 const ScrollToTop = () => {
@@ -54,6 +54,11 @@ const App = () => (
             <Route path="/careers" element={<Careers />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
+            {/* Legacy WordPress redirects */}
+            <Route path="/category/*" element={<Navigate to="/blog" replace />} />
+            <Route path="/tag/*" element={<Navigate to="/blog" replace />} />
+            <Route path="/tech" element={<Navigate to="/" replace />} />
+            <Route path="/why-90-of-tech-learners-quit-but-you-dont-have-to" element={<Navigate to="/blog" replace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

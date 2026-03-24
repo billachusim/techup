@@ -16,10 +16,9 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     {
       name: "serve-verify-static",
-      configureServer(server) {
-        server.middlewares.use((req, res, next) => {
+      configureServer(server: ViteDevServer) {
+        server.middlewares.use((req: IncomingMessage, _res: ServerResponse, next: () => void) => {
           if (req.url?.startsWith("/verify")) {
-            // Let Vite serve the static files from public/verify/
             if (req.url === "/verify" || req.url === "/verify/") {
               req.url = "/verify/index.html";
             }

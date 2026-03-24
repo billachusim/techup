@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=yes">
+  <title>Certificate Verification — Tech Faculty NG</title>
+  <meta name="description" content="Verify and authenticate any certificate issued by Tech Faculty NG. Enter the unique certificate ID to confirm authenticity and prevent forgery.">
+  <meta property="og:title" content="Certificate Verification — Tech Faculty NG">
+  <meta property="og:description" content="Authenticate any credential issued by Tech Faculty NG. Enter the unique certificate ID to confirm authenticity.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://techfaculty.ng/verify">
+  <link rel="canonical" href="https://techfaculty.ng/verify">
+  <link rel="icon" href="TFNGCertVerify.jpg">
+  <link rel="stylesheet" href="verifycss.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo-area">
+        <img class="logo-image" src="TFNGCertVerify.jpg" alt="Tech Faculty NG Logo">
+        <div class="logo-text">
+          <div class="logo-main">Tech Faculty NG</div>
+          <div class="tagline">Train, Certify and Employ</div>
+        </div>
+      </div>
+      <a class="home-btn" href="https://techfaculty.ng" style="text-decoration:none">Home</a>
+    </div>
+    <div class="hero">
+      <h1>Certificate Verification System</h1>
+      <p>Authenticate any credential issued by Tech Faculty NG. Enter the unique certificate ID to confirm authenticity.</p>
+    </div>
+    <div class="verification-card">
+      <div class="input-group">
+        <label>🔐 Certificate ID</label>
+        <div class="input-wrapper">
+          <input type="text" id="certIdInput" placeholder="e.g., TFNG202602, TFNG202603, TFNG202604" autocomplete="off">
+          <button id="verifyBtn" class="verify-btn">✓ Verify Certificate</button>
+        </div>
+        <div id="statusMsg" class="status-message"></div>
+      </div>
+      <div id="certificatePanel" class="certificate-result hidden">
+        <div class="result-header">
+          <div class="seal-icon">🎓</div>
+          <div class="verified-badge">✓ VERIFIED · OFFICIAL RECORD</div>
+        </div>
+        <div class="cert-detail-grid">
+          <div class="detail-row">
+            <div class="detail-label">Full Name</div>
+            <div class="detail-value" id="displayName">—</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Course</div>
+            <div class="detail-value" id="displayCourse">—</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Certificate Type</div>
+            <div class="detail-value" id="displayCertType">—</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Certificate ID</div>
+            <div class="detail-value"><span class="cert-id-highlight" id="displayCertId">—</span></div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Issued by</div>
+            <div class="detail-value" id="displayIssuer">—</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Date Issued</div>
+            <div class="detail-value" id="displayDate">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+  <script src="verifyjs.js"></script>
+</body>
+</html>

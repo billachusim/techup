@@ -111,14 +111,25 @@ export const CertificateCard = ({ certificate, studentName }: CertificateCardPro
               </p>
             </div>
           </div>
-          <Button
-            size="sm"
-            onClick={handleDownload}
-            className="gap-2"
-          >
-            <Download className="w-4 h-4" />
-            Download
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => window.open('/verify', '_blank')}
+              className="gap-2"
+            >
+              <Award className="w-4 h-4" />
+              Verify
+            </Button>
+            <Button
+              size="sm"
+              onClick={handleDownload}
+              className="gap-2"
+            >
+              <Download className="w-4 h-4" />
+              Download
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>

@@ -57,6 +57,7 @@ const Footer = () => {
               <Link to="/blog" className="hover:text-primary transition-colors">Blog</Link>
               <Link to="/careers" className="hover:text-primary transition-colors">Careers</Link>
               <Link to="/products" className="hover:text-primary transition-colors">Products</Link>
+              <a href="/verify" className="hover:text-primary transition-colors">Verify Certificate</a>
               <Link to="/tech-store" className="hover:text-primary transition-colors flex items-center gap-1">
                 <ShoppingBag size={14} /> Tech Store
               </Link>

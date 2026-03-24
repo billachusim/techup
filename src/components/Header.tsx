@@ -26,6 +26,7 @@ const navLinks = [
   { label: "Careers", href: "/careers" },
   { label: "Events", href: "/events" },
   { label: "Internships", href: "/siwes" },
+  { label: "Products", href: "/products" },
   { label: "Tech Store", href: "/tech-store" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },

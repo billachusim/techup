@@ -9,7 +9,25 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  appType: "spa",
+  plugins: [
+    react(),
+    mode === "development" && componentTagger(),
+    {
+      name: "serve-verify-static",
+      configureServer(server) {
+        server.middlewares.use((req, res, next) => {
+          if (req.url?.startsWith("/verify")) {
+            // Let Vite serve the static files from public/verify/
+            if (req.url === "/verify" || req.url === "/verify/") {
+              req.url = "/verify/index.html";
+            }
+          }
+          next();
+        });
+      },
+    },
+  ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

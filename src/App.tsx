@@ -57,6 +57,7 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="/products" element={<Products />} />
+            <Route path="/verify/*" element={<Verify />} />
             {/* Legacy WordPress redirects */}
             <Route path="/category/*" element={<Navigate to="/blog" replace />} />
             <Route path="/tag/*" element={<Navigate to="/blog" replace />} />

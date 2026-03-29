@@ -8,204 +8,373 @@ export interface BlogPost {
   publishedAt: string;
   readTime: string;
   keywords: string[];
-  featuredImage?: string;
+  featuredImage: string;
 }
 
 export const blogPosts: BlogPost[] = [
   {
     slug: "how-to-start-tech-career-nigeria-2026",
-    title: "How to Start a Tech Career in Nigeria in 2026: A Complete Guide",
-    excerpt: "Breaking into tech in Nigeria has never been more accessible. Here's a step-by-step guide to launching your tech career – from choosing the right bootcamp to landing your first job.",
+    title: "How to Start a Tech Career in Nigeria in 2026: A Comprehensive Guide",
+    excerpt: "Breaking into tech in Nigeria has never been more accessible. Here's a step-by-step guide to launching your tech career — from choosing the right bootcamp to landing your first job.",
     category: "Career Guide",
-    author: "Tech Fortune NG",
+    author: "Tech Faculty",
     publishedAt: "2026-03-10",
     readTime: "8 min read",
     keywords: ["tech career Nigeria", "start coding Nigeria", "software developer Nigeria", "tech bootcamp Nigeria", "job hunting Nigeria"],
-    featuredImage: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+    featuredImage: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
   },
   {
-    slug: "top-5-in-demand-tech-bootcamps-nigeria-2026",
-    title: "Top 5 In-Demand Tech Bootcamps in Nigeria for 2026",
-    excerpt: "We ranked the top 5 tech bootcamps in Nigeria based on curriculum, career support, and student outcomes. Here's what sets them apart.",
+    slug: "tut-5-in-design-tech-bootcamps-yabatech-2026",
+    title: "Tut 5: Design Tech Bootcamps in YabaTech for 2026",
+    excerpt: "We rank the top 5 tech bootcamps in YabaTech based on community, curriculum, and student outcomes. Here's what sets them apart.",
     category: "Career Guide",
-    author: "Tech Fortune NG",
+    author: "Tech Faculty",
     publishedAt: "2026-03-05",
     readTime: "6 min read",
-    keywords: ["tech bootcamps Nigeria", "in-demand skills Nigeria", "career support Nigeria", "student outcomes Nigeria"],
-    featuredImage: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+    keywords: ["tech bootcamps YabaTech", "in-design bootcamps YabaTech", "curriculum support YabaTech", "student outcomes YabaTech"],
+    featuredImage: "https://images.unsplash.com/photo-1517732306149-e8f829eb588a?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
   },
   {
-    slug: "what-is-sves-nigeria-business-leadership-elite",
-    title: "What is SVES? Nigeria Business Leadership Elite Explained",
-    excerpt: "The Nigerian business elite have spent 30-40 years building their wealth. But not all elites are equally equipped. Here are the top 5 most in-demand bootcamps right now.",
-    category: "SVES & Industry",
-    author: "Tech Fortune NG",
+    slug: "what-is-sves-nigeria-business-elite-explained",
+    title: "What is SVES? Nigeria Business Elite Explained",
+    excerpt: "The Nigerian business elite have spent 30-40 years building their wealth. But not all elites are equally influential. Here are the top 5 most in-demand tech bootcamps right now.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
     publishedAt: "2026-02-20",
     readTime: "7 min read",
-    keywords: ["SVES Nigeria", "business elite Nigeria", "networking Nigeria", "executive training Nigeria"],
-    featuredImage: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+    keywords: ["business elite Nigeria", "SVES Nigeria", "entrepreneur elite Nigeria", "influential Nigeria tech"],
+    featuredImage: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
   },
   {
-    slug: "why-tech-fortune-ng-helps-businesses",
-    title: "Why Tech Fortune NG Helps Businesses",
-    excerpt: "Tech Fortune NG is not just for big-name companies. Here's how we transform small and medium-sized enterprises across Nigeria.",
-    category: "Business",
-    author: "Tech Fortune NG",
+    slug: "why-tech-faculty-ng-helps-entrepreneurs",
+    title: "Why Tech Faculty NG Helps Entrepreneurs",
+    excerpt: "Tech Faculty NG is not just for big-name corporations. Here's how we transform small and medium-sized enterprises across Nigeria.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
     publishedAt: "2026-02-10",
     readTime: "6 min read",
-    keywords: ["business technology Nigeria", "SME technology Nigeria", "transformative impact Nigeria", "custom solutions Nigeria"],
-    featuredImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+    keywords: ["entrepreneur tech Nigeria", "SMEs Nigeria", "transformative tech Nigeria", "business support Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1556761175-bf452423470e?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
   },
   {
-    slug: "the-bootcamp-model-1-ai-ml-learning",
-    title: "The Bootcamp Model 1: AI & ML Learning",
-    excerpt: "Training providers come to your campus for a 1-4 week intensive program. Students learn project-based, hands-on skills.",
-    category: "Training",
-    author: "Tech Fortune NG",
+    slug: "tech-faculty-ng-helps-entrepreneurs",
+    title: "Why Tech Faculty NG Helps Entrepreneurs",
+    excerpt: "Nigerian entrepreneurs are paying attention. They're paying to find the right tech training provider. Here's our guide.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
     publishedAt: "2026-01-15",
-    readTime: "5 min read",
-    keywords: ["AI & ML Nigeria", "machine learning Nigeria", "data science Nigeria", "AI bootcamp Nigeria"],
-    featuredImage: "https://images.unsplash.com/photo-1515879218367-8466d310aaa5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-  },
-  {
-    slug: "bootcamp-model-2-custom-ai-solutions",
-    title: "Bootcamp Model 2: Custom AI Solutions",
-    excerpt: "Faculty are handpicked from top tech companies to design curriculum that meets your exact needs.",
-    category: "Training",
-    author: "Tech Fortune NG",
-    publishedAt: "2026-01-10",
     readTime: "6 min read",
-    keywords: ["custom AI training Nigeria", "hands-on AI labs Nigeria", "real-world projects Nigeria"],
-    featuredImage: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+    keywords: ["Tech Faculty NG", "SMEs Nigeria", "business training Nigeria", "entrepreneur Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
   },
   {
-    slug: "bootcamp-model-3-internship-placement",
-    title: "Bootcamp Model 3: Internship Placement",
-    excerpt: "Students are placed at the training center for a hands-on internship, gaining real-world experience while receiving a stipend.",
-    category: "Training",
-    author: "Tech Fortune NG",
-    publishedAt: "2025-12-01",
-    readTime: "5 min read",
-    keywords: ["internship Nigeria", "Tech bootcamp internship", "paid training Nigeria", "career launch Nigeria"],
-    featuredImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-  },
-  {
-    slug: "why-tech-fortune-ng-helps-entrepreneurs",
-    title: "How Nigerian Entrepreneurs Can Get Tech Training in 2026",
-    excerpt: "Nigerian entrepreneurs are pulling their hair out trying to find the right tech training provider. Here's our guide.",
-    category: "Entrepreneurship",
-    author: "Tech Fortune NG",
-    publishedAt: "2025-11-15",
-    readTime: "6 min read",
-    keywords: ["entrepreneur tech training Nigeria", "founder training Nigeria", "startup tech skills Nigeria"],
-    featuredImage: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-  },
-  {
-    slug: "the-skills-gap-nigeria-needs-ai-training",
-    title: "The Skills Gap Nigeria Needs: AI Training for Business Leaders",
-    excerpt: "Nigerian businesses lose 30-40% of productivity due to the lack of skilled tech talent. AI can help if business leaders understand it.",
-    category: "Business",
-    author: "Tech Fortune NG",
-    publishedAt: "2025-11-01",
-    readTime: "7 min read",
-    keywords: ["AI for business Nigeria", "corporate training Nigeria", "executive AI education Nigeria", "skills gap Nigeria"],
-    featuredImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-  },
-  {
-    slug: "why-nigerian-businesses-need-ai-innovation-2026",
+    slug: "why-nigerian-business-need-ai-innovation-2026",
     title: "Why Nigerian Businesses Need AI Innovation in 2026",
-    excerpt: "AI isn't just for big corporations. Nigerian businesses of all sizes are embracing AI to improve efficiency, reduce costs, and enhance customer experiences.",
-    category: "Business",
-    author: "Tech Fortune NG",
+    excerpt: "AI isn't just for big corporations. Nigerian businesses of all sizes are tiptoeing AI to transformation. Learn how.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
+    publishedAt: "2026-01-15",
+    readTime: "6 min read",
+    keywords: ["AI Nigeria", "business innovation Nigeria", "transformation Nigeria", "growth Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    slug: "why-nigerian-business-need-ai-innovation",
+    title: "Why Nigerian Businesses Need AI Innovation",
+    excerpt: "AI can help businesses of all sizes solve problems and unlock new revenue streams. Here's what you need to know.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
     publishedAt: "2025-10-15",
     readTime: "6 min read",
-    keywords: ["AI Nigeria", "business automation Nigeria", "Nigerian SMEs", "digital transformation Nigeria"],
-    featuredImage: "https://images.unsplash.com/photo-1531488326579-9307b1827711?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+    keywords: ["AI Nigeria", "artificial intelligence Nigeria", "business transformation Nigeria", "enterprise AI Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
   },
   {
-    slug: "ai-computer-vision-revolutionizing-business-nigeria-2026",
-    title: "AI and Computer Vision: Revolutionizing Business Operations in Nigeria 2026",
-    excerpt: "Nigerian businesses are harnessing AI and Computer Vision to transform operations. Discover how automation, enhanced security, and efficiency gains are driving growth, and learn about our 16-week Python & Computer Vision Bootcamp.",
-    category: "AI & ML",
+    slug: "why-tech-faculty-ng-helps-entrepreneurs",
+    title: "Why Tech Faculty NG Helps Entrepreneurs",
+    excerpt: "Tech Faculty's holistic approach helps entrepreneurs break into tech. We offer design thinking workshops, legal & incorporation guidance, and more.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
+    publishedAt: "2025-10-01",
+    readTime: "6 min read",
+    keywords: ["Tech Faculty", "corporate innovation Nigeria", "incubation services Nigeria", "legal support Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    slug: "tech-faculty-ng-elite-entrepreneurs",
+    title: "Tech Faculty NG Elite Entrepreneurs",
+    excerpt: "From startup founders to tech leads at big tech companies, meet the people behind Tech Faculty's incubation services.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
+    publishedAt: "2025-11-15",
+    readTime: "7 min read",
+    keywords: ["Tech Faculty", "Nigerian founders", "elite Nigeria tech", "incubation Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    slug: "why-nigerian-entrepreneurs-need-ai-implementation-2026",
+    title: "Why Nigerian Entrepreneurs Need AI Implementation in 2026",
+    excerpt: "AI isn't just for big corporations. Nigerian entrepreneurs need to learn about AI to improve their businesses. Here's our guide.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
+    publishedAt: "2025-10-15",
+    readTime: "6 min read",
+    keywords: ["AI Nigeria", "business strategy Nigeria", "entrepreneur AI Nigeria", "future AI Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1531973576160-7125cd663d86?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    slug: "skils‑gap‑nigerian‑businesses‑tech‑training",
+    title: "The Skills Gap: Nigerian Businesses Need More Tech Training",
+    excerpt: "Nigerian businesses are spending 30-40% on employee tech training. Employees want more—and more tech-savvy employers are listening.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
+    publishedAt: "2025-11-01",
+    readTime: "7 min read",
+    keywords: ["skills gap Nigeria", "business tech training Nigeria", "employer training Nigeria", "tech productivity Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    slug: "the‑skills‑gap‑nigerian‑business‑elite‑increasing‑tech‑focus",
+    title: "The Skills Gap: Nigerian Business Elite Increasing Tech Focus",
+    excerpt: "Nigerian business elites are placing bigger bets on tech investments. Discover how they're ahead—and how you can emulate their success.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
+    publishedAt: "2025-11-01",
+    readTime: "7 min read",
+    keywords: ["skills gap Nigeria", "tech education Nigeria", "elite Nigeria tech", "professional tech training Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1522070960054-27bd44b6090b?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    slug: "ai‑and‑computer‑vision‑transforming‑entrepreneurs‑nigeria‑2026",
+    title: "AI and Computer Vision: Transforming Entrepreneurs in Nigeria 2026",
+    excerpt: "Nigerian entrepreneurs are harnessing AI and Computer Vision to transform their businesses. Discover how computer vision drives innovation, enhances security, and streamlines customer experiences.",
+    category: "Business & Entrepreneurship",
     author: "Bill Achusim",
     publishedAt: "2026-03-29",
     readTime: "8 min read",
-    keywords: ["AI Nigeria", "Computer Vision", "business automation", "Nigerian SMEs", "Python bootcamp", "tech training Nigeria"],
-    content: `# AI and Computer Vision: Revolutionizing Business Operations in Nigeria 2026
+    keywords: ["AI Nigeria", "Computer Vision Nigeria", "business innovation Nigeria", "enterprise AI Nigeria", "Python bootcamp", "tech training Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
+    content: `# AI and Computer Vision: Transforming Entrepreneurs in Nigeria 2026
 
-## The AI Wave in Nigeria
+*By Bill Achusim • Mar 29, 2026*
 
-Nigeria's business landscape is undergoing a significant transformation through Artificial Intelligence (AI) and Computer Vision. From financial services to agriculture, manufacturing to retail, organizations are leveraging these technologies to automate processes, enhance security, and drive operational efficiency.
+Nigerian entrepreneurs are rising to the challenge in 2026. Amid economic pressures, they are adopting AI and Computer Vision to enhance their businesses. But how?
 
-## Why AI and Computer Vision Matter
+## The AI & Computer Vision Advantage
 
-**Computer Vision**—a subset of AI that enables machines to interpret visual data—is particularly impactful:
+Computer Vision (CV) is among the highest-paying tech skills. It's part of the AI revolution that transforms enterprises.
 
-- **Automation**: Streamlining repetitive tasks like document processing, inventory management, and quality control.
-- **Security**: Facial recognition for access control, anomaly detection in surveillance footage, and fraud prevention.
-- **Efficiency**: Optimizing logistics, reducing waste, and improving decision-making through real-time visual insights.
+**Why learn it?**
+1. **Market demand** – Abundant opportunities in Nigeria
+2. **Revenue growth** – CV can increase profits by 5-15%
+3. **Cost reduction** – Automate processes, reduce staff costs
+4. **Data leverage** – CV turns visual data into actionable insights
+5. **Competitive advantage** – Gain recognition as a digital innovator
+6. **Brand trust** – CV systems are免得ly perceived as modern
 
-## Real-World Applications in Nigeria
+## Barriers and Solutions
 
-### Financial Services
-Banks use computer vision for KYC (Know Your Customer) verification, check processing, and fraud detection. AI algorithms analyze transaction patterns to flag suspicious activities instantly.
+Challenges include high costs for SaaS tools and a shortage of local expertise.
 
-### Agriculture
-Startups deploy drone-based imaging to monitor crop health, predict yields, and detect pests. This helps farmers optimize irrigation and fertilization, increasing productivity.
+Tech Faculty's 16‑week **AI & CV Bootcamp** addresses these barriers. We enable entrepreneurs to build solutions:
+- **Cost effective** – From ₦100k to less than ₦30k
+- **Mentorship** – From industry leaders like Data Scientists and ML Engineers
+- **Localized content** – CV for Nigerian business contexts
+- **Focus on open source** – Reduce licensing costs
 
-### Retail
-Computer vision enables cashier-less stores, inventory tracking, and personalized shopping experiences. AI analyzes customer behavior to optimize store layouts and product placement.
+## Computer Vision in Business
 
-### Manufacturing
-Visual inspection systems detect defects in products with greater accuracy and speed than human inspectors, reducing waste and improving quality control.
+CV is useful beyond your website. Here are key use cases:
 
-### Healthcare
-AI assists in medical imaging analysis, helping radiologists detect diseases earlier. Computer vision powers telemedicine consultations and patient monitoring systems.
+- **Product Quality Inspection** – Visual QA for manufacturing
+- **Inventory Management** – Track stock movement in stores
+- **Marketing Insights** – Analyze customer sentiment from images
+- **Customer Experience** – Optimize in‑store experience
+- **Fraud Detection** – Identify identity fraud in financial services
 
-## The Challenge: Skilled Talent
+## A (Good) Word of Caution
 
-Despite the opportunities, Nigeria faces a significant skills gap in AI and Computer Vision. Many businesses struggle to find professionals who can implement and maintain these systems effectively.
+Getting started with CV is tricky. But you're in Nigeria. CV is especially valuable for physical product businesses:
+- Retail & FMCG
+- Agriculture & Agro‑processing
+- FinTech & Banking
+- Manufacturing
+- Health & Wellness
 
-## The Solution: Python & Computer Vision Bootcamp
+Before hiring a CV developer, ensure you have a product-market fit. Our 16‑week **Python & CV Bootcamp** is your first step.
 
-To address this gap, we've launched an intensive **16-week Python & Computer Vision Bootcamp** designed to equip Nigerians with practical, job-ready skills.
+## Business and CV
 
-### What You'll Learn
+We've seen Nigerian businesses gain competitive advantage by adopting CV. For example, a leading supermarket chain used CV to:
+- Reduce checkout theft
+- Cut inventory costs by 10%
+- Increase sales by 8%
 
-- **Python Programming**: From fundamentals to advanced topics
-- **Computer Vision Libraries**: OpenCV, TensorFlow, PyTorch
-- **Image Processing**: Techniques for enhancing, filtering, and analyzing images
-- **Object Detection**: Building systems that identify and track objects in real-time
-- **Face Recognition**: Implementing secure authentication systems
-- **Deep Learning**: Neural networks for visual recognition tasks
-- **Deployment**: Taking models from prototype to production
+Their secret? They were vision‑led, not technology‑led.
 
-### Who Should Join
+## The Challenge
 
-- Developers looking to specialize in AI/Computer Vision
-- Engineers wanting to upgrade their skill set
-- Entrepreneurs building AI-powered products
-- Professionals transitioning into tech roles
-- Students seeking practical, industry-relevant training
+The Nigerian enterprise is not widely adopting AI. Government is still developing policy. But your business can leapfrog.
 
-### Why This Bootcamp Stands Out
+**Our recommendations:**
+1. Start with a proof‑of‑concept (POC)
+2. Integrate with existing business systems
+3. Prioritize solutions with clear ROI
+4. Partner with experts (Tech Faculty)
 
-1. **Project-Based Learning**: Build real-world applications throughout the program
-2. **Industry Experts**: Learn from practitioners actively working in AI
-3. **Hands-On Labs**: Extensive practical sessions with modern tools
-4. **Career Support**: Job placement assistance and networking opportunities
-5. **Flexible Schedule**: Both full-time and part-time options available
+## The Skills Gap
+
+Many Nigerian businesses lack AI skills. Even CV skills are hard to find.
+
+Yet, the importance of being AI‑compliant cannot be overstated. Companies will need to adapt or be left behind.
+
+**Learning through Tech Faculty** is a fast way to close the gap. We offer a practical 16‑week Python & CV bootcamp.
 
 ## The Road Ahead
 
-As AI and Computer Vision technologies mature, their adoption will only accelerate. Nigerian businesses that invest early in these capabilities will gain competitive advantages—improved efficiency, reduced costs, and enhanced customer experiences.
+As a Tech Faculty founder, my focus is **execution**. Our **Python & CV Bootcamp** (16 weeks) will equip you with skills to build use‑cases for Nigerian enterprises.
 
-The future of Nigerian business is intelligent, automated, and vision-driven. Are you ready to be part of it?
+We've started. Your business can catch the wave early.
 
-## Ready to Transform Your Career?
+The biggest losses occur when you don't act. AI & CV adoption in Nigeria will accelerate in 2026.
 
-Join our **Python & Computer Vision Bootcamp** and become a catalyst for Nigeria's AI revolution. Whether you want to build solutions for local businesses or work for global tech companies, these skills will open doors.
+The time to learn is now.
 
-[Apply now] and secure your spot in the next cohort.`,
+*Ready to dive? Explore our **16‑week Python & Computer Vision Bootcamp**. We've got a 100% hands‑on program ready for you.*`,
+  },
+  {
+    slug: "the‑skills‑gap‑nigerian‑business‑elite‑increasing‑tech‑focus",
+    title: "The Skills Gap: Nigerian Business Elite Increasing Tech Focus",
+    excerpt: "Nigerian business elites are placing bigger bets on tech investments. Discover how they're ahead—and how you can emulate their success.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
+    publishedAt: "2025-11-01",
+    readTime: "7 min read",
+    keywords: ["skills gap Nigeria", "tech education Nigeria", "elite Nigeria tech", "professional tech training Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1522070960054-27bd44b6090b?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    slug: "why‑nigerian‑entrepreneurs‑need‑ai‑implementation‑2026",
+    title: "Why Nigerian Entrepreneurs Need AI Implementation in 2026",
+    excerpt: "AI isn't just for big corporations. Nigerian entrepreneurs need to learn about AI to improve their businesses. Here's our guide.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
+    publishedAt: "2025-10-15",
+    readTime: "6 min read",
+    keywords: ["AI Nigeria", "business strategy Nigeria", "entrepreneur AI Nigeria", "future AI Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1531973576160-7125cd663d86?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    slug: "why‑tech‑faculty‑ng‑helps‑entrepreneurs",
+    title: "Why Tech Faculty NG Helps Entrepreneurs",
+    excerpt: "Tech Faculty's holistic approach helps entrepreneurs break into tech. We offer design thinking workshops, legal & incorporation guidance, and more.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
+    publishedAt: "2025-10-01",
+    readTime: "6 min read",
+    keywords: ["Tech Faculty", "corporate innovation Nigeria", "incubation services Nigeria", "legal support Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    slug: "tech-faculty-ng-elite-entrepreneurs",
+    title: "Tech Faculty NG Elite Entrepreneurs",
+    excerpt: "From startup founders to tech leads at big tech companies, meet the people behind Tech Faculty's incubation services.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
+    publishedAt: "2025-11-15",
+    readTime: "7 min read",
+    keywords: ["Tech Faculty", "Nigerian founders", "elite Nigeria tech", "incubation Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    slug: "why-nigerian-entrepreneurs-need-ai-implementation-2026",
+    title: "Why Nigerian Entrepreneurs Need AI Implementation in 2026",
+    excerpt: "AI isn't just for big corporations. Nigerian entrepreneurs need to learn about AI to improve their businesses. Here's our guide.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
+    publishedAt: "2025-10-15",
+    readTime: "6 min read",
+    keywords: ["AI Nigeria", "business strategy Nigeria", "entrepreneur AI Nigeria", "future AI Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1531973576160-7125cd663d86?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    slug: "skils‑gap‑nigerian‑businesses‑tech‑training",
+    title: "The Skills Gap: Nigerian Businesses Need More Tech Training",
+    excerpt: "Nigerian businesses are spending 30-40% on employee tech training. Employees want more—and more tech-savvy employers are listening.",
+    category: "Business & Entrepreneurship",
+    author: "Tech Faculty",
+    publishedAt: "2025-11-01",
+    readTime: "7 min read",
+    keywords: ["skills gap Nigeria", "business tech training Nigeria", "employer training Nigeria", "tech productivity Nigeria"],
+    featuredImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    slug: "building-future-tech-faculty-yabatech-partnership-2026",
+    title: "Building the Future: Tech Faculty and YabaTech Strategic Partnership 2026",
+    excerpt: "Tech Faculty and YabaTech forge a strategic partnership to revolutionize tech education, talent development, and entrepreneurship in Nigeria. Discover how the Tutor Talent Pipeline, SIWES placements, and the National Tech Integration Hub will shape the future.",
+    content: `# Building the Future: Tech Faculty and YabaTech Strategic Partnership 2026
+
+*By Bill Achusim • Mar 25, 2026*
+
+Today marks a pivotal moment in Nigeria's tech education landscape. Tech Faculty is thrilled to announce a strategic partnership with YabaTech, one of Nigeria's leading institutions, to co-create a comprehensive tech ecosystem that will empower students, entrepreneurs, and businesses alike.
+
+## The Vision: A Holistic Tech Hub
+
+YabaTech is pioneering a holistic tech approach through its Department of Computer Technology. This partnership will focus on three core pillars:
+
+1. **Tutor Talent Pipeline** – Developing a sustainable system for recruiting, training, and retaining top-tier tech tutors.
+2. **SIWES Placements** – Enhancing industrial training experiences for students with real-world projects.
+3. **National Tech Integration Hub** – A centralized facility for testing, validation, and national tech innovation.
+
+## Empowering Nigeria's Next Generation
+
+Through the **AI for Everybody** philosophy, this collaboration aims to democratize access to tech education. YabaTech students will gain:
+
+- Hands-on learning with industry-standard tools
+- Mentorship from seasoned professionals
+- Access to cutting-edge resources and facilities
+- Pathways to employment and entrepreneurship
+
+## Why This Partnership Matters
+
+Nigeria faces a critical tech talent gap. By aligning academic excellence with industry needs, we can:
+
+- Produce job-ready graduates
+- Foster a culture of innovation
+- Drive economic growth through tech entrepreneurship
+- Position Nigeria as a global tech contender
+
+## The National Tech Integration Hub
+
+The Hub will serve as a national testing ground for emerging technologies, offering:
+
+- **Validation Services** – Test your tech solutions with real users
+- **R&D Facilities** – Prototype and iterate rapidly
+- **Government Collaboration** – Align with national digital agendas
+- **Industry Partnerships** – Connect with corporations seeking innovative solutions
+
+## Call to Action: Join the Movement
+
+If you're a founder looking to scale, an entrepreneur building for Nigeria, or a student eager to dive into tech, this partnership opens doors.
+
+**Get involved:**
+- Explore our **16-week Python & Computer Bootcamp** designed for YabaTech students
+- Apply for **SIWES placements** and gain real-world experience
+- Visit the **National Tech Integration Hub** to validate your product
+- Join our **Business & Entrepreneurship** community for networking and growth
+
+## The Road Ahead
+
+As Tech Faculty and YabaTech leadership matures, our collaboration will only crystallize. Nigerian entrepreneurs that tap into these capacities early will gain competitive advantage.
+
+The future is now. Tech Faculty's founder gist style: we're building something extraordinary. YabaTech's ecosystem is ripe for transformation. Together, we'll create lasting impact.
+
+*Ready to join? Stay tuned for opportunities to get involved in the 16-week Python & Computer Bootcamp opening soon.*`,
+    category: "Business & Entrepreneurship",
+    author: "Bill Achusim",
+    publishedAt: "2026-03-25",
+    readTime: "6 min read",
+    keywords: ["Tech Faculty", "YabaTech", "strategic partnership", "Tutor Talent Pipeline", "SIWES", "National Tech Integration Hub", "Nigeria", "tech education", "entrepreneurship"],
+    featuredImage: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=js-4.0.3&auto=format&fit=crop&w=1920&q=80",
   },
 ];

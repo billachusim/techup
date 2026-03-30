@@ -45,4 +45,12 @@ The future of Nigerian business is visual.`,
     keywords: ["computer vision Nigeria", "AI Nigeria", "business automation Nigeria"],
     featuredImage: "https://images.unsplash.com/photo-1602071309291-bb72d71e0c79?ixlib=js-4.0.2&fit=crop&w=1920&q=80"
   }
-]
+];
+
+export const getAllCategories = (): string[] => {
+  return [...new Set(blogPosts.map((p) => p.category))];
+};
+
+export const getPostBySlug = (slug: string): BlogPost | undefined => {
+  return blogPosts.find((p) => p.slug === slug);
+};

@@ -1,29 +1,33 @@
-name: Deploy to FRT
+name: Deploy to FTP
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  - name: Checkout code
-    uses: actions/checkout@v4
+  deploy:
+    runs-on: ubuntu-latest
 
-  - name: Setup Node.js
-    uses: actions/setup-node@v4
-    with:
-      node-version: "20"
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-  - name: Install dependencies
-    run: npm install
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
 
-  - name: Build project
-    run: npm run build
+    - name: Install dependencies
+      run: npm install
 
-  - name: Deploy to FRT
-    uses: SamKirkland/FRT-Deploy-Action@v4.5
-    with:
-      secret: ${{ secrets.FRT_SECRET }}
-      username: ${{ secrets.FRT_USERNAME }}
-      password: ${{ secrets.FRT_PASSWORD }}
-      server-uri: ./public_html/
-      local-dir: dist/
+    - name: Build project
+      run: npm run build
+
+    - name: Deploy to FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        server-dir: ./public_html/
+        local-dir: dist/

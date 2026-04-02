@@ -797,16 +797,7 @@ Start with **web development** if you're new to programming. The fundamentals (H
 
 *Tech Faculty offers both Web Development and Mobile Development bootcamps. Start with what excites you most.*`,
   },
-];
-
-export const getAllCategories = (): string[] => {
-  return [...new Set(blogPosts.map((p) => p.category)),
   // ── New Posts (April 2026) ──
-  ];
-  featuredImage: string;
-}
-
-export const blogPosts: BlogPost[] = [
   {
     slug: "ai-computing-designing-2026",
     title: "How AI Computing is Designing the Human Future in 2026",

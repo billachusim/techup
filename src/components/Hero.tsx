@@ -56,7 +56,7 @@ const Hero = () => {
       <div className="container mx-auto max-w-4xl text-center space-y-8 relative z-10">
         {/* SEO-optimized static H1 */}
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-          Learn Tech Skills — Get{" "}
+          You Are Now In The Future — Get{" "}
           <span className="bg-gradient-to-r from-primary via-[hsl(170,100%,47%)] to-[hsl(180,100%,45%)] bg-clip-text text-transparent">
             Trained, Certified & Employed
           </span>

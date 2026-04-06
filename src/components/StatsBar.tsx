@@ -30,7 +30,7 @@ const StatsBar = () => {
           >
             World Economic Forum Future of Jobs Report (2025)
           </a>
-          , AI and data skills are among the fastest-growing in Africa, with demand projected to rise 25% annually.
+          , AI and data skills are among the fastest-growing globally, with demand projected to rise 25% annually.
         </p>
       </div>
     </section>

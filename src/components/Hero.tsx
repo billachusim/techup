@@ -56,7 +56,7 @@ const Hero = () => {
       <div className="container mx-auto max-w-4xl text-center space-y-8 relative z-10">
         {/* SEO-optimized static H1 */}
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-          Accredited Tech Training in Africa — Get{" "}
+          World-Class Tech Training — Get{" "}
           <span className="bg-gradient-to-r from-primary via-[hsl(170,100%,47%)] to-[hsl(180,100%,45%)] bg-clip-text text-transparent">
             Trained, Certified & Employed
           </span>
@@ -76,7 +76,7 @@ const Hero = () => {
         <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
           Over 5,000 students trained across 12 industry-recognized courses since 2022.
           87% of graduates secure tech roles within six months.
-          Our curriculum is aligned with national NBTI standards and global employer requirements.
+          Our curriculum is aligned with international industry standards and global employer requirements.
           Our top students start earning through internships as early as month 3.
         </p>
 

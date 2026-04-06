@@ -64,7 +64,7 @@ const testimonials = [
     company: "National Board for Technical Incubation (NBTI)",
     department: "Industry Expert",
     content:
-      "Tech Faculty's curriculum aligns closely with Nigeria's national technology skills framework. Their graduates consistently demonstrate the competencies employers need. This is exactly the kind of training Africa requires to close the digital skills gap.",
+      "Tech Faculty's curriculum aligns closely with international technology skills frameworks. Their graduates consistently demonstrate the competencies employers need. This is exactly the kind of training the world needs to close the digital skills gap.",
     rating: 5,
   },
   {

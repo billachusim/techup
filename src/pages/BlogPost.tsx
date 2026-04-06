@@ -5,38 +5,33 @@ import Footer from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Clock, Calendar } from "lucide-react";
-import { getPostBySlug, blogPosts } from "@/data/blogPosts";
+import { getBlogPostBySlug, getRelatedPosts } from "@/data/blogPosts";
 import ReactMarkdown from "react-markdown";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
-  const post = slug ? getPostBySlug(slug) : undefined;
+  const post = slug ? getBlogPostBySlug(slug) : undefined;
 
   if (!post) return <Navigate to="/blog" replace />;
 
-  const relatedPosts = blogPosts
-    .filter((p) => p.slug !== post.slug)
-    .slice(0, 2);
+  const relatedPosts = getRelatedPosts(post.slug, 2);
 
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>{post.title} | Tech Faculty NG Blog</title>
-        <meta name="description" content={post.excerpt} />
+        <meta name="description" content={post.description} />
         <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={post.excerpt} />
+        <meta property="og:description" content={post.description} />
         <meta property="og:type" content="article" />
         <meta
           property="og:url"
           content={`https://techfaculty.ng/blog/${post.slug}`}
         />
-        <meta
-          property="article:published_time"
-          content={post.publishedAt}
-        />
+        <meta property="article:published_time" content={post.date} />
         <meta property="article:author" content="Tech Faculty NG" />
-        {post.keywords.map((kw) => (
-          <meta property="article:tag" content={kw} key={kw} />
+        {post.tags.map((tag) => (
+          <meta property="article:tag" content={tag} key={tag} />
         ))}
         <link
           rel="canonical"
@@ -47,8 +42,8 @@ const BlogPost = () => {
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             headline: post.title,
-            description: post.excerpt,
-            datePublished: post.publishedAt,
+            description: post.description,
+            datePublished: post.date,
             author: {
               "@type": "Organization",
               name: "Tech Faculty NG",
@@ -60,7 +55,7 @@ const BlogPost = () => {
               url: "https://techfaculty.ng",
             },
             url: `https://techfaculty.ng/blog/${post.slug}`,
-            keywords: post.keywords.join(", "),
+            keywords: post.tags.join(", "),
             mainEntityOfPage: {
               "@type": "WebPage",
               "@id": `https://techfaculty.ng/blog/${post.slug}`,
@@ -81,17 +76,17 @@ const BlogPost = () => {
 
             {/* Meta */}
             <div className="flex flex-wrap items-center gap-3 mb-4">
-              <Badge variant="secondary">{post.category}</Badge>
+              <Badge variant="secondary">{post.tags[0]}</Badge>
               <span className="text-sm text-muted-foreground flex items-center gap-1">
                 <Calendar size={14} />{" "}
-                {new Date(post.publishedAt).toLocaleDateString("en-NG", {
+                {new Date(post.date).toLocaleDateString("en-NG", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
                 })}
               </span>
               <span className="text-sm text-muted-foreground flex items-center gap-1">
-                <Clock size={14} /> {post.readTime}
+                <Clock size={14} /> {post.readTime} min read
               </span>
             </div>
 
@@ -117,13 +112,13 @@ const BlogPost = () => {
                   <Link key={rp.slug} to={`/blog/${rp.slug}`}>
                     <div className="p-4 rounded-lg border border-border hover:border-primary/50 transition-colors">
                       <Badge variant="secondary" className="text-xs mb-2">
-                        {rp.category}
+                        {rp.tags[0]}
                       </Badge>
                       <h3 className="font-semibold text-sm mb-1">
                         {rp.title}
                       </h3>
                       <p className="text-xs text-muted-foreground">
-                        {rp.readTime}
+                        {rp.readTime} min read
                       </p>
                     </div>
                   </Link>

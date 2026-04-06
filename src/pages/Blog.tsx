@@ -5,16 +5,21 @@ import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock, ArrowRight } from "lucide-react";
-import { blogPosts, getAllCategories } from "@/data/blogPosts";
-import { useState } from "react";
+import blogPosts, { getAllBlogPosts } from "@/data/blogPosts";
+import { useState, useMemo } from "react";
 
 const Blog = () => {
-  const categories = getAllCategories();
+  const sortedPosts = useMemo(() => getAllBlogPosts(), []);
+  const categories = useMemo(() => {
+    const cats = new Set(sortedPosts.flatMap((p) => p.tags));
+    return Array.from(cats).sort();
+  }, [sortedPosts]);
+
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const filtered = activeCategory
-    ? blogPosts.filter((p) => p.category === activeCategory)
-    : blogPosts;
+    ? sortedPosts.filter((p) => p.tags.includes(activeCategory))
+    : sortedPosts;
 
   return (
     <div className="min-h-screen bg-background">
@@ -45,17 +50,17 @@ const Blog = () => {
               name: "Tech Faculty NG",
               url: "https://techfaculty.ng",
             },
-            blogPost: blogPosts.map((post) => ({
+            blogPost: sortedPosts.map((post) => ({
               "@type": "BlogPosting",
               headline: post.title,
-              description: post.excerpt,
-              datePublished: post.publishedAt,
+              description: post.description,
+              datePublished: post.date,
               author: {
                 "@type": "Organization",
                 name: "Tech Faculty NG",
               },
               url: `https://techfaculty.ng/blog/${post.slug}`,
-              keywords: post.keywords.join(", "),
+              keywords: post.tags.join(", "),
             })),
           })}
         </script>
@@ -108,17 +113,17 @@ const Blog = () => {
                     <CardContent className="p-6 flex flex-col h-full">
                       <div className="flex items-center gap-2 mb-3">
                         <Badge variant="secondary" className="text-xs">
-                          {post.category}
+                          {post.tags[0]}
                         </Badge>
                         <span className="text-xs text-muted-foreground flex items-center gap-1">
-                          <Clock size={12} /> {post.readTime}
+                          <Clock size={12} /> {post.readTime} min read
                         </span>
                       </div>
                       <h2 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">
                         {post.title}
                       </h2>
                       <p className="text-sm text-muted-foreground flex-1">
-                        {post.excerpt}
+                        {post.description}
                       </p>
                       <div className="flex items-center gap-1 text-primary text-sm font-medium mt-4">
                         Read article <ArrowRight size={14} />

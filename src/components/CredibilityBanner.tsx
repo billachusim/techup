@@ -16,7 +16,7 @@ const CredibilityBanner = ({ compact = false }: CredibilityBannerProps) => {
         <p className={`text-sm md:text-base text-muted-foreground ${compact ? "text-left" : "text-center"} leading-relaxed`}>
           <span className="font-semibold text-foreground">Tech Faculty</span> is licensed and partnered by the{" "}
           <span className="font-semibold text-foreground">Federal Ministry of Science, Technology and Innovation</span> via the{" "}
-          <span className="font-semibold text-foreground">National Board for Technology Incubation (NBTI)</span> — to assist schools and businesses integrate standard and regulated use of AI and Technology across Africa.
+          <span className="font-semibold text-foreground">National Board for Technology Incubation (NBTI)</span> — to assist schools and businesses integrate standard and regulated use of AI and Technology worldwide.
         </p>
       </div>
     </div>

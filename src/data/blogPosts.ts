@@ -791,7 +791,7 @@ For tech professionals, understanding AI development is becoming essential. Whet
 *Interested in AI development? Tech Faculty NG offers comprehensive bootcamps covering Machine Learning, Python, and AI implementation for Nigerian businesses.*`,
     date: "2026-03-17",
     author: "Bill Achusim",
-    tags: ["AI & Automation","AI companions","mental health tech","Deep Claire","computational design"],
+    tags: ["AI & Innovation","AI companions","mental health tech","Deep Claire","computational design"],
     readTime: 6
   },
   {
@@ -912,7 +912,7 @@ Tech Faculty NG is the innovative force behind Dear Claire, pushing the boundari
 Ready to experience the Love Ecosystem? Visit https://techfaculty.ng/blog/dear-claires-love-ecosystem-building-connection-2026 to read the full article and become part of the story.`,
     date: "2026-04-02",
     author: "Bill Achusim",
-    tags: ["AI & Mental Health","Dear Claire","AI companionship","mental health tech","anonymous social network"],
+    tags: ["AI & Innovation","Dear Claire","AI companionship","mental health tech","anonymous social network"],
     readTime: 7
   },
   {

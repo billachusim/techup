@@ -11,7 +11,7 @@ import { useState, useMemo } from "react";
 const Blog = () => {
   const sortedPosts = useMemo(() => getAllBlogPosts(), []);
   const categories = useMemo(() => {
-    const cats = new Set(sortedPosts.flatMap((p) => p.tags));
+    const cats = new Set(sortedPosts.map((p) => p.tags[0]));
     return Array.from(cats).sort();
   }, [sortedPosts]);
 

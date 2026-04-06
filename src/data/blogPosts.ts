@@ -2,54 +2,918 @@ import type { BlogPost } from '@/types/blog';
 
 const blogPosts: BlogPost[] = [
   {
-    slug: "the-power-of-edge-functions-in-modern-web-development",
-    title: "The Power of Edge Functions in Modern Web Development",
-    description: "Explore how edge computing is revolutionizing web development by bringing computation closer to users, resulting in faster experiences and reduced latency.",
-    content: `Edge computing has transformed the way we build and deploy web applications. By running code at the network edge, we can achieve unprecedented performance and reliability.`,
-    date: "2024-03-15",
-    author: "Billachusim",
-    tags: ["Edge Computing", "Web Development", "Performance"],
-    readTime: 5
-  },
-  {
-    slug: "understanding-react-server-components",
-    title: "Understanding React Server Components",
-    description: "A deep dive into React Server Components and how they change the paradigm of building React applications.",
-    content: `React Server Components allow us to render components on the server, reducing the JavaScript bundle size and improving initial page load performance.`,
-    date: "2024-02-28",
-    author: "Billachusim",
-    tags: ["React", "Server Components", "JavaScript"],
+    slug: "ai-and-computer-vision-transforming-entrepreneurs-nigeria-2026",
+    title: "AI and Computer Vision: Transforming Entrepreneurs in Nigeria 2026",
+    description: "Nigerian entrepreneurs are harnessing AI and Computer Vision to transform their businesses. Discover how computer vision drives innovation, enhances security, and streamlines customer experiences.",
+    content: `# AI and Computer Vision: Transforming Entrepreneurs in Nigeria 2026
+
+*By Bill Achusim · Mar 29, 2026*
+
+Nigerian entrepreneurs are rising to the challenge in 2026. Amid economic pressures, they are adopting AI and Computer Vision to enhance their businesses. But how?
+
+## The AI & Computer Vision Advantage
+
+Computer Vision (CV) is among the highest-paying tech skills. It's part of the AI revolution that transforms enterprises.
+
+**Why learn it?**
+1. **Market demand** – Abundant opportunities in Nigeria
+2. **Revenue growth** – CV can increase profits by 5-15%
+3. **Cost reduction** – Automate processes, reduce staff costs
+4. **Data leverage** – CV turns visual data into actionable insights
+5. **Competitive advantage** – Gain recognition as a digital innovator
+
+## Barriers and Solutions
+
+Challenges include high costs for SaaS tools and a shortage of local expertise.
+
+Tech Faculty's 16-week **AI & CV Bootcamp** addresses these barriers. We enable entrepreneurs to build solutions:
+- **Cost effective** – From ₦100k to less than ₦30k
+- **Mentorship** – From industry leaders like Data Scientists and ML Engineers
+- **Localized content** – CV for Nigerian business contexts
+- **Focus on open source** – Reduce licensing costs
+
+## Computer Vision in Business
+
+CV is useful beyond your website. Here are key use cases:
+
+- **Product Quality Inspection** – Visual QA for manufacturing
+- **Inventory Management** – Track stock movement in stores
+- **Marketing Insights** – Analyze customer sentiment from images
+- **Customer Experience** – Optimize in-store experience
+- **Fraud Detection** – Identify identity fraud in financial services
+
+## Business and CV
+
+We've seen Nigerian businesses gain competitive advantage by adopting CV. For example, a leading supermarket chain used CV to:
+- Reduce checkout theft
+- Cut inventory costs by 10%
+- Increase sales by 8%
+
+Their secret? They were vision-led, not technology-led.
+
+## The Road Ahead
+
+As a Tech Faculty founder, my focus is **execution**. Our **Python & CV Bootcamp** (16 weeks) will equip you with skills to build use-cases for Nigerian enterprises.
+
+The biggest losses occur when you don't act. AI & CV adoption in Nigeria will accelerate in 2026.
+
+*Ready to dive? Explore our **16-week Python & Computer Vision Bootcamp**. We've got a 100% hands-on program ready for you.*`,
+    date: "2026-03-29",
+    author: "Bill Achusim",
+    tags: ["AI & Innovation","AI Nigeria","Computer Vision Nigeria","business innovation Nigeria","enterprise AI Nigeria"],
     readTime: 8
   },
   {
-    slug: "optimizing-nextjs-app-router-performance",
-    title: "Optimizing Next.js App Router Performance",
-    description: "Essential techniques and best practices for maximizing performance in Next.js applications using the App Router.",
-    content: `The App Router in Next.js introduces new paradigms for data fetching and rendering. Learn how to leverage streaming, loading states, and caching effectively.`,
-    date: "2024-01-20",
-    author: "Billachusim",
-    tags: ["Next.js", "Performance", "App Router"],
-    readTime: 10
+    slug: "building-future-tech-faculty-yabatech-partnership-2026",
+    title: "Building the Future: Tech Faculty and YabaTech Strategic Partnership 2026",
+    description: "Tech Faculty and YabaTech forge a strategic partnership to revolutionize tech education, talent development, and entrepreneurship in Nigeria.",
+    content: `# Building the Future: Tech Faculty and YabaTech Strategic Partnership 2026
+
+*By Bill Achusim · Mar 25, 2026*
+
+Today marks a pivotal moment in Nigeria's tech education landscape. Tech Faculty is thrilled to announce a strategic partnership with YabaTech to co-create a comprehensive tech ecosystem.
+
+## The Vision: A Holistic Tech Hub
+
+YabaTech is pioneering a holistic tech approach through its Department of Computer Technology. This partnership focuses on three core pillars:
+
+1. **Tutor Talent Pipeline** – Developing a sustainable system for recruiting, training, and retaining top-tier tech tutors.
+2. **SIWES Placements** – Enhancing industrial training experiences for students with real-world projects.
+3. **National Tech Integration Hub** – A centralized facility for testing, validation, and national tech innovation.
+
+## Empowering Nigeria's Next Generation
+
+Through the **AI for Everybody** philosophy, this collaboration aims to democratize access to tech education. YabaTech students will gain:
+
+- Hands-on learning with industry-standard tools
+- Mentorship from seasoned professionals
+- Access to cutting-edge resources and facilities
+- Pathways to employment and entrepreneurship
+
+## Why This Partnership Matters
+
+Nigeria faces a critical tech talent gap. By aligning academic excellence with industry needs, we can:
+
+- Produce job-ready graduates
+- Foster a culture of innovation
+- Drive economic growth through tech entrepreneurship
+- Position Nigeria as a global tech contender
+
+## Call to Action: Join the Movement
+
+If you're a founder looking to scale, an entrepreneur building for Nigeria, or a student eager to dive into tech, this partnership opens doors.
+
+**Get involved:**
+- Explore our **16-week Python & Computer Bootcamp** designed for YabaTech students
+- Apply for **SIWES placements** and gain real-world experience
+- Visit the **National Tech Integration Hub** to validate your product
+
+*Ready to join? Stay tuned for opportunities to get involved in the 16-week Python & Computer Bootcamp opening soon.*`,
+    date: "2026-03-25",
+    author: "Bill Achusim",
+    tags: ["Business & Entrepreneurship","Tech Faculty","YabaTech","strategic partnership","Tutor Talent Pipeline"],
+    readTime: 6
   },
   {
-    slug: "type-safety-in-full-stack-applications",
-    title: "Type Safety in Full-Stack Applications",
-    description: "How to achieve end-to-end type safety across your entire stack using TypeScript, tRPC, and modern tooling.",
-    content: `Type safety shouldn't stop at your frontend. Discover patterns and tools that ensure type consistency from database to UI.`,
-    date: "2023-12-10",
-    author: "Billachusim",
-    tags: ["TypeScript", "tRPC", "Full-Stack"],
+    slug: "how-to-start-tech-career-nigeria-2026",
+    title: "How to Start a Tech Career in Nigeria in 2026: A Comprehensive Guide",
+    description: "Breaking into tech in Nigeria has never been more accessible. Here's a step-by-step guide to launching your tech career.",
+    content: `# How to Start a Tech Career in Nigeria in 2026
+
+*By Tech Faculty · Mar 10, 2026*
+
+Breaking into tech in Nigeria has never been more accessible. Whether you're a university graduate, a career switcher, or someone looking to upskill, the opportunities are abundant.
+
+## Step 1: Choose Your Path
+
+The first decision is which area of tech excites you most:
+
+- **Web Development** – Build websites and web applications
+- **Data Analytics** – Turn raw data into business insights
+- **Cyber Security** – Protect organizations from digital threats
+- **Mobile Development** – Create apps for Android and iOS
+- **Machine Learning / AI** – Build intelligent systems
+
+## Step 2: Find the Right Training
+
+Self-learning from YouTube tutorials is possible, but structured bootcamps dramatically improve your chances. Look for programs that offer:
+
+- **Hands-on projects** – Not just theory
+- **Mentorship** – Access to experienced professionals
+- **Community** – Peers who keep you accountable
+- **Job placement support** – Help landing your first role
+
+Tech Faculty offers 16-week bootcamps across all major tech tracks with exactly these features.
+
+## Step 3: Build Your Portfolio
+
+Employers want to see what you can build. Start with:
+
+1. Personal projects that solve real problems
+2. Contributions to open-source projects
+3. A professional GitHub profile
+4. A portfolio website showcasing your work
+
+## Step 4: Network Actively
+
+Join tech communities in Lagos, Abuja, and online:
+
+- Attend meetups and hackathons
+- Join WhatsApp and Telegram tech groups
+- Follow Nigerian tech leaders on Twitter/X
+- Participate in Tech Faculty's community events
+
+## Step 5: Apply Strategically
+
+Don't just spray and pray. Target companies that hire junior developers and tailor your applications. Tech Faculty's job placement program connects graduates directly with hiring partners like Google, Microsoft, and Amazon.
+
+## The Bottom Line
+
+Starting a tech career in Nigeria requires commitment, but the rewards are worth it. With the right training, portfolio, and network, you can land your first tech role within 6-12 months.
+
+*Ready to start? Explore Tech Faculty's bootcamp programs and take the first step today.*`,
+    date: "2026-03-10",
+    author: "Tech Faculty",
+    tags: ["Career Guide","tech career Nigeria","start coding Nigeria","software developer Nigeria","tech bootcamp Nigeria"],
+    readTime: 8
+  },
+  {
+    slug: "tut-5-in-design-tech-bootcamps-yabatech-2026",
+    title: "Top 5 Design Tech Bootcamps in YabaTech for 2026",
+    description: "We rank the top 5 tech bootcamps in YabaTech based on community, curriculum, and student outcomes.",
+    content: `# Top 5 Design Tech Bootcamps in YabaTech for 2026
+
+*By Tech Faculty · Mar 5, 2026*
+
+YabaTech has become a hub for tech education in Lagos. Here are the top 5 bootcamps operating in and around the institution.
+
+## 1. Tech Faculty NG
+
+Tech Faculty leads with its comprehensive 16-week programs covering Data Analytics, Web Development, Cyber Security, and AI/ML. What sets them apart:
+
+- Industry-standard curriculum updated quarterly
+- 1:1 mentorship from working professionals
+- WhatsApp-based community support
+- Job placement assistance post-graduation
+
+## 2. Andela Learning Community
+
+Andela's learning community provides free resources and peer-learning opportunities, though it's more self-directed than structured bootcamps.
+
+## 3. Decagon Institute
+
+Decagon offers intensive software engineering programs with a pay-after-employment model, making it accessible to students without upfront funds.
+
+## 4. AltSchool Africa
+
+AltSchool provides semester-based tech education with diploma certification, blending traditional education structure with modern tech curriculum.
+
+## 5. HNG Internship
+
+HNG runs periodic internship programs that test and develop skills through real project challenges, though it's more competitive than educational.
+
+## How to Choose
+
+Consider these factors:
+- **Budget** – Free vs. paid programs
+- **Time commitment** – Part-time vs. full-time
+- **Support level** – Self-paced vs. mentored
+- **Outcomes** – Job placement rates and alumni success
+
+*Looking for a structured, mentored experience? Tech Faculty's 16-week bootcamps offer the best balance of rigor and support.*`,
+    date: "2026-03-05",
+    author: "Tech Faculty",
+    tags: ["Career Guide","tech bootcamps YabaTech","in-design bootcamps YabaTech","curriculum support YabaTech"],
+    readTime: 6
+  },
+  {
+    slug: "what-is-sves-nigeria-business-elite-explained",
+    title: "What is SVES? Nigeria Business Elite Explained",
+    description: "The Nigerian business elite have spent decades building their wealth. Learn about the SVES framework and how tech is reshaping Nigeria's business landscape.",
+    content: `# What is SVES? Nigeria Business Elite Explained
+
+*By Tech Faculty · Feb 20, 2026*
+
+Nigeria's business landscape is evolving rapidly. The SVES (Scale, Vision, Execution, Sustainability) framework is how the country's most successful entrepreneurs think about growth.
+
+## Understanding SVES
+
+- **Scale** – Think beyond local markets from day one
+- **Vision** – Set audacious goals rooted in real problems
+- **Execution** – Move fast, iterate, and deliver results
+- **Sustainability** – Build businesses that outlast trends
+
+## How Tech is Reshaping Nigerian Business
+
+The most influential business leaders in Nigeria are now investing heavily in technology:
+
+1. **Digital payments** have exploded with Paystack, Flutterwave, and Moniepoint
+2. **E-commerce** continues to grow despite logistics challenges
+3. **EdTech** is democratizing access to quality education
+4. **FinTech** is banking the unbanked
+
+## What This Means for You
+
+Whether you're an aspiring entrepreneur or an established business owner, tech skills are no longer optional. Understanding data analytics, digital marketing, and AI gives you a competitive edge.
+
+*Tech Faculty's bootcamps are designed to give entrepreneurs the tech skills they need to compete in 2026 and beyond.*`,
+    date: "2026-02-20",
+    author: "Tech Faculty",
+    tags: ["Business & Entrepreneurship","business elite Nigeria","SVES Nigeria","entrepreneur elite Nigeria","influential Nigeria tech"],
     readTime: 7
   },
   {
-    slug: "building-scalable-api-architectures",
-    title: "Building Scalable API Architectures",
-    description: "Principles and patterns for designing APIs that can scale with your application's growth and changing requirements.",
-    content: `Scalability is not just about handling more traffic. Learn how to design APIs that are maintainable, testable, and adaptable to change.`,
-    date: "2023-11-05",
-    author: "Billachusim",
-    tags: ["API Design", "Architecture", "Backend"],
-    readTime: 12
+    slug: "why-tech-faculty-ng-helps-entrepreneurs",
+    title: "Why Tech Faculty NG Helps Entrepreneurs",
+    description: "Tech Faculty's holistic approach helps entrepreneurs break into tech with design thinking workshops, mentorship, and hands-on training.",
+    content: `# Why Tech Faculty NG Helps Entrepreneurs
+
+*By Tech Faculty · Feb 10, 2026*
+
+Tech Faculty NG is not just for students—it's a launchpad for entrepreneurs. Here's how we transform small and medium-sized enterprises across Nigeria.
+
+## Our Entrepreneur Support System
+
+### Design Thinking Workshops
+We teach entrepreneurs to think like product designers—starting with the user's problem and working backwards to a solution.
+
+### Legal & Incorporation Guidance
+Starting a business in Nigeria involves navigating CAC registration, tax compliance, and regulatory requirements. We provide guidance through our partner network.
+
+### Technical Training
+Our 16-week bootcamps give entrepreneurs hands-on skills in:
+- **Data Analytics** – Make data-driven decisions
+- **Web Development** – Build your own website or app
+- **Digital Marketing** – Grow your customer base online
+- **AI/ML** – Automate repetitive tasks
+
+### Mentorship Network
+Connect with experienced founders and tech leaders who've built successful businesses in Nigeria.
+
+## Success Stories
+
+Our alumni include entrepreneurs who have:
+- Built e-commerce platforms serving thousands of customers
+- Automated inventory management saving 20+ hours per week
+- Created data dashboards that improved decision-making by 40%
+
+*Ready to level up your business? Join Tech Faculty's next cohort and gain the tech skills every modern entrepreneur needs.*`,
+    date: "2026-02-10",
+    author: "Tech Faculty",
+    tags: ["Business & Entrepreneurship","entrepreneur tech Nigeria","SMEs Nigeria","transformative tech Nigeria","business support Nigeria"],
+    readTime: 6
+  },
+  {
+    slug: "tech-faculty-ng-elite-entrepreneurs",
+    title: "Tech Faculty NG Elite Entrepreneurs",
+    description: "From startup founders to tech leads, meet the people behind Tech Faculty's incubation services.",
+    content: `# Tech Faculty NG Elite Entrepreneurs
+
+*By Tech Faculty · Nov 15, 2025*
+
+From startup founders to tech leads at big tech companies, Tech Faculty's alumni network is growing. Here's a look at the entrepreneurs shaping Nigeria's tech future.
+
+## The Incubation Advantage
+
+Tech Faculty's incubation services provide:
+
+- **Workspace** – Access to co-working spaces in Lagos
+- **Funding Guidance** – Connecting founders with angel investors and VCs
+- **Technical Support** – CTO-as-a-service for non-technical founders
+- **Market Access** – Introductions to potential customers and partners
+
+## What Makes Our Entrepreneurs Different
+
+Our graduates don't just learn to code—they learn to build businesses. The combination of technical skills and business acumen creates founders who can:
+
+1. Build their own MVPs without outsourcing
+2. Understand technical feasibility before committing resources
+3. Hire and manage technical teams effectively
+4. Make data-driven decisions from day one
+
+## Join the Community
+
+Whether you're pre-idea or post-revenue, Tech Faculty's entrepreneurship track can accelerate your journey.
+
+*Apply for our next incubation cohort and join Nigeria's most ambitious tech entrepreneurs.*`,
+    date: "2025-11-15",
+    author: "Tech Faculty",
+    tags: ["Business & Entrepreneurship","Tech Faculty","Nigerian founders","elite Nigeria tech","incubation Nigeria"],
+    readTime: 7
+  },
+  {
+    slug: "skills-gap-nigerian-businesses-tech-training",
+    title: "The Skills Gap: Nigerian Businesses Need More Tech Training",
+    description: "Nigerian businesses are investing heavily in employee tech training. Here's why the skills gap persists and how to close it.",
+    content: `# The Skills Gap: Nigerian Businesses Need More Tech Training
+
+*By Tech Faculty · Nov 1, 2025*
+
+Nigerian businesses are spending 30-40% more on employee tech training each year, yet the skills gap persists. Why?
+
+## The Problem
+
+Most corporate training programs fail because they:
+- Use generic, one-size-fits-all curricula
+- Focus on theory over practical application
+- Lack follow-up and accountability
+- Don't align with actual business needs
+
+## The Solution
+
+Effective tech training requires:
+
+### 1. Customized Curricula
+Training should address your specific business challenges, not generic textbook problems.
+
+### 2. Hands-On Projects
+Employees learn best by building solutions to real problems they face at work.
+
+### 3. Ongoing Support
+A 2-day workshop isn't enough. Sustained learning over 8-16 weeks produces lasting skill development.
+
+### 4. Measurable Outcomes
+Track ROI through productivity improvements, error reduction, and innovation metrics.
+
+## Tech Faculty's Corporate Training
+
+We offer customized training programs for businesses of all sizes:
+
+- **Data Analytics for Teams** – Empower your team to make data-driven decisions
+- **Digital Transformation** – Modernize legacy processes
+- **Cyber Security Awareness** – Protect your business from threats
+- **AI Integration** – Identify automation opportunities
+
+*Contact us to design a training program tailored to your business needs.*`,
+    date: "2025-11-01",
+    author: "Tech Faculty",
+    tags: ["Business & Entrepreneurship","skills gap Nigeria","business tech training Nigeria","employer training Nigeria","tech productivity Nigeria"],
+    readTime: 7
+  },
+  {
+    slug: "why-nigerian-business-need-ai-innovation-2026",
+    title: "Why Nigerian Businesses Need AI Innovation in 2026",
+    description: "AI isn't just for big corporations. Nigerian businesses of all sizes are using AI for transformation. Learn how.",
+    content: `# Why Nigerian Businesses Need AI Innovation in 2026
+
+*By Tech Faculty · Jan 15, 2026*
+
+AI isn't just for Silicon Valley giants. Nigerian businesses of all sizes are discovering how artificial intelligence can drive growth and efficiency.
+
+## Where AI Fits in Nigerian Business
+
+### Customer Service
+AI chatbots can handle 70% of customer inquiries automatically, reducing response times from hours to seconds.
+
+### Financial Analysis
+Machine learning models can predict cash flow, detect fraud, and optimize pricing strategies.
+
+### Supply Chain
+AI-powered demand forecasting helps businesses stock the right products at the right time.
+
+### Marketing
+Personalized recommendations and targeted advertising powered by AI can increase conversion rates by 20-30%.
+
+## Getting Started
+
+You don't need a massive budget to start with AI:
+
+1. **Identify pain points** – Where does your team spend the most time on repetitive tasks?
+2. **Start small** – Pick one process to automate
+3. **Measure results** – Track time saved and revenue impact
+4. **Scale what works** – Expand AI to other areas of the business
+
+## Learn AI with Tech Faculty
+
+Our **Machine Learning & AI Bootcamp** teaches you to build practical AI solutions using Python, TensorFlow, and real Nigerian business datasets.
+
+*Don't get left behind. The AI revolution is happening now—and Tech Faculty can help you lead it.*`,
+    date: "2026-01-15",
+    author: "Tech Faculty",
+    tags: ["AI & Innovation","AI Nigeria","business innovation Nigeria","transformation Nigeria","growth Nigeria"],
+    readTime: 6
+  },
+  {
+    slug: "why-nigerian-entrepreneurs-need-ai-implementation-2026",
+    title: "Why Nigerian Entrepreneurs Need AI Implementation in 2026",
+    description: "AI isn't just for big corporations. Nigerian entrepreneurs need to learn about AI to improve their businesses.",
+    content: `# Why Nigerian Entrepreneurs Need AI Implementation in 2026
+
+*By Tech Faculty · Oct 15, 2025*
+
+The global AI market is projected to reach $1.8 trillion by 2030. Nigerian entrepreneurs who adopt AI now will be positioned to capture a share of that growth.
+
+## Practical AI for Entrepreneurs
+
+### Automate Admin Tasks
+From invoicing to scheduling, AI tools can free up 10-15 hours per week for strategic work.
+
+### Enhance Decision-Making
+AI analytics dashboards turn raw business data into clear, actionable insights.
+
+### Improve Customer Experience
+Personalized recommendations and instant support build customer loyalty.
+
+### Reduce Costs
+AI-powered process optimization can cut operational costs by 15-25%.
+
+## Common Misconceptions
+
+- **"AI is too expensive"** – Many AI tools offer free tiers perfect for small businesses
+- **"I need a CS degree"** – No-code AI tools and practical bootcamps make it accessible
+- **"AI will replace my employees"** – AI augments human work, it doesn't replace it
+
+## Get Started Today
+
+Tech Faculty's AI bootcamp teaches practical implementation—not just theory. You'll build real AI solutions for Nigerian business contexts.
+
+*Join our next cohort and start building AI-powered solutions for your business.*`,
+    date: "2025-10-15",
+    author: "Tech Faculty",
+    tags: ["AI & Innovation","AI Nigeria","business strategy Nigeria","entrepreneur AI Nigeria","future AI Nigeria"],
+    readTime: 6
+  },
+  {
+    slug: "everything-you-need-to-know-about-siwes-nigeria",
+    title: "Everything You Need to Know About SIWES in Nigeria",
+    description: "A complete guide to the Students' Industrial Work Experience Scheme (SIWES) — what it is, who qualifies, and how to make the most of your placement.",
+    content: `# Everything You Need to Know About SIWES in Nigeria
+
+*By Tech Faculty · Mar 15, 2026*
+
+The Students' Industrial Work Experience Scheme (SIWES) is Nigeria's most important bridge between classroom learning and real-world industry experience. Here's your complete guide.
+
+## What is SIWES?
+
+SIWES is a skills training program established by the Industrial Training Fund (ITF) in 1973. It's designed to expose students of universities, polytechnics, and colleges of education to industrial work relevant to their courses of study.
+
+## Who Qualifies?
+
+Students in the following disciplines typically participate:
+- **Engineering** (all branches)
+- **Computer Science & IT**
+- **Sciences** (Physics, Chemistry, Biology)
+- **Agriculture**
+- **Medical Sciences**
+- **Environmental Sciences**
+
+## Duration
+
+- **Universities** – 6 months (usually in the penultimate year)
+- **Polytechnics** – 4 months (ND) + 6 months (HND)
+
+## How to Get a Placement
+
+1. **Start early** – Begin searching 3-6 months before your IT period
+2. **Write a strong application letter** – Highlight your skills and willingness to learn
+3. **Leverage your network** – Ask seniors, lecturers, and family connections
+4. **Apply to tech companies** – Tech placements offer the most marketable skills
+5. **Consider Tech Faculty** – We offer SIWES placements with real project experience
+
+## Making the Most of SIWES
+
+- **Don't just observe** – Actively participate in projects
+- **Document everything** – Keep a detailed logbook
+- **Build relationships** – Network with professionals in your field
+- **Learn beyond your role** – Pick up additional skills during downtime
+- **Get a recommendation letter** – Before your placement ends
+
+## Tech Faculty's SIWES Program
+
+Tech Faculty partners with YabaTech and other institutions to provide tech-focused SIWES placements. Our students work on real projects in:
+- Web and mobile development
+- Data analytics and visualization
+- Cyber security auditing
+- AI/ML model development
+
+*Looking for a SIWES placement? Apply through Tech Faculty's partnership program for hands-on tech experience.*`,
+    date: "2026-03-15",
+    author: "Tech Faculty",
+    tags: ["IT/SIWES","SIWES Nigeria","industrial training Nigeria","IT placement Nigeria","SIWES guide"],
+    readTime: 7
+  },
+  {
+    slug: "how-to-get-the-most-out-of-your-it-placement",
+    title: "How to Get the Most Out of Your IT Placement",
+    description: "Your IT/SIWES placement is a career-defining opportunity. Here's how to maximize the experience and set yourself up for success.",
+    content: `# How to Get the Most Out of Your IT Placement
+
+*By Tech Faculty · Feb 28, 2026*
+
+Your IT/SIWES placement is more than a requirement—it's your first real professional experience. Here's how to make every day count.
+
+## Before Your Placement
+
+### Set Clear Goals
+What do you want to learn? What skills do you want to develop? Write down 3-5 specific objectives.
+
+### Brush Up on Skills
+If you're going into a tech company, make sure you're comfortable with:
+- Basic programming (Python, JavaScript, or your language of choice)
+- Version control (Git/GitHub)
+- Professional communication
+
+### Prepare Your Toolkit
+- A reliable laptop
+- A professional email address
+- A LinkedIn profile
+- A GitHub account (for tech placements)
+
+## During Your Placement
+
+### Week 1-2: Observe and Learn
+- Understand the company's products and processes
+- Learn the team's workflow and tools
+- Ask questions—lots of them
+
+### Week 3-8: Contribute
+- Take on tasks proactively
+- Deliver quality work on time
+- Seek feedback and iterate
+
+### Week 9+: Lead
+- Propose improvements to existing processes
+- Mentor newer interns if applicable
+- Start your capstone project
+
+## After Your Placement
+
+1. **Update your resume** with specific achievements
+2. **Request LinkedIn recommendations** from supervisors
+3. **Stay in touch** with colleagues—they're your professional network
+4. **Apply what you learned** to your academic projects
+
+## Common Mistakes to Avoid
+
+- ❌ Treating it as just a school requirement
+- ❌ Being passive and waiting for tasks
+- ❌ Not keeping a detailed logbook
+- ❌ Burning bridges when you leave
+
+*Tech Faculty's SIWES program ensures you get meaningful work experience, not just certificate completion. Apply today.*`,
+    date: "2026-02-28",
+    author: "Tech Faculty",
+    tags: ["IT/SIWES","IT placement tips","SIWES tips","industrial training advice","career preparation Nigeria"],
+    readTime: 5
+  },
+  {
+    slug: "data-analytics-bootcamp-what-youll-learn-16-weeks",
+    title: "Data Analytics Bootcamp: What You'll Learn in 16 Weeks",
+    description: "Thinking about enrolling in a data analytics bootcamp? Here's a week-by-week breakdown of what Tech Faculty's program covers.",
+    content: `# Data Analytics Bootcamp: What You'll Learn in 16 Weeks
+
+*By Tech Faculty · Mar 1, 2026*
+
+Data Analytics is one of the most in-demand skills globally, and Nigeria is no exception. Here's exactly what you'll learn in Tech Faculty's 16-week Data Analytics Bootcamp.
+
+## Weeks 1-4: Foundations
+
+### Excel Mastery
+- Advanced formulas (VLOOKUP, INDEX-MATCH, SUMIFS)
+- Pivot tables and charts
+- Data cleaning and validation
+- Dashboard creation
+
+### Statistics Fundamentals
+- Descriptive statistics
+- Probability distributions
+- Hypothesis testing
+- Correlation and regression basics
+
+## Weeks 5-8: SQL & Databases
+
+- Writing SQL queries (SELECT, JOIN, GROUP BY)
+- Database design fundamentals
+- Working with PostgreSQL
+- Real-world data extraction projects
+
+## Weeks 9-12: Python for Data Analysis
+
+- Python basics and data types
+- Pandas for data manipulation
+- NumPy for numerical computing
+- Matplotlib and Seaborn for visualization
+- Working with APIs and web scraping
+
+## Weeks 13-16: Business Intelligence & Capstone
+
+### Power BI / Tableau
+- Building interactive dashboards
+- Data modeling and DAX formulas
+- Connecting to multiple data sources
+- Publishing and sharing reports
+
+### Capstone Project
+- Analyze a real Nigerian business dataset
+- Present findings to a panel of industry professionals
+- Build a portfolio-ready case study
+
+## Career Outcomes
+
+Our Data Analytics graduates have gone on to:
+- Junior Data Analyst roles at banks and fintechs
+- Business Intelligence positions at FMCG companies
+- Freelance data consulting
+- Starting their own analytics firms
+
+*Ready to become a data analyst? Enroll in Tech Faculty's next cohort today.*`,
+    date: "2026-03-01",
+    author: "Tech Faculty",
+    tags: ["Course Deep-Dive","data analytics bootcamp","learn data analytics Nigeria","data science training","Excel Power BI Python"],
+    readTime: 7
+  },
+  {
+    slug: "web-development-vs-mobile-development-which-path",
+    title: "Web Development vs Mobile Development: Which Path Is Right for You?",
+    description: "Choosing between web and mobile development? Here's a detailed comparison to help you pick the right career path.",
+    content: `# Web Development vs Mobile Development: Which Path Is Right for You?
+
+*By Tech Faculty · Feb 15, 2026*
+
+Both web and mobile development offer excellent career prospects in Nigeria. But which one should you learn? Let's break it down.
+
+## Web Development
+
+### What You'll Build
+Websites, web applications, dashboards, e-commerce platforms, SaaS products.
+
+### Key Technologies
+- **Frontend:** HTML, CSS, JavaScript, React, Vue.js
+- **Backend:** Node.js, Python, PHP
+- **Databases:** PostgreSQL, MongoDB
+- **Tools:** Git, VS Code, Figma
+
+### Pros
+- ✅ Lower barrier to entry
+- ✅ Larger job market in Nigeria
+- ✅ Faster development cycles
+- ✅ Works on any device with a browser
+- ✅ Easier to deploy and update
+
+### Cons
+- ❌ Limited access to device features
+- ❌ Performance constraints for heavy applications
+- ❌ Browser compatibility issues
+
+## Mobile Development
+
+### What You'll Build
+Android apps, iOS apps, cross-platform mobile applications.
+
+### Key Technologies
+- **Native:** Kotlin (Android), Swift (iOS)
+- **Cross-platform:** Flutter, React Native
+- **Backend:** Firebase, REST APIs
+- **Tools:** Android Studio, Xcode
+
+### Pros
+- ✅ Access to device hardware (camera, GPS, sensors)
+- ✅ Better performance for complex apps
+- ✅ Push notifications and offline capability
+- ✅ App store distribution
+
+### Cons
+- ❌ Steeper learning curve
+- ❌ Platform-specific development (unless cross-platform)
+- ❌ App store approval process
+- ❌ Harder to update
+
+## Which Should You Choose?
+
+| Factor | Web Dev | Mobile Dev |
+|--------|---------|------------|
+| Job availability | Higher | Growing |
+| Entry barrier | Lower | Higher |
+| Salary range | ₦1.2M - ₦8M | ₦1.5M - ₦10M |
+| Freelance potential | Excellent | Good |
+| Learning time | 4-6 months | 6-8 months |
+
+## Our Recommendation
+
+Start with **web development** if you're new to programming. The fundamentals (HTML, CSS, JavaScript) transfer to mobile development later, especially with React Native.
+
+*Tech Faculty offers both Web Development and Mobile Development bootcamps. Start with what excites you most.*`,
+    date: "2026-02-15",
+    author: "Tech Faculty",
+    tags: ["Course Deep-Dive","web development","mobile development","career choice","React"],
+    readTime: 6
+  },
+  {
+    slug: "ai-computing-designing-2026",
+    title: "How AI Computing is Designing the Human Future in 2026",
+    description: "Artificial intelligence is rapidly evolving from a tool to a companion. In 2026, the line between tech and humanity is bridging, with AI companions, mental health, and the future of computation. Explore the Deep Claire ecosystem and its impact.",
+    content: `# How AI Computing is Designing the Human Future in 2026
+
+*By Bill Achusim · Mar 17, 2026*
+
+Artificial intelligence has long been regarded as the future of work, automation, and data analysis. But a quiet revolution is underway: AI is becoming a companion. In 2026, the line between technology and humanity is blurring—with AI companions, mental health support systems, and the future of computation converging into something deeply personal.
+
+## The Rise of AI Companions
+
+Modern AI companions go far beyond chatbots. They incorporate:
+
+- **Human-like interaction** — Humanoid robots and conversational agents designed to communicate naturally
+- **Sensory intelligence** — Touch sensors, facial recognition, and environmental awareness
+- **Biometric integration** — AI systems that monitor health metrics and adapt to user needs
+
+These companions understand moods, learn conversation patterns, provide supportive care, and can even anticipate needs before the user asks.
+
+## Deep Claire: A Life-Changing Companion
+
+The Deep Claire ecosystem represents the next generation of AI companionship. Deep Claire acts as a supportive confidante—helping with everyday tasks like emotional care, human interaction, and decision-making.
+
+Deep Claire can detect emotional states through text analysis and adjust her responses accordingly, offering comfort during distress, encouragement during lows, and celebration during wins.
+
+## Ethical Boundaries and Privacy
+
+Deep Claire respects strict ethical limits:
+
+- **Consent-first** — She won't make decisions without user approval
+- **Data privacy** — All conversations are encrypted and never sold to advertisers
+- **Anti-manipulation** — Designed to avoid dependency or harmful suggestions
+- **Anonymity** — Users can interact without creating an account or sharing personal information
+
+## Personal Growth Through AI
+
+Deep Claire helps users achieve personal growth through:
+
+- Hobby exploration and career pathing
+- Mindfulness and meditation exercises
+- Goal setting and progress tracking
+- Mental health support and professional referrals
+
+## The Future of AI in Nigeria
+
+As we look toward 2026 and beyond, AI's role in Nigeria's tech ecosystem will only grow. From healthcare to education, AI companions will become integral to how Nigerians access support and information.
+
+For tech professionals, understanding AI development is becoming essential. Whether you're building AI solutions or integrating them into existing businesses, the skills gap is closing fast.
+
+*Interested in AI development? Tech Faculty NG offers comprehensive bootcamps covering Machine Learning, Python, and AI implementation for Nigerian businesses.*`,
+    date: "2026-03-17",
+    author: "Bill Achusim",
+    tags: ["AI & Automation","AI companions","mental health tech","Deep Claire","computational design"],
+    readTime: 6
+  },
+  {
+    slug: "python-nigerian-tech-ecosystem-2026",
+    title: "Why Python is the Language of Choice for Nigerian Tech Startups in 2026",
+    description: "Python has become the de facto programming language for startups and enterprises alike. For Nigerian startups, Python offers a compelling combination of ease, readability, and powerful AI libraries. Discover why Python is powering Nigeria's digital transformation.",
+    content: `# Why Python is the Language of Choice for Nigerian Tech Startups in 2026
+
+*By Bill Achusim · Apr 1, 2026*
+
+In the fast-paced world of tech startups, choosing the right programming language can make or break a company. For Nigerian startups, Python offers a compelling combination of ease, readability, and powerful AI-first analytics platforms. But what makes Python so uniquely suited for Nigeria's entrepreneurial spirit in 2026?
+
+## The Python Advantage
+
+Python's popularity is undeniable. It offers a comprehensive set of libraries for data science, machine learning, web development, and enterprise applications. For startups, this means faster time-to-market, lower development costs, and the ability to iterate quickly.
+
+## Developer Experience
+
+Python developers are among the highest-paid globally. In Nigeria, Python engineers command premium rates, often working remotely for international companies. Learning Python opens doors to high-income opportunities.
+
+## Versatility
+
+Python's versatility allows developers to build diverse applications, from web apps to AI services. Its simple syntax and dynamic typing make it accessible to beginners while remaining powerful for experts.
+
+## Top Use Cases in Nigeria
+
+Nigerian tech companies are already leveraging Python to disrupt industries:
+
+- **FinTech** — Payment processors like Paystack use Python for backend services, fraud detection, and transaction processing
+- **HealthTech** — Platforms use Python for patient data management and predictive diagnostics
+- **EdTech** — Tutoring platforms use Python for personalized learning experiences
+- **AgriTech** — Solutions like Farmdrive use Python for credit scoring and yield prediction
+
+## Python for AI and Data Science
+
+One of Python's greatest draws is its dominance in data science and artificial intelligence. Libraries like NumPy, TensorFlow, scikit-learn, and Matplotlib make Python the go-to language for machine learning projects. For Nigerian businesses looking to adopt AI, Python is the natural first step.
+
+## Open Source and Community
+
+Python is open-source with no licensing fees. The vibrant community means abundant free resources, tutorials, and support:
+
+- **Package Repositories** — PyPI hosts thousands of reusable packages
+- **Developer Tools** — IDEs like PyCharm, VS Code, and Jupyter Notebooks streamline development
+- **Standard Libraries** — Python's "batteries-included" philosophy means everything you need comes built in
+
+## Conclusion
+
+Choosing Python for your startup is a strategic decision that can accelerate growth and reduce technical debt. With its simplicity, power, and extensive library support, Python enables developers to build robust, scalable solutions quickly.
+
+## Getting Started
+
+For those new to programming or transitioning from other languages, Python is remarkably beginner-friendly:
+
+1. **Learn the Basics** — Understand syntax, data types, control structures, and functions
+2. **Build Small Projects** — Start with scripts that solve real-world problems (data cleaning, web scraping, automation)
+3. **Explore Frameworks** — Choose a web framework (Django or Flask) based on your project's complexity
+4. **Join the Community** — Meetup groups like Python Nigeria connect you to open source and fellow developers
+5. **Partner with Experts** — For specialized projects, collaborate with experienced Python developers or consultancies like Tech Faculty NG
+
+*Ready to master Python? Explore Tech Faculty NG's Python bootcamp and start building for Nigeria's future.*`,
+    date: "2026-04-01",
+    author: "Bill Achusim",
+    tags: ["Python & Nigerian Tech","Python Nigeria","tech startups","programming language","AI libraries"],
+    readTime: 8
+  },
+  {
+    slug: "dear-claires-love-ecosystem-building-connection-2026",
+    title: "How Dear Claire's Love Ecosystem is Revolutionizing Human Connection in 2026",
+    description: "Dear Claire's anonymous social network, powered by AI companionship and the Love Ecosystem lore, is creating a new paradigm for authentic connection and mental well-being. Discover how narrative-driven community is combating loneliness.",
+    content: `# How Dear Claire's Love Ecosystem is Revolutionizing Human Connection in 2026
+
+*By Bill Achusim · Apr 2, 2026*
+
+In a digital landscape often criticized for fostering isolation, Dear Claire emerges as a radical alternative—an anonymous social network that blends AI companionship with a rich, evolving narrative known as the Love Ecosystem. This unique approach is not merely a product but a philosophy: that technology can nurture genuine human connection when designed with empathy, story, and psychological safety at its core.
+
+## The Essence of the Love Ecosystem
+
+At the heart of Dear Claire lies the Love Ecosystem, a shared fictional universe that serves as the backdrop for interactions. It's not a static background story; it's a living lore that grows through community participation. Users engage with Claire and each other within this narrative framework, creating a sense of continuity and meaning that typical chat apps lack. The lore includes characters, themes, and symbols that become a common language, fostering a feeling of belonging to something larger than oneself.
+
+## Anonymity as a Gateway to Vulnerability
+
+Dear Claire allows users to remain completely anonymous. This design choice is deliberate: anonymity removes the fear of judgment, social comparison, and real-world repercussions. It creates a psychologically safe space where people can share their deepest struggles, joys, and questions without hesitation. paradoxically, this anonymity often leads to more authentic self-expression than on platforms where identities are curated. For many, especially those in cultures where mental health is stigmatized, this anonymity is the only way they can seek support.
+
+## AI Companionship with Empathy
+
+Claire is not a rule-based chatbot; she is an AI companion trained on extensive conversational data and fine-tuned by mental health professionals. She listens actively, remembers previous conversations, and responds with warmth and empathy. Claire can detect emotional states through text analysis and adjust her tone accordingly—offering comfort during distress, encouragement during lows, and celebration during highs. She is available 24/7, providing constant, reliable presence.
+
+## Mental Health Support at Scale
+
+One of Dear Claire's most profound impacts is in mental health. In Nigeria and many other regions, access to therapists is limited by cost, geography, and cultural barriers. Dear Claire offers a scalable, low-cost first line of support. While it does not replace professional treatment for severe conditions, it can de-escalate crises, teach coping strategies, and guide users toward appropriate resources. The system includes safety protocols that alert human moderators when a user is at risk of self-harm or harm to others.
+
+## The Narrative Advantage: Shared Meaning
+
+What truly sets Dear Claire apart is its use of narrative to create shared meaning. The Love Ecosystem lore—with its motifs of love, resilience, growth, and interconnectedness—permeates conversations. References to the story become inside jokes, metaphors for personal struggles, and sources of hope. This narrative layer combats the alienation that often accompanies digital interactions, where conversations feel disposable and fragmented. Instead, users feel they are co-authoring a living story, which deepens engagement and emotional investment.
+
+## Building Community Beyond One-on-One
+
+While the core experience is one-on-one with Claire, the Love Ecosystem also enables group interactions. Users can participate in community challenges, storytelling events, and themed discussions tied to the lore. These activities foster peer support and friendships, further enhancing the sense of community. The AI acts as a facilitator, guiding conversations and ensuring a supportive environment.
+
+## Ethical Guardrails and Data Privacy
+
+Dear Claire takes ethics seriously. All conversations are encrypted and not used for advertising. The AI is designed to avoid manipulation, dependency, or harmful suggestions. User data is anonymized and stored securely. The team works with ethicists to continuously refine the system, ensuring it respects autonomy and promotes well-being.
+
+## Why This Model Matters for Nigeria
+
+Nigeria's population is young, mobile-savvy, and facing increasing mental health challenges. Yet traditional mental health infrastructure is underdeveloped. Dear Claire's model—accessible via smartphone, anonymous, and culturally adaptable—addresses these gaps head-on. It empowers users to take charge of their emotional well-being in a familiar, non-threatening environment. Moreover, the narrative approach can be customized to reflect local cultures and languages, making it even more resonant.
+
+## The Road Ahead: Transmedia Expansion
+
+The Love Ecosystem is poised to expand beyond text. Plans include audio experiences, AR filters that bring lore characters into the real world, interactive fiction games, and community-generated content. The vision is an interconnected ecosystem where users can engage with the story through multiple sensory channels, deepening their immersion and connection.
+
+## Join the Story
+
+Dear Claire is more than an app; it's an invitation to reimagine what social technology can be. Whether you're seeking personal support, interested in AI ethics, or wanting to contribute to a compassionate community, you have a role to play.
+
+Tech Faculty NG is the innovative force behind Dear Claire, pushing the boundaries of AI for human good. We offer consultation and development services to bring similar empathetic solutions to organizations worldwide.
+
+Ready to experience the Love Ecosystem? Visit https://techfaculty.ng/blog/dear-claires-love-ecosystem-building-connection-2026 to read the full article and become part of the story.`,
+    date: "2026-04-02",
+    author: "Bill Achusim",
+    tags: ["AI & Mental Health","Dear Claire","AI companionship","mental health tech","anonymous social network"],
+    readTime: 7
   },
   {
     slug: "nigerian-business-digitization-roadmap-2026",
@@ -57,7 +921,7 @@ const blogPosts: BlogPost[] = [
     description: "A comprehensive guide for Nigerian SMEs and enterprises looking to digitize their operations, improve efficiency, and compete in a digital-first economy.",
     content: `# Nigerian Business Digitization: A Roadmap for 2026
 
-By Bill Achusim | April 6, 2026
+*By Bill Achusim · April 6, 2026*
 
 Digital transformation is no longer optional for Nigerian businesses. In 2026, companies that fail to digitize risk falling behind competitors and losing market share. This roadmap outlines practical steps for businesses of all sizes to embrace digital technologies, streamline operations, and unlock new growth opportunities.
 
@@ -114,14 +978,7 @@ Technology alone won't transform your business. Foster a culture that embraces c
 
 ### Cloud Computing
 
-Leverage cloud platforms (AWS, Azure, Google Cloud) for scalable infrastructure without heavy upfront costs. Cloud services offer:
-
-- On-demand resources
-- Pay-as-you-go pricing
-- Built-in security and compliance
-- Global reach
-
-Nigeria's cloud adoption is growing, with local data centers improving latency.
+Leverage cloud platforms (AWS, Azure, Google Cloud) for scalable infrastructure without heavy upfront costs.
 
 ### Enterprise Software
 
@@ -131,8 +988,6 @@ Adopt integrated business management systems:
 - CRM: HubSpot, Zoho, Salesforce
 - Accounting: QuickBooks, Xero
 
-These tools centralize data and automate workflows.
-
 ### Data Analytics
 
 Use data to drive decisions:
@@ -140,8 +995,6 @@ Use data to drive decisions:
 - Google Analytics for web insights
 - Business intelligence tools (Power BI, Tableau)
 - Custom dashboards for key metrics
-
-Data reveals trends, customer behavior, and operational inefficiencies.
 
 ### Cybersecurity
 
@@ -155,22 +1008,14 @@ As you digitize, security becomes critical:
 
 ## Overcoming Common Challenges
 
-- Resistance to Change: Involve employees early, communicate benefits, provide training.
-- Budget Constraints: Start with SaaS solutions to avoid large capital expenses. Use phased implementation.
-- Skills Gap: Partner with local tech firms like Tech Faculty NG for training and support.
-- Infrastructure Issues: Ensure reliable internet; consider backup connections or hybrid solutions.
+- **Resistance to Change** — Involve employees early, communicate benefits, provide training.
+- **Budget Constraints** — Start with SaaS solutions to avoid large capital expenses.
+- **Skills Gap** — Partner with local tech firms like Tech Faculty NG for training and support.
+- **Infrastructure Issues** — Ensure reliable internet; consider backup connections or hybrid solutions.
 
 ## The Role of Tech Faculty NG
 
-Tech Faculty NG helps Nigerian businesses navigate digitization with:
-
-- Consulting and strategy development
-- Custom software solutions
-- Training programs for teams
-- Ongoing technical support
-- Cloud migration services
-
-Their expertise covers the full stack from front-end to infrastructure.
+Tech Faculty NG helps Nigerian businesses navigate digitization with consulting, custom software solutions, training programs, ongoing technical support, and cloud migration services.
 
 ## Measuring Success
 
@@ -186,19 +1031,16 @@ Regularly review and adjust your strategy.
 
 ## Looking Ahead
 
-Digitization is a continuous journey, not a one-time project. As technology evolves, businesses must stay agile and keep innovating. In 2026 and beyond, digital leaders will define the Nigerian economy.
-
-Ready to start? Visit https://techfaculty.ng/blog/nigerian-business-digitization-roadmap-2026 for more insights and expert guidance.
-`,
+Digitization is a continuous journey, not a one-time project. As technology evolves, businesses must stay agile and keep innovating. In 2026 and beyond, digital leaders will define the Nigerian economy.`,
     date: "2026-04-06",
     author: "Bill Achusim",
-    tags: ["digitization", "Nigerian business", "digital transformation", "SME", "technology adoption"],
+    tags: ["Business & Entrepreneurship", "digitization", "digital transformation", "SME", "technology adoption"],
     readTime: 9
-  }
+  },
 ];
 
 export const getAllBlogPosts = () => {
-  return blogPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  return [...blogPosts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 };
 
 export const getBlogPostBySlug = (slug: string) => {
@@ -208,7 +1050,7 @@ export const getBlogPostBySlug = (slug: string) => {
 export const getRelatedPosts = (slug: string, limit: number = 3) => {
   const post = getBlogPostBySlug(slug);
   if (!post) return [];
-  
+
   return blogPosts
     .filter(p => p.slug !== slug && p.tags.some(tag => post.tags.includes(tag)))
     .slice(0, limit);

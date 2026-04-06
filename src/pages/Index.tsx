@@ -100,10 +100,10 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>Tech Faculty — Accredited Tech Training in Africa | Get Certified & Employed</title>
-        <meta name="description" content="Accredited tech training in Software Engineering, Data Science, Cyber Security & AI across Africa. Headquartered in Nigeria. Get certified and employed with Tech Faculty." />
-        <meta property="og:title" content="Tech Faculty — Accredited Tech Training in Africa" />
-        <meta property="og:description" content="Over 5,000 students trained. 87% employment rate. Accredited bootcamps in Software Engineering, Data Science, Cybersecurity & AI. Based in Nigeria, training Africa." />
+        <title>Tech Faculty — World-Class Tech Training | Get Certified & Employed</title>
+        <meta name="description" content="World-class tech training in Software Engineering, Data Science, Cyber Security & AI. Get certified and employed with Tech Faculty — training professionals worldwide." />
+        <meta property="og:title" content="Tech Faculty — World-Class Tech Training" />
+        <meta property="og:description" content="Over 5,000 students trained. 87% employment rate. Accredited bootcamps in Software Engineering, Data Science, Cybersecurity & AI. Training professionals worldwide." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://techfaculty.ng/" />
         <link rel="canonical" href="https://techfaculty.ng/" />

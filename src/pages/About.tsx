@@ -168,7 +168,7 @@ const About = () => {
               <h2 className="text-2xl font-bold">Visit Us</h2>
             </div>
             <p className="text-muted-foreground mb-6">
-              Digital Village, NBTI Zonal Office, Nnewi, Anambra State, Nigeria
+              Technology Incubation Center, NBTI South-East Zonal Office, Nnewi, Anambra State, Nigeria
             </p>
             <Button size="lg" className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background font-semibold" asChild>
               <a href="https://wa.me/2348068597140" target="_blank" rel="noopener noreferrer">

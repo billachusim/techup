@@ -18,7 +18,7 @@ const Blog = () => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const filtered = activeCategory
-    ? sortedPosts.filter((p) => p.tags.includes(activeCategory))
+    ? sortedPosts.filter((p) => p.tags[0] === activeCategory)
     : sortedPosts;
 
   return (

@@ -5,6 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Monitor, Apple, Smartphone } from "lucide-react";
 import palmshopPreview from "@/assets/palmshop-preview.jpg";
+import { Link } from "react-router-dom";
+import { Sparkles } from "lucide-react";
 
 type Platform = "playstore" | "appstore" | "web" | "windows" | "mac";
 
@@ -255,6 +257,61 @@ const Products = () => {
             More products coming soon. Some download links are pending store
             approval — check back for updates.
           </p>
+        </section>
+
+        {/* Our Partners */}
+        <section className="container mx-auto px-4 max-w-6xl mt-20">
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-2 text-sm text-primary font-medium bg-primary/10 px-4 py-1.5 rounded-full mb-4">
+              <Sparkles size={14} /> Our Partners
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold">Tools we partner with</h2>
+            <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">
+              World-class platforms we've teamed up with to bring more value to our community.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="overflow-hidden group hover:shadow-lg transition-all border-border/50">
+              <div className="h-1.5 bg-gradient-to-r from-cyan-500 to-teal-600" />
+              <CardContent className="p-6 space-y-4">
+                <div>
+                  <h3 className="text-xl font-bold">Tiny People AI</h3>
+                  <p className="text-sm text-primary font-medium">Your personal AI agent on WhatsApp, Telegram & iMessage</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">by Natura Inc · Partnered with Tech Faculty</p>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  We've partnered with Natura Inc to bring Tiny People AI to users across
+                  Nigeria and Africa — a powerful AI agent you talk to from the apps you already use.
+                </p>
+                <Button asChild size="sm" className="gap-1.5">
+                  <Link to="/tinypeople">
+                    Learn more <ExternalLink size={14} />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="overflow-hidden group hover:shadow-lg transition-all border-border/50">
+              <div className="h-1.5 bg-gradient-to-r from-pink-500 to-fuchsia-600" />
+              <CardContent className="p-6 space-y-4">
+                <div>
+                  <h3 className="text-xl font-bold">Lovable</h3>
+                  <p className="text-sm text-primary font-medium">Build production apps with AI</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Recommended by Tech Faculty</p>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Lovable is the AI platform we use to ship real production apps. Describe what
+                  you want, iterate in plain English, and publish in minutes.
+                </p>
+                <Button asChild size="sm" className="gap-1.5">
+                  <Link to="/lovable">
+                    Learn more <ExternalLink size={14} />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </section>
       </main>
 

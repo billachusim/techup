@@ -1,41 +1,60 @@
+## New Partner Pages
 
+Add two marketing pages showcasing partnerships, each with a clear CTA pointing to an external link.
 
-## Blog Posts Cleanup & Category Expansion
+### 1. `/tinypeople` — Tiny People AI (by Natura Inc)
 
-### Problem
-The `src/data/blogPosts.ts` file has significant duplication and only 2 categories ("Career Guide" and "Business & Entrepreneurship").
+Narrative: "Tech Faculty has partnered with Natura Inc to bring Tiny People AI — a powerful personal AI agent — to users across Nigeria and Africa."
 
-**Duplicates found:**
-- "Why Tech Faculty NG Helps Entrepreneurs" — appears 3 times (lines 49, 93, 268)
-- "Tech Faculty NG Helps Entrepreneurs" — appears as a 4th near-duplicate (line 60)
-- "Why Nigerian Entrepreneurs Need AI Implementation" — appears 3 times (lines 115, 257, 290)
-- "Why Nigerian Businesses Need AI Innovation" — appears twice (lines 71, 82)
-- "Tech Faculty NG Elite Entrepreneurs" — appears twice (lines 104, 279)
-- "Skills Gap: Nigerian Businesses Need More Tech Training" — appears twice (lines 126, 301)
-- "Skills Gap: Nigerian Business Elite Increasing Tech Focus" — appears twice (lines 137, 246)
+Sections:
+- **Hero**: Title "Meet Tiny People AI — Your Personal AI Agent, Now in Africa", subhead about the Tech Faculty × Natura Inc partnership, primary CTA button **"Start Using Tiny People"** → `https://tinypeople.ai/start` (opens in new tab), secondary "Learn more" → `https://tinypeople.ai`. Custom AI-generated hero image.
+- **What is Tiny People**: Short intro — a powerful AI agent you talk to through your everyday messaging apps.
+- **How to use it (3 channels)**: WhatsApp, Telegram, iMessage cards (icons + short blurbs). Mention upcoming earbud delivery option.
+- **Why it matters here**: Partnership angle — bringing world-class AI to African users via the channels they already use.
+- **Final CTA band**: Big "Start Using Tiny People" button to `tinypeople.ai/start`.
+- "Powered by Natura Inc · Brought to you by Tech Faculty" footer line.
 
-After deduplication, roughly 9 unique posts remain from the original ~22 entries.
+### 2. `/lovable` — Build with Lovable
 
-### Plan
+Narrative: "Tech Faculty recommends Lovable — the AI platform we use to build production apps."
 
-**1. Remove all duplicate blog posts** — keep only one version of each (preferring the one with more complete content or the more recent date).
+Sections:
+- **Hero**: Title "Build Apps with AI — Powered by Lovable", subhead, primary CTA **"Start Building on Lovable"** → placeholder referral URL `https://lovable.dev/?via=YOUR_REFERRAL_CODE` (opens new tab, `rel="noopener"`). Custom AI-generated hero image.
+- **What you can build**: Web apps, dashboards, SaaS, internal tools (icon grid).
+- **Why Lovable**: 3–4 benefit cards (chat-to-code, full-stack with Cloud, instant publish, integrations).
+- **How it works**: 3-step flow (Describe → Iterate → Publish).
+- **Final CTA band**: "Start Building on Lovable" button.
+- Small disclosure line: "We may earn a referral reward when you sign up through our link."
 
-**2. Add new categories and posts:**
-- **IT/SIWES** — Posts about SIWES program, industrial training tips, IT placement guides
-- **Course Deep-Dive** — Posts exploring specific bootcamp courses (Data Analytics, Web Dev, Cyber Security, etc.)
-- **AI & Innovation** — Reclassify relevant AI posts here instead of lumping them under Business
+The referral URL will be defined as a single constant at the top of the file so you can swap it later in one place.
 
-**3. New blog posts to add (with full markdown content):**
-- *IT/SIWES*: "Everything You Need to Know About SIWES in Nigeria", "How to Get the Most Out of Your IT Placement"
-- *Course Deep-Dive*: "Data Analytics Bootcamp: What You'll Learn in 16 Weeks", "Web Development vs Mobile Development: Which Path Is Right for You?"
-- *Career Guide*: Keep existing posts in this category
+### Navigation & Discovery
 
-**4. Ensure all posts have content** — currently most posts are missing the `content` field, which means clicking them shows a blank article. Add markdown content for all posts.
+- **Footer (`src/components/Footer.tsx`)**: Add a new "Partners" column (or append to existing column) with links to **Tiny People AI** and **Lovable**.
+- **Products page (`src/pages/Products.tsx`)**: Add a new "Our Partners" section (2 cards) below the existing software portfolio, each linking to the respective new page.
 
-### Technical Details
-- Single file change: `src/data/blogPosts.ts`
-- Deduplicate by keeping unique slugs only
-- Add 4 new posts across the missing categories
-- Add `content` field to all existing posts that lack it
-- Final result: ~13 unique, well-categorized posts with full content across 4-5 categories
+### Routing
 
+- `src/App.tsx`: Add `<Route path="/tinypeople" element={<TinyPeople />} />` and `<Route path="/lovable" element={<Lovable />} />` above the catch-all.
+- `public/sitemap.xml`: Add both URLs.
+
+### Visuals
+
+Generate two custom hero images with `imagegen--generate_image` (fast tier, 16:9), saved to `src/assets/`:
+- `tinypeople-hero.jpg` — friendly AI agent / chat bubbles / African context, brand-aligned.
+- `lovable-hero.jpg` — abstract AI-builds-apps visual matching site palette.
+
+### SEO
+
+Each page wrapped with `react-helmet-async`:
+- TinyPeople: title "Tiny People AI in Africa | Tech Faculty × Natura Inc", meta desc <160 chars, single H1, canonical.
+- Lovable: title "Build Apps with Lovable | Tech Faculty", meta desc, canonical.
+
+### Design
+
+Reuse existing semantic tokens (`primary`, gradient `from-primary to-[hsl(180,100%,45%)]`), shadcn `Button`/`Card`, and Header/Footer layout — consistent with the rest of the site. No new colors introduced.
+
+### Files to add / edit
+
+- Add: `src/pages/TinyPeople.tsx`, `src/pages/Lovable.tsx`, `src/assets/tinypeople-hero.jpg`, `src/assets/lovable-hero.jpg`
+- Edit: `src/App.tsx`, `src/components/Footer.tsx`, `src/pages/Products.tsx`, `public/sitemap.xml`

@@ -47,6 +47,11 @@ const Footer = () => {
               <Link to="/events" className="hover:text-primary transition-colors">Events</Link>
               <Link to="/siwes" className="hover:text-primary transition-colors">Internships</Link>
             </nav>
+            <h4 className="text-sm font-semibold pt-4">Partners</h4>
+            <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
+              <Link to="/tinypeople" className="hover:text-primary transition-colors">Tiny People AI</Link>
+              <Link to="/lovable" className="hover:text-primary transition-colors">Lovable</Link>
+            </nav>
           </div>
 
           {/* Company */}

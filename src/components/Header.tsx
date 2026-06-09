@@ -173,8 +173,9 @@ const Header = () => {
             <CurrencyToggle />
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" aria-label="Open navigation menu">
                   <Menu size={22} />
+                  <span className="sr-only">Open navigation menu</span>
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-72 pt-12">

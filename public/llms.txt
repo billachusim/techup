@@ -1,0 +1,29 @@
+# Tech Faculty NG
+
+> Licensed Nigerian tech training institute in Nnewi, Anambra State. Bootcamps in software engineering, AI, data science, cybersecurity, design, and digital marketing — with certification and job placement support.
+
+Tech Faculty NG trains, certifies, and employs the next generation of African tech talent. Programs run online, hybrid, or on-site, with a free foundation bootcamp and modular paid tracks billed in NGN or USD. The platform also offers SIWES industrial training, a software product portfolio, a tech store, and a certificate verification portal.
+
+## Pages
+
+- [Home](/): Overview of bootcamps, learning modes, pricing, and outcomes.
+- [About](/about): Mission, history, licensing, and team behind Tech Faculty NG.
+- [Business Partnerships](/business-partnerships): Hire-from / train-with-us programs for companies.
+- [School Collaborations](/school-collaborations): Bootcamp partnerships for universities and secondary schools.
+- [SIWES](/siwes): Industrial training placement (Learn & Pay, Tutor & Earn tracks).
+- [Events](/events): Workshops, hackathons, and community sessions.
+- [Careers](/careers): Internal job board and open roles at Tech Faculty NG.
+- [Software Products](/products): Apps and platforms built by Tech Faculty including Dear Claire, Alter Ego, PalmShop.ng, Tiny People AI.
+- [Tiny People AI](/tinypeople): Messaging-native AI agent built with Natura Inc.
+- [Tech Store](/tech-store): Laptops, gadgets, and learning gear with Faculty ID member discounts.
+- [Verify Certificate](/verify): Public certificate verification portal.
+- [Blog](/blog): Tech careers, bootcamp guides, and industry insights for Nigeria.
+
+## Blog
+
+- [How to start a tech career in Nigeria (2026)](/blog/how-to-start-tech-career-nigeria-2026)
+- [Top 5 in-demand tech skills in Nigeria](/blog/top-5-in-demand-tech-skills-nigeria)
+- [What is SIWES — complete Nigerian guide](/blog/what-is-siwes-nigeria-complete-guide)
+- [Why businesses need AI integration in Nigeria](/blog/why-businesses-need-ai-integration-nigeria)
+- [Web development bootcamp — what you learn](/blog/web-development-bootcamp-what-you-learn)
+- [How universities can integrate tech bootcamps](/blog/how-universities-integrate-tech-bootcamps)

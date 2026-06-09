@@ -47,7 +47,7 @@ const TinyPeople = () => {
                 </Button>
                 <Button asChild size="lg" variant="outline">
                   <a href={LEARN_URL} target="_blank" rel="noopener noreferrer">
-                    Learn more
+                    Learn more about Tiny People AI
                   </a>
                 </Button>
               </div>

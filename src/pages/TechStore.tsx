@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -42,6 +43,30 @@ const TechStore = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Tech Store — Tech Faculty NG | Equipment & Gadgets</title>
+        <meta
+          name="description"
+          content="Shop laptops, accessories, and learning gear for Tech Faculty NG students. Verified Faculty IDs unlock exclusive bootcamp member discounts on every order."
+        />
+        <link rel="canonical" href="https://techfaculty.ng/tech-store" />
+        <meta property="og:title" content="Tech Store — Tech Faculty NG" />
+        <meta
+          property="og:description"
+          content="Curated laptops, gadgets, and bootcamp gear with Faculty ID member discounts."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://techfaculty.ng/tech-store" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Tech Store — Tech Faculty NG",
+          description:
+            "Catalog of laptops, gadgets, and learning equipment for Tech Faculty NG students with Faculty ID member discounts.",
+          url: "https://techfaculty.ng/tech-store",
+          isPartOf: { "@type": "WebSite", name: "Tech Faculty NG", url: "https://techfaculty.ng" },
+        })}</script>
+      </Helmet>
       <Header />
       
       <main className="pt-24 pb-16">

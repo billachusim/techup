@@ -35,13 +35,12 @@ const Verify = () => {
     }
 
     setLoading(true);
-    const { data, error } = await supabase
-      .from("certificates")
-      .select("certificate_number, student_name, course_name, certificate_type, issued_by, date_issued, issued_at")
-      .eq("certificate_number", normalizedId)
-      .maybeSingle();
+    const { data: rows, error } = await supabase.rpc("verify_certificate", {
+      cert_number: normalizedId,
+    });
     setLoading(false);
 
+    const data = Array.isArray(rows) ? rows[0] : null;
     if (error || !data) {
       setStatus("error");
       setResult(null);

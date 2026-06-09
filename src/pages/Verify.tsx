@@ -6,18 +6,15 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
 
-const certificateRecords = {
-  TFNG202601: {
-    name: "Mbanefo Ifunanya Lilian",
-    course: "Fullstack Web Development",
-    certificateType: "Certificate of Achievement",
-    issuedBy: "Tech Faculty NG",
-    dateIssued: "April 01, 2026",
-  },
-} as const;
-
-type CertificateRecord = (typeof certificateRecords)[keyof typeof certificateRecords];
+type CertificateRecord = {
+  name: string;
+  course: string;
+  certificateType: string;
+  issuedBy: string;
+  dateIssued: string;
+};
 type Status = "idle" | "success" | "error";
 
 const Verify = () => {
@@ -25,10 +22,11 @@ const Verify = () => {
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
   const [result, setResult] = useState<CertificateRecord | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const normalizedId = useMemo(() => certificateId.trim().toUpperCase(), [certificateId]);
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     if (!normalizedId) {
       setStatus("error");
       setResult(null);
@@ -36,17 +34,33 @@ const Verify = () => {
       return;
     }
 
-    const match = certificateRecords[normalizedId as keyof typeof certificateRecords];
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("certificates")
+      .select("certificate_number, student_name, course_name, certificate_type, issued_by, date_issued, issued_at")
+      .eq("certificate_number", normalizedId)
+      .maybeSingle();
+    setLoading(false);
 
-    if (!match) {
+    if (error || !data) {
       setStatus("error");
       setResult(null);
       setMessage(`Certificate ID \"${normalizedId}\" was not found in the Tech Faculty NG database.`);
       return;
     }
 
+    const fallbackDate = data.issued_at
+      ? new Date(data.issued_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "2-digit" })
+      : "";
+
     setStatus("success");
-    setResult(match);
+    setResult({
+      name: data.student_name ?? "—",
+      course: data.course_name,
+      certificateType: data.certificate_type ?? "Certificate of Achievement",
+      issuedBy: data.issued_by ?? "Tech Faculty NG",
+      dateIssued: data.date_issued ?? fallbackDate,
+    });
     setMessage("Certificate verified successfully.");
   };
 
@@ -108,9 +122,9 @@ const Verify = () => {
                   aria-label="Certificate ID"
                   className="h-12 flex-1 rounded-xl"
                 />
-                <Button type="button" onClick={handleVerify} className="h-12 rounded-xl px-6">
+                <Button type="button" onClick={handleVerify} disabled={loading} className="h-12 rounded-xl px-6">
                   <ShieldCheck className="h-4 w-4" />
-                  Verify Certificate
+                  {loading ? "Verifying..." : "Verify Certificate"}
                 </Button>
               </div>
 

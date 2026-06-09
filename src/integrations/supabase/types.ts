@@ -471,6 +471,18 @@ export type Database = {
       }
       get_department_code: { Args: { dept: string }; Returns: string }
       seed_all_course_lectures: { Args: never; Returns: undefined }
+      verify_certificate: {
+        Args: { cert_number: string }
+        Returns: {
+          certificate_number: string
+          certificate_type: string
+          course_name: string
+          date_issued: string
+          issued_at: string
+          issued_by: string
+          student_name: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

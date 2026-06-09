@@ -225,6 +225,28 @@ const Products = () => {
           content="Explore software products built by Tech Faculty — apps and platforms used by thousands including Dear Claire, Alter Ego, PalmShop.ng, and more."
         />
         <link rel="canonical" href="https://techfaculty.ng/products" />
+        <meta property="og:title" content="Software Products — Tech Faculty NG" />
+        <meta
+          property="og:description"
+          content="Apps and platforms built by Tech Faculty NG: Dear Claire, Alter Ego, PalmShop.ng, Tiny People AI, Lovable, and more."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://techfaculty.ng/products" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Software Products — Tech Faculty NG",
+          description:
+            "Portfolio of software products built by Tech Faculty NG including Dear Claire, Alter Ego, PalmShop.ng, Tiny People AI, and Lovable.",
+          url: "https://techfaculty.ng/products",
+          hasPart: products.map((p) => ({
+            "@type": "SoftwareApplication",
+            name: p.name,
+            description: p.description,
+            applicationCategory: "Application",
+            operatingSystem: p.platforms.join(", "),
+          })),
+        })}</script>
       </Helmet>
 
       <Header />

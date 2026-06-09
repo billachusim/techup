@@ -214,7 +214,6 @@ export type Database = {
           name: string
           plan_required: string
           updated_at: string
-          whatsapp_group_link: string | null
         }
         Insert: {
           created_at?: string
@@ -225,7 +224,6 @@ export type Database = {
           name: string
           plan_required?: string
           updated_at?: string
-          whatsapp_group_link?: string | null
         }
         Update: {
           created_at?: string
@@ -236,7 +234,6 @@ export type Database = {
           name?: string
           plan_required?: string
           updated_at?: string
-          whatsapp_group_link?: string | null
         }
         Relationships: []
       }
@@ -369,7 +366,6 @@ export type Database = {
           description: string | null
           duration_minutes: number | null
           id: string
-          meeting_link: string | null
           scheduled_at: string
           status: string
           title: string
@@ -381,7 +377,6 @@ export type Database = {
           description?: string | null
           duration_minutes?: number | null
           id?: string
-          meeting_link?: string | null
           scheduled_at: string
           status?: string
           title: string
@@ -393,7 +388,6 @@ export type Database = {
           description?: string | null
           duration_minutes?: number | null
           id?: string
-          meeting_link?: string | null
           scheduled_at?: string
           status?: string
           title?: string

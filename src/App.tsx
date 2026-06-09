@@ -31,6 +31,7 @@ import Products from "./pages/Products";
 import Verify from "./pages/Verify";
 import TinyPeople from "./pages/TinyPeople";
 import LovablePage from "./pages/Lovable";
+import AdminCertificates from "./pages/AdminCertificates";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -62,6 +63,7 @@ const App = () => (
             <Route path="/verify/*" element={<Verify />} />
             <Route path="/tinypeople" element={<TinyPeople />} />
             <Route path="/lovable" element={<LovablePage />} />
+            <Route path="/admin/certificates" element={<AdminCertificates />} />
             {/* Legacy WordPress redirects */}
             <Route path="/category/*" element={<Navigate to="/blog" replace />} />
             <Route path="/tag/*" element={<Navigate to="/blog" replace />} />

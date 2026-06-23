@@ -60,7 +60,7 @@ The biggest losses occur when you don't act. AI & CV adoption in Nigeria will ac
 *Ready to dive? Explore our **16-week Python & Computer Vision Bootcamp**. We've got a 100% hands-on program ready for you.*`,
     date: "2026-03-29",
     author: "Bill Achusim",
-    tags: ["AI & Innovation","AI Nigeria","Computer Vision Nigeria","business innovation Nigeria","enterprise AI Nigeria"],
+    tags: ["Artificial Intelligence","AI Nigeria","Computer Vision Nigeria","business innovation Nigeria","enterprise AI Nigeria"],
     readTime: 8
   },
   {
@@ -111,7 +111,7 @@ If you're a founder looking to scale, an entrepreneur building for Nigeria, or a
 *Ready to join? Stay tuned for opportunities to get involved in the 16-week Python & Computer Bootcamp opening soon.*`,
     date: "2026-03-25",
     author: "Bill Achusim",
-    tags: ["Business & Entrepreneurship","Tech Faculty","YabaTech","strategic partnership","Tutor Talent Pipeline"],
+    tags: ["Tech Careers","Tech Faculty","YabaTech","strategic partnership","Tutor Talent Pipeline"],
     readTime: 6
   },
   {
@@ -174,7 +174,7 @@ Starting a tech career in Nigeria requires commitment, but the rewards are worth
 *Ready to start? Explore Tech Faculty's bootcamp programs and take the first step today.*`,
     date: "2026-03-10",
     author: "Tech Faculty",
-    tags: ["Career Guide","tech career Nigeria","start coding Nigeria","software developer Nigeria","tech bootcamp Nigeria"],
+    tags: ["Tech Careers","tech career Nigeria","start coding Nigeria","software developer Nigeria","tech bootcamp Nigeria"],
     readTime: 8
   },
   {
@@ -223,7 +223,7 @@ Consider these factors:
 *Looking for a structured, mentored experience? Tech Faculty's 16-week bootcamps offer the best balance of rigor and support.*`,
     date: "2026-03-05",
     author: "Tech Faculty",
-    tags: ["Career Guide","tech bootcamps YabaTech","in-design bootcamps YabaTech","curriculum support YabaTech"],
+    tags: ["Tech Careers","tech bootcamps YabaTech","in-design bootcamps YabaTech","curriculum support YabaTech"],
     readTime: 6
   },
   {
@@ -259,7 +259,7 @@ Whether you're an aspiring entrepreneur or an established business owner, tech s
 *Tech Faculty's bootcamps are designed to give entrepreneurs the tech skills they need to compete in 2026 and beyond.*`,
     date: "2026-02-20",
     author: "Tech Faculty",
-    tags: ["Business & Entrepreneurship","business elite Nigeria","SVES Nigeria","entrepreneur elite Nigeria","influential Nigeria tech"],
+    tags: ["Startups & Business","business elite Nigeria","SVES Nigeria","entrepreneur elite Nigeria","influential Nigeria tech"],
     readTime: 7
   },
   {
@@ -300,7 +300,7 @@ Our alumni include entrepreneurs who have:
 *Ready to level up your business? Join Tech Faculty's next cohort and gain the tech skills every modern entrepreneur needs.*`,
     date: "2026-02-10",
     author: "Tech Faculty",
-    tags: ["Business & Entrepreneurship","entrepreneur tech Nigeria","SMEs Nigeria","transformative tech Nigeria","business support Nigeria"],
+    tags: ["Startups & Business","entrepreneur tech Nigeria","SMEs Nigeria","transformative tech Nigeria","business support Nigeria"],
     readTime: 6
   },
   {
@@ -338,7 +338,7 @@ Whether you're pre-idea or post-revenue, Tech Faculty's entrepreneurship track c
 *Apply for our next incubation cohort and join Nigeria's most ambitious tech entrepreneurs.*`,
     date: "2025-11-15",
     author: "Tech Faculty",
-    tags: ["Business & Entrepreneurship","Tech Faculty","Nigerian founders","elite Nigeria tech","incubation Nigeria"],
+    tags: ["Startups & Business","Tech Faculty","Nigerian founders","elite Nigeria tech","incubation Nigeria"],
     readTime: 7
   },
   {
@@ -387,7 +387,7 @@ We offer customized training programs for businesses of all sizes:
 *Contact us to design a training program tailored to your business needs.*`,
     date: "2025-11-01",
     author: "Tech Faculty",
-    tags: ["Business & Entrepreneurship","skills gap Nigeria","business tech training Nigeria","employer training Nigeria","tech productivity Nigeria"],
+    tags: ["Startups & Business","skills gap Nigeria","business tech training Nigeria","employer training Nigeria","tech productivity Nigeria"],
     readTime: 7
   },
   {
@@ -430,7 +430,7 @@ Our **Machine Learning & AI Bootcamp** teaches you to build practical AI solutio
 *Don't get left behind. The AI revolution is happening now—and Tech Faculty can help you lead it.*`,
     date: "2026-01-15",
     author: "Tech Faculty",
-    tags: ["AI & Innovation","AI Nigeria","business innovation Nigeria","transformation Nigeria","growth Nigeria"],
+    tags: ["Artificial Intelligence","AI Nigeria","business innovation Nigeria","transformation Nigeria","growth Nigeria"],
     readTime: 6
   },
   {
@@ -470,7 +470,7 @@ Tech Faculty's AI bootcamp teaches practical implementation—not just theory. Y
 *Join our next cohort and start building AI-powered solutions for your business.*`,
     date: "2025-10-15",
     author: "Tech Faculty",
-    tags: ["AI & Innovation","AI Nigeria","business strategy Nigeria","entrepreneur AI Nigeria","future AI Nigeria"],
+    tags: ["Artificial Intelligence","AI Nigeria","business strategy Nigeria","entrepreneur AI Nigeria","future AI Nigeria"],
     readTime: 6
   },
   {
@@ -529,7 +529,7 @@ Tech Faculty partners with YabaTech and other institutions to provide tech-focus
 *Looking for a SIWES placement? Apply through Tech Faculty's partnership program for hands-on tech experience.*`,
     date: "2026-03-15",
     author: "Tech Faculty",
-    tags: ["IT/SIWES","SIWES Nigeria","industrial training Nigeria","IT placement Nigeria","SIWES guide"],
+    tags: ["SIWES & Internships","SIWES Nigeria","industrial training Nigeria","IT placement Nigeria","SIWES guide"],
     readTime: 7
   },
   {
@@ -593,7 +593,7 @@ If you're going into a tech company, make sure you're comfortable with:
 *Tech Faculty's SIWES program ensures you get meaningful work experience, not just certificate completion. Apply today.*`,
     date: "2026-02-28",
     author: "Tech Faculty",
-    tags: ["IT/SIWES","IT placement tips","SIWES tips","industrial training advice","career preparation Nigeria"],
+    tags: ["SIWES & Internships","IT placement tips","SIWES tips","industrial training advice","career preparation Nigeria"],
     readTime: 5
   },
   {
@@ -659,7 +659,7 @@ Our Data Analytics graduates have gone on to:
 *Ready to become a data analyst? Enroll in Tech Faculty's next cohort today.*`,
     date: "2026-03-01",
     author: "Tech Faculty",
-    tags: ["Course Deep-Dive","data analytics bootcamp","learn data analytics Nigeria","data science training","Excel Power BI Python"],
+    tags: ["Data & Analytics","data analytics bootcamp","learn data analytics Nigeria","data science training","Excel Power BI Python"],
     readTime: 7
   },
   {
@@ -735,7 +735,7 @@ Start with **web development** if you're new to programming. The fundamentals (H
 *Tech Faculty offers both Web Development and Mobile Development bootcamps. Start with what excites you most.*`,
     date: "2026-02-15",
     author: "Tech Faculty",
-    tags: ["Course Deep-Dive","web development","mobile development","career choice","React"],
+    tags: ["Web & Software Development","web development","mobile development","career choice","React"],
     readTime: 6
   },
   {
@@ -791,7 +791,7 @@ For tech professionals, understanding AI development is becoming essential. Whet
 *Interested in AI development? Tech Faculty NG offers comprehensive bootcamps covering Machine Learning, Python, and AI implementation for Nigerian businesses.*`,
     date: "2026-03-17",
     author: "Bill Achusim",
-    tags: ["AI & Innovation","AI companions","mental health tech","Deep Claire","computational design"],
+    tags: ["Artificial Intelligence","AI companions","mental health tech","Deep Claire","computational design"],
     readTime: 6
   },
   {
@@ -854,7 +854,7 @@ For those new to programming or transitioning from other languages, Python is re
 *Ready to master Python? Explore Tech Faculty NG's Python bootcamp and start building for Nigeria's future.*`,
     date: "2026-04-01",
     author: "Bill Achusim",
-    tags: ["Python & Nigerian Tech","Python Nigeria","tech startups","programming language","AI libraries"],
+    tags: ["Web & Software Development","Python Nigeria","tech startups","programming language","AI libraries"],
     readTime: 8
   },
   {
@@ -912,7 +912,7 @@ Tech Faculty NG is the innovative force behind Dear Claire, pushing the boundari
 Ready to experience the Love Ecosystem? Visit https://techfaculty.ng/blog/dear-claires-love-ecosystem-building-connection-2026 to read the full article and become part of the story.`,
     date: "2026-04-02",
     author: "Bill Achusim",
-    tags: ["AI & Innovation","Dear Claire","AI companionship","mental health tech","anonymous social network"],
+    tags: ["Artificial Intelligence","Dear Claire","AI companionship","mental health tech","anonymous social network"],
     readTime: 7
   },
   {
@@ -1034,7 +1034,7 @@ Regularly review and adjust your strategy.
 Digitization is a continuous journey, not a one-time project. As technology evolves, businesses must stay agile and keep innovating. In 2026 and beyond, digital leaders will define the Nigerian economy.`,
     date: "2026-04-06",
     author: "Bill Achusim",
-    tags: ["Business & Entrepreneurship", "digitization", "digital transformation", "SME", "technology adoption"],
+    tags: ["Startups & Business", "digitization", "digital transformation", "SME", "technology adoption"],
     readTime: 9
   },
 ];

@@ -1123,7 +1123,7 @@ We train Nigerian professionals and SMEs on practical AI — the prompts, the wo
 
 Generative AI in Nigeria is not the future — it's the present. The cost of adoption keeps falling and the gap between AI-using businesses and the rest keeps widening. Pick one workflow, pilot it for 30 days, measure honestly, and then expand. That's the whole playbook.
 
-*Ready to upskill your team on practical generative AI? Explore our **AI & Productivity bootcamp** — Nigeria-focused, hands-on, and built for SME teams.*`,
+*Ready to upskill your team on practical generative AI? Explore our **AI & Productivity bootcamp** — Nigeria-focused, hands-on, and built for SME teams.*\`,
     date: "2026-04-12",
     author: "Bill Achusim",
     tags: ["Artificial Intelligence","generative AI Nigeria","ChatGPT for business","AI for SMEs","AI automation Nigeria"],
@@ -1222,7 +1222,7 @@ Our **Web Development Bootcamp** is a 16-week, project-first program that follow
 
 Full-stack web development is still one of the most reliable career paths in Nigerian tech. The roadmap hasn't changed much in 2026 — React + Node + Postgres still dominate hiring — but the bar for juniors has risen. Pick one stack, ship real projects, and apply earlier than you think you should.
 
-*Ready to start? Explore our **16-week Web Development Bootcamp** — Nigeria-focused, project-first, job-placement supported.*`,
+*Ready to start? Explore our **16-week Web Development Bootcamp** — Nigeria-focused, project-first, job-placement supported.*\`,
     date: "2026-04-11",
     author: "Bill Achusim",
     tags: ["Web & Software Development","full stack developer Nigeria","learn web development","React Node Nigeria","junior developer Nigeria"],
@@ -1288,7 +1288,7 @@ If you're starting from zero, here's a focused plan:
 
 ### Weeks 1–4: SQL + Excel foundations
 
-You can't be a serious analyst without SQL and solid Excel. Learn `SELECT`, `WHERE`, joins, `GROUP BY`, window functions. In Excel: pivot tables, `XLOOKUP`, `SUMIFS`, basic Power Query.
+You can't be a serious analyst without SQL and solid Excel. Learn \`SELECT\`, \`WHERE\`, joins, \`GROUP BY\`, window functions. In Excel: pivot tables, \`XLOOKUP\`, \`SUMIFS\`, basic Power Query.
 
 ### Weeks 5–8: Power BI core
 
@@ -1331,7 +1331,7 @@ Our **Data Analytics Bootcamp** runs for 16 weeks and covers Excel, SQL, Python,
 
 In 2026, Power BI is the most pragmatic first BI tool for a Nigerian analyst. Add Looker Studio for free, and only invest in Tableau when a specific opportunity demands it. The tool matters less than your SQL, your business judgement, and your portfolio.
 
-*Want a structured path? Check out our **16-week Data Analytics Bootcamp** — Power BI, SQL, Python, and real Nigerian datasets.*`,
+*Want a structured path? Check out our **16-week Data Analytics Bootcamp** — Power BI, SQL, Python, and real Nigerian datasets.*\`,
     date: "2026-04-10",
     author: "Bill Achusim",
     tags: ["Data & Analytics","Power BI Nigeria","Tableau Nigeria","Looker Studio","data analyst tools","BI tools Nigeria"],
@@ -1474,7 +1474,7 @@ Our **Cyber Security Bootcamp** is a 16-week, project-first program built around
 
 Cyber security is one of the highest-leverage paths a Nigerian can pick in 2026 — strong demand, fewer over-saturated candidates than web dev, and a long career runway. A 16-week bootcamp won't make you a senior, but it will get you to the door of entry-level roles with a real portfolio and a real plan.
 
-*Ready to start? Explore our **16-week Cyber Security Bootcamp** — Nigeria-focused, hands-on, and built around the tools Nigerian employers actually hire for.*`,
+*Ready to start? Explore our **16-week Cyber Security Bootcamp** — Nigeria-focused, hands-on, and built around the tools Nigerian employers actually hire for.*\`,
     date: "2026-04-09",
     author: "Bill Achusim",
     tags: ["Cybersecurity","cyber security bootcamp","SOC analyst Nigeria","ethical hacking Nigeria","cybersecurity certifications","cyber jobs Nigeria"],
@@ -1591,7 +1591,7 @@ Whether you're aiming for a junior role in Lagos or a remote senior role paid in
 
 Tech pay in Nigeria is rising, but unevenly. The biggest premium in 2026 goes to people who can ship in production, communicate clearly, and pick high-demand sub-fields like data engineering, cyber, DevOps, and senior product. Pick your sub-field intentionally, build evidence employers can verify, and negotiate from the band — not from fear.
 
-*Looking to hit the next salary band? Browse our **bootcamps and career tracks** built around the roles in this article.*`,
+*Looking to hit the next salary band? Browse our **bootcamps and career tracks** built around the roles in this article.*\`,
     date: "2026-04-08",
     author: "Bill Achusim",
     tags: ["Tech Careers","tech salary Nigeria","developer salary Nigeria","remote tech jobs","Lagos tech salary","negotiation tech"],
@@ -1708,7 +1708,7 @@ We support SIWES students every year — placement, training, and mentorship —
 
 The SIWES logbook is a documentation skill, not a writing skill. Treat it as part of the work, write entries the same day, be specific, get weekly sign-offs, and use it as the foundation for your CV. The students who do this consistently score well — and walk out of SIWES with real evidence of real work.
 
-*Doing SIWES this year? Learn about our **SIWES placement and Learn & Pay tracks** at /siwes — real placements, real mentorship, real outcomes.*`,
+*Doing SIWES this year? Learn about our **SIWES placement and Learn & Pay tracks** at /siwes — real placements, real mentorship, real outcomes.*\`,
     date: "2026-04-07",
     author: "Bill Achusim",
     tags: ["SIWES & Internships","SIWES logbook","SIWES Nigeria","ITF logbook","SIWES tips","industrial training Nigeria"],
@@ -1827,7 +1827,7 @@ We work with Nigerian businesses on the talent side of this — building interna
 
 Government and enterprise contracts in Nigeria reward boring excellence: a clean corporate stack, careful registration, real references, and disciplined bid responses. The startups winning the big deals in 2026 are not the loudest — they are the most professional. Build the boring stack first, and the big contracts become a matter of when, not if.
 
-*Need to build the technical team that delivers a contract you've just won? Talk to us about **enterprise training and partnerships** — we help Nigerian teams ship.*`,
+*Need to build the technical team that delivers a contract you've just won? Talk to us about **enterprise training and partnerships** — we help Nigerian teams ship.*\`,
     date: "2026-04-06",
     author: "Bill Achusim",
     tags: ["Startups & Business","Nigerian startup contracts","government tech contracts","enterprise sales Nigeria","BPP procurement","B2B Nigeria"],

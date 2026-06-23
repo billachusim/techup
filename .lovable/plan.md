@@ -1,60 +1,109 @@
-## New Partner Pages
+# Rework Blog Categories for SEO + Add One Post Per Category
 
-Add two marketing pages showcasing partnerships, each with a clear CTA pointing to an external link.
+## Goals
 
-### 1. `/tinypeople` — Tiny People AI (by Natura Inc)
+1. Replace the current 6 weak category labels with 7 SEO-strong, search-intent-matched categories.
+2. Make every category page **its own indexable URL** (`/blog/category/<slug>`) with proper `<title>`, meta description, canonical, OG tags, and `CollectionPage` + `ItemList` JSON-LD — so Google can rank the category page when people search the keyword.
+3. Re-tag all 18 existing posts onto the new categories (no posts lost, only `tags[0]` swapped).
+4. Add **one new blog post per new category (7 total)**, each SEO-optimized.
 
-Narrative: "Tech Faculty has partnered with Natura Inc to bring Tiny People AI — a powerful personal AI agent — to users across Nigeria and Africa."
+## Proposed new categories
 
-Sections:
-- **Hero**: Title "Meet Tiny People AI — Your Personal AI Agent, Now in Africa", subhead about the Tech Faculty × Natura Inc partnership, primary CTA button **"Start Using Tiny People"** → `https://tinypeople.ai/start` (opens in new tab), secondary "Learn more" → `https://tinypeople.ai`. Custom AI-generated hero image.
-- **What is Tiny People**: Short intro — a powerful AI agent you talk to through your everyday messaging apps.
-- **How to use it (3 channels)**: WhatsApp, Telegram, iMessage cards (icons + short blurbs). Mention upcoming earbud delivery option.
-- **Why it matters here**: Partnership angle — bringing world-class AI to African users via the channels they already use.
-- **Final CTA band**: Big "Start Using Tiny People" button to `tinypeople.ai/start`.
-- "Powered by Natura Inc · Brought to you by Tech Faculty" footer line.
+Picked for real Nigerian + global tech search volume; each maps to a category-keyword users actually type:
 
-### 2. `/lovable` — Build with Lovable
+| New category | Target search intent | URL |
+|---|---|---|
+| Artificial Intelligence | "AI Nigeria", "AI tools", "machine learning Nigeria" | `/blog/category/artificial-intelligence` |
+| Web & Software Development | "learn web development Nigeria", "software developer Nigeria" | `/blog/category/web-software-development` |
+| Data & Analytics | "data analytics Nigeria", "data science career" | `/blog/category/data-analytics` |
+| Cybersecurity | "cybersecurity Nigeria", "cyber security jobs" | `/blog/category/cybersecurity` |
+| Tech Careers | "tech jobs Nigeria", "how to start tech career" | `/blog/category/tech-careers` |
+| SIWES & Internships | "SIWES Nigeria", "IT placement", "internship tech" | `/blog/category/siwes-internships` |
+| Startups & Business | "tech startup Nigeria", "digital transformation SME" | `/blog/category/startups-business` |
 
-Narrative: "Tech Faculty recommends Lovable — the AI platform we use to build production apps."
+These replace: *AI & Innovation, Business & Entrepreneurship, Career Guide, IT/SIWES, Course Deep-Dive, Python & Nigerian Tech*.
 
-Sections:
-- **Hero**: Title "Build Apps with AI — Powered by Lovable", subhead, primary CTA **"Start Building on Lovable"** → placeholder referral URL `https://lovable.dev/?via=YOUR_REFERRAL_CODE` (opens new tab, `rel="noopener"`). Custom AI-generated hero image.
-- **What you can build**: Web apps, dashboards, SaaS, internal tools (icon grid).
-- **Why Lovable**: 3–4 benefit cards (chat-to-code, full-stack with Cloud, instant publish, integrations).
-- **How it works**: 3-step flow (Describe → Iterate → Publish).
-- **Final CTA band**: "Start Building on Lovable" button.
-- Small disclosure line: "We may earn a referral reward when you sign up through our link."
+## Re-tagging existing 18 posts
 
-The referral URL will be defined as a single constant at the top of the file so you can swap it later in one place.
+Only the **first tag** (`tags[0]`, the category) is swapped. The remaining long-tail SEO tags are kept exactly as they are — no slug, title, content, or date changes.
 
-### Navigation & Discovery
+| Existing post | New `tags[0]` |
+|---|---|
+| ai-and-computer-vision-transforming-entrepreneurs-nigeria-2026 | Artificial Intelligence |
+| why-nigerian-business-need-ai-innovation-2026 | Artificial Intelligence |
+| why-nigerian-entrepreneurs-need-ai-implementation-2026 | Artificial Intelligence |
+| ai-computing-designing-2026 | Artificial Intelligence |
+| dear-claires-love-ecosystem-building-connection-2026 | Artificial Intelligence |
+| web-development-vs-mobile-development-which-path | Web & Software Development |
+| python-nigerian-tech-ecosystem-2026 | Web & Software Development |
+| data-analytics-bootcamp-what-youll-learn-16-weeks | Data & Analytics |
+| how-to-start-tech-career-nigeria-2026 | Tech Careers |
+| tut-5-in-design-tech-bootcamps-yabatech-2026 | Tech Careers |
+| building-future-tech-faculty-yabatech-partnership-2026 | Tech Careers |
+| everything-you-need-to-know-about-siwes-nigeria | SIWES & Internships |
+| how-to-get-the-most-out-of-your-it-placement | SIWES & Internships |
+| what-is-sves-nigeria-business-elite-explained | Startups & Business |
+| why-tech-faculty-ng-helps-entrepreneurs | Startups & Business |
+| tech-faculty-ng-elite-entrepreneurs | Startups & Business |
+| skills-gap-nigerian-businesses-tech-training | Startups & Business |
+| nigerian-business-digitization-roadmap-2026 | Startups & Business |
 
-- **Footer (`src/components/Footer.tsx`)**: Add a new "Partners" column (or append to existing column) with links to **Tiny People AI** and **Lovable**.
-- **Products page (`src/pages/Products.tsx`)**: Add a new "Our Partners" section (2 cards) below the existing software portfolio, each linking to the respective new page.
+Coverage check: every new category has ≥1 existing post except **Cybersecurity** (which the new post fills).
 
-### Routing
+## 7 new blog posts (one per category)
 
-- `src/App.tsx`: Add `<Route path="/tinypeople" element={<TinyPeople />} />` and `<Route path="/lovable" element={<Lovable />} />` above the catch-all.
-- `public/sitemap.xml`: Add both URLs.
+Slugs verified against the 18 existing slugs — no collisions.
 
-### Visuals
+| Category | Title | Slug |
+|---|---|---|
+| Artificial Intelligence | Generative AI for Nigerian SMEs: A Practical Playbook for 2026 | `generative-ai-nigerian-smes-playbook-2026` |
+| Web & Software Development | Full-Stack Web Development in Nigeria: Roadmap from Zero to Hired | `full-stack-web-development-nigeria-roadmap-2026` |
+| Data & Analytics | Power BI vs Tableau vs Looker: Which Should Nigerian Analysts Learn First? | `power-bi-vs-tableau-vs-looker-nigerian-analysts-2026` |
+| Cybersecurity | Cyber Security Bootcamp Nigeria: What You'll Learn in 16 Weeks | `cyber-security-bootcamp-nigeria-16-weeks` |
+| Tech Careers | Tech Salaries in Nigeria 2026: Junior, Mid, and Senior Pay Benchmarks | `tech-salaries-nigeria-2026-junior-mid-senior` |
+| SIWES & Internships | SIWES Logbook Mistakes That Cost You Marks (And How to Fix Them) | `siwes-logbook-mistakes-nigeria-fix` |
+| Startups & Business | How Nigerian Startups Can Win Government & Enterprise Contracts in 2026 | `nigerian-startups-win-government-enterprise-contracts-2026` |
 
-Generate two custom hero images with `imagegen--generate_image` (fast tier, 16:9), saved to `src/assets/`:
-- `tinypeople-hero.jpg` — friendly AI agent / chat bubbles / African context, brand-aligned.
-- `lovable-hero.jpg` — abstract AI-builds-apps visual matching site palette.
+Each post: ~900–1,400 words, H1 + scannable H2/H3, FAQ-style subheads (good for AI/Google AIO), `description` 150–160 chars, `tags[0]` = exact new category string + 4 long-tail keywords, recent April 2026 date, author Bill Achusim, compliant with `mem://brand/company-statistics` (5,000+ only), `mem://seo/geo-eeat-strategy`, and `mem://site/blog-content-strategy`.
 
-### SEO
+## Category landing pages (the real SEO unlock)
 
-Each page wrapped with `react-helmet-async`:
-- TinyPeople: title "Tiny People AI in Africa | Tech Faculty × Natura Inc", meta desc <160 chars, single H1, canonical.
-- Lovable: title "Build Apps with Lovable | Tech Faculty", meta desc, canonical.
+New route: `/blog/category/:slug` rendered by a new `src/pages/BlogCategory.tsx`.
 
-### Design
+Each category page ships:
 
-Reuse existing semantic tokens (`primary`, gradient `from-primary to-[hsl(180,100%,45%)]`), shadcn `Button`/`Card`, and Header/Footer layout — consistent with the rest of the site. No new colors introduced.
+- `<h1>` = "{Category Name} Articles & Guides – Tech Faculty NG"
+- Per-category `<title>` and `description` tuned to its search keyword (e.g. *"Artificial Intelligence in Nigeria — Tech Faculty NG Blog"*).
+- Self-referencing `canonical` + `og:url` per `head-meta` rules.
+- `BreadcrumbList` JSON-LD (Home → Blog → Category).
+- `CollectionPage` + `ItemList` JSON-LD listing every post in that category — explicit signal to Google/AI search that this URL aggregates the topic.
+- Intro paragraph (~80 words) describing the topic in natural language (helps both classic SEO and AI-search retrieval).
+- Grid of posts in the category.
 
-### Files to add / edit
+A small `src/data/blogCategories.ts` exports the 7 categories with `slug`, `name`, `title`, `description`, `intro`, and `keywords` — single source of truth used by `Blog.tsx`, `BlogCategory.tsx`, and the sitemap.
 
-- Add: `src/pages/TinyPeople.tsx`, `src/pages/Lovable.tsx`, `src/assets/tinypeople-hero.jpg`, `src/assets/lovable-hero.jpg`
-- Edit: `src/App.tsx`, `src/components/Footer.tsx`, `src/pages/Products.tsx`, `public/sitemap.xml`
+`Blog.tsx` updates:
+- Categories sourced from `blogCategories.ts` (deterministic order, not alphabetical).
+- Category badges become `<Link>`s to `/blog/category/<slug>` (still keeps the in-page filter UX as a fallback).
+
+`BlogPost.tsx` updates:
+- Category badge on a post links to its category page.
+
+## Sitemap updates
+
+`public/sitemap.xml` (hand-edited, per project convention):
+- Add 7 new `/blog/category/<slug>` URLs.
+- Add the 7 new `/blog/<slug>` post URLs.
+- Existing entries untouched.
+
+## Files changed
+
+- `src/data/blogCategories.ts` — **new** (single source of truth for the 7 categories).
+- `src/data/blogPosts.ts` — re-tag `tags[0]` on the 18 existing posts; append 7 new post objects.
+- `src/pages/BlogCategory.tsx` — **new** (category landing page with Helmet + JSON-LD).
+- `src/App.tsx` — register `/blog/category/:slug` route.
+- `src/pages/Blog.tsx` — category list sourced from `blogCategories.ts`; badges link to category pages.
+- `src/pages/BlogPost.tsx` — category badge links to its category page.
+- `public/sitemap.xml` — add 14 new entries (7 category pages + 7 new posts).
+
+No DB changes, no edits to existing post slugs/content/dates, no removal of any post or tag beyond the first-tag swap, no other routes touched.

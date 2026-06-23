@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Clock, Calendar } from "lucide-react";
 import { getBlogPostBySlug, getRelatedPosts } from "@/data/blogPosts";
+import { getCategoryByName } from "@/data/blogCategories";
 import ReactMarkdown from "react-markdown";
 
 const BlogPost = () => {
@@ -15,6 +16,7 @@ const BlogPost = () => {
   if (!post) return <Navigate to="/blog" replace />;
 
   const relatedPosts = getRelatedPosts(post.slug, 2);
+  const category = getCategoryByName(post.tags[0]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -76,7 +78,15 @@ const BlogPost = () => {
 
             {/* Meta */}
             <div className="flex flex-wrap items-center gap-3 mb-4">
-              <Badge variant="secondary">{post.tags[0]}</Badge>
+              {category ? (
+                <Link to={`/blog/category/${category.slug}`}>
+                  <Badge variant="secondary" className="hover:bg-secondary/80">
+                    {post.tags[0]}
+                  </Badge>
+                </Link>
+              ) : (
+                <Badge variant="secondary">{post.tags[0]}</Badge>
+              )}
               <span className="text-sm text-muted-foreground flex items-center gap-1">
                 <Calendar size={14} />{" "}
                 {new Date(post.date).toLocaleDateString("en-NG", {

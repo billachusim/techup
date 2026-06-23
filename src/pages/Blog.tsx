@@ -5,15 +5,13 @@ import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock, ArrowRight } from "lucide-react";
-import blogPosts, { getAllBlogPosts } from "@/data/blogPosts";
+import { getAllBlogPosts } from "@/data/blogPosts";
 import { useState, useMemo } from "react";
+import { blogCategories, getCategoryByName } from "@/data/blogCategories";
 
 const Blog = () => {
   const sortedPosts = useMemo(() => getAllBlogPosts(), []);
-  const categories = useMemo(() => {
-    const cats = new Set(sortedPosts.map((p) => p.tags[0]));
-    return Array.from(cats).sort();
-  }, [sortedPosts]);
+  const categories = blogCategories;
 
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
@@ -55,12 +53,22 @@ const Blog = () => {
               headline: post.title,
               description: post.description,
               datePublished: post.date,
-              author: {
-                "@type": "Organization",
-                name: "Tech Faculty NG",
-              },
+              author: { "@type": "Organization", name: "Tech Faculty NG" },
               url: `https://techfaculty.ng/blog/${post.slug}`,
               keywords: post.tags.join(", "),
+            })),
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "Tech Faculty NG Blog Categories",
+            itemListElement: blogCategories.map((c, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              name: c.name,
+              url: `https://techfaculty.ng/blog/category/${c.slug}`,
             })),
           })}
         </script>
@@ -80,7 +88,7 @@ const Blog = () => {
           </div>
         </section>
 
-        {/* Category Filters */}
+        {/* Category Filters — each badge is also a real link to /blog/category/<slug> for SEO */}
         <section className="px-4 pb-8">
           <div className="container mx-auto max-w-4xl flex flex-wrap gap-2 justify-center">
             <Badge
@@ -91,47 +99,82 @@ const Blog = () => {
               All
             </Badge>
             {categories.map((cat) => (
-              <Badge
-                key={cat}
-                variant={activeCategory === cat ? "default" : "outline"}
-                className="cursor-pointer px-4 py-1.5 text-sm"
-                onClick={() => setActiveCategory(cat)}
+              <Link
+                key={cat.slug}
+                to={`/blog/category/${cat.slug}`}
+                aria-label={`${cat.name} category`}
+                onClick={(e) => {
+                  // In-page filter on plain click; modifier-keys / right-click still open the SEO page.
+                  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                  e.preventDefault();
+                  setActiveCategory(cat.name);
+                }}
               >
-                {cat}
-              </Badge>
+                <Badge
+                  variant={activeCategory === cat.name ? "default" : "outline"}
+                  className="cursor-pointer px-4 py-1.5 text-sm"
+                >
+                  {cat.name}
+                </Badge>
+              </Link>
             ))}
           </div>
+          {/* Visible "view category page" link surfaces the indexable URL */}
+          {activeCategory && getCategoryByName(activeCategory) && (
+            <div className="container mx-auto max-w-4xl text-center mt-4">
+              <Link
+                to={`/blog/category/${getCategoryByName(activeCategory)!.slug}`}
+                className="text-sm text-primary hover:underline"
+              >
+                View full {activeCategory} category page →
+              </Link>
+            </div>
+          )}
         </section>
 
         {/* Posts Grid */}
         <section className="px-4 pb-20">
           <div className="container mx-auto max-w-4xl">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {filtered.map((post) => (
-                <Link key={post.slug} to={`/blog/${post.slug}`}>
-                  <Card className="h-full hover:border-primary/50 transition-colors group">
+              {filtered.map((post) => {
+                const cat = getCategoryByName(post.tags[0]);
+                return (
+                  <Card
+                    key={post.slug}
+                    className="h-full hover:border-primary/50 transition-colors group"
+                  >
                     <CardContent className="p-6 flex flex-col h-full">
                       <div className="flex items-center gap-2 mb-3">
-                        <Badge variant="secondary" className="text-xs">
-                          {post.tags[0]}
-                        </Badge>
+                        {cat ? (
+                          <Link to={`/blog/category/${cat.slug}`}>
+                            <Badge variant="secondary" className="text-xs hover:bg-secondary/80">
+                              {post.tags[0]}
+                            </Badge>
+                          </Link>
+                        ) : (
+                          <Badge variant="secondary" className="text-xs">
+                            {post.tags[0]}
+                          </Badge>
+                        )}
                         <span className="text-xs text-muted-foreground flex items-center gap-1">
                           <Clock size={12} /> {post.readTime} min read
                         </span>
                       </div>
-                      <h2 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">
-                        {post.title}
-                      </h2>
-                      <p className="text-sm text-muted-foreground flex-1">
-                        {post.description}
-                      </p>
-                      <div className="flex items-center gap-1 text-primary text-sm font-medium mt-4">
-                        Read article <ArrowRight size={14} />
-                      </div>
+                      <Link to={`/blog/${post.slug}`} className="flex-1 flex flex-col">
+                        <h2 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">
+                          {post.title}
+                        </h2>
+                        <p className="text-sm text-muted-foreground flex-1">
+                          {post.description}
+                        </p>
+                        <div className="flex items-center gap-1 text-primary text-sm font-medium mt-4">
+                          Read article <ArrowRight size={14} />
+                        </div>
+                      </Link>
                     </CardContent>
                   </Card>
-                </Link>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>

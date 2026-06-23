@@ -24,6 +24,7 @@ import SIWES from "./pages/SIWES";
 import About from "./pages/About";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import BlogCategory from "./pages/BlogCategory";
 import Careers from "./pages/Careers";
 import Dashboard from "./pages/Dashboard";
 import PaymentSuccess from "./pages/PaymentSuccess";
@@ -55,6 +56,7 @@ const App = () => (
             <Route path="/siwes" element={<SIWES />} />
             <Route path="/about" element={<About />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/category/:slug" element={<BlogCategory />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/dashboard" element={<Dashboard />} />

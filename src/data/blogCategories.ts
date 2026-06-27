@@ -133,6 +133,22 @@ export const blogCategories: BlogCategory[] = [
       "enterprise contracts Nigeria",
     ],
   },
+  {
+    slug: "tech-training-for-teens",
+    name: "Tech Training for Teens",
+    title: "Tech Training for Teens Nigeria — Coding & Digital Skills | Tech Faculty NG",
+    description:
+      "Holiday tech bootcamps and coding classes for teenagers in Nigeria. JSS3 & SS3 vacation programs in Nnewi, Onitsha, Enugu, Aba, and Owerri.",
+    intro:
+      "The best time to learn tech is during the long holiday. This category covers holiday coding bootcamps, digital-skills programs, and vacation tech classes for Nigerian teenagers — from JSS3 students who just finished Junior WAEC to SS3 graduates waiting for university. We publish schedules, parent guides, course outlines, and registration details for our centres in Nnewi, Onitsha/Awada, Enugu, Aba, and Owerri.",
+    keywords: [
+      "coding classes for teenagers Nigeria",
+      "holiday tech bootcamp Nigeria",
+      "JSS3 SS3 vacation program",
+      "tech summer camp Nigeria",
+      "youth coding Nigeria",
+    ],
+  },
 ];
 
 export const getCategoryBySlug = (slug: string): BlogCategory | undefined =>

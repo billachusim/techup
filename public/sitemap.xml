@@ -131,6 +131,12 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- Tech Training for Teens category -->
+  <url>
+    <loc>https://techfaculty.ng/blog/category/tech-training-for-teens</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <!-- New blog posts (April 2026 cohort) -->
   <url>
     <loc>https://techfaculty.ng/blog/generative-ai-nigerian-smes-playbook-2026</loc>

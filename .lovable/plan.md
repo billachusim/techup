@@ -1,109 +1,153 @@
-# Rework Blog Categories for SEO + Add One Post Per Category
+## Overview
 
-## Goals
+Create a new youth-focused blog category and publish a holiday-bootcamp post that parents of JSS3/SS3 students will find when searching Google. The post must drive enrollments by clearly presenting what students learn, where classes run, and how to register.
 
-1. Replace the current 6 weak category labels with 7 SEO-strong, search-intent-matched categories.
-2. Make every category page **its own indexable URL** (`/blog/category/<slug>`) with proper `<title>`, meta description, canonical, OG tags, and `CollectionPage` + `ItemList` JSON-LD — so Google can rank the category page when people search the keyword.
-3. Re-tag all 18 existing posts onto the new categories (no posts lost, only `tags[0]` swapped).
-4. Add **one new blog post per new category (7 total)**, each SEO-optimized.
+----
 
-## Proposed new categories
+## Step 1 — Create the "Tech Training for Teens" category
 
-Picked for real Nigerian + global tech search volume; each maps to a category-keyword users actually type:
+Add a new `BlogCategory` to `src/data/blogCategories.ts`:
 
-| New category | Target search intent | URL |
-|---|---|---|
-| Artificial Intelligence | "AI Nigeria", "AI tools", "machine learning Nigeria" | `/blog/category/artificial-intelligence` |
-| Web & Software Development | "learn web development Nigeria", "software developer Nigeria" | `/blog/category/web-software-development` |
-| Data & Analytics | "data analytics Nigeria", "data science career" | `/blog/category/data-analytics` |
-| Cybersecurity | "cybersecurity Nigeria", "cyber security jobs" | `/blog/category/cybersecurity` |
-| Tech Careers | "tech jobs Nigeria", "how to start tech career" | `/blog/category/tech-careers` |
-| SIWES & Internships | "SIWES Nigeria", "IT placement", "internship tech" | `/blog/category/siwes-internships` |
-| Startups & Business | "tech startup Nigeria", "digital transformation SME" | `/blog/category/startups-business` |
+```text
+Name:     Tech Training for Teens
+Slug:     tech-training-for-teens
+Title:    Tech Training for Teens Nigeria — Coding & Digital Skills | Tech Faculty NG
+Description (155 chars):
+  Holiday tech bootcamps and coding classes for teenagers in Nigeria. JSS3 & SS3 vacation programs in Nnewi, Onitsha, Enugu, Aba, and Owerri.
+Intro (~80 words):
+  The best time to learn tech is during the long holiday. This category covers holiday coding bootcamps,
+  digital-skills programs, and vacation tech classes for Nigerian teenagers — from JSS3 students who just
+  finished Junior WAEC to SS3 graduates waiting for university. We publish schedules, parent guides,
+  course outlines, and registration details for our centres in Nnewi, Onitsha/Awada, Enugu, Aba, and Owerri.
+Keywords:
+  - coding classes for teenagers Nigeria
+  - holiday tech bootcamp Nigeria
+  - JSS3 SS3 vacation program
+  - tech summer camp Nigeria
+  - youth coding Nigeria
+```
 
-These replace: *AI & Innovation, Business & Entrepreneurship, Career Guide, IT/SIWES, Course Deep-Dive, Python & Nigerian Tech*.
+No changes to `Blog.tsx` or `BlogCategory.tsx` are required — they already render categories dynamically from `blogCategories.ts`.
 
-## Re-tagging existing 18 posts
+----
 
-Only the **first tag** (`tags[0]`, the category) is swapped. The remaining long-tail SEO tags are kept exactly as they are — no slug, title, content, or date changes.
+## Step 2 — Write and add the holiday bootcamp blog post
 
-| Existing post | New `tags[0]` |
-|---|---|
-| ai-and-computer-vision-transforming-entrepreneurs-nigeria-2026 | Artificial Intelligence |
-| why-nigerian-business-need-ai-innovation-2026 | Artificial Intelligence |
-| why-nigerian-entrepreneurs-need-ai-implementation-2026 | Artificial Intelligence |
-| ai-computing-designing-2026 | Artificial Intelligence |
-| dear-claires-love-ecosystem-building-connection-2026 | Artificial Intelligence |
-| web-development-vs-mobile-development-which-path | Web & Software Development |
-| python-nigerian-tech-ecosystem-2026 | Web & Software Development |
-| data-analytics-bootcamp-what-youll-learn-16-weeks | Data & Analytics |
-| how-to-start-tech-career-nigeria-2026 | Tech Careers |
-| tut-5-in-design-tech-bootcamps-yabatech-2026 | Tech Careers |
-| building-future-tech-faculty-yabatech-partnership-2026 | Tech Careers |
-| everything-you-need-to-know-about-siwes-nigeria | SIWES & Internships |
-| how-to-get-the-most-out-of-your-it-placement | SIWES & Internships |
-| what-is-sves-nigeria-business-elite-explained | Startups & Business |
-| why-tech-faculty-ng-helps-entrepreneurs | Startups & Business |
-| tech-faculty-ng-elite-entrepreneurs | Startups & Business |
-| skills-gap-nigerian-businesses-tech-training | Startups & Business |
-| nigerian-business-digitization-roadmap-2026 | Startups & Business |
+Append a new `BlogPost` object to `src/data/blogPosts.ts`.
 
-Coverage check: every new category has ≥1 existing post except **Cybersecurity** (which the new post fills).
+### Post metadata
 
-## 7 new blog posts (one per category)
+```text
+slug:    jss3-ss3-holiday-tech-bootcamp-2026
+author:  Bill Achusim
+date:    2026-06-27
+tags[0]: Tech Training for Teens
+readTime: 7
+```
 
-Slugs verified against the 18 existing slugs — no collisions.
+### SEO title (≤ 60 chars)
+`JSS3 & SS3 Holiday Tech Bootcamp 2026 — Tech Faculty NG`
 
-| Category | Title | Slug |
-|---|---|---|
-| Artificial Intelligence | Generative AI for Nigerian SMEs: A Practical Playbook for 2026 | `generative-ai-nigerian-smes-playbook-2026` |
-| Web & Software Development | Full-Stack Web Development in Nigeria: Roadmap from Zero to Hired | `full-stack-web-development-nigeria-roadmap-2026` |
-| Data & Analytics | Power BI vs Tableau vs Looker: Which Should Nigerian Analysts Learn First? | `power-bi-vs-tableau-vs-looker-nigerian-analysts-2026` |
-| Cybersecurity | Cyber Security Bootcamp Nigeria: What You'll Learn in 16 Weeks | `cyber-security-bootcamp-nigeria-16-weeks` |
-| Tech Careers | Tech Salaries in Nigeria 2026: Junior, Mid, and Senior Pay Benchmarks | `tech-salaries-nigeria-2026-junior-mid-senior` |
-| SIWES & Internships | SIWES Logbook Mistakes That Cost You Marks (And How to Fix Them) | `siwes-logbook-mistakes-nigeria-fix` |
-| Startups & Business | How Nigerian Startups Can Win Government & Enterprise Contracts in 2026 | `nigerian-startups-win-government-enterprise-contracts-2026` |
+### SEO description (≤ 160 chars)
+`2.5-month holiday tech bootcamp for JSS3 & SS3 students in Nigeria. Learn coding, design & AI at our centres in Nnewi, Onitsha, Enugu, Aba & Owerri. Enrol now.`
 
-Each post: ~900–1,400 words, H1 + scannable H2/H3, FAQ-style subheads (good for AI/Google AIO), `description` 150–160 chars, `tags[0]` = exact new category string + 4 long-tail keywords, recent April 2026 date, author Bill Achusim, compliant with `mem://brand/company-statistics` (5,000+ only), `mem://seo/geo-eeat-strategy`, and `mem://site/blog-content-strategy`.
+### Content outline
 
-## Category landing pages (the real SEO unlock)
+1. **Opening hook (parent-focused)**  
+   "Your child has just finished WAEC. Two and a half months of holiday lie ahead. While rest is important, so is staying mentally engaged. Tech Faculty's Holiday Tech Bootcamp turns this break into a career head-start."
 
-New route: `/blog/category/:slug` rendered by a new `src/pages/BlogCategory.tsx`.
+2. **Why tech during the holidays?**  
+   - Prevents the "holiday brain drain"  
+   - Builds skills university STEM courses will demand  
+   - Gives SS3 graduates an income skill before JAMB / university  
+   - Keeps JSS3 students productively occupied before senior secondary
 
-Each category page ships:
+3. **Who is this for?**  
+   - JSS3 students (just finished Junior WAEC)  
+   - SS3 students (just finished Senior WAEC / NECO)  
+   - Age 13 – 18, no prior coding experience needed
 
-- `<h1>` = "{Category Name} Articles & Guides – Tech Faculty NG"
-- Per-category `<title>` and `description` tuned to its search keyword (e.g. *"Artificial Intelligence in Nigeria — Tech Faculty NG Blog"*).
-- Self-referencing `canonical` + `og:url` per `head-meta` rules.
-- `BreadcrumbList` JSON-LD (Home → Blog → Category).
-- `CollectionPage` + `ItemList` JSON-LD listing every post in that category — explicit signal to Google/AI search that this URL aggregates the topic.
-- Intro paragraph (~80 words) describing the topic in natural language (helps both classic SEO and AI-search retrieval).
-- Grid of posts in the category.
+4. **What students will learn** — propose 4 age-appropriate tracks (user said "come up with the courses"):
+   - **Digital Creator Track** — Canva, content creation, social-media branding, basic video editing  
+   - **Junior Coder Track** — HTML/CSS, building a personal website, Scratch logic  
+   - **Data & AI Explorer** — Excel for analysis, Python basics, using AI tools (ChatGPT, image generators) responsibly  
+   - **Cyber Smart Teen** — Digital safety, password hygiene, recognising online scams, intro to networking
 
-A small `src/data/blogCategories.ts` exports the 7 categories with `slug`, `name`, `title`, `description`, `intro`, and `keywords` — single source of truth used by `Blog.tsx`, `BlogCategory.tsx`, and the sitemap.
+5. **Program structure**
+   - Duration: 6 weeks (fits inside the ~2.5-month holiday)
+   - Format: 3 days per week, 2 hours per day (weekday mornings)
+   - Class size: Max 15 students per track
+   - Certificate of completion awarded
 
-`Blog.tsx` updates:
-- Categories sourced from `blogCategories.ts` (deterministic order, not alphabetical).
-- Category badges become `<Link>`s to `/blog/category/<slug>` (still keeps the in-page filter UX as a fallback).
+6. **Where classes run** — mention every centre:
+   - **Nnewi** — Technology Incubation Centre, NBTI South-East Zonal Office
+   - **Onitsha / Awada** — Technology Incubation Centre
+   - **Enugu** — Technology Incubation Centre
+   - **Aba** — Technology Incubation Centre
+   - **Owerri** — Technology Incubation Centre
+   (Add a note that each centre runs the full bootcamp calendar.)
 
-`BlogPost.tsx` updates:
-- Category badge on a post links to its category page.
+7. **How parents found us**  
+   Briefly acknowledge the Google Map discovery pattern the user mentioned — "Parents across the South-East have been calling us after finding Tech Faculty on Google Maps. This guide answers the most common questions in one place."
 
-## Sitemap updates
+8. **Pricing & registration**
+   - Propose ₦20,000 per student (or a bundled sibling discount)
+   - Clear CTA: "Click below to register your child" (link to `/products` or a direct WhatsApp link)
+   - Include phone number and WhatsApp contact
 
-`public/sitemap.xml` (hand-edited, per project convention):
-- Add 7 new `/blog/category/<slug>` URLs.
-- Add the 7 new `/blog/<slug>` post URLs.
-- Existing entries untouched.
+9. **Closing**
+   - Reassurance: "Every parent who has enrolled a child in our holiday program says the same thing — they came back confident, focused, and curious."
+   - Final CTA to share the post with other parents
 
-## Files changed
+### Markdown formatting rules
+- Use `##` for section headings and `###` for sub-headings.
+- Use `**bold**` for emphasis.
+- Keep paragraphs short (3-4 sentences) for mobile readability.
+- No unescaped backticks inside the content string — escape with `\\`` or rephrase.
 
-- `src/data/blogCategories.ts` — **new** (single source of truth for the 7 categories).
-- `src/data/blogPosts.ts` — re-tag `tags[0]` on the 18 existing posts; append 7 new post objects.
-- `src/pages/BlogCategory.tsx` — **new** (category landing page with Helmet + JSON-LD).
-- `src/App.tsx` — register `/blog/category/:slug` route.
-- `src/pages/Blog.tsx` — category list sourced from `blogCategories.ts`; badges link to category pages.
-- `src/pages/BlogPost.tsx` — category badge links to its category page.
-- `public/sitemap.xml` — add 14 new entries (7 category pages + 7 new posts).
+----
 
-No DB changes, no edits to existing post slugs/content/dates, no removal of any post or tag beyond the first-tag swap, no other routes touched.
+## Step 3 — Generate a hero / thumbnail image
+
+Generate one image for the blog post:
+
+```text
+Prompt:  A bright, modern classroom scene in a Nigerian tech hub. Teenage students (both boys and girls,
+         ages 14-17) sitting at laptops, smiling and collaborating. A mentor stands behind them guiding.
+         Clean, well-lit space with white walls and green plants. Warm, hopeful atmosphere. Professional
+         photography style, shallow depth of field.
+Path:    src/assets/blog-holiday-bootcamp-2026.jpg
+Size:    1024 x 512 (2:1 ratio for blog hero)
+```
+
+Add the image import into `src/data/blogPosts.ts` if the schema supports an `image` field; otherwise leave it in assets for future use.
+
+----
+
+## Step 4 — Update `public/sitemap.xml`
+
+Add two new `<url>` entries:
+
+1. The new category landing page:  
+   `https://techfaculty.ng/blog/category/tech-training-for-teens`  
+   changefreq=weekly, priority=0.8
+
+2. The new blog post:  
+   `https://techfaculty.ng/blog/jss3-ss3-holiday-tech-bootcamp-2026`  
+   lastmod=2026-06-27, changefreq=monthly, priority=0.7
+
+----
+
+## Step 5 — Verify & trigger SEO rescan
+
+1. Run `bun run build` (or `vite build`) to confirm TypeScript compiles cleanly.
+2. If the build passes, mark any new or stale SEO findings as fixed and trigger a rescan so the new pages are evaluated.
+
+----
+
+## Notes
+
+- Do **not** create any additional blog posts — only one post for this category in this batch.
+- Do **not** modify the existing 7 categories.
+- The post should be appended to the end of the `blogPosts` array so it appears as the newest article.
+- Ensure no duplicate slugs exist before appending.

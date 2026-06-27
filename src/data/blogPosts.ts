@@ -1833,6 +1833,117 @@ Government and enterprise contracts in Nigeria reward boring excellence: a clean
     tags: ["Startups & Business","Nigerian startup contracts","government tech contracts","enterprise sales Nigeria","BPP procurement","B2B Nigeria"],
     readTime: 12
   },
+  {
+    slug: "jss3-ss3-holiday-tech-bootcamp-2026",
+    title: "JSS3 & SS3 Holiday Tech Bootcamp 2026 — Keep Your Child Engaged After WAEC",
+    description: "2.5-month holiday tech bootcamp for JSS3 & SS3 students in Nigeria. Learn coding, design & AI at our centres in Nnewi, Onitsha, Enugu, Aba & Owerri. Enrol now.",
+    content: `# JSS3 & SS3 Holiday Tech Bootcamp 2026 — Keep Your Child Engaged After WAEC
+
+*By Bill Achusim · Jun 27, 2026*
+
+Your child has just finished WAEC. Two and a half months of holiday lie ahead. While rest is important, so is staying mentally engaged. Tech Faculty's Holiday Tech Bootcamp turns this long break into a genuine career head-start.
+
+Parents across the South-East have been calling us after finding Tech Faculty on Google Maps. This guide answers the most common questions in one place.
+
+## Why tech during the holidays?
+
+The gap between WAEC and the next academic step is one of the most under-used windows in a Nigerian student's life. Here is why a structured tech program matters:
+
+- **Prevents holiday brain drain** — Students who stay mentally active return sharper, not slower.
+- **Builds university-ready skills** — STEM courses at university now assume basic digital literacy. Getting ahead removes future struggle.
+- **Gives SS3 graduates an income skill** — While waiting for JAMB or admission, a teenager who can build a simple website or manage data in Excel can earn money freelancing.
+- **Keeps JSS3 students productively occupied** — The transition to senior secondary is smoother when a student already understands how technology works.
+
+## Who is this for?
+
+- **JSS3 students** who have just finished Junior WAEC
+- **SS3 students** who have just finished Senior WAEC or NECO
+- Ages 13 to 18
+- **No prior coding experience needed** — every track starts from the basics
+
+## What students will learn
+
+We run four age-appropriate tracks designed to keep teenagers interested, challenged, and building real projects they can show friends and family.
+
+### Digital Creator Track
+Students learn how to create content that looks professional:
+- Canva for posters, presentations, and social-media graphics
+- Content creation strategy for Instagram, TikTok, and YouTube
+- Basic video editing for reels and short-form content
+- Personal branding — building an online presence that stands out
+
+### Junior Coder Track
+A gentle introduction to programming through projects students actually want to show off:
+- HTML and CSS — building a personal website from scratch
+- Introduction to Scratch logic and problem-solving
+- How the internet works (domains, hosting, browsers)
+- Deploying a live website students can share with anyone
+
+### Data & AI Explorer
+The most in-demand skills in the world, simplified for teenagers:
+- Microsoft Excel for real-world analysis (budgets, grades, small-business records)
+- Python basics through fun projects (calculators, quizzes, simple games)
+- Using AI tools responsibly — ChatGPT, image generators, and research assistants
+- Understanding what data science means and why it pays so well
+
+### Cyber Smart Teen
+Digital safety is a survival skill every Nigerian teenager needs:
+- Password hygiene and two-factor authentication
+- Recognising online scams, phishing, and social engineering
+- Protecting personal information on social media
+- Introduction to computer networks and how the web connects
+
+## Program structure
+
+- **Duration:** 6 weeks (fits comfortably inside the long holiday)
+- **Format:** 3 days per week, 2 hours per day (weekday mornings, so afternoons remain free)
+- **Class size:** Maximum 15 students per track for personal attention
+- **Certificate:** Every student receives a Tech Faculty completion certificate
+- **Projects:** Each student finishes with at least one live project (website, portfolio, data dashboard, or brand kit)
+
+## Where classes run
+
+Every centre runs the full bootcamp calendar. Choose the location closest to you:
+
+- **Nnewi** — Technology Incubation Centre, NBTI South-East Zonal Office, Nnewi, Anambra State
+- **Onitsha / Awada** — Technology Incubation Centre, Onitsha, Anambra State
+- **Enugu** — Technology Incubation Centre, Enugu, Enugu State
+- **Aba** — Technology Incubation Centre, Aba, Abia State
+- **Owerri** — Technology Incubation Centre, Owerri, Imo State
+
+All centres are licensed by the Federal Ministry of Science, Technology & Innovation via NBTI.
+
+## Pricing and registration
+
+- **Fee:** ₦20,000 per student
+- **Sibling discount:** ₦35,000 for two children from the same family
+- **What is included:** Tuition, project materials, and certificate
+
+### How to register
+
+1. **WhatsApp:** Message us on [WhatsApp](https://wa.me/2348068597140?text=Hello%2C%20I%20want%20to%20register%20my%20child%20for%20the%20Holiday%20Tech%20Bootcamp) for instant replies
+2. **Call:** +234 806 859 7140
+3. **Visit:** Walk into any of our five centres listed above
+
+Spaces are limited to 15 students per track per centre. Early registration guarantees your child's spot.
+
+## What parents are saying
+
+Every parent who has enrolled a child in our holiday program says the same thing — they came back confident, focused, and curious about what else they can build. One mother from Nnewi told us her daughter now fixes the family laptop and teaches younger cousins how to use Excel. An SS3 graduate from Enugu used his bootcamp website as a portfolio and landed his first paid freelance job before JAMB registration.
+
+## The bottom line
+
+Two and a half months is enough time to scroll through every social-media app on the planet. It is also enough time to learn a skill that pays for life. The difference is a structured environment, experienced mentors, and a curriculum designed for Nigerian teenagers.
+
+**Give your child the gift of tech this holiday.**
+
+[Register now on WhatsApp](https://wa.me/2348068597140?text=Hello%2C%20I%20want%20to%20register%20my%20child%20for%20the%20Holiday%20Tech%20Bootcamp) or share this post with another parent who is wondering what their child should do after WAEC.
+`,
+    date: "2026-06-27",
+    author: "Bill Achusim",
+    tags: ["Tech Training for Teens","holiday bootcamp Nigeria","JSS3 SS3 vacation program","coding for teenagers Nigeria","Tech Faculty Nnewi","Tech Faculty Onitsha","Tech Faculty Enugu","Tech Faculty Aba","Tech Faculty Owerri"],
+    readTime: 7
+  },
 ];
 
 export const getAllBlogPosts = () => {

@@ -16,15 +16,32 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
 
-const jobs = [
-  { company: "Flutterwave", role: "Junior Software Engineer", location: "Lagos, Nigeria", type: "Full-time Internship", logo: "🦋" },
-  { company: "Paystack", role: "Frontend Developer", location: "Lagos, Nigeria", type: "Full-time", logo: "💳" },
-  { company: "Andela", role: "Software Developer", location: "Remote (Africa)", type: "Full-time", logo: "🚀" },
-  { company: "Kuda Bank", role: "Mobile App Developer", location: "Lagos, Nigeria", type: "Full-time Internship", logo: "🏦" },
-  { company: "Interswitch", role: "Backend Engineer", location: "Lagos, Nigeria", type: "Full-time", logo: "💼" },
-  { company: "Microsoft Africa", role: "Cloud Solutions Developer", location: "Lagos, Nigeria", type: "Full-time", logo: "☁️" },
-  { company: "Google Developer", role: "Associate Developer", location: "Remote (Global)", type: "Contract", logo: "🌐" },
-  { company: "MTN Nigeria", role: "Systems Engineer", location: "Abuja, Nigeria", type: "Full-time Internship", logo: "📱" },
+type Job = {
+  company: string;
+  role: string;
+  location: string;
+  type: string;
+  logo: string;
+  description: string;
+  city: string;
+  region: string;
+  country: string;
+  streetAddress: string;
+  postalCode: string;
+};
+
+const POSTED_DATE = "2026-06-01";
+const VALID_THROUGH = "2026-12-31";
+
+const jobs: Job[] = [
+  { company: "Flutterwave", role: "Junior Software Engineer", location: "Lagos, Nigeria", type: "Full-time Internship", logo: "🦋", description: "Junior Software Engineer role at Flutterwave Lagos. Build and maintain payment infrastructure used across Africa. Open to Tech Faculty NG graduates with foundational software engineering skills.", city: "Lagos", region: "Lagos", country: "NG", streetAddress: "8, Providence Street, Lekki Phase 1", postalCode: "106104" },
+  { company: "Paystack", role: "Frontend Developer", location: "Lagos, Nigeria", type: "Full-time", logo: "💳", description: "Frontend Developer role at Paystack Lagos. Ship React-based merchant dashboards and checkout experiences. Strong JavaScript, React, and accessibility knowledge required.", city: "Lagos", region: "Lagos", country: "NG", streetAddress: "126 Joel Ogunnaike Street, Ikeja GRA", postalCode: "101233" },
+  { company: "Andela", role: "Software Developer", location: "Remote (Africa)", type: "Full-time", logo: "🚀", description: "Remote Software Developer role at Andela for engineers across Africa. Match with global clients to build full-stack web and mobile applications. Strong English communication required.", city: "Lagos", region: "Lagos", country: "NG", streetAddress: "281 Herbert Macaulay Way, Yaba", postalCode: "101212" },
+  { company: "Kuda Bank", role: "Mobile App Developer", location: "Lagos, Nigeria", type: "Full-time Internship", logo: "🏦", description: "Mobile App Developer internship at Kuda Bank Lagos. Contribute to the Kuda mobile banking app using React Native and modern mobile tooling.", city: "Lagos", region: "Lagos", country: "NG", streetAddress: "1 Kudi Drive, Victoria Island", postalCode: "101241" },
+  { company: "Interswitch", role: "Backend Engineer", location: "Lagos, Nigeria", type: "Full-time", logo: "💼", description: "Backend Engineer role at Interswitch Lagos. Design and ship scalable payment APIs powering millions of transactions across Nigeria and Africa.", city: "Lagos", region: "Lagos", country: "NG", streetAddress: "1648C Oko Awo Close, Victoria Island", postalCode: "101241" },
+  { company: "Microsoft Africa", role: "Cloud Solutions Developer", location: "Lagos, Nigeria", type: "Full-time", logo: "☁️", description: "Cloud Solutions Developer role at Microsoft Africa Development Center, Lagos. Build Azure-based solutions for enterprise customers across the continent.", city: "Lagos", region: "Lagos", country: "NG", streetAddress: "Kingsway Building, 51 Marina", postalCode: "101241" },
+  { company: "Google Developer", role: "Associate Developer", location: "Remote (Global)", type: "Contract", logo: "🌐", description: "Remote Associate Developer contract via Google Developer ecosystem. Build and document developer tools, sample code, and Google Cloud integrations for a global audience.", city: "Abuja", region: "FCT", country: "NG", streetAddress: "Plot 1261, Bishop Oluwole Street", postalCode: "900001" },
+  { company: "MTN Nigeria", role: "Systems Engineer", location: "Abuja, Nigeria", type: "Full-time Internship", logo: "📱", description: "Systems Engineer internship at MTN Nigeria Abuja. Support core telecom systems, monitoring, and automation across one of Africa's largest mobile networks.", city: "Abuja", region: "FCT", country: "NG", streetAddress: "Plot 1261, Bishop Oluwole Street", postalCode: "900001" },
 ];
 
 const Careers = () => {
@@ -62,17 +79,48 @@ const Careers = () => {
             "@type": "ItemList",
             "name": "Available Job Opportunities",
             "numberOfItems": jobs.length,
-            "itemListElement": jobs.map((job, i) => ({
-              "@type": "ListItem",
-              "position": i + 1,
-              "item": {
-                "@type": "JobPosting",
-                "title": job.role,
-                "hiringOrganization": { "@type": "Organization", "name": job.company },
-                "jobLocation": { "@type": "Place", "address": job.location },
-                "employmentType": job.type.includes("Internship") ? "INTERN" : "FULL_TIME"
+          "itemListElement": jobs.map((job, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "item": {
+              "@type": "JobPosting",
+              "title": job.role,
+              "description": job.description,
+              "datePosted": POSTED_DATE,
+              "validThrough": VALID_THROUGH,
+              "employmentType": job.type.includes("Internship") ? "INTERN" : (job.type.includes("Contract") ? "CONTRACTOR" : "FULL_TIME"),
+              "hiringOrganization": {
+                "@type": "Organization",
+                "name": job.company,
+                "sameAs": `https://www.google.com/search?q=${encodeURIComponent(job.company)}`
+              },
+              "jobLocation": {
+                "@type": "Place",
+                "address": {
+                  "@type": "PostalAddress",
+                  "streetAddress": job.streetAddress,
+                  "addressLocality": job.city,
+                  "addressRegion": job.region,
+                  "postalCode": job.postalCode,
+                  "addressCountry": job.country
+                }
+              },
+              ...(job.location.toLowerCase().includes("remote") ? {
+                "jobLocationType": "TELECOMMUTE",
+                "applicantLocationRequirements": { "@type": "Country", "name": "Nigeria" }
+              } : {}),
+              "baseSalary": {
+                "@type": "MonetaryAmount",
+                "currency": "NGN",
+                "value": {
+                  "@type": "QuantitativeValue",
+                  "minValue": job.type.includes("Internship") ? 150000 : 400000,
+                  "maxValue": job.type.includes("Internship") ? 300000 : 1200000,
+                  "unitText": "MONTH"
+                }
               }
-            }))
+            }
+          }))
           }
         })}</script>
       </Helmet>

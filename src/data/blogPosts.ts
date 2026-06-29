@@ -1944,6 +1944,126 @@ Two and a half months is enough time to scroll through every social-media app on
     tags: ["Tech Training for Teens","holiday bootcamp Nigeria","JSS3 SS3 vacation program","coding for teenagers Nigeria","Tech Faculty Nnewi","Tech Faculty Onitsha","Tech Faculty Enugu","Tech Faculty Aba","Tech Faculty Owerri"],
     readTime: 7
   },
+  {
+    slug: "data-analytics-and-visualization-bootcamp-nigeria-2026-guide",
+    title: "Data Analytics and Visualization Bootcamp Nigeria — 2026 Complete Guide",
+    description: "The complete 2026 guide to a data analytics and visualization bootcamp in Nigeria. Curriculum, tools (Excel, SQL, Power BI, Tableau, Python), salaries, and how to get hired.",
+    content: `# Data Analytics and Visualization Bootcamp Nigeria — 2026 Complete Guide
+
+*By Bill Achusim · Jun 29, 2026*
+
+Every Nigerian company that collects data — banks, fintechs, hospitals, supermarkets, logistics firms, government MDAs — needs people who can turn rows of numbers into clear charts and confident decisions. That is the job of a **data analyst**, and the fastest route into it is a structured **data analytics and visualization bootcamp**.
+
+This guide explains exactly what a modern data analytics and visualization bootcamp in Nigeria covers, the tools you will learn, realistic salary expectations, and how to choose a program that actually gets you hired.
+
+## What is data analytics and visualization?
+
+**Data analytics** is the process of cleaning, exploring, and interpreting data to answer business questions — *Why did sales drop in Q2? Which branch has the highest churn? Where is fraud most likely?*
+
+**Data visualization** is how you communicate those answers: dashboards, charts, and reports that non-technical stakeholders can act on in seconds. Without visualization, an analysis stays buried in a spreadsheet. Without analysis, a dashboard is just decoration. The two skills always ship together.
+
+## Why this is a high-demand career in Nigeria
+
+- **Every sector is hiring.** Fintech, banking, telecoms, FMCG, health, e-commerce, NGOs, and the public sector all advertise data analyst roles weekly on LinkedIn, MyJobMag, and Jobberman.
+- **Remote-friendly.** Analysts working from Lagos, Nnewi, or Enugu serve clients in the UK, US, and EU. Tools, files, and dashboards travel over the internet.
+- **Strong entry salaries.** Junior data analysts in Nigeria typically earn ₦250,000–₦450,000/month; mid-level ₦600,000–₦1,200,000; senior and remote-international roles regularly clear ₦2,000,000+.
+- **Short learning curve.** Unlike software engineering, you can become hireable in 12–16 weeks of focused training.
+
+## Curriculum: what a strong bootcamp covers
+
+At Tech Faculty, our **Data Analytics & Visualization Bootcamp** runs for 12 weeks and is built around the exact workflow Nigerian employers test for in interviews.
+
+### Module 1 — Excel for analysts (Weeks 1–2)
+- Pivot tables, XLOOKUP, INDEX/MATCH, dynamic arrays
+- Data cleaning, conditional formatting, what-if analysis
+- Building a first revenue dashboard from a messy CSV
+
+### Module 2 — SQL (Weeks 3–4)
+- SELECT, JOINs, GROUP BY, window functions, CTEs
+- Querying real datasets in PostgreSQL and BigQuery
+- Writing the SQL questions you will actually be asked at interviews
+
+### Module 3 — Power BI (Weeks 5–7)
+- Power Query for data transformation
+- Data modelling, relationships, and DAX
+- Building executive-ready dashboards used at Nigerian banks and fintechs
+
+### Module 4 — Tableau & Looker Studio (Week 8)
+- When to choose Tableau vs Power BI vs Looker Studio
+- Publishing dashboards clients can view from anywhere
+
+### Module 5 — Python for data analysis (Weeks 9–10)
+- Pandas, NumPy, and Matplotlib
+- Cleaning and merging data at scale
+- Light statistics: distributions, correlation, A/B test reading
+
+### Module 6 — Capstone & portfolio (Weeks 11–12)
+- Three end-to-end projects using real Nigerian data (banking, retail, logistics)
+- Portfolio website, GitHub, and LinkedIn optimisation
+- Mock interviews and CV review with hiring managers
+
+## Power BI vs Tableau vs Looker Studio — which should you learn first?
+
+| Tool | Best for | Nigerian job demand |
+| --- | --- | --- |
+| **Power BI** | Corporates, banks, FMCG (Microsoft shops) | Highest |
+| **Tableau** | Multinationals, consulting, US-remote clients | High |
+| **Looker Studio** | SMEs, startups, marketing teams | Growing |
+
+Start with **Power BI** if your goal is a Nigerian corporate role. Add **Tableau** for remote international roles. Looker Studio is a fast bonus because it is free and integrates with Google Analytics and Google Ads.
+
+## Career outcomes
+
+Graduates of a well-run data analytics and visualization bootcamp move into roles such as:
+
+- **Data Analyst** — the most common first job; ₦250k–₦600k/month
+- **Business Intelligence (BI) Analyst** — dashboard-heavy; ₦400k–₦900k/month
+- **Reporting Analyst** — finance, audit, ops; ₦300k–₦700k/month
+- **Marketing Analyst** — funnel and campaign data; ₦350k–₦800k/month
+- **Junior Data Scientist** — after adding Python and statistics
+- **Remote freelance analyst** — Upwork, Toptal, and direct contracts; $25–$60/hour
+
+87% of Tech Faculty graduates are employed within six months of finishing the program.
+
+## How to choose a data analytics and visualization bootcamp in Nigeria
+
+Five questions to ask any provider before paying:
+
+1. **Does the curriculum include both SQL and Power BI?** Anything less is not a real analyst bootcamp.
+2. **Are the projects built on real Nigerian datasets?** Generic Kaggle data will not impress a Nigerian hiring manager.
+3. **Is there 1-on-1 mentorship?** Group-only cohorts leave beginners behind.
+4. **Are mock interviews included?** Most rejections happen at interview, not application.
+5. **What is the verified employment outcome?** Ask for graduate LinkedIn profiles you can check yourself.
+
+## Who should join?
+
+- University students who want a marketable side-skill before NYSC
+- NYSC corps members planning their first proper job
+- Career switchers from accounting, banking, marketing, or admin roles
+- Self-taught Excel users who want to level up into BI
+- SS3 graduates waiting for university — yes, you can start now
+
+No prior programming experience is required. If you can use Excel and write a clear sentence, you can become a data analyst.
+
+## Format, schedule, and fees
+
+- **Duration:** 12 weeks
+- **Format:** Hybrid — live online classes plus optional in-person sessions at our centres in Nnewi, Onitsha, Enugu, Aba, and Owerri
+- **Time commitment:** 8–10 hours/week
+- **Certificate:** NBTI-licensed Tech Faculty certificate, verifiable at [techfaculty.ng/verify](https://techfaculty.ng/verify)
+- **Career support:** CV review, LinkedIn rewrite, mock interviews, and referrals to our hiring partners
+
+## Ready to start?
+
+Pick the plan that fits you on the [pricing page](https://techfaculty.ng/#pricing), or message us directly on [WhatsApp](https://wa.me/2348068597140?text=Hello%2C%20I%20want%20to%20join%20the%20Data%20Analytics%20and%20Visualization%20Bootcamp) to talk to a human about the next cohort.
+
+Data analytics and visualization is the most accessible high-paying tech skill in Nigeria right now. The companies are hiring. The tools are free to learn on. The only question is whether you start this month or next year.
+`,
+    date: "2026-06-29",
+    author: "Bill Achusim",
+    tags: ["Data & Analytics","data analytics and visualization bootcamp","data analyst Nigeria","Power BI Nigeria","Tableau Nigeria","SQL Nigeria","data visualization Nigeria"],
+    readTime: 9
+  },
 ];
 
 export const getAllBlogPosts = () => {

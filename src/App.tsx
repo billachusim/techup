@@ -30,6 +30,7 @@ import Dashboard from "./pages/Dashboard";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import Products from "./pages/Products";
 import Verify from "./pages/Verify";
+import Locations from "./pages/Locations";
 import TinyPeople from "./pages/TinyPeople";
 import LovablePage from "./pages/Lovable";
 import AdminCertificates from "./pages/AdminCertificates";
@@ -63,6 +64,7 @@ const App = () => (
             <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="/products" element={<Products />} />
             <Route path="/verify/*" element={<Verify />} />
+            <Route path="/locations" element={<Locations />} />
             <Route path="/tinypeople" element={<TinyPeople />} />
             <Route path="/lovable" element={<LovablePage />} />
             <Route path="/admin/certificates" element={<AdminCertificates />} />

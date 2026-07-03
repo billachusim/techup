@@ -17,6 +17,7 @@ Tech Faculty NG trains, certifies, and employs the next generation of African te
 - [Tiny People AI](/tinypeople): Messaging-native AI agent built with Natura Inc.
 - [Tech Store](/tech-store): Laptops, gadgets, and learning gear with Faculty ID member discounts.
 - [Verify Certificate](/verify): Public certificate verification portal.
+- [Locations](/locations): Tech Faculty campuses across Nigeria inside Technology Incubation Centres.
 - [Blog](/blog): Tech careers, bootcamp guides, and industry insights for Nigeria.
 
 ## Blog

@@ -29,6 +29,7 @@ const navLinks = [
   { label: "Products", href: "/products" },
   { label: "Tech Store", href: "/tech-store" },
   { label: "Blog", href: "/blog" },
+  { label: "Locations", href: "/locations" },
   { label: "About", href: "/about" },
 ];
 

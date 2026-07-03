@@ -105,10 +105,11 @@ const Locations = () => {
                   Main Campus / Headquarters
                 </div>
                 <h2 className="text-xl md:text-2xl font-bold mb-2">
-                  Nnewi Campus — Onitsha Operations
+                  Technology Incubation Centre, Nnewi
                 </h2>
                 <p className="text-muted-foreground mb-4">
-                  {hq.address}.
+                  {hq.address}. Our Nnewi campus also serves as the South-East
+                  zonal headquarters for the Technology Incubation Centre network.
                 </p>
                 <div className="flex flex-wrap gap-3">
                   <Button asChild size="sm">

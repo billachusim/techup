@@ -21,17 +21,17 @@ export interface Campus {
 export const campuses: Campus[] = [
   {
     id: "hq-nnewi",
-    name: "Headquarters — Nnewi Campus (Onitsha Operations)",
-    city: "Onitsha",
+    name: "Headquarters — Technology Incubation Centre, Nnewi (South-East Zonal Headquarters)",
+    city: "Nnewi",
     state: "Anambra",
     zone: "South-East",
     address:
-      "Anene Close, Off Ezeiweka Road, Awada, Onitsha, Anambra State",
-    lat: 6.1233161,
-    lng: 6.8035445,
+      "Technology Incubation Centre, Nnewi, Anambra State",
+    lat: 6.0086933,
+    lng: 6.9086904,
     isHeadquarters: true,
   },
-  { id: "nnewi", name: "Technology Incubation Centre, Nnewi", city: "Nnewi", state: "Anambra", zone: "South-East", address: "Technology Incubation Centre, Nnewi, Anambra State", lat: 6.0086933, lng: 6.9086904 },
+  { id: "onitsha", name: "Onitsha Campus", city: "Onitsha", state: "Anambra", zone: "South-East", address: "Anene Close, Off Ezeiweka Road, Awada, Onitsha, Anambra State", lat: 6.1233161, lng: 6.8035445 },
   { id: "owerri", name: "Technology Incubation Centre, Owerri", city: "Owerri", state: "Imo", zone: "South-East", address: "Technology Incubation Centre, Owerri, Imo State", lat: 5.4208739, lng: 7.0760842 },
   { id: "aba", name: "Technology Incubation Centre, Aba", city: "Aba", state: "Abia", zone: "South-East", address: "Technology Incubation Centre, Aba, Abia State", lat: 5.1215877, lng: 7.3732655 },
   { id: "enugu", name: "Technology Incubation Centre, Enugu", city: "Enugu", state: "Enugu", zone: "South-East", address: "Technology Incubation Centre, Enugu, Enugu State", lat: 6.4482701, lng: 7.5138947 },

@@ -1,29 +1,34 @@
-## What happened
+## Problem
 
-The `/verify` page is a standalone static HTML file at `public/verify/index.html` (separate from the React app). It linked its stylesheet, logo, and script using **relative paths**:
+`/verify` on the live site is being served by the standalone static file `public/verify/index.html` (+ `verifycss.css` + `verifyjs.js`), not by the React page `src/pages/Verify.tsx`. Two consequences:
 
-```html
-<link rel="stylesheet" href="verifycss.css">
-<img src="TFNGCertVerify.jpg" ...>
-<script src="verifyjs.js"></script>
-```
+1. **Only `TFNG202601` verifies.** The static JS holds an in-memory `Map` with a single hardcoded certificate. The other 7 real certificates in the database (`TFNG202602`–`TFNG202608`) return "not found" no matter what.
+2. **The page no longer matches the main site.** The static file loads its own `verifycss.css` and its own markup — completely separate from your Tailwind design system, Header, and Footer.
 
-Relative paths resolve against the current URL:
+The React route `/verify/*` → `Verify.tsx` already exists and already:
+- Renders inside the site's `Header` / `Footer` and uses the site's design tokens (so it matches techfaculty.ng).
+- Calls the `verify_certificate(cert_number)` Postgres function, which I confirmed returns all 8 database records via the anon key.
 
-- Visited as `https://techfaculty.ng/verify/` (with trailing slash) → browser asks for `/verify/verifycss.css` ✅
-- Visited as `https://techfaculty.ng/verify` (no trailing slash) → browser asks for `/verifycss.css` ❌
-
-On the no-slash visit (which is what your screenshot shows), those asset URLs 404 at the root. Lovable's SPA fallback then serves the React app's `index.html` for the missing paths, so the browser receives HTML where it expected CSS/JS/an image. Result: the HTML renders raw with no styles, no script, and a broken logo — exactly the screenshot you sent.
-
-The CSS file itself is fine (confirmed 200 `text/css` when fetched with the correct `/verify/` path).
+Static files in `public/` are served before SPA routes fall through, so the React page is being shadowed.
 
 ## Fix
 
-Change the three references in `public/verify/index.html` to absolute paths so they work regardless of trailing slash:
+Delete the standalone static verify page so the React route takes over:
 
-- `href="verifycss.css"` → `href="/verify/verifycss.css"`
-- `href="TFNGCertVerify.jpg"` (favicon) → `href="/verify/TFNGCertVerify.jpg"`
-- `src="TFNGCertVerify.jpg"` (logo `<img>`) → `src="/verify/TFNGCertVerify.jpg"`
-- `src="verifyjs.js"` → `src="/verify/verifyjs.js"`
+- Delete `public/verify/index.html`
+- Delete `public/verify/verifycss.css`
+- Delete `public/verify/verifyjs.js`
+- Keep `public/verify/TFNGCertVerify.jpg` (the React page references it at `/verify/TFNGCertVerify.jpg` for the header logo)
 
-No other files change. After the edit, republish so the fix goes live on techfaculty.ng.
+No code changes to `Verify.tsx`, no database changes, no RLS/grant changes needed — the RPC already works for anon.
+
+After deletion + republish:
+- `/verify` (with or without trailing slash) will render the React page in the site's look-and-feel.
+- All 8 existing certificates will verify, and any future certificate added to the `certificates` table will verify automatically (no code edit per cert).
+
+## Verification steps after publish
+
+1. Open `https://techfaculty.ng/verify` — should render inside the normal site header/footer.
+2. Enter `TFNG202608` (Ifeanyi Kamsiyochukwu Victory, Cybersecurity) — should show the verified record.
+3. Enter `TFNG202601` — should also still work.
+4. Enter a random string like `TFNG999999` — should show the "not found" error.

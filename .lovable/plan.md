@@ -1,25 +1,29 @@
-## Goal
+## Add Like & Share buttons to blog articles
 
-Replace the "Nnewi, Anambra State" positioning in the search snippet with a nationwide + global message, so Google (and social previews) present Tech Faculty NG as a Nigerian institute serving learners across Nigeria and worldwide.
+Place a small action bar directly under the post title (and repeat at the bottom of the article) on `src/pages/BlogPost.tsx`. Works for both signed-in and signed-out visitors.
 
-## Chosen snippet
+### Like button
+- Available to everyone (no sign-in required).
+- New table `public.blog_post_likes` stores one like per visitor per post:
+  - `post_slug text`, `visitor_id text` (anonymous UUID kept in `localStorage`) OR `user_id uuid` when signed in, `created_at timestamptz`.
+  - Unique constraint on `(post_slug, visitor_id)` to prevent duplicate likes from the same device.
+  - RLS: anyone (anon + authenticated) can `INSERT` and `SELECT` counts; delete restricted to owner (`user_id = auth.uid()` or matching `visitor_id`).
+  - Proper `GRANT`s to `anon`, `authenticated`, `service_role`.
+- UI: heart icon + live count. Tapping toggles like/unlike, optimistic update, disabled during request. Liked state persisted per device via `localStorage` key `liked:{slug}`.
 
-> Get trained, certified, and employed in software, AI, data, and cybersecurity. Licensed Nigerian tech institute with nationwide in-person bootcamps and online programs worldwide.
+### Share button
+- Uses the Web Share API when available (`navigator.share`) — this opens the native sheet (WhatsApp, iMessage, etc.) on mobile.
+- Fallback for desktop/unsupported browsers: dropdown menu with:
+  - "Share on WhatsApp" → `https://wa.me/?text=<title>%20<url>` (works on desktop WhatsApp + mobile deep link).
+  - "Copy link" → `navigator.clipboard.writeText(url)` with toast confirmation.
+- Share payload uses `post.title`, `post.description`, and the canonical URL `https://techfaculty.ng/blog/{slug}`.
 
-(185 chars — Google will trim after ~160 but the important keywords lead.)
+### Files
+- New migration: create `blog_post_likes` table with grants + RLS policies.
+- New component `src/components/BlogActions.tsx` — encapsulates like + share UI, fetches count via Supabase client.
+- Edit `src/pages/BlogPost.tsx` — render `<BlogActions post={post} />` under the title and again after the content.
 
-## Changes to `index.html`
-
-Three tags reference the old location-specific copy. All three get updated so Google, social crawlers, and AI-search agents see one consistent message.
-
-1. **`<meta name="description">`** — replace with the chosen snippet above.
-2. **`<meta property="og:description">`** — mirror the same snippet (this is what LinkedIn / Slack / Facebook / WhatsApp show).
-3. **JSON-LD `description`** (inside the Organization schema block) — swap to a slightly longer version that keeps the schema informative:
-   > "Tech Faculty NG is a licensed Nigerian technology training institute delivering nationwide in-person bootcamps and online programs worldwide in Software Engineering, Data Science, Cybersecurity, AI, and more. We train, certify, and place graduates into tech careers."
-
-No other files change. Title, og:title, og:image, canonical, and og:url stay as-is.
-
-## After deploy
-
-- Google typically re-crawls within a few days to a couple of weeks — the new snippet appears on its own schedule.
-- Social previews (LinkedIn, WhatsApp, etc.) cache aggressively; I'll flag that you can force a refresh via each platform's link-preview debugger if you want them updated immediately.
+### Notes
+- No auth wall; anonymous visitor ID generated client-side (UUID v4) and persisted.
+- Lucide icons: `Heart`, `Share2`, `MessageCircle` (WhatsApp representation), `Link` (copy).
+- Toasts via existing `sonner` setup.

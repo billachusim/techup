@@ -5,14 +5,16 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, ArrowRight, ArrowLeft } from "lucide-react";
+import { Clock, ArrowRight, ArrowLeft, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getAllBlogPosts } from "@/data/blogPosts";
 import { getCategoryBySlug, blogCategories } from "@/data/blogCategories";
+import { useBlogLikeCounts } from "@/hooks/useBlogLikeCounts";
 
 const BlogCategory = () => {
   const { slug } = useParams<{ slug: string }>();
   const category = slug ? getCategoryBySlug(slug) : undefined;
+  const likeCounts = useBlogLikeCounts();
 
   const posts = useMemo(() => {
     if (!category) return [];
@@ -134,6 +136,11 @@ const BlogCategory = () => {
                           <span className="text-xs text-muted-foreground flex items-center gap-1">
                             <Clock size={12} /> {post.readTime} min read
                           </span>
+                          {likeCounts[post.slug] > 0 && (
+                            <span className="text-xs text-muted-foreground flex items-center gap-1">
+                              <Heart size={12} /> {likeCounts[post.slug]}
+                            </span>
+                          )}
                         </div>
                         <h2 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">
                           {post.title}

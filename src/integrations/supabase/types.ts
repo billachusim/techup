@@ -61,6 +61,30 @@ export type Database = {
           },
         ]
       }
+      blog_post_likes: {
+        Row: {
+          created_at: string
+          id: string
+          post_slug: string
+          user_id: string | null
+          visitor_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_slug: string
+          user_id?: string | null
+          visitor_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_slug?: string
+          user_id?: string | null
+          visitor_id?: string
+        }
+        Relationships: []
+      }
       certificates: {
         Row: {
           certificate_number: string

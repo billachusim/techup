@@ -8,6 +8,7 @@ import { ArrowLeft, Clock, Calendar } from "lucide-react";
 import { getBlogPostBySlug, getRelatedPosts } from "@/data/blogPosts";
 import { getCategoryByName } from "@/data/blogCategories";
 import ReactMarkdown from "react-markdown";
+import BlogActions from "@/components/BlogActions";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -105,10 +106,22 @@ const BlogPost = () => {
               {post.title}
             </h1>
 
+            <BlogActions
+              slug={post.slug}
+              title={post.title}
+              description={post.description}
+            />
+
             {/* Content */}
             <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-muted-foreground prose-p:mb-6 prose-p:leading-relaxed prose-li:text-muted-foreground prose-li:leading-relaxed prose-ul:mb-6 prose-ol:mb-6 prose-strong:text-foreground prose-a:text-primary hover:prose-a:underline prose-hr:my-8">
               <ReactMarkdown>{post.content}</ReactMarkdown>
             </div>
+
+            <BlogActions
+              slug={post.slug}
+              title={post.title}
+              description={post.description}
+            />
           </div>
         </article>
 

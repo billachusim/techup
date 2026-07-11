@@ -192,4 +192,53 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- New blog posts (July 11, 2026) — one per category -->
+  <url>
+    <loc>https://techfaculty.ng/blog/best-ai-tools-nigerian-businesses-2026</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/react-vs-nextjs-nigerian-developers-2026</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/sql-vs-python-data-analysts-nigeria-2026</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/become-soc-analyst-nigeria-2026-roadmap</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/remote-tech-jobs-nigeria-2026-complete-guide</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/how-to-find-siwes-placement-tech-nigeria-2026</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/how-to-hire-developers-nigerian-startups-2026</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/best-coding-languages-nigerian-teenagers-2026</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>

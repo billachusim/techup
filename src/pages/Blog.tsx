@@ -4,14 +4,16 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, ArrowRight } from "lucide-react";
+import { Clock, ArrowRight, Heart } from "lucide-react";
 import { getAllBlogPosts } from "@/data/blogPosts";
 import { useState, useMemo } from "react";
 import { blogCategories, getCategoryByName } from "@/data/blogCategories";
+import { useBlogLikeCounts } from "@/hooks/useBlogLikeCounts";
 
 const Blog = () => {
   const sortedPosts = useMemo(() => getAllBlogPosts(), []);
   const categories = blogCategories;
+  const likeCounts = useBlogLikeCounts();
 
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
@@ -159,6 +161,11 @@ const Blog = () => {
                         <span className="text-xs text-muted-foreground flex items-center gap-1">
                           <Clock size={12} /> {post.readTime} min read
                         </span>
+                        {likeCounts[post.slug] > 0 && (
+                          <span className="text-xs text-muted-foreground flex items-center gap-1">
+                            <Heart size={12} /> {likeCounts[post.slug]}
+                          </span>
+                        )}
                       </div>
                       <Link to={`/blog/${post.slug}`} className="flex-1 flex flex-col">
                         <h2 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">

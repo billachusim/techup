@@ -2686,7 +2686,7 @@ Scratch is a visual, drag-and-drop language from MIT. It teaches loops, conditio
 
 ## Why Python is the perfect JSS-age language
 
-- **Reads like English.** `if age > 12: print("Welcome")` — no confusing symbols.
+- **Reads like English.** A line like *if age > 12: print("Welcome")* is almost plain English — no confusing symbols.
 - **Free everywhere.** Runs on any laptop, and in the browser via [replit.com](https://replit.com).
 - **Real careers.** Python is used in AI, data, cybersecurity, and automation — all high-paying tracks in Nigeria.
 - **Fun early wins.** A JSS2 student can build a WAEC-grade calculator in one weekend.

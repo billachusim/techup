@@ -51,7 +51,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://techfaculty.ng/verify</loc>
+    <loc>https://techfaculty.ng/verify/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

@@ -62,8 +62,8 @@ const BusinessPartnerships = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>Business Partnerships - Tech Faculty NG | Corporate Training & AI</title>
-        <meta name="description" content="Partner with Tech Faculty NG for corporate training, AI workshops, business digitization, and talent pipelines. Licensed by FMSTI via NBTI in Nnewi, Anambra State." />
+        <title>Business Partnerships | Tech Faculty NG</title>
+        <meta name="description" content="Partner with Tech Faculty NG for corporate training, AI workshops, business digitization, and tech talent pipelines. FMSTI-licensed, based in Nnewi, Nigeria." />
         <meta property="og:title" content="Business Partnerships - Tech Faculty NG" />
         <meta property="og:description" content="Corporate training, AI workshops, and business digitization. Licensed by the Federal Ministry of Science, Technology & Innovation." />
         <meta property="og:type" content="website" />

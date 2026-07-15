@@ -63,7 +63,7 @@ const SIWES = () => {
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>SIWES & Industrial Training - Tech Faculty NG | IT Placement</title>
-        <meta name="description" content="Complete your SIWES/IT placement at Tech Faculty NG in Nnewi. Choose Learn & Pay for mentored real-world experience or Tutor & Earn to teach and get paid. Licensed by FMSTI via NBTI." />
+        <meta name="description" content="Do your SIWES/IT placement at Tech Faculty NG, Nnewi. Learn & Pay for mentored real-world experience or Tutor & Earn to teach and get paid. FMSTI-licensed." />
         <meta property="og:title" content="SIWES & Industrial Training - Tech Faculty NG" />
         <meta property="og:description" content="SIWES & IT placements — Learn & Pay for real-world experience or Tutor & Earn while completing your industrial training in Nnewi." />
         <meta property="og:type" content="website" />

@@ -3,7 +3,7 @@
 // supabase function: mcp
 // Bundled from src/lib/mcp/index.ts by @lovable.dev/mcp-js.
 // src/lib/mcp/index.ts
-import { defineMcp } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { auth, defineMcp } from "npm:@lovable.dev/mcp-js@0.22.2";
 
 // src/lib/mcp/tools/list_departments.ts
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.22.2";
@@ -2997,9 +2997,9 @@ var blogPosts_default = blogPosts;
 
 // src/lib/mcp/tools/list_blog_posts.ts
 async function fetchLikeCounts(slugs) {
-  const env = globalThis.process?.env ?? {};
-  const url = env.SUPABASE_URL;
-  const key = env.SUPABASE_PUBLISHABLE_KEY;
+  const env2 = globalThis.process?.env ?? {};
+  const url = env2.SUPABASE_URL;
+  const key = env2.SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key || slugs.length === 0) return {};
   const supabase = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
   const { data, error } = await supabase.from("blog_post_likes").select("post_slug").in("post_slug", slugs);
@@ -3053,9 +3053,9 @@ import { defineTool as defineTool6 } from "npm:@lovable.dev/mcp-js@0.22.2";
 import { z as z2 } from "npm:zod@^3.25.76";
 import { createClient as createClient2 } from "npm:@supabase/supabase-js@^2.79.0";
 async function fetchLikeCount(slug) {
-  const env = globalThis.process?.env ?? {};
-  const url = env.SUPABASE_URL;
-  const key = env.SUPABASE_PUBLISHABLE_KEY;
+  const env2 = globalThis.process?.env ?? {};
+  const url = env2.SUPABASE_URL;
+  const key = env2.SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return 0;
   const supabase = createClient2(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
   const { count } = await supabase.from("blog_post_likes").select("*", { count: "exact", head: true }).eq("post_slug", slug);
@@ -3114,12 +3114,248 @@ var search_blog_default = defineTool7({
   }
 });
 
+// src/lib/mcp/tools/like_blog_post.ts
+import { defineTool as defineTool8 } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { z as z4 } from "npm:zod@^3.25.76";
+
+// src/lib/mcp/_shared/supabaseForUser.ts
+import { createClient as createClient3 } from "npm:@supabase/supabase-js@^2.79.0";
+function env() {
+  return globalThis.process?.env ?? {};
+}
+function supabaseForUser(ctx) {
+  const e = env();
+  return createClient3(e.SUPABASE_URL, e.SUPABASE_PUBLISHABLE_KEY, {
+    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
+    auth: { persistSession: false, autoRefreshToken: false }
+  });
+}
+function requireAuth(ctx) {
+  if (!ctx.isAuthenticated()) {
+    return {
+      error: {
+        content: [{ type: "text", text: "Not authenticated. Sign in to your Tech Faculty account to use this tool." }],
+        isError: true
+      }
+    };
+  }
+  return { error: null };
+}
+
+// src/lib/mcp/tools/like_blog_post.ts
+var like_blog_post_default = defineTool8({
+  name: "like_blog_post",
+  title: "Like blog post",
+  description: "Like a Tech Faculty blog post as the signed-in user. Idempotent: safe to call if already liked.",
+  inputSchema: {
+    slug: z4.string().min(1).describe("Post slug from list_blog_posts.")
+  },
+  annotations: { readOnlyHint: false, idempotentHint: true, openWorldHint: false },
+  handler: async ({ slug }, ctx) => {
+    const auth2 = requireAuth(ctx);
+    if (auth2.error) return auth2.error;
+    const supabase = supabaseForUser(ctx);
+    const userId = ctx.getUserId();
+    const { data: existing } = await supabase.from("blog_post_likes").select("id").eq("post_slug", slug).eq("user_id", userId).maybeSingle();
+    if (existing) {
+      return { content: [{ type: "text", text: `Already liked ${slug}` }], structuredContent: { slug, liked: true, alreadyLiked: true } };
+    }
+    const { error } = await supabase.from("blog_post_likes").insert({
+      post_slug: slug,
+      user_id: userId,
+      visitor_id: userId
+    });
+    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
+    return { content: [{ type: "text", text: `Liked ${slug}` }], structuredContent: { slug, liked: true, alreadyLiked: false } };
+  }
+});
+
+// src/lib/mcp/tools/unlike_blog_post.ts
+import { defineTool as defineTool9 } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { z as z5 } from "npm:zod@^3.25.76";
+var unlike_blog_post_default = defineTool9({
+  name: "unlike_blog_post",
+  title: "Unlike blog post",
+  description: "Remove the signed-in user's like from a Tech Faculty blog post.",
+  inputSchema: { slug: z5.string().min(1).describe("Post slug.") },
+  annotations: { readOnlyHint: false, idempotentHint: true, openWorldHint: false },
+  handler: async ({ slug }, ctx) => {
+    const auth2 = requireAuth(ctx);
+    if (auth2.error) return auth2.error;
+    const supabase = supabaseForUser(ctx);
+    const { error } = await supabase.from("blog_post_likes").delete().eq("post_slug", slug).eq("user_id", ctx.getUserId());
+    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
+    return { content: [{ type: "text", text: `Unliked ${slug}` }], structuredContent: { slug, liked: false } };
+  }
+});
+
+// src/lib/mcp/tools/get_my_profile.ts
+import { defineTool as defineTool10 } from "npm:@lovable.dev/mcp-js@0.22.2";
+var get_my_profile_default = defineTool10({
+  name: "get_my_profile",
+  title: "Get my profile",
+  description: "Return the signed-in Tech Faculty user's profile.",
+  inputSchema: {},
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async (_input, ctx) => {
+    const auth2 = requireAuth(ctx);
+    if (auth2.error) return auth2.error;
+    const supabase = supabaseForUser(ctx);
+    const { data, error } = await supabase.from("profiles").select("faculty_id,name,email,phone,department,learning_mode,cohort_month,cohort_year").eq("id", ctx.getUserId()).maybeSingle();
+    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
+    return { content: [{ type: "text", text: JSON.stringify(data ?? null, null, 2) }], structuredContent: { profile: data ?? null } };
+  }
+});
+
+// src/lib/mcp/tools/update_my_profile.ts
+import { defineTool as defineTool11 } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { z as z6 } from "npm:zod@^3.25.76";
+var update_my_profile_default = defineTool11({
+  name: "update_my_profile",
+  title: "Update my profile",
+  description: "Update the signed-in user's own name and/or phone. Faculty ID and email cannot be changed.",
+  inputSchema: {
+    name: z6.string().trim().min(1).max(100).optional(),
+    phone: z6.string().trim().min(3).max(20).optional()
+  },
+  annotations: { readOnlyHint: false, idempotentHint: true, openWorldHint: false },
+  handler: async ({ name, phone }, ctx) => {
+    const auth2 = requireAuth(ctx);
+    if (auth2.error) return auth2.error;
+    const patch = {};
+    if (name) patch.name = name;
+    if (phone) patch.phone = phone;
+    if (Object.keys(patch).length === 0) {
+      return { content: [{ type: "text", text: "Nothing to update. Provide name or phone." }], isError: true };
+    }
+    const supabase = supabaseForUser(ctx);
+    const { data, error } = await supabase.from("profiles").update(patch).eq("id", ctx.getUserId()).select("faculty_id,name,email,phone").maybeSingle();
+    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
+    return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }], structuredContent: { profile: data } };
+  }
+});
+
+// src/lib/mcp/tools/list_my_enrollments.ts
+import { defineTool as defineTool12 } from "npm:@lovable.dev/mcp-js@0.22.2";
+var list_my_enrollments_default = defineTool12({
+  name: "list_my_enrollments",
+  title: "List my plan enrollments",
+  description: "List the signed-in user's Tech Faculty plan enrollments (Starter/Pro/Enterprise) with status.",
+  inputSchema: {},
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async (_input, ctx) => {
+    const auth2 = requireAuth(ctx);
+    if (auth2.error) return auth2.error;
+    const supabase = supabaseForUser(ctx);
+    const { data, error } = await supabase.from("enrollments").select("plan_name,status,learning_mode,coupon_code,enrollment_date").order("enrollment_date", { ascending: false });
+    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
+    return { content: [{ type: "text", text: JSON.stringify(data ?? [], null, 2) }], structuredContent: { enrollments: data ?? [] } };
+  }
+});
+
+// src/lib/mcp/tools/list_my_courses.ts
+import { defineTool as defineTool13 } from "npm:@lovable.dev/mcp-js@0.22.2";
+var list_my_courses_default = defineTool13({
+  name: "list_my_courses",
+  title: "List my courses",
+  description: "List the signed-in user's course enrollments with course name and progress percentage.",
+  inputSchema: {},
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async (_input, ctx) => {
+    const auth2 = requireAuth(ctx);
+    if (auth2.error) return auth2.error;
+    const supabase = supabaseForUser(ctx);
+    const { data: enrolls, error } = await supabase.from("course_enrollments").select("course_id,status,enrollment_date,courses(name,department,duration)").order("enrollment_date", { ascending: false });
+    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
+    const courseIds = (enrolls ?? []).map((e) => e.course_id);
+    const progressMap = {};
+    if (courseIds.length) {
+      const { data: prog } = await supabase.from("course_progress").select("course_id,progress_percentage").in("course_id", courseIds);
+      for (const p of prog ?? []) {
+        progressMap[p.course_id] = p.progress_percentage;
+      }
+    }
+    const items = (enrolls ?? []).map((e) => {
+      const course = Array.isArray(e.courses) ? e.courses[0] : e.courses;
+      return {
+        courseId: e.course_id,
+        name: course?.name ?? null,
+        department: course?.department ?? null,
+        duration: course?.duration ?? null,
+        status: e.status,
+        enrolledAt: e.enrollment_date,
+        progressPercentage: progressMap[e.course_id] ?? 0
+      };
+    });
+    return { content: [{ type: "text", text: JSON.stringify(items, null, 2) }], structuredContent: { courses: items } };
+  }
+});
+
+// src/lib/mcp/tools/list_my_certificates.ts
+import { defineTool as defineTool14 } from "npm:@lovable.dev/mcp-js@0.22.2";
+var list_my_certificates_default = defineTool14({
+  name: "list_my_certificates",
+  title: "List my certificates",
+  description: "List certificates issued to the signed-in Tech Faculty user.",
+  inputSchema: {},
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async (_input, ctx) => {
+    const auth2 = requireAuth(ctx);
+    if (auth2.error) return auth2.error;
+    const supabase = supabaseForUser(ctx);
+    const { data, error } = await supabase.from("certificates").select("certificate_number,course_name,certificate_type,issued_by,date_issued,issued_at").order("issued_at", { ascending: false });
+    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
+    const items = (data ?? []).map((c) => ({
+      ...c,
+      verifyUrl: `https://techfaculty.ng/verify/${c.certificate_number}`
+    }));
+    return { content: [{ type: "text", text: JSON.stringify(items, null, 2) }], structuredContent: { certificates: items } };
+  }
+});
+
+// src/lib/mcp/tools/list_my_upcoming_classes.ts
+import { defineTool as defineTool15 } from "npm:@lovable.dev/mcp-js@0.22.2";
+var list_my_upcoming_classes_default = defineTool15({
+  name: "list_my_upcoming_classes",
+  title: "List my upcoming classes",
+  description: "List upcoming scheduled lectures for courses the signed-in user is enrolled in.",
+  inputSchema: {},
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async (_input, ctx) => {
+    const auth2 = requireAuth(ctx);
+    if (auth2.error) return auth2.error;
+    const supabase = supabaseForUser(ctx);
+    const nowIso = (/* @__PURE__ */ new Date()).toISOString();
+    const { data, error } = await supabase.from("lectures").select("id,title,description,scheduled_at,duration_minutes,status,course_id,courses(name)").gte("scheduled_at", nowIso).eq("status", "scheduled").order("scheduled_at", { ascending: true }).limit(50);
+    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
+    const items = (data ?? []).map((l) => {
+      const course = Array.isArray(l.courses) ? l.courses[0] : l.courses;
+      return {
+        id: l.id,
+        title: l.title,
+        description: l.description,
+        scheduledAt: l.scheduled_at,
+        durationMinutes: l.duration_minutes,
+        status: l.status,
+        courseId: l.course_id,
+        courseName: course?.name ?? null
+      };
+    });
+    return { content: [{ type: "text", text: JSON.stringify(items, null, 2) }], structuredContent: { classes: items } };
+  }
+});
+
 // src/lib/mcp/index.ts
+var projectRef = "flxwtwzjslufglpwfjdx";
 var mcp_default = defineMcp({
   name: "tech-faculty-mcp",
   title: "Tech Faculty",
   version: "0.1.0",
-  instructions: "Public tools for Tech Faculty NG (techfaculty.ng): browse departments/tracks, blog posts (with like counts), blog categories, campus locations, and services. Use list_blog_categories then list_blog_posts to browse content, or search_blog to find posts by keyword, then get_blog_post for full markdown.",
+  instructions: "Tools for Tech Faculty NG (techfaculty.ng). Public (no login): list_departments, list_services, list_campuses, list_blog_categories, list_blog_posts, get_blog_post, search_blog. Signed-in user tools (require OAuth): like_blog_post, unlike_blog_post, get_my_profile, update_my_profile, list_my_enrollments, list_my_courses, list_my_certificates, list_my_upcoming_classes. All user-scoped tools act as the caller under Tech Faculty's row-level security.",
+  auth: auth.oauth.issuer({
+    issuer: `https://${projectRef}.supabase.co/auth/v1`,
+    acceptedAudiences: "authenticated"
+  }),
   tools: [
     list_departments_default,
     list_services_default,
@@ -3127,7 +3363,15 @@ var mcp_default = defineMcp({
     list_blog_categories_default,
     list_blog_posts_default,
     get_blog_post_default,
-    search_blog_default
+    search_blog_default,
+    like_blog_post_default,
+    unlike_blog_post_default,
+    get_my_profile_default,
+    update_my_profile_default,
+    list_my_enrollments_default,
+    list_my_courses_default,
+    list_my_certificates_default,
+    list_my_upcoming_classes_default
   ]
 });
 

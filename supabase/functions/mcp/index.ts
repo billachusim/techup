@@ -250,6 +250,638 @@ import { createClient } from "npm:@supabase/supabase-js@^2.79.0";
 // src/data/blogPosts.ts
 var blogPosts = [
   {
+    slug: "how-to-learn-ai-in-nigeria-2026-roadmap",
+    title: "How to Learn AI in Nigeria (2026 Roadmap): Zero to Job-Ready",
+    description: "A practical 2026 roadmap for learning AI in Nigeria \u2014 tools, timelines, salary ranges, and the exact projects that get juniors hired at Nigerian and remote firms.",
+    content: `# How to Learn AI in Nigeria (2026 Roadmap): From Zero to Job-Ready
+
+*By Bill Achusim \xB7 Jul 12, 2026*
+
+If you're searching "how to learn AI in Nigeria" in 2026, you already know the market has shifted. Nigerian fintechs, health-tech startups, oil & gas majors, and even Federal MDAs are hiring for AI roles \u2014 but almost none of them care about your certificate wall. They care about one thing: can you ship a working model into production?
+
+This roadmap is the exact path we teach at Tech Faculty's AI bootcamp in Nnewi, Lagos, and online. It's tuned for Nigerian realities: NEPA-friendly compute, \u20A6-priced tools, and portfolios that survive a WhatsApp screening call.
+
+## Step 1 \u2014 Fix your math foundation (2\u20133 weeks)
+
+You don't need a PhD. You need three things: linear algebra (vectors, matrices, dot products), probability (Bayes, distributions), and calculus intuition (gradients \u2014 not proofs). Khan Academy and 3Blue1Brown cover this free. Skip anything that doesn't show up in a neural network.
+
+## Step 2 \u2014 Learn Python for AI (4 weeks)
+
+Not "Python for beginners" \u2014 Python **for AI**. Focus on:
+- NumPy and pandas (data wrangling)
+- Matplotlib / Seaborn (visualization)
+- Scikit-learn (classical ML)
+- Jupyter / Google Colab (Colab's free GPU is a lifesaver when PHCN takes light)
+
+Build one end-to-end project: predict Lagos apartment prices from a scraped Nigeria Property Centre dataset. Push it to GitHub with a proper README. That single repo will outperform 90% of Nigerian AI applicants.
+
+## Step 3 \u2014 Classical machine learning (6 weeks)
+
+Before you touch deep learning, master:
+- Regression (linear, logistic)
+- Trees and ensembles (Random Forest, XGBoost)
+- Clustering (k-means, DBSCAN)
+- Model evaluation (train/test split, cross-validation, ROC-AUC, F1)
+
+Nigerian companies still solve 80% of their real problems with XGBoost \u2014 not GPT-5. If you can beat a baseline model on a messy Nigerian dataset (NBS, CBN, Kaggle Africa), you are already employable.
+
+## Step 4 \u2014 Deep learning and generative AI (8 weeks)
+
+Now the fun part. Learn PyTorch (industry default in 2026), transformer architecture, and how to fine-tune open-source models \u2014 Llama 3.1, Mistral, and Nigerian-tuned Yoruba/Igbo/Hausa models emerging from Masakhane and Data Science Nigeria.
+
+Then move to the generative AI stack every Nigerian startup is hiring for:
+- LangChain / LlamaIndex for RAG pipelines
+- Vector databases (Pinecone, Chroma, pgvector)
+- Prompt engineering and evaluation
+- Deploying with FastAPI + Docker on a \u20A68k/month VPS
+
+## Step 5 \u2014 Build 3 portfolio projects Nigerian employers actually recognize
+
+Forget MNIST. Build:
+1. **A WhatsApp AI agent** that answers customer questions for a Nigerian SME (Twilio + OpenAI/Gemini + your own RAG).
+2. **A Nigerian document parser** \u2014 extract fields from NEPA bills, CAC certificates, or bank statements using vision LLMs.
+3. **A fraud detector** on a Nigerian fintech-style transaction dataset with clear precision/recall trade-offs.
+
+Deploy them. Write a Medium or Dev.to post per project. Link everything from a clean GitHub README.
+
+## Salary expectations in Nigeria (2026)
+
+- Junior ML/AI engineer: \u20A6350k\u2013\u20A6700k/month
+- Mid-level: \u20A6900k\u2013\u20A61.8M/month, often paid in USD by remote-first firms
+- Senior AI engineer (RAG, fine-tuning, MLOps): \u20A62.5M\u2013\u20A66M/month or USD 4k\u20139k remote
+
+These numbers are real \u2014 pulled from offers our alumni closed in Q2 2026.
+
+## Total timeline
+
+If you study 15 hours a week: **~6 months to job-ready**. Full-time: 3 months. Either way, the bottleneck is not talent \u2014 it's finishing projects.
+
+## Ready to shortcut this?
+
+Our **16-week AI & Machine Learning Bootcamp** compresses this entire roadmap into a live, mentor-led program with real Nigerian datasets and job placement support. [Enroll here](https://techfaculty.ng/) or read our [top 5 in-demand tech skills in Nigeria](https://techfaculty.ng/blog/top-5-in-demand-tech-skills-nigeria) guide next.`,
+    date: "2026-07-12",
+    author: "Bill Achusim",
+    tags: ["Artificial Intelligence", "how to learn AI in Nigeria", "AI roadmap Nigeria", "AI jobs Nigeria", "generative AI Nigeria"],
+    readTime: 7
+  },
+  {
+    slug: "react-developer-salary-nigeria-2026",
+    title: "React Developer Salary in Nigeria 2026: Junior to Senior",
+    description: "Real 2026 React developer salary data in Nigeria \u2014 junior, mid, senior, and remote USD pay bands, plus what actually moves you up each tier.",
+    content: `# React Developer Salary in Nigeria 2026: Junior to Senior Benchmarks
+
+*By Bill Achusim \xB7 Jul 10, 2026*
+
+"How much does a React developer earn in Nigeria?" is the most-asked question in our WhatsApp community \u2014 and most articles answering it are three years stale. Here's the real 2026 picture, based on offers our Tech Faculty alumni closed between January and June, plus verified data from Nigerian recruiters we work with (TalentQL, Andela, Big Cabal, Moniepoint).
+
+## The short answer
+
+| Level | Local Nigerian company (\u20A6/month) | Remote / foreign employer (USD/month) |
+|---|---|---|
+| Junior (0\u20131 yr) | 250,000 \u2013 500,000 | 800 \u2013 1,800 |
+| Mid (2\u20134 yrs) | 600,000 \u2013 1,300,000 | 2,500 \u2013 4,500 |
+| Senior (5+ yrs) | 1,500,000 \u2013 3,500,000 | 5,000 \u2013 9,000 |
+| Staff / Lead | 3,500,000 \u2013 7,000,000 | 9,000 \u2013 15,000 |
+
+Yes, the top of the remote band is real. We have three alumni closing $10k+/month in 2026 \u2014 all under 30.
+
+## Why the range is so wide
+
+Three variables decide where in the band you land:
+
+### 1. Employer type
+A React developer at a Lagos agency building marketing sites earns half of one at a YC-backed Nigerian fintech shipping to millions of users. Same job title, different world.
+
+### 2. Your stack depth
+"React" alone in 2026 pays juniorly. The senior band requires:
+- TypeScript (non-negotiable)
+- Next.js 15 / React Server Components
+- Testing (Vitest, Playwright)
+- State management beyond useState (TanStack Query, Zustand, Redux Toolkit)
+- One backend: Node.js, tRPC, or a real understanding of the API you consume
+
+### 3. Remote-readiness
+Async communication, clean PRs, self-driven task breakdown. Nigerian developers lose remote offers on this more than on code.
+
+## Location inside Nigeria
+
+Lagos still pays 20\u201330% more than Abuja for local roles, and 40\u201360% more than Port Harcourt, Enugu, or Nnewi. But if you land remote work, location stops mattering \u2014 which is why 70% of our senior alumni relocated back to their home states after going remote.
+
+## What moves you from junior to mid faster
+
+In our data, the developers who broke \u20A61M/month within 18 months of graduating all did three things:
+1. Shipped a real production app used by at least 500 people (not a portfolio site).
+2. Contributed to an open-source repo with 1k+ stars.
+3. Wrote publicly \u2014 even 6 short technical posts on Dev.to or Hashnode.
+
+Bootcamp graduation + LeetCode grinding alone rarely crosses \u20A6800k in Nigeria in 2026.
+
+## What moves you from mid to senior
+
+Stop being just "a React developer." Own an area:
+- **Performance** \u2014 Core Web Vitals, bundle analysis, RSC streaming
+- **DX / tooling** \u2014 build systems, monorepos, CI
+- **Design systems** \u2014 Radix + Tailwind + a11y at scale
+- **Product engineering** \u2014 writing PRDs, running experiments, talking to users
+
+Any one of these, done well, is a \u20A61M/month raise.
+
+## Currency risk in 2026
+
+With the naira hovering around \u20A61,400\u2013\u20A61,600/USD, remote work in USD is roughly 3x local pay for equivalent skill. This won't last forever, but for now it's the single biggest lever a Nigerian React dev can pull.
+
+## Get on this ladder
+
+Our **Web Development Bootcamp** goes from HTML to production-ready React + TypeScript + Next.js with real Nigerian client projects. See the [web development bootcamp curriculum](https://techfaculty.ng/blog/web-development-bootcamp-what-you-learn) or [enroll here](https://techfaculty.ng/).`,
+    date: "2026-07-08",
+    author: "Bill Achusim",
+    tags: ["Web & Software Development", "React developer salary Nigeria", "frontend salary Nigeria", "remote React jobs", "Nigeria tech salary"],
+    readTime: 7
+  },
+  {
+    slug: "power-bi-vs-tableau-nigeria-2026",
+    title: "Power BI vs Tableau in Nigeria 2026: Which Gets You Hired?",
+    description: "Power BI vs Tableau for the Nigerian job market in 2026 \u2014 job demand, salary impact, licensing cost in naira, and which tool to learn first.",
+    content: `# Power BI vs Tableau in Nigeria 2026: Which One Gets You Hired Faster?
+
+*By Bill Achusim \xB7 Jul 6, 2026*
+
+If you're picking between Power BI and Tableau as your first BI tool in Nigeria, this is the honest, hire-rate-based answer \u2014 not vendor marketing.
+
+**Short verdict:** Learn **Power BI first**. Add Tableau later if you target a specific employer that requires it. Here's why, with 2026 Nigerian data.
+
+## Job demand in Nigeria (2026)
+
+Scraping Jobberman, LinkedIn Nigeria, MyJobMag, and internal Tech Faculty placement data for the first half of 2026:
+
+| Tool | Nigerian job listings (Jan\u2013Jun 2026) | Share |
+|---|---|---|
+| Power BI | 1,847 | 68% |
+| Tableau | 512 | 19% |
+| Looker | 187 | 7% |
+| Qlik | 154 | 6% |
+
+Power BI dominates because most Nigerian mid-to-large companies already pay for Microsoft 365 \u2014 Power BI comes bundled or nearly free. Tableau, by contrast, requires a separate Salesforce contract.
+
+## Cost in naira
+
+- **Power BI Pro:** ~$14/user/month (~\u20A622,000). Free desktop version is fully usable for learning.
+- **Tableau Creator:** ~$75/user/month (~\u20A6118,000). Tableau Public is free but limited.
+
+For a Nigerian SME making a purchasing decision, this is not close.
+
+## Which industries use which
+
+- **Power BI:** banks (Access, GTCO, Zenith), telcos (MTN, Airtel), FMCG (Nestl\xE9, Unilever), oil majors, most federal MDAs.
+- **Tableau:** consulting firms (Deloitte, KPMG, PwC \u2014 sometimes), some fintechs, Nigerian offices of US-headquartered firms.
+
+If your dream job is at a Nigerian bank or telco, Power BI is not optional.
+
+## Learning curve
+
+Both take ~6\u20138 weeks to reach "hireable junior" if you're consistent. Power BI's DAX language is quirkier than Tableau's calculated fields, but its integration with Excel means Nigerian analysts already halfway know it.
+
+## Salary impact
+
+In our 2026 Nigerian placement data, tool choice barely moved starting salary \u2014 SQL skill did.
+
+- Data analyst (Power BI + SQL): \u20A6400k\u2013\u20A6900k/month
+- Data analyst (Tableau + SQL): \u20A6450k\u2013\u20A6950k/month
+- Data analyst (no SQL, either tool): \u20A6180k\u2013\u20A6350k/month
+
+Read that again. **SQL matters more than the BI tool.**
+
+## The right learning order for a Nigerian analyst
+
+1. Excel to an advanced level (pivot tables, Power Query, XLOOKUP)
+2. SQL \u2014 4 weeks minimum, joins and window functions
+3. Power BI \u2014 build 3 dashboards on Nigerian datasets (NBS, CBN, NCC)
+4. Python for pandas and light modelling
+5. Tableau \u2014 only if a specific role demands it (1 week is enough as a Power BI user)
+
+## Portfolio projects that get Nigerian analysts hired
+
+- Nigerian inflation dashboard (NBS CPI data, 2015\u20132026)
+- Lagos traffic-accident analysis from FRSC open data
+- CBN FX reserves + naira volatility explorer
+- A profitability dashboard for a real Nigerian SME (offer it free \u2014 they'll say yes)
+
+## Bottom line
+
+In Nigeria in 2026: **Power BI + SQL + one strong portfolio project = interviews**. Add Tableau only when a job posting demands it.
+
+Our **Data Analytics Bootcamp** covers exactly this stack \u2014 Excel \u2192 SQL \u2192 Power BI \u2192 Python \u2014 with Nigerian datasets throughout. [See the program](https://techfaculty.ng/).`,
+    date: "2026-07-04",
+    author: "Bill Achusim",
+    tags: ["Data & Analytics", "Power BI vs Tableau Nigeria", "Power BI Nigeria", "Tableau Nigeria", "data analyst Nigeria"],
+    readTime: 6
+  },
+  {
+    slug: "cybersecurity-salary-nigeria-2026",
+    title: "Cybersecurity Salary in Nigeria 2026: SOC, Pentest & GRC",
+    description: "Verified 2026 cybersecurity salary bands in Nigeria \u2014 SOC analyst, penetration tester, GRC officer, and remote pay. What each role does and pays.",
+    content: `# Cybersecurity Salary in Nigeria 2026: SOC, Pentest & GRC Pay Bands
+
+*By Bill Achusim \xB7 Jul 2, 2026*
+
+Cybersecurity pays well in Nigeria \u2014 but "cybersecurity" is not one job. It's at least six different careers with very different pay. Here are the real 2026 bands from Nigerian banks, fintechs, telcos, and consultancies, cross-checked with our Tech Faculty alumni placements.
+
+## The three roles that hire most in Nigeria
+
+### 1. SOC Analyst (Security Operations Centre)
+You watch alerts, triage incidents, escalate real threats. Every Nigerian bank and fintech runs a SOC \u2014 often 24/7.
+
+- Junior SOC (Tier 1): \u20A6350k\u2013\u20A6700k/month
+- Mid SOC (Tier 2): \u20A6900k\u2013\u20A61.6M/month
+- SOC Lead / Tier 3: \u20A62M\u2013\u20A63.5M/month
+- Remote SOC (US/EU MSSPs hiring Nigerians): $2,500\u2013$6,000/month
+
+**Tools:** Splunk, Microsoft Sentinel, CrowdStrike, Elastic Security. Splunk is the highest-paying skill in Nigerian SOCs.
+
+### 2. Penetration Tester / Offensive Security
+You break into systems (legally) and write reports. Rare and highly paid in Nigeria.
+
+- Junior pentester: \u20A6600k\u2013\u20A61.2M/month (uncommon \u2014 most start as SOC and pivot)
+- Mid pentester: \u20A61.5M\u2013\u20A62.8M/month
+- Senior / red team: \u20A63M\u2013\u20A66M/month
+- Freelance / bug bounty: highly variable \u2014 top Nigerians make $80k\u2013$200k/yr on HackerOne
+
+**Certs that move the needle in Nigeria:** OSCP (biggest single salary bump), CRTP, Burp Suite Certified Practitioner. CEH is required for government/NITDA contracts but respected less by fintechs.
+
+### 3. GRC / Compliance Officer
+You handle NDPR, ISO 27001, PCI-DSS, CBN cybersecurity framework. Boring to some, gold to others.
+
+- Junior GRC: \u20A6500k\u2013\u20A6900k/month
+- Mid GRC (NDPR-fluent): \u20A61.2M\u2013\u20A62.5M/month
+- Senior / Head of Compliance: \u20A63M\u2013\u20A68M/month + bonus
+
+GRC salaries jumped hard in Nigeria after NDPR enforcement intensified in 2024\u20132025. Every fintech with more than 50 staff now needs at least one.
+
+## Other paths worth naming
+
+- **Application security engineer** \u2014 \u20A61.5M\u2013\u20A64M/month. Rare in Nigeria; usually remote.
+- **Cloud security (AWS/Azure):** \u20A61.8M\u2013\u20A64.5M/month. Fastest-growing niche in 2026.
+- **Identity & access (IAM):** \u20A61M\u2013\u20A62.5M/month. Undervalued, easy to enter.
+
+## What actually gets you hired
+
+Nigerian cybersecurity hiring managers we placed talent with in 2026 asked for, in order:
+1. A home lab / TryHackMe or HackTheBox profile with real progress
+2. Working knowledge of Linux command line
+3. Basic scripting (Python or PowerShell)
+4. One recognized certification (Security+, or the role-specific one above)
+5. Ability to write a clean incident report or pentest report
+
+Notice what's missing: a Computer Science degree. We've placed graduates from mass comm, accounting, and even law into SOC roles inside 8 months.
+
+## Nigerian-specific advantage
+
+NDPR (Nigeria Data Protection Regulation) + the new CBN cybersecurity framework mean local compliance knowledge is a moat. A GRC officer who genuinely understands NITDA and CBN rules cannot be replaced by an offshore hire \u2014 that's why GRC pay is spiking.
+
+## How to start
+
+Our **Cybersecurity Bootcamp** takes complete beginners to SOC-ready in 20 weeks with a real Splunk lab, TryHackMe pathway, and NDPR module. [See the program](https://techfaculty.ng/) or read [why businesses need AI integration in Nigeria](https://techfaculty.ng/blog/why-businesses-need-ai-integration-nigeria) for adjacent skills.`,
+    date: "2026-06-30",
+    author: "Bill Achusim",
+    tags: ["Cybersecurity", "cybersecurity salary Nigeria", "SOC analyst Nigeria", "pentester Nigeria", "NDPR compliance"],
+    readTime: 7
+  },
+  {
+    slug: "how-to-get-remote-tech-job-from-nigeria-2026",
+    title: "How to Get a Remote Tech Job from Nigeria in 2026",
+    description: "The exact 2026 playbook for landing a remote tech job from Nigeria \u2014 where to apply, USD pay bands, payment rails, taxes, and the mistakes that cost offers.",
+    content: `# How to Get a Remote Tech Job from Nigeria in 2026 (Step-by-Step)
+
+*By Bill Achusim \xB7 Jun 28, 2026*
+
+In 2026, a remote tech job pays 3\u20135x the equivalent local role in Nigeria. This is the playbook our alumni use \u2014 the one that actually converts, not the recycled LinkedIn advice.
+
+## Step 1 \u2014 Pick a role foreign employers actually hire Nigerians for
+
+Not every role goes remote at scale. The ones that do, ranked by our 2026 Nigerian placement data:
+
+1. Frontend / Full-stack engineer (React, Next.js, TypeScript)
+2. Backend engineer (Node.js, Python, Go)
+3. Data engineer (dbt, Snowflake, BigQuery, Airflow)
+4. DevOps / SRE (AWS, Kubernetes, Terraform)
+5. AI/ML engineer (PyTorch + LLM ops)
+6. QA automation (Playwright, Cypress)
+7. Technical customer support / DevRel
+
+Roles that rarely go remote from Nigeria: entry-level UI design, project management, most product manager jobs (visa/timezone).
+
+## Step 2 \u2014 Fix your GitHub and LinkedIn first
+
+Before you apply anywhere:
+- **GitHub:** 5+ pinned repos, each with a real README, screenshots, and a live deploy link. No tutorial clones on the front page.
+- **LinkedIn:** headline includes your stack and "Remote" \u2014 e.g., "Senior React + TypeScript Engineer (Remote, Nigeria)". Full experience with metrics. Turn on "Open to work" (recruiter-only visibility).
+
+95% of remote offers close through these two profiles.
+
+## Step 3 \u2014 Where to actually apply from Nigeria
+
+Job boards our alumni actually get offers from, ranked:
+
+1. **Wellfound (AngelList)** \u2014 highest hit rate for Nigerian devs
+2. **YC's Work at a Startup** \u2014 brutal but pays well
+3. **Weworkremotely, Remote.co, Remotive**
+4. **LinkedIn Jobs** (filter: Remote, worldwide)
+5. **Turing, Andela Talent Cloud, TalentQL, Terawork** \u2014 vetted marketplaces
+6. **Discord communities** for your stack \u2014 surprisingly effective
+7. Direct DMs to founders whose products you've contributed to
+
+Skip Upwork/Fiverr for full-time roles \u2014 race to the bottom.
+
+## Step 4 \u2014 Nail the async / written interview
+
+Remote-first companies interview differently. Expect:
+- A take-home coding task (2\u20134 hours) \u2014 treat it like production code
+- An async written case study
+- Live pairing (1 hour, screen share)
+- A "values" call with a founder
+
+Nigerian candidates lose most often at the take-home. Not on correctness \u2014 on **communication**. Write a proper README. Explain trade-offs. Test your code. Deploy it.
+
+## Step 5 \u2014 Getting paid in USD from Nigeria (2026)
+
+Working rails in 2026:
+- **Deel, Remote.com, Rippling** \u2014 the gold standard; they file everything correctly
+- **Payoneer + domiciliary account** \u2014 reliable for smaller employers
+- **Grey, Geegpay, Cleva** \u2014 Nigerian-built for freelancer USD accounts
+- **Wise** \u2014 restricted for Nigerians; usable via a UK/US company setup
+- **Crypto (USDC via Bitnob, Yellow Card)** \u2014 legal grey area, faster settlement
+
+## Step 6 \u2014 Nigerian tax reality
+
+You owe personal income tax (PAYE via self-assessment) to your state IRS. In Lagos, that's LIRS; in Anambra, AIRS. Rates: ~7\u201324% progressive. FIRS handles VAT for freelancers over the \u20A625M threshold.
+
+File. It's cheap insurance for future visa applications and mortgages.
+
+## Common mistakes that cost Nigerian applicants offers
+
+1. Applying with a Gmail address named "kingchidera2007"
+2. Take-home submitted zipped without a README
+3. Asking about salary in the first message
+4. Video calls with terrible audio \u2014 buy a \u20A625k mic
+5. Not turning on the camera because "network"
+6. Claiming "senior" with 2 years of experience \u2014 foreign hiring managers will smell it in 5 minutes
+
+## Realistic timeline
+
+If you're already mid-level with a strong GitHub: 6\u201312 weeks of active applying to first offer. Junior: 4\u20139 months, and you should stack a local job in parallel for cashflow.
+
+## Ready?
+
+Our **Web Development** and **Data Analytics** bootcamps both include a dedicated remote-work module with mock async interviews. See [tech careers in Nigeria](https://techfaculty.ng/blog/how-to-start-tech-career-nigeria-2026) or [enroll here](https://techfaculty.ng/).`,
+    date: "2026-06-28",
+    author: "Bill Achusim",
+    tags: ["Tech Careers", "remote tech jobs Nigeria", "how to get remote job Nigeria", "USD tech jobs Nigeria", "Nigerian developer remote"],
+    readTime: 8
+  },
+  {
+    slug: "siwes-allowance-nigeria-2026-itf-rates",
+    title: "SIWES Allowance in Nigeria 2026: ITF Rates & Timeline",
+    description: "How much SIWES students earn in Nigeria in 2026 \u2014 ITF allowance amount, payment timeline, top-ups from IT hosts, and how to actually get paid on time.",
+    content: `# SIWES Allowance in Nigeria 2026: ITF Rates, Payment Timeline & Top-Ups
+
+*By Bill Achusim \xB7 Jun 25, 2026*
+
+Every SIWES intake, the same question floods our DMs: "How much will ITF pay me, and when?" Here's the clean 2026 answer, plus what Tech Faculty and other tech-forward IT hosts actually top up.
+
+## What ITF pays SIWES students in 2026
+
+The Industrial Training Fund (ITF) pays the official SIWES allowance directly to students. As of the 2026 review:
+
+- **Polytechnic / College of Education students:** \u20A625,000/month
+- **University students:** \u20A630,000/month
+- **Duration:** typically 4 or 6 months, depending on your school's SIWES calendar
+
+ITF has hinted at another review before end of 2026 \u2014 check your Institution-Based Supervisor (IBS) for updates.
+
+## When does the money actually land?
+
+Realistic 2026 timeline based on students we've hosted:
+
+1. Month 1\u20132 of IT: Nothing lands. Don't panic.
+2. Month 3\u20134: First tranche often arrives \u2014 sometimes covering 2\u20133 months at once.
+3. Post-IT (up to 6 months after): Backlog payments continue trickling in.
+
+If nothing has come by month 4, chase it in this order: your Industry-Based Supervisor (IBS) \u2192 SIWES Unit at your school \u2192 nearest ITF Area Office. Bring your SPE-1, ITF Form 8, and logbook.
+
+## What blocks your ITF payment (most common causes)
+
+1. **Wrong bank details** on your SPE-1 form \u2014 the #1 cause. Double-check BVN, account number, and name spelling *before* submission.
+2. **Missing ITF Form 8** from your employer at the end of IT.
+3. **Logbook not signed** by your industry supervisor weekly.
+4. **Placement not registered** with your school's SIWES coordinator *before* you resumed.
+5. **Course not on the ITF-approved SIWES list** \u2014 verify with your department.
+
+## Top-ups: what IT hosts actually pay in tech (2026)
+
+ITF's \u20A630k does not survive 2026 Lagos or Abuja living costs. Good tech hosts top up. Real ranges from Nigerian tech firms we track:
+
+| Host type | Monthly top-up (\u20A6) |
+|---|---|
+| Small Nigerian startup | 20,000 \u2013 50,000 |
+| Mid-size fintech / SaaS | 60,000 \u2013 150,000 |
+| Bank tech unit / telco | 80,000 \u2013 200,000 |
+| Foreign-funded / YC-backed | 150,000 \u2013 400,000 |
+| Tech Faculty (our SIWES track) | 40,000 \u2013 120,000 + free bootcamp seat |
+
+Some hosts also cover transport, lunch, or provide a laptop for the placement. Ask before you resume \u2014 most students are too shy and lose out.
+
+## Choosing a SIWES placement that actually pays (and teaches)
+
+In 2026, the best-paying SIWES placements in Nigerian tech share three traits:
+1. They put interns on real production work, not "shadowing."
+2. They have a written IT handbook / onboarding.
+3. They convert 20%+ of interns to graduate roles.
+
+Red flags: no laptop provided, no dedicated supervisor, "help around the office" style work, unpaid overtime.
+
+## How to get paid on time (checklist)
+
+- [ ] Register placement with your school SIWES unit *before* Day 1
+- [ ] Submit SPE-1 with correct BVN-matched account details
+- [ ] Keep weekly logbook signed
+- [ ] Get ITF Form 8 signed on your last day
+- [ ] Submit all forms to your school within 2 weeks of finishing
+
+Follow this and 80% of the delay problems disappear.
+
+## Learn more
+
+Read our full [What is SIWES \u2014 complete Nigerian guide](https://techfaculty.ng/blog/what-is-siwes-nigeria-complete-guide), or explore our [SIWES program](https://techfaculty.ng/siwes) \u2014 we host students across our Nnewi, Onitsha/Awada, Enugu, Aba, and Owerri centres with real project work plus top-ups.`,
+    date: "2026-06-25",
+    author: "Bill Achusim",
+    tags: ["SIWES & Internships", "SIWES allowance 2026", "ITF SIWES payment", "SIWES Nigeria", "tech internship Nigeria"],
+    readTime: 6
+  },
+  {
+    slug: "how-to-hire-developers-in-nigeria-2026",
+    title: "How to Hire Developers in Nigeria (2026): Rates & Vetting",
+    description: "A founder's guide to hiring developers in Nigeria in 2026 \u2014 real salary rates, how to vet, contract structures, retention, and the pitfalls that burn budgets.",
+    content: `# How to Hire Developers in Nigeria (2026): Rates, Vetting & Retention
+
+*By Bill Achusim \xB7 Jun 22, 2026*
+
+If you're a founder \u2014 Nigerian or foreign \u2014 trying to hire developers in Nigeria in 2026, this is the practical, no-nonsense playbook. Nigerian developer talent is world-class, but the hiring pitfalls are specific. Here's what we've learned running Tech Faculty and placing 300+ engineers into Nigerian and remote roles.
+
+## What Nigerian developers actually cost in 2026
+
+Full-time in-house rates, all-in cost per month:
+
+| Role | Junior | Mid | Senior |
+|---|---|---|---|
+| Frontend (React/Next) | \u20A6350k \u2013 700k | \u20A6900k \u2013 1.6M | \u20A62M \u2013 4M |
+| Backend (Node/Python) | \u20A6400k \u2013 800k | \u20A61M \u2013 1.8M | \u20A62.2M \u2013 4.5M |
+| Full-stack | \u20A6450k \u2013 900k | \u20A61.1M \u2013 2M | \u20A62.5M \u2013 5M |
+| Mobile (React Native/Flutter) | \u20A6400k \u2013 800k | \u20A61M \u2013 1.8M | \u20A62.2M \u2013 4M |
+| DevOps / SRE | \u20A6500k \u2013 1M | \u20A61.3M \u2013 2.5M | \u20A63M \u2013 6M |
+| Data engineer | \u20A6500k \u2013 1M | \u20A61.3M \u2013 2.5M | \u20A63M \u2013 6M |
+
+**Contract / project rates:** \u20A68,000 \u2013 \u20A645,000/hour depending on level. Anything above \u20A650k/hr, the person is almost always available for full-time roles instead.
+
+## Where to source (in order of hit rate for founders)
+
+1. **Referrals from developers you already trust** \u2014 highest quality, lowest cost
+2. **Tech Faculty, Semicolon, AltSchool alumni networks** \u2014 pre-vetted
+3. **Andela Talent Cloud, TalentQL, Terawork** \u2014 vetted marketplaces, pay a premium
+4. **LinkedIn direct search** \u2014 works, takes patience
+5. **Nigerian tech Twitter / Discord communities**
+6. **Jobberman, MyJobMag** \u2014 high volume, low signal; use only with clear filters
+
+Avoid Upwork/Fiverr for full-time hires \u2014 you'll pay more for less commitment.
+
+## A vetting process that works
+
+A 4-stage funnel that keeps false positives out:
+
+1. **Written screen (30 min)** \u2014 3 questions about their most recent project. Fake CVs die here.
+2. **Take-home (4\u20138 hours, paid \u20A620k\u201350k)** \u2014 a scoped, real-shaped problem. Paying signals seriousness both ways.
+3. **Live pairing (60 min)** \u2014 extend or debug their take-home. This catches ghost-writers.
+4. **Values / async call (30 min)** \u2014 how they communicate is how they'll work.
+
+Skip LeetCode gauntlets for anything below staff level. They filter for the wrong signal in Nigerian context.
+
+## Contract structures (Nigerian legal reality)
+
+- **Full-time employee** \u2014 you owe PAYE, pension (RSA), NHF, NSITF, ITF. Budget +18\u201322% on top of gross.
+- **Consultant / independent contractor** \u2014 cleaner, but be careful: the FIRS looks at working patterns, not just contract wording. If your "consultant" works only for you 40 hrs/week, tax authorities may reclassify.
+- **Foreign entity hiring from Nigeria:** use Deel, Remote.com, or Rippling. Do not try to pay via Western Union \u2014 it burns candidates.
+
+## Retention: why Nigerian developers actually leave
+
+In our exit-interview data across 2024\u20132026:
+1. **Career growth stalled** (46%) \u2014 no clear promotion path
+2. **Learning stagnation** (22%) \u2014 legacy stack, no new challenges
+3. **Pay fell behind USD-denominated peers** (18%)
+4. **Bad manager** (10%)
+5. **Relocation / study abroad** (4%)
+
+Salary is rarely #1. It's growth. Fix that and you'll keep senior Nigerian devs for 4+ years.
+
+## Pitfalls that burn foreign founders
+
+1. Underestimating the pay gap between "Nigerian rates" (marketing myth) and real market rates
+2. Hiring on a title inflation (someone calling themselves senior with 18 months of experience)
+3. Ignoring timezone \u2014 Lagos is 5\u20138 hours ahead of US; plan overlap deliberately
+4. Paying late, even once \u2014 your reputation dies on Nigerian tech Twitter in 48 hours
+5. Contracts written under US/UK law with no local counsel review
+
+## Ready to hire from a pre-vetted pool?
+
+Tech Faculty alumni are available for full-time, contract, and remote roles across web, mobile, data, AI, and cybersecurity. Reach us via [Business Partnerships](https://techfaculty.ng/business-partnerships).`,
+    date: "2026-06-20",
+    author: "Bill Achusim",
+    tags: ["Startups & Business", "how to hire developers Nigeria", "Nigerian developer rates", "hire Nigerian engineers", "founder Nigeria"],
+    readTime: 8
+  },
+  {
+    slug: "coding-classes-for-teenagers-nnewi-awada-2026",
+    title: "Coding Classes for Teenagers in Nnewi & Awada (2026)",
+    description: "The 2026 holiday coding bootcamp for teenagers in Nnewi, Awada, and Onitsha. Ages 10\u201317, JSS3 & SS3 friendly. Schedule, fees, and what your child will build.",
+    content: `# Coding Classes for Teenagers in Nnewi & Awada (2026 Holiday Bootcamp)
+
+*By Bill Achusim \xB7 Jun 18, 2026*
+
+Every long holiday, Nnewi and Awada parents ask the same question: "Where can my child actually learn to code \u2014 not just play games on a laptop?" Here's the honest 2026 answer, and what our Tech Faculty holiday bootcamp does differently.
+
+## Who this is for
+
+- Ages **10 to 17**
+- JSS students on long holiday
+- SS3 graduates waiting for JAMB/university
+- Any Anambra teenager who's curious about tech but doesn't know where to start
+
+No prior coding experience needed. A working laptop helps, but we have loaners on-site for the paid track.
+
+## The 2026 holiday tracks
+
+### Track 1 \u2014 Digital Foundations (Ages 10\u201313, 4 weeks)
+Typing, Google Workspace, Canva design, safe internet use, Scratch programming, Roblox Studio basics. Ends with each child publishing a Scratch game.
+
+### Track 2 \u2014 Junior Coder (Ages 12\u201315, 6 weeks)
+HTML, CSS, and beginner JavaScript. AI tools (safe use of ChatGPT, image generation). Each teen builds and deploys a personal website by graduation.
+
+### Track 3 \u2014 Teen Tech Pro (Ages 14\u201317, 8 weeks)
+Real web development: HTML, CSS, JavaScript, and an intro to React. Python for data. AI project work. Each participant ships a real portfolio site + one AI-powered mini-project.
+
+### Track 4 \u2014 SS3 Gap-Year Bootcamp (Ages 16\u201319, 12 weeks)
+Our full foundation curriculum, compressed for SS3 graduates waiting for university. Choose one specialisation: web development, data analytics, or AI. Certificate + portfolio + WAEC/JAMB-tutoring add-on.
+
+## Where and when
+
+**Primary centre:** Tech Faculty Nnewi (inside the Technology Incubation Centre, Nnewi).
+
+**Also running in:** Awada (Onitsha), Enugu, Aba, and Owerri.
+
+**2026 holiday intakes:**
+- August intake \u2014 registration open
+- December\u2013January intake \u2014 early-bird registration opens October
+
+Sessions run Monday\u2013Thursday, 10:00 AM \u2013 1:00 PM. Weekend-only options available for tracks 1 & 2.
+
+## Fees (2026)
+
+- Digital Foundations: \u20A645,000 (4 weeks)
+- Junior Coder: \u20A665,000 (6 weeks)
+- Teen Tech Pro: \u20A695,000 (8 weeks)
+- SS3 Gap-Year Bootcamp: \u20A6180,000 (12 weeks) \u2014 instalments available
+
+Sibling discount: 15% off the second and third child. Faculty ID holders (returning students): 20% off.
+
+## What makes this different from "computer classes"
+
+Most "computer training" centres in Nnewi and Anambra teach Microsoft Word and typing \u2014 useful in 2005, not in 2026. Our teen tracks are taught by working developers using the same tools professional Nigerian engineers use: VS Code, GitHub, Vercel, real AI APIs.
+
+Every teenager leaves with:
+1. A live GitHub account with their code
+2. A deployed project on a public URL they can share
+3. A Tech Faculty certificate
+4. A clear next-step roadmap
+
+## Safety and supervision
+
+- Maximum 15 students per class
+- All instructors DBS/character-checked
+- Parents get a weekly WhatsApp progress report
+- Structured lunch break with supervised environment
+- Pickup/dropoff verification for under-14s
+
+## Why teenagers in Anambra should not wait
+
+The developers earning \u20A62M+/month in Nigeria today mostly started coding between ages 12 and 16. Every long holiday your teen spends on TikTok is a compounding opportunity cost. One 8-week bootcamp at 14 changes a career trajectory.
+
+## Register
+
+Space is capped and August fills fast. See our [Nnewi campus location](https://techfaculty.ng/locations), read [how to start a tech career in Nigeria](https://techfaculty.ng/blog/how-to-start-tech-career-nigeria-2026), or [register on the main site](https://techfaculty.ng/). WhatsApp us for the current cohort form.`,
+    date: "2026-06-18",
+    author: "Bill Achusim",
+    tags: ["Tech Training for Teens", "coding classes for teenagers Nnewi", "holiday tech bootcamp Anambra", "teen coding Nigeria", "SS3 gap year Nigeria"],
+    readTime: 6
+  },
+  {
     slug: "ai-and-computer-vision-transforming-entrepreneurs-nigeria-2026",
     title: "AI and Computer Vision: Transforming Entrepreneurs in Nigeria 2026",
     description: "Nigerian entrepreneurs are harnessing AI and Computer Vision to transform their businesses. Discover how computer vision drives innovation, enhances security, and streamlines customer experiences.",

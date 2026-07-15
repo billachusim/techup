@@ -20,16 +20,19 @@ export default defineTool({
       .order("scheduled_at", { ascending: true })
       .limit(50);
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
-    const items = (data ?? []).map((l: { id: string; title: string; description: string | null; scheduled_at: string; duration_minutes: number | null; status: string; course_id: string; courses: { name: string } | null }) => ({
-      id: l.id,
-      title: l.title,
-      description: l.description,
-      scheduledAt: l.scheduled_at,
-      durationMinutes: l.duration_minutes,
-      status: l.status,
-      courseId: l.course_id,
-      courseName: l.courses?.name ?? null,
-    }));
+    const items = (data ?? []).map((l: { id: string; title: string; description: string | null; scheduled_at: string; duration_minutes: number | null; status: string; course_id: string; courses: Array<{ name: string }> | { name: string } | null }) => {
+      const course = Array.isArray(l.courses) ? l.courses[0] : l.courses;
+      return {
+        id: l.id,
+        title: l.title,
+        description: l.description,
+        scheduledAt: l.scheduled_at,
+        durationMinutes: l.duration_minutes,
+        status: l.status,
+        courseId: l.course_id,
+        courseName: course?.name ?? null,
+      };
+    });
     return { content: [{ type: "text", text: JSON.stringify(items, null, 2) }], structuredContent: { classes: items } };
   },
 });

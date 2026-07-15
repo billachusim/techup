@@ -3328,16 +3328,19 @@ var list_my_upcoming_classes_default = defineTool15({
     const nowIso = (/* @__PURE__ */ new Date()).toISOString();
     const { data, error } = await supabase.from("lectures").select("id,title,description,scheduled_at,duration_minutes,status,course_id,courses(name)").gte("scheduled_at", nowIso).eq("status", "scheduled").order("scheduled_at", { ascending: true }).limit(50);
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
-    const items = (data ?? []).map((l) => ({
-      id: l.id,
-      title: l.title,
-      description: l.description,
-      scheduledAt: l.scheduled_at,
-      durationMinutes: l.duration_minutes,
-      status: l.status,
-      courseId: l.course_id,
-      courseName: l.courses?.name ?? null
-    }));
+    const items = (data ?? []).map((l) => {
+      const course = Array.isArray(l.courses) ? l.courses[0] : l.courses;
+      return {
+        id: l.id,
+        title: l.title,
+        description: l.description,
+        scheduledAt: l.scheduled_at,
+        durationMinutes: l.duration_minutes,
+        status: l.status,
+        courseId: l.course_id,
+        courseName: course?.name ?? null
+      };
+    });
     return { content: [{ type: "text", text: JSON.stringify(items, null, 2) }], structuredContent: { classes: items } };
   }
 });

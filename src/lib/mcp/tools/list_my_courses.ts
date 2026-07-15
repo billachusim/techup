@@ -27,15 +27,18 @@ export default defineTool({
         progressMap[p.course_id] = p.progress_percentage;
       }
     }
-    const items = (enrolls ?? []).map((e: { course_id: string; status: string; enrollment_date: string; courses: { name: string; department: string | null; duration: string | null } | null }) => ({
-      courseId: e.course_id,
-      name: e.courses?.name ?? null,
-      department: e.courses?.department ?? null,
-      duration: e.courses?.duration ?? null,
-      status: e.status,
-      enrolledAt: e.enrollment_date,
-      progressPercentage: progressMap[e.course_id] ?? 0,
-    }));
+    const items = (enrolls ?? []).map((e: { course_id: string; status: string; enrollment_date: string; courses: Array<{ name: string; department: string | null; duration: string | null }> | { name: string; department: string | null; duration: string | null } | null }) => {
+      const course = Array.isArray(e.courses) ? e.courses[0] : e.courses;
+      return {
+        courseId: e.course_id,
+        name: course?.name ?? null,
+        department: course?.department ?? null,
+        duration: course?.duration ?? null,
+        status: e.status,
+        enrolledAt: e.enrollment_date,
+        progressPercentage: progressMap[e.course_id] ?? 0,
+      };
+    });
     return { content: [{ type: "text", text: JSON.stringify(items, null, 2) }], structuredContent: { courses: items } };
   },
 });

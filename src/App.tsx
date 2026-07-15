@@ -35,6 +35,8 @@ import TinyPeople from "./pages/TinyPeople";
 import LovablePage from "./pages/Lovable";
 import AdminCertificates from "./pages/AdminCertificates";
 import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
+import OAuthConsent from "./pages/OAuthConsent";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +70,8 @@ const App = () => (
             <Route path="/tinypeople" element={<TinyPeople />} />
             <Route path="/lovable" element={<LovablePage />} />
             <Route path="/admin/certificates" element={<AdminCertificates />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
             {/* Legacy WordPress redirects */}
             <Route path="/category/*" element={<Navigate to="/blog" replace />} />
             <Route path="/tag/*" element={<Navigate to="/blog" replace />} />

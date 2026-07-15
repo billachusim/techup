@@ -3053,8 +3053,9 @@ import { defineTool as defineTool6 } from "npm:@lovable.dev/mcp-js@0.22.2";
 import { z as z2 } from "npm:zod@^3.25.76";
 import { createClient as createClient2 } from "npm:@supabase/supabase-js@^2.79.0";
 async function fetchLikeCount(slug) {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY;
+  const env = globalThis.process?.env ?? {};
+  const url = env.SUPABASE_URL;
+  const key = env.SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return 0;
   const supabase = createClient2(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
   const { count } = await supabase.from("blog_post_likes").select("*", { count: "exact", head: true }).eq("post_slug", slug);

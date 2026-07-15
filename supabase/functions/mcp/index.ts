@@ -2997,8 +2997,9 @@ var blogPosts_default = blogPosts;
 
 // src/lib/mcp/tools/list_blog_posts.ts
 async function fetchLikeCounts(slugs) {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY;
+  const env = globalThis.process?.env ?? {};
+  const url = env.SUPABASE_URL;
+  const key = env.SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key || slugs.length === 0) return {};
   const supabase = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
   const { data, error } = await supabase.from("blog_post_likes").select("post_slug").in("post_slug", slugs);

@@ -4,8 +4,9 @@ import { createClient } from "@supabase/supabase-js";
 import blogPosts from "../../../data/blogPosts";
 
 async function fetchLikeCounts(slugs: string[]): Promise<Record<string, number>> {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY;
+  const env = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env ?? {};
+  const url = env.SUPABASE_URL;
+  const key = env.SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key || slugs.length === 0) return {};
   const supabase = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
   const { data, error } = await supabase.from("blog_post_likes").select("post_slug").in("post_slug", slugs);

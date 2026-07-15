@@ -93,6 +93,7 @@ const Blog = () => {
         {/* Category Filters — each badge is also a real link to /blog/category/<slug> for SEO */}
         <section className="px-4 pb-8">
           <div className="container mx-auto max-w-4xl flex flex-wrap gap-2 justify-center">
+            <h2 className="sr-only">Browse by Category</h2>
             <Badge
               variant={activeCategory === null ? "default" : "outline"}
               className="cursor-pointer px-4 py-1.5 text-sm"
@@ -137,6 +138,7 @@ const Blog = () => {
         {/* Posts Grid */}
         <section className="px-4 pb-20">
           <div className="container mx-auto max-w-4xl">
+            <h2 className="sr-only">Recent Articles</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {filtered.map((post) => {
                 const cat = getCategoryByName(post.tags[0]);

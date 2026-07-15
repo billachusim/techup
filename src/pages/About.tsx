@@ -45,7 +45,7 @@ const About = () => {
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>About Us - Tech Faculty NG | Our Mission & Story</title>
-        <meta name="description" content="Learn about Tech Faculty NG — licensed by the Federal Ministry of Science, Technology & Innovation via NBTI. Training the next generation of tech professionals from Nnewi, Anambra State, Nigeria." />
+        <meta name="description" content="Tech Faculty NG — licensed by FMSTI via NBTI. We train, certify, and place the next generation of Nigerian tech professionals from Nnewi, Anambra State." />
         <meta property="og:title" content="About Us - Tech Faculty NG | Our Mission & Story" />
         <meta property="og:description" content="Licensed by FMSTI via NBTI. Training the next generation of tech professionals in Nigeria from Nnewi, Anambra State." />
         <meta property="og:type" content="website" />

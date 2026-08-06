@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import { ArrowRight, MessageCircle, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import aiForEverything from "@/assets/ai-for-everything.png.asset.json";
-import nnewiTechMeetup from "@/assets/nnewi-tech-meetup.jpg.asset.json";
+import aiForEverything from "@/assets/ai-for-everything.jpg";
+import nnewiTechMeetup from "@/assets/nnewi-tech-meetup.jpg";
 import siwesCover from "@/assets/siwes-featured.jpg";
 
 type Program = {
@@ -35,7 +35,7 @@ const programs: Program[] = [
     badge: "Cohort forming",
     description:
       "Our AI Agents & Data Training Fellowship. Use AI agents to solve real-world tasks, train the models powering intelligent systems and robotics, and earn a certificate on completion.",
-    image: aiForEverything.url,
+    image: aiForEverything,
     alt: "AI for Everything — AI Agents and Data Training Fellowship",
     cta: "Join the AI Fellowship",
     href: "https://chat.whatsapp.com/FWxf8PpzZcDG9czk455VI6",
@@ -47,7 +47,7 @@ const programs: Program[] = [
     badge: "Monthly",
     description:
       "The monthly gathering of the Nnewi tech community — product demos, lightning talks, networking, and collaboration at Tech Faculty HQ.",
-    image: nnewiTechMeetup.url,
+    image: nnewiTechMeetup,
     alt: "Nnewi Tech Meetup community event poster",
     cta: "See Event Details",
     href: "/events#nnewi-tech-meetup",

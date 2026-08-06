@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -54,15 +55,27 @@ const upcomingEvents = [
     description: "Build a full website from scratch in one weekend. Perfect for beginners and aspiring developers.",
   },
   {
-    title: "Tech Faculty Community Meetup",
+    id: "nnewi-tech-meetup",
+    title: "Nnewi Tech Meetup",
     date: "Monthly",
     location: "Tech Faculty HQ, Nnewi",
     type: "Meetup",
-    description: "Monthly gathering of the tech community — demos, networking, lightning talks, and collaboration.",
+    description: "Monthly gathering of the Nnewi tech community — product demos, networking, lightning talks, and collaboration.",
+    ctaLabel: "Reserve my seat",
+    ctaHref: "https://wa.me/2348068597140?text=Hello%2C%20please%20add%20me%20to%20the%20next%20Nnewi%20Tech%20Meetup",
   },
 ];
 
 const Events = () => {
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (!hash) return;
+    const timer = window.setTimeout(() => {
+      document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 150);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
@@ -136,7 +149,7 @@ const Events = () => {
             <h2 className="text-3xl font-bold text-center mb-12">Upcoming Events</h2>
             <div className="space-y-6">
               {upcomingEvents.map((event, idx) => (
-                <Card key={idx} className="border-2 hover:shadow-lg transition-all duration-300">
+                <Card key={idx} id={(event as { id?: string }).id} className="border-2 hover:shadow-lg transition-all duration-300 scroll-mt-28">
                   <CardContent className="p-6">
                     <div className="flex flex-col md:flex-row md:items-start gap-4">
                       <div className="flex-1">
@@ -157,8 +170,12 @@ const Events = () => {
                         </div>
                       </div>
                       <Button variant="outline" size="sm" className="shrink-0" asChild>
-                        <a href="https://wa.me/2348068597140?text=I'm%20interested%20in%20the%20event%3A%20" target="_blank" rel="noopener noreferrer">
-                          Register Interest
+                        <a
+                          href={(event as { ctaHref?: string }).ctaHref ?? "https://wa.me/2348068597140?text=I'm%20interested%20in%20the%20event%3A%20"}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {(event as { ctaLabel?: string }).ctaLabel ?? "Register Interest"}
                         </a>
                       </Button>
                     </div>

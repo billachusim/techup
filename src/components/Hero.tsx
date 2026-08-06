@@ -1,6 +1,8 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
+
+const COMMUNITY_WHATSAPP_URL = "https://chat.whatsapp.com/D8kuxWVZRTKKeAx6ERjSqc";
 
 const taglines = [
   "Learn Today. Earn Tomorrow.",
@@ -84,16 +86,31 @@ const Hero = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
           <Button
             size="lg"
+            asChild
+            className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] hover:opacity-90 shadow-lg font-semibold text-background"
+          >
+            <a href={COMMUNITY_WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+              <MessageCircle className="mr-2" size={20} />
+              Join Our WhatsApp Community
+            </a>
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
             onClick={() => {
               const element = document.getElementById("get-started");
               element?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] hover:opacity-90 shadow-lg font-semibold text-background"
+            className="font-semibold"
           >
             Tech Up Now
             <ArrowRight className="ml-2" size={20} />
           </Button>
         </div>
+
+        <p className="text-sm text-muted-foreground">
+          Free to join — get program updates, events, and job alerts first.
+        </p>
       </div>
     </section>
   );

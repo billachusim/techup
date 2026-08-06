@@ -76,7 +76,7 @@ const Hero = () => {
 
         {/* Subheading */}
         <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Over 5,000 students trained across 12 industry-recognized courses since 2022.
+          Over 6,000 students trained across 12 industry-recognized courses since 2022.
           87% of graduates secure tech roles within six months.
           Our curriculum is aligned with international industry standards and global employer requirements.
           Our top students start earning through internships as early as month 3.

@@ -1,10 +1,10 @@
 import { GraduationCap, TrendingUp, BookOpen, Award } from "lucide-react";
 
 const stats = [
-  { icon: GraduationCap, value: "5,000+", label: "Students Trained" },
+  { icon: GraduationCap, value: "6,000+", label: "Students Trained" },
   { icon: TrendingUp, value: "87%", label: "Employed Within 6 Months" },
   { icon: BookOpen, value: "12", label: "Industry-Recognized Courses" },
-  { icon: Award, value: "3+", label: "Years Training Excellence" },
+  { icon: Award, value: "4+", label: "Years Training Excellence" },
 ];
 
 const StatsBar = () => {

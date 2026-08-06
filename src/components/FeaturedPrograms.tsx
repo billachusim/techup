@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { ArrowRight, MessageCircle, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import JoinWhatsAppButton from "@/components/JoinWhatsAppButton";
+import { AI_FELLOWSHIP_WHATSAPP_URL } from "@/lib/whatsapp";
 import aiForEverything from "@/assets/ai-for-everything.jpg";
 import nnewiTechMeetup from "@/assets/nnewi-tech-meetup.jpg";
 import siwesCover from "@/assets/siwes-featured.jpg";
@@ -38,7 +40,7 @@ const programs: Program[] = [
     image: aiForEverything,
     alt: "AI for Everything — AI Agents and Data Training Fellowship",
     cta: "Join the AI Fellowship",
-    href: "https://chat.whatsapp.com/FWxf8PpzZcDG9czk455VI6",
+    href: AI_FELLOWSHIP_WHATSAPP_URL,
     external: true,
     icon: MessageCircle,
   },
@@ -92,15 +94,16 @@ const FeaturedPrograms = () => {
                   <p className="text-sm text-muted-foreground flex-1">{program.description}</p>
                   <div className="mt-6">
                     {program.external ? (
-                      <Button
+                      <JoinWhatsAppButton
+                        url={program.href}
+                        groupName={program.title}
                         className="w-full bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background font-semibold hover:opacity-90"
-                        asChild
                       >
-                        <a href={program.href} target="_blank" rel="noopener noreferrer">
+                        <span className="flex items-center justify-center">
                           <Icon className="mr-2" size={18} />
                           {program.cta}
-                        </a>
-                      </Button>
+                        </span>
+                      </JoinWhatsAppButton>
                     ) : (
                       <Button variant="outline" className="w-full font-semibold" asChild>
                         <Link to={program.href}>

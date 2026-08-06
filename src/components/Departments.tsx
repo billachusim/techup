@@ -1,4 +1,6 @@
 import { useState } from "react";
+import JoinWhatsAppButton from "@/components/JoinWhatsAppButton";
+import { COMMUNITY_WHATSAPP_URL } from "@/lib/whatsapp";
 import {
   Code,
   Database,
@@ -488,25 +490,21 @@ const Departments = () => {
                               <Download size={14} className="mr-2" />
                               Download Curriculum
                             </Button>
-                            <Button
+                            <JoinWhatsAppButton
                               size="sm"
+                              url={COMMUNITY_WHATSAPP_URL}
+                              groupName="the Tech Faculty WhatsApp community"
                               className="flex-1"
                               style={{
                                 backgroundColor: dept.color,
                                 color: "white",
                               }}
-                              asChild
                             >
-                              <a
-                                href="https://chat.whatsapp.com/D8kuxWVZRTKKeAx6ERjSqc"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center justify-center gap-2"
-                              >
+                              <span className="flex items-center justify-center gap-2">
                                 Join Community
                                 <MessageCircle size={14} />
-                              </a>
-                            </Button>
+                              </span>
+                            </JoinWhatsAppButton>
                           </div>
                         </div>
                       </AccordionContent>

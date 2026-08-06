@@ -589,9 +589,15 @@ const Dashboard = () => {
                   }}>
                     <MessageCircle className="mr-2" size={18} />Contact Support
                   </Button>
-                  <Button variant="outline" onClick={() => window.open("https://chat.whatsapp.com/D8kuxWVZRTKKeAx6ERjSqc", "_blank")}>
-                    <Users className="mr-2" size={18} />Community Hub
-                  </Button>
+                  <JoinWhatsAppButton
+                    variant="outline"
+                    url={COMMUNITY_WHATSAPP_URL}
+                    groupName="the Tech Faculty WhatsApp community"
+                  >
+                    <span className="flex items-center justify-center">
+                      <Users className="mr-2" size={18} />Community Hub
+                    </span>
+                  </JoinWhatsAppButton>
                 </div>
               </CardContent>
             </Card>

@@ -1,5 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { useState, useEffect } from "react";
+import JoinWhatsAppButton from "@/components/JoinWhatsAppButton";
+import { COMMUNITY_WHATSAPP_URL } from "@/lib/whatsapp";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

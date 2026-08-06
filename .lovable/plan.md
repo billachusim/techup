@@ -1,42 +1,42 @@
-# Add one high-ranking SEO blog per category
+# WhatsApp-First Landing Page + Featured Programs
 
-Add **8 new blog posts** to `src/data/blogPosts.ts` — one for each of the 8 categories in `src/data/blogCategories.ts`. Each post targets a high-search-volume, Nigeria-specific long-tail keyword and follows the existing `BlogPost` schema (`slug`, `title`, `description`, `content`, `date`, `author`, `tags`, `readTime`).
+## Goal
+Make joining the WhatsApp community the primary action on the landing page, and surface three flagship offerings (SIWES, AI for Everything, Nnewi Tech Meetup) in a new "Featured Programs" section right under the stats bar.
 
-## Planned posts (one per category)
+## 1. Hero: dual CTA
+- Keep "Tech Up Now" (scrolls to Get Started / signup) as the secondary button.
+- Add a new primary CTA: **"Join Our WhatsApp Community"** linking to the main community group (`https://chat.whatsapp.com/D8kuxWVZRTKKeAx6ERjSqc`), opens in a new tab, WhatsApp icon, gradient styling so it reads as the dominant action.
+- Add a small trust line under the buttons, e.g. "Free to join — get program updates, events and job alerts first".
 
-| # | Category | Target keyword | Working title |
-|---|---|---|---|
-| 1 | Artificial Intelligence | "how to learn AI in Nigeria" | How to Learn AI in Nigeria (2026 Roadmap): From Zero to Job-Ready |
-| 2 | Web & Software Development | "React developer salary Nigeria" | React Developer Salary in Nigeria 2026: Junior to Senior Benchmarks |
-| 3 | Data & Analytics | "Power BI vs Tableau Nigeria" | Power BI vs Tableau in Nigeria 2026: Which One Gets You Hired Faster? |
-| 4 | Cybersecurity | "cybersecurity salary Nigeria" | Cybersecurity Salary in Nigeria 2026: SOC, Pentest & GRC Pay Bands |
-| 5 | Tech Careers | "how to get a remote tech job from Nigeria" | How to Get a Remote Tech Job from Nigeria in 2026 (Step-by-Step) |
-| 6 | SIWES & Internships | "SIWES allowance 2026" | SIWES Allowance in Nigeria 2026: ITF Rates, Payment Timeline & Top-Ups |
-| 7 | Startups & Business | "how to hire developers in Nigeria" | How to Hire Developers in Nigeria (2026): Rates, Vetting & Retention |
-| 8 | Tech Training for Teens | "coding classes for teenagers in Nnewi" | Coding Classes for Teenagers in Nnewi & Awada (2026 Holiday Bootcamp) |
+## 2. New "Featured Programs" section
+Placed on the homepage directly after the stats bar (5,000+ / 87%) and before How It Works.
 
-## Content rules per post
+Three cards, each with a cover image, title, short description, a meta badge ("Hot", "Monthly", "Cohort forming"), and one CTA:
 
-- **Length**: 900–1,400 words of real, non-fluff markdown (matches existing post depth).
-- **Structure**: H1 → byline → intro → 4–7 H2 sections → clear CTA to the relevant Tech Faculty program.
-- **SEO**:
-  - `title` ≤ 60 chars where possible, contains the primary keyword.
-  - `description` 150–160 chars, keyword + benefit + Nigeria context.
-  - `tags[0]` MUST equal the category `name` exactly (required by `getCategoryByName`).
-  - `tags[1..4]` = 3–4 long-tail supporting keywords.
-- **E-E-A-T**: concrete Nigerian numbers (₦ salary bands, city names, ITF/NDPR references) — no generic global filler.
-- **Date**: staggered recent 2026 dates so they sort naturally at the top of `/blog`.
-- **Author**: `Bill Achusim` (matches existing voice).
-- **Read time**: computed roughly at ~200 wpm.
+| Card | Description focus | CTA |
+|---|---|---|
+| SIWES / Industrial Training | IT placements for university students — Learn & Pay or Tutor & Earn tracks. Listed first, badged "Hot". | "Explore SIWES" -> `/siwes` |
+| AI for Everything | AI Agents & Data Training Fellowship — use AI agents for real tasks, train AI/robotics models, certificate on completion. | "Join the AI Fellowship" -> `https://chat.whatsapp.com/FWxf8PpzZcDG9czk455VI6` (new tab) |
+| Nnewi Tech Meetup | Monthly community meetup — demos, lightning talks, networking at Tech Faculty HQ. | "See Event Details" -> `/events#nnewi-tech-meetup` |
 
-## Files touched
+Cover images: use the two artworks you just uploaded (AI for Everything banner, Nnewi Tech Meetup poster) as card covers via Lovable Assets; generate a matching SIWES cover in the same green/white brand style.
 
-- `src/data/blogPosts.ts` — append 8 new post objects at the top of the array (newest-first ordering is handled by `getAllBlogPosts` sort, but placing them first keeps the source readable).
+Built from a data array inside the component so new featured programs can be added later by appending one object.
 
-No other files change. Category pages, `/blog`, JSON-LD schema, sitemap generation, and the MCP `list_blog_posts` / `get_blog_post` tools all pick these up automatically because they read from `blogPosts` + `blogCategories`.
+## 3. Events page tie-in
+- Rename the existing "Tech Faculty Community Meetup" entry to **Nnewi Tech Meetup**, give its card an `id="nnewi-tech-meetup"` anchor, and add a WhatsApp CTA on that card ("Reserve my seat") pre-filled with a message asking to be added to the next meetup.
 
-## Out of scope
+## 4. Consistency
+- Header and footer untouched.
+- New section gets a proper `h2` ("Featured Programs"); existing homepage metadata and JSON-LD stay as they are.
 
-- No new categories.
-- No image assets (existing posts are text-only).
-- No changes to routing, SEO components, or the MCP server.
+## Technical notes
+- New component `src/components/FeaturedPrograms.tsx`, rendered in `src/pages/Index.tsx` between `<StatsBar />` and `<HowItWorks />`.
+- Hero CTA change in `src/components/Hero.tsx`; WhatsApp link as an `<a>` inside `Button asChild` with `target="_blank" rel="noopener noreferrer"`.
+- Uploaded images registered as CDN asset pointers in `src/assets/` (no binaries committed); SIWES cover generated.
+- Colors via existing semantic tokens / brand gradient — no hardcoded hex.
+- Events change is presentational only, in `src/pages/Events.tsx`.
+
+## Assumptions (say the word to change)
+- SIWES card first since it currently drives the most search traffic.
+- Meetup card links to the events page anchor rather than straight to WhatsApp, per your description.

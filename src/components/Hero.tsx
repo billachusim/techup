@@ -1,8 +1,8 @@
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-
-const COMMUNITY_WHATSAPP_URL = "https://chat.whatsapp.com/D8kuxWVZRTKKeAx6ERjSqc";
+import JoinWhatsAppButton from "@/components/JoinWhatsAppButton";
+import { COMMUNITY_WHATSAPP_URL } from "@/lib/whatsapp";
 
 const taglines = [
   "Learn Today. Earn Tomorrow.",
@@ -84,16 +84,12 @@ const Hero = () => {
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-          <Button
+          <JoinWhatsAppButton
             size="lg"
-            asChild
+            url={COMMUNITY_WHATSAPP_URL}
+            groupName="the Tech Faculty WhatsApp community"
             className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] hover:opacity-90 shadow-lg font-semibold text-background"
-          >
-            <a href={COMMUNITY_WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="mr-2" size={20} />
-              Join Our WhatsApp Community
-            </a>
-          </Button>
+          />
           <Button
             size="lg"
             variant="outline"

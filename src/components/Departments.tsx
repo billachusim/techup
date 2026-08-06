@@ -1,4 +1,6 @@
 import { useState } from "react";
+import JoinWhatsAppButton from "@/components/JoinWhatsAppButton";
+import { COMMUNITY_WHATSAPP_URL } from "@/lib/whatsapp";
 import {
   Code,
   Database,

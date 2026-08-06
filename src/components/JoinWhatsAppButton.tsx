@@ -99,7 +99,7 @@ const JoinWhatsAppButton = ({
                 {copied ? <Check className="mr-2" size={16} /> : <Copy className="mr-2" size={16} />}
                 {copied ? "Link copied" : "Copy invite link"}
               </Button>
-              <Button variant="ghost" className="w-full" asChild>
+              <Button variant="secondary" className="w-full" asChild>
                 <a href={url} target="_blank" rel="noopener noreferrer">
                   <ExternalLink className="mr-2" size={16} />
                   Open in browser instead

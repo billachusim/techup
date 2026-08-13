@@ -383,6 +383,81 @@ export type Database = {
         }
         Relationships: []
       }
+      jobs: {
+        Row: {
+          company: string
+          country: string | null
+          created_at: string
+          description: string
+          employment_type: string
+          first_seen_at: string
+          id: string
+          is_expired: boolean
+          is_remote: boolean
+          last_seen_at: string
+          location: string | null
+          posted_at: string | null
+          salary_currency: string | null
+          salary_max: number | null
+          salary_min: number | null
+          salary_unit: string | null
+          slug: string
+          source_platform: string
+          source_url: string
+          tags: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          company: string
+          country?: string | null
+          created_at?: string
+          description: string
+          employment_type?: string
+          first_seen_at?: string
+          id?: string
+          is_expired?: boolean
+          is_remote?: boolean
+          last_seen_at?: string
+          location?: string | null
+          posted_at?: string | null
+          salary_currency?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          salary_unit?: string | null
+          slug: string
+          source_platform: string
+          source_url: string
+          tags?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          company?: string
+          country?: string | null
+          created_at?: string
+          description?: string
+          employment_type?: string
+          first_seen_at?: string
+          id?: string
+          is_expired?: boolean
+          is_remote?: boolean
+          last_seen_at?: string
+          location?: string | null
+          posted_at?: string | null
+          salary_currency?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          salary_unit?: string | null
+          slug?: string
+          source_platform?: string
+          source_url?: string
+          tags?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       lectures: {
         Row: {
           course_id: string

@@ -26,6 +26,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import BlogCategory from "./pages/BlogCategory";
 import Careers from "./pages/Careers";
+import JobDetail from "./pages/JobDetail";
 import Dashboard from "./pages/Dashboard";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import Products from "./pages/Products";
@@ -62,6 +63,7 @@ const App = () => (
             <Route path="/blog/category/:slug" element={<BlogCategory />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/careers" element={<Careers />} />
+            <Route path="/careers/jobs/:slug" element={<JobDetail />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="/products" element={<Products />} />

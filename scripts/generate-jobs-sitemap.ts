@@ -8,8 +8,19 @@ const SITEMAP = resolve("public/sitemap.xml");
 const START = "  <!-- JOBS:START -->";
 const END = "  <!-- JOBS:END -->";
 
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
-const SUPABASE_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+function envFromFile(key: string): string | undefined {
+  try {
+    const line = readFileSync(resolve(".env"), "utf8")
+      .split("\n")
+      .find((l) => l.trim().startsWith(`${key}=`));
+    return line?.slice(line.indexOf("=") + 1).trim().replace(/^["']|["']$/g, "");
+  } catch {
+    return undefined;
+  }
+}
+
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? envFromFile("VITE_SUPABASE_URL");
+const SUPABASE_KEY = process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? envFromFile("VITE_SUPABASE_PUBLISHABLE_KEY");
 
 async function fetchJobSlugs(): Promise<{ slug: string; last_seen_at: string }[]> {
   if (!SUPABASE_URL || !SUPABASE_KEY) return [];

@@ -12,3 +12,6 @@ verify_jwt = false
 [functions.faculty-ai-chat]
 verify_jwt = false
 
+[functions.scrape-jobs]
+verify_jwt = false
+

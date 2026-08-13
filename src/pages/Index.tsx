@@ -5,7 +5,7 @@ import StatsBar from "@/components/StatsBar";
 import FeaturedPrograms from "@/components/FeaturedPrograms";
 import HowItWorks from "@/components/HowItWorks";
 import Departments from "@/components/Departments";
-import Companies from "@/components/Companies";
+import LatestJobs from "@/components/LatestJobs";
 import Testimonials from "@/components/Testimonials";
 import Clarity from "@/components/Clarity";
 import FacultyDiscount from "@/components/FacultyDiscount";
@@ -117,7 +117,7 @@ const Index = () => {
         <FeaturedPrograms />
         <HowItWorks />
         <Departments />
-        <Companies />
+        <LatestJobs />
         <Testimonials />
         <ServicesSection />
         <Pricing />

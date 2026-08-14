@@ -88,6 +88,9 @@ const AUDIENCE_HINTS = [
   "online", "virtual", "remote", "worldwide", "global",
 ];
 
+/** URL shapes that are articles or news rather than an event registration page. */
+const NON_EVENT_URL = /\/(brandpress|news|blog|press-release|articles?)\//i;
+
 function slugify(input: string): string {
   return input
     .toLowerCase()

@@ -5,13 +5,13 @@ import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock, ArrowRight, Heart } from "lucide-react";
-import { getAllBlogPosts } from "@/data/blogPosts";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { blogCategories, getCategoryByName } from "@/data/blogCategories";
 import { useBlogLikeCounts } from "@/hooks/useBlogLikeCounts";
+import { useAllBlogPosts } from "@/hooks/useBlogPostsData";
 
 const Blog = () => {
-  const sortedPosts = useMemo(() => getAllBlogPosts(), []);
+  const { posts: sortedPosts } = useAllBlogPosts();
   const categories = blogCategories;
   const likeCounts = useBlogLikeCounts();
 

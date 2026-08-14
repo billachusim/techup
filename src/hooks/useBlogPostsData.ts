@@ -16,6 +16,11 @@ type DbPost = {
   published_at: string;
 };
 
+/** Generated posts repeat the title as an H1; the page renders its own H1. */
+function stripLeadingH1(markdown: string): string {
+  return markdown.replace(/^\s*#\s+.*\n+/, "");
+}
+
 function toBlogPost(row: DbPost): BlogPost {
   const minutes = parseInt(row.read_time, 10);
   const tags = row.tags?.length ? row.tags : [row.category];
@@ -23,7 +28,7 @@ function toBlogPost(row: DbPost): BlogPost {
     slug: row.slug,
     title: row.title,
     description: row.description,
-    content: row.content,
+    content: stripLeadingH1(row.content),
     date: row.published_at,
     author: row.author || "Tech Faculty NG",
     tags: tags[0] === row.category ? tags : [row.category, ...tags],

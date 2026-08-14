@@ -20,6 +20,7 @@ import TechStore from "./pages/TechStore";
 import BusinessPartnerships from "./pages/BusinessPartnerships";
 import SchoolCollaborations from "./pages/SchoolCollaborations";
 import Events from "./pages/Events";
+import EventDetail from "./pages/EventDetail";
 import SIWES from "./pages/SIWES";
 import About from "./pages/About";
 import Blog from "./pages/Blog";
@@ -60,6 +61,7 @@ const App = () => (
             <Route path="/business-partnerships" element={<BusinessPartnerships />} />
             <Route path="/school-collaborations" element={<SchoolCollaborations />} />
             <Route path="/events" element={<Events />} />
+            <Route path="/events/:slug" element={<EventDetail />} />
             <Route path="/siwes" element={<SIWES />} />
             <Route path="/about" element={<About />} />
             <Route path="/blog" element={<Blog />} />

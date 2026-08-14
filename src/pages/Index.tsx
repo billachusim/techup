@@ -4,7 +4,7 @@ import Hero from "@/components/Hero";
 import StatsBar from "@/components/StatsBar";
 import FeaturedPrograms from "@/components/FeaturedPrograms";
 import HowItWorks from "@/components/HowItWorks";
-import Departments from "@/components/Departments";
+import Departments from "@/components/DepartmentsSection";
 import LatestJobs from "@/components/LatestJobs";
 import Testimonials from "@/components/Testimonials";
 import Clarity from "@/components/Clarity";

@@ -18,6 +18,7 @@ Tech Faculty NG trains, certifies, and employs the next generation of African te
 - [Tech Store](/tech-store): Laptops, gadgets, and learning gear with Faculty ID member discounts.
 - [Verify Certificate](/verify): Public certificate verification portal.
 - [Locations](/locations): Tech Faculty campuses across Nigeria inside Technology Incubation Centres.
+- [Tech Faculty Nnewi](/locations/nnewi): Courses, SIWES placement, teen holiday bootcamps and events in Nnewi.
 - [Blog](/blog): Tech careers, bootcamp guides, and industry insights for Nigeria.
 
 ## Blog

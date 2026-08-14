@@ -3,12 +3,15 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Monitor, Apple, Smartphone } from "lucide-react";
-import palmshopPreview from "@/assets/palmshop-preview.jpg";
+import { ExternalLink, Smartphone } from "lucide-react";
+import dearClaireCover from "@/assets/dear-claire-cover.png.asset.json";
+import aiclopediaCover from "@/assets/aiclopedia-cover.png.asset.json";
+import alterEgoCover from "@/assets/alter-ego-cover.png.asset.json";
+import eavesdropCover from "@/assets/eavesdrop-cover.png.asset.json";
 import { Link } from "react-router-dom";
 import { Sparkles } from "lucide-react";
 
-type Platform = "playstore" | "appstore" | "web" | "windows" | "mac";
+type Platform = "playstore" | "appstore";
 
 interface Product {
   name: string;
@@ -18,9 +21,6 @@ interface Product {
   links: {
     playstore?: string;
     appstore?: string;
-    web?: string;
-    windows?: string;
-    mac?: string;
   };
   accent: string;
   previewImage?: string;
@@ -32,86 +32,61 @@ interface Product {
 const products: Product[] = [
   {
     name: "Dear Claire",
-    tagline: "Secret Confession — Anonymous Diary",
+    tagline: "Secret Diary Chat",
     description:
-      "Open up. Write or record your daily situations and get advice in an anonymous secret diary. Or be like Claire — follow someone's diary sessions and comment positive advice to earn Loves convertible to cash.",
+      "Speak freely, get real advice, feel understood. Write or record your day in a 100% anonymous secret diary and receive kind, honest perspectives. Or be like Claire — follow other diaries, give positive advice, and earn Loves you can convert to cash.",
     platforms: ["playstore", "appstore"],
     links: {
       playstore: "https://play.google.com/store/apps/details?id=com.mobymagic.clairediary",
-      appstore: "#",
+      appstore: "https://apps.apple.com/ng/app/dear-claire-secret-diary-chat/id1635333304",
     },
     accent: "from-pink-500 to-rose-600",
+    previewImage: dearClaireCover.url,
     rating: "4.5★",
-    downloads: "10,000+",
+    downloads: "1M+",
     developer: "Social Faculty",
   },
   {
     name: "Alter Ego",
-    tagline: "Know All Yourselves",
+    tagline: "Private Self Map",
     description:
-      "You are not one personality — you are many. Discover who's running your life today. Alter Ego uses localised intelligence to reveal your strongest alter egos and lets them guide you.",
+      "You are not one personality — you are many. Map your inner identities across 8 key dimensions, consult your inner council before you decide, and check in daily. 100% local: no account, no cloud, no tracking.",
     platforms: ["playstore", "appstore"],
     links: {
       appstore: "https://apps.apple.com/app/alter-ego-know-all-yourselves/id6759404823",
-      playstore: "#",
+      playstore: "https://play.google.com/store/apps/details?id=com.socialfaculty.alter_ego",
     },
     accent: "from-violet-500 to-purple-600",
+    previewImage: alterEgoCover.url,
     developer: "Social Faculty",
   },
   {
     name: "Eavesdrop",
-    tagline: "Live Conversations",
+    tagline: "Live Stories",
     description:
-      "Tune into live conversations, discover trending topics, and engage with real-time discussions happening around you. A new way to connect and communicate.",
+      "Some conversations weren't meant for you. Listen live to real people, join thousands of rooms on every topic, raise your hand to speak, or book and host your own conversation.",
     platforms: ["playstore", "appstore"],
     links: {
-      playstore: "#",
-      appstore: "#",
+      playstore: "https://play.google.com/store/apps/details?id=com.socialfaculty.eavesdrop",
+      appstore: "https://apps.apple.com/us/app/eavesdrop-live-stories/id6759225893",
     },
     accent: "from-emerald-500 to-teal-600",
+    previewImage: eavesdropCover.url,
     developer: "Social Faculty",
   },
   {
-    name: "AiClopedia",
+    name: "AI Clopedia",
     tagline: "Ask AI Anything",
     description:
-      "Your AI-powered encyclopedia — explore, discover, and learn about any topic with intelligent answers. A gateway to the world of knowledge powered by artificial intelligence.",
+      "Your AI-powered encyclopedia. Browse featured questions, get answers the way you'll never forget, see an image for every question, and follow your curiosity through your own question history.",
     platforms: ["playstore", "appstore"],
     links: {
-      playstore: "#",
-      appstore: "#",
+      playstore: "https://play.google.com/store/apps/details?id=com.socialfaculty.AiClopedia",
+      appstore: "https://apps.apple.com/us/app/ai-clopedia-ask-ai-anything/id6447000971",
     },
     accent: "from-blue-500 to-cyan-600",
+    previewImage: aiclopediaCover.url,
     developer: "Social Faculty",
-  },
-  {
-    name: "PalmShop.ng",
-    tagline: "Integrated POS & Payment App",
-    description:
-      "A multi-platform point-of-sale and payment solution for businesses. Accept payments, manage inventory, and run your business from anywhere — on web, mobile, or desktop.",
-    platforms: ["web", "playstore", "appstore", "windows", "mac"],
-    links: {
-      web: "https://palmshop.ng",
-      playstore: "#",
-      appstore: "#",
-      windows: "#",
-      mac: "#",
-    },
-    accent: "from-orange-500 to-amber-600",
-    previewImage: palmshopPreview,
-    developer: "Tech Faculty",
-  },
-  {
-    name: "ExamsAI.ng",
-    tagline: "AI-Powered Exam Preparation",
-    description:
-      "Prepare smarter with AI-generated practice questions, study guides, and performance analytics. Designed for Nigerian students and examination bodies.",
-    platforms: ["web"],
-    links: {
-      web: "https://examsai.ng",
-    },
-    accent: "from-indigo-500 to-blue-600",
-    developer: "Tech Faculty",
   },
 ];
 

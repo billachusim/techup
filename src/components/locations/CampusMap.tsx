@@ -11,6 +11,14 @@ declare global {
 interface Props {
   activeId?: string | null;
   onSelect?: (id: string) => void;
+  /** Limit the markers shown (e.g. a single campus page). Defaults to all campuses. */
+  items?: Campus[];
+  /** Initial map centre. Defaults to the centre of Nigeria. */
+  center?: { lat: number; lng: number };
+  /** Initial zoom. Defaults to 6 (national view). */
+  zoom?: number;
+  className?: string;
+  ariaLabel?: string;
 }
 
 const BROWSER_KEY = import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY as string | undefined;
@@ -35,7 +43,16 @@ function loadMaps(): Promise<void> {
   return loadingPromise;
 }
 
-const CampusMap = ({ activeId, onSelect }: Props) => {
+const CampusMap = ({
+  activeId,
+  onSelect,
+  items,
+  center,
+  zoom,
+  className,
+  ariaLabel,
+}: Props) => {
+  const points = items ?? campuses;
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<any>(null);
   const markersRef = useRef<Record<string, any>>({});
@@ -48,15 +65,15 @@ const CampusMap = ({ activeId, onSelect }: Props) => {
         if (cancelled || !containerRef.current || !window.google) return;
         const g = window.google;
         const map = new g.maps.Map(containerRef.current, {
-          center: { lat: 9.082, lng: 8.6753 },
-          zoom: 6,
+          center: center ?? { lat: 9.082, lng: 8.6753 },
+          zoom: zoom ?? 6,
           mapTypeControl: false,
           streetViewControl: false,
           fullscreenControl: false,
         });
         mapRef.current = map;
         infoRef.current = new g.maps.InfoWindow();
-        campuses.forEach((c: Campus) => {
+        points.forEach((c: Campus) => {
           const marker = new g.maps.Marker({
             position: { lat: c.lat, lng: c.lng },
             map,
@@ -80,11 +97,11 @@ const CampusMap = ({ activeId, onSelect }: Props) => {
     return () => {
       cancelled = true;
     };
-  }, [onSelect]);
+  }, [onSelect, points, center, zoom]);
 
   useEffect(() => {
     if (!activeId || !mapRef.current || !window.google) return;
-    const c = campuses.find((x) => x.id === activeId);
+    const c = points.find((x) => x.id === activeId);
     const marker = markersRef.current[activeId];
     if (!c || !marker) return;
     mapRef.current.panTo({ lat: c.lat, lng: c.lng });
@@ -93,14 +110,14 @@ const CampusMap = ({ activeId, onSelect }: Props) => {
       `<div style="max-width:240px;font-family:inherit"><div style="font-weight:600;margin-bottom:4px">${c.name}</div><div style="font-size:12px;color:#555;margin-bottom:6px">${c.address}</div><a href="${directionsUrl(c)}" target="_blank" rel="noopener" style="color:#0ea5a4;font-size:12px;font-weight:600">Get directions →</a></div>`,
     );
     infoRef.current?.open({ anchor: marker, map: mapRef.current });
-  }, [activeId]);
+  }, [activeId, points]);
 
   return (
     <div
       ref={containerRef}
-      className="w-full h-[480px] rounded-xl border border-border bg-muted overflow-hidden"
+      className={className ?? "w-full h-[480px] rounded-xl border border-border bg-muted overflow-hidden"}
       role="application"
-      aria-label="Map of Tech Faculty campuses across Nigeria"
+      aria-label={ariaLabel ?? "Map of Tech Faculty campuses across Nigeria"}
     />
   );
 };

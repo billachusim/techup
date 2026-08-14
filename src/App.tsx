@@ -32,6 +32,7 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import Products from "./pages/Products";
 import Verify from "./pages/Verify";
 import Locations from "./pages/Locations";
+import LocationDetail from "./pages/LocationDetail";
 import DepartmentsIndex from "./pages/DepartmentsIndex";
 import DepartmentDetail from "./pages/DepartmentDetail";
 import TinyPeople from "./pages/TinyPeople";
@@ -71,6 +72,7 @@ const App = () => (
             <Route path="/products" element={<Products />} />
             <Route path="/verify/*" element={<Verify />} />
             <Route path="/locations" element={<Locations />} />
+            <Route path="/locations/:slug" element={<LocationDetail />} />
             <Route path="/departments" element={<DepartmentsIndex />} />
             <Route path="/departments/:slug" element={<DepartmentDetail />} />
             <Route path="/tinypeople" element={<TinyPeople />} />

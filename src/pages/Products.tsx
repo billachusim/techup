@@ -172,13 +172,13 @@ const Products = () => {
         <title>Software Products — Tech Faculty NG</title>
         <meta
           name="description"
-          content="Explore software products built by Tech Faculty — apps and platforms used by thousands including Dear Claire, Alter Ego, PalmShop.ng, and more."
+          content="Explore the mobile apps built by Tech Faculty and Social Faculty — Dear Claire, Alter Ego, Eavesdrop and AI Clopedia, live on the App Store and Google Play."
         />
         <link rel="canonical" href="https://techfaculty.ng/products" />
         <meta property="og:title" content="Software Products — Tech Faculty NG" />
         <meta
           property="og:description"
-          content="Apps and platforms built by Tech Faculty NG: Dear Claire, Alter Ego, PalmShop.ng, Tiny People AI, Lovable, and more."
+          content="Apps built by Tech Faculty NG: Dear Claire, Alter Ego, Eavesdrop and AI Clopedia — on iOS and Android."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://techfaculty.ng/products" />
@@ -187,14 +187,15 @@ const Products = () => {
           "@type": "CollectionPage",
           name: "Software Products — Tech Faculty NG",
           description:
-            "Portfolio of software products built by Tech Faculty NG including Dear Claire, Alter Ego, PalmShop.ng, Tiny People AI, and Lovable.",
+            "Portfolio of mobile apps built by Tech Faculty NG including Dear Claire, Alter Ego, Eavesdrop and AI Clopedia.",
           url: "https://techfaculty.ng/products",
           hasPart: products.map((p) => ({
             "@type": "SoftwareApplication",
             name: p.name,
             description: p.description,
             applicationCategory: "Application",
-            operatingSystem: p.platforms.join(", "),
+            operatingSystem: "iOS, Android",
+            url: p.links.appstore || p.links.playstore,
           })),
         })}</script>
       </Helmet>
@@ -211,23 +212,22 @@ const Products = () => {
             Our Software Products
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Apps and platforms built by Tech Faculty — from social apps with
-            100,000+ downloads to business tools powering commerce across Nigeria.
+            Mobile apps built by Tech Faculty and Social Faculty — social, AI and
+            self-discovery apps used by over a million people worldwide, live on the
+            App Store and Google Play.
           </p>
         </section>
 
         {/* Product Grid */}
         <section className="container mx-auto px-4 max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {products.map((product) => (
               <ProductCard key={product.name} product={product} />
             ))}
           </div>
 
-          {/* Coming soon note */}
           <p className="text-center text-sm text-muted-foreground mt-12">
-            More products coming soon. Some download links are pending store
-            approval — check back for updates.
+            More products coming soon.
           </p>
         </section>
 

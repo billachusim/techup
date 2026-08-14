@@ -19,6 +19,26 @@ Tech Faculty NG trains, certifies, and employs the next generation of African te
 - [Verify Certificate](/verify): Public certificate verification portal.
 - [Locations](/locations): Tech Faculty campuses across Nigeria inside Technology Incubation Centres.
 - [Tech Faculty Nnewi](/locations/nnewi): Courses, SIWES placement, teen holiday bootcamps and events in Nnewi.
+- [Tech Faculty Onitsha](/locations/onitsha): Courses, SIWES placement, teen holiday bootcamps and events in Onitsha.
+- [Tech Faculty Owerri](/locations/owerri): Courses, SIWES placement, teen holiday bootcamps and events in Owerri.
+- [Tech Faculty Aba](/locations/aba): Courses, SIWES placement, teen holiday bootcamps and events in Aba.
+- [Tech Faculty Enugu](/locations/enugu): Courses, SIWES placement, teen holiday bootcamps and events in Enugu.
+- [Tech Faculty Abakaliki](/locations/abakaliki): Courses, SIWES placement, teen holiday bootcamps and events in Abakaliki.
+- [Tech Faculty Abuja](/locations/abuja): Courses, SIWES placement, teen holiday bootcamps and events in Abuja.
+- [Tech Faculty Lagos](/locations/lagos): Courses, SIWES placement, teen holiday bootcamps and events in Lagos.
+- [Tech Faculty Ibadan](/locations/ibadan): Courses, SIWES placement, teen holiday bootcamps and events in Ibadan.
+- [Tech Faculty Port Harcourt](/locations/port-harcourt): Courses, SIWES placement, teen holiday bootcamps and events in Port Harcourt.
+- [Tech Faculty Benin City](/locations/benin-city): Courses, SIWES placement, teen holiday bootcamps and events in Benin City.
+- [Tech Faculty Kaduna](/locations/kaduna): Courses, SIWES placement, teen holiday bootcamps and events in Kaduna.
+- [Tech Faculty Kano](/locations/kano): Courses, SIWES placement, teen holiday bootcamps and events in Kano.
+- [Tech Faculty Jos](/locations/jos): Courses, SIWES placement, teen holiday bootcamps and events in Jos.
+- [Tech Faculty Bauchi](/locations/bauchi): Courses, SIWES placement, teen holiday bootcamps and events in Bauchi.
+- [Tech Faculty Makurdi](/locations/makurdi): Courses, SIWES placement, teen holiday bootcamps and events in Makurdi.
+- [Tech Faculty Uyo](/locations/uyo): Courses, SIWES placement, teen holiday bootcamps and events in Uyo.
+- [Tech Faculty Calabar](/locations/calabar): Courses, SIWES placement, teen holiday bootcamps and events in Calabar.
+- [Tech Faculty Sokoto](/locations/sokoto): Courses, SIWES placement, teen holiday bootcamps and events in Sokoto.
+- [Tech Faculty Ilorin](/locations/ilorin): Courses, SIWES placement, teen holiday bootcamps and events in Ilorin.
+- [Tech Faculty Akure](/locations/akure): Courses, SIWES placement, teen holiday bootcamps and events in Akure.
 - [Blog](/blog): Tech careers, bootcamp guides, and industry insights for Nigeria.
 
 ## Blog

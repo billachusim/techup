@@ -7,19 +7,20 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock, ArrowRight, ArrowLeft, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getAllBlogPosts } from "@/data/blogPosts";
 import { getCategoryBySlug, blogCategories } from "@/data/blogCategories";
 import { useBlogLikeCounts } from "@/hooks/useBlogLikeCounts";
+import { useAllBlogPosts } from "@/hooks/useBlogPostsData";
 
 const BlogCategory = () => {
   const { slug } = useParams<{ slug: string }>();
   const category = slug ? getCategoryBySlug(slug) : undefined;
   const likeCounts = useBlogLikeCounts();
+  const { posts: allPosts } = useAllBlogPosts();
 
   const posts = useMemo(() => {
     if (!category) return [];
-    return getAllBlogPosts().filter((p) => p.tags[0] === category.name);
-  }, [category]);
+    return allPosts.filter((p) => p.tags[0] === category.name);
+  }, [category, allPosts]);
 
   if (!category) return <Navigate to="/blog" replace />;
 

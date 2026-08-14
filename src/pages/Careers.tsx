@@ -272,7 +272,11 @@ const Careers = () => {
             <div className="mb-16 scroll-mt-24" id="live-opportunities">
               <div className="flex items-baseline justify-between mb-6">
                 <h2 className="text-xl md:text-2xl font-bold">Live opportunities</h2>
-                <span className="text-sm text-muted-foreground">{filtered.length} open roles</span>
+                <span className="text-sm text-muted-foreground">
+                  {filtered.length
+                    ? `Showing ${Math.min(visibleCount, filtered.length)} of ${filtered.length} open roles`
+                    : "0 open roles"}
+                </span>
               </div>
 
               {isLoading ? (
@@ -282,9 +286,22 @@ const Careers = () => {
                   ))}
                 </div>
               ) : filtered.length ? (
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filtered.map((job) => <JobCard key={job.id} job={job} />)}
-                </div>
+                <>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {visibleJobs.map((job) => <JobCard key={job.id} job={job} />)}
+                  </div>
+                  {visibleCount < filtered.length && (
+                    <div className="mt-8 text-center">
+                      <Button
+                        variant="outline"
+                        size="lg"
+                        onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+                      >
+                        See more jobs ({filtered.length - visibleCount} left)
+                      </Button>
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="text-center border border-border rounded-lg p-10 bg-card">
                   <p className="text-muted-foreground">

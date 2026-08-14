@@ -5,18 +5,38 @@ import Footer from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Clock, Calendar } from "lucide-react";
-import { getBlogPostBySlug, getRelatedPosts } from "@/data/blogPosts";
 import { getCategoryByName } from "@/data/blogCategories";
 import ReactMarkdown from "react-markdown";
 import BlogActions from "@/components/BlogActions";
+import { useAllBlogPosts } from "@/hooks/useBlogPostsData";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
-  const post = slug ? getBlogPostBySlug(slug) : undefined;
+  const { posts, isLoading } = useAllBlogPosts();
+  const post = slug ? posts.find((p) => p.slug === slug) : undefined;
 
-  if (!post) return <Navigate to="/blog" replace />;
+  // Auto-generated posts arrive from the database, so wait before redirecting.
+  if (!post) {
+    if (isLoading) {
+      return (
+        <div className="min-h-screen bg-background">
+          <Header />
+          <main className="pt-32 px-4">
+            <div className="container mx-auto max-w-3xl space-y-4">
+              <div className="h-8 w-2/3 rounded bg-muted animate-pulse" />
+              <div className="h-4 w-full rounded bg-muted animate-pulse" />
+              <div className="h-4 w-5/6 rounded bg-muted animate-pulse" />
+            </div>
+          </main>
+        </div>
+      );
+    }
+    return <Navigate to="/blog" replace />;
+  }
 
-  const relatedPosts = getRelatedPosts(post.slug, 2);
+  const relatedPosts = posts
+    .filter((p) => p.slug !== post.slug && p.tags.some((tag) => post.tags.includes(tag)))
+    .slice(0, 2);
   const category = getCategoryByName(post.tags[0]);
 
   return (

@@ -109,6 +109,8 @@ const Careers = () => {
   const [platform, setPlatform] = useState("all");
   const [type, setType] = useState("all");
   const [workplace, setWorkplace] = useState("all");
+  const PAGE_SIZE = 12;
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const { data: jobs = [], isLoading } = useQuery({
     queryKey: ["jobs"],
@@ -146,6 +148,13 @@ const Careers = () => {
         .includes(q);
     });
   }, [jobs, search, platform, type, workplace]);
+
+  // Any filter change restarts the list from the top.
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [search, platform, type, workplace]);
+
+  const visibleJobs = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
 
   const lastUpdated = useMemo(() => {
     if (!jobs.length) return null;

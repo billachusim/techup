@@ -155,6 +155,7 @@ function normalize(raw: any, source: Source) {
   if (!/^https?:\/\//i.test(sourceUrl)) return null;
   // Never let a scraped row impersonate one of our own pages.
   if (/techfaculty\.ng/i.test(sourceUrl)) return null;
+  if (NON_EVENT_URL.test(sourceUrl)) return null;
 
   const description = String(raw?.description ?? "").trim();
   if (description.length < 40) return null;
@@ -166,7 +167,16 @@ function normalize(raw: any, source: Source) {
     ? String(raw.category).toUpperCase()
     : "CONFERENCE";
   const rawFormat = String(raw?.format ?? "").toUpperCase().replace(/[\s-]/g, "_");
-  const format = FORMATS.includes(rawFormat) ? rawFormat : "IN_PERSON";
+  let format = FORMATS.includes(rawFormat) ? rawFormat : "IN_PERSON";
+  // Online-only signals in the copy beat a wrongly-guessed in-person format.
+  const hasVenue = Boolean(raw?.venue_name || raw?.address || raw?.city);
+  if (
+    format === "IN_PERSON" &&
+    !hasVenue &&
+    /\b(online|virtual|webinar|livestream|live stream|remote|zoom)\b/i.test(`${title} ${description}`)
+  ) {
+    format = "VIRTUAL";
+  }
 
   const startsAt = toIso(raw?.starts_at);
   const endsAt = toIso(raw?.ends_at);

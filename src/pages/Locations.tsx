@@ -191,8 +191,16 @@ const Locations = () => {
                         )}
                       </div>
                       <p className="text-xs text-muted-foreground mt-1">{c.address}</p>
-                      <div className="flex items-center gap-3 mt-2">
+                      <p className="text-xs text-muted-foreground mt-1.5">{c.tagline}</p>
+                      <div className="flex items-center gap-3 mt-2 flex-wrap">
                         <Badge variant="secondary" className="text-[10px]">{c.zone}</Badge>
+                        <Link
+                          to={`/locations/${c.slug}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1"
+                        >
+                          Tech Faculty {c.city} details <ArrowRight className="w-3 h-3" />
+                        </Link>
                         <a
                           href={directionsUrl(c)}
                           target="_blank"
@@ -213,6 +221,28 @@ const Locations = () => {
             <div className="min-h-[480px]">
               <CampusMap activeId={activeId} onSelect={setActiveId} />
             </div>
+          </div>
+        </section>
+
+        {/* A-Z directory */}
+        <section className="container mx-auto px-4 mt-16">
+          <h2 className="text-2xl md:text-3xl font-bold mb-3">Browse every campus page A–Z</h2>
+          <p className="text-muted-foreground mb-5 max-w-3xl">
+            Each city has its own page covering the courses, SIWES placement, teen holiday bootcamps and events
+            available there.
+          </p>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+            {[...campuses]
+              .sort((a, b) => a.city.localeCompare(b.city))
+              .map((c) => (
+                <Link
+                  key={c.slug}
+                  to={`/locations/${c.slug}`}
+                  className="text-sm text-muted-foreground hover:text-primary py-1.5 inline-flex items-center gap-1"
+                >
+                  Tech training in {c.city} <ArrowRight className="w-3 h-3" />
+                </Link>
+              ))}
           </div>
         </section>
 

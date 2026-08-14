@@ -14,3 +14,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://techfaculty.ng/sitemap.xml
+Sitemap: https://flxwtwzjslufglpwfjdx.supabase.co/functions/v1/sitemap

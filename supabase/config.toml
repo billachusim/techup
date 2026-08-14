@@ -18,3 +18,9 @@ verify_jwt = false
 
 [functions.scrape-events]
 verify_jwt = false
+
+[functions.generate-weekly-blog]
+verify_jwt = false
+
+[functions.sitemap]
+verify_jwt = false

@@ -70,6 +70,7 @@ const Events = () => {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return events.filter((e) => {
+      if (e.is_featured) return false;
       if (category !== "all" && e.category !== category) return false;
       if (format !== "all" && e.format !== format) return false;
       if (city !== "all" && e.city !== city) return false;

@@ -6,6 +6,7 @@ import FeaturedPrograms from "@/components/FeaturedPrograms";
 import HowItWorks from "@/components/HowItWorks";
 import Departments from "@/components/DepartmentsSection";
 import LatestJobs from "@/components/LatestJobs";
+import UpcomingEvents from "@/components/UpcomingEvents";
 import Testimonials from "@/components/Testimonials";
 import Clarity from "@/components/Clarity";
 import FacultyDiscount from "@/components/FacultyDiscount";
@@ -118,6 +119,7 @@ const Index = () => {
         <HowItWorks />
         <Departments />
         <LatestJobs />
+        <UpcomingEvents />
         <Testimonials />
         <ServicesSection />
         <Pricing />

@@ -17,8 +17,6 @@ const SOURCES: Source[] = [
   { platform: "Meetup", url: "https://www.meetup.com/find/?location=ng--Lagos&source=EVENTS&keywords=tech" },
   { platform: "Meetup", url: "https://www.meetup.com/find/?location=ng--Abuja&source=EVENTS&keywords=technology" },
   { platform: "GDG Community", url: "https://gdg.community.dev/events/" },
-  { platform: "Techpoint Africa", url: "https://techpoint.africa/events/" },
-  { platform: "TechCabal", url: "https://techcabal.com/events/" },
   { platform: "Luma", url: "https://lu.ma/nigeria" },
   { platform: "Luma", url: "https://lu.ma/ai" },
   { platform: "AWS Events", url: "https://aws.amazon.com/events/" },

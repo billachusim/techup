@@ -29,7 +29,20 @@ const navLinks = [
   { label: "Products", href: "/products" },
   { label: "Tech Store", href: "/tech-store" },
   { label: "Blog", href: "/blog" },
-  { label: "Locations", href: "/locations" },
+  {
+    label: "Locations",
+    children: [
+      { label: "All campuses", href: "/locations" },
+      { label: "Nnewi (HQ)", href: "/locations/nnewi" },
+      { label: "Onitsha", href: "/locations/onitsha" },
+      { label: "Enugu", href: "/locations/enugu" },
+      { label: "Owerri", href: "/locations/owerri" },
+      { label: "Aba", href: "/locations/aba" },
+      { label: "Abuja", href: "/locations/abuja" },
+      { label: "Lagos", href: "/locations/lagos" },
+      { label: "Port Harcourt", href: "/locations/port-harcourt" },
+    ],
+  },
   { label: "About", href: "/about" },
 ];
 

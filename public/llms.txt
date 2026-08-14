@@ -13,7 +13,7 @@ Tech Faculty NG trains, certifies, and employs the next generation of African te
 - [SIWES](/siwes): Industrial training placement (Learn & Pay, Tutor & Earn tracks).
 - [Events](/events): Workshops, hackathons, and community sessions.
 - [Careers](/careers): Internal job board and open roles at Tech Faculty NG.
-- [Software Products](/products): Apps and platforms built by Tech Faculty including Dear Claire, Alter Ego, PalmShop.ng, Tiny People AI.
+- [Software Products](/products): Mobile apps built by Tech Faculty including Dear Claire, Alter Ego, Eavesdrop, AI Clopedia, plus partners Tiny People AI and Lovable.
 - [Tiny People AI](/tinypeople): Messaging-native AI agent built with Natura Inc.
 - [Tech Store](/tech-store): Laptops, gadgets, and learning gear with Faculty ID member discounts.
 - [Verify Certificate](/verify): Public certificate verification portal.

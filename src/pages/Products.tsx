@@ -128,7 +128,7 @@ const ProductCard = ({ product }: { product: Product }) => (
     <div className={`h-1.5 bg-gradient-to-r ${product.accent}`} />
 
     {product.previewImage && (
-      <div className="w-full aspect-video overflow-hidden bg-muted">
+      <div className="w-full aspect-[2/1] overflow-hidden bg-muted">
         <img
           src={product.previewImage}
           alt={`${product.name} preview`}
@@ -160,31 +160,6 @@ const ProductCard = ({ product }: { product: Product }) => (
       <div className="flex flex-wrap items-center gap-2">
         {product.links.playstore && <PlayStoreBadge href={product.links.playstore} />}
         {product.links.appstore && <AppStoreBadge href={product.links.appstore} />}
-      </div>
-
-      {/* Web & Desktop buttons */}
-      <div className="flex flex-wrap gap-2">
-        {product.links.web && (
-          <Button size="sm" variant="outline" asChild className="gap-1.5">
-            <a href={product.links.web} target="_blank" rel="noopener noreferrer">
-              <ExternalLink size={14} /> Visit Website
-            </a>
-          </Button>
-        )}
-        {product.links.windows && (
-          <Button size="sm" variant="outline" asChild className={`gap-1.5 ${product.links.windows === "#" ? "opacity-50 pointer-events-none" : ""}`}>
-            <a href={product.links.windows} target="_blank" rel="noopener noreferrer">
-              <Monitor size={14} /> Windows
-            </a>
-          </Button>
-        )}
-        {product.links.mac && (
-          <Button size="sm" variant="outline" asChild className={`gap-1.5 ${product.links.mac === "#" ? "opacity-50 pointer-events-none" : ""}`}>
-            <a href={product.links.mac} target="_blank" rel="noopener noreferrer">
-              <Apple size={14} /> macOS
-            </a>
-          </Button>
-        )}
       </div>
     </CardContent>
   </Card>

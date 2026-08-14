@@ -8,6 +8,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { JobApplicationForm } from "@/components/JobApplicationForm";
 import { useUser } from "@/contexts/UserContext";
+import ApplySteps from "@/components/jobs/ApplySteps";
+import { platformFor } from "@/data/jobPlatforms";
 import {
   fetchJobBySlug,
   employmentLabel,
@@ -61,6 +63,7 @@ const JobDetail = () => {
   }
 
   const pay = salaryLabel(job);
+  const platform = platformFor(job.source_platform);
   const title = `${job.title} at ${job.company}`;
   const description = job.description.slice(0, 155);
 
@@ -128,21 +131,30 @@ const JobDetail = () => {
           <section className="border border-border rounded-lg p-6 bg-card space-y-4">
             <h2 className="text-lg font-semibold">Apply for this role</h2>
             <p className="text-sm text-muted-foreground">
-              Applications are handled on {job.source_platform}. Tech Faculty graduates can also send us their profile so our placement team can support the application.
+              Applications are handled on {job.source_platform}. Follow the steps below to apply.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <a href={job.source_url} target="_blank" rel="noopener noreferrer nofollow" className="flex-1">
-                <Button className="w-full">
+
+            {platform ? (
+              <ApplySteps platform={platform} jobUrl={job.source_url} jobTitle={job.title} />
+            ) : (
+              <a href={job.source_url} target="_blank" rel="noopener noreferrer nofollow" className="block">
+                <Button className="w-full sm:w-auto">
                   Apply on {job.source_platform} <ExternalLink size={14} className="ml-2" />
                 </Button>
               </a>
+            )}
+
+            <div className="pt-2 border-t border-border">
+              <p className="text-sm text-muted-foreground mb-3">
+                Tech Faculty graduates can also send us their profile so our placement team can support the application.
+              </p>
               {isLoggedIn && facultyId ? (
-                <Button variant="outline" className="flex-1" onClick={() => setShowForm(true)}>
+                <Button variant="outline" size="sm" onClick={() => setShowForm(true)}>
                   Send my profile to placement team
                 </Button>
               ) : (
-                <Link to="/#get-started" className="flex-1">
-                  <Button variant="outline" className="w-full">Get a Faculty ID for placement support</Button>
+                <Link to="/#get-started">
+                  <Button variant="outline" size="sm">Get a Faculty ID for placement support</Button>
                 </Link>
               )}
             </div>

@@ -2,6 +2,512 @@ import type { BlogPost } from '@/types/blog';
 
 const blogPosts: BlogPost[] = [
   {
+    slug: "ai-automation-for-nigerian-businesses-2026",
+    title: "AI Automation for Nigerian Businesses: A Practical 2026 Playbook",
+    description: "How Nigerian businesses automate sales, support and reporting with AI in 2026 — the tools, realistic costs in naira, rollout steps and mistakes that waste money.",
+    content: `# AI Automation for Nigerian Businesses: A Practical 2026 Playbook
+
+*By Bill Achusim · Aug 14, 2026*
+
+Most Nigerian businesses do not need a data science team. They need three or four repetitive tasks removed from a human's day. That is what AI automation means in practice in 2026, and it is why a pharmacy in Nnewi and a logistics firm in Lekki can now run the same playbook.
+
+## Start with the tasks, not the tools
+
+Write down every task your staff repeats more than ten times a week. Typical Nigerian candidates:
+
+- Answering the same WhatsApp questions about price, location and delivery
+- Copying order details from WhatsApp into a spreadsheet
+- Generating daily or weekly sales summaries for the owner
+- Writing product captions and posting them across platforms
+- Chasing invoices and payment confirmations
+
+Automate the ones that are high-volume, low-judgement and text-based. Anything requiring negotiation or trust stays human.
+
+## The 2026 stack that actually works here
+
+**Customer conversations.** WhatsApp Business API with an AI agent that answers from your own price list and hands over to a human on request. This is the single highest-return automation for Nigerian SMEs because WhatsApp is where the customer already is.
+
+**Back office.** A spreadsheet or database connected to an automation tool that reads incoming orders, structures them and updates stock. No developer required for the first version.
+
+**Reporting.** A dashboard that refreshes on its own and sends the owner a summary each morning. Power BI or Looker Studio on top of your sales sheet is enough.
+
+**Content.** An assistant trained on your brand voice for captions, product descriptions and email drafts, reviewed by a human before publishing.
+
+## What it costs in naira
+
+Budget realistically. A small business running a WhatsApp AI agent, automated reporting and content assistance typically spends between ₦40,000 and ₦150,000 per month on tools and messaging fees, plus a one-off setup of ₦250,000 to ₦1,500,000 depending on complexity. Compare that to the salary of the role you are freeing up, not to zero.
+
+## A four-week rollout
+
+**Week 1 — Document.** Write down the exact answers, prices and policies the AI is allowed to give. Bad automation is almost always missing documentation, not missing technology.
+
+**Week 2 — Build one flow.** Pick the single busiest task. Ship it for internal use only.
+
+**Week 3 — Supervise.** Let staff review every AI response before it goes out. Correct the knowledge base rather than the individual message.
+
+**Week 4 — Release and measure.** Track response time, orders handled and hours saved. If the numbers do not move, the flow was wrong, not AI.
+
+## Five mistakes that waste money
+
+1. **Buying a platform before defining the task.** Tools are cheap; unclear processes are expensive.
+2. **Letting the AI invent prices.** Ground every answer in your own documented list.
+3. **Hiding that it is automated.** Nigerian customers respond well to speed and badly to being tricked.
+4. **No human escape hatch.** Every conversation must reach a person within one message.
+5. **No owner.** Assign one staff member to review and update the knowledge base weekly.
+
+## Compliance you cannot ignore
+
+If your automation stores customer names, phone numbers or transaction history, the Nigeria Data Protection Act applies. Collect only what you need, state why you collect it, and keep it in systems you control.
+
+## Where to learn this
+
+Our AI & Machine Learning department teaches this exact pipeline — from documented knowledge base to deployed WhatsApp agent — and our Basic Internet & AI Studies track covers the non-technical version for owners and staff. Both run online and on campus at Technology Incubation Centres nationwide.
+
+Start with one task. Measure it. Then automate the next.`,
+    date: "2026-08-14",
+    author: "Bill Achusim",
+    tags: ["Artificial Intelligence", "AI Automation", "Nigerian Business", "WhatsApp AI"],
+    readTime: 8,
+  },
+  {
+    slug: "cost-to-build-a-website-in-nigeria-2026",
+    title: "How Much Does It Cost to Build a Website in Nigeria in 2026?",
+    description: "Real 2026 website prices in Nigeria — landing pages, business sites, e-commerce and web apps, plus hosting costs, what changes the price, and how to avoid overpaying.",
+    content: `# How Much Does It Cost to Build a Website in Nigeria in 2026?
+
+*By Bill Achusim · Aug 14, 2026*
+
+Ask five Nigerian developers what a website costs and you will get five answers between ₦50,000 and ₦5,000,000. Both can be honest quotes for different work. Here is how pricing actually breaks down in 2026, from someone who trains the developers writing those quotes.
+
+## Typical price bands
+
+**Single landing page — ₦80,000 to ₦300,000.** One scrolling page, contact form, WhatsApp button. Right for an event, a service, or validating an idea.
+
+**Business website (5–8 pages) — ₦250,000 to ₦900,000.** Home, about, services, blog, contact. Includes basic search optimisation and a content system you can edit yourself.
+
+**E-commerce store — ₦600,000 to ₦3,000,000.** Product catalogue, cart, Paystack or Flutterwave checkout, order management, delivery logic. Price scales with catalogue size and inventory complexity.
+
+**Custom web application — ₦2,000,000 upward.** Accounts, dashboards, roles, payments, integrations. Priced by weeks of engineering, not by pages.
+
+## Recurring costs everyone forgets
+
+- Domain: ₦8,000–₦20,000 per year (.ng slightly higher than .com)
+- Hosting: ₦30,000–₦250,000 per year depending on traffic
+- SSL: usually free through your host
+- Maintenance: budget 15–20% of build cost annually
+- Payment processing: roughly 1.5% per transaction with Nigerian providers
+
+## What genuinely changes the price
+
+**Content readiness.** If you supply text and images, you save weeks. Most delays in Nigerian web projects are content delays.
+
+**Design origin.** A template adaptation is far cheaper than an original design system.
+
+**Integrations.** Payments, delivery partners, accounting software and CRM each add real engineering time.
+
+**Speed and search optimisation.** A site built to load fast on 3G and rank in search costs more upfront and earns far more later.
+
+## How to avoid overpaying
+
+1. Ask for a written scope listing every page and feature.
+2. Insist on owning the domain, hosting account and source code.
+3. Pay in milestones, not fully upfront.
+4. Require a live staging link before final payment.
+5. Ask to see two sites the developer built and check them on a phone over mobile data.
+
+## Should you build it yourself?
+
+If your budget is under ₦300,000 and your needs are simple, learning to build it is often the better investment — you keep the skill and can update the site forever. A motivated beginner can ship a professional business site within twelve weeks of focused training.
+
+That is precisely what our Web Development department covers: HTML, CSS, JavaScript, React and Next.js, deployment, and the AI-assisted workflows that let one person do the work of a small agency. Learn the curriculum, tools and salary outcomes on the department page, or join the community and ask us what your specific project should cost.`,
+    date: "2026-08-14",
+    author: "Bill Achusim",
+    tags: ["Web & Software Development", "Web Development", "Freelancing", "Pricing"],
+    readTime: 7,
+  },
+  {
+    slug: "data-analyst-portfolio-projects-nigeria-2026",
+    title: "7 Data Analyst Portfolio Projects Using Real Nigerian Data (2026)",
+    description: "Seven portfolio projects that get Nigerian data analysts hired in 2026 — real public datasets, the exact deliverable to build, and how to present each one to employers.",
+    content: `# 7 Data Analyst Portfolio Projects Using Real Nigerian Data (2026)
+
+*By Bill Achusim · Aug 14, 2026*
+
+Hiring managers in Lagos, Abuja and Port Harcourt skim portfolios in about ninety seconds. Certificates do not survive that skim. A dashboard answering a question their business actually has does.
+
+These seven projects use free, public Nigerian data. Build three well rather than seven poorly.
+
+## 1. Inflation and food price tracker
+
+**Data:** National Bureau of Statistics CPI and selected food price releases.
+**Build:** A Power BI dashboard tracking staple prices by state over 24 months, with a month-on-month change indicator.
+**Why it works:** Every retailer, restaurant and manufacturer in Nigeria is pricing against this data.
+
+## 2. Bank customer churn analysis
+
+**Data:** Public churn datasets, relabelled to a Nigerian retail banking context.
+**Build:** Cleaning in SQL, exploration in Python, a churn probability model, and a one-page summary of the three drivers management should act on.
+**Why it works:** It proves you can move from model output to a business recommendation.
+
+## 3. Lagos transport and traffic insight
+
+**Data:** Open transport datasets and route timing you can collect yourself.
+**Build:** Peak-hour analysis with a recommendation on dispatch scheduling.
+**Why it works:** Logistics is one of the fastest-hiring analytics sectors in Nigeria.
+
+## 4. Health facility access map
+
+**Data:** Nigeria health facility registry.
+**Build:** A geographic dashboard showing facilities per 100,000 people by local government area.
+**Why it works:** Mapping skills are rare, and NGOs and state governments hire for exactly this.
+
+## 5. E-commerce sales and returns dashboard
+
+**Data:** Your own sales sheet, a friend's shop, or a synthetic dataset you document as synthetic.
+**Build:** Revenue, margin, return rate and repeat-customer cohorts, refreshed automatically.
+**Why it works:** It is the most common analyst brief in Nigerian retail.
+
+## 6. Job market skills analysis
+
+**Data:** Job listings scraped from public boards, including our own careers board.
+**Build:** Which tools appear most in Nigerian tech adverts, trended monthly.
+**Why it works:** Self-referential and instantly interesting to any recruiter reading it.
+
+## 7. Agricultural yield and rainfall correlation
+
+**Data:** Open agricultural and climate datasets.
+**Build:** Correlation analysis by state with a clear caveat section on data quality.
+**Why it works:** Agritech funding in Nigeria keeps growing and analysts are scarce.
+
+## How to present each project
+
+Every project needs four things: the business question in one sentence, the data source with a link, the deliverable (dashboard screenshot or notebook), and the recommendation. Publish on GitHub with a readable README and, where possible, a live Power BI or Looker Studio link.
+
+## Do not skip data quality
+
+Nigerian public data is often incomplete. Say so. A section explaining what you cleaned, what you dropped, and what you could not verify signals more seniority than a flawless-looking chart.
+
+Our Data Science & Analytics department builds these exact projects with review from working analysts, covering Excel, SQL, Power BI, Tableau and Python across 12 to 16 weeks. See the full curriculum and salary bands on the department page.`,
+    date: "2026-08-14",
+    author: "Bill Achusim",
+    tags: ["Data & Analytics", "Data Analytics", "Portfolio", "Power BI"],
+    readTime: 8,
+  },
+  {
+    slug: "ndpr-compliance-checklist-nigerian-businesses-2026",
+    title: "Nigeria Data Protection Compliance Checklist for Businesses (2026)",
+    description: "A practical 2026 data protection compliance checklist for Nigerian businesses — what the law requires, the security controls to implement first, and who to assign each task to.",
+    content: `# Nigeria Data Protection Compliance Checklist for Businesses (2026)
+
+*By Bill Achusim · Aug 14, 2026*
+
+Data protection stopped being a paperwork exercise in Nigeria. Enforcement is real, customers now ask questions, and enterprise contracts increasingly require evidence of controls before they are signed. This checklist turns the obligation into a work plan.
+
+It is written for owners and operations leads, not lawyers. Where the law is specific, get professional advice; where it is about practice, this is the practice.
+
+## 1. Know what personal data you hold
+
+Create a simple register: what you collect, why, where it lives, who can see it, and how long you keep it. Most Nigerian businesses discover customer phone numbers scattered across three WhatsApp accounts, two spreadsheets and a former staff member's laptop. Fix that first.
+
+## 2. Have a lawful reason for every field
+
+If you cannot explain why you collect a customer's date of birth, stop collecting it. Data minimisation is the cheapest compliance control available.
+
+## 3. Publish a real privacy notice
+
+Plain English, on your website, stating what you collect, why, who you share it with, how long you keep it, and how someone requests deletion. A copied template naming a foreign regulator is worse than none.
+
+## 4. Get and record consent properly
+
+Pre-ticked boxes and bundled consent do not count. Keep a record of when and how consent was given, especially for marketing messages.
+
+## 5. Control access
+
+Every staff member should only see the data their role requires. Remove access the day someone leaves. Shared logins are the most common failure we find in Nigerian SMEs.
+
+## 6. Turn on the basic security controls
+
+- Multi-factor authentication on email, banking and admin accounts
+- Encrypted storage and full-disk encryption on staff laptops
+- Automatic backups tested at least quarterly
+- Patched operating systems and browsers
+- A password manager instead of a notebook
+
+## 7. Have an incident response plan
+
+Write down who is called, in what order, and within what timeframe when data is exposed. Practise it once. Breach notification timelines are short and panic is slow.
+
+## 8. Manage your vendors
+
+Your payment processor, hosting provider, CRM and marketing tool all touch customer data. Keep a list and confirm each has adequate protections and a lawful basis for any cross-border transfer.
+
+## 9. Train your people
+
+Most breaches in Nigeria start with a phishing message or a shared password, not a sophisticated attack. Short quarterly training beats an annual policy document nobody reads.
+
+## 10. Audit and document annually
+
+Depending on the volume and sensitivity of data you process, you may fall within annual filing requirements. Even where you do not, an internal audit trail is what wins enterprise contracts.
+
+## Assign owners, not intentions
+
+Each item above needs a named person and a date. Compliance fails as a shared responsibility and succeeds as an assigned one.
+
+Our Cybersecurity department covers this ground in depth — governance and compliance alongside security operations, ethical hacking and incident response, with CompTIA Security+ and CEH preparation. It is a 16 to 20 week programme, online or on campus.`,
+    date: "2026-08-14",
+    author: "Bill Achusim",
+    tags: ["Cybersecurity", "Compliance", "NDPR", "Nigerian Business"],
+    readTime: 8,
+  },
+  {
+    slug: "remote-ai-jobs-for-nigerians-platforms-that-pay-dollars-2026",
+    title: "Remote AI Jobs for Nigerians: Platforms That Pay in Dollars (2026)",
+    description: "The AI platforms hiring Nigerians remotely in 2026 — what each pays, the skills they screen for, how to pass the assessments, and how to get paid in Nigeria.",
+    content: `# Remote AI Jobs for Nigerians: Platforms That Pay in Dollars (2026)
+
+*By Bill Achusim · Aug 14, 2026*
+
+The fastest-growing source of dollar income for Nigerian tech talent in 2026 is not traditional outsourcing. It is AI work: training, evaluating, annotating, red-teaming and building for the companies racing to improve frontier models. The work is remote, the screening is skills-based, and a Nigerian passport is not a barrier.
+
+## The categories of work
+
+**AI training and evaluation.** You write, review or rank model responses in your area of expertise — code, law, medicine, finance, engineering. Pay is typically hourly and rises sharply with credentialed expertise.
+
+**Data annotation and quality.** Labelling images, audio and text. Lower pay, lower barrier, good as a first step.
+
+**Red-teaming and safety.** Deliberately probing models for failures. Pays well and rewards creativity plus domain knowledge.
+
+**Engineering roles.** Machine learning engineers, data engineers and full-stack developers building AI products for global teams. This is where the ₦2m+ monthly equivalents live.
+
+## What the platforms screen for
+
+Almost every AI work platform screens the same three things: written English clarity, verifiable domain expertise, and consistency across a timed assessment. Your degree matters less than your ability to explain a technical judgement in two clear paragraphs.
+
+Practical preparation:
+
+1. Fix your written English. Ambiguity fails more Nigerian applicants than technical weakness.
+2. Pick one domain and prove depth. Generalists get the lowest rates.
+3. Build a public portfolio — GitHub for engineers, writing samples for experts.
+4. Practise timed reasoning tasks. Speed is scored.
+
+## Getting hired without getting scammed
+
+Legitimate platforms never ask for payment to start, never request your bank password, and always have a formal onboarding with tax documentation. Treat any "AI job" arriving via a random WhatsApp group with the same suspicion you would apply to an investment promise.
+
+## Getting paid in Nigeria
+
+Most platforms pay through international transfer services or direct bank transfer. Set up a compliant domiciliary account, keep records of every payout, and understand that this income is taxable. Consistent documentation is what lets you later prove income for visas, loans and larger contracts.
+
+## Realistic expectations
+
+Entry-level annotation work pays modestly. Domain expert evaluation pays several times more. Engineering contracts pay the most and take the longest to land. Most people who succeed start on evaluation work while building the portfolio that gets them the engineering contract six to twelve months later.
+
+## Where to start today
+
+We aggregate live roles from the major AI work platforms on our careers board, refreshed weekly, with the account-creation step for each partner platform. Filter by role type, read the description, and apply the same day the listing appears — these roles close fast.
+
+If the skills are the gap rather than the access, our AI & Machine Learning and Data Science departments are built around exactly the portfolio these platforms screen for.`,
+    date: "2026-08-14",
+    author: "Bill Achusim",
+    tags: ["Tech Careers", "Remote Jobs", "AI Jobs", "Freelancing"],
+    readTime: 8,
+  },
+  {
+    slug: "siwes-placement-ai-data-science-nigeria-2026",
+    title: "SIWES in AI and Data Science: How to Land a Tech Placement in 2026",
+    description: "A step-by-step 2026 guide for Nigerian students seeking SIWES placement in AI, data science or software — where to apply, what to send, and how to convert IT into a job offer.",
+    content: `# SIWES in AI and Data Science: How to Land a Tech Placement in 2026
+
+*By Bill Achusim · Aug 14, 2026*
+
+Every session, thousands of Nigerian students carry SIWES letters to companies that have no idea what to do with them, and end up photocopying documents for six months. The students who spend their industrial training writing code and analysing data are not luckier. They apply differently.
+
+## Start twelve weeks early
+
+The single biggest predictor of a good placement is timing. Companies with structured tech internships fill slots long before the semester ends. Begin applying three months before your attachment window opens.
+
+## Where tech placements actually exist
+
+- **Software companies and startups** — the best technical exposure, often the smallest stipend
+- **Bank and fintech technology departments** — structured, competitive, well paid
+- **Telecom and ISP technical units** — strong for networking and infrastructure
+- **Hospitals, schools and government MDAs** — data and systems work, easier to secure
+- **Training institutes** — where you both learn and assist in delivery
+- **Remote placements** — increasingly accepted, and they widen your options enormously
+
+## Build the one thing that gets you picked
+
+Before you apply, ship a small project relevant to the role: a dashboard, a working web app, or a simple model with a clear README. A student with a link outranks a student with a letter. This takes two weekends and changes the entire process.
+
+## Write an application that gets answered
+
+Attach your letter, but lead the email with three sentences: who you are, what you built, and what you want to do for them. Send to a named person, follow up once after five working days, and apply to at least twenty organisations. Placement is a numbers game with a quality filter.
+
+## During the placement
+
+**Ask for a real task in week one.** If you are given nothing, propose something: automate a report, clean a dataset, build an internal page.
+
+**Keep your logbook daily.** Not weekly. Supervisors sign what they can verify, and the logbook is what your assessor grades.
+
+**Document everything you build.** Screenshots, code, before-and-after numbers. This becomes your graduate portfolio.
+
+**Behave like staff.** Punctuality and follow-through are why interns get retained in Nigeria far more often than raw brilliance.
+
+## Getting the ITF allowance right
+
+Register on the ITF portal, keep every form, confirm your bank details match your registration exactly, and submit your documentation at the deadline rather than after it. Most delayed allowances trace back to a mismatch a student could have fixed in five minutes.
+
+## Convert IT into an offer
+
+In your final two weeks, write a one-page summary of what you built and the value it created, present it to your supervisor, and ask directly whether a role or contract work is available after your programme. Very few students ask. That is precisely why it works.
+
+## If you cannot find a placement
+
+Tech Faculty runs structured SIWES tracks — Learn & Pay and Tutor & Earn — with supervised project work, logbook support, and documentation your institution accepts. Places are limited each session, so apply early.`,
+    date: "2026-08-14",
+    author: "Bill Achusim",
+    tags: ["SIWES & Internships", "SIWES", "Students", "Career Growth"],
+    readTime: 8,
+  },
+  {
+    slug: "whatsapp-ai-agents-for-nigerian-smes-2026",
+    title: "WhatsApp AI Agents for Nigerian SMEs: Build, Launch, Profit (2026)",
+    description: "How Nigerian small businesses deploy WhatsApp AI agents in 2026 — architecture, setup costs, sample flows, handover rules, and the metrics that prove it is working.",
+    content: `# WhatsApp AI Agents for Nigerian SMEs: Build, Launch, Profit (2026)
+
+*By Bill Achusim · Aug 14, 2026*
+
+In Nigeria, the storefront is WhatsApp. Not your website, not your app — the chat window where a customer types "how much?" at 11pm. In 2026, the businesses winning that moment are the ones answering instantly, accurately and at 3am, and they are doing it with AI agents.
+
+## What a WhatsApp AI agent is
+
+It is a program connected to your business WhatsApp number that reads incoming messages, answers from your own documented knowledge — prices, stock, delivery zones, opening hours — and hands the conversation to a human the moment it hits a limit. It is not a chatbot with fixed buttons, and it is not a general chatbot that invents answers.
+
+## Why this beats every other automation for SMEs
+
+- Customers are already there; nothing new to download
+- Response time drops from hours to seconds
+- Night and weekend enquiries stop dying
+- Every conversation becomes structured data you can analyse
+- One staff member can supervise the volume of five
+
+## The architecture, plainly
+
+1. **Knowledge base.** A document or database with your prices, policies and answers. This is 80% of the work and the part most businesses skip.
+2. **Messaging channel.** WhatsApp Business Platform, which gives programmatic access to your number.
+3. **The agent.** A language model constrained to answer only from your knowledge base, with a clear refusal rule.
+4. **Handover.** A trigger that routes to a human on any complaint, negotiation, refund or repeated confusion.
+5. **Record.** Every conversation logged to a database you own.
+
+## Five flows worth building first
+
+**Price and availability.** The highest-volume question in Nigerian commerce.
+
+**Delivery quote.** Location in, price and timeline out.
+
+**Order capture.** Item, quantity, address, payment confirmation — written straight into your order sheet.
+
+**Order status.** Reduces the follow-up messages that eat your day.
+
+**After-sales FAQ.** Warranty, returns, care instructions.
+
+## Costs and timeline
+
+Expect two to four weeks from documentation to launch for a focused build. Ongoing costs are messaging fees plus model usage — commonly ₦40,000 to ₦150,000 monthly for a small business. A custom build ranges from ₦300,000 to ₦2,000,000 depending on integrations.
+
+## Rules that keep it trustworthy
+
+- Never let the agent quote a price that is not in your list
+- Always offer a human within one message
+- Say clearly that the assistant is automated
+- Never collect card details in chat
+- Store only the customer data you genuinely need, in line with the Nigeria Data Protection Act
+
+## Measure four numbers
+
+Median response time, percentage of conversations resolved without a human, orders captured per week, and customer complaints about the agent. If the first three do not improve within a month, your knowledge base is the problem — not the model.
+
+## Build it yourself
+
+Our AI & Machine Learning department teaches this end to end, including a WhatsApp agent for a real Nigerian business as a portfolio project. Owners who prefer the non-technical path can take Basic Internet & AI Studies and learn to run and supervise the system without writing code.`,
+    date: "2026-08-14",
+    author: "Bill Achusim",
+    tags: ["Startups & Business", "AI Automation", "Nigerian Business", "WhatsApp AI"],
+    readTime: 8,
+  },
+  {
+    slug: "best-tech-skills-for-nigerian-teenagers-2026",
+    title: "Best Tech Skills for Nigerian Teenagers to Learn in 2026",
+    description: "A parent-friendly 2026 guide to the tech skills Nigerian teenagers should learn — what each skill leads to, realistic timelines, equipment needed and how to start safely.",
+    content: `# Best Tech Skills for Nigerian Teenagers to Learn in 2026
+
+*By Bill Achusim · Aug 14, 2026*
+
+Every holiday, parents in Nnewi, Onitsha, Enugu, Aba and Owerri ask us the same question: what should my child actually learn? Not what sounds impressive — what will still matter when they finish secondary school.
+
+Here is our honest answer for 2026, ordered by how quickly a teenager sees real results.
+
+## 1. Digital creation (2–4 weeks to first result)
+
+Graphic design, short-form video editing and content production. Teenagers already live inside these platforms; this turns consumption into a skill. Many of our teen students earn their first income designing flyers for family businesses within a term.
+
+**Leads to:** Freelance design, social media management, creative direction.
+
+## 2. Coding fundamentals (6–12 weeks)
+
+Start with web development — HTML, CSS and JavaScript — because the results are visible immediately. A teenager who can build and publish a web page has crossed the gap between using technology and making it.
+
+**Leads to:** Software engineering, product building, university advantage in computer science.
+
+## 3. Artificial intelligence literacy (4–8 weeks)
+
+Not just prompting. Understanding what models can and cannot do, how to check their output, and how to build simple tools with them. This is the reading and writing of their generation.
+
+**Leads to:** Every other field, plus AI-specific careers later.
+
+## 4. Cybersecurity basics (4–8 weeks)
+
+How accounts get stolen, how phishing works, how to secure a device and a family's data. This has immediate protective value and opens one of Nigeria's best-paid technical careers.
+
+**Leads to:** Security analysis, ethical hacking, compliance roles.
+
+## 5. Data and spreadsheets (4 weeks)
+
+Underrated and universally useful. A teenager comfortable with Excel and basic charts is ahead of most graduates in the job market.
+
+**Leads to:** Data analysis, business intelligence, finance.
+
+## 6. Robotics and electronics (8+ weeks)
+
+For the hands-on child who takes things apart. Arduino and sensors turn curiosity into engineering.
+
+**Leads to:** Engineering, embedded systems, agritech and energy innovation.
+
+## What you actually need at home
+
+A laptop with 8GB of RAM, a stable internet plan, and a fixed daily study slot. Phone-only learning works for design and AI literacy but not for coding. Where a laptop is not possible, our centres provide workstations during class hours.
+
+## Guidance for parents
+
+**Choose one skill per holiday.** Depth beats sampling.
+
+**Ask to see the work, not the certificate.** A published page, a design portfolio, a working circuit.
+
+**Supervise online exposure.** Discuss scams, private information and screen limits directly — the same conversation that protects them also teaches security.
+
+**Do not force the field.** The teenager who chooses design and stays for three years outperforms the one pushed into coding for three months.
+
+## Holiday bootcamps near you
+
+Tech Faculty runs teen tracks in Digital Creation, Coding, Artificial Intelligence and Cybersecurity across our centres in Nnewi, Onitsha, Enugu, Aba, Owerri and other cities, with online options for families elsewhere. Sessions are project-based, supervised, and end with the student presenting something they built.
+
+Join the community to ask about the next cohort in your city.`,
+    date: "2026-08-14",
+    author: "Bill Achusim",
+    tags: ["Tech Training for Teens", "Students", "Parents", "Coding"],
+    readTime: 8,
+  },
+  {
     slug: "how-to-learn-ai-in-nigeria-2026-roadmap",
     title: "How to Learn AI in Nigeria (2026 Roadmap): Zero to Job-Ready",
     description: "A practical 2026 roadmap for learning AI in Nigeria — tools, timelines, salary ranges, and the exact projects that get juniors hired at Nigerian and remote firms.",

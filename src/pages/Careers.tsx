@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { Briefcase, MapPin, ExternalLink, Search, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Dialog,

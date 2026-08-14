@@ -10,19 +10,27 @@ const FIRECRAWL_V2 = "https://api.firecrawl.dev/v2";
 
 type Source = { platform: string; url: string };
 
-/** Public listing pages for tech / AI / remote-work events in Nigeria and Africa. */
+/**
+ * Public listing pages for tech / AI / remote-work events in Nigeria and Africa.
+ * Trimmed to the six sources that consistently return dated, upcoming events.
+ */
 const SOURCES: Source[] = [
   { platform: "Eventbrite", url: "https://www.eventbrite.com/d/nigeria/technology--events/" },
-  { platform: "Eventbrite", url: "https://www.eventbrite.com/d/nigeria--lagos/science-and-tech--events/" },
   { platform: "Meetup", url: "https://www.meetup.com/find/?location=ng--Lagos&source=EVENTS&keywords=tech" },
-  { platform: "Meetup", url: "https://www.meetup.com/find/?location=ng--Abuja&source=EVENTS&keywords=technology" },
   { platform: "GDG Community", url: "https://gdg.community.dev/events/" },
   { platform: "Luma", url: "https://lu.ma/nigeria" },
   { platform: "Luma", url: "https://lu.ma/ai" },
-  { platform: "AWS Events", url: "https://aws.amazon.com/events/" },
   { platform: "Microsoft Reactor", url: "https://developer.microsoft.com/en-us/reactor/" },
-  { platform: "DevFest Nigeria", url: "https://devfest.gdg.ng/" },
 ];
+
+/** Cost controls — keep each weekly run small. */
+const MAX_PER_SOURCE = 5;
+/** Stop scraping once we have this many upcoming events. */
+const TARGET_TOTAL = 30;
+/** Sources scraped concurrently per wave. */
+const WAVE_SIZE = 3;
+/** Ignore anything scheduled further out than this. */
+const MAX_LEAD_DAYS = 120;
 
 const eventsSchema = {
   type: "object",
@@ -59,7 +67,7 @@ const eventsSchema = {
 };
 
 const EXTRACT_PROMPT =
-  "Extract every distinct upcoming event listed on this page that relates to technology, software, AI, data, " +
+  `Extract at most ${MAX_PER_SOURCE} of the soonest upcoming events listed on this page that relate to technology, software, AI, data, ` +
   "cybersecurity, design, startups, remote work or digital skills. For each event return: title; a factual " +
   "2-5 sentence description written only from the page content; the absolute URL of the event's own page where " +
   "someone registers; the organiser name; category as one of CONFERENCE HACKATHON MEETUP WEBINAR WORKSHOP " +
@@ -131,7 +139,7 @@ async function scrapeSource(source: Source, apiKey: string) {
     body: JSON.stringify({
       url: source.url,
       onlyMainContent: true,
-      waitFor: 3000,
+      waitFor: 1500,
       formats: [{ type: "json", schema: eventsSchema, prompt: EXTRACT_PROMPT }],
     }),
   });
@@ -180,9 +188,13 @@ function normalize(raw: any, source: Source) {
 
   const startsAt = toIso(raw?.starts_at);
   const endsAt = toIso(raw?.ends_at);
-  // Skip events that have already finished.
-  const end = endsAt ?? startsAt;
-  if (end && new Date(end).getTime() < Date.now() - 12 * 3600e3) return null;
+  // Upcoming events only: we need a readable date, it must not have passed,
+  // and it must not be further out than MAX_LEAD_DAYS.
+  if (!startsAt && !endsAt) return null;
+  const end = endsAt ?? startsAt!;
+  if (new Date(end).getTime() < Date.now() - 12 * 3600e3) return null;
+  const start = startsAt ?? endsAt!;
+  if (new Date(start).getTime() > Date.now() + MAX_LEAD_DAYS * 864e5) return null;
 
   const row = {
     slug: `${slugify(title)}-${hash(sourceUrl)}`,
@@ -231,31 +243,44 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    const results = await Promise.allSettled(
-      SOURCES.map(async (source) => ({ source, raw: await scrapeSource(source, apiKey) })),
-    );
-
     // deno-lint-ignore no-explicit-any
     const byUrl: Record<string, any> = {};
-    for (let i = 0; i < results.length; i++) {
-      const source = SOURCES[i];
-      const outcome = results[i];
-      const key = `${source.platform} ${new URL(source.url).pathname}`;
-      if (outcome.status === "rejected") {
-        report[key] = `failed: ${String(outcome.reason).slice(0, 200)}`;
-        console.error(`scrape-events: ${key} failed`, outcome.reason);
-        continue;
-      }
-      let kept = 0;
-      for (const raw of outcome.value.raw) {
-        const row = normalize(raw, source);
-        if (!row) continue;
-        if (!byUrl[row.source_url]) {
-          byUrl[row.source_url] = row;
-          kept++;
+
+    // Scrape in waves so we can stop as soon as we have enough upcoming events.
+    for (let startIdx = 0; startIdx < SOURCES.length; startIdx += WAVE_SIZE) {
+      if (Object.keys(byUrl).length >= TARGET_TOTAL) {
+        for (const skipped of SOURCES.slice(startIdx)) {
+          report[`${skipped.platform} ${new URL(skipped.url).pathname}`] = "skipped (quota reached)";
         }
+        break;
       }
-      report[key] = `${kept} events`;
+
+      const wave = SOURCES.slice(startIdx, startIdx + WAVE_SIZE);
+      const results = await Promise.allSettled(
+        wave.map(async (source) => ({ source, raw: await scrapeSource(source, apiKey) })),
+      );
+
+      for (let i = 0; i < results.length; i++) {
+        const source = wave[i];
+        const outcome = results[i];
+        const key = `${source.platform} ${new URL(source.url).pathname}`;
+        if (outcome.status === "rejected") {
+          report[key] = `failed: ${String(outcome.reason).slice(0, 200)}`;
+          console.error(`scrape-events: ${key} failed`, outcome.reason);
+          continue;
+        }
+        let kept = 0;
+        for (const raw of outcome.value.raw) {
+          if (kept >= MAX_PER_SOURCE) break;
+          const row = normalize(raw, source);
+          if (!row) continue;
+          if (!byUrl[row.source_url]) {
+            byUrl[row.source_url] = row;
+            kept++;
+          }
+        }
+        report[key] = `${kept} events`;
+      }
     }
 
     const upserts = Object.values(byUrl);
@@ -268,21 +293,8 @@ Deno.serve(async (req) => {
       upserted = upserts.length;
     }
 
-    // Expire finished events and listings we have not seen in 45 days (never our own featured rows).
-    const nowIso = new Date().toISOString();
-    await supabase
-      .from("events")
-      .update({ is_expired: true })
-      .eq("is_featured", false)
-      .eq("is_expired", false)
-      .not("ends_at", "is", null)
-      .lt("ends_at", nowIso);
-    await supabase
-      .from("events")
-      .update({ is_expired: true })
-      .eq("is_featured", false)
-      .eq("is_expired", false)
-      .lt("last_seen_at", new Date(Date.now() - 45 * 864e5).toISOString());
+    // Archive finished events / stale jobs and purge rows older than the retention window.
+    await supabase.rpc("archive_stale_listings");
 
     return new Response(
       JSON.stringify({ success: true, upserted, ms: Date.now() - started, report }),

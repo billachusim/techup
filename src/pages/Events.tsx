@@ -84,6 +84,13 @@ const Events = () => {
 
   const featured = events.filter((e) => e.is_featured);
 
+  const PAGE_SIZE = 12;
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [search, category, format, city, price]);
+  const visibleEvents = filtered.slice(0, visibleCount);
+
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
     if (!hash) return;
@@ -290,13 +297,21 @@ const Events = () => {
             ) : (
               <>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Showing {filtered.length} event{filtered.length === 1 ? "" : "s"}
+                  Showing {Math.min(visibleCount, filtered.length)} of {filtered.length} event
+                  {filtered.length === 1 ? "" : "s"}
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {filtered.map((event) => (
+                  {visibleEvents.map((event) => (
                     <EventCard key={event.id} event={event} />
                   ))}
                 </div>
+                {visibleCount < filtered.length && (
+                  <div className="mt-8 text-center">
+                    <Button variant="outline" size="lg" onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}>
+                      See more events ({filtered.length - visibleCount} left)
+                    </Button>
+                  </div>
+                )}
               </>
             )}
           </div>

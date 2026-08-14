@@ -85,6 +85,60 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_posts: {
+        Row: {
+          author: string
+          category: string
+          content: string
+          created_at: string
+          description: string
+          id: string
+          image_prompt: string | null
+          is_published: boolean
+          published_at: string
+          read_time: string
+          slug: string
+          source: string
+          tags: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author?: string
+          category: string
+          content: string
+          created_at?: string
+          description: string
+          id?: string
+          image_prompt?: string | null
+          is_published?: boolean
+          published_at?: string
+          read_time?: string
+          slug: string
+          source?: string
+          tags?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          category?: string
+          content?: string
+          created_at?: string
+          description?: string
+          id?: string
+          image_prompt?: string | null
+          is_published?: boolean
+          published_at?: string
+          read_time?: string
+          slug?: string
+          source?: string
+          tags?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       certificates: {
         Row: {
           certificate_number: string
@@ -651,6 +705,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      archive_stale_listings: { Args: never; Returns: undefined }
       ensure_course_lectures: {
         Args: { course_uuid: string }
         Returns: undefined

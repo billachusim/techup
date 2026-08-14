@@ -24,6 +24,7 @@ import { useUser } from "@/contexts/UserContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import JobCard from "@/components/jobs/JobCard";
+import PlatformPartners from "@/components/jobs/PlatformPartners";
 import { fetchJobs, employmentLabel, jobPostingSchema } from "@/lib/jobs";
 import { Link } from "react-router-dom";
 
@@ -119,6 +120,14 @@ const Careers = () => {
     () => Array.from(new Set(jobs.map((j) => j.source_platform))).sort(),
     [jobs],
   );
+  const platformCounts = useMemo(
+    () =>
+      jobs.reduce<Record<string, number>>((acc, j) => {
+        acc[j.source_platform] = (acc[j.source_platform] ?? 0) + 1;
+        return acc;
+      }, {}),
+    [jobs],
+  );
   const types = useMemo(
     () => Array.from(new Set(jobs.map((j) => j.employment_type))).sort(),
     [jobs],
@@ -201,6 +210,17 @@ const Careers = () => {
               </p>
             </div>
 
+            <PlatformPartners
+              counts={platformCounts}
+              onViewRoles={(name) => {
+                setPlatform(name);
+                setSearch("");
+                setType("all");
+                setWorkplace("all");
+                document.getElementById("live-opportunities")?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+            />
+
             {/* Filters */}
             <div className="grid gap-3 md:grid-cols-4 mb-8">
               <div className="relative md:col-span-2">
@@ -240,7 +260,7 @@ const Careers = () => {
             </div>
 
             {/* Live feed */}
-            <div className="mb-16">
+            <div className="mb-16 scroll-mt-24" id="live-opportunities">
               <div className="flex items-baseline justify-between mb-6">
                 <h2 className="text-xl md:text-2xl font-bold">Live opportunities</h2>
                 <span className="text-sm text-muted-foreground">{filtered.length} open roles</span>

@@ -1,9 +1,14 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Globe, Building2 } from "lucide-react";
+import { MapPin, Globe, Building2, ExternalLink } from "lucide-react";
 import { Job, employmentLabel, locationLabel, salaryLabel } from "@/lib/jobs";
+import { platformFor } from "@/data/jobPlatforms";
+import ApplyDialog from "@/components/jobs/ApplyDialog";
 
 const JobCard = ({ job }: { job: Job }) => {
   const pay = salaryLabel(job);
+  const platform = platformFor(job.source_platform);
+  const [applyOpen, setApplyOpen] = useState(false);
   return (
     <article className="bg-card border border-border rounded-lg p-5 space-y-3 shadow-sm hover:shadow-md transition-shadow flex flex-col">
       <div className="flex items-start justify-between gap-3">
@@ -36,13 +41,45 @@ const JobCard = ({ job }: { job: Job }) => {
         {pay && <span className="font-medium text-foreground">{pay}</span>}
       </div>
 
-      <Link
-        to={`/careers/jobs/${job.slug}`}
-        className="text-sm font-medium text-primary hover:underline"
-        aria-label={`View details and apply for ${job.title} at ${job.company}`}
-      >
-        View role &amp; apply →
-      </Link>
+      <div className="flex items-center justify-between gap-3 pt-1">
+        <Link
+          to={`/careers/jobs/${job.slug}`}
+          className="text-sm font-medium text-primary hover:underline"
+          aria-label={`View details for ${job.title} at ${job.company}`}
+        >
+          View role →
+        </Link>
+        {platform ? (
+          <button
+            type="button"
+            onClick={() => setApplyOpen(true)}
+            className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+            aria-label={`Apply for ${job.title} at ${job.company}`}
+          >
+            Apply
+          </button>
+        ) : (
+          <a
+            href={job.source_url}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1"
+            aria-label={`Apply for ${job.title} on ${job.source_platform}`}
+          >
+            Apply <ExternalLink size={12} />
+          </a>
+        )}
+      </div>
+
+      {platform && (
+        <ApplyDialog
+          open={applyOpen}
+          onOpenChange={setApplyOpen}
+          platform={platform}
+          jobTitle={job.title}
+          jobUrl={job.source_url}
+        />
+      )}
     </article>
   );
 };

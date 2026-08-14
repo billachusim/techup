@@ -10,21 +10,27 @@ const FIRECRAWL_V2 = "https://api.firecrawl.dev/v2";
 
 type Source = { platform: string; url: string };
 
-// Listing pages for popular AI / remote tech work platforms.
+// Listing pages for the AI / remote tech work platforms that reliably return
+// Nigeria- and Africa-friendly roles. Kept deliberately short to limit spend.
 const SOURCES: Source[] = [
   { platform: "Mercor", url: "https://work.mercor.com/jobs" },
   { platform: "Micro1", url: "https://www.micro1.ai/jobs" },
   { platform: "Turing", url: "https://www.turing.com/jobs" },
   { platform: "Mindrift", url: "https://www.mindrift.ai/opportunities" },
-  { platform: "Alignerr", url: "https://www.alignerr.com/" },
   { platform: "Outlier", url: "https://outlier.ai/expert-jobs" },
-  { platform: "Handshake AI", url: "https://joinhandshake.com/ai/" },
-  { platform: "Toloka", url: "https://toloka.ai/careers/" },
+  { platform: "Alignerr", url: "https://www.alignerr.com/" },
   { platform: "Remote OK", url: "https://remoteok.com/remote-dev-jobs" },
-  { platform: "Wellfound", url: "https://wellfound.com/role/r/software-engineer" },
-  { platform: "Scale AI", url: "https://scale.com/careers" },
   { platform: "Jobberman Nigeria", url: "https://www.jobberman.com/jobs/software-data" },
 ];
+
+/** Cost controls — one weekly run must stay small and predictable. */
+const MAX_PER_PLATFORM = 6;
+/** Once we have this many fresh jobs, remaining sources are skipped this week. */
+const TARGET_TOTAL = 60;
+/** Sources scraped concurrently per wave (lets us stop early). */
+const WAVE_SIZE = 4;
+/** Only listings published within this window are imported. */
+const MAX_AGE_DAYS = 14;
 
 const jobsSchema = {
   type: "object",
@@ -46,6 +52,7 @@ const jobsSchema = {
           salary_max: { type: "number" },
           salary_currency: { type: "string" },
           salary_unit: { type: "string" },
+          posted_date: { type: "string" },
           tags: { type: "array", items: { type: "string" } },
         },
         required: ["title", "company", "description"],
@@ -56,14 +63,13 @@ const jobsSchema = {
 };
 
 const EXTRACT_PROMPT =
-  "Extract every distinct job or work opportunity listed on this page. " +
-  "Focus on technology, AI, data, engineering, design and related roles. " +
-  "For each: title, hiring company (use the platform name if the listing is the platform itself), " +
-  "the absolute apply/listing URL, a factual 2-5 sentence description written from the page content, " +
-  "employment_type as one of FULL_TIME PART_TIME CONTRACTOR INTERN TEMPORARY, " +
-  "is_remote, location text, ISO country code when stated, pay range with currency and unit " +
-  "(HOUR, MONTH or YEAR) only when explicitly published, and up to 6 skill tags. " +
-  "Never invent pay, locations or companies — omit unknown fields.";
+  `Extract at most ${MAX_PER_PLATFORM} of the newest technology, AI, data, engineering or design ` +
+  "job listings on this page. For each: title, hiring company (use the platform name if the listing " +
+  "is the platform itself), the absolute apply URL, a factual 2-4 sentence description from the page " +
+  "content, employment_type (FULL_TIME PART_TIME CONTRACTOR INTERN TEMPORARY), is_remote, location, " +
+  "ISO country code, pay range with currency and unit (HOUR, MONTH, YEAR) only when published, " +
+  "posted_date as an ISO date when the page shows when it was posted, and up to 4 skill tags. " +
+  "Never invent pay, dates, locations or companies — omit unknown fields.";
 
 function slugify(input: string): string {
   return input
@@ -100,7 +106,7 @@ async function scrapeSource(source: Source, apiKey: string) {
     body: JSON.stringify({
       url: source.url,
       onlyMainContent: true,
-      waitFor: 2500,
+      waitFor: 1200,
       formats: [{ type: "json", schema: jobsSchema, prompt: EXTRACT_PROMPT }],
     }),
   });
@@ -118,6 +124,15 @@ async function scrapeSource(source: Source, apiKey: string) {
 
 const ALLOWED_TYPES = ["FULL_TIME", "PART_TIME", "CONTRACTOR", "INTERN", "TEMPORARY"];
 
+/** Parses a scraped posted date. Returns null when unreadable. */
+function parsePostedAt(value: unknown): string | null {
+  if (!value) return null;
+  const d = new Date(String(value));
+  if (Number.isNaN(d.getTime())) return null;
+  if (d.getTime() > Date.now() + 864e5) return null;
+  return d.toISOString().slice(0, 10);
+}
+
 function normalize(raw: any, source: Source) {
   const title = String(raw?.title ?? "").trim();
   if (!title || title.length > 160) return null;
@@ -132,6 +147,13 @@ function normalize(raw: any, source: Source) {
 
   const type = String(raw?.employment_type ?? "").toUpperCase().replace(/[\s-]/g, "_");
   const employment_type = ALLOWED_TYPES.includes(type) ? type : "FULL_TIME";
+
+  // Recency gate: drop anything published more than MAX_AGE_DAYS ago.
+  const postedAt = parsePostedAt(raw?.posted_date);
+  if (postedAt) {
+    const age = Date.now() - new Date(postedAt).getTime();
+    if (age > MAX_AGE_DAYS * 864e5) return null;
+  }
 
   const slug = `${slugify(`${company}-${title}`)}-${hash(`${source.platform}|${sourceUrl}|${title}`)}`;
 
@@ -150,8 +172,8 @@ function normalize(raw: any, source: Source) {
     salary_max: Number.isFinite(raw?.salary_max) ? raw.salary_max : null,
     salary_currency: raw?.salary_currency ? String(raw.salary_currency).toUpperCase().slice(0, 3) : null,
     salary_unit: raw?.salary_unit ? String(raw.salary_unit).toUpperCase().slice(0, 8) : null,
-    tags: Array.isArray(raw?.tags) ? raw.tags.map((t: unknown) => String(t).slice(0, 40)).slice(0, 6) : [],
-    posted_at: new Date().toISOString().slice(0, 10),
+    tags: Array.isArray(raw?.tags) ? raw.tags.map((t: unknown) => String(t).slice(0, 40)).slice(0, 4) : [],
+    posted_at: postedAt ?? new Date().toISOString().slice(0, 10),
     last_seen_at: new Date().toISOString(),
     is_expired: false,
   };
@@ -174,37 +196,42 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    const results = await Promise.allSettled(
-      SOURCES.map(async (source) => {
-        const raw = await scrapeSource(source, apiKey);
-        return { source, raw };
-      }),
-    );
-
-    const rows: Record<string, any> = {};
-    for (let i = 0; i < results.length; i++) {
-      const source = SOURCES[i];
-      const outcome = results[i];
-      if (outcome.status === "rejected") {
-        report[source.platform] = `failed: ${String(outcome.reason).slice(0, 200)}`;
-        console.error(`scrape-jobs: ${source.platform} failed`, outcome.reason);
-        continue;
-      }
-      let kept = 0;
-      for (const raw of outcome.value.raw) {
-        const row = normalize(raw, source);
-        if (!row) continue;
-        rows[row.source_url + "|" + row.title] = row;
-        kept++;
-      }
-      report[source.platform] = `${kept} jobs`;
-    }
-
     // Dedupe by source_url — the table has a unique constraint on it.
     const byUrl: Record<string, any> = {};
-    for (const row of Object.values(rows)) {
-      if (!byUrl[row.source_url]) byUrl[row.source_url] = row;
+
+    // Scrape in small waves so we can stop as soon as we have enough fresh jobs.
+    for (let start = 0; start < SOURCES.length; start += WAVE_SIZE) {
+      if (Object.keys(byUrl).length >= TARGET_TOTAL) {
+        for (const skipped of SOURCES.slice(start)) report[skipped.platform] = "skipped (quota reached)";
+        break;
+      }
+
+      const wave = SOURCES.slice(start, start + WAVE_SIZE);
+      const results = await Promise.allSettled(
+        wave.map(async (source) => ({ source, raw: await scrapeSource(source, apiKey) })),
+      );
+
+      for (let i = 0; i < results.length; i++) {
+        const source = wave[i];
+        const outcome = results[i];
+        if (outcome.status === "rejected") {
+          report[source.platform] = `failed: ${String(outcome.reason).slice(0, 200)}`;
+          console.error(`scrape-jobs: ${source.platform} failed`, outcome.reason);
+          continue;
+        }
+        let kept = 0;
+        for (const raw of outcome.value.raw) {
+          if (kept >= MAX_PER_PLATFORM) break;
+          const row = normalize(raw, source);
+          if (!row) continue;
+          if (byUrl[row.source_url]) continue;
+          byUrl[row.source_url] = row;
+          kept++;
+        }
+        report[source.platform] = `${kept} jobs`;
+      }
     }
+
     const upserts = Object.values(byUrl);
 
     let inserted = 0;
@@ -216,9 +243,8 @@ Deno.serve(async (req) => {
       inserted = upserts.length;
     }
 
-    // Retire listings not seen in the last 30 days.
-    const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-    await supabase.from("jobs").update({ is_expired: true }).lt("last_seen_at", cutoff).eq("is_expired", false);
+    // Archive stale jobs / finished events and purge very old rows.
+    await supabase.rpc("archive_stale_listings");
 
     return new Response(
       JSON.stringify({ success: true, upserted: inserted, ms: Date.now() - started, report }),

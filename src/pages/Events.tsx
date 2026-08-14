@@ -84,6 +84,13 @@ const Events = () => {
 
   const featured = events.filter((e) => e.is_featured);
 
+  const PAGE_SIZE = 12;
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [search, category, format, city, price]);
+  const visibleEvents = filtered.slice(0, visibleCount);
+
   useEffect(() => {
     const hash = window.location.hash.replace("#", "");
     if (!hash) return;

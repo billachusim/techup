@@ -302,6 +302,108 @@ export type Database = {
           },
         ]
       }
+      events: {
+        Row: {
+          address: string | null
+          category: string
+          city: string | null
+          country: string | null
+          created_at: string
+          currency: string | null
+          date_text: string | null
+          description: string
+          ends_at: string | null
+          first_seen_at: string
+          format: string
+          id: string
+          image_url: string | null
+          is_expired: boolean
+          is_featured: boolean
+          is_free: boolean
+          last_seen_at: string
+          lat: number | null
+          lng: number | null
+          organizer: string
+          price_text: string | null
+          slug: string
+          source_platform: string
+          source_url: string
+          starts_at: string | null
+          state: string | null
+          tags: string[]
+          timezone: string | null
+          title: string
+          updated_at: string
+          venue_name: string | null
+        }
+        Insert: {
+          address?: string | null
+          category?: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          currency?: string | null
+          date_text?: string | null
+          description: string
+          ends_at?: string | null
+          first_seen_at?: string
+          format?: string
+          id?: string
+          image_url?: string | null
+          is_expired?: boolean
+          is_featured?: boolean
+          is_free?: boolean
+          last_seen_at?: string
+          lat?: number | null
+          lng?: number | null
+          organizer: string
+          price_text?: string | null
+          slug: string
+          source_platform: string
+          source_url: string
+          starts_at?: string | null
+          state?: string | null
+          tags?: string[]
+          timezone?: string | null
+          title: string
+          updated_at?: string
+          venue_name?: string | null
+        }
+        Update: {
+          address?: string | null
+          category?: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          currency?: string | null
+          date_text?: string | null
+          description?: string
+          ends_at?: string | null
+          first_seen_at?: string
+          format?: string
+          id?: string
+          image_url?: string | null
+          is_expired?: boolean
+          is_featured?: boolean
+          is_free?: boolean
+          last_seen_at?: string
+          lat?: number | null
+          lng?: number | null
+          organizer?: string
+          price_text?: string | null
+          slug?: string
+          source_platform?: string
+          source_url?: string
+          starts_at?: string | null
+          state?: string | null
+          tags?: string[]
+          timezone?: string | null
+          title?: string
+          updated_at?: string
+          venue_name?: string | null
+        }
+        Relationships: []
+      }
       faculty_ids: {
         Row: {
           course_interest: string

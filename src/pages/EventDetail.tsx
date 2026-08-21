@@ -99,7 +99,11 @@ const EventDetail = () => {
         <meta name="twitter:card" content="summary_large_image" />
         {event.image_url && <meta property="og:image" content={event.image_url} />}
         <link rel="canonical" href={eventUrl(event)} />
-        <script type="application/ld+json">{JSON.stringify(eventSchema(event))}</script>
+        {(() => {
+          const schema = eventSchema(event);
+          return schema ? <script type="application/ld+json">{JSON.stringify(schema)}</script> : null;
+        })()}
+
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",

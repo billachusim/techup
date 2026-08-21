@@ -134,19 +134,24 @@ const Events = () => {
             { "@type": "Thing", name: "Hackathons Nigeria" },
           ],
         })}</script>
-        {events.length > 0 && (
-          <script type="application/ld+json">{JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "ItemList",
-            name: "Upcoming tech events in Nigeria and Africa",
-            numberOfItems: events.slice(0, 25).length,
-            itemListElement: events.slice(0, 25).map((event, i) => ({
-              "@type": "ListItem",
-              position: i + 1,
-              item: eventSchema(event),
-            })),
-          })}</script>
-        )}
+        {(() => {
+          const items = events.slice(0, 25).map(eventSchema).filter(Boolean);
+          if (items.length === 0) return null;
+          return (
+            <script type="application/ld+json">{JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ItemList",
+              name: "Upcoming tech events in Nigeria and Africa",
+              numberOfItems: items.length,
+              itemListElement: items.map((item, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                item,
+              })),
+            })}</script>
+          );
+        })()}
+
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "FAQPage",

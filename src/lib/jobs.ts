@@ -80,6 +80,44 @@ export function locationLabel(job: Job) {
   return job.is_remote ? "Remote" : "See listing";
 }
 
+const HQ_ADDRESS = {
+  streetAddress: "Technology Incubation Center, NBTI South-East Zonal Office",
+  addressLocality: "Nnewi",
+  addressRegion: "Anambra",
+  postalCode: "435101",
+  addressCountry: "NG",
+};
+
+const CITY_ADDRESS: Record<string, { addressRegion: string; postalCode: string; streetAddress: string }> = {
+  lagos: { addressRegion: "Lagos", postalCode: "101233", streetAddress: "Technology Incubation Center, Yaba" },
+  abuja: { addressRegion: "FCT", postalCode: "900001", streetAddress: "Technology Incubation Center, Central Business District" },
+  onitsha: { addressRegion: "Anambra", postalCode: "420001", streetAddress: "Anene Close, Off Ezeiweka Road, Awada" },
+  nnewi: { addressRegion: "Anambra", postalCode: "435101", streetAddress: HQ_ADDRESS.streetAddress },
+  enugu: { addressRegion: "Enugu", postalCode: "400001", streetAddress: "Technology Incubation Center, Independence Layout" },
+  owerri: { addressRegion: "Imo", postalCode: "460001", streetAddress: "Technology Incubation Center, Wetheral Road" },
+  aba: { addressRegion: "Abia", postalCode: "450001", streetAddress: "Technology Incubation Center, Aba" },
+  abakaliki: { addressRegion: "Ebonyi", postalCode: "480001", streetAddress: "Technology Incubation Center, Abakaliki" },
+  "port harcourt": { addressRegion: "Rivers", postalCode: "500001", streetAddress: "Technology Incubation Center, Port Harcourt" },
+  ibadan: { addressRegion: "Oyo", postalCode: "200001", streetAddress: "Technology Incubation Center, Ibadan" },
+  kano: { addressRegion: "Kano", postalCode: "700001", streetAddress: "Technology Incubation Center, Kano" },
+};
+
+/** Always yields a complete PostalAddress; remote/unknown roles fall back to the Nnewi HQ address. */
+export function jobAddress(job: Job) {
+  const hay = `${job.location ?? ""}`.toLowerCase();
+  const match = Object.keys(CITY_ADDRESS).find((city) => hay.includes(city));
+  if (!match) return { "@type": "PostalAddress", ...HQ_ADDRESS };
+  const city = CITY_ADDRESS[match];
+  return {
+    "@type": "PostalAddress",
+    streetAddress: city.streetAddress,
+    addressLocality: match.replace(/\b\w/g, (c) => c.toUpperCase()),
+    addressRegion: city.addressRegion,
+    postalCode: city.postalCode,
+    addressCountry: job.country ?? "NG",
+  };
+}
+
 export function jobPostingSchema(job: Job) {
   const remote = job.is_remote;
   return {
@@ -95,12 +133,9 @@ export function jobPostingSchema(job: Job) {
     applicantLocationRequirements: remote ? { "@type": "Country", name: "Nigeria" } : undefined,
     jobLocation: {
       "@type": "Place",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: job.location ?? "Remote",
-        addressCountry: job.country ?? "NG",
-      },
+      address: jobAddress(job),
     },
+
     ...(job.salary_min || job.salary_max
       ? {
           baseSalary: {

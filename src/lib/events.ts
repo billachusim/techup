@@ -121,9 +121,31 @@ export function eventUrl(event: TechEvent) {
   return `https://techfaculty.ng/events/${event.slug}`;
 }
 
+/** Try to recover an ISO start date from free-text date labels like "12 September 2026". */
+export function resolveStartDate(event: TechEvent): string | null {
+  if (event.starts_at) return event.starts_at;
+  const text = (event.date_text ?? "").trim();
+  if (!text) return null;
+  const cleaned = text.replace(/\b(\d{1,2})(st|nd|rd|th)\b/gi, "$1").split(/\s*(?:–|—|-\s|to\s)/)[0];
+  const parsed = new Date(cleaned);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return parsed.toISOString();
+}
+
+function organizerUrl(event: TechEvent) {
+  if (event.is_featured) return "https://techfaculty.ng/events";
+  try {
+    return new URL(event.source_url).origin;
+  } catch {
+    return "https://techfaculty.ng/events";
+  }
+}
+
+/** Returns null when no start date can be established — invalid Event markup is never emitted. */
 export function eventSchema(event: TechEvent) {
-  const start = event.starts_at ?? undefined;
-  const end = event.ends_at ?? undefined;
+  const start = resolveStartDate(event);
+  if (!start) return null;
+  const end = event.ends_at ?? new Date(new Date(start).getTime() + 3 * 60 * 60 * 1000).toISOString();
   const virtual = event.format === "VIRTUAL";
   const hybrid = event.format === "HYBRID";
 
@@ -143,6 +165,10 @@ export function eventSchema(event: TechEvent) {
     url: event.source_url,
   };
 
+  const priceNumber = event.is_free
+    ? "0"
+    : (event.price_text?.match(/[\d][\d,\.]*/)?.[0]?.replace(/,/g, "") ?? null);
+
   return {
     "@context": "https://schema.org",
     "@type": "Event",
@@ -157,15 +183,17 @@ export function eventSchema(event: TechEvent) {
     startDate: start,
     endDate: end,
     location: virtual ? online : hybrid ? [place, online] : place,
-    organizer: { "@type": "Organization", name: event.organizer },
+    organizer: { "@type": "Organization", name: event.organizer, url: organizerUrl(event) },
+    performer: { "@type": "PerformingGroup", name: event.organizer },
     image: event.image_url ? [event.image_url] : undefined,
     url: eventUrl(event),
     isAccessibleForFree: event.is_free,
     offers: {
       "@type": "Offer",
       url: event.source_url,
-      price: event.is_free ? "0" : undefined,
-      priceCurrency: event.is_free ? "NGN" : event.currency ?? undefined,
+      price: priceNumber ?? undefined,
+      priceCurrency: event.is_free ? "NGN" : event.currency ?? (priceNumber ? "NGN" : undefined),
+      validFrom: new Date(event.last_seen_at).toISOString(),
       availability: "https://schema.org/InStock",
       category: event.is_free ? "Free" : "Paid",
     },

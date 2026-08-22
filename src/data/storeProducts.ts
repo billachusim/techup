@@ -1,5 +1,5 @@
-import batteryBankBox from "@/assets/products/battery-bank-box.png.asset.json";
-import batteryBankDetails from "@/assets/products/battery-bank-details.png.asset.json";
+import batteryBankBox from "@/assets/products/battery-bank-box.png";
+import batteryBankDetails from "@/assets/products/battery-bank-details.png";
 import laptop1 from "@/assets/products/laptop-1.jpg";
 import laptop2 from "@/assets/products/laptop-2.jpg";
 import backpack1 from "@/assets/products/backpack-1.jpg";
@@ -78,9 +78,9 @@ export const storeProducts: StoreProduct[] = [
       "18650 power bank Nigeria",
     ],
     images: [
-      { src: batteryBankBox.url, alt: "Battery Bank replaceable battery power bank retail box, made in Nigeria" },
+      { src: batteryBankBox, alt: "Battery Bank replaceable battery power bank retail box, made in Nigeria" },
       {
-        src: batteryBankDetails.url,
+        src: batteryBankDetails,
         alt: "Battery Bank features: works with 18650 and AA batteries, colour options, 1-year battery replacement guarantee",
       },
     ],

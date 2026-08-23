@@ -102,8 +102,8 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>Tech Faculty — World-Class Tech Training | Get Certified & Employed</title>
-        <meta name="description" content="World-class tech training in Software Engineering, Data Science, Cyber Security & AI. Get certified and employed with Tech Faculty — training professionals worldwide." />
+        <title>Tech Faculty — Get Certified & Employed in Tech</title>
+        <meta name="description" content="Accredited bootcamps in software engineering, data science, AI and cybersecurity. 6,000+ students trained, 87% employed. Learn in person or online." />
         <meta property="og:title" content="Tech Faculty — World-Class Tech Training" />
         <meta property="og:description" content="Over 6,000 students trained. 87% employment rate. Accredited bootcamps in Software Engineering, Data Science, Cybersecurity & AI. Training professionals worldwide." />
         <meta property="og:type" content="website" />

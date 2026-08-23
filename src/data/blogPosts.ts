@@ -736,8 +736,8 @@ Our **Data Analytics Bootcamp** covers exactly this stack — Excel → SQL → 
   },
   {
     slug: "cybersecurity-salary-nigeria-2026",
-    title: "Cybersecurity Salary in Nigeria 2026: SOC, Pentest & GRC",
-    description: "Verified 2026 cybersecurity salary bands in Nigeria — SOC analyst, penetration tester, GRC officer, and remote pay. What each role does and pays.",
+    title: "Cybersecurity Salary Nigeria: 2026 Entry to Senior Guide",
+    description: "2026 salary guide: exact naira pay bands for SOC analysts, pentesters and GRC officers in Nigeria, entry-level to senior, plus remote USD rates.",
     content: `# Cybersecurity Salary in Nigeria 2026: SOC, Pentest & GRC Pay Bands
 
 *By Bill Achusim · Jul 2, 2026*

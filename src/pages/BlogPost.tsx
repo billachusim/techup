@@ -8,6 +8,7 @@ import { ArrowLeft, Clock, Calendar } from "lucide-react";
 import { getCategoryByName } from "@/data/blogCategories";
 import ReactMarkdown from "react-markdown";
 import BlogActions from "@/components/BlogActions";
+import SuccessKitCTA from "@/components/siwes/SuccessKitCTA";
 import { useAllBlogPosts } from "@/hooks/useBlogPostsData";
 
 const BlogPost = () => {
@@ -38,6 +39,11 @@ const BlogPost = () => {
     .filter((p) => p.slug !== post.slug && p.tags.some((tag) => post.tags.includes(tag)))
     .slice(0, 2);
   const category = getCategoryByName(post.tags[0]);
+
+  // SIWES/internship articles get the Success Kit funnel; other posts are untouched.
+  const isSiwesPost = /siwes|internship|industrial training|\bIT placement\b/i.test(
+    `${post.slug} ${post.title} ${post.tags.join(" ")}`,
+  );
 
   return (
     <div className="min-h-screen bg-background">

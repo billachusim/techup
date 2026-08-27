@@ -25,7 +25,14 @@ const navLinks = [
   },
   { label: "Careers", href: "/careers" },
   { label: "Events", href: "/events" },
-  { label: "Internships", href: "/siwes" },
+  {
+    label: "Internships",
+    children: [
+      { label: "SIWES / IT placements", href: "/siwes" },
+      { label: "SIWES Success Kit", href: "/siwes-success-kit" },
+      { label: "Opportunities board", href: "/opportunities" },
+    ],
+  },
   { label: "Products", href: "/products" },
   { label: "Tech Store", href: "/tech-store" },
   { label: "Blog", href: "/blog" },

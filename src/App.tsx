@@ -22,6 +22,8 @@ import SchoolCollaborations from "./pages/SchoolCollaborations";
 import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
 import SIWES from "./pages/SIWES";
+import SuccessKit from "./pages/SuccessKit";
+import Opportunities from "./pages/Opportunities";
 import About from "./pages/About";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -63,6 +65,8 @@ const App = () => (
             <Route path="/events" element={<Events />} />
             <Route path="/events/:slug" element={<EventDetail />} />
             <Route path="/siwes" element={<SIWES />} />
+            <Route path="/siwes-success-kit" element={<SuccessKit />} />
+            <Route path="/opportunities" element={<Opportunities />} />
             <Route path="/about" element={<About />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/category/:slug" element={<BlogCategory />} />

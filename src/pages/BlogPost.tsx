@@ -8,6 +8,7 @@ import { ArrowLeft, Clock, Calendar } from "lucide-react";
 import { getCategoryByName } from "@/data/blogCategories";
 import ReactMarkdown from "react-markdown";
 import BlogActions from "@/components/BlogActions";
+import SuccessKitCTA from "@/components/siwes/SuccessKitCTA";
 import { useAllBlogPosts } from "@/hooks/useBlogPostsData";
 
 const BlogPost = () => {
@@ -38,6 +39,11 @@ const BlogPost = () => {
     .filter((p) => p.slug !== post.slug && p.tags.some((tag) => post.tags.includes(tag)))
     .slice(0, 2);
   const category = getCategoryByName(post.tags[0]);
+
+  // SIWES/internship articles get the Success Kit funnel; other posts are untouched.
+  const isSiwesPost = /siwes|internship|industrial training|\bIT placement\b/i.test(
+    `${post.slug} ${post.title} ${post.tags.join(" ")}`,
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -132,16 +138,21 @@ const BlogPost = () => {
               description={post.description}
             />
 
+            {isSiwesPost && <SuccessKitCTA source={post.slug} variant="inline" />}
+
             {/* Content */}
             <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-muted-foreground prose-p:mb-6 prose-p:leading-relaxed prose-li:text-muted-foreground prose-li:leading-relaxed prose-ul:mb-6 prose-ol:mb-6 prose-strong:text-foreground prose-a:text-primary hover:prose-a:underline prose-hr:my-8">
               <ReactMarkdown>{post.content}</ReactMarkdown>
             </div>
+
+            {isSiwesPost && <SuccessKitCTA source={post.slug} variant="capture" />}
 
             <BlogActions
               slug={post.slug}
               title={post.title}
               description={post.description}
             />
+
           </div>
         </article>
 

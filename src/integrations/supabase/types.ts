@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "13.0.5"
+    PostgrestVersion: "14.17"
   }
   public: {
     Tables: {
@@ -614,6 +614,42 @@ export type Database = {
         }
         Relationships: []
       }
+      leads: {
+        Row: {
+          channel: string
+          contact: string
+          created_at: string
+          id: string
+          interest: string
+          name: string | null
+          notes: string | null
+          school: string | null
+          source: string | null
+        }
+        Insert: {
+          channel: string
+          contact: string
+          created_at?: string
+          id?: string
+          interest: string
+          name?: string | null
+          notes?: string | null
+          school?: string | null
+          source?: string | null
+        }
+        Update: {
+          channel?: string
+          contact?: string
+          created_at?: string
+          id?: string
+          interest?: string
+          name?: string | null
+          notes?: string | null
+          school?: string | null
+          source?: string | null
+        }
+        Relationships: []
+      }
       lectures: {
         Row: {
           course_id: string
@@ -657,6 +693,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      partner_listings: {
+        Row: {
+          apply_url: string | null
+          created_at: string
+          deadline: string | null
+          description: string
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          is_paid_placement: boolean
+          kind: string
+          location: string | null
+          organisation: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          apply_url?: string | null
+          created_at?: string
+          deadline?: string | null
+          description: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          is_paid_placement?: boolean
+          kind: string
+          location?: string | null
+          organisation: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          apply_url?: string | null
+          created_at?: string
+          deadline?: string | null
+          description?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          is_paid_placement?: boolean
+          kind?: string
+          location?: string | null
+          organisation?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {

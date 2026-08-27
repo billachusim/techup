@@ -31,6 +31,16 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://techfaculty.ng/siwes-success-kit</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/opportunities</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://techfaculty.ng/tech-store</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -242,6 +252,42 @@
     <priority>0.7</priority>
   </url>
   <!-- JOBS:START -->
+  <url>
+    <loc>https://techfaculty.ng/careers/jobs/micro1-ai-devops-engineer-joh9ht</loc>
+    <lastmod>2026-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/careers/jobs/micro1-ai-enterprise-marketing-content-expert-94hg03</loc>
+    <lastmod>2026-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/careers/jobs/micro1-ai-business-intelligence-analytics-expert-66cbqh</loc>
+    <lastmod>2026-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/careers/jobs/micro1-ai-software-developer-7npdk2</loc>
+    <lastmod>2026-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/careers/jobs/micro1-ai-data-analyst-oy30nd</loc>
+    <lastmod>2026-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/careers/jobs/micro1-ai-software-engineer-dmgsnh</loc>
+    <lastmod>2026-08-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
   <url>
     <loc>https://techfaculty.ng/careers/jobs/micro1-ai-data-scientist-e709ix</loc>
     <lastmod>2026-08-17</lastmod>

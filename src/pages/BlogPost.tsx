@@ -132,16 +132,21 @@ const BlogPost = () => {
               description={post.description}
             />
 
+            {isSiwesPost && <SuccessKitCTA source={post.slug} variant="inline" />}
+
             {/* Content */}
             <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-muted-foreground prose-p:mb-6 prose-p:leading-relaxed prose-li:text-muted-foreground prose-li:leading-relaxed prose-ul:mb-6 prose-ol:mb-6 prose-strong:text-foreground prose-a:text-primary hover:prose-a:underline prose-hr:my-8">
               <ReactMarkdown>{post.content}</ReactMarkdown>
             </div>
+
+            {isSiwesPost && <SuccessKitCTA source={post.slug} variant="capture" />}
 
             <BlogActions
               slug={post.slug}
               title={post.title}
               description={post.description}
             />
+
           </div>
         </article>
 

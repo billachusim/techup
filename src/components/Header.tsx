@@ -130,7 +130,7 @@ const Header = () => {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1 overflow-x-auto max-w-[70vw] [scrollbar-width:thin]">
             {navLinks.map((link) =>
               link.children ? (
                 <DropdownMenu key={link.label}>
@@ -139,7 +139,7 @@ const Header = () => {
                       {link.label} <ChevronDown size={14} />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start">
+                  <DropdownMenuContent align="start" className="max-h-[70vh] overflow-y-auto">
                     {link.children.map((child) => (
                       <DropdownMenuItem key={child.href} asChild>
                         <Link to={child.href} className={isActive(child.href) ? "font-semibold text-primary" : ""}>
@@ -200,8 +200,8 @@ const Header = () => {
                   <span className="sr-only">Open navigation menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-72 pt-12">
-                <nav className="flex flex-col gap-1">
+              <SheetContent side="right" className="w-72 pt-12 overflow-y-auto">
+                <nav className="flex flex-col gap-1 pb-8">
                   {navLinks.map((link) =>
                     link.children ? (
                       <div key={link.label} className="space-y-1">

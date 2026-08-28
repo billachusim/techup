@@ -223,6 +223,22 @@ const LeadCaptureForm = ({
             placeholder="e.g. Nnamdi Azikiwe University"
           />
         </div>
+        {extraFields.map((f) => (
+          <div key={f.id} className="space-y-1.5">
+            <Label htmlFor={`lead-${interest}-${f.id}`}>
+              {f.label}
+              {!f.required && (
+                <span className="text-muted-foreground font-normal"> (optional)</span>
+              )}
+            </Label>
+            <Input
+              id={`lead-${interest}-${f.id}`}
+              value={extras[f.id] ?? ""}
+              onChange={(e) => setExtras((prev) => ({ ...prev, [f.id]: e.target.value }))}
+              placeholder={f.placeholder}
+            />
+          </div>
+        ))}
       </div>
 
       {error && (

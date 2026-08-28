@@ -3882,7 +3882,128 @@ Coding is the closest thing to a superpower a Nigerian teenager can learn in 202
     tags: ["Tech Training for Teens","coding for teenagers Nigeria","Python for kids Nigeria","JavaScript for teens","holiday coding bootcamp Nigeria"],
     readTime: 8
   },
+  {
+    slug: "virtual-siwes-nigeria-2026-online-it-logbook-signing",
+    title: "Virtual SIWES in Nigeria (2026): Online IT & Logbook Signing",
+    description: "How to do your SIWES or IT online in Nigeria in 2026, get your logbook reviewed, signed and stamped, and have it delivered back before your school deadline.",
+    content: `# Virtual SIWES in Nigeria (2026): How to Do Your IT Online and Get Your Logbook Signed and Delivered
+
+*By Bill Achusim · Aug 28, 2026*
+
+Every session, the same thing happens. A student in Yola, Ekiti or Gombe is told to go and find an IT placement in "a relevant tech organisation". There is one in their town, maybe. It has no supervisor free, or it collects the logbook and returns it three months later, unsigned. The student loses the session — not because they could not do the work, but because nobody would sign for it.
+
+That is the real pain point of SIWES in Nigeria. Not the training. The **placement letter, the logbook and the stamp.**
+
+This guide explains how virtual industrial training works in 2026, what your school actually checks, how to write logbook entries that survive scrutiny, and how to get your logbook reviewed, filled, signed and stamped without travelling — including our own two-way delivery service.
+
+## Can you do SIWES online in Nigeria?
+
+For most computing and computing-adjacent courses, yes — and it is now common. Since 2020, departments across Nigerian universities and polytechnics have accepted remote and hybrid industrial training for Computer Science, Information Technology, Software Engineering, Data Science, Statistics, Cybersecurity and related programmes.
+
+What your department is really checking is not your desk. It is four things:
+
+1. **Is the host organisation real and registered?** A verifiable name, address and licence.
+2. **Is the work relevant to your course?** Web development, data analytics, AI, cybersecurity, design — yes. Selling recharge cards — no.
+3. **Is there a named supervisor?** Someone who can attest to what you did each week.
+4. **Will the logbook and ITF forms be completed, signed and stamped?** This is where most remote placements collapse.
+
+If the answer to all four is yes, remote placement is usually approved. **Ask your department SIWES coordinator before you pay anyone anything** — including us. Get the approval, in writing if you can, then arrange the placement.
+
+## What supervisors and coordinators actually check in a logbook
+
+Coordinators do not read your logbook for literature. They scan for three signals:
+
+- **Weekly consistency.** Dated entries for every working week of your stated duration. Gaps look invented.
+- **Specific, technical detail.** Tools, tasks, outcomes. "Learnt about computers" fails. "Built the product listing page in React and connected it to the Supabase products table" passes.
+- **Supervisor engagement.** Comments, signatures and a company stamp — not one signature scrawled across twelve weeks on the last day.
+
+The single biggest reason logbooks get rejected is that they were written in one weekend at the end of the placement. It shows.
+
+## How to write entries that hold up
+
+Use one line per day and a short weekly summary. Concrete verbs, real artefacts.
+
+**Sample week (Web Development track)**
+
+- *Monday:* Set up the project repository and development environment; reviewed the client brief for a produce distributor's storefront.
+- *Tuesday:* Built the responsive product grid with React and Tailwind CSS; tested on mobile viewports.
+- *Wednesday:* Connected the product list to the database and handled empty and loading states.
+- *Thursday:* Implemented the WhatsApp order button that pre-fills the product name and price.
+- *Friday:* Supervisor code review; fixed image sizing and accessibility issues flagged in review.
+- *Weekly summary:* Delivered a working storefront page and learnt how component state and database queries fit together.
+
+**Sample week (Data Analytics track)**
+
+- *Monday:* Cleaned three months of sales records in Excel; documented duplicate and missing-value rules.
+- *Tuesday:* Loaded the cleaned data into Power BI and built the revenue-by-month visual.
+- *Wednesday:* Added a customer-segment slicer and validated totals against the raw file.
+- *Thursday:* Presented the draft dashboard to my supervisor; noted feedback on chart choice.
+- *Friday:* Rebuilt the top-products chart as a sorted bar chart and wrote the insight summary.
+
+Ten weeks of that and no coordinator argues with you.
+
+## The deadline trap nobody warns you about
+
+Logbook submission deadlines arrive fast at the start of the new session, and three things collide:
+
+- Your ITF forms (SPE-1, Form 8) still need company sections completed.
+- Your logbook needs signatures and a stamp.
+- You are already back in school, hundreds of kilometres from your host.
+
+Students then travel across the country holding a logbook, or send it by bus with a stranger's phone number and hope. Both are avoidable.
+
+## How the waybill review process works
+
+"Waybill" is how we say delivery here. The process we run is deliberately simple:
+
+1. You book the logbook service and tell us your city and your submission deadline.
+2. Our courier partner **collects** your logbook and ITF forms from your address.
+3. We **review** every week against your recorded work, and fill in gaps, supervisor comments and the summary sections.
+4. Your supervisor **signs**, and the documents are **stamped** officially.
+5. We **waybill it back** to you, in time for your deadline.
+
+Both delivery legs are inside the fee, so you never travel to Nnewi. Turnaround is 5–7 working days from arrival at our headquarters, plus courier time each way — so book with two clear weeks before your deadline where possible.
+
+## What it costs
+
+- **Virtual IT placement — ₦45,000** for the full duration of your training. Includes the acceptance and placement letter addressed to your school, weekly live sessions, a mentor in your department, real project work, attendance and supervision records, a completion certificate and a recommendation letter. Both tracks are available online: **Learn & Pay** and **Tutor & Earn** (tutor other learners and earn while completing your IT).
+- **Logbook &amp; documents service — ₦15,000** per logbook, covering courier pickup, review, filling, official signing and stamping, ITF form sections, and the return delivery.
+
+Both fees are paid before work starts. You submit the form, we send payment details on WhatsApp or email, and nothing is charged automatically. See the full breakdown on the [Virtual SIWES page](/virtual-siwes).
+
+## Virtual, on-site or hybrid — which should you pick?
+
+| | Virtual IT | On-site IT |
+|---|---|---|
+| Best for | Students far from our centres, working or part-time students, late placements | Students who want daily in-person supervision and lab access |
+| Location | Anywhere in Nigeria | 21 cities including Nnewi, Onitsha, Owerri, Aba, Enugu, Abakaliki, Abuja |
+| Logbook | Reviewed, signed, stamped and delivered both ways | Signed and stamped in person |
+| Cost | ₦45,000 placement + ₦15,000 logbook service | See the [SIWES tracks page](/siwes) |
+
+Some students do a hybrid: online weekly work with a few on-site weeks. We write the acceptance letter to match whatever your department approved.
+
+## Before you apply, do these four things
+
+1. Confirm with your coordinator that remote or hybrid IT is acceptable for your course.
+2. Note your exact IT duration and start date — schools differ (usually 3 or 6 months).
+3. Collect your logbook and ITF forms from your department early, not in the final week.
+4. Decide your track: Learn & Pay if you are building skills, Tutor & Earn if you can already teach.
+
+Then [reserve a virtual IT slot](/virtual-siwes) or message a coordinator. If you want the free preparation checklist and templates first, start with the [SIWES Success Kit](/siwes-success-kit).
+
+## The bottom line
+
+Industrial training is supposed to teach you to work. In 2026, a huge amount of real technology work in Nigeria already happens remotely — for dollar-paying clients, on distributed teams. Doing your IT online is not a shortcut around the scheme; it is the scheme catching up with how the industry actually operates.
+
+Just make sure the paperwork is handled by people who take it seriously. That part is not optional, and it is exactly the part we built this service around.
+`,
+    date: "2026-08-28",
+    author: "Bill Achusim",
+    tags: ["SIWES & Internships","virtual SIWES Nigeria","online industrial training Nigeria","SIWES logbook signing","IT logbook stamp Nigeria"],
+    readTime: 9
+  },
 ];
+
 
 export const getAllBlogPosts = () => {
   return [...blogPosts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

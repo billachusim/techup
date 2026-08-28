@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CredibilityBanner from "@/components/CredibilityBanner";
@@ -14,6 +15,8 @@ import {
   MessageCircle,
   CheckCircle2,
   ArrowRight,
+  Monitor,
+  Stamp,
 } from "lucide-react";
 
 const tracks = [
@@ -182,6 +185,53 @@ const SIWES = () => {
           </div>
         </section>
 
+        {/* Virtual option */}
+        <section className="py-16 px-4">
+          <div className="container mx-auto max-w-4xl">
+            <h2 className="text-3xl font-bold text-center mb-4">
+              Can&apos;t attend in person? Do it virtually
+            </h2>
+            <p className="text-center text-muted-foreground text-sm md:text-base max-w-2xl mx-auto mb-10">
+              Both tracks — Learn &amp; Pay and Tutor &amp; Earn — also run fully online for students
+              anywhere in Nigeria, and we handle your logbook by delivery so you never travel.
+            </p>
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card className="border-primary/30">
+                <CardContent className="p-6 space-y-3">
+                  <div className="p-3 rounded-xl bg-primary/10 w-fit">
+                    <Monitor className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-lg">Virtual IT placement — ₦45,000</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Placement letter for your school, weekly live sessions, a mentor, real project
+                    work, attendance records and your completion certificate — all online.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="border-border">
+                <CardContent className="p-6 space-y-3">
+                  <div className="p-3 rounded-xl bg-primary/10 w-fit">
+                    <Stamp className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-lg">Logbook service — ₦15,000</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    We arrange courier pickup of your logbook and ITF forms, review and complete the
+                    entries, sign and stamp them, then waybill everything back to you. On-site interns
+                    can use this too.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+            <div className="text-center mt-8">
+              <Button size="lg" variant="outline" asChild>
+                <Link to="/virtual-siwes">
+                  See how Virtual SIWES works <ArrowRight className="ml-2" size={18} />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+
         {/* How to Apply */}
         <section className="py-16 px-4">
           <div className="container mx-auto max-w-3xl">
@@ -192,6 +242,7 @@ const SIWES = () => {
                 "Include your IT duration (e.g., 3 months, 6 months) and preferred start date.",
                 "We'll review your application and schedule an onboarding call within 48 hours.",
                 "Once accepted, you'll receive your placement letter and onboarding materials.",
+                "Prefer to stay in your city? Tell us you want the virtual IT track and we onboard you online instead.",
               ].map((step, idx) => (
                 <div key={idx} className="flex items-start gap-4">
                   <div className="w-8 h-8 rounded-full bg-primary text-background font-bold text-sm flex items-center justify-center shrink-0">

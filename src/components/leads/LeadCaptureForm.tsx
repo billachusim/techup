@@ -10,7 +10,16 @@ export type LeadInterest =
   | "free_checklist"
   | "success_kit"
   | "partner_enquiry"
-  | "siwes_placement";
+  | "siwes_placement"
+  | "virtual_siwes"
+  | "logbook_service";
+
+export type LeadExtraField = {
+  id: string;
+  label: string;
+  placeholder?: string;
+  required?: boolean;
+};
 
 type Props = {
   interest: LeadInterest;
@@ -22,7 +31,10 @@ type Props = {
   /** Message pre-filled when the student continues on WhatsApp after submitting. */
   whatsappMessage?: string;
   compact?: boolean;
+  /** Additional questions saved into the lead's notes field. */
+  extraFields?: LeadExtraField[];
 };
+
 
 const successCopy: Record<LeadInterest, { title: string; body: string }> = {
   free_checklist: {

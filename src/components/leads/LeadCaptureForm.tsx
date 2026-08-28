@@ -53,6 +53,14 @@ const successCopy: Record<LeadInterest, { title: string; body: string }> = {
     title: "Placement request received",
     body: "A SIWES coordinator will contact you with available tracks, dates and the nearest Tech Faculty centre.",
   },
+  virtual_siwes: {
+    title: "Virtual IT slot requested",
+    body: "A coordinator replies within one working day with your payment details and start date. The ₦45,000 placement fee confirms your slot — nothing is charged automatically, and your acceptance letter follows within 48 hours of payment.",
+  },
+  logbook_service: {
+    title: "Logbook pickup requested",
+    body: "We reply within one working day with payment details for the ₦15,000 service and confirm your courier pickup window. Review, signing, stamping and the return delivery are all included.",
+  },
 };
 
 const LeadCaptureForm = ({
@@ -62,11 +70,13 @@ const LeadCaptureForm = ({
   hint,
   whatsappMessage,
   compact = false,
+  extraFields = [],
 }: Props) => {
   const [channel, setChannel] = useState<"email" | "whatsapp">("email");
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [school, setSchool] = useState("");
+  const [extras, setExtras] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
 
@@ -85,8 +95,17 @@ const LeadCaptureForm = ({
       );
       return;
     }
+    const missing = extraFields.find((f) => f.required && !extras[f.id]?.trim());
+    if (missing) {
+      setError(`Please fill in "${missing.label}".`);
+      return;
+    }
     setStatus("saving");
     setError(null);
+    const notes = extraFields
+      .map((f) => (extras[f.id]?.trim() ? `${f.label}: ${extras[f.id].trim()}` : null))
+      .filter(Boolean)
+      .join(" | ");
     const { error: insertError } = await supabase.from("leads").insert({
       name: name.trim() || null,
       channel,
@@ -94,7 +113,9 @@ const LeadCaptureForm = ({
       school: school.trim() || null,
       interest,
       source,
+      notes: notes || null,
     });
+
     if (insertError) {
       setStatus("idle");
       setError("We couldn't save that. Please try again, or reach us on WhatsApp.");

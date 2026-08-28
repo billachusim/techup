@@ -22,6 +22,7 @@ import SchoolCollaborations from "./pages/SchoolCollaborations";
 import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
 import SIWES from "./pages/SIWES";
+import VirtualSIWES from "./pages/VirtualSIWES";
 import SuccessKit from "./pages/SuccessKit";
 import Opportunities from "./pages/Opportunities";
 import About from "./pages/About";
@@ -65,6 +66,7 @@ const App = () => (
             <Route path="/events" element={<Events />} />
             <Route path="/events/:slug" element={<EventDetail />} />
             <Route path="/siwes" element={<SIWES />} />
+            <Route path="/virtual-siwes" element={<VirtualSIWES />} />
             <Route path="/siwes-success-kit" element={<SuccessKit />} />
             <Route path="/opportunities" element={<Opportunities />} />
             <Route path="/about" element={<About />} />

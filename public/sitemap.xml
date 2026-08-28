@@ -31,6 +31,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://techfaculty.ng/virtual-siwes</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://techfaculty.ng/siwes-success-kit</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

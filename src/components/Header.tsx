@@ -29,6 +29,7 @@ const navLinks = [
     label: "Internships",
     children: [
       { label: "SIWES / IT placements", href: "/siwes" },
+      { label: "Virtual SIWES (online IT)", href: "/virtual-siwes" },
       { label: "SIWES Success Kit", href: "/siwes-success-kit" },
       { label: "Opportunities board", href: "/opportunities" },
     ],

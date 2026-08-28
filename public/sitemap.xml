@@ -819,4 +819,9 @@
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/virtual-siwes-nigeria-2026-online-it-logbook-signing</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

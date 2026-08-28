@@ -11,6 +11,7 @@ Tech Faculty NG trains, certifies, and employs the next generation of African te
 - [Business Partnerships](/business-partnerships): Hire-from / train-with-us programs for companies.
 - [School Collaborations](/school-collaborations): Bootcamp partnerships for universities and secondary schools.
 - [SIWES](/siwes): Industrial training placement (Learn & Pay, Tutor & Earn tracks).
+- [Virtual SIWES](/virtual-siwes): Online IT placement (NGN 45,000) plus logbook review, signing, stamping and two-way courier delivery (NGN 15,000).
 - [Tech Events](/events): Directory of upcoming tech, AI, data and developer events across Nigeria and Africa, refreshed weekly, plus our own meetups, workshops and holiday bootcamps. Each event has its own page at /events/<slug>.
 - [Careers](/careers): Internal job board and open roles at Tech Faculty NG.
 - [Software Products](/products): Mobile apps built by Tech Faculty including Dear Claire, Alter Ego, Eavesdrop, AI Clopedia, plus partners Tiny People AI and Lovable.

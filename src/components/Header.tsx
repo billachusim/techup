@@ -15,7 +15,7 @@ import { CurrencyToggle } from "@/components/CurrencyToggle";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "Departments", href: "/#departments" },
+  { label: "Departments", href: "/departments" },
   {
     label: "Partnerships",
     children: [

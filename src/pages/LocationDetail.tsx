@@ -118,7 +118,7 @@ const LocationDetail = () => {
           </p>
 
           <div className="flex flex-wrap gap-3 mt-6">
-            <JoinWhatsAppButton url={COMMUNITY_WHATSAPP_URL} groupName="the Tech Faculty WhatsApp community">
+            <JoinWhatsAppButton url={COMMUNITY_WHATSAPP_URL} groupName="the Tech Faculty WhatsApp community" captureSource={`location:${campus.slug}`} captureContext={`${campus.city} campus`}>
               <span className="flex items-center justify-center gap-2">
                 Join the {campus.city} community <MessageCircle size={14} />
               </span>

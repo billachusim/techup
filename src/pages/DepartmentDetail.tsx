@@ -134,6 +134,8 @@ const DepartmentDetail = () => {
             <JoinWhatsAppButton
               url={COMMUNITY_WHATSAPP_URL}
               groupName="the Tech Faculty WhatsApp community"
+              captureSource={`department:${dept.slug}`}
+              captureContext={dept.title}
               size="lg"
             >
               <span className="flex items-center justify-center gap-2">
@@ -216,7 +218,7 @@ const DepartmentDetail = () => {
               <li>Complete your projects and receive a verifiable Tech Faculty certificate.</li>
             </ol>
             <div className="flex flex-wrap gap-3 mt-5">
-              <JoinWhatsAppButton url={COMMUNITY_WHATSAPP_URL} groupName="the Tech Faculty WhatsApp community">
+              <JoinWhatsAppButton url={COMMUNITY_WHATSAPP_URL} groupName="the Tech Faculty WhatsApp community" captureSource={`department-footer:${dept.slug}`} captureContext={dept.title}>
                 <span className="flex items-center justify-center gap-2">
                   Join Community <MessageCircle size={14} />
                 </span>

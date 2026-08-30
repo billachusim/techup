@@ -148,15 +148,18 @@ const LeadCaptureForm = ({
     }
     // Marker row so you can see who actually opened WhatsApp before downloading.
     void supabase.from("leads").insert({
-      name: name.trim() || null,
+      name: clampLeadField(name, "name"),
       channel,
-      contact: contact.trim(),
-      school: school.trim() || null,
+      contact: clampLeadField(contact, "contact") ?? "",
+      school: clampLeadField(school, "school"),
       interest,
-      source: `${source}#whatsapp-unlock`,
-      notes: [notesValue, "WhatsApp unlock clicked (checklist download unlocked)"]
-        .filter(Boolean)
-        .join(" | "),
+      source: clampLeadField(`${source}#whatsapp-unlock`, "source"),
+      notes: clampLeadField(
+        [notesValue, "WhatsApp unlock clicked (checklist download unlocked)"]
+          .filter(Boolean)
+          .join(" | "),
+        "notes",
+      ),
     });
     window.setTimeout(() => {
       setUnlocked(true);

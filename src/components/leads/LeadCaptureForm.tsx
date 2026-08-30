@@ -119,26 +119,21 @@ const LeadCaptureForm = ({
       .map((f) => (extras[f.id]?.trim() ? `${f.label}: ${extras[f.id].trim()}` : null))
       .filter(Boolean)
       .join(" | ");
-    const { data: inserted, error: insertError } = await supabase
-      .from("leads")
-      .insert({
-        name: name.trim() || null,
-        channel,
-        contact: contact.trim(),
-        school: school.trim() || null,
-        interest,
-        source,
-        notes: notes || null,
-      })
-      .select("id")
-      .maybeSingle();
+    const { error: insertError } = await supabase.from("leads").insert({
+      name: name.trim() || null,
+      channel,
+      contact: contact.trim(),
+      school: school.trim() || null,
+      interest,
+      source,
+      notes: notes || null,
+    });
 
     if (insertError) {
       setStatus("idle");
       setError("We couldn't save that. Please try again, or reach us on WhatsApp.");
       return;
     }
-    setLeadId(inserted?.id ?? null);
     setNotesValue(notes || null);
     setStatus("done");
   };
@@ -150,14 +145,18 @@ const LeadCaptureForm = ({
     } catch {
       /* storage may be unavailable */
     }
-    if (leadId) {
-      void supabase
-        .from("leads")
-        .update({
-          notes: [notesValue, "WhatsApp unlock clicked"].filter(Boolean).join(" | "),
-        })
-        .eq("id", leadId);
-    }
+    // Marker row so you can see who actually opened WhatsApp before downloading.
+    void supabase.from("leads").insert({
+      name: name.trim() || null,
+      channel,
+      contact: contact.trim(),
+      school: school.trim() || null,
+      interest,
+      source: `${source}#whatsapp-unlock`,
+      notes: [notesValue, "WhatsApp unlock clicked (checklist download unlocked)"]
+        .filter(Boolean)
+        .join(" | "),
+    });
     window.setTimeout(() => {
       setUnlocked(true);
       setUnlocking(false);

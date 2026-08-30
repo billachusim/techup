@@ -120,13 +120,13 @@ const LeadCaptureForm = ({
       .filter(Boolean)
       .join(" | ");
     const { error: insertError } = await supabase.from("leads").insert({
-      name: name.trim() || null,
+      name: clampLeadField(name, "name"),
       channel,
-      contact: contact.trim(),
-      school: school.trim() || null,
+      contact: clampLeadField(contact, "contact") ?? "",
+      school: clampLeadField(school, "school"),
       interest,
-      source,
-      notes: notes || null,
+      source: clampLeadField(source, "source"),
+      notes: clampLeadField(notes, "notes"),
     });
 
     if (insertError) {

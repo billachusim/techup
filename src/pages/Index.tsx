@@ -128,6 +128,7 @@ const Index = () => {
         <GetStarted />
       </main>
       <Footer />
+      <HomeWhatsAppPrompts />
     </div>
   );
 };

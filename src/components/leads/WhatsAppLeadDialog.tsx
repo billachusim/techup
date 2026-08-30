@@ -138,13 +138,13 @@ const WhatsAppLeadDialog = ({
       .join(" | ");
 
     const { error: insertError } = await supabase.from("leads").insert({
-      name: name.trim(),
+      name: clampLeadField(name, "name"),
       channel: "whatsapp",
-      contact: phone.trim(),
-      school: city || null,
+      contact: clampLeadField(phone, "contact") ?? "",
+      school: clampLeadField(city, "school"),
       interest: variant === "community" ? "community_join" : "whatsapp_chat",
-      source,
-      notes,
+      source: clampLeadField(source, "source"),
+      notes: clampLeadField(notes, "notes"),
     });
 
     if (insertError) {

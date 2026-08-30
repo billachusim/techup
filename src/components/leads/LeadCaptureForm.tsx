@@ -79,6 +79,17 @@ const LeadCaptureForm = ({
   const [extras, setExtras] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
+  const [leadId, setLeadId] = useState<string | null>(null);
+  const [notesValue, setNotesValue] = useState<string | null>(null);
+  const [unlocking, setUnlocking] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [unlocked, setUnlocked] = useState(() => {
+    try {
+      return localStorage.getItem(UNLOCK_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
 
   const valid =
     channel === "email"

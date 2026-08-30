@@ -20,6 +20,7 @@ import {
 import { Check, Contact, Copy, Loader2, MessageCircle, Users } from "lucide-react";
 import { campuses } from "@/data/campuses";
 import { SUCCESS_KIT } from "@/data/successKit";
+import { isMobileDevice } from "@/lib/whatsapp";
 
 export const LEAD_CAPTURED_KEY = "tf_wa_lead_captured";
 
@@ -154,7 +155,9 @@ const WhatsAppLeadDialog = ({
     rememberLead();
     setStatus("done");
     if (variant === "community") {
-      onCaptured?.();
+      // On mobile the invite opens natively right away; on desktop we wait for
+      // an explicit click so the QR dialog doesn't stack over this one.
+      if (isMobileDevice()) onCaptured?.();
     } else {
       window.open(waHref, "_blank", "noopener,noreferrer");
     }
@@ -232,11 +235,16 @@ const WhatsAppLeadDialog = ({
               </a>
             </Button>
             {variant === "community" && groupUrl && (
-              <Button variant="secondary" className="w-full" asChild>
-                <a href={groupUrl} target="_blank" rel="noopener noreferrer">
-                  <Users size={16} className="mr-2" />
-                  Open the community group
-                </a>
+              <Button
+                variant="secondary"
+                className="w-full"
+                onClick={() => {
+                  onOpenChange(false);
+                  onCaptured?.();
+                }}
+              >
+                <Users size={16} className="mr-2" />
+                Open the community group
               </Button>
             )}
             <p className="text-xs text-muted-foreground">

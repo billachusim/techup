@@ -34,6 +34,8 @@ type Props = {
   /** Additional questions saved into the lead's notes field. */
   extraFields?: LeadExtraField[];
 };
+const UNLOCK_KEY = "tf_checklist_unlocked";
+
 
 
 const successCopy: Record<LeadInterest, { title: string; body: string }> = {
@@ -79,6 +81,17 @@ const LeadCaptureForm = ({
   const [extras, setExtras] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
+  
+  const [notesValue, setNotesValue] = useState<string | null>(null);
+  const [unlocking, setUnlocking] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [unlocked, setUnlocked] = useState(() => {
+    try {
+      return localStorage.getItem(UNLOCK_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
 
   const valid =
     channel === "email"
@@ -121,45 +134,130 @@ const LeadCaptureForm = ({
       setError("We couldn't save that. Please try again, or reach us on WhatsApp.");
       return;
     }
+    setNotesValue(notes || null);
     setStatus("done");
   };
 
+  const unlockWhatsApp = () => {
+    setUnlocking(true);
+    try {
+      localStorage.setItem(UNLOCK_KEY, "1");
+    } catch {
+      /* storage may be unavailable */
+    }
+    // Marker row so you can see who actually opened WhatsApp before downloading.
+    void supabase.from("leads").insert({
+      name: name.trim() || null,
+      channel,
+      contact: contact.trim(),
+      school: school.trim() || null,
+      interest,
+      source: `${source}#whatsapp-unlock`,
+      notes: [notesValue, "WhatsApp unlock clicked (checklist download unlocked)"]
+        .filter(Boolean)
+        .join(" | "),
+    });
+    window.setTimeout(() => {
+      setUnlocked(true);
+      setUnlocking(false);
+    }, 1200);
+  };
+
+  const waHref = `https://wa.me/${SUCCESS_KIT.whatsappNumber}?text=${encodeURIComponent(
+    whatsappMessage ?? "Hello Tech Faculty, I just submitted the SIWES form on your website.",
+  )}`;
+
   if (status === "done") {
     const copy = successCopy[interest];
+    const gated = interest === "free_checklist";
+    const checklistWa = `https://wa.me/${SUCCESS_KIT.whatsappNumber}?text=${encodeURIComponent(
+      `Hello Tech Faculty, I'd like the free SIWES Placement Checklist.${
+        name.trim() ? ` Name: ${name.trim()}.` : ""
+      }${school.trim() ? ` School: ${school.trim()}.` : ""}`,
+    )}`;
+
     return (
       <div className="rounded-lg border border-primary/30 bg-primary/5 p-5 space-y-3">
         <div className="flex items-start gap-2">
           <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 shrink-0" />
           <div>
-            <p className="font-semibold">{copy.title}</p>
-            <p className="text-sm text-muted-foreground mt-1">{copy.body}</p>
+            <p className="font-semibold">
+              {gated && !unlocked ? "One quick step to unlock your checklist" : copy.title}
+            </p>
+            <p className="text-sm text-muted-foreground mt-1">
+              {gated && !unlocked
+                ? "Send us the pre-filled WhatsApp message (and save our number) — your download unlocks right after."
+                : copy.body}
+            </p>
           </div>
         </div>
-        {interest === "free_checklist" ? (
-          <Button asChild className="w-full sm:w-auto">
-            <a href="/downloads/siwes-placement-checklist.pdf" download="SIWES-Placement-Checklist-TechFaculty.pdf">
-              <FileDown size={16} className="mr-2" />
-              Download the checklist (PDF)
-            </a>
-          </Button>
+
+        {gated ? (
+          unlocked ? (
+            <Button asChild className="w-full sm:w-auto">
+              <a
+                href="/downloads/siwes-placement-checklist.pdf"
+                download="SIWES-Placement-Checklist-TechFaculty.pdf"
+              >
+                <FileDown size={16} className="mr-2" />
+                Download the checklist (PDF)
+              </a>
+            </Button>
+          ) : (
+            <div className="space-y-2">
+              <Button asChild className="w-full sm:w-auto" disabled={unlocking}>
+                <a href={checklistWa} target="_blank" rel="noopener noreferrer" onClick={unlockWhatsApp}>
+                  {unlocking ? (
+                    <Loader2 size={16} className="mr-2 animate-spin" />
+                  ) : (
+                    <MessageCircle size={16} className="mr-2" />
+                  )}
+                  {unlocking ? "Unlocking your download…" : "Message us on WhatsApp to unlock"}
+                </a>
+              </Button>
+              <p className="text-xs text-muted-foreground">
+                Save our number so you get replies:{" "}
+                <span className="font-medium text-foreground">+{SUCCESS_KIT.whatsappNumber}</span>{" "}
+                <button
+                  type="button"
+                  className="underline underline-offset-2 hover:text-foreground"
+                  onClick={() => {
+                    void navigator.clipboard?.writeText(`+${SUCCESS_KIT.whatsappNumber}`);
+                    setCopied(true);
+                    window.setTimeout(() => setCopied(false), 1500);
+                  }}
+                >
+                  {copied ? "Copied" : "Copy number"}
+                </button>
+              </p>
+              <p className="text-xs text-muted-foreground">
+                WhatsApp didn't open?{" "}
+                <button
+                  type="button"
+                  className="underline underline-offset-2 hover:text-foreground"
+                  onClick={unlockWhatsApp}
+                >
+                  Tap here to continue to your download
+                </button>
+                .
+              </p>
+            </div>
+          )
         ) : (
           <p className="text-sm text-muted-foreground">
             Sent to <span className="font-medium text-foreground">{contact}</span>
             {channel === "whatsapp" ? " on WhatsApp" : " by email"}.
           </p>
         )}
-        <Button variant="outline" size="sm" asChild>
-          <a
-            href={`https://wa.me/${SUCCESS_KIT.whatsappNumber}?text=${encodeURIComponent(
-              whatsappMessage ?? "Hello Tech Faculty, I just submitted the SIWES form on your website.",
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <MessageCircle size={14} className="mr-2" />
-            Continue on WhatsApp
-          </a>
-        </Button>
+
+        {(!gated || unlocked) && (
+          <Button variant="outline" size="sm" asChild>
+            <a href={waHref} target="_blank" rel="noopener noreferrer">
+              <MessageCircle size={14} className="mr-2" />
+              Continue on WhatsApp
+            </a>
+          </Button>
+        )}
       </div>
     );
   }

@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, MessageCircle, CheckCircle2, Loader2 } from "lucide-react";
+import { Mail, MessageCircle, CheckCircle2, Loader2, FileDown } from "lucide-react";
 import { SUCCESS_KIT } from "@/data/successKit";
 
 export type LeadInterest =
@@ -38,8 +38,8 @@ type Props = {
 
 const successCopy: Record<LeadInterest, { title: string; body: string }> = {
   free_checklist: {
-    title: "Your free SIWES checklist is on the way",
-    body: "We send it within a few minutes. If it hasn't arrived in 10 minutes, check your spam folder or message us on WhatsApp and we'll resend it.",
+    title: "Your free SIWES checklist is ready",
+    body: "Download it instantly below — we've also noted your contact in case we need to resend it.",
   },
   success_kit: {
     title: "Kit reserved — we'll confirm shortly",
@@ -135,10 +135,19 @@ const LeadCaptureForm = ({
             <p className="text-sm text-muted-foreground mt-1">{copy.body}</p>
           </div>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Sent to <span className="font-medium text-foreground">{contact}</span>
-          {channel === "whatsapp" ? " on WhatsApp" : " by email"}.
-        </p>
+        {interest === "free_checklist" ? (
+          <Button asChild className="w-full sm:w-auto">
+            <a href="/downloads/siwes-placement-checklist.pdf" download="SIWES-Placement-Checklist-TechFaculty.pdf">
+              <FileDown size={16} className="mr-2" />
+              Download the checklist (PDF)
+            </a>
+          </Button>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            Sent to <span className="font-medium text-foreground">{contact}</span>
+            {channel === "whatsapp" ? " on WhatsApp" : " by email"}.
+          </p>
+        )}
         <Button variant="outline" size="sm" asChild>
           <a
             href={`https://wa.me/${SUCCESS_KIT.whatsappNumber}?text=${encodeURIComponent(

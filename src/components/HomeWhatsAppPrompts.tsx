@@ -91,7 +91,7 @@ const HomeWhatsAppPrompts = () => {
 
       {/* One-time scroll / exit prompt */}
       {prompt && (
-        <div className="fixed bottom-20 sm:bottom-6 left-3 right-3 sm:left-auto sm:right-6 sm:w-80 z-40 rounded-xl border border-border bg-card shadow-xl p-4">
+        <div className="fixed bottom-40 sm:bottom-24 left-3 right-3 sm:left-auto sm:right-6 sm:w-80 z-50 rounded-xl border border-border bg-card shadow-xl p-4">
           <button
             type="button"
             aria-label="Close"

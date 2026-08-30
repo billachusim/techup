@@ -42,7 +42,7 @@ const FloatingWhatsAppCTA = () => {
 
   return (
     <>
-      <div className="fixed bottom-4 right-4 z-40 hidden min-[420px]:flex items-center gap-2">
+      <div className={`fixed right-3 sm:right-4 z-40 flex items-center gap-2 ${pathname === "/" ? "bottom-20 sm:bottom-4" : "bottom-4"}`}>
         <button
           type="button"
           onClick={dismiss}

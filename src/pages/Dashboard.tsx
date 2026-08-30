@@ -593,6 +593,7 @@ const Dashboard = () => {
                   </Button>
                   <JoinWhatsAppButton
                     variant="outline"
+                    capture={false}
                     url={COMMUNITY_WHATSAPP_URL}
                     groupName="the Tech Faculty WhatsApp community"
                   >

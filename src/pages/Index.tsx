@@ -14,6 +14,7 @@ import ServicesSection from "@/components/ServicesSection";
 import Pricing from "@/components/Pricing";
 import GetStarted from "@/components/GetStarted";
 import Footer from "@/components/Footer";
+import HomeWhatsAppPrompts from "@/components/HomeWhatsAppPrompts";
 
 const provider = { "@type": "Organization", "name": "Tech Faculty", "url": "https://techfaculty.ng" };
 
@@ -128,6 +129,7 @@ const Index = () => {
         <GetStarted />
       </main>
       <Footer />
+      <HomeWhatsAppPrompts />
     </div>
   );
 };

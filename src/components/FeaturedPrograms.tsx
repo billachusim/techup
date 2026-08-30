@@ -97,6 +97,8 @@ const FeaturedPrograms = () => {
                       <JoinWhatsAppButton
                         url={program.href}
                         groupName={program.title}
+                        captureSource={`home-featured:${program.title}`}
+                        captureContext={program.title}
                         className="w-full bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background font-semibold hover:opacity-90"
                       >
                         <span className="flex items-center justify-center">

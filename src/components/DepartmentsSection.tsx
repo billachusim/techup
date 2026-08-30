@@ -136,6 +136,8 @@ const DepartmentsSection = () => {
                           size="sm"
                           url={COMMUNITY_WHATSAPP_URL}
                           groupName="the Tech Faculty WhatsApp community"
+                          captureSource="home-departments"
+                          captureContext={dept.title}
                           className="flex-1"
                         >
                           <span className="flex items-center justify-center gap-2">

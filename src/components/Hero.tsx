@@ -88,6 +88,8 @@ const Hero = () => {
             size="lg"
             url={COMMUNITY_WHATSAPP_URL}
             groupName="the Tech Faculty WhatsApp community"
+            captureSource="home-hero"
+            captureContext="Homepage hero"
             className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] hover:opacity-90 shadow-lg font-semibold text-background"
           />
           <Button

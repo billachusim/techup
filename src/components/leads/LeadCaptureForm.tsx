@@ -34,6 +34,8 @@ type Props = {
   /** Additional questions saved into the lead's notes field. */
   extraFields?: LeadExtraField[];
 };
+const UNLOCK_KEY = "tf_checklist_unlocked";
+
 
 
 const successCopy: Record<LeadInterest, { title: string; body: string }> = {

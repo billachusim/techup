@@ -95,6 +95,18 @@ const JoinWhatsAppButton = ({
         )}
       </Button>
 
+      <WhatsAppLeadDialog
+        open={leadOpen}
+        onOpenChange={setLeadOpen}
+        variant="community"
+        source={captureSource ?? `join-whatsapp:${typeof window !== "undefined" ? window.location.pathname : "/"}`}
+        groupUrl={url}
+        context={captureContext ?? groupName}
+        onCaptured={proceed}
+      />
+
+
+
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>

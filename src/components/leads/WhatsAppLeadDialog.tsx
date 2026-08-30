@@ -167,12 +167,12 @@ const WhatsAppLeadDialog = ({
   const markSaidHi = () => {
     setSaidHi(true);
     void supabase.from("leads").insert({
-      name: name.trim(),
+      name: clampLeadField(name, "name"),
       channel: "whatsapp",
-      contact: phone.trim(),
-      school: city || null,
+      contact: clampLeadField(phone, "contact") ?? "",
+      school: clampLeadField(city, "school"),
       interest: variant === "community" ? "community_join" : "whatsapp_chat",
-      source: `${source}#said-hi`,
+      source: clampLeadField(`${source}#said-hi`, "source"),
       notes: "Said hi on WhatsApp (direct chat opened)",
     });
   };

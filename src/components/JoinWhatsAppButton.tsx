@@ -11,12 +11,19 @@ import {
 } from "@/components/ui/dialog";
 import { isMobileDevice } from "@/lib/whatsapp";
 import { toast } from "@/hooks/use-toast";
+import WhatsAppLeadDialog, { hasCapturedLead } from "@/components/leads/WhatsAppLeadDialog";
 
 interface JoinWhatsAppButtonProps extends Omit<ButtonProps, "onClick" | "asChild"> {
   url: string;
   label?: string;
   groupName?: string;
   children?: ReactNode;
+  /** Ask for name/number/city before opening the group. Defaults to true. */
+  capture?: boolean;
+  /** Attribution for the captured lead. */
+  captureSource?: string;
+  /** What they were viewing, e.g. a department or campus. */
+  captureContext?: string;
 }
 
 /**
@@ -24,15 +31,22 @@ interface JoinWhatsAppButtonProps extends Omit<ButtonProps, "onClick" | "asChild
  * they frequently land on an error page unless the invite is opened from a
  * logged-in WhatsApp session. On desktop we show a QR code to scan with the
  * phone plus an explicit "open in browser" escape hatch.
+ *
+ * When `capture` is on (default), first-time visitors get a short lead form so
+ * their name, number and city land in the leads table before they join.
  */
 const JoinWhatsAppButton = ({
   url,
   label = "Join Our WhatsApp Community",
   groupName = "our WhatsApp community",
   children,
+  capture = true,
+  captureSource,
+  captureContext,
   ...buttonProps
 }: JoinWhatsAppButtonProps) => {
   const [open, setOpen] = useState(false);
+  const [leadOpen, setLeadOpen] = useState(false);
   const [qr, setQr] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -43,12 +57,20 @@ const JoinWhatsAppButton = ({
       .catch(() => setQr(null));
   }, [open, qr, url]);
 
-  const handleClick = () => {
+  const proceed = () => {
     if (isMobileDevice()) {
       window.open(url, "_blank", "noopener,noreferrer");
       return;
     }
     setOpen(true);
+  };
+
+  const handleClick = () => {
+    if (capture && !hasCapturedLead()) {
+      setLeadOpen(true);
+      return;
+    }
+    proceed();
   };
 
   const copyLink = async () => {

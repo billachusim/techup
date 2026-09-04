@@ -95,7 +95,7 @@ serve(async (req) => {
       customizations: {
         title: 'Tech Faculty',
         description: `${planName} Plan — ${itemNames.join(', ')}`,
-        logo: 'https://techup.lovable.app/favicon.ico',
+        logo: 'https://techfaculty.ng/favicon.png',
       },
     };
 

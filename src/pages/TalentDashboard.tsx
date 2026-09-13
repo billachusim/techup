@@ -1,22 +1,37 @@
 import { Helmet } from "react-helmet-async";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Loader2, Sparkles, Briefcase, Pencil, ShieldCheck } from "lucide-react";
+import { Loader2, Sparkles, Briefcase, Pencil, ShieldCheck, Users2, MessageCircle, Wallet, Eye } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { APPLICATION_STATUS_LABEL, formatBudget, type TalentProfile } from "@/lib/talent";
+import {
+  APPLICATION_STATUS_LABEL,
+  ENGAGEMENT_STATUS_LABEL,
+  MATCH_STATUS_LABEL,
+  fetchProjectGroupUrl,
+  formatBudget,
+  formatMoney,
+  projectManagerUrl,
+  weeksSince,
+  type TalentEngagement,
+  type TalentProfile,
+} from "@/lib/talent";
+
+const MATCHED_STATUSES = ["approved", "accepted", "assessment", "interview", "hired"];
 
 type MatchRow = {
   id: string;
   score: number;
   reason: string | null;
   status: string;
+  role_id: string;
   talent_roles: {
     slug: string; title: string; company: string; summary: string;
     budget_min: number | null; budget_max: number | null; budget_currency: string; budget_unit: string;

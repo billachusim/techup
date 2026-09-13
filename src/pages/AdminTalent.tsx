@@ -71,6 +71,7 @@ const AdminTalent = () => {
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
   const [briefs, setBriefs] = useState<BusinessBrief[]>([]);
   const [engagements, setEngagements] = useState<EngagementRow[]>([]);
+  const [interests, setInterests] = useState<InterestRow[]>([]);
   const [newRole, setNewRole] = useState(emptyRole);
   const [creating, setCreating] = useState(false);
   const [matchingRoleId, setMatchingRoleId] = useState<string | null>(null);

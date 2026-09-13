@@ -255,6 +255,12 @@ const AdminTalent = () => {
     load();
   };
 
+  const setInterestStatus = async (id: string, status: string) => {
+    const { error } = await supabase.from("talent_interest_requests").update({ status }).eq("id", id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    load();
+  };
+
   const setEngagementStatus = async (id: string, status: string) => {
     const { error } = await supabase.from("talent_engagements").update({ status }).eq("id", id);
     if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }

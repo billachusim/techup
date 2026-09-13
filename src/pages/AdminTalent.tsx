@@ -535,8 +535,19 @@ const AdminTalent = () => {
                             <Download size={14} className="mr-1.5" /> CV
                           </Button>
                         )}
+                        {t.phone && (
+                          <a href={talentWhatsAppUrl(`Hello ${t.full_name.split(" ")[0]}, this is Tech Faculty.`)} target="_blank" rel="noopener noreferrer">
+                            <Button size="sm" variant="outline">WhatsApp us</Button>
+                          </a>
+                        )}
                         <Button size="sm" variant={t.is_vetted ? "ghost" : "default"} onClick={() => toggleVetted(t)}>
                           {t.is_vetted ? "Remove vetted" : "Mark vetted"}
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => toggleProfileFlag(t, "is_client_interested")}>
+                          {t.is_client_interested ? "Clear client interest" : "Mark client interested"}
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => toggleProfileFlag(t, "is_public")}>
+                          {t.is_public ? "Hide from directory" : "Show in directory"}
                         </Button>
                       </div>
                     </div>

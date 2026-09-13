@@ -120,6 +120,12 @@ const Careers = () => {
     staleTime: 1000 * 60 * 30,
   });
 
+  const { data: talentRoles = [] } = useQuery({
+    queryKey: ["talent-roles-careers"],
+    queryFn: () => fetchPublishedRoles(),
+    staleTime: 1000 * 60 * 10,
+  });
+
   const platforms = useMemo(
     () => Array.from(new Set(jobs.map((j) => j.source_platform))).sort(),
     [jobs],

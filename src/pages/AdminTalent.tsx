@@ -29,7 +29,14 @@ type MatchRow = {
   id: string; score: number; reason: string | null; status: string; source: string;
   role_id: string; talent_profile_id: string;
   talent_roles: { title: string; company: string } | null;
-  talent_profiles: { full_name: string; city: string | null; skills: string[] } | null;
+  talent_profiles: { full_name: string; city: string | null; skills: string[]; phone: string | null } | null;
+};
+
+type EngagementRow = {
+  id: string; talent_profile_id: string; role_id: string | null; weekly_amount: number | null;
+  currency: string; started_on: string; status: string; note: string | null;
+  talent_roles: { title: string } | null;
+  talent_profiles: { full_name: string } | null;
 };
 
 type ApplicationRow = {

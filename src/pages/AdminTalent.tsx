@@ -616,7 +616,25 @@ const AdminTalent = () => {
                     {decided.map((m) => (
                       <div key={m.id} className="flex flex-wrap items-center justify-between gap-2 p-3 text-sm">
                         <span>{m.talent_profiles?.full_name} → {m.talent_roles?.title}</span>
-                        <Badge variant="outline">{MATCH_STATUS_LABEL[m.status] ?? m.status}</Badge>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Badge variant="outline">{MATCH_STATUS_LABEL[m.status] ?? m.status}</Badge>
+                          {m.talent_profiles?.phone && (
+                            <a href={contactUrl(m.talent_profiles.phone, m.talent_profiles.full_name)} target="_blank" rel="noopener noreferrer">
+                              <Button size="sm" variant="outline"><MessageCircle size={14} className="mr-1.5" /> Message</Button>
+                            </a>
+                          )}
+                          <Select value={m.status} onValueChange={(v) => setMatchStatus(m.id, v)}>
+                            <SelectTrigger className="h-8 w-[11rem]"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="approved">Shared with talent</SelectItem>
+                              <SelectItem value="accepted">Talent accepted</SelectItem>
+                              <SelectItem value="assessment">In assessment</SelectItem>
+                              <SelectItem value="interview">In interview</SelectItem>
+                              <SelectItem value="hired">Hired</SelectItem>
+                              <SelectItem value="declined">Declined</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                     ))}
                   </div>

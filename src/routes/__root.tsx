@@ -1,0 +1,231 @@
+import type { QueryClient } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import {
+  HeadContent,
+  Outlet,
+  Scripts,
+  createRootRouteWithContext,
+  useRouter,
+} from "@tanstack/react-router";
+import { useEffect, type ReactNode } from "react";
+import { HelmetProvider } from "react-helmet-async";
+import FloatingWhatsAppCTA from "@/components/FloatingWhatsAppCTA";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { CurrencyProvider } from "@/contexts/CurrencyContext";
+import { UserProvider } from "@/contexts/UserContext";
+import { reportLovableError } from "@/lib/lovable-error-reporting";
+import NotFound from "@/pages/NotFound";
+import appCss from "../styles.css?url";
+
+const SITE_TITLE = "Tech Faculty NG — Nigerian Tech Bootcamps & Certification";
+const SITE_DESCRIPTION =
+  "Get trained, certified, and employed in software, AI, data and cybersecurity. Licensed institute with nationwide in-person bootcamps and online programs.";
+const OG_IMAGE =
+  "https://storage.googleapis.com/gpt-engineer-file-uploads/Nz94FlzZhAUL7Qyy7N9OzcfiFDW2/social-images/social-1762032884675-20251101_223347.jpg";
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": ["Organization", "EducationalOrganization", "LocalBusiness"],
+  name: "Tech Faculty NG",
+  alternateName: "Tech Faculty",
+  url: "https://techfaculty.ng",
+  logo: "https://storage.googleapis.com/gpt-engineer-file-uploads/Nz94FlzZhAUL7Qyy7N9OzcfiFDW2/uploads/1762881794512-IMG-20251103-WA0014.jpg",
+  description:
+    "Tech Faculty NG is a licensed Nigerian technology training institute delivering nationwide in-person bootcamps and online programs worldwide in Software Engineering, Data Science, Cybersecurity, AI, and more. We train, certify, and place graduates into tech careers.",
+  foundingDate: "2022",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Digital Village, NBTI Zonal Office",
+    addressLocality: "Nnewi",
+    addressRegion: "Anambra State",
+    addressCountry: "NG",
+  },
+  geo: { "@type": "GeoCoordinates", latitude: 6.0178, longitude: 6.9174 },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+234-806-859-7140",
+    contactType: "admissions",
+    availableLanguage: "English",
+  },
+  sameAs: ["https://wa.me/2348068597140"],
+  areaServed: { "@type": "Place", name: "Nigeria" },
+  knowsAbout: [
+    "Software Engineering",
+    "Data Science",
+    "Artificial Intelligence",
+    "Cybersecurity",
+    "Web Development",
+    "Digital Marketing",
+    "Machine Learning",
+    "UI/UX Design",
+  ],
+  memberOf: {
+    "@type": "Organization",
+    name: "National Board for Technology Incubation (NBTI)",
+    parentOrganization: {
+      "@type": "GovernmentOrganization",
+      name: "Federal Ministry of Science, Technology and Innovation",
+    },
+  },
+  hasCredential: {
+    "@type": "EducationalOccupationalCredential",
+    credentialCategory: "Licensed Technology Training Center",
+    recognizedBy: {
+      "@type": "GovernmentOrganization",
+      name: "Federal Ministry of Science, Technology and Innovation",
+    },
+  },
+};
+
+const webSiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Tech Faculty NG",
+  url: "https://techfaculty.ng",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: "https://techfaculty.ng/?q={search_term_string}",
+    "query-input": "required name=search_term_string",
+  },
+};
+
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  head: () => ({
+    meta: [
+      { charSet: "UTF-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1.0" },
+      { title: SITE_TITLE },
+      { name: "author", content: "Tech Faculty NG" },
+      {
+        name: "keywords",
+        content:
+          "tech training Nigeria, AI training Nnewi, data science bootcamp, web development course, cybersecurity training, SIWES placement, industrial training Nigeria, tech faculty, FMSTI, NBTI, Anambra State tech, South East Nigeria tech",
+      },
+      {
+        name: "robots",
+        content:
+          "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      },
+      { name: "description", content: SITE_DESCRIPTION },
+      {
+        name: "google-site-verification",
+        content: "E02mOgO2uC7YKjc1KT8VMhZlxiDK3Tn-8-Q-w6DVOG8",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Tech Faculty NG" },
+      { property: "og:locale", content: "en_NG" },
+      { property: "og:title", content: SITE_TITLE },
+      { property: "og:description", content: SITE_DESCRIPTION },
+      { property: "og:url", content: "https://techfaculty.ng/" },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "shortcut icon", href: "/favicon.png", type: "image/png" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+    ],
+    scripts: [
+      {
+        src: "https://www.googletagmanager.com/gtag/js?id=G-1DG9P7LVRX",
+        async: true,
+      },
+      {
+        children:
+          "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-1DG9P7LVRX');",
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(organizationSchema),
+      },
+      { type: "application/ld+json", children: JSON.stringify(webSiteSchema) },
+    ],
+  }),
+  shellComponent: RootShell,
+  component: RootComponent,
+  notFoundComponent: NotFound,
+  errorComponent: RootErrorComponent,
+});
+
+function RootShell({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+function RootComponent() {
+  const { queryClient } = Route.useRouteContext();
+  return (
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <UserProvider>
+          <CurrencyProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <Outlet />
+              <FloatingWhatsAppCTA />
+            </TooltipProvider>
+          </CurrencyProvider>
+        </UserProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
+  );
+}
+
+function RootErrorComponent({
+  error,
+  reset,
+}: {
+  error: Error;
+  reset: () => void;
+}) {
+  const router = useRouter();
+
+  useEffect(() => {
+    console.error(error);
+    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+  }, [error]);
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background px-6 text-center text-foreground">
+      <h1 className="text-3xl font-bold">This page didn't load</h1>
+      <p className="max-w-md text-muted-foreground">
+        Something went wrong while loading this page. You can try again or head
+        back home.
+      </p>
+      <div className="flex gap-4">
+        <button
+          type="button"
+          onClick={() => {
+            router.invalidate();
+            reset();
+          }}
+          className="rounded-md bg-primary px-6 py-3 font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+        >
+          Try again
+        </button>
+        <a
+          href="/"
+          className="rounded-md border border-border px-6 py-3 font-semibold transition-colors hover:bg-muted"
+        >
+          Go home
+        </a>
+      </div>
+    </div>
+  );
+}

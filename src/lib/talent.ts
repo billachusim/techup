@@ -189,6 +189,13 @@ export const introRequestUrl = (name: string, skills: string[]) =>
       " Please tell me about availability and rates."
   );
 
+export const contactUrl = (phone: string | null, name: string) => {
+  const digits = (phone ?? "").replace(/\D/g, "");
+  const normalised = digits.startsWith("0") ? `234${digits.slice(1)}` : digits;
+  const message = `Hello ${name.split(" ")[0]}, this is Tech Faculty about a role you were matched to.`;
+  return `https://wa.me/${normalised}?text=${encodeURIComponent(message)}`;
+};
+
 export const projectManagerUrl = (roleTitle: string, talentName?: string) =>
   talentWhatsAppUrl(
     `Hello Tech Faculty, I am ${talentName ?? "a matched talent"} and I was matched to "${roleTitle}". ` +

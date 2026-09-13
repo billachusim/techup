@@ -287,7 +287,7 @@ const LeadCaptureForm = ({
             aria-pressed={channel === c}
             className={`px-3 py-1.5 text-sm rounded-[4px] flex items-center gap-1.5 transition-colors ${
               channel === c
-                ? "bg-background font-medium shadow-sm"
+                ? "bg-background font-medium shadow-xs"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >

@@ -47,7 +47,7 @@ const FloatingWhatsAppCTA = () => {
           type="button"
           onClick={dismiss}
           aria-label="Hide the WhatsApp chat button"
-          className="h-7 w-7 rounded-full bg-background/80 border border-border text-muted-foreground hover:text-foreground flex items-center justify-center shadow-sm"
+          className="h-7 w-7 rounded-full bg-background/80 border border-border text-muted-foreground hover:text-foreground flex items-center justify-center shadow-xs"
         >
           <X size={13} />
         </button>

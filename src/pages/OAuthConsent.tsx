@@ -91,7 +91,7 @@ const OAuthConsent = () => {
 
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-16 bg-background">
-      <div className="w-full max-w-md space-y-6 rounded-lg border border-border bg-card p-8 shadow-sm">
+      <div className="w-full max-w-md space-y-6 rounded-lg border border-border bg-card p-8 shadow-xs">
         {error ? (
           <>
             <h1 className="text-xl font-bold text-foreground">Authorization error</h1>

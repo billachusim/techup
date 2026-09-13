@@ -10,7 +10,7 @@ const JobCard = ({ job }: { job: Job }) => {
   const platform = platformFor(job.source_platform);
   const [applyOpen, setApplyOpen] = useState(false);
   return (
-    <article className="bg-card border border-border rounded-lg p-5 space-y-3 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+    <article className="bg-card border border-border rounded-lg p-5 space-y-3 shadow-xs hover:shadow-md transition-shadow flex flex-col">
       <div className="flex items-start justify-between gap-3">
         <span className="text-[11px] uppercase tracking-wide text-muted-foreground font-semibold">
           {job.source_platform}

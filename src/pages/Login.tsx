@@ -19,7 +19,7 @@ const Login = () => {
 
   return (
     <main className="min-h-screen flex items-center justify-center px-4 py-16 bg-background">
-      <div className="w-full max-w-md space-y-6 rounded-lg border border-border bg-card p-8 shadow-sm">
+      <div className="w-full max-w-md space-y-6 rounded-lg border border-border bg-card p-8 shadow-xs">
         <div className="text-center space-y-1">
           <h1 className="text-2xl font-bold text-foreground">
             {mode === "login" ? "Sign in to Tech Faculty" : "Create your Tech Faculty account"}

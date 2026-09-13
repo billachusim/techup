@@ -1168,6 +1168,7 @@ export type Database = {
           budget_max: number | null
           budget_min: number | null
           budget_unit: string
+          category: string | null
           city: string | null
           company: string
           country: string
@@ -1177,6 +1178,7 @@ export type Database = {
           employment_type: string
           id: string
           is_featured: boolean
+          is_paid_training: boolean
           is_remote: boolean
           nice_to_have: string[]
           openings: number
@@ -1197,6 +1199,7 @@ export type Database = {
           budget_max?: number | null
           budget_min?: number | null
           budget_unit?: string
+          category?: string | null
           city?: string | null
           company?: string
           country?: string
@@ -1206,6 +1209,7 @@ export type Database = {
           employment_type?: string
           id?: string
           is_featured?: boolean
+          is_paid_training?: boolean
           is_remote?: boolean
           nice_to_have?: string[]
           openings?: number
@@ -1226,6 +1230,7 @@ export type Database = {
           budget_max?: number | null
           budget_min?: number | null
           budget_unit?: string
+          category?: string | null
           city?: string | null
           company?: string
           country?: string
@@ -1235,6 +1240,7 @@ export type Database = {
           employment_type?: string
           id?: string
           is_featured?: boolean
+          is_paid_training?: boolean
           is_remote?: boolean
           nice_to_have?: string[]
           openings?: number
@@ -1279,6 +1285,8 @@ export type Database = {
     Functions: {
       approve_talent: { Args: { _talent_id: string }; Returns: string }
       archive_stale_listings: { Args: never; Returns: undefined }
+      claim_my_talent_profile: { Args: never; Returns: string }
+      claim_talent_faculty_id: { Args: never; Returns: string }
       ensure_course_lectures: {
         Args: { course_uuid: string }
         Returns: undefined

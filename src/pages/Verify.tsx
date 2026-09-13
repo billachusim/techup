@@ -86,7 +86,7 @@ const Verify = () => {
       <main className="container mx-auto px-4 pt-32 pb-16">
         <section className="mx-auto max-w-4xl space-y-8">
           <div className="space-y-4 text-center">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center overflow-hidden rounded-3xl border border-border bg-card shadow-xs">
               <img
                 src="/verify/TFNGCertVerify.jpg"
                 alt="Tech Faculty NG certificate verification logo"
@@ -100,7 +100,7 @@ const Verify = () => {
             </p>
           </div>
 
-          <Card className="border-border bg-card/90 shadow-sm">
+          <Card className="border-border bg-card/90 shadow-xs">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-xl">
                 <Search className="h-5 w-5 text-primary" />
@@ -142,7 +142,7 @@ const Verify = () => {
             </CardContent>
           </Card>
 
-          <Card className="border-border bg-card/90 shadow-sm">
+          <Card className="border-border bg-card/90 shadow-xs">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-xl">
                 <BadgeCheck className="h-5 w-5 text-primary" />

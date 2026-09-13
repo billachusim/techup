@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { CalendarDays, MapPin, Globe, Ticket, Building2 } from "lucide-react";
 import {
   TechEvent,
@@ -15,7 +15,7 @@ const EventCard = ({ event }: { event: TechEvent }) => {
   return (
     <article
       id={event.slug}
-      className="bg-card border border-border rounded-lg p-5 space-y-3 shadow-sm hover:shadow-md transition-shadow flex flex-col scroll-mt-28"
+      className="bg-card border border-border rounded-lg p-5 space-y-3 shadow-xs hover:shadow-md transition-shadow flex flex-col scroll-mt-28"
     >
       <div className="flex items-start justify-between gap-3">
         <span className="text-[11px] uppercase tracking-wide text-muted-foreground font-semibold">

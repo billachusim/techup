@@ -1,0 +1,18 @@
+{
+  "customizations": [
+    { "token": "--primary (158 100% 50% electric green palette, all shadcn tokens)", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": "--electric-green", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": "--gradient-green", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": "--plan-beginner / --plan-development / --plan-data / --plan-creative / --plan-security", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": "--gradient-beginner / --gradient-development / --gradient-data / --gradient-creative / --gradient-security", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": ".text-gradient", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": ".text-gradient-blue", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": ".text-gradient-purple", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": ".text-gradient-pink", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": ".text-gradient-orange", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": "html scroll-behavior smooth + body font-feature-settings", "source": "src/index.css", "reappliedIn": "src/styles.css" },
+    { "token": "container (center, 2rem padding, 1400px max)", "source": "tailwind.config.ts", "reappliedIn": "src/styles.css" },
+    { "token": "accordion-down / accordion-up keyframes+animations", "source": "tailwind.config.ts", "reappliedIn": "src/styles.css" },
+    { "token": "@tailwindcss/typography plugin", "source": "tailwind.config.ts", "reappliedIn": "src/styles.css" }
+  ]
+}

@@ -53,7 +53,7 @@ const ProductGallery = ({ images, className }: ProductGalleryProps) => {
             type="button"
             aria-label="Previous product image"
             onClick={() => go(index - 1)}
-            className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-1.5 text-foreground shadow-sm transition hover:bg-background"
+            className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-1.5 text-foreground shadow-xs transition hover:bg-background"
           >
             <ChevronLeft size={16} />
           </button>
@@ -61,7 +61,7 @@ const ProductGallery = ({ images, className }: ProductGalleryProps) => {
             type="button"
             aria-label="Next product image"
             onClick={() => go(index + 1)}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-1.5 text-foreground shadow-sm transition hover:bg-background"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-1.5 text-foreground shadow-xs transition hover:bg-background"
           >
             <ChevronRight size={16} />
           </button>

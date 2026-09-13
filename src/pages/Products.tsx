@@ -8,7 +8,7 @@ import dearClaireCover from "@/assets/dear-claire-cover.png.asset.json";
 import aiclopediaCover from "@/assets/aiclopedia-cover.png.asset.json";
 import alterEgoCover from "@/assets/alter-ego-cover.png.asset.json";
 import eavesdropCover from "@/assets/eavesdrop-cover.png.asset.json";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { Sparkles } from "lucide-react";
 
 type Platform = "playstore" | "appstore";

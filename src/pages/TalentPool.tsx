@@ -9,14 +9,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import RequestIntroDialog from "@/components/talent/RequestIntroDialog";
 import {
   WORK_MODE_LABEL,
   fetchPublicTalent,
-  introRequestUrl,
   type PublicTalentSummary,
 } from "@/lib/talent";
 
-const TalentCard = ({ person }: { person: PublicTalentSummary }) => (
+const TalentCard = ({ person, onRequested }: { person: PublicTalentSummary; onRequested: () => void }) => (
   <article className="flex flex-col justify-between rounded-lg border border-border bg-card p-5 transition-shadow hover:shadow-md">
     <div className="space-y-3">
       <div className="flex flex-wrap items-start justify-between gap-2">
@@ -55,9 +55,13 @@ const TalentCard = ({ person }: { person: PublicTalentSummary }) => (
     </div>
     <div className="mt-5 flex flex-wrap gap-2">
       <Link to={`/talent/pool/${person.id}`}><Button size="sm" variant="outline">View profile</Button></Link>
-      <a href={introRequestUrl(person.full_name, person.skills)} target="_blank" rel="noopener noreferrer">
-        <Button size="sm">Request an introduction</Button>
-      </a>
+      <RequestIntroDialog
+        talentId={person.id}
+        talentName={person.full_name}
+        skills={person.skills}
+        onRequested={onRequested}
+        trigger={<Button size="sm">Request an introduction</Button>}
+      />
     </div>
   </article>
 );

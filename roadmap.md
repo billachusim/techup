@@ -18,3 +18,9 @@
 - [x] Link every guide to its local hub pages, relevant training routes, and a city-specific WhatsApp enquiry
 - [x] Add all city guide URLs to the static sitemap
 - [x] Verify article rendering, metadata, internal links, and WhatsApp messages
+
+## Navigation cleanup
+- [x] Group desktop navigation into Programmes, Explore, and Resources
+- [x] Make Locations one direct menu link
+- [x] Organize the mobile menu into clear labelled sections
+- [x] Verify desktop and mobile navigation

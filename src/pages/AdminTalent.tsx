@@ -78,24 +78,30 @@ const AdminTalent = () => {
   }, []);
 
   const load = useCallback(async () => {
-    const [r, t, m, a, b] = await Promise.all([
+    const [r, t, m, a, b, e] = await Promise.all([
       supabase.from("talent_roles").select("*").order("created_at", { ascending: false }),
       supabase.from("talent_profiles").select("*").order("profile_strength", { ascending: false }),
       supabase
         .from("role_matches")
-        .select("id, score, reason, status, source, role_id, talent_profile_id, talent_roles(title, company), talent_profiles(full_name, city, skills)")
+        .select("id, score, reason, status, source, role_id, talent_profile_id, talent_roles(title, company), talent_profiles(full_name, city, skills, phone)")
         .order("score", { ascending: false }),
       supabase
         .from("talent_applications")
         .select("id, status, message, created_at, talent_roles(title), talent_profiles(full_name, phone, email)")
         .order("created_at", { ascending: false }),
       supabase.from("business_briefs").select("*").order("created_at", { ascending: false }),
+      supabase
+        .from("talent_engagements")
+        .select("id, talent_profile_id, role_id, weekly_amount, currency, started_on, status, note, talent_roles(title), talent_profiles(full_name)")
+        .order("started_on", { ascending: false }),
     ]);
     setRoles(r.data ?? []);
     setTalents(t.data ?? []);
     setMatches((m.data ?? []) as MatchRow[]);
     setApplications((a.data ?? []) as ApplicationRow[]);
     setBriefs(b.data ?? []);
+    setEngagements((e.data ?? []) as EngagementRow[]);
+    setGroupDrafts(Object.fromEntries((r.data ?? []).map((role) => [role.id, role.whatsapp_group_url ?? ""])));
     setLoading(false);
   }, []);
 

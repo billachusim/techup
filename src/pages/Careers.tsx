@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PlatformPartners from "@/components/jobs/PlatformPartners";
 import RoleCard from "@/components/talent/RoleCard";
+import TalentNav from "@/components/talent/TalentNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -24,6 +25,7 @@ const Careers = () => {
   const [search, setSearch] = useState("");
   const [type, setType] = useState("all");
   const [workplace, setWorkplace] = useState("all");
+  const [category, setCategory] = useState("all");
   const { data: roles = [], isLoading } = useQuery({
     queryKey: ["talent-roles-careers"],
     queryFn: () => fetchPublishedRoles(),
@@ -31,18 +33,24 @@ const Careers = () => {
   });
 
   const types = useMemo(() => Array.from(new Set(roles.map((role) => role.employment_type))).sort(), [roles]);
+  const categories = useMemo(
+    () => Array.from(new Set(roles.map((role) => role.category).filter(Boolean) as string[])).sort(),
+    [roles],
+  );
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
     return roles.filter((role) => {
       if (type !== "all" && role.employment_type !== type) return false;
+      if (category !== "all" && role.category !== category) return false;
       if (workplace === "remote" && !role.is_remote) return false;
       if (workplace === "onsite" && role.is_remote) return false;
       if (!query) return true;
-      return `${role.title} ${role.company} ${role.summary} ${role.description} ${role.required_skills.join(" ")} ${roleLocationLabel(role)}`
+      return `${role.title} ${role.company} ${role.summary} ${role.description} ${role.category ?? ""} ${role.required_skills.join(" ")} ${roleLocationLabel(role)}`
         .toLowerCase()
         .includes(query);
     });
-  }, [roles, search, type, workplace]);
+  }, [roles, search, type, workplace, category]);
+  const totalOpenings = useMemo(() => filtered.reduce((sum, role) => sum + (role.openings ?? 1), 0), [filtered]);
 
   const joinHref = isLoggedIn ? "/talent/profile" : "/login?next=/talent/profile";
   const itemList = filtered.map((role, index) => ({
@@ -73,7 +81,8 @@ const Careers = () => {
       </Helmet>
       <Header />
       <main className="pt-20">
-        <section className="px-4 py-16">
+        <TalentNav />
+        <section className="px-4 py-12 md:py-16">
           <div className="container mx-auto max-w-5xl text-center">
             <p className="mb-3 text-sm font-semibold text-primary">Tech Faculty Talent</p>
             <h1 className="text-3xl font-bold md:text-5xl">One profile. Real roles. <span className="text-gradient">Work that matters.</span></h1>
@@ -94,7 +103,7 @@ const Careers = () => {
                   </p>
                 ) : (
                   <p className="mt-1 text-muted-foreground">
-                    No Faculty ID needed here. We assign one only when you enrol in a programme or qualify for member benefits.
+                    No Faculty ID needed to apply. You get one when you enrol in a programme, or the moment your talent profile is 100% complete.
                   </p>
                 )}
               </div>
@@ -121,14 +130,20 @@ const Careers = () => {
                 <h2 id="open-roles-heading" className="text-2xl font-bold md:text-3xl">Open roles</h2>
                 <p className="mt-1 text-sm text-muted-foreground">Roles from Tech Faculty and businesses using our talent pipeline.</p>
               </div>
-              <span className="text-sm text-muted-foreground">{filtered.length} {filtered.length === 1 ? "opening" : "openings"}</span>
+              <span className="text-sm text-muted-foreground">
+                {filtered.length} {filtered.length === 1 ? "role" : "roles"} · {totalOpenings} {totalOpenings === 1 ? "opening" : "openings"}
+              </span>
             </div>
 
-            <div className="mb-8 grid gap-3 md:grid-cols-[minmax(0,1fr)_12rem_12rem]">
+            <div className="mb-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_11rem_11rem_11rem]">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
                 <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search role, skill, company or location" className="pl-9" aria-label="Search open roles" />
               </div>
+              <Select value={category} onValueChange={setCategory}>
+                <SelectTrigger aria-label="Filter by category"><SelectValue placeholder="Category" /></SelectTrigger>
+                <SelectContent><SelectItem value="all">All categories</SelectItem>{categories.map((item) => <SelectItem key={item} value={item}>{item}</SelectItem>)}</SelectContent>
+              </Select>
               <Select value={type} onValueChange={setType}>
                 <SelectTrigger aria-label="Filter by role type"><SelectValue placeholder="Role type" /></SelectTrigger>
                 <SelectContent><SelectItem value="all">All role types</SelectItem>{types.map((item) => <SelectItem key={item} value={item}>{EMPLOYMENT_LABEL[item] ?? item}</SelectItem>)}</SelectContent>

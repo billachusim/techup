@@ -55,11 +55,11 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
       }
 
       setEmailSent(true);
-    } catch (error: any) {
+    } catch (error) {
       console.error("Signup error:", error);
       toast({
         title: "Could not create your account",
-        description: error.message || "Please try again.",
+        description: error instanceof Error ? error.message : "Please try again.",
         variant: "destructive",
       });
     } finally {

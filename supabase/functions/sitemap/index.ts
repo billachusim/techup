@@ -38,20 +38,24 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_ANON_KEY")!,
     );
 
-    const [posts, jobs, events] = await Promise.all([
+    const [posts, jobs, events, roles] = await Promise.all([
       supabase.from("blog_posts").select("slug, published_at, updated_at").eq("is_published", true).order("published_at", { ascending: false }).limit(500),
       supabase.from("jobs").select("slug, last_seen_at").eq("is_expired", false).order("last_seen_at", { ascending: false }).limit(500),
       supabase.from("events").select("slug, updated_at").eq("is_expired", false).order("updated_at", { ascending: false }).limit(500),
+      supabase.from("talent_roles").select("slug, updated_at").eq("status", "published").order("updated_at", { ascending: false }).limit(200),
     ]);
 
     for (const p of posts.data ?? []) {
       entries.push(urlEntry(`${SITE}/blog/${p.slug}`, String(p.updated_at ?? p.published_at).slice(0, 10), "monthly", "0.7"));
     }
     for (const j of jobs.data ?? []) {
-      entries.push(urlEntry(`${SITE}/careers/${j.slug}`, String(j.last_seen_at).slice(0, 10), "weekly", "0.6"));
+      entries.push(urlEntry(`${SITE}/careers/jobs/${j.slug}`, String(j.last_seen_at).slice(0, 10), "weekly", "0.6"));
     }
     for (const e of events.data ?? []) {
       entries.push(urlEntry(`${SITE}/events/${e.slug}`, String(e.updated_at).slice(0, 10), "weekly", "0.6"));
+    }
+    for (const r of roles.data ?? []) {
+      entries.push(urlEntry(`${SITE}/talent/roles/${r.slug}`, String(r.updated_at).slice(0, 10), "weekly", "0.8"));
     }
   } catch (error) {
     // Always return valid XML — a broken sitemap is worse than a short one.

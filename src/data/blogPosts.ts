@@ -1,6 +1,8 @@
 import type { BlogPost } from '@/types/blog';
+import cityBlogPosts from '@/data/cityBlogPosts';
 
 const blogPosts: BlogPost[] = [
+  ...cityBlogPosts,
   {
     slug: "ai-automation-for-nigerian-businesses-2026",
     title: "AI Automation for Nigerian Businesses: A Practical 2026 Playbook",

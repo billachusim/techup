@@ -13,18 +13,25 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as BusinessPartnershipsRouteImport } from './routes/business-partnerships'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as HireRouteImport } from './routes/hire'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as LovableRouteImport } from './routes/lovable'
 import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as SchoolCollaborationsRouteImport } from './routes/school-collaborations'
 import { Route as SiwesRouteImport } from './routes/siwes'
 import { Route as SiwesSuccessKitRouteImport } from './routes/siwes-success-kit'
+import { Route as TechRouteImport } from './routes/tech'
 import { Route as TechStoreRouteImport } from './routes/tech-store'
 import { Route as TinypeopleRouteImport } from './routes/tinypeople'
 import { Route as VirtualSiwesRouteImport } from './routes/virtual-siwes'
+import { Route as Why90OfTechLearnersQuitButYouDontHaveToRouteImport } from './routes/why-90-of-tech-learners-quit-but-you-dont-have-to'
+import { Route as AdminCertificatesRouteImport } from './routes/admin.certificates'
+import { Route as AdminTalentRouteImport } from './routes/admin.talent'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CareersIndexRouteImport } from './routes/careers.index'
+import { Route as CategorySplatRouteImport } from './routes/category.$'
 import { Route as DepartmentsIndexRouteImport } from './routes/departments.index'
 import { Route as DepartmentsSlugRouteImport } from './routes/departments.$slug'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
@@ -33,10 +40,18 @@ import { Route as HubsIndexRouteImport } from './routes/hubs.index'
 import { Route as HubsSlugRouteImport } from './routes/hubs.$slug'
 import { Route as LocationsIndexRouteImport } from './routes/locations.index'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
+import { Route as TagSplatRouteImport } from './routes/tag.$'
+import { Route as TalentIndexRouteImport } from './routes/talent.index'
+import { Route as TalentDashboardRouteImport } from './routes/talent.dashboard'
+import { Route as TalentProfileRouteImport } from './routes/talent.profile'
 import { Route as VerifySplatRouteImport } from './routes/verify.$'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as BlogCategorySlugRouteImport } from './routes/blog.category.$slug'
 import { Route as CareersJobsSlugRouteImport } from './routes/careers.jobs.$slug'
 import { Route as CareersPlatformsPlatformSlugRouteImport } from './routes/careers.platforms.$platformSlug'
+import { Route as TalentPoolIndexRouteImport } from './routes/talent.pool.index'
+import { Route as TalentPoolIdRouteImport } from './routes/talent.pool.$id'
+import { Route as TalentRolesSlugRouteImport } from './routes/talent.roles.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -56,6 +71,16 @@ const BusinessPartnershipsRoute = BusinessPartnershipsRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HireRoute = HireRouteImport.update({
+  id: '/hire',
+  path: '/hire',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LovableRoute = LovableRouteImport.update({
@@ -88,6 +113,11 @@ const SiwesSuccessKitRoute = SiwesSuccessKitRouteImport.update({
   path: '/siwes-success-kit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TechRoute = TechRouteImport.update({
+  id: '/tech',
+  path: '/tech',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TechStoreRoute = TechStoreRouteImport.update({
   id: '/tech-store',
   path: '/tech-store',
@@ -103,6 +133,22 @@ const VirtualSiwesRoute = VirtualSiwesRouteImport.update({
   path: '/virtual-siwes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Why90OfTechLearnersQuitButYouDontHaveToRoute =
+  Why90OfTechLearnersQuitButYouDontHaveToRouteImport.update({
+    id: '/why-90-of-tech-learners-quit-but-you-dont-have-to',
+    path: '/why-90-of-tech-learners-quit-but-you-dont-have-to',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AdminCertificatesRoute = AdminCertificatesRouteImport.update({
+  id: '/admin/certificates',
+  path: '/admin/certificates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTalentRoute = AdminTalentRouteImport.update({
+  id: '/admin/talent',
+  path: '/admin/talent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
@@ -116,6 +162,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
 const CareersIndexRoute = CareersIndexRouteImport.update({
   id: '/careers/',
   path: '/careers/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategorySplatRoute = CategorySplatRouteImport.update({
+  id: '/category/$',
+  path: '/category/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DepartmentsIndexRoute = DepartmentsIndexRouteImport.update({
@@ -158,9 +209,34 @@ const LocationsSlugRoute = LocationsSlugRouteImport.update({
   path: '/locations/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TagSplatRoute = TagSplatRouteImport.update({
+  id: '/tag/$',
+  path: '/tag/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TalentIndexRoute = TalentIndexRouteImport.update({
+  id: '/talent/',
+  path: '/talent/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TalentDashboardRoute = TalentDashboardRouteImport.update({
+  id: '/talent/dashboard',
+  path: '/talent/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TalentProfileRoute = TalentProfileRouteImport.update({
+  id: '/talent/profile',
+  path: '/talent/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VerifySplatRoute = VerifySplatRouteImport.update({
   id: '/verify/$',
   path: '/verify/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogCategorySlugRoute = BlogCategorySlugRouteImport.update({
@@ -179,26 +255,51 @@ const CareersPlatformsPlatformSlugRoute =
     path: '/careers/platforms/$platformSlug',
     getParentRoute: () => rootRouteImport,
   } as any)
+const TalentPoolIndexRoute = TalentPoolIndexRouteImport.update({
+  id: '/talent/pool/',
+  path: '/talent/pool/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TalentPoolIdRoute = TalentPoolIdRouteImport.update({
+  id: '/talent/pool/$id',
+  path: '/talent/pool/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TalentRolesSlugRoute = TalentRolesSlugRouteImport.update({
+  id: '/talent/roles/$slug',
+  path: '/talent/roles/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/business-partnerships': typeof BusinessPartnershipsRoute
   '/dashboard': typeof DashboardRoute
+  '/hire': typeof HireRoute
+  '/login': typeof LoginRoute
   '/lovable': typeof LovableRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
+  '/tech': typeof TechRoute
   '/tech-store': typeof TechStoreRoute
   '/tinypeople': typeof TinypeopleRoute
   '/virtual-siwes': typeof VirtualSiwesRoute
+  '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
+  '/admin/certificates': typeof AdminCertificatesRoute
+  '/admin/talent': typeof AdminTalentRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/category/$': typeof CategorySplatRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/hubs/$slug': typeof HubsSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/tag/$': typeof TagSplatRoute
+  '/talent/dashboard': typeof TalentDashboardRoute
+  '/talent/profile': typeof TalentProfileRoute
   '/verify/$': typeof VerifySplatRoute
   '/blog/': typeof BlogIndexRoute
   '/careers/': typeof CareersIndexRoute
@@ -206,29 +307,44 @@ export interface FileRoutesByFullPath {
   '/events/': typeof EventsIndexRoute
   '/hubs/': typeof HubsIndexRoute
   '/locations/': typeof LocationsIndexRoute
+  '/talent/': typeof TalentIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/careers/jobs/$slug': typeof CareersJobsSlugRoute
   '/careers/platforms/$platformSlug': typeof CareersPlatformsPlatformSlugRoute
+  '/talent/pool/$id': typeof TalentPoolIdRoute
+  '/talent/roles/$slug': typeof TalentRolesSlugRoute
+  '/talent/pool/': typeof TalentPoolIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/business-partnerships': typeof BusinessPartnershipsRoute
   '/dashboard': typeof DashboardRoute
+  '/hire': typeof HireRoute
+  '/login': typeof LoginRoute
   '/lovable': typeof LovableRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
+  '/tech': typeof TechRoute
   '/tech-store': typeof TechStoreRoute
   '/tinypeople': typeof TinypeopleRoute
   '/virtual-siwes': typeof VirtualSiwesRoute
+  '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
+  '/admin/certificates': typeof AdminCertificatesRoute
+  '/admin/talent': typeof AdminTalentRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/category/$': typeof CategorySplatRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/hubs/$slug': typeof HubsSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/tag/$': typeof TagSplatRoute
+  '/talent/dashboard': typeof TalentDashboardRoute
+  '/talent/profile': typeof TalentProfileRoute
   '/verify/$': typeof VerifySplatRoute
   '/blog': typeof BlogIndexRoute
   '/careers': typeof CareersIndexRoute
@@ -236,9 +352,14 @@ export interface FileRoutesByTo {
   '/events': typeof EventsIndexRoute
   '/hubs': typeof HubsIndexRoute
   '/locations': typeof LocationsIndexRoute
+  '/talent': typeof TalentIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/careers/jobs/$slug': typeof CareersJobsSlugRoute
   '/careers/platforms/$platformSlug': typeof CareersPlatformsPlatformSlugRoute
+  '/talent/pool/$id': typeof TalentPoolIdRoute
+  '/talent/roles/$slug': typeof TalentRolesSlugRoute
+  '/talent/pool': typeof TalentPoolIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -246,20 +367,30 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/business-partnerships': typeof BusinessPartnershipsRoute
   '/dashboard': typeof DashboardRoute
+  '/hire': typeof HireRoute
+  '/login': typeof LoginRoute
   '/lovable': typeof LovableRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
+  '/tech': typeof TechRoute
   '/tech-store': typeof TechStoreRoute
   '/tinypeople': typeof TinypeopleRoute
   '/virtual-siwes': typeof VirtualSiwesRoute
+  '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
+  '/admin/certificates': typeof AdminCertificatesRoute
+  '/admin/talent': typeof AdminTalentRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/category/$': typeof CategorySplatRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
   '/events/$slug': typeof EventsSlugRoute
   '/hubs/$slug': typeof HubsSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/tag/$': typeof TagSplatRoute
+  '/talent/dashboard': typeof TalentDashboardRoute
+  '/talent/profile': typeof TalentProfileRoute
   '/verify/$': typeof VerifySplatRoute
   '/blog/': typeof BlogIndexRoute
   '/careers/': typeof CareersIndexRoute
@@ -267,9 +398,14 @@ export interface FileRoutesById {
   '/events/': typeof EventsIndexRoute
   '/hubs/': typeof HubsIndexRoute
   '/locations/': typeof LocationsIndexRoute
+  '/talent/': typeof TalentIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/careers/jobs/$slug': typeof CareersJobsSlugRoute
   '/careers/platforms/$platformSlug': typeof CareersPlatformsPlatformSlugRoute
+  '/talent/pool/$id': typeof TalentPoolIdRoute
+  '/talent/roles/$slug': typeof TalentRolesSlugRoute
+  '/talent/pool/': typeof TalentPoolIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -278,20 +414,30 @@ export interface FileRouteTypes {
     | '/about'
     | '/business-partnerships'
     | '/dashboard'
+    | '/hire'
+    | '/login'
     | '/lovable'
     | '/payment-success'
     | '/products'
     | '/school-collaborations'
     | '/siwes'
     | '/siwes-success-kit'
+    | '/tech'
     | '/tech-store'
     | '/tinypeople'
     | '/virtual-siwes'
+    | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
+    | '/admin/certificates'
+    | '/admin/talent'
     | '/blog/$slug'
+    | '/category/$'
     | '/departments/$slug'
     | '/events/$slug'
     | '/hubs/$slug'
     | '/locations/$slug'
+    | '/tag/$'
+    | '/talent/dashboard'
+    | '/talent/profile'
     | '/verify/$'
     | '/blog/'
     | '/careers/'
@@ -299,29 +445,44 @@ export interface FileRouteTypes {
     | '/events/'
     | '/hubs/'
     | '/locations/'
+    | '/talent/'
+    | '/.lovable/oauth/consent'
     | '/blog/category/$slug'
     | '/careers/jobs/$slug'
     | '/careers/platforms/$platformSlug'
+    | '/talent/pool/$id'
+    | '/talent/roles/$slug'
+    | '/talent/pool/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/business-partnerships'
     | '/dashboard'
+    | '/hire'
+    | '/login'
     | '/lovable'
     | '/payment-success'
     | '/products'
     | '/school-collaborations'
     | '/siwes'
     | '/siwes-success-kit'
+    | '/tech'
     | '/tech-store'
     | '/tinypeople'
     | '/virtual-siwes'
+    | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
+    | '/admin/certificates'
+    | '/admin/talent'
     | '/blog/$slug'
+    | '/category/$'
     | '/departments/$slug'
     | '/events/$slug'
     | '/hubs/$slug'
     | '/locations/$slug'
+    | '/tag/$'
+    | '/talent/dashboard'
+    | '/talent/profile'
     | '/verify/$'
     | '/blog'
     | '/careers'
@@ -329,29 +490,44 @@ export interface FileRouteTypes {
     | '/events'
     | '/hubs'
     | '/locations'
+    | '/talent'
+    | '/.lovable/oauth/consent'
     | '/blog/category/$slug'
     | '/careers/jobs/$slug'
     | '/careers/platforms/$platformSlug'
+    | '/talent/pool/$id'
+    | '/talent/roles/$slug'
+    | '/talent/pool'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/business-partnerships'
     | '/dashboard'
+    | '/hire'
+    | '/login'
     | '/lovable'
     | '/payment-success'
     | '/products'
     | '/school-collaborations'
     | '/siwes'
     | '/siwes-success-kit'
+    | '/tech'
     | '/tech-store'
     | '/tinypeople'
     | '/virtual-siwes'
+    | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
+    | '/admin/certificates'
+    | '/admin/talent'
     | '/blog/$slug'
+    | '/category/$'
     | '/departments/$slug'
     | '/events/$slug'
     | '/hubs/$slug'
     | '/locations/$slug'
+    | '/tag/$'
+    | '/talent/dashboard'
+    | '/talent/profile'
     | '/verify/$'
     | '/blog/'
     | '/careers/'
@@ -359,9 +535,14 @@ export interface FileRouteTypes {
     | '/events/'
     | '/hubs/'
     | '/locations/'
+    | '/talent/'
+    | '/.lovable/oauth/consent'
     | '/blog/category/$slug'
     | '/careers/jobs/$slug'
     | '/careers/platforms/$platformSlug'
+    | '/talent/pool/$id'
+    | '/talent/roles/$slug'
+    | '/talent/pool/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -369,20 +550,30 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   BusinessPartnershipsRoute: typeof BusinessPartnershipsRoute
   DashboardRoute: typeof DashboardRoute
+  HireRoute: typeof HireRoute
+  LoginRoute: typeof LoginRoute
   LovableRoute: typeof LovableRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
   ProductsRoute: typeof ProductsRoute
   SchoolCollaborationsRoute: typeof SchoolCollaborationsRoute
   SiwesRoute: typeof SiwesRoute
   SiwesSuccessKitRoute: typeof SiwesSuccessKitRoute
+  TechRoute: typeof TechRoute
   TechStoreRoute: typeof TechStoreRoute
   TinypeopleRoute: typeof TinypeopleRoute
   VirtualSiwesRoute: typeof VirtualSiwesRoute
+  Why90OfTechLearnersQuitButYouDontHaveToRoute: typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
+  AdminCertificatesRoute: typeof AdminCertificatesRoute
+  AdminTalentRoute: typeof AdminTalentRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  CategorySplatRoute: typeof CategorySplatRoute
   DepartmentsSlugRoute: typeof DepartmentsSlugRoute
   EventsSlugRoute: typeof EventsSlugRoute
   HubsSlugRoute: typeof HubsSlugRoute
   LocationsSlugRoute: typeof LocationsSlugRoute
+  TagSplatRoute: typeof TagSplatRoute
+  TalentDashboardRoute: typeof TalentDashboardRoute
+  TalentProfileRoute: typeof TalentProfileRoute
   VerifySplatRoute: typeof VerifySplatRoute
   BlogIndexRoute: typeof BlogIndexRoute
   CareersIndexRoute: typeof CareersIndexRoute
@@ -390,9 +581,14 @@ export interface RootRouteChildren {
   EventsIndexRoute: typeof EventsIndexRoute
   HubsIndexRoute: typeof HubsIndexRoute
   LocationsIndexRoute: typeof LocationsIndexRoute
+  TalentIndexRoute: typeof TalentIndexRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   BlogCategorySlugRoute: typeof BlogCategorySlugRoute
   CareersJobsSlugRoute: typeof CareersJobsSlugRoute
   CareersPlatformsPlatformSlugRoute: typeof CareersPlatformsPlatformSlugRoute
+  TalentPoolIdRoute: typeof TalentPoolIdRoute
+  TalentRolesSlugRoute: typeof TalentRolesSlugRoute
+  TalentPoolIndexRoute: typeof TalentPoolIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -423,6 +619,20 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hire': {
+      id: '/hire'
+      path: '/hire'
+      fullPath: '/hire'
+      preLoaderRoute: typeof HireRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lovable': {
@@ -467,6 +677,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiwesSuccessKitRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tech': {
+      id: '/tech'
+      path: '/tech'
+      fullPath: '/tech'
+      preLoaderRoute: typeof TechRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tech-store': {
       id: '/tech-store'
       path: '/tech-store'
@@ -488,6 +705,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VirtualSiwesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/why-90-of-tech-learners-quit-but-you-dont-have-to': {
+      id: '/why-90-of-tech-learners-quit-but-you-dont-have-to'
+      path: '/why-90-of-tech-learners-quit-but-you-dont-have-to'
+      fullPath: '/why-90-of-tech-learners-quit-but-you-dont-have-to'
+      preLoaderRoute: typeof Why90OfTechLearnersQuitButYouDontHaveToRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/certificates': {
+      id: '/admin/certificates'
+      path: '/admin/certificates'
+      fullPath: '/admin/certificates'
+      preLoaderRoute: typeof AdminCertificatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/talent': {
+      id: '/admin/talent'
+      path: '/admin/talent'
+      fullPath: '/admin/talent'
+      preLoaderRoute: typeof AdminTalentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/': {
       id: '/blog/'
       path: '/blog'
@@ -507,6 +745,13 @@ declare module '@tanstack/react-router' {
       path: '/careers'
       fullPath: '/careers/'
       preLoaderRoute: typeof CareersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/category/$': {
+      id: '/category/$'
+      path: '/category/$'
+      fullPath: '/category/$'
+      preLoaderRoute: typeof CategorySplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/departments/': {
@@ -565,11 +810,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tag/$': {
+      id: '/tag/$'
+      path: '/tag/$'
+      fullPath: '/tag/$'
+      preLoaderRoute: typeof TagSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/talent/': {
+      id: '/talent/'
+      path: '/talent'
+      fullPath: '/talent/'
+      preLoaderRoute: typeof TalentIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/talent/dashboard': {
+      id: '/talent/dashboard'
+      path: '/talent/dashboard'
+      fullPath: '/talent/dashboard'
+      preLoaderRoute: typeof TalentDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/talent/profile': {
+      id: '/talent/profile'
+      path: '/talent/profile'
+      fullPath: '/talent/profile'
+      preLoaderRoute: typeof TalentProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/verify/$': {
       id: '/verify/$'
       path: '/verify/$'
       fullPath: '/verify/$'
       preLoaderRoute: typeof VerifySplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/category/$slug': {
@@ -593,6 +873,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CareersPlatformsPlatformSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/talent/pool/': {
+      id: '/talent/pool/'
+      path: '/talent/pool'
+      fullPath: '/talent/pool/'
+      preLoaderRoute: typeof TalentPoolIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/talent/pool/$id': {
+      id: '/talent/pool/$id'
+      path: '/talent/pool/$id'
+      fullPath: '/talent/pool/$id'
+      preLoaderRoute: typeof TalentPoolIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/talent/roles/$slug': {
+      id: '/talent/roles/$slug'
+      path: '/talent/roles/$slug'
+      fullPath: '/talent/roles/$slug'
+      preLoaderRoute: typeof TalentRolesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -601,20 +902,31 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   BusinessPartnershipsRoute: BusinessPartnershipsRoute,
   DashboardRoute: DashboardRoute,
+  HireRoute: HireRoute,
+  LoginRoute: LoginRoute,
   LovableRoute: LovableRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
   ProductsRoute: ProductsRoute,
   SchoolCollaborationsRoute: SchoolCollaborationsRoute,
   SiwesRoute: SiwesRoute,
   SiwesSuccessKitRoute: SiwesSuccessKitRoute,
+  TechRoute: TechRoute,
   TechStoreRoute: TechStoreRoute,
   TinypeopleRoute: TinypeopleRoute,
   VirtualSiwesRoute: VirtualSiwesRoute,
+  Why90OfTechLearnersQuitButYouDontHaveToRoute:
+    Why90OfTechLearnersQuitButYouDontHaveToRoute,
+  AdminCertificatesRoute: AdminCertificatesRoute,
+  AdminTalentRoute: AdminTalentRoute,
   BlogSlugRoute: BlogSlugRoute,
+  CategorySplatRoute: CategorySplatRoute,
   DepartmentsSlugRoute: DepartmentsSlugRoute,
   EventsSlugRoute: EventsSlugRoute,
   HubsSlugRoute: HubsSlugRoute,
   LocationsSlugRoute: LocationsSlugRoute,
+  TagSplatRoute: TagSplatRoute,
+  TalentDashboardRoute: TalentDashboardRoute,
+  TalentProfileRoute: TalentProfileRoute,
   VerifySplatRoute: VerifySplatRoute,
   BlogIndexRoute: BlogIndexRoute,
   CareersIndexRoute: CareersIndexRoute,
@@ -622,9 +934,14 @@ const rootRouteChildren: RootRouteChildren = {
   EventsIndexRoute: EventsIndexRoute,
   HubsIndexRoute: HubsIndexRoute,
   LocationsIndexRoute: LocationsIndexRoute,
+  TalentIndexRoute: TalentIndexRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   BlogCategorySlugRoute: BlogCategorySlugRoute,
   CareersJobsSlugRoute: CareersJobsSlugRoute,
   CareersPlatformsPlatformSlugRoute: CareersPlatformsPlatformSlugRoute,
+  TalentPoolIdRoute: TalentPoolIdRoute,
+  TalentRolesSlugRoute: TalentRolesSlugRoute,
+  TalentPoolIndexRoute: TalentPoolIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

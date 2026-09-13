@@ -48,6 +48,12 @@ import LovablePage from "./pages/Lovable";
 import AdminCertificates from "./pages/AdminCertificates";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
+import Talent from "./pages/Talent";
+import TalentRoleDetail from "./pages/TalentRoleDetail";
+import TalentProfile from "./pages/TalentProfile";
+import TalentDashboard from "./pages/TalentDashboard";
+import Hire from "./pages/Hire";
+import AdminTalent from "./pages/AdminTalent";
 import OAuthConsent from "./pages/OAuthConsent";
 
 const queryClient = new QueryClient();

@@ -1,9 +1,10 @@
 import { Helmet } from "react-helmet-async";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Loader2, Sparkles, Briefcase, Pencil, ShieldCheck, Users2, MessageCircle, Wallet, Eye } from "lucide-react";
+import { Loader2, Sparkles, Briefcase, Pencil, ShieldCheck, Users2, MessageCircle, Wallet, Eye, ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import TalentNav from "@/components/talent/TalentNav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -60,7 +61,23 @@ const TalentDashboard = () => {
       navigate("/login?next=/talent/dashboard", { replace: true });
       return;
     }
-    const { data: p } = await supabase.from("talent_profiles").select("*").eq("user_id", auth.user.id).maybeSingle();
+    let p = (await supabase.from("talent_profiles").select("*").eq("user_id", auth.user.id).maybeSingle()).data;
+
+    // People we added to the talent pool before they signed up: attach the
+    // waiting profile (and its Faculty ID) to this account automatically.
+    if (!p) {
+      const { data: claimedId } = await supabase.rpc("claim_my_talent_profile");
+      if (claimedId) {
+        p = (await supabase.from("talent_profiles").select("*").eq("id", claimedId).maybeSingle()).data;
+      }
+    }
+
+    // A complete profile earns a Faculty ID without waiting for an admin.
+    if (p && !p.faculty_id && (p.profile_strength ?? 0) >= 100) {
+      const { data: issued } = await supabase.rpc("claim_talent_faculty_id");
+      if (issued) p = { ...p, faculty_id: issued };
+    }
+
     setProfile(p ?? null);
     if (p) {
       const [{ data: m }, { data: a }, { data: e }] = await Promise.all([
@@ -153,13 +170,22 @@ const TalentDashboard = () => {
       <Header />
 
       <main className="pt-20">
-        <div className="container mx-auto max-w-4xl space-y-8 px-4 py-12">
+        <TalentNav />
+        <div className="container mx-auto max-w-4xl space-y-8 px-4 py-10 md:py-12">
+          <Link to="/careers" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+            <ArrowLeft size={14} /> Back to open roles
+          </Link>
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold">
+              <h1 className="text-2xl font-bold sm:text-3xl">
                 {profile ? `Welcome, ${profile.full_name.split(" ")[0]}` : "Your talent dashboard"}
               </h1>
               <p className="mt-1 text-muted-foreground">Your matches, applications and availability in one place.</p>
+              {profile?.faculty_id && (
+                <p className="mt-2 text-sm">
+                  Faculty ID: <span className="font-mono font-medium">{profile.faculty_id}</span>
+                </p>
+              )}
             </div>
             <Link to="/talent/profile">
               <Button variant="outline"><Pencil className="mr-2" size={15} /> Edit profile</Button>

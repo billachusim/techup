@@ -27,6 +27,8 @@ import JobCard from "@/components/jobs/JobCard";
 import PlatformPartners from "@/components/jobs/PlatformPartners";
 import { fetchJobs, employmentLabel, jobPostingSchema } from "@/lib/jobs";
 import { Link } from "react-router-dom";
+import RoleCard from "@/components/talent/RoleCard";
+import { fetchPublishedRoles } from "@/lib/talent";
 
 type PartnerJob = {
   company: string;

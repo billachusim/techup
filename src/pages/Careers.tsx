@@ -83,6 +83,7 @@ const Careers = () => {
             <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link to={joinHref}><Button size="lg">Join as talent</Button></Link>
               <Link to="/hire"><Button size="lg" variant="outline">Hire talent</Button></Link>
+              <Link to="/talent/pool"><Button size="lg" variant="ghost">Browse the talent directory</Button></Link>
             </div>
           </div>
         </section>

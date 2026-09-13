@@ -1,7 +1,6 @@
 import { Award, Download } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import jsPDF from "jspdf";
 
 interface CertificateCardProps {
   certificate: {
@@ -14,7 +13,8 @@ interface CertificateCardProps {
 }
 
 export const CertificateCard = ({ certificate, studentName }: CertificateCardProps) => {
-  const handleDownload = () => {
+  const handleDownload = async () => {
+    const { default: jsPDF } = await import("jspdf");
     const doc = new jsPDF({
       orientation: 'landscape',
       unit: 'mm',

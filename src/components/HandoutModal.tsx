@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Download, ExternalLink, Youtube, Globe, FileText } from "lucide-react";
 import { useState } from "react";
-import jsPDF from "jspdf";
 
 interface Resource {
   type: string;
@@ -45,7 +44,8 @@ export const HandoutModal = ({
     }
   };
 
-  const generatePDF = () => {
+  const generatePDF = async () => {
+    const { default: jsPDF } = await import("jspdf");
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const margin = 20;

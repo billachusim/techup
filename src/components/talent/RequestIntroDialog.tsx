@@ -42,8 +42,8 @@ const RequestIntroDialog = ({ talentId, talentName, skills, source = "talent_poo
       _profile_id: talentId,
       _requester_name: form.name.trim().slice(0, 120),
       _requester_contact: form.contact.trim().slice(0, 160),
-      _requester_org: form.org.trim().slice(0, 160) || null,
-      _message: form.message.trim().slice(0, 1000) || null,
+      _requester_org: form.org.trim().slice(0, 160) || undefined,
+      _message: form.message.trim().slice(0, 1000) || undefined,
       _source: source,
     });
     setSending(false);

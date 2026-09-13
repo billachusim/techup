@@ -535,9 +535,9 @@ const AdminTalent = () => {
                             <Download size={14} className="mr-1.5" /> CV
                           </Button>
                         )}
-                        {t.phone && (
-                          <a href={talentWhatsAppUrl(`Hello ${t.full_name.split(" ")[0]}, this is Tech Faculty.`)} target="_blank" rel="noopener noreferrer">
-                            <Button size="sm" variant="outline">WhatsApp us</Button>
+                        {(t.whatsapp || t.phone) && (
+                          <a href={contactUrl(t.whatsapp || t.phone, t.full_name)} target="_blank" rel="noopener noreferrer">
+                            <Button size="sm" variant="outline"><MessageCircle size={14} className="mr-1.5" /> Message</Button>
                           </a>
                         )}
                         <Button size="sm" variant={t.is_vetted ? "ghost" : "default"} onClick={() => toggleVetted(t)}>

@@ -40,7 +40,7 @@ const navGroups = [
     icon: Compass,
     items: [
       { label: "Careers", href: "/careers" },
-      { label: "Opportunities board", href: "/opportunities" },
+      
       { label: "Events", href: "/events" },
       { label: "Tech hubs directory", href: "/hubs" },
     ],

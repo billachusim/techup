@@ -276,7 +276,7 @@ const SuccessKit = () => (
               </Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link to="/opportunities">Browse opportunities board</Link>
+              <Link to="/careers">Browse open roles</Link>
             </Button>
           </div>
         </div>

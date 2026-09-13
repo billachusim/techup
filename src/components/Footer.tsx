@@ -53,7 +53,7 @@ const Footer = () => {
               <Link to="/siwes" className="hover:text-primary transition-colors">Internships</Link>
               <Link to="/virtual-siwes" className="hover:text-primary transition-colors">Virtual SIWES (Online IT)</Link>
               <Link to="/siwes-success-kit" className="hover:text-primary transition-colors">SIWES Success Kit</Link>
-              <Link to="/opportunities" className="hover:text-primary transition-colors">Opportunities Board</Link>
+              
             </nav>
             <h4 className="text-sm font-semibold pt-4">Partners</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted-foreground">

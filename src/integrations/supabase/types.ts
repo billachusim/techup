@@ -1277,6 +1277,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      approve_talent: { Args: { _talent_id: string }; Returns: string }
       archive_stale_listings: { Args: never; Returns: undefined }
       ensure_course_lectures: {
         Args: { course_uuid: string }
@@ -1300,6 +1301,7 @@ export type Database = {
           bio: string
           city: string
           country: string
+          faculty_id: string
           full_name: string
           github_url: string
           headline: string
@@ -1327,6 +1329,7 @@ export type Database = {
         Returns: boolean
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      issue_talent_faculty_id: { Args: { _talent_id: string }; Returns: string }
       list_public_talent: {
         Args: never
         Returns: {
@@ -1334,6 +1337,7 @@ export type Database = {
           city: string
           country: string
           created_at: string
+          faculty_id: string
           full_name: string
           headline: string
           hours_per_week: number
@@ -1348,6 +1352,15 @@ export type Database = {
           work_mode: string
           years_experience: number
         }[]
+      }
+      next_faculty_id: {
+        Args: {
+          cohort_mo: number
+          cohort_yr: number
+          dept_name: string
+          learn_mode: string
+        }
+        Returns: string
       }
       request_talent_intro: {
         Args: {

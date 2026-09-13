@@ -1,0 +1,606 @@
+import { Helmet } from "react-helmet-async";
+import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Loader2, Sparkles, Download, Check, X, Plus } from "lucide-react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useIsStaff } from "@/hooks/useIsStaff";
+import {
+  MATCH_STATUS_LABEL,
+  APPLICATION_STATUS_LABEL,
+  ROLE_KIND_LABEL,
+  parseList,
+  slugify,
+  type BusinessBrief,
+  type TalentProfile,
+  type TalentRole,
+} from "@/lib/talent";
+
+type MatchRow = {
+  id: string; score: number; reason: string | null; status: string; source: string;
+  role_id: string; talent_profile_id: string;
+  talent_roles: { title: string; company: string } | null;
+  talent_profiles: { full_name: string; city: string | null; skills: string[] } | null;
+};
+
+type ApplicationRow = {
+  id: string; status: string; message: string | null; created_at: string;
+  talent_roles: { title: string } | null;
+  talent_profiles: { full_name: string; phone: string | null; email: string | null } | null;
+};
+
+const emptyRole = {
+  title: "", role_kind: "internal", company: "Tech Faculty", city: "", country: "Nigeria",
+  is_remote: "true", employment_type: "full_time", summary: "", description: "",
+  responsibilities: "", required_skills: "", nice_to_have: "", seniority: "mid",
+  budget_min: "", budget_max: "", budget_currency: "NGN", budget_unit: "MONTH", openings: "1",
+};
+
+const AdminTalent = () => {
+  const { loading: roleLoading, isStaff } = useIsStaff();
+  const [signedIn, setSignedIn] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [roles, setRoles] = useState<TalentRole[]>([]);
+  const [talents, setTalents] = useState<TalentProfile[]>([]);
+  const [matches, setMatches] = useState<MatchRow[]>([]);
+  const [applications, setApplications] = useState<ApplicationRow[]>([]);
+  const [briefs, setBriefs] = useState<BusinessBrief[]>([]);
+  const [newRole, setNewRole] = useState(emptyRole);
+  const [creating, setCreating] = useState(false);
+  const [matchingRoleId, setMatchingRoleId] = useState<string | null>(null);
+  const [manualRole, setManualRole] = useState("");
+  const [manualTalent, setManualTalent] = useState("");
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setSignedIn(Boolean(data.user)));
+  }, []);
+
+  const load = useCallback(async () => {
+    const [r, t, m, a, b] = await Promise.all([
+      supabase.from("talent_roles").select("*").order("created_at", { ascending: false }),
+      supabase.from("talent_profiles").select("*").order("profile_strength", { ascending: false }),
+      supabase
+        .from("role_matches")
+        .select("id, score, reason, status, source, role_id, talent_profile_id, talent_roles(title, company), talent_profiles(full_name, city, skills)")
+        .order("score", { ascending: false }),
+      supabase
+        .from("talent_applications")
+        .select("id, status, message, created_at, talent_roles(title), talent_profiles(full_name, phone, email)")
+        .order("created_at", { ascending: false }),
+      supabase.from("business_briefs").select("*").order("created_at", { ascending: false }),
+    ]);
+    setRoles(r.data ?? []);
+    setTalents(t.data ?? []);
+    setMatches((m.data ?? []) as MatchRow[]);
+    setApplications((a.data ?? []) as ApplicationRow[]);
+    setBriefs(b.data ?? []);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { if (isStaff) load(); else if (!roleLoading) setLoading(false); }, [isStaff, roleLoading, load]);
+
+  const createRole = async () => {
+    if (!newRole.title.trim() || !newRole.summary.trim() || !newRole.description.trim()) {
+      toast({ title: "Title, summary and description are required", variant: "destructive" });
+      return;
+    }
+    setCreating(true);
+    try {
+      const { data: auth } = await supabase.auth.getUser();
+      const { error } = await supabase.from("talent_roles").insert({
+        slug: `${slugify(newRole.title)}-${Date.now().toString().slice(-4)}`,
+        title: newRole.title.trim(),
+        role_kind: newRole.role_kind,
+        company: newRole.company.trim() || "Tech Faculty",
+        city: newRole.city.trim() || null,
+        country: newRole.country.trim() || "Nigeria",
+        is_remote: newRole.is_remote === "true",
+        employment_type: newRole.employment_type,
+        summary: newRole.summary.trim(),
+        description: newRole.description.trim(),
+        responsibilities: parseList(newRole.responsibilities),
+        required_skills: parseList(newRole.required_skills),
+        nice_to_have: parseList(newRole.nice_to_have),
+        seniority: newRole.seniority,
+        budget_min: newRole.budget_min ? Number(newRole.budget_min) : null,
+        budget_max: newRole.budget_max ? Number(newRole.budget_max) : null,
+        budget_currency: newRole.budget_currency,
+        budget_unit: newRole.budget_unit,
+        openings: Number(newRole.openings) || 1,
+        status: "draft",
+        created_by: auth.user?.id ?? null,
+      });
+      if (error) throw error;
+      toast({ title: "Role created as a draft", description: "Publish it when you are ready." });
+      setNewRole(emptyRole);
+      load();
+    } catch (err) {
+      toast({ title: "Could not create the role", description: err instanceof Error ? err.message : "", variant: "destructive" });
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const setRoleStatus = async (id: string, status: string) => {
+    const { error } = await supabase.from("talent_roles").update({ status }).eq("id", id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    load();
+  };
+
+  const runMatching = async (roleId: string) => {
+    setMatchingRoleId(roleId);
+    try {
+      const { data, error } = await supabase.functions.invoke("match-talent", { body: { role_id: roleId } });
+      if (error) throw error;
+      const created = (data as { created?: number } | null)?.created ?? 0;
+      toast({
+        title: created ? `${created} suggested matches ready` : "No new matches",
+        description: created ? "Review them in the Matches tab and approve the good ones." : "Everyone suitable has already been matched to this role.",
+      });
+      load();
+    } catch (err) {
+      toast({ title: "Matching failed", description: err instanceof Error ? err.message : "Please try again.", variant: "destructive" });
+    } finally {
+      setMatchingRoleId(null);
+    }
+  };
+
+  const setMatchStatus = async (id: string, status: string) => {
+    const { error } = await supabase.from("role_matches").update({ status }).eq("id", id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    load();
+  };
+
+  const addManualMatch = async () => {
+    if (!manualRole || !manualTalent) {
+      toast({ title: "Pick a role and a talent", variant: "destructive" });
+      return;
+    }
+    const { data: auth } = await supabase.auth.getUser();
+    const { error } = await supabase.from("role_matches").insert({
+      role_id: manualRole,
+      talent_profile_id: manualTalent,
+      score: 100,
+      reason: "Matched by the Tech Faculty team.",
+      status: "approved",
+      source: "manual",
+      created_by: auth.user?.id ?? null,
+    });
+    if (error) {
+      toast({ title: "Could not add the match", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: "Match added and shared with the talent" });
+    setManualRole(""); setManualTalent("");
+    load();
+  };
+
+  const toggleVetted = async (talent: TalentProfile) => {
+    const { error } = await supabase
+      .from("talent_profiles")
+      .update({ is_vetted: !talent.is_vetted, vetted_at: talent.is_vetted ? null : new Date().toISOString() })
+      .eq("id", talent.id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    load();
+  };
+
+  const openCv = async (path: string | null) => {
+    if (!path) return;
+    const { data, error } = await supabase.storage.from("talent-cvs").createSignedUrl(path, 300);
+    if (error || !data) { toast({ title: "Could not open the CV", description: error?.message, variant: "destructive" }); return; }
+    window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const setBriefStatus = async (id: string, status: string) => {
+    const { error } = await supabase.from("business_briefs").update({ status }).eq("id", id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    load();
+  };
+
+  const setApplicationStatus = async (id: string, status: string) => {
+    const { error } = await supabase.from("talent_applications").update({ status }).eq("id", id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    load();
+  };
+
+  if (roleLoading || signedIn === null) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <main className="container mx-auto max-w-4xl px-4 pt-28">
+          <Loader2 className="mx-auto animate-spin text-muted-foreground" />
+        </main>
+      </div>
+    );
+  }
+
+  if (!isStaff) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Helmet>
+          <title>Talent admin | Tech Faculty</title>
+          <meta name="robots" content="noindex, nofollow" />
+        </Helmet>
+        <Header />
+        <main className="container mx-auto max-w-lg px-4 pb-20 pt-28 text-center">
+          <h1 className="text-2xl font-bold">Staff access only</h1>
+          <p className="mt-3 text-muted-foreground">
+            {signedIn
+              ? "This account does not have talent admin access. Ask the owner to grant it."
+              : "Sign in with a staff account to manage roles, talent and matches."}
+          </p>
+          {!signedIn && (
+            <Link to="/login?next=/admin/talent" className="mt-6 inline-block">
+              <Button>Sign in</Button>
+            </Link>
+          )}
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  const suggested = matches.filter((m) => m.status === "suggested");
+  const decided = matches.filter((m) => m.status !== "suggested");
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Talent admin | Tech Faculty</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
+      <Header />
+
+      <main className="pt-20">
+        <div className="container mx-auto max-w-6xl px-4 py-12">
+          <h1 className="text-3xl font-bold">Talent admin</h1>
+          <p className="mt-1 text-muted-foreground">Add roles, review talent, approve matches and read business briefs.</p>
+
+          {loading ? (
+            <Loader2 className="mx-auto mt-12 animate-spin text-muted-foreground" />
+          ) : (
+            <Tabs defaultValue="roles" className="mt-8">
+              <TabsList className="flex-wrap">
+                <TabsTrigger value="roles">Roles ({roles.length})</TabsTrigger>
+                <TabsTrigger value="talent">Talent ({talents.length})</TabsTrigger>
+                <TabsTrigger value="matches">Matches ({suggested.length})</TabsTrigger>
+                <TabsTrigger value="applications">Applications ({applications.length})</TabsTrigger>
+                <TabsTrigger value="briefs">Briefs ({briefs.filter((b) => b.status === "new").length})</TabsTrigger>
+              </TabsList>
+
+              {/* ROLES */}
+              <TabsContent value="roles" className="space-y-8 pt-6">
+                <section className="rounded-lg border border-border bg-card p-6">
+                  <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold"><Plus size={18} /> Add a role</h2>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <Label>Title</Label>
+                      <Input value={newRole.title} onChange={(e) => setNewRole({ ...newRole, title: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label>Company</Label>
+                      <Input value={newRole.company} onChange={(e) => setNewRole({ ...newRole, company: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label>Kind</Label>
+                      <Select value={newRole.role_kind} onValueChange={(v) => setNewRole({ ...newRole, role_kind: v })}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="internal">Tech Faculty role</SelectItem>
+                          <SelectItem value="partner">Partner role</SelectItem>
+                          <SelectItem value="client">Client project</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>Type</Label>
+                      <Select value={newRole.employment_type} onValueChange={(v) => setNewRole({ ...newRole, employment_type: v })}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="full_time">Full-time</SelectItem>
+                          <SelectItem value="part_time">Part-time</SelectItem>
+                          <SelectItem value="contract">Contract</SelectItem>
+                          <SelectItem value="internship">Internship</SelectItem>
+                          <SelectItem value="freelance">Freelance</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>City</Label>
+                      <Input value={newRole.city} onChange={(e) => setNewRole({ ...newRole, city: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label>Remote?</Label>
+                      <Select value={newRole.is_remote} onValueChange={(v) => setNewRole({ ...newRole, is_remote: v })}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="true">Remote friendly</SelectItem>
+                          <SelectItem value="false">On-site</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>Seniority</Label>
+                      <Select value={newRole.seniority} onValueChange={(v) => setNewRole({ ...newRole, seniority: v })}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="entry">Entry level</SelectItem>
+                          <SelectItem value="mid">Mid level</SelectItem>
+                          <SelectItem value="senior">Senior</SelectItem>
+                          <SelectItem value="lead">Lead</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>Openings</Label>
+                      <Input type="number" min="1" value={newRole.openings} onChange={(e) => setNewRole({ ...newRole, openings: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label>Pay from</Label>
+                      <Input type="number" value={newRole.budget_min} onChange={(e) => setNewRole({ ...newRole, budget_min: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label>Pay to</Label>
+                      <Input type="number" value={newRole.budget_max} onChange={(e) => setNewRole({ ...newRole, budget_max: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label>Currency</Label>
+                      <Select value={newRole.budget_currency} onValueChange={(v) => setNewRole({ ...newRole, budget_currency: v })}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="NGN">Naira</SelectItem>
+                          <SelectItem value="USD">US Dollar</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>Pay period</Label>
+                      <Select value={newRole.budget_unit} onValueChange={(v) => setNewRole({ ...newRole, budget_unit: v })}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="MONTH">Per month</SelectItem>
+                          <SelectItem value="WEEK">Per week</SelectItem>
+                          <SelectItem value="HOUR">Per hour</SelectItem>
+                          <SelectItem value="PROJECT">Per project</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="mt-4 space-y-4">
+                    <div>
+                      <Label>One-line summary</Label>
+                      <Input value={newRole.summary} onChange={(e) => setNewRole({ ...newRole, summary: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label>Full description</Label>
+                      <Textarea rows={4} value={newRole.description} onChange={(e) => setNewRole({ ...newRole, description: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label>Responsibilities (one per line)</Label>
+                      <Textarea rows={3} value={newRole.responsibilities} onChange={(e) => setNewRole({ ...newRole, responsibilities: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label>Required skills (comma separated)</Label>
+                      <Input value={newRole.required_skills} onChange={(e) => setNewRole({ ...newRole, required_skills: e.target.value })} />
+                    </div>
+                    <div>
+                      <Label>Nice to have (comma separated)</Label>
+                      <Input value={newRole.nice_to_have} onChange={(e) => setNewRole({ ...newRole, nice_to_have: e.target.value })} />
+                    </div>
+                    <Button onClick={createRole} disabled={creating}>{creating ? "Saving…" : "Create draft role"}</Button>
+                  </div>
+                </section>
+
+                <section className="space-y-3">
+                  {roles.map((role) => (
+                    <div key={role.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card p-4">
+                      <div>
+                        <p className="font-medium">{role.title}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {ROLE_KIND_LABEL[role.role_kind]} · {role.company} · {role.city ?? "Anywhere"} ·{" "}
+                          <Badge variant="outline" className="ml-1">{role.status}</Badge>
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <Button size="sm" variant="outline" onClick={() => runMatching(role.id)} disabled={matchingRoleId === role.id}>
+                          {matchingRoleId === role.id ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <Sparkles size={14} className="mr-1.5" />}
+                          Run AI matching
+                        </Button>
+                        {role.status !== "published" ? (
+                          <Button size="sm" onClick={() => setRoleStatus(role.id, "published")}>Publish</Button>
+                        ) : (
+                          <Button size="sm" variant="ghost" onClick={() => setRoleStatus(role.id, "closed")}>Close</Button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </section>
+              </TabsContent>
+
+              {/* TALENT */}
+              <TabsContent value="talent" className="space-y-3 pt-6">
+                {talents.length === 0 && (
+                  <p className="rounded-lg border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+                    No talent profiles yet. Share techfaculty.ng/talent in the WhatsApp group.
+                  </p>
+                )}
+                {talents.map((t) => (
+                  <div key={t.id} className="rounded-lg border border-border bg-card p-4">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <p className="font-medium">
+                          {t.full_name} {t.is_vetted && <Badge className="ml-1">Vetted</Badge>}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {[t.city, t.country].filter(Boolean).join(", ")} · {t.phone} · strength {t.profile_strength}% ·{" "}
+                          {t.availability === "open" ? "open to work" : "unavailable"}
+                        </p>
+                        {t.skills.length > 0 && (
+                          <p className="mt-1 text-xs text-muted-foreground">{t.skills.join(", ")}</p>
+                        )}
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {t.cv_path && (
+                          <Button size="sm" variant="outline" onClick={() => openCv(t.cv_path)}>
+                            <Download size={14} className="mr-1.5" /> CV
+                          </Button>
+                        )}
+                        <Button size="sm" variant={t.is_vetted ? "ghost" : "default"} onClick={() => toggleVetted(t)}>
+                          {t.is_vetted ? "Remove vetted" : "Mark vetted"}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </TabsContent>
+
+              {/* MATCHES */}
+              <TabsContent value="matches" className="space-y-6 pt-6">
+                <section className="rounded-lg border border-border bg-card p-5">
+                  <h2 className="mb-3 text-lg font-semibold">Match someone manually</h2>
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <Select value={manualRole} onValueChange={setManualRole}>
+                      <SelectTrigger><SelectValue placeholder="Role" /></SelectTrigger>
+                      <SelectContent>
+                        {roles.map((r) => <SelectItem key={r.id} value={r.id}>{r.title}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                    <Select value={manualTalent} onValueChange={setManualTalent}>
+                      <SelectTrigger><SelectValue placeholder="Talent" /></SelectTrigger>
+                      <SelectContent>
+                        {talents.map((t) => <SelectItem key={t.id} value={t.id}>{t.full_name}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                    <Button onClick={addManualMatch}>Add match</Button>
+                  </div>
+                </section>
+
+                <section>
+                  <h2 className="mb-3 text-lg font-semibold">Awaiting your review ({suggested.length})</h2>
+                  <div className="space-y-3">
+                    {suggested.length === 0 && (
+                      <p className="rounded-lg border border-border bg-card p-6 text-sm text-muted-foreground">
+                        Nothing waiting. Use “Run AI matching” on a role to generate suggestions.
+                      </p>
+                    )}
+                    {suggested.map((m) => (
+                      <div key={m.id} className="rounded-lg border border-border bg-card p-4">
+                        <div className="flex flex-wrap items-start justify-between gap-3">
+                          <div>
+                            <p className="font-medium">
+                              {m.talent_profiles?.full_name} → {m.talent_roles?.title}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {m.score}% · {m.talent_profiles?.city} · {m.talent_profiles?.skills?.slice(0, 5).join(", ")}
+                            </p>
+                            {m.reason && <p className="mt-2 text-sm text-muted-foreground">{m.reason}</p>}
+                          </div>
+                          <div className="flex gap-2">
+                            <Button size="sm" onClick={() => setMatchStatus(m.id, "approved")}>
+                              <Check size={14} className="mr-1.5" /> Approve
+                            </Button>
+                            <Button size="sm" variant="ghost" onClick={() => setMatchStatus(m.id, "declined")}>
+                              <X size={14} className="mr-1.5" /> Decline
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                <section>
+                  <h2 className="mb-3 text-lg font-semibold">Decided ({decided.length})</h2>
+                  <div className="divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
+                    {decided.map((m) => (
+                      <div key={m.id} className="flex flex-wrap items-center justify-between gap-2 p-3 text-sm">
+                        <span>{m.talent_profiles?.full_name} → {m.talent_roles?.title}</span>
+                        <Badge variant="outline">{MATCH_STATUS_LABEL[m.status] ?? m.status}</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              </TabsContent>
+
+              {/* APPLICATIONS */}
+              <TabsContent value="applications" className="space-y-3 pt-6">
+                {applications.length === 0 && (
+                  <p className="rounded-lg border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+                    No applications yet.
+                  </p>
+                )}
+                {applications.map((app) => (
+                  <div key={app.id} className="rounded-lg border border-border bg-card p-4">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <p className="font-medium">{app.talent_profiles?.full_name} → {app.talent_roles?.title}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {app.talent_profiles?.phone} · {new Date(app.created_at).toLocaleDateString("en-GB")}
+                        </p>
+                        {app.message && <p className="mt-2 text-sm text-muted-foreground">{app.message}</p>}
+                      </div>
+                      <Select value={app.status} onValueChange={(v) => setApplicationStatus(app.id, v)}>
+                        <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          {Object.entries(APPLICATION_STATUS_LABEL).map(([value, label]) => (
+                            <SelectItem key={value} value={value}>{label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                ))}
+              </TabsContent>
+
+              {/* BRIEFS */}
+              <TabsContent value="briefs" className="space-y-3 pt-6">
+                {briefs.length === 0 && (
+                  <p className="rounded-lg border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+                    No business briefs yet. Share techfaculty.ng/hire with prospects.
+                  </p>
+                )}
+                {briefs.map((b) => (
+                  <div key={b.id} className="rounded-lg border border-border bg-card p-4">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <p className="font-medium">{b.project_title}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {b.company} · {b.contact_name} · {b.phone} · {[b.city, b.country].filter(Boolean).join(", ")}
+                        </p>
+                        <p className="mt-2 text-sm text-muted-foreground">{b.description}</p>
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          {b.skills_needed.join(", ")}{b.budget_text ? ` · budget ${b.budget_text}` : ""}{b.timeline ? ` · ${b.timeline}` : ""}
+                        </p>
+                      </div>
+                      <Select value={b.status} onValueChange={(v) => setBriefStatus(b.id, v)}>
+                        <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="new">New</SelectItem>
+                          <SelectItem value="reviewing">Reviewing</SelectItem>
+                          <SelectItem value="approved">Approved</SelectItem>
+                          <SelectItem value="rejected">Not a fit</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                ))}
+              </TabsContent>
+            </Tabs>
+          )}
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+export default AdminTalent;

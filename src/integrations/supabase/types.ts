@@ -139,6 +139,63 @@ export type Database = {
         }
         Relationships: []
       }
+      business_briefs: {
+        Row: {
+          budget_text: string | null
+          city: string | null
+          company: string
+          contact_name: string
+          country: string
+          created_at: string
+          description: string
+          email: string | null
+          engagement: string
+          id: string
+          phone: string
+          project_title: string
+          skills_needed: string[]
+          status: string
+          timeline: string | null
+          updated_at: string
+        }
+        Insert: {
+          budget_text?: string | null
+          city?: string | null
+          company: string
+          contact_name: string
+          country?: string
+          created_at?: string
+          description: string
+          email?: string | null
+          engagement?: string
+          id?: string
+          phone: string
+          project_title: string
+          skills_needed?: string[]
+          status?: string
+          timeline?: string | null
+          updated_at?: string
+        }
+        Update: {
+          budget_text?: string | null
+          city?: string | null
+          company?: string
+          contact_name?: string
+          country?: string
+          created_at?: string
+          description?: string
+          email?: string | null
+          engagement?: string
+          id?: string
+          phone?: string
+          project_title?: string
+          skills_needed?: string[]
+          status?: string
+          timeline?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       certificates: {
         Row: {
           certificate_number: string
@@ -787,6 +844,318 @@ export type Database = {
         }
         Relationships: []
       }
+      role_matches: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          reason: string | null
+          role_id: string
+          score: number
+          source: string
+          status: string
+          talent_profile_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          reason?: string | null
+          role_id: string
+          score?: number
+          source?: string
+          status?: string
+          talent_profile_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          reason?: string | null
+          role_id?: string
+          score?: number
+          source?: string
+          status?: string
+          talent_profile_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "role_matches_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "talent_roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "role_matches_talent_profile_id_fkey"
+            columns: ["talent_profile_id"]
+            isOneToOne: false
+            referencedRelation: "talent_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      talent_applications: {
+        Row: {
+          created_at: string
+          id: string
+          message: string | null
+          role_id: string
+          status: string
+          talent_profile_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          role_id: string
+          status?: string
+          talent_profile_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          role_id?: string
+          status?: string
+          talent_profile_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "talent_applications_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "talent_roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "talent_applications_talent_profile_id_fkey"
+            columns: ["talent_profile_id"]
+            isOneToOne: false
+            referencedRelation: "talent_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      talent_profiles: {
+        Row: {
+          admin_notes: string | null
+          availability: string
+          bio: string | null
+          city: string | null
+          country: string
+          created_at: string
+          cv_path: string | null
+          email: string | null
+          faculty_id: string | null
+          full_name: string
+          github_url: string | null
+          headline: string | null
+          hours_per_week: number | null
+          id: string
+          intro_video_url: string | null
+          is_vetted: boolean
+          linkedin_url: string | null
+          phone: string | null
+          portfolio_url: string | null
+          profile_strength: number
+          rate_amount: number | null
+          rate_currency: string
+          skill_details: Json
+          skills: string[]
+          source: string
+          tools: string[]
+          updated_at: string
+          user_id: string | null
+          vetted_at: string | null
+          whatsapp: string | null
+          work_mode: string
+          years_experience: number | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          availability?: string
+          bio?: string | null
+          city?: string | null
+          country?: string
+          created_at?: string
+          cv_path?: string | null
+          email?: string | null
+          faculty_id?: string | null
+          full_name: string
+          github_url?: string | null
+          headline?: string | null
+          hours_per_week?: number | null
+          id?: string
+          intro_video_url?: string | null
+          is_vetted?: boolean
+          linkedin_url?: string | null
+          phone?: string | null
+          portfolio_url?: string | null
+          profile_strength?: number
+          rate_amount?: number | null
+          rate_currency?: string
+          skill_details?: Json
+          skills?: string[]
+          source?: string
+          tools?: string[]
+          updated_at?: string
+          user_id?: string | null
+          vetted_at?: string | null
+          whatsapp?: string | null
+          work_mode?: string
+          years_experience?: number | null
+        }
+        Update: {
+          admin_notes?: string | null
+          availability?: string
+          bio?: string | null
+          city?: string | null
+          country?: string
+          created_at?: string
+          cv_path?: string | null
+          email?: string | null
+          faculty_id?: string | null
+          full_name?: string
+          github_url?: string | null
+          headline?: string | null
+          hours_per_week?: number | null
+          id?: string
+          intro_video_url?: string | null
+          is_vetted?: boolean
+          linkedin_url?: string | null
+          phone?: string | null
+          portfolio_url?: string | null
+          profile_strength?: number
+          rate_amount?: number | null
+          rate_currency?: string
+          skill_details?: Json
+          skills?: string[]
+          source?: string
+          tools?: string[]
+          updated_at?: string
+          user_id?: string | null
+          vetted_at?: string | null
+          whatsapp?: string | null
+          work_mode?: string
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
+      talent_roles: {
+        Row: {
+          apply_deadline: string | null
+          budget_currency: string
+          budget_max: number | null
+          budget_min: number | null
+          budget_unit: string
+          city: string | null
+          company: string
+          country: string
+          created_at: string
+          created_by: string | null
+          description: string
+          employment_type: string
+          id: string
+          is_featured: boolean
+          is_remote: boolean
+          nice_to_have: string[]
+          openings: number
+          required_skills: string[]
+          responsibilities: string[]
+          role_kind: string
+          seniority: string
+          slug: string
+          status: string
+          summary: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          apply_deadline?: string | null
+          budget_currency?: string
+          budget_max?: number | null
+          budget_min?: number | null
+          budget_unit?: string
+          city?: string | null
+          company?: string
+          country?: string
+          created_at?: string
+          created_by?: string | null
+          description: string
+          employment_type?: string
+          id?: string
+          is_featured?: boolean
+          is_remote?: boolean
+          nice_to_have?: string[]
+          openings?: number
+          required_skills?: string[]
+          responsibilities?: string[]
+          role_kind?: string
+          seniority?: string
+          slug: string
+          status?: string
+          summary: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          apply_deadline?: string | null
+          budget_currency?: string
+          budget_max?: number | null
+          budget_min?: number | null
+          budget_unit?: string
+          city?: string | null
+          company?: string
+          country?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          employment_type?: string
+          id?: string
+          is_featured?: boolean
+          is_remote?: boolean
+          nice_to_have?: string[]
+          openings?: number
+          required_skills?: string[]
+          responsibilities?: string[]
+          role_kind?: string
+          seniority?: string
+          slug?: string
+          status?: string
+          summary?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -807,6 +1176,14 @@ export type Database = {
         Returns: string
       }
       get_department_code: { Args: { dept: string }; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_staff: { Args: { _user_id: string }; Returns: boolean }
       seed_all_course_lectures: { Args: never; Returns: undefined }
       verify_certificate: {
         Args: { cert_number: string }
@@ -822,7 +1199,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "recruiter" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -949,6 +1326,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "recruiter", "user"],
+    },
   },
 } as const

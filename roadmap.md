@@ -24,3 +24,13 @@
 - [x] Make Locations one direct menu link
 - [x] Organize the mobile menu into clear labelled sections
 - [x] Verify desktop and mobile navigation
+
+## Talent marketplace
+- [x] Database: talent_profiles, talent_roles, role_matches, talent_applications, business_briefs, user_roles + is_staff
+- [x] Private talent-cvs storage bucket with per-user access
+- [x] /talent landing, profile builder, dashboard, role detail with 1-click apply
+- [x] /hire business brief form
+- [x] /admin/talent staff area (roles, talent vetting, match approval, applications, briefs)
+- [x] match-talent edge function (keyword pre-rank + Gemini scoring, admin approval required)
+- [x] Careers page openings block + talent/hire CTAs, sitemap and footer entries
+- [ ] Seed early talents from the Google Form export (waiting on the CSV from you)

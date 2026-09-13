@@ -12,16 +12,31 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as BusinessPartnershipsRouteImport } from './routes/business-partnerships'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as LovableRouteImport } from './routes/lovable'
+import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
+import { Route as ProductsRouteImport } from './routes/products'
 import { Route as SchoolCollaborationsRouteImport } from './routes/school-collaborations'
 import { Route as SiwesRouteImport } from './routes/siwes'
 import { Route as SiwesSuccessKitRouteImport } from './routes/siwes-success-kit'
 import { Route as TechStoreRouteImport } from './routes/tech-store'
+import { Route as TinypeopleRouteImport } from './routes/tinypeople'
 import { Route as VirtualSiwesRouteImport } from './routes/virtual-siwes'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as CareersIndexRouteImport } from './routes/careers.index'
+import { Route as DepartmentsIndexRouteImport } from './routes/departments.index'
+import { Route as DepartmentsSlugRouteImport } from './routes/departments.$slug'
 import { Route as EventsIndexRouteImport } from './routes/events.index'
 import { Route as EventsSlugRouteImport } from './routes/events.$slug'
+import { Route as HubsIndexRouteImport } from './routes/hubs.index'
+import { Route as HubsSlugRouteImport } from './routes/hubs.$slug'
+import { Route as LocationsIndexRouteImport } from './routes/locations.index'
+import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
+import { Route as VerifySplatRouteImport } from './routes/verify.$'
 import { Route as BlogCategorySlugRouteImport } from './routes/blog.category.$slug'
+import { Route as CareersJobsSlugRouteImport } from './routes/careers.jobs.$slug'
+import { Route as CareersPlatformsPlatformSlugRouteImport } from './routes/careers.platforms.$platformSlug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -36,6 +51,26 @@ const AboutRoute = AboutRouteImport.update({
 const BusinessPartnershipsRoute = BusinessPartnershipsRouteImport.update({
   id: '/business-partnerships',
   path: '/business-partnerships',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableRoute = LovableRouteImport.update({
+  id: '/lovable',
+  path: '/lovable',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
+  id: '/payment-success',
+  path: '/payment-success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsRoute = ProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SchoolCollaborationsRoute = SchoolCollaborationsRouteImport.update({
@@ -58,6 +93,11 @@ const TechStoreRoute = TechStoreRouteImport.update({
   path: '/tech-store',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TinypeopleRoute = TinypeopleRouteImport.update({
+  id: '/tinypeople',
+  path: '/tinypeople',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VirtualSiwesRoute = VirtualSiwesRouteImport.update({
   id: '/virtual-siwes',
   path: '/virtual-siwes',
@@ -73,6 +113,21 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CareersIndexRoute = CareersIndexRouteImport.update({
+  id: '/careers/',
+  path: '/careers/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DepartmentsIndexRoute = DepartmentsIndexRouteImport.update({
+  id: '/departments/',
+  path: '/departments/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DepartmentsSlugRoute = DepartmentsSlugRouteImport.update({
+  id: '/departments/$slug',
+  path: '/departments/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EventsIndexRoute = EventsIndexRouteImport.update({
   id: '/events/',
   path: '/events/',
@@ -83,57 +138,138 @@ const EventsSlugRoute = EventsSlugRouteImport.update({
   path: '/events/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HubsIndexRoute = HubsIndexRouteImport.update({
+  id: '/hubs/',
+  path: '/hubs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HubsSlugRoute = HubsSlugRouteImport.update({
+  id: '/hubs/$slug',
+  path: '/hubs/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocationsIndexRoute = LocationsIndexRouteImport.update({
+  id: '/locations/',
+  path: '/locations/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocationsSlugRoute = LocationsSlugRouteImport.update({
+  id: '/locations/$slug',
+  path: '/locations/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifySplatRoute = VerifySplatRouteImport.update({
+  id: '/verify/$',
+  path: '/verify/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogCategorySlugRoute = BlogCategorySlugRouteImport.update({
   id: '/blog/category/$slug',
   path: '/blog/category/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CareersJobsSlugRoute = CareersJobsSlugRouteImport.update({
+  id: '/careers/jobs/$slug',
+  path: '/careers/jobs/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CareersPlatformsPlatformSlugRoute =
+  CareersPlatformsPlatformSlugRouteImport.update({
+    id: '/careers/platforms/$platformSlug',
+    path: '/careers/platforms/$platformSlug',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/business-partnerships': typeof BusinessPartnershipsRoute
+  '/dashboard': typeof DashboardRoute
+  '/lovable': typeof LovableRoute
+  '/payment-success': typeof PaymentSuccessRoute
+  '/products': typeof ProductsRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
   '/tech-store': typeof TechStoreRoute
+  '/tinypeople': typeof TinypeopleRoute
   '/virtual-siwes': typeof VirtualSiwesRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/departments/$slug': typeof DepartmentsSlugRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/hubs/$slug': typeof HubsSlugRoute
+  '/locations/$slug': typeof LocationsSlugRoute
+  '/verify/$': typeof VerifySplatRoute
   '/blog/': typeof BlogIndexRoute
+  '/careers/': typeof CareersIndexRoute
+  '/departments/': typeof DepartmentsIndexRoute
   '/events/': typeof EventsIndexRoute
+  '/hubs/': typeof HubsIndexRoute
+  '/locations/': typeof LocationsIndexRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
+  '/careers/jobs/$slug': typeof CareersJobsSlugRoute
+  '/careers/platforms/$platformSlug': typeof CareersPlatformsPlatformSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/business-partnerships': typeof BusinessPartnershipsRoute
+  '/dashboard': typeof DashboardRoute
+  '/lovable': typeof LovableRoute
+  '/payment-success': typeof PaymentSuccessRoute
+  '/products': typeof ProductsRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
   '/tech-store': typeof TechStoreRoute
+  '/tinypeople': typeof TinypeopleRoute
   '/virtual-siwes': typeof VirtualSiwesRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/departments/$slug': typeof DepartmentsSlugRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/hubs/$slug': typeof HubsSlugRoute
+  '/locations/$slug': typeof LocationsSlugRoute
+  '/verify/$': typeof VerifySplatRoute
   '/blog': typeof BlogIndexRoute
+  '/careers': typeof CareersIndexRoute
+  '/departments': typeof DepartmentsIndexRoute
   '/events': typeof EventsIndexRoute
+  '/hubs': typeof HubsIndexRoute
+  '/locations': typeof LocationsIndexRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
+  '/careers/jobs/$slug': typeof CareersJobsSlugRoute
+  '/careers/platforms/$platformSlug': typeof CareersPlatformsPlatformSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/business-partnerships': typeof BusinessPartnershipsRoute
+  '/dashboard': typeof DashboardRoute
+  '/lovable': typeof LovableRoute
+  '/payment-success': typeof PaymentSuccessRoute
+  '/products': typeof ProductsRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
   '/tech-store': typeof TechStoreRoute
+  '/tinypeople': typeof TinypeopleRoute
   '/virtual-siwes': typeof VirtualSiwesRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/departments/$slug': typeof DepartmentsSlugRoute
   '/events/$slug': typeof EventsSlugRoute
+  '/hubs/$slug': typeof HubsSlugRoute
+  '/locations/$slug': typeof LocationsSlugRoute
+  '/verify/$': typeof VerifySplatRoute
   '/blog/': typeof BlogIndexRoute
+  '/careers/': typeof CareersIndexRoute
+  '/departments/': typeof DepartmentsIndexRoute
   '/events/': typeof EventsIndexRoute
+  '/hubs/': typeof HubsIndexRoute
+  '/locations/': typeof LocationsIndexRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
+  '/careers/jobs/$slug': typeof CareersJobsSlugRoute
+  '/careers/platforms/$platformSlug': typeof CareersPlatformsPlatformSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -141,62 +277,122 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/business-partnerships'
+    | '/dashboard'
+    | '/lovable'
+    | '/payment-success'
+    | '/products'
     | '/school-collaborations'
     | '/siwes'
     | '/siwes-success-kit'
     | '/tech-store'
+    | '/tinypeople'
     | '/virtual-siwes'
     | '/blog/$slug'
+    | '/departments/$slug'
     | '/events/$slug'
+    | '/hubs/$slug'
+    | '/locations/$slug'
+    | '/verify/$'
     | '/blog/'
+    | '/careers/'
+    | '/departments/'
     | '/events/'
+    | '/hubs/'
+    | '/locations/'
     | '/blog/category/$slug'
+    | '/careers/jobs/$slug'
+    | '/careers/platforms/$platformSlug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/business-partnerships'
+    | '/dashboard'
+    | '/lovable'
+    | '/payment-success'
+    | '/products'
     | '/school-collaborations'
     | '/siwes'
     | '/siwes-success-kit'
     | '/tech-store'
+    | '/tinypeople'
     | '/virtual-siwes'
     | '/blog/$slug'
+    | '/departments/$slug'
     | '/events/$slug'
+    | '/hubs/$slug'
+    | '/locations/$slug'
+    | '/verify/$'
     | '/blog'
+    | '/careers'
+    | '/departments'
     | '/events'
+    | '/hubs'
+    | '/locations'
     | '/blog/category/$slug'
+    | '/careers/jobs/$slug'
+    | '/careers/platforms/$platformSlug'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/business-partnerships'
+    | '/dashboard'
+    | '/lovable'
+    | '/payment-success'
+    | '/products'
     | '/school-collaborations'
     | '/siwes'
     | '/siwes-success-kit'
     | '/tech-store'
+    | '/tinypeople'
     | '/virtual-siwes'
     | '/blog/$slug'
+    | '/departments/$slug'
     | '/events/$slug'
+    | '/hubs/$slug'
+    | '/locations/$slug'
+    | '/verify/$'
     | '/blog/'
+    | '/careers/'
+    | '/departments/'
     | '/events/'
+    | '/hubs/'
+    | '/locations/'
     | '/blog/category/$slug'
+    | '/careers/jobs/$slug'
+    | '/careers/platforms/$platformSlug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   BusinessPartnershipsRoute: typeof BusinessPartnershipsRoute
+  DashboardRoute: typeof DashboardRoute
+  LovableRoute: typeof LovableRoute
+  PaymentSuccessRoute: typeof PaymentSuccessRoute
+  ProductsRoute: typeof ProductsRoute
   SchoolCollaborationsRoute: typeof SchoolCollaborationsRoute
   SiwesRoute: typeof SiwesRoute
   SiwesSuccessKitRoute: typeof SiwesSuccessKitRoute
   TechStoreRoute: typeof TechStoreRoute
+  TinypeopleRoute: typeof TinypeopleRoute
   VirtualSiwesRoute: typeof VirtualSiwesRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  DepartmentsSlugRoute: typeof DepartmentsSlugRoute
   EventsSlugRoute: typeof EventsSlugRoute
+  HubsSlugRoute: typeof HubsSlugRoute
+  LocationsSlugRoute: typeof LocationsSlugRoute
+  VerifySplatRoute: typeof VerifySplatRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  CareersIndexRoute: typeof CareersIndexRoute
+  DepartmentsIndexRoute: typeof DepartmentsIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
+  HubsIndexRoute: typeof HubsIndexRoute
+  LocationsIndexRoute: typeof LocationsIndexRoute
   BlogCategorySlugRoute: typeof BlogCategorySlugRoute
+  CareersJobsSlugRoute: typeof CareersJobsSlugRoute
+  CareersPlatformsPlatformSlugRoute: typeof CareersPlatformsPlatformSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -220,6 +416,34 @@ declare module '@tanstack/react-router' {
       path: '/business-partnerships'
       fullPath: '/business-partnerships'
       preLoaderRoute: typeof BusinessPartnershipsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable': {
+      id: '/lovable'
+      path: '/lovable'
+      fullPath: '/lovable'
+      preLoaderRoute: typeof LovableRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payment-success': {
+      id: '/payment-success'
+      path: '/payment-success'
+      fullPath: '/payment-success'
+      preLoaderRoute: typeof PaymentSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products': {
+      id: '/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/school-collaborations': {
@@ -250,6 +474,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TechStoreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tinypeople': {
+      id: '/tinypeople'
+      path: '/tinypeople'
+      fullPath: '/tinypeople'
+      preLoaderRoute: typeof TinypeopleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/virtual-siwes': {
       id: '/virtual-siwes'
       path: '/virtual-siwes'
@@ -271,6 +502,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/careers/': {
+      id: '/careers/'
+      path: '/careers'
+      fullPath: '/careers/'
+      preLoaderRoute: typeof CareersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/departments/': {
+      id: '/departments/'
+      path: '/departments'
+      fullPath: '/departments/'
+      preLoaderRoute: typeof DepartmentsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/departments/$slug': {
+      id: '/departments/$slug'
+      path: '/departments/$slug'
+      fullPath: '/departments/$slug'
+      preLoaderRoute: typeof DepartmentsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/events/': {
       id: '/events/'
       path: '/events'
@@ -285,11 +537,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hubs/': {
+      id: '/hubs/'
+      path: '/hubs'
+      fullPath: '/hubs/'
+      preLoaderRoute: typeof HubsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hubs/$slug': {
+      id: '/hubs/$slug'
+      path: '/hubs/$slug'
+      fullPath: '/hubs/$slug'
+      preLoaderRoute: typeof HubsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/locations/': {
+      id: '/locations/'
+      path: '/locations'
+      fullPath: '/locations/'
+      preLoaderRoute: typeof LocationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/locations/$slug': {
+      id: '/locations/$slug'
+      path: '/locations/$slug'
+      fullPath: '/locations/$slug'
+      preLoaderRoute: typeof LocationsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify/$': {
+      id: '/verify/$'
+      path: '/verify/$'
+      fullPath: '/verify/$'
+      preLoaderRoute: typeof VerifySplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/category/$slug': {
       id: '/blog/category/$slug'
       path: '/blog/category/$slug'
       fullPath: '/blog/category/$slug'
       preLoaderRoute: typeof BlogCategorySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/careers/jobs/$slug': {
+      id: '/careers/jobs/$slug'
+      path: '/careers/jobs/$slug'
+      fullPath: '/careers/jobs/$slug'
+      preLoaderRoute: typeof CareersJobsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/careers/platforms/$platformSlug': {
+      id: '/careers/platforms/$platformSlug'
+      path: '/careers/platforms/$platformSlug'
+      fullPath: '/careers/platforms/$platformSlug'
+      preLoaderRoute: typeof CareersPlatformsPlatformSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -299,16 +600,31 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   BusinessPartnershipsRoute: BusinessPartnershipsRoute,
+  DashboardRoute: DashboardRoute,
+  LovableRoute: LovableRoute,
+  PaymentSuccessRoute: PaymentSuccessRoute,
+  ProductsRoute: ProductsRoute,
   SchoolCollaborationsRoute: SchoolCollaborationsRoute,
   SiwesRoute: SiwesRoute,
   SiwesSuccessKitRoute: SiwesSuccessKitRoute,
   TechStoreRoute: TechStoreRoute,
+  TinypeopleRoute: TinypeopleRoute,
   VirtualSiwesRoute: VirtualSiwesRoute,
   BlogSlugRoute: BlogSlugRoute,
+  DepartmentsSlugRoute: DepartmentsSlugRoute,
   EventsSlugRoute: EventsSlugRoute,
+  HubsSlugRoute: HubsSlugRoute,
+  LocationsSlugRoute: LocationsSlugRoute,
+  VerifySplatRoute: VerifySplatRoute,
   BlogIndexRoute: BlogIndexRoute,
+  CareersIndexRoute: CareersIndexRoute,
+  DepartmentsIndexRoute: DepartmentsIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
+  HubsIndexRoute: HubsIndexRoute,
+  LocationsIndexRoute: LocationsIndexRoute,
   BlogCategorySlugRoute: BlogCategorySlugRoute,
+  CareersJobsSlugRoute: CareersJobsSlugRoute,
+  CareersPlatformsPlatformSlugRoute: CareersPlatformsPlatformSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

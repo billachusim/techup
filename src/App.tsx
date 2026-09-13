@@ -51,6 +51,8 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import Talent from "./pages/Talent";
 import TalentRoleDetail from "./pages/TalentRoleDetail";
+import TalentPool from "./pages/TalentPool";
+import TalentPublicProfile from "./pages/TalentPublicProfile";
 import TalentProfile from "./pages/TalentProfile";
 import TalentDashboard from "./pages/TalentDashboard";
 import Hire from "./pages/Hire";
@@ -102,6 +104,8 @@ const App = () => (
             <Route path="/lovable" element={<LovablePage />} />
             <Route path="/talent" element={<Talent />} />
             <Route path="/talent/roles/:slug" element={<TalentRoleDetail />} />
+            <Route path="/talent/pool" element={<TalentPool />} />
+            <Route path="/talent/pool/:id" element={<TalentPublicProfile />} />
             <Route path="/talent/profile" element={<TalentProfile />} />
             <Route path="/talent/dashboard" element={<TalentDashboard />} />
             <Route path="/hire" element={<Hire />} />

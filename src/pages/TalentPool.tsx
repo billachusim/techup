@@ -71,7 +71,7 @@ const TalentPool = () => {
   const [mode, setMode] = useState("all");
   const [status, setStatus] = useState("all");
 
-  const { data: people = [], isLoading } = useQuery({
+  const { data: people = [], isLoading, refetch } = useQuery({
     queryKey: ["public-talent-pool"],
     queryFn: fetchPublicTalent,
     staleTime: 1000 * 60 * 5,
@@ -175,7 +175,9 @@ const TalentPool = () => {
               </div>
             ) : filtered.length ? (
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {filtered.map((person) => <TalentCard key={person.id} person={person} />)}
+                {filtered.map((person) => (
+                  <TalentCard key={person.id} person={person} onRequested={() => refetch()} />
+                ))}
               </div>
             ) : (
               <div className="rounded-lg border border-border bg-card p-10 text-center">

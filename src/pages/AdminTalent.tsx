@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Loader2, Sparkles, Download, Check, X, Plus } from "lucide-react";
+import { Loader2, Sparkles, Download, Check, X, Plus, MessageCircle, Wallet } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ import {
   formatMoney,
   parseList,
   slugify,
-  talentWhatsAppUrl,
+  contactUrl,
   type BusinessBrief,
   type TalentProfile,
   type TalentRole,

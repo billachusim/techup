@@ -705,6 +705,78 @@ const AdminTalent = () => {
                   </div>
                 ))}
               </TabsContent>
+
+              {/* WORK & PAY */}
+              <TabsContent value="pay" className="space-y-6 pt-6">
+                <section className="rounded-lg border border-border bg-card p-5">
+                  <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold"><Wallet size={18} /> Record someone as working</h2>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <Select value={newEngagement.talent} onValueChange={(v) => setNewEngagement({ ...newEngagement, talent: v })}>
+                      <SelectTrigger><SelectValue placeholder="Talent" /></SelectTrigger>
+                      <SelectContent>
+                        {talents.map((t) => <SelectItem key={t.id} value={t.id}>{t.full_name}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                    <Select value={newEngagement.role} onValueChange={(v) => setNewEngagement({ ...newEngagement, role: v })}>
+                      <SelectTrigger><SelectValue placeholder="Project (optional)" /></SelectTrigger>
+                      <SelectContent>
+                        {roles.map((r) => <SelectItem key={r.id} value={r.id}>{r.title}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                    <div>
+                      <Label>Weekly pay</Label>
+                      <Input
+                        type="number"
+                        value={newEngagement.amount}
+                        onChange={(e) => setNewEngagement({ ...newEngagement, amount: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <Label>Currency</Label>
+                      <Select value={newEngagement.currency} onValueChange={(v) => setNewEngagement({ ...newEngagement, currency: v })}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="NGN">NGN</SelectItem>
+                          <SelectItem value="USD">USD</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="sm:col-span-2">
+                      <Label>Note the talent will see (optional)</Label>
+                      <Input value={newEngagement.note} onChange={(e) => setNewEngagement({ ...newEngagement, note: e.target.value })} />
+                    </div>
+                  </div>
+                  <Button className="mt-4" onClick={addEngagement}>Save</Button>
+                </section>
+
+                <section className="space-y-3">
+                  {engagements.length === 0 && (
+                    <p className="rounded-lg border border-border bg-card p-6 text-sm text-muted-foreground">
+                      Nobody is recorded as working yet.
+                    </p>
+                  )}
+                  {engagements.map((e) => (
+                    <div key={e.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card p-4">
+                      <div>
+                        <p className="font-medium">{e.talent_profiles?.full_name} · {e.talent_roles?.title ?? "Project"}</p>
+                        <p className="text-xs text-muted-foreground">
+                          Started {new Date(e.started_on).toLocaleDateString("en-GB")} ·{" "}
+                          {e.weekly_amount != null ? `${formatMoney(Number(e.weekly_amount), e.currency)} / week` : "pay being agreed"}
+                          {e.note ? ` · ${e.note}` : ""}
+                        </p>
+                      </div>
+                      <Select value={e.status} onValueChange={(v) => setEngagementStatus(e.id, v)}>
+                        <SelectTrigger className="w-36"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          {Object.entries(ENGAGEMENT_STATUS_LABEL).map(([value, label]) => (
+                            <SelectItem key={value} value={value}>{label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  ))}
+                </section>
+              </TabsContent>
             </Tabs>
           )}
         </div>

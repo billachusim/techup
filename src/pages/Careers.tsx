@@ -238,6 +238,51 @@ const Careers = () => {
               }}
             />
 
+            {/* Tech Faculty and client roles */}
+            {talentRoles.length > 0 && (
+              <div className="mb-16">
+                <div className="mb-6">
+                  <h2 className="text-xl md:text-2xl font-bold">Tech Faculty &amp; client openings</h2>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Roles we are hiring for directly, plus paid project work for Nigerian and African businesses.
+                    Join the talent pool and get matched.
+                  </p>
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {talentRoles.slice(0, 6).map((role) => <RoleCard key={role.id} role={role} />)}
+                </div>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <Link to="/talent">
+                    <Button>Join the talent pool</Button>
+                  </Link>
+                  <Link to="/hire">
+                    <Button variant="outline">I want to hire talent</Button>
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {/* Talent pool banner */}
+            <div className="mb-16 rounded-lg border border-border bg-card p-6 md:p-8">
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="max-w-2xl">
+                  <h2 className="text-lg md:text-xl font-bold">One profile, every opportunity</h2>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Create your Tech Faculty talent profile once — CV, skills, availability — and our team matches you to
+                    paid client projects and in-house roles as they come in.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <Link to="/talent">
+                    <Button>Create my profile</Button>
+                  </Link>
+                  <Link to="/hire">
+                    <Button variant="outline">Hire our talent</Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+
             {/* Filters */}
             <div className="grid gap-3 md:grid-cols-4 mb-8">
               <div className="relative md:col-span-2">

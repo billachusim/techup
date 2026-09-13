@@ -1,0 +1,17 @@
+{"functions": [
+  {"name": "admin-add-certificate", "classification": "internal-only", "signal": "called from src/pages/AdminCertificates.tsx; uses SUPABASE_SERVICE_ROLE_KEY", "outcome": "left"},
+  {"name": "create-checkout", "classification": "internal-only", "signal": "called from src/components/Pricing.tsx; uses FLUTTERWAVE_SECRET_KEY (payment-critical)", "outcome": "left"},
+  {"name": "faculty-ai-chat", "classification": "internal-only", "signal": "called from src/components/AIChatModal.tsx; uses LOVABLE_API_KEY", "outcome": "left"},
+  {"name": "generate-certificate", "classification": "unknown", "signal": "no internal call sites found; uses SUPABASE_SERVICE_ROLE_KEY — URL treated as load-bearing", "outcome": "left"},
+  {"name": "generate-class-content", "classification": "internal-only", "signal": "called from src/pages/Dashboard.tsx; uses LOVABLE_API_KEY", "outcome": "left"},
+  {"name": "generate-next-class", "classification": "internal-only", "signal": "called from src/pages/Dashboard.tsx; uses SUPABASE_SERVICE_ROLE_KEY", "outcome": "left"},
+  {"name": "generate-weekly-blog", "classification": "cron target", "signal": "no internal call sites; weekly blog automation runs on a schedule created outside the repo (live state confirmable only in Database → Cron)", "outcome": "left"},
+  {"name": "match-talent", "classification": "internal-only", "signal": "called from src/pages/AdminTalent.tsx; uses LOVABLE_API_KEY", "outcome": "left"},
+  {"name": "mcp", "classification": "MCP server", "signal": "imports npm:@lovable.dev/mcp-js, JSON-RPC handler; external AI agents call its fixed URL", "outcome": "left"},
+  {"name": "scrape-events", "classification": "cron target", "signal": "referenced in supabase/migrations/20260814010331_*.sql (weekly cron)", "outcome": "left"},
+  {"name": "scrape-jobs", "classification": "cron target", "signal": "referenced in supabase/migrations/20260813234348_*.sql (weekly cron)", "outcome": "left"},
+  {"name": "send-class-reminders", "classification": "cron target", "signal": "no internal call sites; class-reminder notifier runs on a schedule created outside the repo", "outcome": "left"},
+  {"name": "sitemap", "classification": "custom response / external caller", "signal": "referenced from public/robots.txt; search engines fetch its fixed URL", "outcome": "left"}
+,
+  {"name": "user-courses", "classification": "internal-only", "signal": "called from src/pages/Dashboard.tsx; uses SUPABASE_SERVICE_ROLE_KEY", "outcome": "left"}
+]}

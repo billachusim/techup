@@ -8,7 +8,7 @@ export interface PageHeadOptions {
   description: string;
   /** Path starting with "/" — used for canonical + og:url. */
   path: string;
-  image?: string;
+  image?: string | undefined;
   /** "website" (default) or "article" etc. */
   type?: string;
   noindex?: boolean;

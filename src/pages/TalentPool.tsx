@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { MapPin, Search, ShieldCheck, Sparkles, BriefcaseBusiness } from "lucide-react";
+import { MapPin, MessageCircle, Search, ShieldCheck, Sparkles, BriefcaseBusiness } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TalentNav from "@/components/talent/TalentNav";

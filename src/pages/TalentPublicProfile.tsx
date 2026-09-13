@@ -93,6 +93,9 @@ const TalentPublicProfile = () => {
             </div>
             <h1 className="text-3xl font-bold md:text-4xl">{person.full_name}</h1>
             {person.headline && <p className="text-lg text-muted-foreground">{person.headline}</p>}
+            {person.faculty_id && (
+              <p className="font-mono text-xs uppercase tracking-wide text-muted-foreground">Faculty ID {person.faculty_id}</p>
+            )}
             <div className="grid gap-2 pt-2 text-sm text-muted-foreground sm:grid-cols-2">
               <p className="flex items-center gap-2"><MapPin size={14} /> {location}</p>
               <p>{WORK_MODE_LABEL[person.work_mode] ?? person.work_mode}{person.hours_per_week ? ` · ${person.hours_per_week} hrs/week` : ""}</p>

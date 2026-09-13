@@ -230,6 +230,20 @@ const AdminTalent = () => {
     load();
   };
 
+  const approveTalent = async (talent: TalentProfile) => {
+    const { data, error } = await supabase.rpc("approve_talent", { _talent_id: talent.id });
+    if (error) { toast({ title: "Could not approve", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Approved as talent", description: data ? `Faculty ID ${data}` : "Faculty ID issued." });
+    load();
+  };
+
+  const issueFacultyId = async (talent: TalentProfile) => {
+    const { data, error } = await supabase.rpc("issue_talent_faculty_id", { _talent_id: talent.id });
+    if (error) { toast({ title: "Could not issue a Faculty ID", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Faculty ID issued", description: String(data ?? "") });
+    load();
+  };
+
   const saveGroupUrl = async (roleId: string) => {
     const value = (groupDrafts[roleId] ?? "").trim();
     const { error } = await supabase.from("talent_roles").update({ whatsapp_group_url: value || null }).eq("id", roleId);
@@ -542,6 +556,7 @@ const AdminTalent = () => {
                           {!t.is_public && <Badge variant="outline" className="ml-1">Hidden</Badge>}
                         </p>
                         <p className="text-xs text-muted-foreground">
+                          {t.faculty_id ? `${t.faculty_id} · ` : ""}
                           {[t.city, t.country].filter(Boolean).join(", ")} · {t.phone} · strength {t.profile_strength}% ·{" "}
                           {t.availability === "open" ? "open to work" : "unavailable"}
                         </p>
@@ -559,6 +574,12 @@ const AdminTalent = () => {
                           <a href={contactUrl(t.whatsapp || t.phone, t.full_name)} target="_blank" rel="noopener noreferrer">
                             <Button size="sm" variant="outline"><MessageCircle size={14} className="mr-1.5" /> Message</Button>
                           </a>
+                        )}
+                        {!t.faculty_id && (
+                          <Button size="sm" onClick={() => approveTalent(t)}>Approve &amp; issue Faculty ID</Button>
+                        )}
+                        {!t.faculty_id && t.is_vetted && (
+                          <Button size="sm" variant="outline" onClick={() => issueFacultyId(t)}>Issue Faculty ID only</Button>
                         )}
                         <Button size="sm" variant={t.is_vetted ? "ghost" : "default"} onClick={() => toggleVetted(t)}>
                           {t.is_vetted ? "Remove vetted" : "Mark vetted"}

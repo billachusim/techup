@@ -230,6 +230,20 @@ const AdminTalent = () => {
     load();
   };
 
+  const approveTalent = async (talent: TalentProfile) => {
+    const { data, error } = await supabase.rpc("approve_talent", { _talent_id: talent.id });
+    if (error) { toast({ title: "Could not approve", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Approved as talent", description: data ? `Faculty ID ${data}` : "Faculty ID issued." });
+    load();
+  };
+
+  const issueFacultyId = async (talent: TalentProfile) => {
+    const { data, error } = await supabase.rpc("issue_talent_faculty_id", { _talent_id: talent.id });
+    if (error) { toast({ title: "Could not issue a Faculty ID", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Faculty ID issued", description: String(data ?? "") });
+    load();
+  };
+
   const saveGroupUrl = async (roleId: string) => {
     const value = (groupDrafts[roleId] ?? "").trim();
     const { error } = await supabase.from("talent_roles").update({ whatsapp_group_url: value || null }).eq("id", roleId);

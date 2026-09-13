@@ -139,13 +139,64 @@ export const MATCH_STATUS_LABEL: Record<string, string> = {
   suggested: "Awaiting review",
   approved: "Shared with talent",
   accepted: "Talent accepted",
+  assessment: "In assessment",
+  interview: "In interview",
+  hired: "Hired",
   declined: "Declined",
 };
 
 export const APPLICATION_STATUS_LABEL: Record<string, string> = {
   applied: "Applied",
   shortlisted: "Shortlisted",
+  assessment: "Assessment",
   interviewing: "Interviewing",
   hired: "Hired",
   rejected: "Not selected",
+};
+
+export const ENGAGEMENT_STATUS_LABEL: Record<string, string> = {
+  active: "Active",
+  paused: "Paused",
+  ended: "Ended",
+};
+
+export type TalentEngagement = Database["public"]["Tables"]["talent_engagements"]["Row"];
+export type PublicTalentSummary = Database["public"]["Functions"]["list_public_talent"]["Returns"][number];
+export type PublicTalentDetail = Database["public"]["Functions"]["get_public_talent"]["Returns"][number];
+
+export async function fetchPublicTalent(): Promise<PublicTalentSummary[]> {
+  const { data, error } = await supabase.rpc("list_public_talent");
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function fetchPublicTalentById(id: string): Promise<PublicTalentDetail | null> {
+  const { data, error } = await supabase.rpc("get_public_talent", { profile_id: id });
+  if (error) throw error;
+  return data?.[0] ?? null;
+}
+
+export async function fetchProjectGroupUrl(roleId: string): Promise<string | null> {
+  const { data, error } = await supabase.rpc("get_project_group_url", { _role_id: roleId });
+  if (error) return null;
+  return data ?? null;
+}
+
+export const introRequestUrl = (name: string, skills: string[]) =>
+  talentWhatsAppUrl(
+    `Hello Tech Faculty, I would like an introduction to ${name} from your talent pool` +
+      (skills.length ? ` (${skills.slice(0, 4).join(", ")}).` : ".") +
+      " Please tell me about availability and rates."
+  );
+
+export const projectManagerUrl = (roleTitle: string, talentName?: string) =>
+  talentWhatsAppUrl(
+    `Hello Tech Faculty, I am ${talentName ?? "a matched talent"} and I was matched to "${roleTitle}". ` +
+      "I would like to speak with the project manager about the assessment and next steps."
+  );
+
+export const weeksSince = (isoDate: string) => {
+  const start = new Date(isoDate).getTime();
+  if (Number.isNaN(start)) return 0;
+  return Math.max(1, Math.floor((Date.now() - start) / (7 * 24 * 60 * 60 * 1000)) + 1);
 };

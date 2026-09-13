@@ -53,7 +53,22 @@
   <url>
     <loc>https://techfaculty.ng/careers</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/careers/platforms/micro1</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/careers/platforms/ask-ethos</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/careers/platforms/atlas-capture</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://techfaculty.ng/products</loc>

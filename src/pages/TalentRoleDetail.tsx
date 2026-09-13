@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { MapPin, Wallet, Users, CalendarClock, ArrowLeft } from "lucide-react";
+import { MapPin, Wallet, Users, CalendarClock, ArrowLeft, MessageCircle, Users2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,10 @@ import {
   EMPLOYMENT_LABEL,
   ROLE_KIND_LABEL,
   SENIORITY_LABEL,
+  fetchProjectGroupUrl,
   fetchRoleBySlug,
   formatBudget,
+  projectManagerUrl,
   roleLocationLabel,
 } from "@/lib/talent";
 
@@ -32,6 +34,43 @@ const TalentRoleDetail = () => {
     queryFn: () => fetchRoleBySlug(slug),
     enabled: Boolean(slug),
   });
+
+  const { data: mine } = useQuery({
+    queryKey: ["talent-role-mine", role?.id, isLoggedIn],
+    enabled: Boolean(role?.id) && isLoggedIn,
+    queryFn: async () => {
+      const { data: auth } = await supabase.auth.getUser();
+      if (!auth.user || !role) return null;
+      const { data: profile } = await supabase
+        .from("talent_profiles")
+        .select("id, full_name")
+        .eq("user_id", auth.user.id)
+        .maybeSingle();
+      if (!profile) return { profile: null, matched: false, applied: false, groupUrl: null as string | null };
+      const [{ data: match }, { data: application }, groupUrl] = await Promise.all([
+        supabase
+          .from("role_matches")
+          .select("id, status")
+          .eq("role_id", role.id)
+          .eq("talent_profile_id", profile.id)
+          .maybeSingle(),
+        supabase
+          .from("talent_applications")
+          .select("id")
+          .eq("role_id", role.id)
+          .eq("talent_profile_id", profile.id)
+          .maybeSingle(),
+        fetchProjectGroupUrl(role.id),
+      ]);
+      return {
+        profile,
+        matched: Boolean(match && ["approved", "accepted", "assessment", "interview", "hired"].includes(match.status)),
+        applied: Boolean(application),
+        groupUrl,
+      };
+    },
+  });
+
 
   const apply = async () => {
     if (!role) return;

@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
 import { MapPin, Wallet, ArrowRight } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import {
   EMPLOYMENT_LABEL,
-  ROLE_KIND_LABEL,
   formatBudget,
   roleLocationLabel,
   type TalentRole,
@@ -13,12 +11,11 @@ const RoleCard = ({ role }: { role: TalentRole }) => (
   <article className="flex flex-col justify-between rounded-lg border border-border bg-card p-5 transition-shadow hover:shadow-md">
     <div className="space-y-3">
       <div className="flex items-start justify-between gap-3">
-        <Badge variant="outline" className="text-xs">{ROLE_KIND_LABEL[role.role_kind] ?? role.role_kind}</Badge>
+        <span className="text-xs font-medium text-muted-foreground">{role.company}</span>
         <span className="text-xs text-muted-foreground">{EMPLOYMENT_LABEL[role.employment_type] ?? role.employment_type}</span>
       </div>
       <div>
         <h3 className="text-lg font-semibold leading-snug">{role.title}</h3>
-        <p className="text-sm text-muted-foreground">{role.company}</p>
       </div>
       <p className="text-sm text-muted-foreground line-clamp-3">{role.summary}</p>
       <div className="space-y-1 text-xs text-muted-foreground">

@@ -36,9 +36,9 @@
 - [ ] Seed early talents from the Google Form export (waiting on the CSV from you)
 
 ## Careers marketplace consolidation
-- [ ] Make Tech Faculty Talent the main `/careers` experience
-- [ ] Search and filter published talent roles
-- [ ] Remove expired partner-role claims and scraped-job feed from Careers
-- [ ] Add dedicated Micro1, Ask Ethos and Atlas Capture listing pages
-- [ ] Update homepage, Talent copy, sitemap and public site description
-- [ ] Verify desktop, mobile, metadata and external application flows
+- [x] Make Tech Faculty Talent the main `/careers` experience
+- [x] Search and filter published talent roles
+- [x] Remove expired partner-role claims and scraped-job feed from Careers
+- [x] Add dedicated Micro1, Ask Ethos and Atlas Capture listing pages
+- [x] Update homepage, Talent copy, sitemap and public site description
+- [x] Verify desktop, mobile, metadata and external application flows

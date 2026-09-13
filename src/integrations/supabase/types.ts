@@ -1003,6 +1003,50 @@ export type Database = {
           },
         ]
       }
+      talent_interest_requests: {
+        Row: {
+          created_at: string
+          id: string
+          message: string | null
+          requester_contact: string
+          requester_name: string
+          requester_org: string | null
+          source: string
+          status: string
+          talent_profile_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          requester_contact: string
+          requester_name: string
+          requester_org?: string | null
+          source?: string
+          status?: string
+          talent_profile_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          requester_contact?: string
+          requester_name?: string
+          requester_org?: string | null
+          source?: string
+          status?: string
+          talent_profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "talent_interest_requests_talent_profile_id_fkey"
+            columns: ["talent_profile_id"]
+            isOneToOne: false
+            referencedRelation: "talent_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       talent_profiles: {
         Row: {
           admin_notes: string | null
@@ -1304,6 +1348,17 @@ export type Database = {
           work_mode: string
           years_experience: number
         }[]
+      }
+      request_talent_intro: {
+        Args: {
+          _message?: string
+          _profile_id: string
+          _requester_contact: string
+          _requester_name: string
+          _requester_org?: string
+          _source?: string
+        }
+        Returns: undefined
       }
       seed_all_course_lectures: { Args: never; Returns: undefined }
       verify_certificate: {

@@ -20,7 +20,7 @@ const steps = [
 ];
 
 const Careers = () => {
-  const { isLoggedIn } = useUser();
+  const { isLoggedIn, facultyId, userData } = useUser();
   const [search, setSearch] = useState("");
   const [type, setType] = useState("all");
   const [workplace, setWorkplace] = useState("all");
@@ -81,10 +81,24 @@ const Careers = () => {
               We connect skilled people across Nigeria and Africa with Tech Faculty openings and approved business projects. Build your profile once and get matched as new work becomes available.
             </p>
             <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link to={joinHref}><Button size="lg">Join as talent</Button></Link>
+              <Link to={joinHref}><Button size="lg">{isLoggedIn ? "Enter talent portal" : "Join as talent"}</Button></Link>
               <Link to="/hire"><Button size="lg" variant="outline">Hire talent</Button></Link>
               <Link to="/talent/pool"><Button size="lg" variant="ghost">Browse the talent directory</Button></Link>
             </div>
+            {isLoggedIn && (
+              <div className="mx-auto mt-5 max-w-md rounded-lg border border-border bg-card p-4 text-sm">
+                {userData?.name ? <p className="font-medium">Signed in as {userData.name}</p> : <p className="font-medium">You are signed in</p>}
+                {facultyId ? (
+                  <p className="mt-1 text-muted-foreground">
+                    Your Faculty ID: <span className="font-mono font-semibold text-foreground">{facultyId}</span>
+                  </p>
+                ) : (
+                  <p className="mt-1 text-muted-foreground">
+                    No Faculty ID needed here. We assign one only when you enrol in a programme or qualify for member benefits.
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         </section>
 

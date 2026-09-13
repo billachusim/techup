@@ -809,11 +809,11 @@ export type Database = {
           created_at: string
           department: string | null
           email: string
-          faculty_id: string
+          faculty_id: string | null
           id: string
           learning_mode: string | null
           name: string
-          phone: string
+          phone: string | null
           updated_at: string
         }
         Insert: {
@@ -821,12 +821,12 @@ export type Database = {
           cohort_year?: number | null
           created_at?: string
           department?: string | null
-          email: string
-          faculty_id: string
+          email?: string
+          faculty_id?: string | null
           id: string
           learning_mode?: string | null
-          name: string
-          phone: string
+          name?: string
+          phone?: string | null
           updated_at?: string
         }
         Update: {
@@ -835,11 +835,11 @@ export type Database = {
           created_at?: string
           department?: string | null
           email?: string
-          faculty_id?: string
+          faculty_id?: string | null
           id?: string
           learning_mode?: string | null
           name?: string
-          phone?: string
+          phone?: string | null
           updated_at?: string
         }
         Relationships: []

@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { GoogleAuthButton } from "@/components/Auth/GoogleAuthButton";
 
 interface LoginFormProps {
   onSuccess: () => void;
@@ -57,6 +58,15 @@ export const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
   };
 
   return (
+    <div className="space-y-4">
+    <GoogleAuthButton label="Continue with Google" onSuccess={onSuccess} />
+
+    <div className="flex items-center gap-3">
+      <span className="h-px flex-1 bg-border" />
+      <span className="text-xs uppercase tracking-wide text-muted-foreground">or</span>
+      <span className="h-px flex-1 bg-border" />
+    </div>
+
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <Label htmlFor="login-email">Email</Label>
@@ -96,5 +106,6 @@ export const LoginForm = ({ onSuccess, onForgotPassword }: LoginFormProps) => {
         {isLoading ? "Signing In..." : "Sign In"}
       </Button>
     </form>
+    </div>
   );
 };

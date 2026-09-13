@@ -32,6 +32,7 @@ import BlogPost from "./pages/BlogPost";
 import BlogCategory from "./pages/BlogCategory";
 import Careers from "./pages/Careers";
 import JobDetail from "./pages/JobDetail";
+import ExternalPlatformJobs from "./pages/ExternalPlatformJobs";
 import Dashboard from "./pages/Dashboard";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import Products from "./pages/Products";
@@ -85,6 +86,7 @@ const App = () => (
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/careers/jobs/:slug" element={<JobDetail />} />
+            <Route path="/careers/platforms/:platformSlug" element={<ExternalPlatformJobs />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="/products" element={<Products />} />

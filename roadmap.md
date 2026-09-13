@@ -34,3 +34,11 @@
 - [x] match-talent edge function (keyword pre-rank + Gemini scoring, admin approval required)
 - [x] Careers page openings block + talent/hire CTAs, sitemap and footer entries
 - [ ] Seed early talents from the Google Form export (waiting on the CSV from you)
+
+## Careers marketplace consolidation
+- [x] Make Tech Faculty Talent the main `/careers` experience
+- [x] Search and filter published talent roles
+- [x] Remove expired partner-role claims and scraped-job feed from Careers
+- [x] Add dedicated Micro1, Ask Ethos and Atlas Capture listing pages
+- [x] Update homepage, Talent copy, sitemap and public site description
+- [x] Verify desktop, mobile, metadata and external application flows

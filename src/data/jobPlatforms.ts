@@ -1,4 +1,6 @@
 export type JobPlatform = {
+  /** URL-safe identifier */
+  slug: string;
   /** Display name */
   name: string;
   /** source_platform values in the jobs table that map to this platform */
@@ -11,6 +13,7 @@ export type JobPlatform = {
 
 export const jobPlatforms: JobPlatform[] = [
   {
+    slug: "micro1",
     name: "Micro1",
     match: ["Micro1"],
     signupUrl:
@@ -18,12 +21,14 @@ export const jobPlatforms: JobPlatform[] = [
     blurb: "Vetted remote engineering roles with US and global companies.",
   },
   {
+    slug: "ask-ethos",
     name: "Ask Ethos",
     match: ["Ask Ethos", "AskEthos", "Askitos", "Ask Etos"],
     signupUrl: "https://agent.askethos.com/refer/copbdvcud51e",
     blurb: "AI agent work and expert tasks you can take on remotely.",
   },
   {
+    slug: "atlas-capture",
     name: "Atlas Capture",
     match: ["Atlas Capture", "Atlas Audit", "AtlasCapture"],
     signupUrl: "https://audit.atlascapture.io/?ref_id=6a7e58a8de1a75582251a347",
@@ -35,4 +40,8 @@ export function platformFor(sourcePlatform: string | null | undefined): JobPlatf
   if (!sourcePlatform) return undefined;
   const needle = sourcePlatform.trim().toLowerCase();
   return jobPlatforms.find((p) => p.match.some((m) => m.toLowerCase() === needle));
+}
+
+export function platformBySlug(slug: string | null | undefined): JobPlatform | undefined {
+  return jobPlatforms.find((platform) => platform.slug === slug);
 }

@@ -1,13 +1,10 @@
 import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { ArrowLeft, Building2, Globe, MapPin, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { JobApplicationForm } from "@/components/JobApplicationForm";
-import { useUser } from "@/contexts/UserContext";
 import ApplySteps from "@/components/jobs/ApplySteps";
 import { platformFor } from "@/data/jobPlatforms";
 import {
@@ -20,8 +17,6 @@ import {
 
 const JobDetail = () => {
   const { slug = "" } = useParams();
-  const { isLoggedIn, facultyId } = useUser();
-  const [showForm, setShowForm] = useState(false);
 
   const { data: job, isLoading } = useQuery({
     queryKey: ["job", slug],
@@ -91,8 +86,8 @@ const JobDetail = () => {
       <Header />
       <main className="pt-24 pb-20 px-4">
         <article className="container mx-auto max-w-3xl space-y-8">
-          <Link to="/careers" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary">
-            <ArrowLeft size={14} /> Back to all jobs
+          <Link to={platform ? `/careers/platforms/${platform.slug}` : "/careers"} className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary">
+            <ArrowLeft size={14} /> Back to {platform ? `${platform.name} jobs` : "Careers"}
           </Link>
 
           <header className="space-y-4">
@@ -144,32 +139,14 @@ const JobDetail = () => {
               </a>
             )}
 
-            <div className="pt-2 border-t border-border">
-              <p className="text-sm text-muted-foreground mb-3">
-                Tech Faculty graduates can also send us their profile so our placement team can support the application.
-              </p>
-              {isLoggedIn && facultyId ? (
-                <Button variant="outline" size="sm" onClick={() => setShowForm(true)}>
-                  Send my profile to placement team
-                </Button>
-              ) : (
-                <Link to="/#get-started">
-                  <Button variant="outline" size="sm">Get a Faculty ID for placement support</Button>
-                </Link>
-              )}
-            </div>
+            <p className="border-t border-border pt-3 text-xs text-muted-foreground">
+              This is an independent third-party listing. Tech Faculty does not manage its hiring process.
+            </p>
           </section>
         </article>
       </main>
       <Footer />
 
-      {showForm && facultyId && (
-        <JobApplicationForm
-          facultyId={facultyId}
-          onClose={() => setShowForm(false)}
-          onSuccess={() => setShowForm(false)}
-        />
-      )}
     </div>
   );
 };

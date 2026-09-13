@@ -4,6 +4,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Loader2, Upload, FileCheck2, ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import TalentNav from "@/components/talent/TalentNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -67,10 +68,19 @@ const TalentProfile = () => {
         navigate("/login?next=/talent/profile", { replace: true });
         return;
       }
-      const [{ data: profile }, { data: account }] = await Promise.all([
+      const [{ data: existing }, { data: account }] = await Promise.all([
         supabase.from("talent_profiles").select("*").eq("user_id", auth.user.id).maybeSingle(),
         supabase.from("profiles").select("faculty_id, name, email, phone, department").eq("id", auth.user.id).maybeSingle(),
       ]);
+      let profile = existing;
+      // Someone we added to the pool before they had an account: claim it by email.
+      if (!profile) {
+        const { data: claimedId } = await supabase.rpc("claim_my_talent_profile");
+        if (claimedId) {
+          profile = (await supabase.from("talent_profiles").select("*").eq("id", claimedId).maybeSingle()).data;
+          if (profile) toast({ title: "We found your existing talent profile", description: "It is now linked to this account." });
+        }
+      }
       setFacultyId(profile?.faculty_id ?? account?.faculty_id ?? null);
       if (profile) {
         setProfileId(profile.id);
@@ -209,6 +219,15 @@ const TalentProfile = () => {
         setProfileId(data.id);
       }
       toast({ title: "Profile saved", description: "You are now in the matching pool." });
+
+      // A fully complete profile earns a Faculty ID straight away.
+      if (!facultyId && strength >= 100) {
+        const { data: issued } = await supabase.rpc("claim_talent_faculty_id");
+        if (issued) {
+          setFacultyId(issued);
+          toast({ title: "Your Faculty ID is ready", description: `${issued} — your profile is complete and verified.` });
+        }
+      }
       navigate(nextPath && nextPath.startsWith("/") ? nextPath : "/talent/dashboard");
     } catch (err) {
       toast({
@@ -241,12 +260,13 @@ const TalentProfile = () => {
       <Header />
 
       <main className="pt-20">
-        <div className="container mx-auto max-w-3xl px-4 py-12">
+        <TalentNav />
+        <div className="container mx-auto max-w-3xl px-4 py-10 md:py-12">
           <Link to="/talent/dashboard" className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
             <ArrowLeft size={14} /> Back to dashboard
           </Link>
 
-          <h1 className="text-3xl font-bold">Your talent profile</h1>
+          <h1 className="text-2xl font-bold sm:text-3xl">Your talent profile</h1>
           <p className="mt-2 text-muted-foreground">
             Only your name, city and skills are shown to hiring teams we match you with. Your CV and contact details stay private
             until you are shortlisted.
@@ -258,7 +278,15 @@ const TalentProfile = () => {
               <span className="text-muted-foreground">{strength}%</span>
             </div>
             <Progress value={strength} />
-            {facultyId && <p className="mt-3 text-xs text-muted-foreground">Faculty ID: {facultyId}</p>}
+            {facultyId ? (
+              <p className="mt-3 text-xs text-muted-foreground">
+                Faculty ID: <span className="font-mono font-medium text-foreground">{facultyId}</span>
+              </p>
+            ) : (
+              <p className="mt-3 text-xs text-muted-foreground">
+                Reach 100% and we issue your Faculty ID automatically when you save.
+              </p>
+            )}
           </div>
 
           <div className="mt-8 space-y-8">

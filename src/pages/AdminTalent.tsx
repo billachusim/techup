@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Loader2, Sparkles, Download, Check, X, Plus, MessageCircle, Wallet } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import TalentNav from "@/components/talent/TalentNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -349,6 +350,7 @@ const AdminTalent = () => {
       <Header />
 
       <main className="pt-20">
+        <TalentNav />
         <div className="container mx-auto max-w-6xl px-4 py-12">
           <h1 className="text-3xl font-bold">Talent admin</h1>
           <p className="mt-1 text-muted-foreground">Add roles, review talent, approve matches and read business briefs.</p>

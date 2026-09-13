@@ -13,10 +13,30 @@ export const talentWhatsAppUrl = (message: string) =>
   `https://wa.me/${TALENT_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
 export const ROLE_KIND_LABEL: Record<string, string> = {
-  internal: "Tech Faculty role",
-  partner: "Partner role",
+  internal: "In-house team",
+  partner: "Project role",
   client: "Client project",
 };
+
+/**
+ * Card badges describe the work, not who owns it: category first, then
+ * anything a candidate needs to notice at a glance.
+ */
+export const roleBadges = (
+  role: Pick<TalentRole, "category" | "is_paid_training" | "employment_type" | "openings" | "created_at" | "is_remote">,
+): string[] => {
+  const badges: string[] = [];
+  if (role.category) badges.push(role.category);
+  if (role.is_paid_training) badges.push("Paid training");
+  badges.push(EMPLOYMENT_LABEL[role.employment_type] ?? role.employment_type);
+  if (role.is_remote) badges.push("Remote");
+  const days = (Date.now() - new Date(role.created_at).getTime()) / 86_400_000;
+  if (days <= 14) badges.push("New");
+  return badges;
+};
+
+export const openingsLabel = (openings: number) =>
+  openings === 1 ? "1 opening" : `${openings} openings`;
 
 export const EMPLOYMENT_LABEL: Record<string, string> = {
   full_time: "Full-time",

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { CheckCircle2, MessageCircle } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import TalentNav from "@/components/talent/TalentNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -94,6 +95,7 @@ const Hire = () => {
       <Header />
 
       <main className="pt-20">
+        <TalentNav />
         <section className="px-4 py-14">
           <div className="container mx-auto grid max-w-6xl gap-10 lg:grid-cols-2">
             <div className="space-y-6">

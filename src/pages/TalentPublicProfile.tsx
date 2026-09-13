@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, BriefcaseBusiness, ExternalLink, MapPin, ShieldCheck, Sparkles } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import TalentNav from "@/components/talent/TalentNav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import RequestIntroDialog from "@/components/talent/RequestIntroDialog";
@@ -79,6 +80,7 @@ const TalentPublicProfile = () => {
       <Header />
 
       <main className="pt-20">
+        <TalentNav />
         <article className="container mx-auto max-w-3xl px-4 py-12">
           <Link to="/talent/pool" className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
             <ArrowLeft size={14} /> All talent

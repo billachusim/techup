@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Loader2, Sparkles, Download, Check, X, Plus } from "lucide-react";
+import { Loader2, Sparkles, Download, Check, X, Plus, MessageCircle, Wallet } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -17,9 +17,12 @@ import { useIsStaff } from "@/hooks/useIsStaff";
 import {
   MATCH_STATUS_LABEL,
   APPLICATION_STATUS_LABEL,
+  ENGAGEMENT_STATUS_LABEL,
   ROLE_KIND_LABEL,
+  formatMoney,
   parseList,
   slugify,
+  contactUrl,
   type BusinessBrief,
   type TalentProfile,
   type TalentRole,
@@ -29,7 +32,14 @@ type MatchRow = {
   id: string; score: number; reason: string | null; status: string; source: string;
   role_id: string; talent_profile_id: string;
   talent_roles: { title: string; company: string } | null;
-  talent_profiles: { full_name: string; city: string | null; skills: string[] } | null;
+  talent_profiles: { full_name: string; city: string | null; skills: string[]; phone: string | null } | null;
+};
+
+type EngagementRow = {
+  id: string; talent_profile_id: string; role_id: string | null; weekly_amount: number | null;
+  currency: string; started_on: string; status: string; note: string | null;
+  talent_roles: { title: string } | null;
+  talent_profiles: { full_name: string } | null;
 };
 
 type ApplicationRow = {
@@ -54,35 +64,44 @@ const AdminTalent = () => {
   const [matches, setMatches] = useState<MatchRow[]>([]);
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
   const [briefs, setBriefs] = useState<BusinessBrief[]>([]);
+  const [engagements, setEngagements] = useState<EngagementRow[]>([]);
   const [newRole, setNewRole] = useState(emptyRole);
   const [creating, setCreating] = useState(false);
   const [matchingRoleId, setMatchingRoleId] = useState<string | null>(null);
   const [manualRole, setManualRole] = useState("");
   const [manualTalent, setManualTalent] = useState("");
+  const [groupDrafts, setGroupDrafts] = useState<Record<string, string>>({});
+  const [newEngagement, setNewEngagement] = useState({ talent: "", role: "", amount: "", currency: "NGN", note: "" });
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setSignedIn(Boolean(data.user)));
   }, []);
 
   const load = useCallback(async () => {
-    const [r, t, m, a, b] = await Promise.all([
+    const [r, t, m, a, b, e] = await Promise.all([
       supabase.from("talent_roles").select("*").order("created_at", { ascending: false }),
       supabase.from("talent_profiles").select("*").order("profile_strength", { ascending: false }),
       supabase
         .from("role_matches")
-        .select("id, score, reason, status, source, role_id, talent_profile_id, talent_roles(title, company), talent_profiles(full_name, city, skills)")
+        .select("id, score, reason, status, source, role_id, talent_profile_id, talent_roles(title, company), talent_profiles(full_name, city, skills, phone)")
         .order("score", { ascending: false }),
       supabase
         .from("talent_applications")
         .select("id, status, message, created_at, talent_roles(title), talent_profiles(full_name, phone, email)")
         .order("created_at", { ascending: false }),
       supabase.from("business_briefs").select("*").order("created_at", { ascending: false }),
+      supabase
+        .from("talent_engagements")
+        .select("id, talent_profile_id, role_id, weekly_amount, currency, started_on, status, note, talent_roles(title), talent_profiles(full_name)")
+        .order("started_on", { ascending: false }),
     ]);
     setRoles(r.data ?? []);
     setTalents(t.data ?? []);
     setMatches((m.data ?? []) as MatchRow[]);
     setApplications((a.data ?? []) as ApplicationRow[]);
     setBriefs(b.data ?? []);
+    setEngagements((e.data ?? []) as EngagementRow[]);
+    setGroupDrafts(Object.fromEntries((r.data ?? []).map((role) => [role.id, role.whatsapp_group_url ?? ""])));
     setLoading(false);
   }, []);
 
@@ -193,6 +212,43 @@ const AdminTalent = () => {
     load();
   };
 
+  const toggleProfileFlag = async (talent: TalentProfile, field: "is_client_interested" | "is_public") => {
+    const { error } = await supabase.from("talent_profiles").update({ [field]: !talent[field] }).eq("id", talent.id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    load();
+  };
+
+  const saveGroupUrl = async (roleId: string) => {
+    const value = (groupDrafts[roleId] ?? "").trim();
+    const { error } = await supabase.from("talent_roles").update({ whatsapp_group_url: value || null }).eq("id", roleId);
+    if (error) { toast({ title: "Could not save the group link", description: error.message, variant: "destructive" }); return; }
+    toast({ title: value ? "Group link saved" : "Group link removed", description: "Only matched talent and staff can see it." });
+    load();
+  };
+
+  const addEngagement = async () => {
+    if (!newEngagement.talent) { toast({ title: "Pick the talent", variant: "destructive" }); return; }
+    const { data: auth } = await supabase.auth.getUser();
+    const { error } = await supabase.from("talent_engagements").insert({
+      talent_profile_id: newEngagement.talent,
+      role_id: newEngagement.role || null,
+      weekly_amount: newEngagement.amount ? Number(newEngagement.amount) : null,
+      currency: newEngagement.currency,
+      note: newEngagement.note.trim() || null,
+      created_by: auth.user?.id ?? null,
+    });
+    if (error) { toast({ title: "Could not save the engagement", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Engagement recorded", description: "The talent now sees their weekly pay on their dashboard." });
+    setNewEngagement({ talent: "", role: "", amount: "", currency: "NGN", note: "" });
+    load();
+  };
+
+  const setEngagementStatus = async (id: string, status: string) => {
+    const { error } = await supabase.from("talent_engagements").update({ status }).eq("id", id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    load();
+  };
+
   const openCv = async (path: string | null) => {
     if (!path) return;
     const { data, error } = await supabase.storage.from("talent-cvs").createSignedUrl(path, 300);
@@ -275,6 +331,7 @@ const AdminTalent = () => {
                 <TabsTrigger value="matches">Matches ({suggested.length})</TabsTrigger>
                 <TabsTrigger value="applications">Applications ({applications.length})</TabsTrigger>
                 <TabsTrigger value="briefs">Briefs ({briefs.filter((b) => b.status === "new").length})</TabsTrigger>
+                <TabsTrigger value="pay">Work &amp; pay ({engagements.filter((e) => e.status === "active").length})</TabsTrigger>
               </TabsList>
 
               {/* ROLES */}
@@ -401,28 +458,51 @@ const AdminTalent = () => {
                 </section>
 
                 <section className="space-y-3">
-                  {roles.map((role) => (
-                    <div key={role.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card p-4">
-                      <div>
-                        <p className="font-medium">{role.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {ROLE_KIND_LABEL[role.role_kind]} · {role.company} · {role.city ?? "Anywhere"} ·{" "}
-                          <Badge variant="outline" className="ml-1">{role.status}</Badge>
-                        </p>
+                  {roles.map((role) => {
+                    const roleMatches = matches.filter((m) => m.role_id === role.id);
+                    const count = (statuses: string[]) => roleMatches.filter((m) => statuses.includes(m.status)).length;
+                    return (
+                      <div key={role.id} className="space-y-3 rounded-lg border border-border bg-card p-4">
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                          <div>
+                            <p className="font-medium">{role.title}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {ROLE_KIND_LABEL[role.role_kind]} · {role.company} · {role.city ?? "Anywhere"} ·{" "}
+                              <Badge variant="outline" className="ml-1">{role.status}</Badge>
+                            </p>
+                            <p className="mt-1 text-xs text-muted-foreground">
+                              {count(["approved", "accepted", "assessment", "interview", "hired"])} matched ·{" "}
+                              {count(["accepted"])} accepted · {count(["assessment"])} in assessment ·{" "}
+                              {count(["interview"])} in interview · {count(["hired"])} hired
+                            </p>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            <Button size="sm" variant="outline" onClick={() => runMatching(role.id)} disabled={matchingRoleId === role.id}>
+                              {matchingRoleId === role.id ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <Sparkles size={14} className="mr-1.5" />}
+                              Run AI matching
+                            </Button>
+                            {role.status !== "published" ? (
+                              <Button size="sm" onClick={() => setRoleStatus(role.id, "published")}>Publish</Button>
+                            ) : (
+                              <Button size="sm" variant="ghost" onClick={() => setRoleStatus(role.id, "closed")}>Close</Button>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap items-end gap-2">
+                          <div className="min-w-[16rem] flex-1">
+                            <Label className="text-xs">Project WhatsApp group link (matched talent only)</Label>
+                            <Input
+                              className="mt-1"
+                              placeholder="https://chat.whatsapp.com/…"
+                              value={groupDrafts[role.id] ?? ""}
+                              onChange={(e) => setGroupDrafts({ ...groupDrafts, [role.id]: e.target.value })}
+                            />
+                          </div>
+                          <Button size="sm" variant="outline" onClick={() => saveGroupUrl(role.id)}>Save link</Button>
+                        </div>
                       </div>
-                      <div className="flex flex-wrap gap-2">
-                        <Button size="sm" variant="outline" onClick={() => runMatching(role.id)} disabled={matchingRoleId === role.id}>
-                          {matchingRoleId === role.id ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <Sparkles size={14} className="mr-1.5" />}
-                          Run AI matching
-                        </Button>
-                        {role.status !== "published" ? (
-                          <Button size="sm" onClick={() => setRoleStatus(role.id, "published")}>Publish</Button>
-                        ) : (
-                          <Button size="sm" variant="ghost" onClick={() => setRoleStatus(role.id, "closed")}>Close</Button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </section>
               </TabsContent>
 
@@ -439,6 +519,8 @@ const AdminTalent = () => {
                       <div>
                         <p className="font-medium">
                           {t.full_name} {t.is_vetted && <Badge className="ml-1">Vetted</Badge>}
+                          {t.is_client_interested && <Badge variant="secondary" className="ml-1">Client interested</Badge>}
+                          {!t.is_public && <Badge variant="outline" className="ml-1">Hidden</Badge>}
                         </p>
                         <p className="text-xs text-muted-foreground">
                           {[t.city, t.country].filter(Boolean).join(", ")} · {t.phone} · strength {t.profile_strength}% ·{" "}
@@ -454,8 +536,19 @@ const AdminTalent = () => {
                             <Download size={14} className="mr-1.5" /> CV
                           </Button>
                         )}
+                        {(t.whatsapp || t.phone) && (
+                          <a href={contactUrl(t.whatsapp || t.phone, t.full_name)} target="_blank" rel="noopener noreferrer">
+                            <Button size="sm" variant="outline"><MessageCircle size={14} className="mr-1.5" /> Message</Button>
+                          </a>
+                        )}
                         <Button size="sm" variant={t.is_vetted ? "ghost" : "default"} onClick={() => toggleVetted(t)}>
                           {t.is_vetted ? "Remove vetted" : "Mark vetted"}
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => toggleProfileFlag(t, "is_client_interested")}>
+                          {t.is_client_interested ? "Clear client interest" : "Mark client interested"}
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => toggleProfileFlag(t, "is_public")}>
+                          {t.is_public ? "Hide from directory" : "Show in directory"}
                         </Button>
                       </div>
                     </div>
@@ -524,7 +617,25 @@ const AdminTalent = () => {
                     {decided.map((m) => (
                       <div key={m.id} className="flex flex-wrap items-center justify-between gap-2 p-3 text-sm">
                         <span>{m.talent_profiles?.full_name} → {m.talent_roles?.title}</span>
-                        <Badge variant="outline">{MATCH_STATUS_LABEL[m.status] ?? m.status}</Badge>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Badge variant="outline">{MATCH_STATUS_LABEL[m.status] ?? m.status}</Badge>
+                          {m.talent_profiles?.phone && (
+                            <a href={contactUrl(m.talent_profiles.phone, m.talent_profiles.full_name)} target="_blank" rel="noopener noreferrer">
+                              <Button size="sm" variant="outline"><MessageCircle size={14} className="mr-1.5" /> Message</Button>
+                            </a>
+                          )}
+                          <Select value={m.status} onValueChange={(v) => setMatchStatus(m.id, v)}>
+                            <SelectTrigger className="h-8 w-[11rem]"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="approved">Shared with talent</SelectItem>
+                              <SelectItem value="accepted">Talent accepted</SelectItem>
+                              <SelectItem value="assessment">In assessment</SelectItem>
+                              <SelectItem value="interview">In interview</SelectItem>
+                              <SelectItem value="hired">Hired</SelectItem>
+                              <SelectItem value="declined">Declined</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -593,6 +704,78 @@ const AdminTalent = () => {
                     </div>
                   </div>
                 ))}
+              </TabsContent>
+
+              {/* WORK & PAY */}
+              <TabsContent value="pay" className="space-y-6 pt-6">
+                <section className="rounded-lg border border-border bg-card p-5">
+                  <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold"><Wallet size={18} /> Record someone as working</h2>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <Select value={newEngagement.talent} onValueChange={(v) => setNewEngagement({ ...newEngagement, talent: v })}>
+                      <SelectTrigger><SelectValue placeholder="Talent" /></SelectTrigger>
+                      <SelectContent>
+                        {talents.map((t) => <SelectItem key={t.id} value={t.id}>{t.full_name}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                    <Select value={newEngagement.role} onValueChange={(v) => setNewEngagement({ ...newEngagement, role: v })}>
+                      <SelectTrigger><SelectValue placeholder="Project (optional)" /></SelectTrigger>
+                      <SelectContent>
+                        {roles.map((r) => <SelectItem key={r.id} value={r.id}>{r.title}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                    <div>
+                      <Label>Weekly pay</Label>
+                      <Input
+                        type="number"
+                        value={newEngagement.amount}
+                        onChange={(e) => setNewEngagement({ ...newEngagement, amount: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <Label>Currency</Label>
+                      <Select value={newEngagement.currency} onValueChange={(v) => setNewEngagement({ ...newEngagement, currency: v })}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="NGN">NGN</SelectItem>
+                          <SelectItem value="USD">USD</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="sm:col-span-2">
+                      <Label>Note the talent will see (optional)</Label>
+                      <Input value={newEngagement.note} onChange={(e) => setNewEngagement({ ...newEngagement, note: e.target.value })} />
+                    </div>
+                  </div>
+                  <Button className="mt-4" onClick={addEngagement}>Save</Button>
+                </section>
+
+                <section className="space-y-3">
+                  {engagements.length === 0 && (
+                    <p className="rounded-lg border border-border bg-card p-6 text-sm text-muted-foreground">
+                      Nobody is recorded as working yet.
+                    </p>
+                  )}
+                  {engagements.map((e) => (
+                    <div key={e.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card p-4">
+                      <div>
+                        <p className="font-medium">{e.talent_profiles?.full_name} · {e.talent_roles?.title ?? "Project"}</p>
+                        <p className="text-xs text-muted-foreground">
+                          Started {new Date(e.started_on).toLocaleDateString("en-GB")} ·{" "}
+                          {e.weekly_amount != null ? `${formatMoney(Number(e.weekly_amount), e.currency)} / week` : "pay being agreed"}
+                          {e.note ? ` · ${e.note}` : ""}
+                        </p>
+                      </div>
+                      <Select value={e.status} onValueChange={(v) => setEngagementStatus(e.id, v)}>
+                        <SelectTrigger className="w-36"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          {Object.entries(ENGAGEMENT_STATUS_LABEL).map(([value, label]) => (
+                            <SelectItem key={value} value={value}>{label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  ))}
+                </section>
               </TabsContent>
             </Tabs>
           )}

@@ -943,12 +943,73 @@ export type Database = {
           },
         ]
       }
+      talent_engagements: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          currency: string
+          ended_on: string | null
+          id: string
+          note: string | null
+          role_id: string | null
+          started_on: string
+          status: string
+          talent_profile_id: string
+          updated_at: string
+          weekly_amount: number | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          ended_on?: string | null
+          id?: string
+          note?: string | null
+          role_id?: string | null
+          started_on?: string
+          status?: string
+          talent_profile_id: string
+          updated_at?: string
+          weekly_amount?: number | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          ended_on?: string | null
+          id?: string
+          note?: string | null
+          role_id?: string | null
+          started_on?: string
+          status?: string
+          talent_profile_id?: string
+          updated_at?: string
+          weekly_amount?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "talent_engagements_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "talent_roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "talent_engagements_talent_profile_id_fkey"
+            columns: ["talent_profile_id"]
+            isOneToOne: false
+            referencedRelation: "talent_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       talent_profiles: {
         Row: {
           admin_notes: string | null
           availability: string
           bio: string | null
           city: string | null
+          client_interest_note: string | null
           country: string
           created_at: string
           cv_path: string | null
@@ -960,6 +1021,8 @@ export type Database = {
           hours_per_week: number | null
           id: string
           intro_video_url: string | null
+          is_client_interested: boolean
+          is_public: boolean
           is_vetted: boolean
           linkedin_url: string | null
           phone: string | null
@@ -983,6 +1046,7 @@ export type Database = {
           availability?: string
           bio?: string | null
           city?: string | null
+          client_interest_note?: string | null
           country?: string
           created_at?: string
           cv_path?: string | null
@@ -994,6 +1058,8 @@ export type Database = {
           hours_per_week?: number | null
           id?: string
           intro_video_url?: string | null
+          is_client_interested?: boolean
+          is_public?: boolean
           is_vetted?: boolean
           linkedin_url?: string | null
           phone?: string | null
@@ -1017,6 +1083,7 @@ export type Database = {
           availability?: string
           bio?: string | null
           city?: string | null
+          client_interest_note?: string | null
           country?: string
           created_at?: string
           cv_path?: string | null
@@ -1028,6 +1095,8 @@ export type Database = {
           hours_per_week?: number | null
           id?: string
           intro_video_url?: string | null
+          is_client_interested?: boolean
+          is_public?: boolean
           is_vetted?: boolean
           linkedin_url?: string | null
           phone?: string | null
@@ -1076,6 +1145,7 @@ export type Database = {
           summary: string
           title: string
           updated_at: string
+          whatsapp_group_url: string | null
         }
         Insert: {
           apply_deadline?: string | null
@@ -1104,6 +1174,7 @@ export type Database = {
           summary: string
           title: string
           updated_at?: string
+          whatsapp_group_url?: string | null
         }
         Update: {
           apply_deadline?: string | null
@@ -1132,6 +1203,7 @@ export type Database = {
           summary?: string
           title?: string
           updated_at?: string
+          whatsapp_group_url?: string | null
         }
         Relationships: []
       }
@@ -1176,6 +1248,33 @@ export type Database = {
         Returns: string
       }
       get_department_code: { Args: { dept: string }; Returns: string }
+      get_project_group_url: { Args: { _role_id: string }; Returns: string }
+      get_public_talent: {
+        Args: { profile_id: string }
+        Returns: {
+          availability: string
+          bio: string
+          city: string
+          country: string
+          full_name: string
+          github_url: string
+          headline: string
+          hours_per_week: number
+          id: string
+          is_client_interested: boolean
+          is_matched: boolean
+          is_vetted: boolean
+          is_working: boolean
+          linkedin_url: string
+          portfolio_url: string
+          profile_strength: number
+          skill_details: Json
+          skills: string[]
+          tools: string[]
+          work_mode: string
+          years_experience: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1184,6 +1283,28 @@ export type Database = {
         Returns: boolean
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      list_public_talent: {
+        Args: never
+        Returns: {
+          availability: string
+          city: string
+          country: string
+          created_at: string
+          full_name: string
+          headline: string
+          hours_per_week: number
+          id: string
+          is_client_interested: boolean
+          is_matched: boolean
+          is_vetted: boolean
+          is_working: boolean
+          profile_strength: number
+          skills: string[]
+          tools: string[]
+          work_mode: string
+          years_experience: number
+        }[]
+      }
       seed_all_course_lectures: { Args: never; Returns: undefined }
       verify_certificate: {
         Args: { cert_number: string }

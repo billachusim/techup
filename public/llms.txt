@@ -14,7 +14,8 @@ Tech Faculty NG trains, certifies, and employs the next generation of African te
 - [Virtual SIWES](/virtual-siwes): Online IT placement (NGN 45,000) plus logbook review, signing, stamping and two-way courier delivery (NGN 15,000).
 - [Tech Events](/events): Directory of upcoming tech, AI, data and developer events across Nigeria and Africa, refreshed weekly, plus our own meetups, workshops and holiday bootcamps. Each event has its own page at /events/<slug>.
 - [Careers](/careers): Tech Faculty talent marketplace with searchable Tech Faculty and approved client openings, talent profile matching, and a business hiring path.
-- [Join the Talent Pool](/talent): Create and improve a private talent profile for reviewed role matches.
+- [Join the Talent Pool](/talent): Create and improve a talent profile for reviewed role matches.
+- [Talent Directory](/talent/pool): Public directory of Tech Faculty talent showing names, skills, city and availability; contact details stay private and businesses request introductions through Tech Faculty.
 - [Hire Talent](/hire): Submit a business role or project brief for Tech Faculty to review and match.
 - [Micro1 Jobs](/careers/platforms/micro1): Independent Micro1 listings and referral signup access.
 - [Ask Ethos Jobs](/careers/platforms/ask-ethos): Independent Ask Ethos listings and referral signup access.

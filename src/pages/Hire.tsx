@@ -105,6 +105,11 @@ const Hire = () => {
                 does not convert, records still on paper, a dashboard nobody built, marketing nobody runs — and we match
                 the right people to it.
               </p>
+              <p className="text-sm">
+                <Link to="/talent/pool" className="font-medium text-primary hover:underline">
+                  Browse the talent directory →
+                </Link>
+              </p>
               <ul className="space-y-3">
                 {benefits.map((b) => (
                   <li key={b} className="flex gap-2.5 text-sm text-muted-foreground">

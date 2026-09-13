@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { MapPin, Wallet, Users, CalendarClock, ArrowLeft } from "lucide-react";
+import { MapPin, Wallet, Users, CalendarClock, ArrowLeft, MessageCircle, Users2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,10 @@ import {
   EMPLOYMENT_LABEL,
   ROLE_KIND_LABEL,
   SENIORITY_LABEL,
+  fetchProjectGroupUrl,
   fetchRoleBySlug,
   formatBudget,
+  projectManagerUrl,
   roleLocationLabel,
 } from "@/lib/talent";
 
@@ -32,6 +34,43 @@ const TalentRoleDetail = () => {
     queryFn: () => fetchRoleBySlug(slug),
     enabled: Boolean(slug),
   });
+
+  const { data: mine } = useQuery({
+    queryKey: ["talent-role-mine", role?.id, isLoggedIn],
+    enabled: Boolean(role?.id) && isLoggedIn,
+    queryFn: async () => {
+      const { data: auth } = await supabase.auth.getUser();
+      if (!auth.user || !role) return null;
+      const { data: profile } = await supabase
+        .from("talent_profiles")
+        .select("id, full_name")
+        .eq("user_id", auth.user.id)
+        .maybeSingle();
+      if (!profile) return { profile: null, matched: false, applied: false, groupUrl: null as string | null };
+      const [{ data: match }, { data: application }, groupUrl] = await Promise.all([
+        supabase
+          .from("role_matches")
+          .select("id, status")
+          .eq("role_id", role.id)
+          .eq("talent_profile_id", profile.id)
+          .maybeSingle(),
+        supabase
+          .from("talent_applications")
+          .select("id")
+          .eq("role_id", role.id)
+          .eq("talent_profile_id", profile.id)
+          .maybeSingle(),
+        fetchProjectGroupUrl(role.id),
+      ]);
+      return {
+        profile,
+        matched: Boolean(match && ["approved", "accepted", "assessment", "interview", "hired"].includes(match.status)),
+        applied: Boolean(application),
+        groupUrl,
+      };
+    },
+  });
+
 
   const apply = async () => {
     if (!role) return;
@@ -219,21 +258,68 @@ const TalentRoleDetail = () => {
             )}
           </section>
 
+          {mine?.matched && (
+            <section className="mt-10 rounded-lg border border-primary/40 bg-primary/5 p-6">
+              <h2 className="text-lg font-semibold">You have been matched to this role</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                The next step is a short assessment or interview over WhatsApp. If you do not hear back within two days,
+                message the project manager yourself.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                {mine.groupUrl && (
+                  <a href={mine.groupUrl} target="_blank" rel="noopener noreferrer">
+                    <Button><Users2 className="mr-2" size={16} /> Join the project group</Button>
+                  </a>
+                )}
+                <a href={projectManagerUrl(role.title, mine.profile?.full_name)} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline"><MessageCircle className="mr-2" size={16} /> Reach out to the project manager</Button>
+                </a>
+              </div>
+            </section>
+          )}
+
           <section className="mt-10 rounded-lg border border-border bg-card p-6">
             <h2 className="text-lg font-semibold">Apply with your talent profile</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              We send your profile, skills and CV to the hiring team. Add a short note if you want.
-            </p>
-            <Textarea
-              className="mt-4"
-              rows={4}
-              value={message}
-              onChange={(e) => setMessage(e.target.value.slice(0, 1000))}
-              placeholder="Why you are a good fit (optional)"
-            />
-            <Button className="mt-4 w-full sm:w-auto" onClick={apply} disabled={submitting}>
-              {submitting ? "Sending…" : isLoggedIn ? "Apply now" : "Sign in and apply"}
-            </Button>
+            {mine?.applied ? (
+              <>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  You have already applied to this role. Track it on your dashboard.
+                </p>
+                <Link to="/talent/dashboard" className="mt-4 inline-block">
+                  <Button variant="outline">Go to my dashboard</Button>
+                </Link>
+              </>
+            ) : isLoggedIn && mine?.profile ? (
+              <>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  One click sends your profile, skills and CV to the hiring team. No forms.
+                </p>
+                <Button className="mt-4 w-full sm:w-auto" onClick={apply} disabled={submitting}>
+                  {submitting ? "Sending…" : "Apply with my Faculty profile"}
+                </Button>
+                <details className="mt-4">
+                  <summary className="cursor-pointer text-sm text-muted-foreground">Add a short note (optional)</summary>
+                  <Textarea
+                    className="mt-3"
+                    rows={4}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value.slice(0, 1000))}
+                    placeholder="Why you are a good fit"
+                  />
+                </details>
+              </>
+            ) : (
+              <>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {isLoggedIn
+                    ? "Build your talent profile once and applying becomes one click, here and on every other role."
+                    : "Sign in with your Faculty account and applying takes one click."}
+                </p>
+                <Button className="mt-4 w-full sm:w-auto" onClick={apply} disabled={submitting}>
+                  {isLoggedIn ? "Build my profile" : "Sign in and apply"}
+                </Button>
+              </>
+            )}
           </section>
         </article>
       </main>

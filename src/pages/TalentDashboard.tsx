@@ -1,22 +1,37 @@
 import { Helmet } from "react-helmet-async";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Loader2, Sparkles, Briefcase, Pencil, ShieldCheck } from "lucide-react";
+import { Loader2, Sparkles, Briefcase, Pencil, ShieldCheck, Users2, MessageCircle, Wallet, Eye } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { APPLICATION_STATUS_LABEL, formatBudget, type TalentProfile } from "@/lib/talent";
+import {
+  APPLICATION_STATUS_LABEL,
+  ENGAGEMENT_STATUS_LABEL,
+  MATCH_STATUS_LABEL,
+  fetchProjectGroupUrl,
+  formatBudget,
+  formatMoney,
+  projectManagerUrl,
+  weeksSince,
+  type TalentEngagement,
+  type TalentProfile,
+} from "@/lib/talent";
+
+const MATCHED_STATUSES = ["approved", "accepted", "assessment", "interview", "hired"];
 
 type MatchRow = {
   id: string;
   score: number;
   reason: string | null;
   status: string;
+  role_id: string;
   talent_roles: {
     slug: string; title: string; company: string; summary: string;
     budget_min: number | null; budget_max: number | null; budget_currency: string; budget_unit: string;
@@ -36,6 +51,8 @@ const TalentDashboard = () => {
   const [profile, setProfile] = useState<TalentProfile | null>(null);
   const [matches, setMatches] = useState<MatchRow[]>([]);
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
+  const [engagements, setEngagements] = useState<(TalentEngagement & { talent_roles: { title: string } | null })[]>([]);
+  const [groupUrls, setGroupUrls] = useState<Record<string, string>>({});
 
   const load = useCallback(async () => {
     const { data: auth } = await supabase.auth.getUser();
@@ -46,10 +63,10 @@ const TalentDashboard = () => {
     const { data: p } = await supabase.from("talent_profiles").select("*").eq("user_id", auth.user.id).maybeSingle();
     setProfile(p ?? null);
     if (p) {
-      const [{ data: m }, { data: a }] = await Promise.all([
+      const [{ data: m }, { data: a }, { data: e }] = await Promise.all([
         supabase
           .from("role_matches")
-          .select("id, score, reason, status, talent_roles(slug, title, company, summary, budget_min, budget_max, budget_currency, budget_unit)")
+          .select("id, score, reason, status, role_id, talent_roles(slug, title, company, summary, budget_min, budget_max, budget_currency, budget_unit)")
           .eq("talent_profile_id", p.id)
           .order("score", { ascending: false }),
         supabase
@@ -57,9 +74,24 @@ const TalentDashboard = () => {
           .select("id, status, created_at, talent_roles(slug, title, company)")
           .eq("talent_profile_id", p.id)
           .order("created_at", { ascending: false }),
+        supabase
+          .from("talent_engagements")
+          .select("*, talent_roles(title)")
+          .eq("talent_profile_id", p.id)
+          .order("started_on", { ascending: false }),
       ]);
-      setMatches((m ?? []) as MatchRow[]);
+      const matchRows = (m ?? []) as MatchRow[];
+      setMatches(matchRows);
       setApplications((a ?? []) as ApplicationRow[]);
+      setEngagements((e ?? []) as (TalentEngagement & { talent_roles: { title: string } | null })[]);
+
+      const matchedRoleIds = Array.from(
+        new Set(matchRows.filter((row) => MATCHED_STATUSES.includes(row.status)).map((row) => row.role_id))
+      );
+      const urls = await Promise.all(matchedRoleIds.map((id) => fetchProjectGroupUrl(id)));
+      const urlMap: Record<string, string> = {};
+      matchedRoleIds.forEach((id, index) => { const url = urls[index]; if (url) urlMap[id] = url; });
+      setGroupUrls(urlMap);
     }
     setLoading(false);
   }, [navigate]);
@@ -88,6 +120,17 @@ const TalentDashboard = () => {
     }
     setProfile({ ...profile, availability });
     toast({ title: availability === "open" ? "Marked as open to work" : "Marked as unavailable" });
+  };
+
+  const setDirectoryVisible = async (isPublic: boolean) => {
+    if (!profile) return;
+    const { error } = await supabase.from("talent_profiles").update({ is_public: isPublic }).eq("id", profile.id);
+    if (error) {
+      toast({ title: "Could not update that", description: error.message, variant: "destructive" });
+      return;
+    }
+    setProfile({ ...profile, is_public: isPublic });
+    toast({ title: isPublic ? "Your profile is listed publicly" : "Your profile is hidden from the directory" });
   };
 
   if (loading) {
@@ -171,6 +214,58 @@ const TalentDashboard = () => {
                 </div>
               </div>
 
+              <div className="flex flex-wrap gap-2">
+                {profile.is_client_interested && <Badge>A client is interested in you</Badge>}
+                {matches.some((m) => MATCHED_STATUSES.includes(m.status)) && (
+                  <Badge variant="secondary">Matched to a project</Badge>
+                )}
+                {engagements.some((e) => e.status === "active") && <Badge variant="outline">Working and earning</Badge>}
+              </div>
+
+              <div className="rounded-lg border border-border bg-card p-5">
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div>
+                    <p className="flex items-center gap-2 text-sm font-medium"><Eye size={16} /> Show me in the public talent directory</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Businesses see your name, skills and city — never your phone, email or CV.{" "}
+                      <Link to={`/talent/pool/${profile.id}`} className="text-primary hover:underline">Preview my public profile</Link>
+                    </p>
+                  </div>
+                  <Switch checked={profile.is_public} onCheckedChange={setDirectoryVisible} aria-label="Show me in the public talent directory" />
+                </div>
+              </div>
+
+              {engagements.length > 0 && (
+                <section>
+                  <h2 className="mb-4 flex items-center gap-2 text-xl font-bold">
+                    <Wallet size={18} className="text-primary" /> Your work and pay
+                  </h2>
+                  <div className="space-y-3">
+                    {engagements.map((item) => (
+                      <div key={item.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card p-4">
+                        <div>
+                          <p className="font-medium">{item.talent_roles?.title ?? "Project"}</p>
+                          <p className="text-xs text-muted-foreground">
+                            Started {new Date(item.started_on).toLocaleDateString("en-GB")} · week {weeksSince(item.started_on)}
+                            {item.note ? ` · ${item.note}` : ""}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-semibold">
+                            {item.weekly_amount != null ? `${formatMoney(Number(item.weekly_amount), item.currency)} / week` : "Pay being agreed"}
+                          </p>
+                          <Badge variant="outline" className="mt-1">{ENGAGEMENT_STATUS_LABEL[item.status] ?? item.status}</Badge>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    Payments are sent outside the platform. If a payment is late, message us on WhatsApp.
+                  </p>
+                </section>
+              )}
+
+
               <section>
                 <h2 className="mb-4 flex items-center gap-2 text-xl font-bold">
                   <Sparkles size={18} className="text-primary" /> Your matches
@@ -184,13 +279,19 @@ const TalentDashboard = () => {
                             <h3 className="font-semibold">{match.talent_roles?.title ?? "Role"}</h3>
                             <p className="text-sm text-muted-foreground">{match.talent_roles?.company}</p>
                           </div>
-                          <Badge variant={match.status === "accepted" ? "default" : "outline"}>
-                            {match.status === "approved" ? `${match.score}% match` : match.status === "accepted" ? "You accepted" : "Declined"}
+                          <Badge variant={match.status === "declined" ? "outline" : "default"}>
+                            {match.status === "approved" ? `${match.score}% match` : MATCH_STATUS_LABEL[match.status] ?? match.status}
                           </Badge>
                         </div>
                         {match.reason && <p className="mt-3 text-sm text-muted-foreground">{match.reason}</p>}
                         {match.talent_roles && (
                           <p className="mt-2 text-xs text-muted-foreground">{formatBudget(match.talent_roles)}</p>
+                        )}
+                        {MATCHED_STATUSES.includes(match.status) && (
+                          <p className="mt-3 text-xs text-muted-foreground">
+                            Next step is a short assessment or interview on WhatsApp. If you do not hear back within two days,
+                            reach out to the project manager yourself.
+                          </p>
                         )}
                         <div className="mt-4 flex flex-wrap gap-2">
                           {match.talent_roles && (
@@ -203,6 +304,22 @@ const TalentDashboard = () => {
                               <Button size="sm" onClick={() => respond(match.id, "accepted")}>I am interested</Button>
                               <Button size="sm" variant="ghost" onClick={() => respond(match.id, "declined")}>Not for me</Button>
                             </>
+                          )}
+                          {MATCHED_STATUSES.includes(match.status) && groupUrls[match.role_id] && (
+                            <a href={groupUrls[match.role_id]} target="_blank" rel="noopener noreferrer">
+                              <Button size="sm"><Users2 className="mr-1.5" size={14} /> Join the project group</Button>
+                            </a>
+                          )}
+                          {MATCHED_STATUSES.includes(match.status) && (
+                            <a
+                              href={projectManagerUrl(match.talent_roles?.title ?? "a Tech Faculty role", profile.full_name)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Button size="sm" variant="outline">
+                                <MessageCircle className="mr-1.5" size={14} /> Reach out to the project manager
+                              </Button>
+                            </a>
                           )}
                         </div>
                       </div>

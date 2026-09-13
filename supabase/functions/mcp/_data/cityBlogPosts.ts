@@ -279,7 +279,7 @@ Yes. We provide structured training and SIWES routes, while our careers resource
 [Message Tech Faculty on WhatsApp](${whatsappUrl(guide.city)}) with your city, current level and preferred skill. We will help you compare the clearest available route instead of guessing your way through unrelated courses.`;
 }
 
-const cityBlogPosts: BlogPost[] = cityGuides.map((guide) => ({
+const cityBlogPosts = cityGuides.map((guide) => ({
   slug: guide.slug,
   title: `${guide.city} Tech Scene: Hubs, Courses & Training Guide (2026)`,
   seoTitle: `Tech Training in ${guide.city}: Hubs & Courses`,

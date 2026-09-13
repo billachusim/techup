@@ -32,9 +32,12 @@ const Footer = () => {
           <div className="space-y-3">
             <h4 className="text-sm font-semibold">Training</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link to="/#departments" className="hover:text-primary transition-colors">Departments</Link>
+              <Link to="/departments" className="hover:text-primary transition-colors">Departments</Link>
+              <Link to="/locations" className="hover:text-primary transition-colors">Campus Locations</Link>
+              <Link to="/hubs" className="hover:text-primary transition-colors">Tech Hubs Directory</Link>
               <Link to="/#pricing" className="hover:text-primary transition-colors">Pricing</Link>
               <Link to="/#get-started" className="hover:text-primary transition-colors">Get Started</Link>
+
             </nav>
           </div>
 

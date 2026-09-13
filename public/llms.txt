@@ -18,6 +18,7 @@ Tech Faculty NG trains, certifies, and employs the next generation of African te
 - [Tiny People AI](/tinypeople): Messaging-native AI agent built with Natura Inc.
 - [Tech Store](/tech-store): Laptops, gadgets, and learning gear with Faculty ID member discounts.
 - [Verify Certificate](/verify): Public certificate verification portal.
+- [Tech Hubs Directory](/hubs): Curated editorial directory of tech hubs, innovation centres and training institutes across Nigeria and Africa, searchable by city and course area, with WhatsApp enrolment CTAs. Each hub has its own page at /hubs/<slug>.
 - [Locations](/locations): Tech Faculty campuses across Nigeria inside Technology Incubation Centres.
 - [Tech Faculty Nnewi](/locations/nnewi): Courses, SIWES placement, teen holiday bootcamps and events in Nnewi.
 - [Tech Faculty Onitsha](/locations/onitsha): Courses, SIWES placement, teen holiday bootcamps and events in Onitsha.

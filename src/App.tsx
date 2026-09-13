@@ -92,7 +92,13 @@ const App = () => (
             <Route path="/departments/:slug" element={<DepartmentDetail />} />
             <Route path="/tinypeople" element={<TinyPeople />} />
             <Route path="/lovable" element={<LovablePage />} />
+            <Route path="/talent" element={<Talent />} />
+            <Route path="/talent/roles/:slug" element={<TalentRoleDetail />} />
+            <Route path="/talent/profile" element={<TalentProfile />} />
+            <Route path="/talent/dashboard" element={<TalentDashboard />} />
+            <Route path="/hire" element={<Hire />} />
             <Route path="/admin/certificates" element={<AdminCertificates />} />
+            <Route path="/admin/talent" element={<AdminTalent />} />
             <Route path="/login" element={<Login />} />
             <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
             {/* Legacy WordPress redirects */}

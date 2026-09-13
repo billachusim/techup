@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { UserCheck, Sparkles, Briefcase, Building2, ArrowRight, ShieldCheck } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import TalentNav from "@/components/talent/TalentNav";
 import { Button } from "@/components/ui/button";
 import RoleCard from "@/components/talent/RoleCard";
 import { fetchPublishedRoles } from "@/lib/talent";
@@ -63,6 +64,7 @@ const Talent = () => {
       <Header />
 
       <main className="pt-20">
+        <TalentNav />
         <section className="px-4 py-16">
           <div className="container mx-auto max-w-5xl space-y-6 text-center">
             <h1 className="text-3xl font-bold md:text-5xl">

@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { MapPin, Search, ShieldCheck, Sparkles, BriefcaseBusiness } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import TalentNav from "@/components/talent/TalentNav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -123,6 +124,7 @@ const TalentPool = () => {
       <Header />
 
       <main className="pt-20">
+        <TalentNav />
         <section className="px-4 py-14">
           <div className="container mx-auto max-w-5xl text-center">
             <p className="mb-3 text-sm font-semibold text-primary">Tech Faculty Talent Pool</p>

@@ -11,7 +11,7 @@ import { WORK_MODE_LABEL, fetchPublicTalentById } from "@/lib/talent";
 
 const TalentPublicProfile = () => {
   const { id = "" } = useParams();
-  const { data: person, isLoading } = useQuery({
+  const { data: person, isLoading, refetch } = useQuery({
     queryKey: ["public-talent", id],
     queryFn: () => fetchPublicTalentById(id),
     enabled: Boolean(id),

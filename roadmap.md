@@ -12,3 +12,9 @@
 
 ## Notes
 - No fabricated partnership claims: directory is editorial/advisory.
+
+## Nigerian city tech guides
+- [ ] Publish one distinct local tech-scene guide for each of the 14 Nigerian cities in the hubs directory
+- [ ] Link every guide to its local hub pages, relevant training routes, and a city-specific WhatsApp enquiry
+- [ ] Add all city guide URLs to the static sitemap
+- [ ] Verify article rendering, metadata, internal links, and WhatsApp messages

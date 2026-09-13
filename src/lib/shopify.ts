@@ -77,7 +77,7 @@ export async function storefrontApiRequest(query: string, variables: any = {}) {
   const data = await response.json();
   
   if (data.errors) {
-    throw new Error(`Error calling Shopify: ${data.errors.map(e => e.message).join(', ')}`);
+    throw new Error(`Error calling Shopify: ${data.errors.map((e: { message: string }) => e.message).join(', ')}`);
   }
 
   return data;
@@ -196,7 +196,7 @@ export async function createStorefrontCheckout(items: CartItem[]): Promise<strin
     });
 
     if (cartData.data.cartCreate.userErrors.length > 0) {
-      throw new Error(`Cart creation failed: ${cartData.data.cartCreate.userErrors.map(e => e.message).join(', ')}`);
+      throw new Error(`Cart creation failed: ${cartData.data.cartCreate.userErrors.map((e: { message: string }) => e.message).join(', ')}`);
     }
 
     const cart = cartData.data.cartCreate.cart;

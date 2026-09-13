@@ -226,7 +226,11 @@ const AdminTalent = () => {
   };
 
   const toggleProfileFlag = async (talent: TalentProfile, field: "is_client_interested" | "is_public") => {
-    const { error } = await supabase.from("talent_profiles").update({ [field]: !talent[field] }).eq("id", talent.id);
+    const update =
+      field === "is_client_interested"
+        ? { is_client_interested: !talent.is_client_interested }
+        : { is_public: !talent.is_public };
+    const { error } = await supabase.from("talent_profiles").update(update).eq("id", talent.id);
     if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
     load();
   };

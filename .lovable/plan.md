@@ -17,16 +17,18 @@ Faculty ID becomes a badge of belonging, not a signup requirement. Anyone can cr
 - Talents: `/talent/profile` and their public profile
 - Careers page: shown when the signed-in person has one, otherwise a short line explaining how to get one
 
-## Seeding the talents from your list
+## Seeding the talents from your clean list
 
-The PDF you sent has scrambled columns — skills, links and locations landed in the wrong cells and a few people appear twice — so I will wait for the CSV export of the form responses before importing. Once you upload it I will:
+Your clean list has 29 responses covering 27 people — Ogbonnaya Favour Chioma and Udeaja Chioma Lydia each submitted twice. I will:
 
-1. De-duplicate by email, keeping the most recent response per person.
-2. Create a vetted, public talent profile for each: name, email, phone/WhatsApp, location, track, tools, expertise level, weekly hours, preferred project role, goal, and portfolio/LinkedIn/GitHub links.
-3. Issue each one a Faculty ID using their track as department, online mode, and the month of their response as cohort.
-4. Give you a summary table of who was imported with which ID, so you can spot anything that looks wrong.
+1. Keep the most recent response for those two, so 27 profiles are created.
+2. Create a vetted, public profile for each: name, email, phone/WhatsApp, location, track, tools, expertise level, weekly hours, preferred project role, goal, and their LinkedIn / portfolio / GitHub links (each link filed under the right heading).
+3. Issue each one a Faculty ID from their track, online mode, and the month of their response.
+4. Give you a table of who was imported with which ID so you can spot anything wrong.
 
-They will appear in the public talent directory immediately with the vetted badge, so businesses can find them.
+Small fixes I will apply while importing: trim the stray full stop on `oge.ibe55@gmail.com.`, tidy the two phone numbers that lost or gained digits (`0090 7979 8502`, `9049385722`), keep only the first of the two numbers where someone gave two, and correct the "VidVideo Editing" typo. Two entries look off and I will flag rather than guess: "Contact writing" (likely Content writing) and one person whose track is Video editing but whose only listed tool is Python.
+
+They will appear in the public directory immediately with the vetted badge, so businesses can find them today.
 
 ## Notes on accounts
 

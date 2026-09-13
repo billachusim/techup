@@ -6,11 +6,12 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { WORK_MODE_LABEL, fetchPublicTalentById, introRequestUrl } from "@/lib/talent";
+import RequestIntroDialog from "@/components/talent/RequestIntroDialog";
+import { WORK_MODE_LABEL, fetchPublicTalentById } from "@/lib/talent";
 
 const TalentPublicProfile = () => {
   const { id = "" } = useParams();
-  const { data: person, isLoading } = useQuery({
+  const { data: person, isLoading, refetch } = useQuery({
     queryKey: ["public-talent", id],
     queryFn: () => fetchPublicTalentById(id),
     enabled: Boolean(id),
@@ -147,9 +148,14 @@ const TalentPublicProfile = () => {
               working agreement.
             </p>
             <div className="mt-4 flex flex-wrap gap-3">
-              <a href={introRequestUrl(person.full_name, person.skills)} target="_blank" rel="noopener noreferrer">
-                <Button>Request an introduction</Button>
-              </a>
+              <RequestIntroDialog
+                talentId={person.id}
+                talentName={person.full_name}
+                skills={person.skills}
+                source="talent_profile"
+                onRequested={() => refetch()}
+                trigger={<Button>Request an introduction</Button>}
+              />
               <Link to="/hire"><Button variant="outline">Send a full brief</Button></Link>
             </div>
           </section>

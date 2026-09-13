@@ -35,6 +35,12 @@ type MatchRow = {
   talent_profiles: { full_name: string; city: string | null; skills: string[]; phone: string | null } | null;
 };
 
+type InterestRow = {
+  id: string; talent_profile_id: string; requester_name: string; requester_org: string | null;
+  requester_contact: string; message: string | null; source: string; status: string; created_at: string;
+  talent_profiles: { full_name: string } | null;
+};
+
 type EngagementRow = {
   id: string; talent_profile_id: string; role_id: string | null; weekly_amount: number | null;
   currency: string; started_on: string; status: string; note: string | null;
@@ -65,6 +71,7 @@ const AdminTalent = () => {
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
   const [briefs, setBriefs] = useState<BusinessBrief[]>([]);
   const [engagements, setEngagements] = useState<EngagementRow[]>([]);
+  const [interests, setInterests] = useState<InterestRow[]>([]);
   const [newRole, setNewRole] = useState(emptyRole);
   const [creating, setCreating] = useState(false);
   const [matchingRoleId, setMatchingRoleId] = useState<string | null>(null);
@@ -78,7 +85,7 @@ const AdminTalent = () => {
   }, []);
 
   const load = useCallback(async () => {
-    const [r, t, m, a, b, e] = await Promise.all([
+    const [r, t, m, a, b, e, i] = await Promise.all([
       supabase.from("talent_roles").select("*").order("created_at", { ascending: false }),
       supabase.from("talent_profiles").select("*").order("profile_strength", { ascending: false }),
       supabase
@@ -94,6 +101,10 @@ const AdminTalent = () => {
         .from("talent_engagements")
         .select("id, talent_profile_id, role_id, weekly_amount, currency, started_on, status, note, talent_roles(title), talent_profiles(full_name)")
         .order("started_on", { ascending: false }),
+      supabase
+        .from("talent_interest_requests")
+        .select("*, talent_profiles(full_name)")
+        .order("created_at", { ascending: false }),
     ]);
     setRoles(r.data ?? []);
     setTalents(t.data ?? []);
@@ -101,6 +112,7 @@ const AdminTalent = () => {
     setApplications((a.data ?? []) as ApplicationRow[]);
     setBriefs(b.data ?? []);
     setEngagements((e.data ?? []) as EngagementRow[]);
+    setInterests((i.data ?? []) as InterestRow[]);
     setGroupDrafts(Object.fromEntries((r.data ?? []).map((role) => [role.id, role.whatsapp_group_url ?? ""])));
     setLoading(false);
   }, []);
@@ -243,6 +255,12 @@ const AdminTalent = () => {
     load();
   };
 
+  const setInterestStatus = async (id: string, status: string) => {
+    const { error } = await supabase.from("talent_interest_requests").update({ status }).eq("id", id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    load();
+  };
+
   const setEngagementStatus = async (id: string, status: string) => {
     const { error } = await supabase.from("talent_engagements").update({ status }).eq("id", id);
     if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
@@ -331,6 +349,7 @@ const AdminTalent = () => {
                 <TabsTrigger value="matches">Matches ({suggested.length})</TabsTrigger>
                 <TabsTrigger value="applications">Applications ({applications.length})</TabsTrigger>
                 <TabsTrigger value="briefs">Briefs ({briefs.filter((b) => b.status === "new").length})</TabsTrigger>
+                <TabsTrigger value="interest">Interest ({interests.filter((i) => i.status === "new").length})</TabsTrigger>
                 <TabsTrigger value="pay">Work &amp; pay ({engagements.filter((e) => e.status === "active").length})</TabsTrigger>
               </TabsList>
 
@@ -701,6 +720,45 @@ const AdminTalent = () => {
                           <SelectItem value="rejected">Not a fit</SelectItem>
                         </SelectContent>
                       </Select>
+                    </div>
+                  </div>
+                ))}
+              </TabsContent>
+
+              {/* INTEREST REQUESTS */}
+              <TabsContent value="interest" className="space-y-3 pt-6">
+                {interests.length === 0 && (
+                  <p className="rounded-lg border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+                    No introduction requests yet. They arrive automatically from the public talent directory.
+                  </p>
+                )}
+                {interests.map((i) => (
+                  <div key={i.id} className="rounded-lg border border-border bg-card p-4">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <p className="font-medium">
+                          {i.requester_name}
+                          {i.requester_org ? ` · ${i.requester_org}` : ""} → {i.talent_profiles?.full_name}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {i.requester_contact} · {new Date(i.created_at).toLocaleString("en-GB")} · from {i.source}
+                        </p>
+                        {i.message && <p className="mt-2 text-sm text-muted-foreground">{i.message}</p>}
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <a href={contactUrl(i.requester_contact, i.requester_name)} target="_blank" rel="noopener noreferrer">
+                          <Button size="sm" variant="outline"><MessageCircle size={14} className="mr-1.5" /> Message</Button>
+                        </a>
+                        <Select value={i.status} onValueChange={(v) => setInterestStatus(i.id, v)}>
+                          <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="new">New</SelectItem>
+                            <SelectItem value="contacted">Contacted</SelectItem>
+                            <SelectItem value="introduced">Introduced</SelectItem>
+                            <SelectItem value="closed">Closed</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </div>
                   </div>
                 ))}

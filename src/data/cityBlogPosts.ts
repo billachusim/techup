@@ -283,6 +283,7 @@ Yes. We provide structured training and SIWES routes, while our careers resource
 const cityBlogPosts: BlogPost[] = cityGuides.map((guide) => ({
   slug: guide.slug,
   title: `${guide.city} Tech Scene: Hubs, Courses & Training Guide (2026)`,
+  seoTitle: `Tech Training in ${guide.city}: Hubs & Courses`,
   description: guide.description,
   content: buildContent(guide),
   date: "2026-09-13",

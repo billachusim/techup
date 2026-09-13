@@ -457,28 +457,51 @@ const AdminTalent = () => {
                 </section>
 
                 <section className="space-y-3">
-                  {roles.map((role) => (
-                    <div key={role.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card p-4">
-                      <div>
-                        <p className="font-medium">{role.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {ROLE_KIND_LABEL[role.role_kind]} · {role.company} · {role.city ?? "Anywhere"} ·{" "}
-                          <Badge variant="outline" className="ml-1">{role.status}</Badge>
-                        </p>
+                  {roles.map((role) => {
+                    const roleMatches = matches.filter((m) => m.role_id === role.id);
+                    const count = (statuses: string[]) => roleMatches.filter((m) => statuses.includes(m.status)).length;
+                    return (
+                      <div key={role.id} className="space-y-3 rounded-lg border border-border bg-card p-4">
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                          <div>
+                            <p className="font-medium">{role.title}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {ROLE_KIND_LABEL[role.role_kind]} · {role.company} · {role.city ?? "Anywhere"} ·{" "}
+                              <Badge variant="outline" className="ml-1">{role.status}</Badge>
+                            </p>
+                            <p className="mt-1 text-xs text-muted-foreground">
+                              {count(["approved", "accepted", "assessment", "interview", "hired"])} matched ·{" "}
+                              {count(["accepted"])} accepted · {count(["assessment"])} in assessment ·{" "}
+                              {count(["interview"])} in interview · {count(["hired"])} hired
+                            </p>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            <Button size="sm" variant="outline" onClick={() => runMatching(role.id)} disabled={matchingRoleId === role.id}>
+                              {matchingRoleId === role.id ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <Sparkles size={14} className="mr-1.5" />}
+                              Run AI matching
+                            </Button>
+                            {role.status !== "published" ? (
+                              <Button size="sm" onClick={() => setRoleStatus(role.id, "published")}>Publish</Button>
+                            ) : (
+                              <Button size="sm" variant="ghost" onClick={() => setRoleStatus(role.id, "closed")}>Close</Button>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap items-end gap-2">
+                          <div className="min-w-[16rem] flex-1">
+                            <Label className="text-xs">Project WhatsApp group link (matched talent only)</Label>
+                            <Input
+                              className="mt-1"
+                              placeholder="https://chat.whatsapp.com/…"
+                              value={groupDrafts[role.id] ?? ""}
+                              onChange={(e) => setGroupDrafts({ ...groupDrafts, [role.id]: e.target.value })}
+                            />
+                          </div>
+                          <Button size="sm" variant="outline" onClick={() => saveGroupUrl(role.id)}>Save link</Button>
+                        </div>
                       </div>
-                      <div className="flex flex-wrap gap-2">
-                        <Button size="sm" variant="outline" onClick={() => runMatching(role.id)} disabled={matchingRoleId === role.id}>
-                          {matchingRoleId === role.id ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <Sparkles size={14} className="mr-1.5" />}
-                          Run AI matching
-                        </Button>
-                        {role.status !== "published" ? (
-                          <Button size="sm" onClick={() => setRoleStatus(role.id, "published")}>Publish</Button>
-                        ) : (
-                          <Button size="sm" variant="ghost" onClick={() => setRoleStatus(role.id, "closed")}>Close</Button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </section>
               </TabsContent>
 

@@ -54,14 +54,23 @@ const TalentCard = ({ person, onRequested }: { person: PublicTalentSummary; onRe
         )}
       </div>
     </div>
-    <div className="mt-5 flex flex-wrap gap-2">
+    <div className="mt-5 flex flex-wrap items-center gap-2">
       <Link to={`/talent/pool/${person.id}`}><Button size="sm" variant="outline">View profile</Button></Link>
       <RequestIntroDialog
         talentId={person.id}
         talentName={person.full_name}
         skills={person.skills}
         onRequested={onRequested}
-        trigger={<Button size="sm">Request an introduction</Button>}
+        trigger={
+          <Button
+            size="icon"
+            className="h-9 w-9 bg-green-600 text-white hover:bg-green-700"
+            aria-label={`Request an introduction to ${person.full_name} on WhatsApp`}
+            title="Request an introduction"
+          >
+            <MessageCircle size={16} />
+          </Button>
+        }
       />
     </div>
   </article>

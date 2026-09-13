@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { CalendarDays, MapPin, Globe, Ticket, Building2 } from "lucide-react";
 import {
   TechEvent,

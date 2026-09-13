@@ -14,7 +14,7 @@ import { HandoutModal } from "@/components/HandoutModal";
 import { CertificateCard } from "@/components/CertificateCard";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "@/lib/router-compat";
 import techFacultyLogo from "@/assets/tech-faculty-logo.png";
 import googleLogo from "@/assets/partners/google-logo.png";
 import microsoftLogo from "@/assets/partners/microsoft-logo.png";

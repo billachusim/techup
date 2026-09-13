@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "@/lib/router-compat";
 import { useIsStaff } from "@/hooks/useIsStaff";
 import { useUser } from "@/contexts/UserContext";
 import { cn } from "@/lib/utils";

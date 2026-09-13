@@ -17,7 +17,7 @@ import { useUser } from "@/contexts/UserContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SignupForm } from "@/components/Auth/SignupForm";
 import { LoginForm } from "@/components/Auth/LoginForm";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 
 const GetStarted = () => {
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");

@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams } from "@/lib/router-compat";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Building2, Globe, MapPin, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";

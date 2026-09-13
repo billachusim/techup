@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router-compat";
 import { useQuery } from "@tanstack/react-query";
 import { UserCheck, Sparkles, Briefcase, Building2, ArrowRight, ShieldCheck } from "lucide-react";
 import Header from "@/components/Header";

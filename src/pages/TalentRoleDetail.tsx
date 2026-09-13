@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "@/lib/router-compat";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { MapPin, Wallet, Users, CalendarClock, ArrowLeft, MessageCircle, Users2 } from "lucide-react";

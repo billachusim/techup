@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { useCallback, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "@/lib/router-compat";
 import { Loader2, Sparkles, Briefcase, Pencil, ShieldCheck, Users2, MessageCircle, Wallet, Eye, ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";

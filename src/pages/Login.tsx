@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "@/lib/router-compat";
 import { LoginForm } from "@/components/Auth/LoginForm";
 import { SignupForm } from "@/components/Auth/SignupForm";
 

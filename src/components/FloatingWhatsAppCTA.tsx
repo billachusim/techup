@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { MessageCircle, X } from "lucide-react";
 import WhatsAppLeadDialog from "@/components/leads/WhatsAppLeadDialog";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "@/lib/router-compat";
 
 const DISMISS_KEY = "tf_wa_float_dismissed";
 

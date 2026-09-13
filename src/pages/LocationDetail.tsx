@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CampusMap from "@/components/locations/CampusMap";

@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { Link, useParams, Navigate } from "react-router-dom";
+import { Link, useParams, Navigate } from "@/lib/router-compat";
 import { useMemo } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";

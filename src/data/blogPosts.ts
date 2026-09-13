@@ -1,5 +1,5 @@
 import type { BlogPost } from '@/types/blog';
-import cityBlogPosts from '@/data/cityBlogPosts';
+import cityBlogPosts from './cityBlogPosts';
 
 const blogPosts: BlogPost[] = [
   ...cityBlogPosts,

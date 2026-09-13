@@ -122,6 +122,17 @@ const TalentDashboard = () => {
     toast({ title: availability === "open" ? "Marked as open to work" : "Marked as unavailable" });
   };
 
+  const setDirectoryVisible = async (isPublic: boolean) => {
+    if (!profile) return;
+    const { error } = await supabase.from("talent_profiles").update({ is_public: isPublic }).eq("id", profile.id);
+    if (error) {
+      toast({ title: "Could not update that", description: error.message, variant: "destructive" });
+      return;
+    }
+    setProfile({ ...profile, is_public: isPublic });
+    toast({ title: isPublic ? "Your profile is listed publicly" : "Your profile is hidden from the directory" });
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background">

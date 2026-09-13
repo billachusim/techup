@@ -214,6 +214,58 @@ const TalentDashboard = () => {
                 </div>
               </div>
 
+              <div className="flex flex-wrap gap-2">
+                {profile.is_client_interested && <Badge>A client is interested in you</Badge>}
+                {matches.some((m) => MATCHED_STATUSES.includes(m.status)) && (
+                  <Badge variant="secondary">Matched to a project</Badge>
+                )}
+                {engagements.some((e) => e.status === "active") && <Badge variant="outline">Working and earning</Badge>}
+              </div>
+
+              <div className="rounded-lg border border-border bg-card p-5">
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div>
+                    <p className="flex items-center gap-2 text-sm font-medium"><Eye size={16} /> Show me in the public talent directory</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Businesses see your name, skills and city — never your phone, email or CV.{" "}
+                      <Link to={`/talent/pool/${profile.id}`} className="text-primary hover:underline">Preview my public profile</Link>
+                    </p>
+                  </div>
+                  <Switch checked={profile.is_public} onCheckedChange={setDirectoryVisible} aria-label="Show me in the public talent directory" />
+                </div>
+              </div>
+
+              {engagements.length > 0 && (
+                <section>
+                  <h2 className="mb-4 flex items-center gap-2 text-xl font-bold">
+                    <Wallet size={18} className="text-primary" /> Your work and pay
+                  </h2>
+                  <div className="space-y-3">
+                    {engagements.map((item) => (
+                      <div key={item.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card p-4">
+                        <div>
+                          <p className="font-medium">{item.talent_roles?.title ?? "Project"}</p>
+                          <p className="text-xs text-muted-foreground">
+                            Started {new Date(item.started_on).toLocaleDateString("en-GB")} · week {weeksSince(item.started_on)}
+                            {item.note ? ` · ${item.note}` : ""}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-semibold">
+                            {item.weekly_amount != null ? `${formatMoney(Number(item.weekly_amount), item.currency)} / week` : "Pay being agreed"}
+                          </p>
+                          <Badge variant="outline" className="mt-1">{ENGAGEMENT_STATUS_LABEL[item.status] ?? item.status}</Badge>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    Payments are sent outside the platform. If a payment is late, message us on WhatsApp.
+                  </p>
+                </section>
+              )}
+
+
               <section>
                 <h2 className="mb-4 flex items-center gap-2 text-xl font-bold">
                   <Sparkles size={18} className="text-primary" /> Your matches

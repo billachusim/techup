@@ -343,6 +343,7 @@ const AdminTalent = () => {
                 <TabsTrigger value="matches">Matches ({suggested.length})</TabsTrigger>
                 <TabsTrigger value="applications">Applications ({applications.length})</TabsTrigger>
                 <TabsTrigger value="briefs">Briefs ({briefs.filter((b) => b.status === "new").length})</TabsTrigger>
+                <TabsTrigger value="interest">Interest ({interests.filter((i) => i.status === "new").length})</TabsTrigger>
                 <TabsTrigger value="pay">Work &amp; pay ({engagements.filter((e) => e.status === "active").length})</TabsTrigger>
               </TabsList>
 

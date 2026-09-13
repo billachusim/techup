@@ -17,9 +17,12 @@ import { useIsStaff } from "@/hooks/useIsStaff";
 import {
   MATCH_STATUS_LABEL,
   APPLICATION_STATUS_LABEL,
+  ENGAGEMENT_STATUS_LABEL,
   ROLE_KIND_LABEL,
+  formatMoney,
   parseList,
   slugify,
+  talentWhatsAppUrl,
   type BusinessBrief,
   type TalentProfile,
   type TalentRole,
@@ -61,11 +64,14 @@ const AdminTalent = () => {
   const [matches, setMatches] = useState<MatchRow[]>([]);
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
   const [briefs, setBriefs] = useState<BusinessBrief[]>([]);
+  const [engagements, setEngagements] = useState<EngagementRow[]>([]);
   const [newRole, setNewRole] = useState(emptyRole);
   const [creating, setCreating] = useState(false);
   const [matchingRoleId, setMatchingRoleId] = useState<string | null>(null);
   const [manualRole, setManualRole] = useState("");
   const [manualTalent, setManualTalent] = useState("");
+  const [groupDrafts, setGroupDrafts] = useState<Record<string, string>>({});
+  const [newEngagement, setNewEngagement] = useState({ talent: "", role: "", amount: "", currency: "NGN", note: "" });
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setSignedIn(Boolean(data.user)));

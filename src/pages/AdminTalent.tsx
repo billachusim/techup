@@ -35,6 +35,12 @@ type MatchRow = {
   talent_profiles: { full_name: string; city: string | null; skills: string[]; phone: string | null } | null;
 };
 
+type InterestRow = {
+  id: string; talent_profile_id: string; requester_name: string; requester_org: string | null;
+  requester_contact: string; message: string | null; source: string; status: string; created_at: string;
+  talent_profiles: { full_name: string } | null;
+};
+
 type EngagementRow = {
   id: string; talent_profile_id: string; role_id: string | null; weekly_amount: number | null;
   currency: string; started_on: string; status: string; note: string | null;

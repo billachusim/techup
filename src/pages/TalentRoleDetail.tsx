@@ -11,14 +11,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useUser } from "@/contexts/UserContext";
+import TalentNav from "@/components/talent/TalentNav";
 import {
   EMPLOYMENT_LABEL,
-  ROLE_KIND_LABEL,
   SENIORITY_LABEL,
   fetchProjectGroupUrl,
   fetchRoleBySlug,
   formatBudget,
+  openingsLabel,
   projectManagerUrl,
+  roleBadges,
   roleLocationLabel,
 } from "@/lib/talent";
 
@@ -200,24 +202,35 @@ const TalentRoleDetail = () => {
               }
             : {}),
           ...(role.apply_deadline ? { validThrough: role.apply_deadline } : {}),
+          totalJobOpenings: role.openings,
+          directApply: true,
+          identifier: { "@type": "PropertyValue", name: role.company, value: role.slug },
+          ...(role.category ? { occupationalCategory: role.category } : {}),
         })}</script>
       </Helmet>
       <Header />
 
       <main className="pt-20">
-        <article className="container mx-auto max-w-3xl px-4 py-12">
-          <Link to="/talent" className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+        <TalentNav />
+        <article className="container mx-auto max-w-3xl px-4 py-10 md:py-12">
+          <Link to="/careers" className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
             <ArrowLeft size={14} /> All open roles
           </Link>
 
           <header className="space-y-3">
-            <Badge variant="outline">{ROLE_KIND_LABEL[role.role_kind] ?? role.role_kind}</Badge>
-            <h1 className="text-3xl font-bold md:text-4xl">{role.title}</h1>
+            <div className="flex flex-wrap gap-1.5">
+              {roleBadges(role).map((badge) => (
+                <Badge key={badge} variant={badge === "Paid training" || badge === "New" ? "default" : "secondary"}>
+                  {badge}
+                </Badge>
+              ))}
+            </div>
+            <h1 className="text-2xl font-bold sm:text-3xl md:text-4xl">{role.title}</h1>
             <p className="text-muted-foreground">{role.company}</p>
             <div className="grid gap-2 pt-2 text-sm text-muted-foreground sm:grid-cols-2">
               <p className="flex items-center gap-2"><MapPin size={14} /> {roleLocationLabel(role)}</p>
               <p className="flex items-center gap-2"><Wallet size={14} /> {formatBudget(role)}</p>
-              <p className="flex items-center gap-2"><Users size={14} /> {role.openings} opening{role.openings > 1 ? "s" : ""} · {SENIORITY_LABEL[role.seniority] ?? role.seniority}</p>
+              <p className="flex items-center gap-2"><Users size={14} /> {openingsLabel(role.openings)} · {SENIORITY_LABEL[role.seniority] ?? role.seniority}</p>
               <p className="flex items-center gap-2"><CalendarClock size={14} /> {EMPLOYMENT_LABEL[role.employment_type] ?? role.employment_type}</p>
             </div>
           </header>

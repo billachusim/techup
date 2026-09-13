@@ -23,7 +23,7 @@ const steps = [
   {
     icon: Briefcase,
     title: "Do paid work",
-    body: "Take on client projects, Tech Faculty roles or partner openings — mostly remote, for businesses across Nigeria and Africa.",
+    body: "Take on Tech Faculty roles and client projects — mostly remote, for businesses across Nigeria and Africa.",
   },
 ];
 
@@ -113,11 +113,11 @@ const Talent = () => {
               <div>
                 <h2 className="text-2xl font-bold">Open roles</h2>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Tech Faculty openings, partner roles and live client projects.
+                  Current Tech Faculty openings and approved client projects.
                 </p>
               </div>
               <Link to="/careers" className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline">
-                See the external jobs board <ArrowRight size={14} />
+                Browse all openings <ArrowRight size={14} />
               </Link>
             </div>
 

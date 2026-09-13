@@ -27,8 +27,7 @@ const GetStarted = () => {
   const { toast } = useToast();
   const { isLoggedIn, userData, logout } = useUser();
 
-  const handleSignupSuccess = async () => {
-    await supabase.auth.signOut();
+  const handleSignupSuccess = () => {
     setActiveTab("login");
   };
 

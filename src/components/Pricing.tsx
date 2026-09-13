@@ -686,21 +686,31 @@ const Pricing = () => {
         throw new Error('Failed to update profile');
       }
 
-      // Update faculty_ids table
-      await supabase
-        .from("faculty_ids")
-        .update({
-          faculty_id: newFacultyId,
-          department: plan.name,
-        })
-        .eq('faculty_id', currentFacultyId);
+      // Record the Faculty ID itself: first-time enrollees have no row to update yet
+      if (currentFacultyId) {
+        await supabase
+          .from("faculty_ids")
+          .update({ faculty_id: newFacultyId, department: plan.name })
+          .eq('faculty_id', currentFacultyId);
 
-      // Update all related records with new faculty ID
-      await Promise.all([
-        supabase.from("enrollments").update({ faculty_id: newFacultyId, learning_mode: selectedMode }).eq('faculty_id', currentFacultyId),
-        supabase.from("course_enrollments").update({ faculty_id: newFacultyId }).eq('faculty_id', currentFacultyId),
-        supabase.from("course_progress").update({ faculty_id: newFacultyId }).eq('faculty_id', currentFacultyId),
-      ]);
+        // Carry existing records over to the new Faculty ID
+        await Promise.all([
+          supabase.from("enrollments").update({ faculty_id: newFacultyId, learning_mode: selectedMode }).eq('faculty_id', currentFacultyId),
+          supabase.from("course_enrollments").update({ faculty_id: newFacultyId }).eq('faculty_id', currentFacultyId),
+          supabase.from("course_progress").update({ faculty_id: newFacultyId }).eq('faculty_id', currentFacultyId),
+        ]);
+      } else {
+        await supabase.from("faculty_ids").insert({
+          faculty_id: newFacultyId,
+          name: profile.name || '',
+          email: profile.email || user.email || '',
+          phone: profile.phone || '',
+          course_interest: plan.name,
+          hear_about_us: 'programme_enrolment',
+          status: 'active',
+          department: plan.name,
+        });
+      }
 
       // Create new enrollment with status based on payment method
       const enrollmentStatus = plan.isFree ? "active" : (method === 'card' ? "active" : "pending");

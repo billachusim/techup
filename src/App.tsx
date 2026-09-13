@@ -39,6 +39,9 @@ import Verify from "./pages/Verify";
 import Locations from "./pages/Locations";
 import LocationDetail from "./pages/LocationDetail";
 import DepartmentsIndex from "./pages/DepartmentsIndex";
+import Hubs from "./pages/Hubs";
+import HubDetail from "./pages/HubDetail";
+
 import DepartmentDetail from "./pages/DepartmentDetail";
 import TinyPeople from "./pages/TinyPeople";
 import LovablePage from "./pages/Lovable";

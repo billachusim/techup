@@ -518,6 +518,8 @@ const AdminTalent = () => {
                       <div>
                         <p className="font-medium">
                           {t.full_name} {t.is_vetted && <Badge className="ml-1">Vetted</Badge>}
+                          {t.is_client_interested && <Badge variant="secondary" className="ml-1">Client interested</Badge>}
+                          {!t.is_public && <Badge variant="outline" className="ml-1">Hidden</Badge>}
                         </p>
                         <p className="text-xs text-muted-foreground">
                           {[t.city, t.country].filter(Boolean).join(", ")} · {t.phone} · strength {t.profile_strength}% ·{" "}

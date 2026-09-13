@@ -279,13 +279,19 @@ const TalentDashboard = () => {
                             <h3 className="font-semibold">{match.talent_roles?.title ?? "Role"}</h3>
                             <p className="text-sm text-muted-foreground">{match.talent_roles?.company}</p>
                           </div>
-                          <Badge variant={match.status === "accepted" ? "default" : "outline"}>
-                            {match.status === "approved" ? `${match.score}% match` : match.status === "accepted" ? "You accepted" : "Declined"}
+                          <Badge variant={match.status === "declined" ? "outline" : "default"}>
+                            {match.status === "approved" ? `${match.score}% match` : MATCH_STATUS_LABEL[match.status] ?? match.status}
                           </Badge>
                         </div>
                         {match.reason && <p className="mt-3 text-sm text-muted-foreground">{match.reason}</p>}
                         {match.talent_roles && (
                           <p className="mt-2 text-xs text-muted-foreground">{formatBudget(match.talent_roles)}</p>
+                        )}
+                        {MATCHED_STATUSES.includes(match.status) && (
+                          <p className="mt-3 text-xs text-muted-foreground">
+                            Next step is a short assessment or interview on WhatsApp. If you do not hear back within two days,
+                            reach out to the project manager yourself.
+                          </p>
                         )}
                         <div className="mt-4 flex flex-wrap gap-2">
                           {match.talent_roles && (
@@ -298,6 +304,22 @@ const TalentDashboard = () => {
                               <Button size="sm" onClick={() => respond(match.id, "accepted")}>I am interested</Button>
                               <Button size="sm" variant="ghost" onClick={() => respond(match.id, "declined")}>Not for me</Button>
                             </>
+                          )}
+                          {MATCHED_STATUSES.includes(match.status) && groupUrls[match.role_id] && (
+                            <a href={groupUrls[match.role_id]} target="_blank" rel="noopener noreferrer">
+                              <Button size="sm"><Users2 className="mr-1.5" size={14} /> Join the project group</Button>
+                            </a>
+                          )}
+                          {MATCHED_STATUSES.includes(match.status) && (
+                            <a
+                              href={projectManagerUrl(match.talent_roles?.title ?? "a Tech Faculty role", profile.full_name)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Button size="sm" variant="outline">
+                                <MessageCircle className="mr-1.5" size={14} /> Reach out to the project manager
+                              </Button>
+                            </a>
                           )}
                         </div>
                       </div>

@@ -1,14 +1,14 @@
 # Roadmap
 
-## Hub of hubs (in progress)
+## Hub of hubs (complete)
 - [x] `src/data/techHubs.ts` — editorial hubs directory data
-- [ ] `/hubs` searchable directory page
-- [ ] `/hubs/:slug` per-hub SEO pages with WhatsApp apply CTA
-- [ ] Routes + footer link
-- [ ] Blog post A — Nigeria hubs by city
-- [ ] Blog post B — Africa hubs by country
-- [ ] sitemap.xml + llms.txt entries
-- [ ] Build + render verification
+- [x] `/hubs` searchable directory page
+- [x] `/hubs/:slug` per-hub SEO pages with WhatsApp apply CTA
+- [x] Routes + footer link
+- [x] Blog post A — Nigeria hubs by city
+- [x] Blog post B — Africa hubs by country
+- [x] sitemap.xml + llms.txt entries
+- [x] Build + render verification
 
 ## Notes
 - No fabricated partnership claims: directory is editorial/advisory.

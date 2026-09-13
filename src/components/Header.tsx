@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/tech-faculty-logo.png";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import {
   ArrowRight,
   BookOpen,
@@ -225,7 +225,7 @@ const Header = () => {
               </SheetTrigger>
               <SheetContent side="right" className="w-[min(22rem,88vw)] overflow-y-auto px-4 pt-12">
                 <div className="mb-5 border-b border-border pb-4">
-                  <p className="text-base font-bold">Menu</p>
+                  <SheetTitle className="text-base font-bold">Menu</SheetTitle>
                   <p className="text-xs text-muted-foreground">Learn, explore and connect</p>
                 </div>
                 <nav className="flex flex-col gap-5 pb-8" aria-label="Mobile navigation">

@@ -23,4 +23,4 @@
 - [x] Group desktop navigation into Programmes, Explore, and Resources
 - [x] Make Locations one direct menu link
 - [x] Organize the mobile menu into clear labelled sections
-- [ ] Verify desktop and mobile navigation
+- [x] Verify desktop and mobile navigation

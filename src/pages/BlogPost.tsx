@@ -48,7 +48,7 @@ const BlogPost = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>{post.title} | Tech Faculty NG Blog</title>
+        <title>{post.seoTitle ?? `${post.title} | Tech Faculty NG Blog`}</title>
         <meta name="description" content={post.description} />
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={post.description} />

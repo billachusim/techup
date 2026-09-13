@@ -254,7 +254,9 @@ import { z } from "npm:zod@^3.25.76";
 import { createClient } from "npm:@supabase/supabase-js@^2.79.0";
 
 // src/data/blogPosts.ts
+import cityBlogPosts from "npm:@/data/cityBlogPosts";
 var blogPosts = [
+  ...cityBlogPosts,
   {
     slug: "ai-automation-for-nigerian-businesses-2026",
     title: "AI Automation for Nigerian Businesses: A Practical 2026 Playbook",

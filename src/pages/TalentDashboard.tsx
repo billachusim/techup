@@ -51,6 +51,8 @@ const TalentDashboard = () => {
   const [profile, setProfile] = useState<TalentProfile | null>(null);
   const [matches, setMatches] = useState<MatchRow[]>([]);
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
+  const [engagements, setEngagements] = useState<(TalentEngagement & { talent_roles: { title: string } | null })[]>([]);
+  const [groupUrls, setGroupUrls] = useState<Record<string, string>>({});
 
   const load = useCallback(async () => {
     const { data: auth } = await supabase.auth.getUser();
@@ -61,10 +63,10 @@ const TalentDashboard = () => {
     const { data: p } = await supabase.from("talent_profiles").select("*").eq("user_id", auth.user.id).maybeSingle();
     setProfile(p ?? null);
     if (p) {
-      const [{ data: m }, { data: a }] = await Promise.all([
+      const [{ data: m }, { data: a }, { data: e }] = await Promise.all([
         supabase
           .from("role_matches")
-          .select("id, score, reason, status, talent_roles(slug, title, company, summary, budget_min, budget_max, budget_currency, budget_unit)")
+          .select("id, score, reason, status, role_id, talent_roles(slug, title, company, summary, budget_min, budget_max, budget_currency, budget_unit)")
           .eq("talent_profile_id", p.id)
           .order("score", { ascending: false }),
         supabase
@@ -72,9 +74,24 @@ const TalentDashboard = () => {
           .select("id, status, created_at, talent_roles(slug, title, company)")
           .eq("talent_profile_id", p.id)
           .order("created_at", { ascending: false }),
+        supabase
+          .from("talent_engagements")
+          .select("*, talent_roles(title)")
+          .eq("talent_profile_id", p.id)
+          .order("started_on", { ascending: false }),
       ]);
-      setMatches((m ?? []) as MatchRow[]);
+      const matchRows = (m ?? []) as MatchRow[];
+      setMatches(matchRows);
       setApplications((a ?? []) as ApplicationRow[]);
+      setEngagements((e ?? []) as (TalentEngagement & { talent_roles: { title: string } | null })[]);
+
+      const matchedRoleIds = Array.from(
+        new Set(matchRows.filter((row) => MATCHED_STATUSES.includes(row.status)).map((row) => row.role_id))
+      );
+      const urls = await Promise.all(matchedRoleIds.map((id) => fetchProjectGroupUrl(id)));
+      const urlMap: Record<string, string> = {};
+      matchedRoleIds.forEach((id, index) => { const url = urls[index]; if (url) urlMap[id] = url; });
+      setGroupUrls(urlMap);
     }
     setLoading(false);
   }, [navigate]);

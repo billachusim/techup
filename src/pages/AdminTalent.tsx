@@ -719,6 +719,45 @@ const AdminTalent = () => {
                 ))}
               </TabsContent>
 
+              {/* INTEREST REQUESTS */}
+              <TabsContent value="interest" className="space-y-3 pt-6">
+                {interests.length === 0 && (
+                  <p className="rounded-lg border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+                    No introduction requests yet. They arrive automatically from the public talent directory.
+                  </p>
+                )}
+                {interests.map((i) => (
+                  <div key={i.id} className="rounded-lg border border-border bg-card p-4">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <p className="font-medium">
+                          {i.requester_name}
+                          {i.requester_org ? ` · ${i.requester_org}` : ""} → {i.talent_profiles?.full_name}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {i.requester_contact} · {new Date(i.created_at).toLocaleString("en-GB")} · from {i.source}
+                        </p>
+                        {i.message && <p className="mt-2 text-sm text-muted-foreground">{i.message}</p>}
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <a href={contactUrl(i.requester_contact, i.requester_name)} target="_blank" rel="noopener noreferrer">
+                          <Button size="sm" variant="outline"><MessageCircle size={14} className="mr-1.5" /> Message</Button>
+                        </a>
+                        <Select value={i.status} onValueChange={(v) => setInterestStatus(i.id, v)}>
+                          <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="new">New</SelectItem>
+                            <SelectItem value="contacted">Contacted</SelectItem>
+                            <SelectItem value="introduced">Introduced</SelectItem>
+                            <SelectItem value="closed">Closed</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </TabsContent>
+
               {/* WORK & PAY */}
               <TabsContent value="pay" className="space-y-6 pt-6">
                 <section className="rounded-lg border border-border bg-card p-5">

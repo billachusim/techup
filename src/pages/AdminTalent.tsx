@@ -212,6 +212,43 @@ const AdminTalent = () => {
     load();
   };
 
+  const toggleProfileFlag = async (talent: TalentProfile, field: "is_client_interested" | "is_public") => {
+    const { error } = await supabase.from("talent_profiles").update({ [field]: !talent[field] }).eq("id", talent.id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    load();
+  };
+
+  const saveGroupUrl = async (roleId: string) => {
+    const value = (groupDrafts[roleId] ?? "").trim();
+    const { error } = await supabase.from("talent_roles").update({ whatsapp_group_url: value || null }).eq("id", roleId);
+    if (error) { toast({ title: "Could not save the group link", description: error.message, variant: "destructive" }); return; }
+    toast({ title: value ? "Group link saved" : "Group link removed", description: "Only matched talent and staff can see it." });
+    load();
+  };
+
+  const addEngagement = async () => {
+    if (!newEngagement.talent) { toast({ title: "Pick the talent", variant: "destructive" }); return; }
+    const { data: auth } = await supabase.auth.getUser();
+    const { error } = await supabase.from("talent_engagements").insert({
+      talent_profile_id: newEngagement.talent,
+      role_id: newEngagement.role || null,
+      weekly_amount: newEngagement.amount ? Number(newEngagement.amount) : null,
+      currency: newEngagement.currency,
+      note: newEngagement.note.trim() || null,
+      created_by: auth.user?.id ?? null,
+    });
+    if (error) { toast({ title: "Could not save the engagement", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Engagement recorded", description: "The talent now sees their weekly pay on their dashboard." });
+    setNewEngagement({ talent: "", role: "", amount: "", currency: "NGN", note: "" });
+    load();
+  };
+
+  const setEngagementStatus = async (id: string, status: string) => {
+    const { error } = await supabase.from("talent_engagements").update({ status }).eq("id", id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    load();
+  };
+
   const openCv = async (path: string | null) => {
     if (!path) return;
     const { data, error } = await supabase.storage.from("talent-cvs").createSignedUrl(path, 300);

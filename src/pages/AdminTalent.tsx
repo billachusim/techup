@@ -556,6 +556,7 @@ const AdminTalent = () => {
                           {!t.is_public && <Badge variant="outline" className="ml-1">Hidden</Badge>}
                         </p>
                         <p className="text-xs text-muted-foreground">
+                          {t.faculty_id ? `${t.faculty_id} · ` : ""}
                           {[t.city, t.country].filter(Boolean).join(", ")} · {t.phone} · strength {t.profile_strength}% ·{" "}
                           {t.availability === "open" ? "open to work" : "unavailable"}
                         </p>
@@ -573,6 +574,12 @@ const AdminTalent = () => {
                           <a href={contactUrl(t.whatsapp || t.phone, t.full_name)} target="_blank" rel="noopener noreferrer">
                             <Button size="sm" variant="outline"><MessageCircle size={14} className="mr-1.5" /> Message</Button>
                           </a>
+                        )}
+                        {!t.faculty_id && (
+                          <Button size="sm" onClick={() => approveTalent(t)}>Approve &amp; issue Faculty ID</Button>
+                        )}
+                        {!t.faculty_id && t.is_vetted && (
+                          <Button size="sm" variant="outline" onClick={() => issueFacultyId(t)}>Issue Faculty ID only</Button>
                         )}
                         <Button size="sm" variant={t.is_vetted ? "ghost" : "default"} onClick={() => toggleVetted(t)}>
                           {t.is_vetted ? "Remove vetted" : "Mark vetted"}

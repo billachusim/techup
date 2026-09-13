@@ -15,5 +15,13 @@ export default defineConfig({
   },
   vite: {
     plugins: [mcpPlugin()],
+    resolve: {
+      alias: {
+        // jspdf 3.x only exports "node"/"browser" conditions; the workerd SSR
+        // resolver matches neither. Point at the browser ES build directly —
+        // it is only ever loaded via dynamic import in click handlers.
+        jspdf: "jspdf/dist/jspdf.es.min.js",
+      },
+    },
   },
 });

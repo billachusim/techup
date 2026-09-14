@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import RequestIntroDialog from "@/components/talent/RequestIntroDialog";
 import { WORK_MODE_LABEL, fetchPublicTalentById } from "@/lib/talent";
+import { asCertifications, asEducation, asExperiences, dateRange } from "@/lib/cv";
 
 const TalentPublicProfile = () => {
   const { id = "" } = useParams();
@@ -55,6 +56,10 @@ const TalentPublicProfile = () => {
     { label: "GitHub", url: person.github_url },
     { label: "Portfolio", url: person.portfolio_url },
   ].filter((item) => item.url);
+  const experiences = asExperiences(person.experiences);
+  const education = asEducation(person.education);
+  const certifications = asCertifications(person.certifications);
+  const languages = person.languages ?? [];
 
   return (
     <div className="min-h-screen bg-background">

@@ -1,10 +1,11 @@
 import { Helmet } from "react-helmet-async";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "@/lib/router-compat";
-import { Loader2, Upload, FileCheck2, ArrowLeft } from "lucide-react";
+import { Loader2, Upload, FileCheck2, ArrowLeft, Sparkles } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TalentNav from "@/components/talent/TalentNav";
+import { CertificationEditor, EducationEditor, ExperienceEditor } from "@/components/talent/ProfileSections";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +15,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { SKILL_SUGGESTIONS, parseList, profileStrength } from "@/lib/talent";
+import { asCertifications, asEducation, asExperiences, type Certification, type Education, type Experience } from "@/lib/cv";
+import { parseCv } from "@/lib/cv.functions";
 
 type FormState = {
   full_name: string;
@@ -30,6 +33,7 @@ type FormState = {
   intro_video_url: string;
   skills: string[];
   tools: string;
+  languages: string;
   years_experience: string;
   hours_per_week: string;
   work_mode: string;
@@ -37,13 +41,17 @@ type FormState = {
   rate_currency: string;
   availability: string;
   cv_path: string | null;
+  experiences: Experience[];
+  education: Education[];
+  certifications: Certification[];
 };
 
 const empty: FormState = {
   full_name: "", email: "", phone: "", whatsapp: "", city: "", country: "Nigeria",
   headline: "", bio: "", linkedin_url: "", github_url: "", portfolio_url: "", intro_video_url: "",
-  skills: [], tools: "", years_experience: "", hours_per_week: "", work_mode: "remote",
+  skills: [], tools: "", languages: "", years_experience: "", hours_per_week: "", work_mode: "remote",
   rate_amount: "", rate_currency: "NGN", availability: "open", cv_path: null,
+  experiences: [], education: [], certifications: [],
 };
 
 const TalentProfile = () => {

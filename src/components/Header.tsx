@@ -133,11 +133,11 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Logo */}
-          <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label="Tech Faculty home">
-            <img src={logo} alt="" className="h-9 w-9" />
-            <div className="hidden sm:block">
-              <div className="text-base font-bold leading-tight">Tech Faculty</div>
-              <div className="text-[10px] leading-tight text-muted-foreground">Train, Certify and Employ</div>
+          <Link to="/" className="flex min-w-0 shrink items-center gap-2 sm:gap-2.5" aria-label="Tech Faculty home">
+            <img src={logo} alt="" className="h-8 w-8 shrink-0 sm:h-9 sm:w-9" />
+            <div className="min-w-0">
+              <div className="truncate text-sm font-bold leading-tight sm:text-base">Tech Faculty</div>
+              <div className="truncate text-[9px] leading-tight text-muted-foreground sm:text-[10px]">Train, Certify and Employ</div>
             </div>
           </Link>
 

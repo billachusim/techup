@@ -107,6 +107,7 @@ const TalentProfile = () => {
           intro_video_url: profile.intro_video_url ?? "",
           skills: profile.skills ?? [],
           tools: (profile.tools ?? []).join(", "),
+          languages: (profile.languages ?? []).join(", "),
           years_experience: profile.years_experience?.toString() ?? "",
           hours_per_week: profile.hours_per_week?.toString() ?? "",
           work_mode: profile.work_mode ?? "remote",
@@ -114,6 +115,9 @@ const TalentProfile = () => {
           rate_currency: profile.rate_currency ?? "NGN",
           availability: profile.availability ?? "open",
           cv_path: profile.cv_path,
+          experiences: asExperiences(profile.experiences),
+          education: asEducation(profile.education),
+          certifications: asCertifications(profile.certifications),
         });
       } else {
         setForm({

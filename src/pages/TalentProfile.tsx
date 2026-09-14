@@ -1,10 +1,11 @@
 import { Helmet } from "react-helmet-async";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "@/lib/router-compat";
-import { Loader2, Upload, FileCheck2, ArrowLeft } from "lucide-react";
+import { Loader2, Upload, FileCheck2, ArrowLeft, Sparkles } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TalentNav from "@/components/talent/TalentNav";
+import { CertificationEditor, EducationEditor, ExperienceEditor } from "@/components/talent/ProfileSections";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +15,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { SKILL_SUGGESTIONS, parseList, profileStrength } from "@/lib/talent";
+import { asCertifications, asEducation, asExperiences, type Certification, type Education, type Experience } from "@/lib/cv";
+import { parseCv } from "@/lib/cv.functions";
 
 type FormState = {
   full_name: string;
@@ -30,6 +33,7 @@ type FormState = {
   intro_video_url: string;
   skills: string[];
   tools: string;
+  languages: string;
   years_experience: string;
   hours_per_week: string;
   work_mode: string;
@@ -37,13 +41,17 @@ type FormState = {
   rate_currency: string;
   availability: string;
   cv_path: string | null;
+  experiences: Experience[];
+  education: Education[];
+  certifications: Certification[];
 };
 
 const empty: FormState = {
   full_name: "", email: "", phone: "", whatsapp: "", city: "", country: "Nigeria",
   headline: "", bio: "", linkedin_url: "", github_url: "", portfolio_url: "", intro_video_url: "",
-  skills: [], tools: "", years_experience: "", hours_per_week: "", work_mode: "remote",
+  skills: [], tools: "", languages: "", years_experience: "", hours_per_week: "", work_mode: "remote",
   rate_amount: "", rate_currency: "NGN", availability: "open", cv_path: null,
+  experiences: [], education: [], certifications: [],
 };
 
 const TalentProfile = () => {
@@ -53,6 +61,7 @@ const TalentProfile = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [parsing, setParsing] = useState(false);
   const [form, setForm] = useState<FormState>(empty);
   const [profileId, setProfileId] = useState<string | null>(null);
   const [facultyId, setFacultyId] = useState<string | null>(null);
@@ -99,6 +108,7 @@ const TalentProfile = () => {
           intro_video_url: profile.intro_video_url ?? "",
           skills: profile.skills ?? [],
           tools: (profile.tools ?? []).join(", "),
+          languages: (profile.languages ?? []).join(", "),
           years_experience: profile.years_experience?.toString() ?? "",
           hours_per_week: profile.hours_per_week?.toString() ?? "",
           work_mode: profile.work_mode ?? "remote",
@@ -106,6 +116,9 @@ const TalentProfile = () => {
           rate_currency: profile.rate_currency ?? "NGN",
           availability: profile.availability ?? "open",
           cv_path: profile.cv_path,
+          experiences: asExperiences(profile.experiences),
+          education: asEducation(profile.education),
+          certifications: asCertifications(profile.certifications),
         });
       } else {
         setForm({
@@ -167,6 +180,48 @@ const TalentProfile = () => {
     }
   };
 
+  /** Reads the uploaded CV and pre-fills empty fields; nothing is saved until they press save. */
+  const autofillFromCv = async () => {
+    if (!form.cv_path) return;
+    setParsing(true);
+    try {
+      const result = await parseCv({ data: { path: form.cv_path } });
+      if ("error" in result) {
+        toast({ title: "Could not read that CV", description: result.error, variant: "destructive" });
+        return;
+      }
+      const p = result.parsed;
+      setForm((f) => ({
+        ...f,
+        headline: f.headline || (p.headline ?? ""),
+        bio: f.bio || (p.bio ?? ""),
+        city: f.city || (p.city ?? ""),
+        country: f.country || (p.country ?? "Nigeria"),
+        years_experience: f.years_experience || (p.years_experience != null ? String(p.years_experience) : ""),
+        tools: f.tools || (p.tools ?? []).join(", "),
+        languages: f.languages || (p.languages ?? []).join(", "),
+        skills: f.skills.length ? f.skills : (p.skills ?? []).slice(0, 25),
+        experiences: f.experiences.length ? f.experiences : (p.experiences ?? []),
+        education: f.education.length ? f.education : (p.education ?? []),
+        certifications: f.certifications.length ? f.certifications : (p.certifications ?? []),
+      }));
+      toast({
+        title: "We filled in what we found",
+        description: "Check every detail, edit anything that is wrong, then save.",
+      });
+    } catch (err) {
+      toast({
+        title: "Could not read that CV",
+        description: err instanceof Error ? err.message : "Please try again in a moment.",
+        variant: "destructive",
+      });
+    } finally {
+      setParsing(false);
+    }
+  };
+
+
+
   const save = async () => {
     if (!form.full_name.trim() || !form.phone.trim() || !form.city.trim() || form.skills.length === 0) {
       toast({
@@ -197,6 +252,10 @@ const TalentProfile = () => {
         intro_video_url: form.intro_video_url.trim() || null,
         skills: form.skills,
         tools: parseList(form.tools),
+        languages: parseList(form.languages),
+        experiences: form.experiences.filter((e) => e.title || e.company),
+        education: form.education.filter((e) => e.qualification || e.institution),
+        certifications: form.certifications.filter((c) => c.name),
         years_experience: form.years_experience ? Number(form.years_experience) : null,
         hours_per_week: form.hours_per_week ? Number(form.hours_per_week) : null,
         work_mode: form.work_mode,
@@ -384,6 +443,19 @@ const TalentProfile = () => {
                     </span>
                   )}
                 </div>
+                {form.cv_path && (
+                  <div className="mt-3 rounded-lg border border-primary/30 bg-primary/5 p-4">
+                    <p className="text-sm font-medium">Save time — fill this profile from your CV</p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      We read your PDF CV and fill in your headline, experience, education, certificates and skills. Nothing is
+                      saved until you check it and press save.
+                    </p>
+                    <Button type="button" variant="outline" size="sm" className="mt-3" onClick={autofillFromCv} disabled={parsing}>
+                      {parsing ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <Sparkles size={14} className="mr-1.5" />}
+                      {parsing ? "Reading your CV…" : "Fill in from my CV"}
+                    </Button>
+                  </div>
+                )}
               </div>
             </section>
 
@@ -470,6 +542,36 @@ const TalentProfile = () => {
                   </Select>
                 </div>
               </div>
+              <div>
+                <Label htmlFor="languages">Languages you speak</Label>
+                <Input id="languages" value={form.languages} onChange={(e) => set("languages", e.target.value)} placeholder="English, Igbo, French" />
+              </div>
+            </section>
+
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-lg font-semibold">Work experience</h2>
+                <p className="text-sm text-muted-foreground">
+                  Roles, internships and freelance work. This is what hiring teams read first.
+                </p>
+              </div>
+              <ExperienceEditor items={form.experiences} onChange={(v) => set("experiences", v)} />
+            </section>
+
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-lg font-semibold">Education</h2>
+                <p className="text-sm text-muted-foreground">Degrees, diplomas and training programmes.</p>
+              </div>
+              <EducationEditor items={form.education} onChange={(v) => set("education", v)} />
+            </section>
+
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-lg font-semibold">Certificates</h2>
+                <p className="text-sm text-muted-foreground">Anything you have been awarded, including your Tech Faculty certificate.</p>
+              </div>
+              <CertificationEditor items={form.certifications} onChange={(v) => set("certifications", v)} />
             </section>
 
             <Button size="lg" className="w-full sm:w-auto" onClick={save} disabled={saving}>

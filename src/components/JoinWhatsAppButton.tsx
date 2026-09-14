@@ -1,5 +1,4 @@
 import { useEffect, useState, type ReactNode } from "react";
-import QRCode from "qrcode";
 import { Check, Copy, ExternalLink, MessageCircle } from "lucide-react";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import {
@@ -52,9 +51,25 @@ const JoinWhatsAppButton = ({
 
   useEffect(() => {
     if (!open || qr) return;
-    QRCode.toDataURL(url, { width: 512, margin: 1 })
-      .then(setQr)
-      .catch(() => setQr(null));
+    let cancelled = false;
+    // qrcode pulls in pngjs, which uses Node's util.inherits and crashes the
+    // SSR runtime at module-evaluation time — load it only in the browser.
+    import("qrcode")
+      .then((mod) => {
+        const QRCode = (mod.default ?? mod) as {
+          toDataURL: (u: string, o: { width: number; margin: number }) => Promise<string>;
+        };
+        return QRCode.toDataURL(url, { width: 512, margin: 1 });
+      })
+      .then((dataUrl) => {
+        if (!cancelled) setQr(dataUrl);
+      })
+      .catch(() => {
+        if (!cancelled) setQr(null);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [open, qr, url]);
 
   const proceed = () => {

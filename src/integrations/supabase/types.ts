@@ -1052,12 +1052,16 @@ export type Database = {
           admin_notes: string | null
           availability: string
           bio: string | null
+          certifications: Json
           city: string | null
           client_interest_note: string | null
           country: string
           created_at: string
+          cv_parsed_at: string | null
           cv_path: string | null
+          education: Json
           email: string | null
+          experiences: Json
           faculty_id: string | null
           full_name: string
           github_url: string | null
@@ -1068,6 +1072,7 @@ export type Database = {
           is_client_interested: boolean
           is_public: boolean
           is_vetted: boolean
+          languages: string[]
           linkedin_url: string | null
           phone: string | null
           portfolio_url: string | null
@@ -1089,12 +1094,16 @@ export type Database = {
           admin_notes?: string | null
           availability?: string
           bio?: string | null
+          certifications?: Json
           city?: string | null
           client_interest_note?: string | null
           country?: string
           created_at?: string
+          cv_parsed_at?: string | null
           cv_path?: string | null
+          education?: Json
           email?: string | null
+          experiences?: Json
           faculty_id?: string | null
           full_name: string
           github_url?: string | null
@@ -1105,6 +1114,7 @@ export type Database = {
           is_client_interested?: boolean
           is_public?: boolean
           is_vetted?: boolean
+          languages?: string[]
           linkedin_url?: string | null
           phone?: string | null
           portfolio_url?: string | null
@@ -1126,12 +1136,16 @@ export type Database = {
           admin_notes?: string | null
           availability?: string
           bio?: string | null
+          certifications?: Json
           city?: string | null
           client_interest_note?: string | null
           country?: string
           created_at?: string
+          cv_parsed_at?: string | null
           cv_path?: string | null
+          education?: Json
           email?: string | null
+          experiences?: Json
           faculty_id?: string | null
           full_name?: string
           github_url?: string | null
@@ -1142,6 +1156,7 @@ export type Database = {
           is_client_interested?: boolean
           is_public?: boolean
           is_vetted?: boolean
+          languages?: string[]
           linkedin_url?: string | null
           phone?: string | null
           portfolio_url?: string | null
@@ -1307,8 +1322,11 @@ export type Database = {
         Returns: {
           availability: string
           bio: string
+          certifications: Json
           city: string
           country: string
+          education: Json
+          experiences: Json
           faculty_id: string
           full_name: string
           github_url: string
@@ -1319,6 +1337,7 @@ export type Database = {
           is_matched: boolean
           is_vetted: boolean
           is_working: boolean
+          languages: string[]
           linkedin_url: string
           portfolio_url: string
           profile_strength: number

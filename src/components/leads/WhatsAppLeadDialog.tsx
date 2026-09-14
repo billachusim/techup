@@ -195,8 +195,8 @@ const WhatsAppLeadDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md max-h-[85vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-md max-h-[85dvh] overflow-y-auto">
+        <DialogHeader className="pr-8">
           <DialogTitle>
             {status === "done"
               ? "You're in — two quick things"

@@ -443,6 +443,19 @@ const TalentProfile = () => {
                     </span>
                   )}
                 </div>
+                {form.cv_path && (
+                  <div className="mt-3 rounded-lg border border-primary/30 bg-primary/5 p-4">
+                    <p className="text-sm font-medium">Save time — fill this profile from your CV</p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      We read your PDF CV and fill in your headline, experience, education, certificates and skills. Nothing is
+                      saved until you check it and press save.
+                    </p>
+                    <Button type="button" variant="outline" size="sm" className="mt-3" onClick={autofillFromCv} disabled={parsing}>
+                      {parsing ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <Sparkles size={14} className="mr-1.5" />}
+                      {parsing ? "Reading your CV…" : "Fill in from my CV"}
+                    </Button>
+                  </div>
+                )}
               </div>
             </section>
 

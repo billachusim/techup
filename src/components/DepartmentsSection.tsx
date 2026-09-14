@@ -91,7 +91,7 @@ const DepartmentsSection = () => {
               const Icon = icons[dept.icon] ?? Code;
               return (
                 <AccordionItem key={dept.id} value={dept.id} className="border-0 px-4">
-                  <AccordionTrigger className="hover:no-underline py-4">
+                  <AccordionTrigger className="hover:no-underline py-4 min-w-0">
                     <div className="flex items-center gap-3 text-left flex-1 min-w-0">
                       <span
                         className="p-2 rounded-md flex-shrink-0"
@@ -100,7 +100,7 @@ const DepartmentsSection = () => {
                         <Icon className="h-4 w-4" style={{ color: dept.color }} />
                       </span>
                       <span className="min-w-0">
-                        <span className="flex items-center gap-2">
+                        <span className="flex min-w-0 items-center gap-2">
                           <h3 className="font-semibold truncate">{dept.title}</h3>
                           {dept.trending && (
                             <Badge variant="secondary" className="gap-1 text-[10px] px-1.5 py-0">

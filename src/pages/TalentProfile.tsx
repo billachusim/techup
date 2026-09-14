@@ -61,6 +61,7 @@ const TalentProfile = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [parsing, setParsing] = useState(false);
   const [form, setForm] = useState<FormState>(empty);
   const [profileId, setProfileId] = useState<string | null>(null);
   const [facultyId, setFacultyId] = useState<string | null>(null);
@@ -178,6 +179,48 @@ const TalentProfile = () => {
       setUploading(false);
     }
   };
+
+  /** Reads the uploaded CV and pre-fills empty fields; nothing is saved until they press save. */
+  const autofillFromCv = async () => {
+    if (!form.cv_path) return;
+    setParsing(true);
+    try {
+      const result = await parseCv({ data: { path: form.cv_path } });
+      if ("error" in result) {
+        toast({ title: "Could not read that CV", description: result.error, variant: "destructive" });
+        return;
+      }
+      const p = result.parsed;
+      setForm((f) => ({
+        ...f,
+        headline: f.headline || (p.headline ?? ""),
+        bio: f.bio || (p.bio ?? ""),
+        city: f.city || (p.city ?? ""),
+        country: f.country || (p.country ?? "Nigeria"),
+        years_experience: f.years_experience || (p.years_experience != null ? String(p.years_experience) : ""),
+        tools: f.tools || (p.tools ?? []).join(", "),
+        languages: f.languages || (p.languages ?? []).join(", "),
+        skills: f.skills.length ? f.skills : (p.skills ?? []).slice(0, 25),
+        experiences: f.experiences.length ? f.experiences : (p.experiences ?? []),
+        education: f.education.length ? f.education : (p.education ?? []),
+        certifications: f.certifications.length ? f.certifications : (p.certifications ?? []),
+      }));
+      toast({
+        title: "We filled in what we found",
+        description: "Check every detail, edit anything that is wrong, then save.",
+      });
+    } catch (err) {
+      toast({
+        title: "Could not read that CV",
+        description: err instanceof Error ? err.message : "Please try again in a moment.",
+        variant: "destructive",
+      });
+    } finally {
+      setParsing(false);
+    }
+  };
+
+
 
   const save = async () => {
     if (!form.full_name.trim() || !form.phone.trim() || !form.city.trim() || form.skills.length === 0) {

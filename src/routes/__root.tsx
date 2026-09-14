@@ -178,7 +178,7 @@ function RootComponent() {
               <Toaster />
               <Sonner />
               <Outlet />
-              <FloatingWhatsAppCTA />
+
             </TooltipProvider>
           </CurrencyProvider>
         </UserProvider>

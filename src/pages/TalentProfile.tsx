@@ -542,6 +542,36 @@ const TalentProfile = () => {
                   </Select>
                 </div>
               </div>
+              <div>
+                <Label htmlFor="languages">Languages you speak</Label>
+                <Input id="languages" value={form.languages} onChange={(e) => set("languages", e.target.value)} placeholder="English, Igbo, French" />
+              </div>
+            </section>
+
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-lg font-semibold">Work experience</h2>
+                <p className="text-sm text-muted-foreground">
+                  Roles, internships and freelance work. This is what hiring teams read first.
+                </p>
+              </div>
+              <ExperienceEditor items={form.experiences} onChange={(v) => set("experiences", v)} />
+            </section>
+
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-lg font-semibold">Education</h2>
+                <p className="text-sm text-muted-foreground">Degrees, diplomas and training programmes.</p>
+              </div>
+              <EducationEditor items={form.education} onChange={(v) => set("education", v)} />
+            </section>
+
+            <section className="space-y-4">
+              <div>
+                <h2 className="text-lg font-semibold">Certificates</h2>
+                <p className="text-sm text-muted-foreground">Anything you have been awarded, including your Tech Faculty certificate.</p>
+              </div>
+              <CertificationEditor items={form.certifications} onChange={(v) => set("certifications", v)} />
             </section>
 
             <Button size="lg" className="w-full sm:w-auto" onClick={save} disabled={saving}>

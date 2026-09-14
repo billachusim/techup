@@ -131,6 +131,67 @@ const TalentPublicProfile = () => {
             </section>
           )}
 
+          {experiences.length > 0 && (
+            <section className="mt-8">
+              <h2 className="mb-3 text-xl font-semibold">Work experience</h2>
+              <div className="space-y-4">
+                {experiences.map((item, i) => (
+                  <div key={i} className="rounded-lg border border-border bg-card p-4">
+                    <p className="font-medium">{item.title}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {[item.company, item.location].filter(Boolean).join(" · ")}
+                      {dateRange(item) && ` · ${dateRange(item)}`}
+                    </p>
+                    {item.description && (
+                      <p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">{item.description}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {education.length > 0 && (
+            <section className="mt-8">
+              <h2 className="mb-3 text-xl font-semibold">Education</h2>
+              <div className="space-y-3">
+                {education.map((item, i) => (
+                  <div key={i} className="rounded-lg border border-border bg-card p-4">
+                    <p className="font-medium">{[item.qualification, item.field].filter(Boolean).join(", ")}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {item.institution}
+                      {dateRange(item) && ` · ${dateRange(item)}`}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {certifications.length > 0 && (
+            <section className="mt-8">
+              <h2 className="mb-3 text-xl font-semibold">Certificates</h2>
+              <ul className="space-y-1.5 text-muted-foreground">
+                {certifications.map((item, i) => (
+                  <li key={i}>
+                    <span className="text-foreground">{item.name}</span>
+                    {[item.issuer, item.year].filter(Boolean).length > 0 &&
+                      ` — ${[item.issuer, item.year].filter(Boolean).join(", ")}`}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {languages.length > 0 && (
+            <section className="mt-8">
+              <h2 className="mb-2 text-xl font-semibold">Languages</h2>
+              <p className="text-muted-foreground">{languages.join(", ")}</p>
+            </section>
+          )}
+
+
+
           {links.length > 0 && (
             <section className="mt-8">
               <h2 className="mb-2 text-xl font-semibold">Work links</h2>

@@ -42,3 +42,9 @@
 - [x] Add dedicated Micro1, Ask Ethos and Atlas Capture listing pages
 - [x] Update homepage, Talent copy, sitemap and public site description
 - [x] Verify desktop, mobile, metadata and external application flows
+
+## Mobile header & overflow polish
+- [x] Show the Tech Faculty wordmark and "Train, Certify and Employ" tagline on mobile (was logo-only)
+- [x] Verify both lines render at 320, 360 and 390 px widths
+- [x] Stop the homepage dragging sideways on phones (long department name forced the list wider than the screen)
+- [x] Confirm no page overflows horizontally at 390 px

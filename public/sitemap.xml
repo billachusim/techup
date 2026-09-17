@@ -453,6 +453,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://techfaculty.ng/locations/awka</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://techfaculty.ng/locations/owerri</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

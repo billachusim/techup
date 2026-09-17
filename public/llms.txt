@@ -28,6 +28,7 @@ Tech Faculty NG trains, certifies, and employs the next generation of African te
 - [Locations](/locations): Tech Faculty campuses across Nigeria inside Technology Incubation Centres.
 - [Tech Faculty Nnewi](/locations/nnewi): Courses, SIWES placement, teen holiday bootcamps and events in Nnewi.
 - [Tech Faculty Onitsha](/locations/onitsha): Courses, SIWES placement, teen holiday bootcamps and events in Onitsha.
+- [Tech Faculty Awka](/locations/awka): Courses, SIWES placement, teen holiday bootcamps and events in Awka.
 - [Tech Faculty Owerri](/locations/owerri): Courses, SIWES placement, teen holiday bootcamps and events in Owerri.
 - [Tech Faculty Aba](/locations/aba): Courses, SIWES placement, teen holiday bootcamps and events in Aba.
 - [Tech Faculty Enugu](/locations/enugu): Courses, SIWES placement, teen holiday bootcamps and events in Enugu.

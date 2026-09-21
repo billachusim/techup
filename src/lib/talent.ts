@@ -202,6 +202,32 @@ export async function fetchProjectGroupUrl(roleId: string): Promise<string | nul
   return data ?? null;
 }
 
+export type TalentDeliverable = Database["public"]["Tables"]["talent_deliverables"]["Row"];
+export type ProjectWorkspace = Database["public"]["Functions"]["get_project_workspace"]["Returns"][number];
+
+export const DELIVERABLE_STATUS_LABEL: Record<string, string> = {
+  submitted: "Submitted",
+  reviewed: "Reviewed",
+  needs_changes: "Needs changes",
+};
+
+/** Project links are only readable by matched talent and staff (database gated). */
+export async function fetchProjectWorkspace(roleId: string): Promise<ProjectWorkspace | null> {
+  const { data, error } = await supabase.rpc("get_project_workspace", { _role_id: roleId });
+  if (error) return null;
+  return data?.[0] ?? null;
+}
+
+export const hasWorkspaceLinks = (w: ProjectWorkspace | null | undefined) =>
+  Boolean(w && (w.whatsapp_group_url || w.slack_channel_url || w.task_board_url || w.drive_url || w.project_brief));
+
+export const startOfWeek = (date = new Date()) => {
+  const d = new Date(date);
+  const day = (d.getDay() + 6) % 7; // Monday = 0
+  d.setDate(d.getDate() - day);
+  return d.toISOString().slice(0, 10);
+};
+
 export const introRequestUrl = (name: string, skills: string[]) =>
   talentWhatsAppUrl(
     `Hello Tech Faculty, I would like an introduction to ${name} from your talent pool` +

@@ -943,6 +943,63 @@ export type Database = {
           },
         ]
       }
+      talent_deliverables: {
+        Row: {
+          created_at: string
+          id: string
+          link_url: string | null
+          reviewer_note: string | null
+          role_id: string
+          status: string
+          summary: string | null
+          talent_profile_id: string
+          title: string
+          updated_at: string
+          week_of: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          link_url?: string | null
+          reviewer_note?: string | null
+          role_id: string
+          status?: string
+          summary?: string | null
+          talent_profile_id: string
+          title: string
+          updated_at?: string
+          week_of?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          link_url?: string | null
+          reviewer_note?: string | null
+          role_id?: string
+          status?: string
+          summary?: string | null
+          talent_profile_id?: string
+          title?: string
+          updated_at?: string
+          week_of?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "talent_deliverables_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "talent_roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "talent_deliverables_talent_profile_id_fkey"
+            columns: ["talent_profile_id"]
+            isOneToOne: false
+            referencedRelation: "talent_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       talent_engagements: {
         Row: {
           created_at: string
@@ -1178,6 +1235,7 @@ export type Database = {
       }
       talent_roles: {
         Row: {
+          applications_closed: boolean
           apply_deadline: string | null
           budget_currency: string
           budget_max: number | null
@@ -1190,6 +1248,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           description: string
+          drive_url: string | null
           employment_type: string
           id: string
           is_featured: boolean
@@ -1197,18 +1256,22 @@ export type Database = {
           is_remote: boolean
           nice_to_have: string[]
           openings: number
+          project_brief: string | null
           required_skills: string[]
           responsibilities: string[]
           role_kind: string
           seniority: string
+          slack_channel_url: string | null
           slug: string
           status: string
           summary: string
+          task_board_url: string | null
           title: string
           updated_at: string
           whatsapp_group_url: string | null
         }
         Insert: {
+          applications_closed?: boolean
           apply_deadline?: string | null
           budget_currency?: string
           budget_max?: number | null
@@ -1221,6 +1284,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description: string
+          drive_url?: string | null
           employment_type?: string
           id?: string
           is_featured?: boolean
@@ -1228,18 +1292,22 @@ export type Database = {
           is_remote?: boolean
           nice_to_have?: string[]
           openings?: number
+          project_brief?: string | null
           required_skills?: string[]
           responsibilities?: string[]
           role_kind?: string
           seniority?: string
+          slack_channel_url?: string | null
           slug: string
           status?: string
           summary: string
+          task_board_url?: string | null
           title: string
           updated_at?: string
           whatsapp_group_url?: string | null
         }
         Update: {
+          applications_closed?: boolean
           apply_deadline?: string | null
           budget_currency?: string
           budget_max?: number | null
@@ -1252,6 +1320,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description?: string
+          drive_url?: string | null
           employment_type?: string
           id?: string
           is_featured?: boolean
@@ -1259,13 +1328,16 @@ export type Database = {
           is_remote?: boolean
           nice_to_have?: string[]
           openings?: number
+          project_brief?: string | null
           required_skills?: string[]
           responsibilities?: string[]
           role_kind?: string
           seniority?: string
+          slack_channel_url?: string | null
           slug?: string
           status?: string
           summary?: string
+          task_board_url?: string | null
           title?: string
           updated_at?: string
           whatsapp_group_url?: string | null
@@ -1317,6 +1389,17 @@ export type Database = {
       }
       get_department_code: { Args: { dept: string }; Returns: string }
       get_project_group_url: { Args: { _role_id: string }; Returns: string }
+      get_project_workspace: {
+        Args: { _role_id: string }
+        Returns: {
+          drive_url: string
+          project_brief: string
+          role_id: string
+          slack_channel_url: string
+          task_board_url: string
+          whatsapp_group_url: string
+        }[]
+      }
       get_public_talent: {
         Args: { profile_id: string }
         Returns: {

@@ -19,12 +19,14 @@ import {
   MATCH_STATUS_LABEL,
   APPLICATION_STATUS_LABEL,
   ENGAGEMENT_STATUS_LABEL,
+  DELIVERABLE_STATUS_LABEL,
   ROLE_KIND_LABEL,
   formatMoney,
   parseList,
   slugify,
   contactUrl,
   type BusinessBrief,
+  type TalentDeliverable,
   type TalentProfile,
   type TalentRole,
 } from "@/lib/talent";
@@ -55,6 +57,13 @@ type ApplicationRow = {
   talent_profiles: { full_name: string; phone: string | null; email: string | null } | null;
 };
 
+type DeliverableRow = TalentDeliverable & {
+  talent_roles: { title: string } | null;
+  talent_profiles: { full_name: string } | null;
+};
+
+type ProjectDraft = { slack: string; task: string; drive: string; brief: string };
+
 const emptyRole = {
   title: "", role_kind: "internal", company: "Tech Faculty", city: "", country: "Nigeria",
   is_remote: "true", employment_type: "full_time", summary: "", description: "",
@@ -79,6 +88,9 @@ const AdminTalent = () => {
   const [manualRole, setManualRole] = useState("");
   const [manualTalent, setManualTalent] = useState("");
   const [groupDrafts, setGroupDrafts] = useState<Record<string, string>>({});
+  const [projectDrafts, setProjectDrafts] = useState<Record<string, ProjectDraft>>({});
+  const [deliverables, setDeliverables] = useState<DeliverableRow[]>([]);
+  const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>({});
   const [newEngagement, setNewEngagement] = useState({ talent: "", role: "", amount: "", currency: "NGN", note: "" });
 
   useEffect(() => {
@@ -86,7 +98,7 @@ const AdminTalent = () => {
   }, []);
 
   const load = useCallback(async () => {
-    const [r, t, m, a, b, e, i] = await Promise.all([
+    const [r, t, m, a, b, e, i, d] = await Promise.all([
       supabase.from("talent_roles").select("*").order("created_at", { ascending: false }),
       supabase.from("talent_profiles").select("*").order("profile_strength", { ascending: false }),
       supabase
@@ -106,6 +118,10 @@ const AdminTalent = () => {
         .from("talent_interest_requests")
         .select("*, talent_profiles(full_name)")
         .order("created_at", { ascending: false }),
+      supabase
+        .from("talent_deliverables")
+        .select("*, talent_roles(title), talent_profiles(full_name)")
+        .order("week_of", { ascending: false }),
     ]);
     setRoles(r.data ?? []);
     setTalents(t.data ?? []);
@@ -114,7 +130,22 @@ const AdminTalent = () => {
     setBriefs(b.data ?? []);
     setEngagements((e.data ?? []) as EngagementRow[]);
     setInterests((i.data ?? []) as InterestRow[]);
+    setDeliverables((d.data ?? []) as DeliverableRow[]);
     setGroupDrafts(Object.fromEntries((r.data ?? []).map((role) => [role.id, role.whatsapp_group_url ?? ""])));
+    setProjectDrafts(
+      Object.fromEntries(
+        (r.data ?? []).map((role) => [
+          role.id,
+          {
+            slack: role.slack_channel_url ?? "",
+            task: role.task_board_url ?? "",
+            drive: role.drive_url ?? "",
+            brief: role.project_brief ?? "",
+          } satisfies ProjectDraft,
+        ])
+      )
+    );
+    setNoteDrafts(Object.fromEntries((d.data ?? []).map((row) => [row.id, row.reviewer_note ?? ""])));
     setLoading(false);
   }, []);
 
@@ -257,6 +288,41 @@ const AdminTalent = () => {
     load();
   };
 
+  const saveProjectLinks = async (roleId: string) => {
+    const draft = projectDrafts[roleId] ?? { slack: "", task: "", drive: "", brief: "" };
+    const { error } = await supabase
+      .from("talent_roles")
+      .update({
+        slack_channel_url: draft.slack.trim() || null,
+        task_board_url: draft.task.trim() || null,
+        drive_url: draft.drive.trim() || null,
+        project_brief: draft.brief.trim() || null,
+      })
+      .eq("id", roleId);
+    if (error) { toast({ title: "Could not save the project links", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Project workspace saved", description: "Only selected talent and staff can see these links." });
+    load();
+  };
+
+  const toggleApplications = async (role: TalentRole) => {
+    const { error } = await supabase
+      .from("talent_roles")
+      .update({ applications_closed: !role.applications_closed })
+      .eq("id", role.id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    load();
+  };
+
+  const reviewDeliverable = async (id: string, status: string) => {
+    const { error } = await supabase
+      .from("talent_deliverables")
+      .update({ status, reviewer_note: (noteDrafts[id] ?? "").trim() || null })
+      .eq("id", id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Review saved" });
+    load();
+  };
+
   const addEngagement = async () => {
     if (!newEngagement.talent) { toast({ title: "Pick the talent", variant: "destructive" }); return; }
     const { data: auth } = await supabase.auth.getUser();
@@ -371,6 +437,7 @@ const AdminTalent = () => {
                 <TabsTrigger value="briefs">Briefs ({briefs.filter((b) => b.status === "new").length})</TabsTrigger>
                 <TabsTrigger value="interest">Interest ({interests.filter((i) => i.status === "new").length})</TabsTrigger>
                 <TabsTrigger value="pay">Work &amp; pay ({engagements.filter((e) => e.status === "active").length})</TabsTrigger>
+                <TabsTrigger value="logs">Work logs ({deliverables.filter((d) => d.status === "submitted").length})</TabsTrigger>
               </TabsList>
 
               {/* ROLES */}
@@ -538,6 +605,51 @@ const AdminTalent = () => {
                             />
                           </div>
                           <Button size="sm" variant="outline" onClick={() => saveGroupUrl(role.id)}>Save link</Button>
+                        </div>
+                        <div className="grid gap-3 border-t border-border pt-3 sm:grid-cols-3">
+                          <div>
+                            <Label className="text-xs">Slack channel link</Label>
+                            <Input
+                              className="mt-1"
+                              placeholder="https://slack.com/…"
+                              value={projectDrafts[role.id]?.slack ?? ""}
+                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? { slack: "", task: "", drive: "", brief: "" }), slack: e.target.value } })}
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">Task board link</Label>
+                            <Input
+                              className="mt-1"
+                              placeholder="https://…"
+                              value={projectDrafts[role.id]?.task ?? ""}
+                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? { slack: "", task: "", drive: "", brief: "" }), task: e.target.value } })}
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">Shared files link</Label>
+                            <Input
+                              className="mt-1"
+                              placeholder="https://drive.google.com/…"
+                              value={projectDrafts[role.id]?.drive ?? ""}
+                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? { slack: "", task: "", drive: "", brief: "" }), drive: e.target.value } })}
+                            />
+                          </div>
+                          <div className="sm:col-span-3">
+                            <Label className="text-xs">Project brief selected talent will see</Label>
+                            <Textarea
+                              className="mt-1"
+                              rows={2}
+                              value={projectDrafts[role.id]?.brief ?? ""}
+                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? { slack: "", task: "", drive: "", brief: "" }), brief: e.target.value } })}
+                            />
+                          </div>
+                          <div className="flex flex-wrap items-center gap-2 sm:col-span-3">
+                            <Button size="sm" variant="outline" onClick={() => saveProjectLinks(role.id)}>Save project workspace</Button>
+                            <Button size="sm" variant="ghost" onClick={() => toggleApplications(role)}>
+                              {role.applications_closed ? "Reopen applications" : "Close applications"}
+                            </Button>
+                            {role.applications_closed && <Badge variant="outline">Applications closed</Badge>}
+                          </div>
                         </div>
                       </div>
                     );
@@ -861,6 +973,51 @@ const AdminTalent = () => {
                     </div>
                   ))}
                 </section>
+              </TabsContent>
+
+              {/* WORK LOGS */}
+              <TabsContent value="logs" className="space-y-3 pt-6">
+                {deliverables.length === 0 && (
+                  <p className="rounded-lg border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+                    No work has been logged yet. Selected talent log their weekly work from their dashboard.
+                  </p>
+                )}
+                {deliverables.map((d) => (
+                  <div key={d.id} className="space-y-3 rounded-lg border border-border bg-card p-4">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="font-medium">{d.title}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {d.talent_profiles?.full_name} · {d.talent_roles?.title ?? "Project"} · week of{" "}
+                          {new Date(d.week_of).toLocaleDateString("en-GB")}
+                        </p>
+                        {d.summary && <p className="mt-1 text-xs text-muted-foreground">{d.summary}</p>}
+                        {d.link_url && (
+                          <a href={d.link_url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline">
+                            Open the work
+                          </a>
+                        )}
+                      </div>
+                      <Badge variant="outline">{DELIVERABLE_STATUS_LABEL[d.status] ?? d.status}</Badge>
+                    </div>
+                    <div className="flex flex-wrap items-end gap-2">
+                      <div className="min-w-[16rem] flex-1">
+                        <Label className="text-xs">Feedback for the talent</Label>
+                        <Input
+                          className="mt-1"
+                          value={noteDrafts[d.id] ?? ""}
+                          onChange={(ev) => setNoteDrafts({ ...noteDrafts, [d.id]: ev.target.value })}
+                        />
+                      </div>
+                      <Button size="sm" onClick={() => reviewDeliverable(d.id, "reviewed")}>
+                        <Check size={14} className="mr-1.5" /> Reviewed
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => reviewDeliverable(d.id, "needs_changes")}>
+                        <X size={14} className="mr-1.5" /> Needs changes
+                      </Button>
+                    </div>
+                  </div>
+                ))}
               </TabsContent>
             </Tabs>
           )}

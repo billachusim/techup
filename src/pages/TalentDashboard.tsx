@@ -24,6 +24,7 @@ import {
   type TalentEngagement,
   type TalentProfile,
 } from "@/lib/talent";
+import ProjectWorkspace from "@/components/talent/ProjectWorkspace";
 
 const MATCHED_STATUSES = ["approved", "accepted", "assessment", "interview", "hired"];
 
@@ -114,6 +115,9 @@ const TalentDashboard = () => {
   }, [navigate]);
 
   useEffect(() => { load(); }, [load]);
+
+  // Selected members get a workspace per project they are on.
+  const activeProjects = matches.filter((m) => ["accepted", "assessment", "interview", "hired"].includes(m.status));
 
   const respond = async (matchId: string, status: "accepted" | "declined") => {
     const { error } = await supabase.from("role_matches").update({ status }).eq("id", matchId);
@@ -288,6 +292,26 @@ const TalentDashboard = () => {
                   <p className="mt-3 text-xs text-muted-foreground">
                     Payments are sent outside the platform. If a payment is late, message us on WhatsApp.
                   </p>
+                </section>
+              )}
+
+
+              {activeProjects.length > 0 && (
+                <section>
+                  <h2 className="mb-4 flex items-center gap-2 text-xl font-bold">
+                    <Users2 size={18} className="text-primary" /> Your projects
+                  </h2>
+                  <div className="space-y-4">
+                    {activeProjects.map((match) => (
+                      <ProjectWorkspace
+                        key={match.id}
+                        roleId={match.role_id}
+                        roleTitle={match.talent_roles?.title ?? "Project"}
+                        company={match.talent_roles?.company ?? "Tech Faculty"}
+                        profileId={profile.id}
+                      />
+                    ))}
+                  </div>
                 </section>
               )}
 

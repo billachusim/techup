@@ -292,8 +292,19 @@ const TalentRoleDetail = () => {
           )}
 
           <section className="mt-10 rounded-lg border border-border bg-card p-6">
-            <h2 className="text-lg font-semibold">Apply with your talent profile</h2>
-            {mine?.applied ? (
+            <h2 className="text-lg font-semibold">
+              {role.applications_closed && !mine?.applied ? "Applications are closed" : "Apply with your talent profile"}
+            </h2>
+            {role.applications_closed && !mine?.applied ? (
+              <>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  This project has already selected its team. Keep your profile complete and you will be matched to the next one.
+                </p>
+                <Link to="/careers" className="mt-4 inline-block">
+                  <Button variant="outline">See other open roles</Button>
+                </Link>
+              </>
+            ) : mine?.applied ? (
               <>
                 <p className="mt-1 text-sm text-muted-foreground">
                   You have already applied to this role. Track it on your dashboard.

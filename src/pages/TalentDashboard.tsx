@@ -292,6 +292,26 @@ const TalentDashboard = () => {
               )}
 
 
+              {activeProjects.length > 0 && (
+                <section>
+                  <h2 className="mb-4 flex items-center gap-2 text-xl font-bold">
+                    <Users2 size={18} className="text-primary" /> Your projects
+                  </h2>
+                  <div className="space-y-4">
+                    {activeProjects.map((match) => (
+                      <ProjectWorkspace
+                        key={match.id}
+                        roleId={match.role_id}
+                        roleTitle={match.talent_roles?.title ?? "Project"}
+                        company={match.talent_roles?.company ?? "Tech Faculty"}
+                        profileId={profile.id}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+
               <section>
                 <h2 className="mb-4 flex items-center gap-2 text-xl font-bold">
                   <Sparkles size={18} className="text-primary" /> Your matches

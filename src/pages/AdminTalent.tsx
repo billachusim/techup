@@ -55,6 +55,13 @@ type ApplicationRow = {
   talent_profiles: { full_name: string; phone: string | null; email: string | null } | null;
 };
 
+type DeliverableRow = TalentDeliverable & {
+  talent_roles: { title: string } | null;
+  talent_profiles: { full_name: string } | null;
+};
+
+type ProjectDraft = { slack: string; task: string; drive: string; brief: string };
+
 const emptyRole = {
   title: "", role_kind: "internal", company: "Tech Faculty", city: "", country: "Nigeria",
   is_remote: "true", employment_type: "full_time", summary: "", description: "",
@@ -79,6 +86,9 @@ const AdminTalent = () => {
   const [manualRole, setManualRole] = useState("");
   const [manualTalent, setManualTalent] = useState("");
   const [groupDrafts, setGroupDrafts] = useState<Record<string, string>>({});
+  const [projectDrafts, setProjectDrafts] = useState<Record<string, ProjectDraft>>({});
+  const [deliverables, setDeliverables] = useState<DeliverableRow[]>([]);
+  const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>({});
   const [newEngagement, setNewEngagement] = useState({ talent: "", role: "", amount: "", currency: "NGN", note: "" });
 
   useEffect(() => {

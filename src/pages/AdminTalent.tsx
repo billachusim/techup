@@ -605,6 +605,51 @@ const AdminTalent = () => {
                           </div>
                           <Button size="sm" variant="outline" onClick={() => saveGroupUrl(role.id)}>Save link</Button>
                         </div>
+                        <div className="grid gap-3 border-t border-border pt-3 sm:grid-cols-3">
+                          <div>
+                            <Label className="text-xs">Slack channel link</Label>
+                            <Input
+                              className="mt-1"
+                              placeholder="https://slack.com/…"
+                              value={projectDrafts[role.id]?.slack ?? ""}
+                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? { slack: "", task: "", drive: "", brief: "" }), slack: e.target.value } })}
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">Task board link</Label>
+                            <Input
+                              className="mt-1"
+                              placeholder="https://…"
+                              value={projectDrafts[role.id]?.task ?? ""}
+                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? { slack: "", task: "", drive: "", brief: "" }), task: e.target.value } })}
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs">Shared files link</Label>
+                            <Input
+                              className="mt-1"
+                              placeholder="https://drive.google.com/…"
+                              value={projectDrafts[role.id]?.drive ?? ""}
+                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? { slack: "", task: "", drive: "", brief: "" }), drive: e.target.value } })}
+                            />
+                          </div>
+                          <div className="sm:col-span-3">
+                            <Label className="text-xs">Project brief selected talent will see</Label>
+                            <Textarea
+                              className="mt-1"
+                              rows={2}
+                              value={projectDrafts[role.id]?.brief ?? ""}
+                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? { slack: "", task: "", drive: "", brief: "" }), brief: e.target.value } })}
+                            />
+                          </div>
+                          <div className="flex flex-wrap items-center gap-2 sm:col-span-3">
+                            <Button size="sm" variant="outline" onClick={() => saveProjectLinks(role.id)}>Save project workspace</Button>
+                            <Button size="sm" variant="ghost" onClick={() => toggleApplications(role)}>
+                              {role.applications_closed ? "Reopen applications" : "Close applications"}
+                            </Button>
+                            {role.applications_closed && <Badge variant="outline">Applications closed</Badge>}
+                          </div>
+                        </div>
                       </div>
                     );
                   })}

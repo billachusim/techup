@@ -24,6 +24,7 @@ import {
   type TalentEngagement,
   type TalentProfile,
 } from "@/lib/talent";
+import ProjectWorkspace from "@/components/talent/ProjectWorkspace";
 
 const MATCHED_STATUSES = ["approved", "accepted", "assessment", "interview", "hired"];
 
@@ -114,6 +115,9 @@ const TalentDashboard = () => {
   }, [navigate]);
 
   useEffect(() => { load(); }, [load]);
+
+  // Selected members get a workspace per project they are on.
+  const activeProjects = matches.filter((m) => ["accepted", "assessment", "interview", "hired"].includes(m.status));
 
   const respond = async (matchId: string, status: "accepted" | "declined") => {
     const { error } = await supabase.from("role_matches").update({ status }).eq("id", matchId);

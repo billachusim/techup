@@ -98,7 +98,7 @@ const AdminTalent = () => {
   }, []);
 
   const load = useCallback(async () => {
-    const [r, t, m, a, b, e, i] = await Promise.all([
+    const [r, t, m, a, b, e, i, d] = await Promise.all([
       supabase.from("talent_roles").select("*").order("created_at", { ascending: false }),
       supabase.from("talent_profiles").select("*").order("profile_strength", { ascending: false }),
       supabase
@@ -118,6 +118,10 @@ const AdminTalent = () => {
         .from("talent_interest_requests")
         .select("*, talent_profiles(full_name)")
         .order("created_at", { ascending: false }),
+      supabase
+        .from("talent_deliverables")
+        .select("*, talent_roles(title), talent_profiles(full_name)")
+        .order("week_of", { ascending: false }),
     ]);
     setRoles(r.data ?? []);
     setTalents(t.data ?? []);
@@ -126,7 +130,22 @@ const AdminTalent = () => {
     setBriefs(b.data ?? []);
     setEngagements((e.data ?? []) as EngagementRow[]);
     setInterests((i.data ?? []) as InterestRow[]);
+    setDeliverables((d.data ?? []) as DeliverableRow[]);
     setGroupDrafts(Object.fromEntries((r.data ?? []).map((role) => [role.id, role.whatsapp_group_url ?? ""])));
+    setProjectDrafts(
+      Object.fromEntries(
+        (r.data ?? []).map((role) => [
+          role.id,
+          {
+            slack: role.slack_channel_url ?? "",
+            task: role.task_board_url ?? "",
+            drive: role.drive_url ?? "",
+            brief: role.project_brief ?? "",
+          } satisfies ProjectDraft,
+        ])
+      )
+    );
+    setNoteDrafts(Object.fromEntries((d.data ?? []).map((row) => [row.id, row.reviewer_note ?? ""])));
     setLoading(false);
   }, []);
 

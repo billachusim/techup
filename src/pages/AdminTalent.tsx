@@ -974,6 +974,51 @@ const AdminTalent = () => {
                   ))}
                 </section>
               </TabsContent>
+
+              {/* WORK LOGS */}
+              <TabsContent value="logs" className="space-y-3 pt-6">
+                {deliverables.length === 0 && (
+                  <p className="rounded-lg border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+                    No work has been logged yet. Selected talent log their weekly work from their dashboard.
+                  </p>
+                )}
+                {deliverables.map((d) => (
+                  <div key={d.id} className="space-y-3 rounded-lg border border-border bg-card p-4">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="font-medium">{d.title}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {d.talent_profiles?.full_name} · {d.talent_roles?.title ?? "Project"} · week of{" "}
+                          {new Date(d.week_of).toLocaleDateString("en-GB")}
+                        </p>
+                        {d.summary && <p className="mt-1 text-xs text-muted-foreground">{d.summary}</p>}
+                        {d.link_url && (
+                          <a href={d.link_url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline">
+                            Open the work
+                          </a>
+                        )}
+                      </div>
+                      <Badge variant="outline">{DELIVERABLE_STATUS_LABEL[d.status] ?? d.status}</Badge>
+                    </div>
+                    <div className="flex flex-wrap items-end gap-2">
+                      <div className="min-w-[16rem] flex-1">
+                        <Label className="text-xs">Feedback for the talent</Label>
+                        <Input
+                          className="mt-1"
+                          value={noteDrafts[d.id] ?? ""}
+                          onChange={(ev) => setNoteDrafts({ ...noteDrafts, [d.id]: ev.target.value })}
+                        />
+                      </div>
+                      <Button size="sm" onClick={() => reviewDeliverable(d.id, "reviewed")}>
+                        <Check size={14} className="mr-1.5" /> Reviewed
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => reviewDeliverable(d.id, "needs_changes")}>
+                        <X size={14} className="mr-1.5" /> Needs changes
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </TabsContent>
             </Tabs>
           )}
         </div>

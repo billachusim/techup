@@ -288,6 +288,41 @@ const AdminTalent = () => {
     load();
   };
 
+  const saveProjectLinks = async (roleId: string) => {
+    const draft = projectDrafts[roleId] ?? { slack: "", task: "", drive: "", brief: "" };
+    const { error } = await supabase
+      .from("talent_roles")
+      .update({
+        slack_channel_url: draft.slack.trim() || null,
+        task_board_url: draft.task.trim() || null,
+        drive_url: draft.drive.trim() || null,
+        project_brief: draft.brief.trim() || null,
+      })
+      .eq("id", roleId);
+    if (error) { toast({ title: "Could not save the project links", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Project workspace saved", description: "Only selected talent and staff can see these links." });
+    load();
+  };
+
+  const toggleApplications = async (role: TalentRole) => {
+    const { error } = await supabase
+      .from("talent_roles")
+      .update({ applications_closed: !role.applications_closed })
+      .eq("id", role.id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    load();
+  };
+
+  const reviewDeliverable = async (id: string, status: string) => {
+    const { error } = await supabase
+      .from("talent_deliverables")
+      .update({ status, reviewer_note: (noteDrafts[id] ?? "").trim() || null })
+      .eq("id", id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Review saved" });
+    load();
+  };
+
   const addEngagement = async () => {
     if (!newEngagement.talent) { toast({ title: "Pick the talent", variant: "destructive" }); return; }
     const { data: auth } = await supabase.auth.getUser();

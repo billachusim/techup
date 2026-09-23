@@ -9,7 +9,7 @@ import { EmailChangeEmail } from '@/lib/email-templates/email-change'
 import { ReauthenticationEmail } from '@/lib/email-templates/reauthentication'
 
 // Configuration
-const SITE_NAME = "TechUp"
+const SITE_NAME = "Tech Faculty"
 const SENDER_DOMAIN = "alerts.techfaculty.ng"
 const ROOT_DOMAIN = "techfaculty.ng"
 const FROM_DOMAIN = "alerts.techfaculty.ng"

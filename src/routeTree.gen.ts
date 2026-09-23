@@ -52,6 +52,8 @@ import { Route as CareersPlatformsPlatformSlugRouteImport } from './routes/caree
 import { Route as TalentPoolIndexRouteImport } from './routes/talent.pool.index'
 import { Route as TalentPoolIdRouteImport } from './routes/talent.pool.$id'
 import { Route as TalentRolesSlugRouteImport } from './routes/talent.roles.$slug'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -270,6 +272,16 @@ const TalentRolesSlugRoute = TalentRolesSlugRouteImport.update({
   path: '/talent/roles/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/email/auth/preview',
+  path: '/email/auth/preview',
+  getParentRoute: () => LovableRoute,
+} as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/email/auth/webhook',
+  path: '/email/auth/webhook',
+  getParentRoute: () => LovableRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -278,7 +290,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
-  '/lovable': typeof LovableRoute
+  '/lovable': typeof LovableRouteWithChildren
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
@@ -315,6 +327,8 @@ export interface FileRoutesByFullPath {
   '/talent/pool/$id': typeof TalentPoolIdRoute
   '/talent/roles/$slug': typeof TalentRolesSlugRoute
   '/talent/pool/': typeof TalentPoolIndexRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -323,7 +337,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
-  '/lovable': typeof LovableRoute
+  '/lovable': typeof LovableRouteWithChildren
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
@@ -360,6 +374,8 @@ export interface FileRoutesByTo {
   '/talent/pool/$id': typeof TalentPoolIdRoute
   '/talent/roles/$slug': typeof TalentRolesSlugRoute
   '/talent/pool': typeof TalentPoolIndexRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -369,7 +385,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
-  '/lovable': typeof LovableRoute
+  '/lovable': typeof LovableRouteWithChildren
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
@@ -406,6 +422,8 @@ export interface FileRoutesById {
   '/talent/pool/$id': typeof TalentPoolIdRoute
   '/talent/roles/$slug': typeof TalentRolesSlugRoute
   '/talent/pool/': typeof TalentPoolIndexRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -453,6 +471,8 @@ export interface FileRouteTypes {
     | '/talent/pool/$id'
     | '/talent/roles/$slug'
     | '/talent/pool/'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -498,6 +518,8 @@ export interface FileRouteTypes {
     | '/talent/pool/$id'
     | '/talent/roles/$slug'
     | '/talent/pool'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
   id:
     | '__root__'
     | '/'
@@ -543,6 +565,8 @@ export interface FileRouteTypes {
     | '/talent/pool/$id'
     | '/talent/roles/$slug'
     | '/talent/pool/'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -552,7 +576,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   HireRoute: typeof HireRoute
   LoginRoute: typeof LoginRoute
-  LovableRoute: typeof LovableRoute
+  LovableRoute: typeof LovableRouteWithChildren
   PaymentSuccessRoute: typeof PaymentSuccessRoute
   ProductsRoute: typeof ProductsRoute
   SchoolCollaborationsRoute: typeof SchoolCollaborationsRoute
@@ -894,8 +918,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TalentRolesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
+      parentRoute: typeof LovableRoute
+    }
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof LovableRoute
+    }
   }
 }
+
+interface LovableRouteChildren {
+  LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
+  LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
+}
+
+const LovableRouteChildren: LovableRouteChildren = {
+  LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
+  LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
+}
+
+const LovableRouteWithChildren =
+  LovableRoute._addFileChildren(LovableRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -904,7 +955,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   HireRoute: HireRoute,
   LoginRoute: LoginRoute,
-  LovableRoute: LovableRoute,
+  LovableRoute: LovableRouteWithChildren,
   PaymentSuccessRoute: PaymentSuccessRoute,
   ProductsRoute: ProductsRoute,
   SchoolCollaborationsRoute: SchoolCollaborationsRoute,

@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { notifyMarketplaceEvent } from "@/lib/marketplace-emails.functions";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "@/lib/router-compat";
 import { Loader2, Sparkles, Download, Check, X, Plus, MessageCircle, Wallet } from "lucide-react";
@@ -220,6 +221,7 @@ const AdminTalent = () => {
   const setMatchStatus = async (id: string, status: string) => {
     const { error } = await supabase.from("role_matches").update({ status }).eq("id", id);
     if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    notifyMarketplaceEvent({ data: { event: "match_updated", id } }).catch(() => {});
     load();
   };
 
@@ -269,6 +271,7 @@ const AdminTalent = () => {
   const approveTalent = async (talent: TalentProfile) => {
     const { data, error } = await supabase.rpc("approve_talent", { _talent_id: talent.id });
     if (error) { toast({ title: "Could not approve", description: error.message, variant: "destructive" }); return; }
+    notifyMarketplaceEvent({ data: { event: "talent_approved", id: talent.id } }).catch(() => {});
     toast({ title: "Approved as talent", description: data ? `Faculty ID ${data}` : "Faculty ID issued." });
     load();
   };
@@ -319,6 +322,7 @@ const AdminTalent = () => {
       .update({ status, reviewer_note: (noteDrafts[id] ?? "").trim() || null })
       .eq("id", id);
     if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    notifyMarketplaceEvent({ data: { event: "deliverable_reviewed", id } }).catch(() => {});
     toast({ title: "Review saved" });
     load();
   };

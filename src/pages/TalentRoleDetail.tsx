@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { notifyMarketplaceEvent } from "@/lib/marketplace-emails.functions";
 import { Link, useNavigate, useParams } from "@/lib/router-compat";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -97,11 +98,11 @@ const TalentRoleDetail = () => {
         navigate(`/talent/profile?next=/talent/roles/${slug}`);
         return;
       }
-      const { error } = await supabase.from("talent_applications").insert({
+      const { data: inserted, error } = await supabase.from("talent_applications").insert({
         role_id: role.id,
         talent_profile_id: profile.id,
         message: message.trim() || null,
-      });
+      }).select("id").single();
       if (error) {
         if (error.code === "23505" || error.code === "23514" || error.message.includes("duplicate")) {
           toast({ title: "Already applied", description: "You have applied to this role already." });
@@ -109,6 +110,7 @@ const TalentRoleDetail = () => {
         }
         throw error;
       }
+      if (inserted?.id) notifyMarketplaceEvent({ data: { event: "application_submitted", id: inserted.id } }).catch(() => {});
       toast({ title: "Application sent", description: "You can track it on your talent dashboard." });
       setMessage("");
       navigate("/talent/dashboard");

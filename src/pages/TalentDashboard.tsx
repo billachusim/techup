@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+import { notifyMarketplaceEvent } from "@/lib/marketplace-emails.functions";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "@/lib/router-compat";
 import { Loader2, Sparkles, Briefcase, Pencil, ShieldCheck, Users2, MessageCircle, Wallet, Eye, ArrowLeft } from "lucide-react";
@@ -125,6 +126,7 @@ const TalentDashboard = () => {
       toast({ title: "Could not save that", description: error.message, variant: "destructive" });
       return;
     }
+    if (status === "accepted") notifyMarketplaceEvent({ data: { event: "match_updated", id: matchId } }).catch(() => {});
     toast({
       title: status === "accepted" ? "Interest sent" : "Match declined",
       description: status === "accepted" ? "Our team will follow up with next steps." : "We will keep matching you to other roles.",

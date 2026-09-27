@@ -381,8 +381,7 @@ const AdminTalent = () => {
   };
 
   const setInterestStatus = async (id: string, status: string) => {
-    const update: Record<string, unknown> = { status };
-    if (status === "introduced") update.approved_at = new Date().toISOString();
+    const update = { status, ...(status === "introduced" ? { approved_at: new Date().toISOString() } : {}) };
     const { error } = await supabase.from("talent_interest_requests").update(update).eq("id", id);
     if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
     if (status === "introduced") {

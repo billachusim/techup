@@ -852,6 +852,7 @@ export type Database = {
           reason: string | null
           role_id: string
           score: number
+          slack_invited_at: string | null
           source: string
           status: string
           talent_profile_id: string
@@ -864,6 +865,7 @@ export type Database = {
           reason?: string | null
           role_id: string
           score?: number
+          slack_invited_at?: string | null
           source?: string
           status?: string
           talent_profile_id: string
@@ -876,6 +878,7 @@ export type Database = {
           reason?: string | null
           role_id?: string
           score?: number
+          slack_invited_at?: string | null
           source?: string
           status?: string
           talent_profile_id?: string
@@ -1062,6 +1065,7 @@ export type Database = {
       }
       talent_interest_requests: {
         Row: {
+          approved_at: string | null
           created_at: string
           id: string
           message: string | null
@@ -1073,6 +1077,7 @@ export type Database = {
           talent_profile_id: string
         }
         Insert: {
+          approved_at?: string | null
           created_at?: string
           id?: string
           message?: string | null
@@ -1084,6 +1089,7 @@ export type Database = {
           talent_profile_id: string
         }
         Update: {
+          approved_at?: string | null
           created_at?: string
           id?: string
           message?: string | null
@@ -1138,6 +1144,8 @@ export type Database = {
           rate_currency: string
           skill_details: Json
           skills: string[]
+          slack_general_joined_at: string | null
+          slack_user_id: string | null
           source: string
           tools: string[]
           updated_at: string
@@ -1180,6 +1188,8 @@ export type Database = {
           rate_currency?: string
           skill_details?: Json
           skills?: string[]
+          slack_general_joined_at?: string | null
+          slack_user_id?: string | null
           source?: string
           tools?: string[]
           updated_at?: string
@@ -1222,6 +1232,8 @@ export type Database = {
           rate_currency?: string
           skill_details?: Json
           skills?: string[]
+          slack_general_joined_at?: string | null
+          slack_user_id?: string | null
           source?: string
           tools?: string[]
           updated_at?: string
@@ -1261,6 +1273,7 @@ export type Database = {
           responsibilities: string[]
           role_kind: string
           seniority: string
+          slack_channel_id: string | null
           slack_channel_url: string | null
           slug: string
           status: string
@@ -1297,6 +1310,7 @@ export type Database = {
           responsibilities?: string[]
           role_kind?: string
           seniority?: string
+          slack_channel_id?: string | null
           slack_channel_url?: string | null
           slug: string
           status?: string
@@ -1333,6 +1347,7 @@ export type Database = {
           responsibilities?: string[]
           role_kind?: string
           seniority?: string
+          slack_channel_id?: string | null
           slack_channel_url?: string | null
           slug?: string
           status?: string

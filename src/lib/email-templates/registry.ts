@@ -1,5 +1,17 @@
 import type { ComponentType } from 'react'
-import { applicationReceived, newApplicationAdmin, matchUpdate, deliverableReviewed, talentApproved } from './marketplace'
+import {
+  applicationReceived,
+  newApplicationAdmin,
+  matchUpdate,
+  deliverableReviewed,
+  talentApproved,
+  profileSubmitted,
+  introRequestReceived,
+  introRequestAdmin,
+  introApproved,
+  hiringRequestReceived,
+  hiringRequestAdmin,
+} from './marketplace'
 
 export interface TemplateEntry {
   component: ComponentType<any>
@@ -24,6 +36,12 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'match-update': matchUpdate,
   'deliverable-reviewed': deliverableReviewed,
   'talent-approved': talentApproved,
+  'profile-submitted': profileSubmitted,
+  'intro-request-received': introRequestReceived,
+  'intro-request-admin': introRequestAdmin,
+  'intro-approved': introApproved,
+  'hiring-request-received': hiringRequestReceived,
+  'hiring-request-admin': hiringRequestAdmin,
   // Add templates here as they are created, e.g.:
   // 'welcome': welcomeTemplate,
 }

@@ -3,7 +3,14 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const Input = z.object({
-  event: z.enum(["application_submitted", "match_updated", "deliverable_reviewed", "talent_approved"]),
+  event: z.enum([
+    "application_submitted",
+    "match_updated",
+    "deliverable_reviewed",
+    "talent_approved",
+    "profile_submitted",
+    "intro_approved",
+  ]),
   id: z.string().uuid(),
 });
 
@@ -43,7 +50,39 @@ export const notifyMarketplaceEvent = createServerFn({ method: "POST" })
       return { ok: true };
     }
 
+    if (data.event === "profile_submitted") {
+      const { data: p } = await supabaseAdmin
+        .from("talent_profiles")
+        .select("id, user_id, full_name, email, faculty_id, profile_strength")
+        .eq("id", data.id)
+        .maybeSingle();
+      if (!p || (p.user_id !== context.userId && !staff)) return { ok: false };
+      await send(
+        "profile-submitted",
+        p.email,
+        { name: p.full_name, strength: p.profile_strength, facultyId: p.faculty_id },
+        `${p.id}-${p.profile_strength}`,
+      );
+      return { ok: true };
+    }
+
     if (!staff) return { ok: false };
+
+    if (data.event === "intro_approved") {
+      const { data: req } = await supabaseAdmin
+        .from("talent_interest_requests")
+        .select("id, requester_name, requester_contact, status, talent_profiles(full_name)")
+        .eq("id", data.id)
+        .maybeSingle();
+      if (!req || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(req.requester_contact ?? "")) return { ok: false };
+      await send(
+        "intro-approved",
+        req.requester_contact,
+        { requesterName: req.requester_name, talentName: (req.talent_profiles as any)?.full_name },
+        req.id,
+      );
+      return { ok: true };
+    }
 
     if (data.event === "match_updated") {
       const { data: m } = await supabaseAdmin

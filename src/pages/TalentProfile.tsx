@@ -17,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SKILL_SUGGESTIONS, parseList, profileStrength } from "@/lib/talent";
 import { asCertifications, asEducation, asExperiences, type Certification, type Education, type Experience } from "@/lib/cv";
 import { parseCv } from "@/lib/cv.functions";
+import { notifyMarketplaceEvent } from "@/lib/marketplace-emails.functions";
 
 type FormState = {
   full_name: string;

@@ -48,3 +48,11 @@
 - [x] Verify both lines render at 320, 360 and 390 px widths
 - [x] Stop the homepage dragging sideways on phones (long department name forced the list wider than the screen)
 - [x] Confirm no page overflows horizontally at 390 px
+
+## Hiring requests, stage emails & Slack automation
+- [x] Hiring request form on /careers (business brief + instant confirmation email)
+- [x] Confirmation + staff alert emails for introduction requests; approval email when an intro is approved
+- [x] Talent email at every stage: profile submitted, application received, matched/selected/assessment/interview/hired, work log reviewed, profile approved
+- [x] Slack: matched talent auto-added to #general; talent selected for a project auto-added to that project's Slack channel
+- [x] Admin Slack channel picker per project + manual "Slack access" button
+- [ ] Emails only start delivering once alerts.techfaculty.ng finishes verifying, and after publishing

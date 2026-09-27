@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import PlatformPartners from "@/components/jobs/PlatformPartners";
 import RoleCard from "@/components/talent/RoleCard";
 import TalentNav from "@/components/talent/TalentNav";
+import HiringRequestForm from "@/components/talent/HiringRequestForm";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -164,6 +165,25 @@ const Careers = () => {
                 <Link to={joinHref}><Button className="mt-5" variant="outline">Complete my profile for future matches</Button></Link>
               </div>
             )}
+          </div>
+        </section>
+
+        <section id="hire" className="border-t border-border bg-card/40 px-4 py-16" aria-labelledby="hire-heading">
+          <div className="container mx-auto grid max-w-5xl gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+            <div className="space-y-4">
+              <h2 id="hire-heading" className="text-2xl font-bold md:text-3xl">Hiring instead? Request talent</h2>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                Tell us what your business needs and we introduce you to matched talent from our pipeline. A Tech Faculty
+                project manager oversees the work, so you get delivery, not just a contact.
+              </p>
+              <p className="text-sm text-muted-foreground">
+                You get an email confirmation immediately, and a shortlist within two working days.
+              </p>
+              <p className="text-sm">
+                <Link to="/talent/pool" className="font-medium text-primary hover:underline">Browse the talent directory →</Link>
+              </p>
+            </div>
+            <HiringRequestForm />
           </div>
         </section>
 

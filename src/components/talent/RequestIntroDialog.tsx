@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { introRequestUrl } from "@/lib/talent";
+import { notifyIntroRequest } from "@/lib/public-requests.functions";
 
 type Props = {
   talentId: string;
@@ -55,6 +56,11 @@ const RequestIntroDialog = ({ talentId, talentName, skills, source = "talent_poo
       title: "Request received",
       description: `We will introduce you to ${firstName} on WhatsApp shortly.`,
     });
+    try {
+      await notifyIntroRequest({ data: { talentId, contact: form.contact.trim().slice(0, 160) } });
+    } catch {
+      /* confirmation email is best-effort */
+    }
     onRequested?.();
     setOpen(false);
     setForm({ name: "", org: "", contact: "", message: "" });

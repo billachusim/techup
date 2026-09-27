@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { parseList, talentWhatsAppUrl } from "@/lib/talent";
+import { notifyHiringRequest } from "@/lib/public-requests.functions";
 
 const benefits = [
   "Vetted Nigerian and African talent, matched to your brief in 48 hours",
@@ -39,22 +40,33 @@ const Hire = () => {
     }
     setSubmitting(true);
     try {
-      const { error } = await supabase.from("business_briefs").insert({
-        company: form.company.trim().slice(0, 160),
-        contact_name: form.contact_name.trim().slice(0, 120),
-        email: form.email.trim() || null,
-        phone: form.phone.trim().slice(0, 40),
-        city: form.city.trim().slice(0, 80) || null,
-        country: form.country.trim() || "Nigeria",
-        project_title: form.project_title.trim().slice(0, 160),
-        description: form.description.trim().slice(0, 4000),
-        skills_needed: parseList(form.skills_needed),
-        budget_text: form.budget_text.trim().slice(0, 160) || null,
-        timeline: form.timeline.trim().slice(0, 160) || null,
-        engagement: form.engagement,
-      });
+      const { data, error } = await supabase
+        .from("business_briefs")
+        .insert({
+          company: form.company.trim().slice(0, 160),
+          contact_name: form.contact_name.trim().slice(0, 120),
+          email: form.email.trim() || null,
+          phone: form.phone.trim().slice(0, 40),
+          city: form.city.trim().slice(0, 80) || null,
+          country: form.country.trim() || "Nigeria",
+          project_title: form.project_title.trim().slice(0, 160),
+          description: form.description.trim().slice(0, 4000),
+          skills_needed: parseList(form.skills_needed),
+          budget_text: form.budget_text.trim().slice(0, 160) || null,
+          timeline: form.timeline.trim().slice(0, 160) || null,
+          engagement: form.engagement,
+        })
+        .select("id")
+        .single();
       if (error) throw error;
       setDone(true);
+      if (data?.id) {
+        try {
+          await notifyHiringRequest({ data: { briefId: data.id } });
+        } catch {
+          /* confirmation email is best-effort */
+        }
+      }
     } catch (err) {
       toast({
         title: "Could not send your brief",

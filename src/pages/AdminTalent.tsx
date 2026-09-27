@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { notifyMarketplaceEvent } from "@/lib/marketplace-emails.functions";
+import { listSlackChannels, syncSlackForMatch } from "@/lib/slack.functions";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "@/lib/router-compat";
 import { Loader2, Sparkles, Download, Check, X, Plus, MessageCircle, Wallet } from "lucide-react";
@@ -63,7 +64,9 @@ type DeliverableRow = TalentDeliverable & {
   talent_profiles: { full_name: string } | null;
 };
 
-type ProjectDraft = { slack: string; task: string; drive: string; brief: string };
+type ProjectDraft = { slack: string; channel: string; task: string; drive: string; brief: string };
+
+const emptyProjectDraft: ProjectDraft = { slack: "", channel: "", task: "", drive: "", brief: "" };
 
 const emptyRole = {
   title: "", role_kind: "internal", company: "Tech Faculty", city: "", country: "Nigeria",
@@ -93,10 +96,19 @@ const AdminTalent = () => {
   const [deliverables, setDeliverables] = useState<DeliverableRow[]>([]);
   const [noteDrafts, setNoteDrafts] = useState<Record<string, string>>({});
   const [newEngagement, setNewEngagement] = useState({ talent: "", role: "", amount: "", currency: "NGN", note: "" });
+  const [slackChannels, setSlackChannels] = useState<{ id: string; name: string; is_private: boolean }[]>([]);
+  const [slackBusyMatch, setSlackBusyMatch] = useState<string | null>(null);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setSignedIn(Boolean(data.user)));
   }, []);
+
+  useEffect(() => {
+    if (!isStaff) return;
+    listSlackChannels()
+      .then((res) => setSlackChannels(res.channels ?? []))
+      .catch(() => setSlackChannels([]));
+  }, [isStaff]);
 
   const load = useCallback(async () => {
     const [r, t, m, a, b, e, i, d] = await Promise.all([
@@ -139,6 +151,7 @@ const AdminTalent = () => {
           role.id,
           {
             slack: role.slack_channel_url ?? "",
+            channel: (role as { slack_channel_id?: string | null }).slack_channel_id ?? "",
             task: role.task_board_url ?? "",
             drive: role.drive_url ?? "",
             brief: role.project_brief ?? "",
@@ -218,10 +231,32 @@ const AdminTalent = () => {
     }
   };
 
+  const syncSlack = async (matchId: string, quiet = false) => {
+    setSlackBusyMatch(matchId);
+    try {
+      const res = await syncSlackForMatch({ data: { matchId } });
+      const description = (res.notes ?? []).join(" ");
+      if (!quiet || !res.ok) {
+        toast({
+          title: res.ok ? "Slack updated" : "Slack needs attention",
+          description: description || undefined,
+          variant: res.ok ? undefined : "destructive",
+        });
+      }
+    } catch (err) {
+      if (!quiet) {
+        toast({ title: "Slack update failed", description: err instanceof Error ? err.message : undefined, variant: "destructive" });
+      }
+    } finally {
+      setSlackBusyMatch(null);
+    }
+  };
+
   const setMatchStatus = async (id: string, status: string) => {
     const { error } = await supabase.from("role_matches").update({ status }).eq("id", id);
     if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
     notifyMarketplaceEvent({ data: { event: "match_updated", id } }).catch(() => {});
+    if (["approved", "accepted", "hired"].includes(status)) void syncSlack(id, true);
     load();
   };
 
@@ -292,11 +327,12 @@ const AdminTalent = () => {
   };
 
   const saveProjectLinks = async (roleId: string) => {
-    const draft = projectDrafts[roleId] ?? { slack: "", task: "", drive: "", brief: "" };
+    const draft = projectDrafts[roleId] ?? emptyProjectDraft;
     const { error } = await supabase
       .from("talent_roles")
       .update({
         slack_channel_url: draft.slack.trim() || null,
+        slack_channel_id: draft.channel || null,
         task_board_url: draft.task.trim() || null,
         drive_url: draft.drive.trim() || null,
         project_brief: draft.brief.trim() || null,
@@ -345,8 +381,13 @@ const AdminTalent = () => {
   };
 
   const setInterestStatus = async (id: string, status: string) => {
-    const { error } = await supabase.from("talent_interest_requests").update({ status }).eq("id", id);
+    const update = { status, ...(status === "introduced" ? { approved_at: new Date().toISOString() } : {}) };
+    const { error } = await supabase.from("talent_interest_requests").update(update).eq("id", id);
     if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    if (status === "introduced") {
+      notifyMarketplaceEvent({ data: { event: "intro_approved", id } }).catch(() => {});
+      toast({ title: "Introduction approved", description: "We emailed the client a confirmation." });
+    }
     load();
   };
 
@@ -612,12 +653,27 @@ const AdminTalent = () => {
                         </div>
                         <div className="grid gap-3 border-t border-border pt-3 sm:grid-cols-3">
                           <div>
+                            <Label className="text-xs">Slack channel (auto-invites selected talent)</Label>
+                            <Select
+                              value={projectDrafts[role.id]?.channel || "none"}
+                              onValueChange={(v) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? emptyProjectDraft), channel: v === "none" ? "" : v } })}
+                            >
+                              <SelectTrigger className="mt-1"><SelectValue placeholder="Pick a Slack channel" /></SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="none">No Slack channel</SelectItem>
+                                {slackChannels.map((c) => (
+                                  <SelectItem key={c.id} value={c.id}>{c.is_private ? "🔒 " : "# "}{c.name}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
                             <Label className="text-xs">Slack channel link</Label>
                             <Input
                               className="mt-1"
                               placeholder="https://slack.com/…"
                               value={projectDrafts[role.id]?.slack ?? ""}
-                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? { slack: "", task: "", drive: "", brief: "" }), slack: e.target.value } })}
+                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? emptyProjectDraft), slack: e.target.value } })}
                             />
                           </div>
                           <div>
@@ -626,7 +682,7 @@ const AdminTalent = () => {
                               className="mt-1"
                               placeholder="https://…"
                               value={projectDrafts[role.id]?.task ?? ""}
-                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? { slack: "", task: "", drive: "", brief: "" }), task: e.target.value } })}
+                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? emptyProjectDraft), task: e.target.value } })}
                             />
                           </div>
                           <div>
@@ -635,7 +691,7 @@ const AdminTalent = () => {
                               className="mt-1"
                               placeholder="https://drive.google.com/…"
                               value={projectDrafts[role.id]?.drive ?? ""}
-                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? { slack: "", task: "", drive: "", brief: "" }), drive: e.target.value } })}
+                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? emptyProjectDraft), drive: e.target.value } })}
                             />
                           </div>
                           <div className="sm:col-span-3">
@@ -644,7 +700,7 @@ const AdminTalent = () => {
                               className="mt-1"
                               rows={2}
                               value={projectDrafts[role.id]?.brief ?? ""}
-                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? { slack: "", task: "", drive: "", brief: "" }), brief: e.target.value } })}
+                              onChange={(e) => setProjectDrafts({ ...projectDrafts, [role.id]: { ...(projectDrafts[role.id] ?? emptyProjectDraft), brief: e.target.value } })}
                             />
                           </div>
                           <div className="flex flex-wrap items-center gap-2 sm:col-span-3">
@@ -797,6 +853,15 @@ const AdminTalent = () => {
                               <SelectItem value="declined">Declined</SelectItem>
                             </SelectContent>
                           </Select>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            disabled={slackBusyMatch === m.id}
+                            onClick={() => syncSlack(m.id)}
+                          >
+                            {slackBusyMatch === m.id ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : null}
+                            Slack access
+                          </Button>
                         </div>
                       </div>
                     ))}

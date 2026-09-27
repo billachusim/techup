@@ -17,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SKILL_SUGGESTIONS, parseList, profileStrength } from "@/lib/talent";
 import { asCertifications, asEducation, asExperiences, type Certification, type Education, type Experience } from "@/lib/cv";
 import { parseCv } from "@/lib/cv.functions";
+import { notifyMarketplaceEvent } from "@/lib/marketplace-emails.functions";
 
 type FormState = {
   full_name: string;
@@ -265,6 +266,7 @@ const TalentProfile = () => {
         profile_strength: strength,
       };
 
+      let savedId = profileId;
       if (profileId) {
         const { error } = await supabase.from("talent_profiles").update({ ...payload, cv_path: form.cv_path }).eq("id", profileId);
         if (error) throw error;
@@ -276,6 +278,7 @@ const TalentProfile = () => {
           .single();
         if (error) throw error;
         setProfileId(data.id);
+        savedId = data.id;
       }
       toast({ title: "Profile saved", description: "You are now in the matching pool." });
 
@@ -286,6 +289,10 @@ const TalentProfile = () => {
           setFacultyId(issued);
           toast({ title: "Your Faculty ID is ready", description: `${issued} — your profile is complete and verified.` });
         }
+      }
+
+      if (savedId) {
+        notifyMarketplaceEvent({ data: { event: "profile_submitted", id: savedId } }).catch(() => {});
       }
       navigate(nextPath && nextPath.startsWith("/") ? nextPath : "/talent/dashboard");
     } catch (err) {

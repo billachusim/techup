@@ -75,7 +75,12 @@ export type InviteOutcome = "invited" | "already_in_channel" | "no_slack_account
 
 /** Adds a Slack member to a channel. Treats "already there" as success. */
 export async function inviteToChannel(channelId: string, slackUserId: string): Promise<InviteOutcome> {
-  const res = await slackPost("conversations.invite", { channel: channelId, users: slackUserId });
+  let res = await slackPost("conversations.invite", { channel: channelId, users: slackUserId });
+  if (!res.ok && res.error === "not_in_channel") {
+    // Public channels: the app can add itself first, then invite.
+    const joined = await slackPost("conversations.join", { channel: channelId });
+    if (joined.ok) res = await slackPost("conversations.invite", { channel: channelId, users: slackUserId });
+  }
   if (res.ok) return "invited";
   if (res.error === "already_in_channel") return "already_in_channel";
   if (res.error === "not_in_channel" || res.error === "channel_not_found") {

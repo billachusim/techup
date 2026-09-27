@@ -265,6 +265,7 @@ const TalentProfile = () => {
         profile_strength: strength,
       };
 
+      let savedId = profileId;
       if (profileId) {
         const { error } = await supabase.from("talent_profiles").update({ ...payload, cv_path: form.cv_path }).eq("id", profileId);
         if (error) throw error;
@@ -276,6 +277,7 @@ const TalentProfile = () => {
           .single();
         if (error) throw error;
         setProfileId(data.id);
+        savedId = data.id;
       }
       toast({ title: "Profile saved", description: "You are now in the matching pool." });
 
@@ -286,6 +288,10 @@ const TalentProfile = () => {
           setFacultyId(issued);
           toast({ title: "Your Faculty ID is ready", description: `${issued} — your profile is complete and verified.` });
         }
+      }
+
+      if (savedId) {
+        notifyMarketplaceEvent({ data: { event: "profile_submitted", id: savedId } }).catch(() => {});
       }
       navigate(nextPath && nextPath.startsWith("/") ? nextPath : "/talent/dashboard");
     } catch (err) {

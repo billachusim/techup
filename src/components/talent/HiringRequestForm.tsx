@@ -36,9 +36,11 @@ const HiringRequestForm = () => {
     }
     setSubmitting(true);
     try {
-      const { data, error } = await supabase
+      const briefId = crypto.randomUUID();
+      const { error } = await supabase
         .from("business_briefs")
         .insert({
+          id: briefId,
           company: form.company.trim().slice(0, 160),
           contact_name: form.contact_name.trim().slice(0, 120),
           phone: form.phone.trim().slice(0, 40),
@@ -48,12 +50,11 @@ const HiringRequestForm = () => {
           description: form.description.trim().slice(0, 4000),
           skills_needed: parseList(form.skills_needed),
           engagement: form.engagement,
-        })
-        .select("id")
-        .single();
+        });
       if (error) throw error;
       setDone(true);
-      if (data?.id) {
+      const data = { id: briefId };
+      if (data.id) {
         try {
           await notifyHiringRequest({ data: { briefId: data.id } });
         } catch {

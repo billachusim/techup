@@ -130,6 +130,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.png", type: "image/png" },
       { rel: "shortcut icon", href: "/favicon.png", type: "image/png" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+      {
+        rel: "alternate",
+        type: "application/rss+xml",
+        title: "Tech Faculty NG Blog",
+        href: "https://techfaculty.ng/rss.xml",
+      },
     ],
     scripts: [
       {

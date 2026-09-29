@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as BusinessPartnershipsRouteImport } from './routes/business-partnerships'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as FeedDotxmlRouteImport } from './routes/feed[.]xml'
 import { Route as HireRouteImport } from './routes/hire'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LovableRouteImport } from './routes/lovable'
@@ -75,6 +76,11 @@ const BusinessPartnershipsRoute = BusinessPartnershipsRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeedDotxmlRoute = FeedDotxmlRouteImport.update({
+  id: '/feed.xml',
+  path: '/feed.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HireRoute = HireRouteImport.update({
@@ -301,6 +307,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/business-partnerships': typeof BusinessPartnershipsRoute
   '/dashboard': typeof DashboardRoute
+  '/feed.xml': typeof FeedDotxmlRoute
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
   '/lovable': typeof LovableRouteWithChildren
@@ -350,6 +357,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/business-partnerships': typeof BusinessPartnershipsRoute
   '/dashboard': typeof DashboardRoute
+  '/feed.xml': typeof FeedDotxmlRoute
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
   '/lovable': typeof LovableRouteWithChildren
@@ -400,6 +408,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/business-partnerships': typeof BusinessPartnershipsRoute
   '/dashboard': typeof DashboardRoute
+  '/feed.xml': typeof FeedDotxmlRoute
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
   '/lovable': typeof LovableRouteWithChildren
@@ -451,6 +460,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/business-partnerships'
     | '/dashboard'
+    | '/feed.xml'
     | '/hire'
     | '/login'
     | '/lovable'
@@ -500,6 +510,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/business-partnerships'
     | '/dashboard'
+    | '/feed.xml'
     | '/hire'
     | '/login'
     | '/lovable'
@@ -549,6 +560,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/business-partnerships'
     | '/dashboard'
+    | '/feed.xml'
     | '/hire'
     | '/login'
     | '/lovable'
@@ -599,6 +611,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   BusinessPartnershipsRoute: typeof BusinessPartnershipsRoute
   DashboardRoute: typeof DashboardRoute
+  FeedDotxmlRoute: typeof FeedDotxmlRoute
   HireRoute: typeof HireRoute
   LoginRoute: typeof LoginRoute
   LovableRoute: typeof LovableRouteWithChildren
@@ -669,6 +682,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/feed.xml': {
+      id: '/feed.xml'
+      path: '/feed.xml'
+      fullPath: '/feed.xml'
+      preLoaderRoute: typeof FeedDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hire': {
@@ -995,6 +1015,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   BusinessPartnershipsRoute: BusinessPartnershipsRoute,
   DashboardRoute: DashboardRoute,
+  FeedDotxmlRoute: FeedDotxmlRoute,
   HireRoute: HireRoute,
   LoginRoute: LoginRoute,
   LovableRoute: LovableRouteWithChildren,

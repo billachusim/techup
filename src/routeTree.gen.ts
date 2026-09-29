@@ -18,6 +18,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as LovableRouteImport } from './routes/lovable'
 import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
 import { Route as ProductsRouteImport } from './routes/products'
+import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as SchoolCollaborationsRouteImport } from './routes/school-collaborations'
 import { Route as SiwesRouteImport } from './routes/siwes'
 import { Route as SiwesSuccessKitRouteImport } from './routes/siwes-success-kit'
@@ -99,6 +100,11 @@ const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
 const ProductsRoute = ProductsRouteImport.update({
   id: '/products',
   path: '/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RssDotxmlRoute = RssDotxmlRouteImport.update({
+  id: '/rss.xml',
+  path: '/rss.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SchoolCollaborationsRoute = SchoolCollaborationsRouteImport.update({
@@ -300,6 +306,7 @@ export interface FileRoutesByFullPath {
   '/lovable': typeof LovableRouteWithChildren
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
@@ -348,6 +355,7 @@ export interface FileRoutesByTo {
   '/lovable': typeof LovableRouteWithChildren
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
@@ -397,6 +405,7 @@ export interface FileRoutesById {
   '/lovable': typeof LovableRouteWithChildren
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
@@ -447,6 +456,7 @@ export interface FileRouteTypes {
     | '/lovable'
     | '/payment-success'
     | '/products'
+    | '/rss.xml'
     | '/school-collaborations'
     | '/siwes'
     | '/siwes-success-kit'
@@ -495,6 +505,7 @@ export interface FileRouteTypes {
     | '/lovable'
     | '/payment-success'
     | '/products'
+    | '/rss.xml'
     | '/school-collaborations'
     | '/siwes'
     | '/siwes-success-kit'
@@ -543,6 +554,7 @@ export interface FileRouteTypes {
     | '/lovable'
     | '/payment-success'
     | '/products'
+    | '/rss.xml'
     | '/school-collaborations'
     | '/siwes'
     | '/siwes-success-kit'
@@ -592,6 +604,7 @@ export interface RootRouteChildren {
   LovableRoute: typeof LovableRouteWithChildren
   PaymentSuccessRoute: typeof PaymentSuccessRoute
   ProductsRoute: typeof ProductsRoute
+  RssDotxmlRoute: typeof RssDotxmlRoute
   SchoolCollaborationsRoute: typeof SchoolCollaborationsRoute
   SiwesRoute: typeof SiwesRoute
   SiwesSuccessKitRoute: typeof SiwesSuccessKitRoute
@@ -691,6 +704,13 @@ declare module '@tanstack/react-router' {
       path: '/products'
       fullPath: '/products'
       preLoaderRoute: typeof ProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rss.xml': {
+      id: '/rss.xml'
+      path: '/rss.xml'
+      fullPath: '/rss.xml'
+      preLoaderRoute: typeof RssDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/school-collaborations': {
@@ -980,6 +1000,7 @@ const rootRouteChildren: RootRouteChildren = {
   LovableRoute: LovableRouteWithChildren,
   PaymentSuccessRoute: PaymentSuccessRoute,
   ProductsRoute: ProductsRoute,
+  RssDotxmlRoute: RssDotxmlRoute,
   SchoolCollaborationsRoute: SchoolCollaborationsRoute,
   SiwesRoute: SiwesRoute,
   SiwesSuccessKitRoute: SiwesSuccessKitRoute,

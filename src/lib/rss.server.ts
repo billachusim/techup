@@ -61,7 +61,7 @@ async function fetchDbPosts(): Promise<BlogPost[]> {
       description: row.description,
       content: "",
       date: row.published_at,
-      author: row.author || "Tech Faculty NG",
+      author: "Bill Achusim",
       tags: row.tags?.length ? row.tags : [row.category],
       readTime: 8,
     }));
@@ -83,7 +83,7 @@ function item(post: BlogPost): string {
     `    <link>${escapeXml(link)}</link>`,
     `    <guid isPermaLink="true">${escapeXml(link)}</guid>`,
     `    <pubDate>${rfc822(post.date)}</pubDate>`,
-    `    <dc:creator>${escapeXml(post.author || "Tech Faculty NG")}</dc:creator>`,
+    `    <dc:creator>${escapeXml("Bill Achusim")}</dc:creator>`,
     `    <description>${escapeXml(post.description)}</description>`,
     categories,
     "  </item>",

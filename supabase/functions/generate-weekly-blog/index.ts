@@ -86,6 +86,8 @@ function prettyDate(): string {
   return new Date().toLocaleDateString("en-NG", { year: "numeric", month: "short", day: "numeric" });
 }
 
+let RECENT: { slug: string; title: string }[] = [];
+
 function buildPrompt(category: Category, existingTitles: string[]): string {
   return [
     `You are the senior SEO editor for Tech Faculty NG (https://techfaculty.ng), a Nigerian government-licensed tech training institute (licensed by the Federal Ministry of Science, Technology & Innovation via the National Board for Technology Incubation). Over 6,000 students trained, 4+ years of training experience, campuses inside Technology Incubation Centres across Nigeria with HQ in Nnewi, Anambra State, plus online programs worldwide.`,
@@ -96,7 +98,10 @@ function buildPrompt(category: Category, existingTitles: string[]): string {
     `- Target a specific high-intent long-tail keyword a Nigerian reader would actually search in ${new Date().getFullYear()}. Put it in the title, the first paragraph and at least two H2 headings.`,
     `- Title: 55-70 characters, specific, no clickbait, no emoji.`,
     `- description: a meta description of 150-160 characters.`,
-    `- content: GitHub-flavoured markdown, 1100-1600 words. Start with an H1 that matches the title, then a line "*By Tech Faculty Editorial · ${prettyDate()}*", then the body.`,
+    `- content: GitHub-flavoured markdown, 1100-1600 words. Start with an H1 that matches the title, then a line "*By Bill Achusim, Founder, Tech Faculty NG · ${prettyDate()}*", then the body.`,
+    `- Link naturally to 2-3 genuinely relevant earlier Tech Faculty blog posts using /blog/<slug> markdown links, chosen from:`,
+    RECENT.slice(0, 25).map((r) => `  - ${r.title} -> /blog/${r.slug}`).join("\n") || "  - (none yet)",
+    `- Keep markdown tables small: max 4 columns, short cell text.`,
     `- Structure with H2/H3 sections, short paragraphs, bullet lists and at least one markdown table where it genuinely helps.`,
     `- Include a "## Frequently asked questions" section with 4 question H3s and concise answers.`,
     `- Include 3-5 internal markdown links chosen from: /departments, /locations, /careers, /events, /blog, /siwes, /verify, /about.`,
@@ -179,6 +184,7 @@ Deno.serve(async (req) => {
     const rows = existing ?? [];
     const takenSlugs = new Set(rows.map((r) => r.slug));
     const titles = rows.map((r) => r.title);
+    RECENT = rows.map((r) => ({ slug: r.slug, title: r.title }));
 
     // Rotation: the categories whose newest generated post is oldest go first.
     const lastPublished = new Map<string, string>();
@@ -230,6 +236,7 @@ Deno.serve(async (req) => {
         read_time: `${readTime} min read`,
         published_at: todayIso(),
         source: "auto",
+        author: "Bill Achusim",
         is_published: true,
       });
 

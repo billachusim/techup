@@ -162,7 +162,7 @@ const BlogPost = () => {
                   ),
                 }}
               >
-                {post.content}
+                {post.content.replace(/^\s*\*By [^*\n]+\*[ \t]*\n?/m, "")}
               </ReactMarkdown>
             </div>
 

@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Clock, Calendar } from "lucide-react";
 import { getCategoryByName } from "@/data/blogCategories";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { BLOG_AUTHOR, authorSchema } from "@/data/author";
+import { Linkedin, Twitter } from "lucide-react";
 import BlogActions from "@/components/BlogActions";
 import SuccessKitCTA from "@/components/siwes/SuccessKitCTA";
 import { useAllBlogPosts } from "@/hooks/useBlogPostsData";
@@ -58,7 +61,7 @@ const BlogPost = () => {
           content={`https://techfaculty.ng/blog/${post.slug}`}
         />
         <meta property="article:published_time" content={post.date} />
-        <meta property="article:author" content="Tech Faculty NG" />
+        <meta property="article:author" content={BLOG_AUTHOR.linkedin} />
         {post.tags.map((tag) => (
           <meta property="article:tag" content={tag} key={tag} />
         ))}
@@ -73,11 +76,7 @@ const BlogPost = () => {
             headline: post.title,
             description: post.description,
             datePublished: post.date,
-            author: {
-              "@type": "Organization",
-              name: "Tech Faculty NG",
-              url: "https://techfaculty.ng",
-            },
+            author: authorSchema,
             publisher: {
               "@type": "Organization",
               name: "Tech Faculty NG",
@@ -128,9 +127,14 @@ const BlogPost = () => {
             </div>
 
             {/* Title */}
-            <h1 className="text-3xl md:text-4xl font-bold mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">
               {post.title}
             </h1>
+            <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
+              <span>By <a href={BLOG_AUTHOR.linkedin} target="_blank" rel="author noopener" className="font-medium text-foreground hover:underline">{BLOG_AUTHOR.name}</a>, {BLOG_AUTHOR.role}</span>
+              <a href={BLOG_AUTHOR.linkedin} target="_blank" rel="author noopener" aria-label="Bill Achusim on LinkedIn" className="hover:text-foreground"><Linkedin size={15} /></a>
+                <a href={BLOG_AUTHOR.x} target="_blank" rel="author noopener" aria-label="Bill Achusim on X" className="hover:text-foreground"><Twitter size={15} /></a>
+            </div>
 
             <BlogActions
               slug={post.slug}
@@ -142,7 +146,34 @@ const BlogPost = () => {
 
             {/* Content */}
             <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-muted-foreground prose-p:mb-6 prose-p:leading-relaxed prose-li:text-muted-foreground prose-li:leading-relaxed prose-ul:mb-6 prose-ol:mb-6 prose-strong:text-foreground prose-a:text-primary hover:prose-a:underline prose-hr:my-8">
-              <ReactMarkdown>{post.content}</ReactMarkdown>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  table: ({ node, ...props }) => (
+                    <div className="not-prose my-8 w-full overflow-x-auto rounded-md border border-border">
+                      <table className="w-full min-w-[480px] border-collapse text-sm" {...props} />
+                    </div>
+                  ),
+                  th: ({ node, ...props }) => (
+                    <th className="border-b border-border bg-muted px-3 py-2 text-left font-semibold text-foreground" {...props} />
+                  ),
+                  td: ({ node, ...props }) => (
+                    <td className="border-b border-border px-3 py-2 align-top text-muted-foreground" {...props} />
+                  ),
+                }}
+              >
+                {post.content}
+              </ReactMarkdown>
+            </div>
+
+            <div className="mt-10 rounded-lg border border-border p-5">
+              <p className="text-sm text-muted-foreground">Written by</p>
+              <p className="font-semibold">{BLOG_AUTHOR.name}</p>
+              <p className="text-sm text-muted-foreground mb-3">{BLOG_AUTHOR.role}. Building Africa's remote and physical tech workforce.</p>
+              <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                <a href={BLOG_AUTHOR.linkedin} target="_blank" rel="author noopener" aria-label="Bill Achusim on LinkedIn" className="hover:text-foreground"><Linkedin size={15} /></a>
+                <a href={BLOG_AUTHOR.x} target="_blank" rel="author noopener" aria-label="Bill Achusim on X" className="hover:text-foreground"><Twitter size={15} /></a>
+              </div>
             </div>
 
             {isSiwesPost && <SuccessKitCTA source={post.slug} variant="capture" />}

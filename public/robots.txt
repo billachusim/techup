@@ -15,3 +15,5 @@ Allow: /
 
 Sitemap: https://techfaculty.ng/sitemap.xml
 Sitemap: https://flxwtwzjslufglpwfjdx.supabase.co/functions/v1/sitemap
+
+RSS: https://techfaculty.ng/rss.xml

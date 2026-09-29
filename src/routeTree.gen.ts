@@ -13,11 +13,13 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as BusinessPartnershipsRouteImport } from './routes/business-partnerships'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as FeedDotxmlRouteImport } from './routes/feed[.]xml'
 import { Route as HireRouteImport } from './routes/hire'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LovableRouteImport } from './routes/lovable'
 import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
 import { Route as ProductsRouteImport } from './routes/products'
+import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as SchoolCollaborationsRouteImport } from './routes/school-collaborations'
 import { Route as SiwesRouteImport } from './routes/siwes'
 import { Route as SiwesSuccessKitRouteImport } from './routes/siwes-success-kit'
@@ -76,6 +78,11 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeedDotxmlRoute = FeedDotxmlRouteImport.update({
+  id: '/feed.xml',
+  path: '/feed.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HireRoute = HireRouteImport.update({
   id: '/hire',
   path: '/hire',
@@ -99,6 +106,11 @@ const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
 const ProductsRoute = ProductsRouteImport.update({
   id: '/products',
   path: '/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RssDotxmlRoute = RssDotxmlRouteImport.update({
+  id: '/rss.xml',
+  path: '/rss.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SchoolCollaborationsRoute = SchoolCollaborationsRouteImport.update({
@@ -295,11 +307,13 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/business-partnerships': typeof BusinessPartnershipsRoute
   '/dashboard': typeof DashboardRoute
+  '/feed.xml': typeof FeedDotxmlRoute
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
   '/lovable': typeof LovableRouteWithChildren
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
@@ -343,11 +357,13 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/business-partnerships': typeof BusinessPartnershipsRoute
   '/dashboard': typeof DashboardRoute
+  '/feed.xml': typeof FeedDotxmlRoute
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
   '/lovable': typeof LovableRouteWithChildren
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
@@ -392,11 +408,13 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/business-partnerships': typeof BusinessPartnershipsRoute
   '/dashboard': typeof DashboardRoute
+  '/feed.xml': typeof FeedDotxmlRoute
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
   '/lovable': typeof LovableRouteWithChildren
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
+  '/rss.xml': typeof RssDotxmlRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
@@ -442,11 +460,13 @@ export interface FileRouteTypes {
     | '/about'
     | '/business-partnerships'
     | '/dashboard'
+    | '/feed.xml'
     | '/hire'
     | '/login'
     | '/lovable'
     | '/payment-success'
     | '/products'
+    | '/rss.xml'
     | '/school-collaborations'
     | '/siwes'
     | '/siwes-success-kit'
@@ -490,11 +510,13 @@ export interface FileRouteTypes {
     | '/about'
     | '/business-partnerships'
     | '/dashboard'
+    | '/feed.xml'
     | '/hire'
     | '/login'
     | '/lovable'
     | '/payment-success'
     | '/products'
+    | '/rss.xml'
     | '/school-collaborations'
     | '/siwes'
     | '/siwes-success-kit'
@@ -538,11 +560,13 @@ export interface FileRouteTypes {
     | '/about'
     | '/business-partnerships'
     | '/dashboard'
+    | '/feed.xml'
     | '/hire'
     | '/login'
     | '/lovable'
     | '/payment-success'
     | '/products'
+    | '/rss.xml'
     | '/school-collaborations'
     | '/siwes'
     | '/siwes-success-kit'
@@ -587,11 +611,13 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   BusinessPartnershipsRoute: typeof BusinessPartnershipsRoute
   DashboardRoute: typeof DashboardRoute
+  FeedDotxmlRoute: typeof FeedDotxmlRoute
   HireRoute: typeof HireRoute
   LoginRoute: typeof LoginRoute
   LovableRoute: typeof LovableRouteWithChildren
   PaymentSuccessRoute: typeof PaymentSuccessRoute
   ProductsRoute: typeof ProductsRoute
+  RssDotxmlRoute: typeof RssDotxmlRoute
   SchoolCollaborationsRoute: typeof SchoolCollaborationsRoute
   SiwesRoute: typeof SiwesRoute
   SiwesSuccessKitRoute: typeof SiwesSuccessKitRoute
@@ -658,6 +684,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/feed.xml': {
+      id: '/feed.xml'
+      path: '/feed.xml'
+      fullPath: '/feed.xml'
+      preLoaderRoute: typeof FeedDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/hire': {
       id: '/hire'
       path: '/hire'
@@ -691,6 +724,13 @@ declare module '@tanstack/react-router' {
       path: '/products'
       fullPath: '/products'
       preLoaderRoute: typeof ProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rss.xml': {
+      id: '/rss.xml'
+      path: '/rss.xml'
+      fullPath: '/rss.xml'
+      preLoaderRoute: typeof RssDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/school-collaborations': {
@@ -975,11 +1015,13 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   BusinessPartnershipsRoute: BusinessPartnershipsRoute,
   DashboardRoute: DashboardRoute,
+  FeedDotxmlRoute: FeedDotxmlRoute,
   HireRoute: HireRoute,
   LoginRoute: LoginRoute,
   LovableRoute: LovableRouteWithChildren,
   PaymentSuccessRoute: PaymentSuccessRoute,
   ProductsRoute: ProductsRoute,
+  RssDotxmlRoute: RssDotxmlRoute,
   SchoolCollaborationsRoute: SchoolCollaborationsRoute,
   SiwesRoute: SiwesRoute,
   SiwesSuccessKitRoute: SiwesSuccessKitRoute,

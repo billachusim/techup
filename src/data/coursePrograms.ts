@@ -120,3 +120,6 @@ export function findProgram(planOrDepartment?: string | null): CourseProgram {
 
 /** Public workspace link students use before we know their Slack member id. */
 export const SLACK_WORKSPACE_URL = "https://tech-faculty.slack.com";
+
+/** One-click Slack workspace invite for new students. */
+export const SLACK_JOIN_URL = "https://join.slack.com/t/tech-faculty/shared_invite/zt-4amaqqq6t-gxhTsCM~GunqRgjqHLzxtQ";

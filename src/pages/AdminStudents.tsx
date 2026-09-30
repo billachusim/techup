@@ -51,7 +51,14 @@ export default function AdminStudents() {
   const submit = async (id: string, status: "reviewed" | "needs_changes") => {
     const d = drafts[id] ?? { score: "", note: "" };
     const score = d.score.trim() === "" ? null : Math.max(0, Math.min(100, parseInt(d.score, 10)));
-    if (score !== null && Number.isNaN(score)) { toast.error("Score must be 0–100"); return; }
+    if (score !== null && Number.isNaN(score)) {
+      toast.error("Score must be 0–100");
+    } else {
+      await save(id, status, score, d.note);
+    }
+  };
+
+  const save = async (id: string, status: "reviewed" | "needs_changes", score: number | null, note: string) => {
     setSaving(id);
     try {
       await review({ data: { id, status, score, note: d.note } });

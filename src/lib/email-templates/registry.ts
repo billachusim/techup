@@ -12,6 +12,7 @@ import {
   hiringRequestReceived,
   hiringRequestAdmin,
 } from './marketplace'
+import { studentWelcome, classUnlocked, studentWorkReviewed } from './student'
 
 export interface TemplateEntry {
   component: ComponentType<any>

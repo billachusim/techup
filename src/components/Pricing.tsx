@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { onboardStudent } from "@/lib/student-onboarding.functions";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -377,6 +379,7 @@ const Pricing = () => {
   const [enrollmentData, setEnrollmentData] = useState<any>(null);
   const { toast } = useToast();
   const { formatPrice, symbol, convertPrice, isNigeria } = useCurrency();
+  const runOnboarding = useServerFn(onboardStudent);
 
   const [selections, setSelections] = useState<Record<string, Selection>>({});
   const [totalPrices, setTotalPrices] = useState<Record<string, number>>({});

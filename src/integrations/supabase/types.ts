@@ -1487,6 +1487,10 @@ export type Database = {
         }
         Returns: string
       }
+      record_my_faculty_id: {
+        Args: { _department: string; _old_id: string }
+        Returns: string
+      }
       request_talent_intro: {
         Args: {
           _message?: string

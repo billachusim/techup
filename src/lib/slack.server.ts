@@ -62,6 +62,29 @@ export async function listChannels(): Promise<SlackChannel[]> {
   return out.sort((a, b) => a.name.localeCompare(b.name));
 }
 
+/**
+ * Finds a channel by name, creating it if it does not exist yet.
+ * Used for rolling student course cohort channels (#course-ai-web-dev etc).
+ */
+export async function ensureChannel(name: string, topic?: string): Promise<SlackChannel> {
+  const clean = name.replace(/^#/, "").toLowerCase();
+  const existing = (await listChannels()).find((c) => c.name === clean);
+  if (existing) return existing;
+
+  const created = await slackPost("conversations.create", { name: clean, is_private: false });
+  if (!created.ok) throw new Error(`Could not create #${clean}: ${created.error}`);
+  const channel: SlackChannel = {
+    id: created.channel.id,
+    name: created.channel.name,
+    is_private: !!created.channel.is_private,
+  };
+  if (topic) {
+    await slackPost("conversations.setPurpose", { channel: channel.id, purpose: topic });
+    await slackPost("conversations.setTopic", { channel: channel.id, topic });
+  }
+  return channel;
+}
+
 /** Resolves a talent's Slack member id from their email address. */
 export async function findSlackUserByEmail(email?: string | null): Promise<string | null> {
   if (!email) return null;

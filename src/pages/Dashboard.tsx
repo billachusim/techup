@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { useUser } from "@/contexts/UserContext";
 import { HandoutModal } from "@/components/HandoutModal";
 import { CertificateCard } from "@/components/CertificateCard";
+import { StudentClassroom } from "@/components/student/StudentClassroom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Link, useNavigate } from "@/lib/router-compat";
@@ -468,6 +469,17 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             </div>
+
+            {/* Slack class group + weekly work submission */}
+            <StudentClassroom
+              facultyId={facultyId || userData?.faculty_id}
+              department={userData?.department}
+              courseName={nextLecture?.courses?.name}
+              classNumber={nextClassNumber}
+              classTitle={(aiGeneratedContent?.title || nextLecture?.title || '').replace(/\s*-?\s*(Session|Class)\s+\d+/gi, '')}
+            />
+
+
 
             {/* Courses and Progress */}
             <Card>

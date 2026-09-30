@@ -56,3 +56,12 @@
 - [x] Slack: matched talent auto-added to #general; talent selected for a project auto-added to that project's Slack channel
 - [x] Admin Slack channel picker per project + manual "Slack access" button
 - [ ] Emails only start delivering once alerts.techfaculty.ng finishes verifying, and after publishing
+
+## Student onboarding automation (Slack + email)
+- [x] Programmes renamed AI-first (AI for Full-Stack Web Development, AI for Data Analytics & BI, AI & Autonomous Agents Engineering, etc.); departments unchanged
+- [x] Rolling Slack cohort channels per programme (#course-ai-web-dev, #course-general-tech, ...) created by the bot when missing
+- [x] Enrolment auto-adds the student to #general and their course channel, posts a welcome, and sends the student welcome email (Faculty ID, programme, channel, dashboard)
+- [x] Dashboard: "Your class group" card (connect/re-check) + weekly work submission with status, score and tutor feedback; submissions post to the course channel
+- [ ] Slack workspace shared invite link still needed (SLACK_JOIN_URL) so students who aren't on Slack can join in one click
+- [ ] Admin review UI for student submissions (scoring toward assessment/certification) — next pass
+- [ ] Automated per-class Slack briefing on next-class generation — next pass

@@ -813,7 +813,12 @@ export type Database = {
           id: string
           learning_mode: string | null
           name: string
+          onboarding_email_sent_at: string | null
           phone: string | null
+          slack_channel_id: string | null
+          slack_channel_name: string | null
+          slack_joined_at: string | null
+          slack_user_id: string | null
           updated_at: string
         }
         Insert: {
@@ -826,7 +831,12 @@ export type Database = {
           id: string
           learning_mode?: string | null
           name?: string
+          onboarding_email_sent_at?: string | null
           phone?: string | null
+          slack_channel_id?: string | null
+          slack_channel_name?: string | null
+          slack_joined_at?: string | null
+          slack_user_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -839,7 +849,12 @@ export type Database = {
           id?: string
           learning_mode?: string | null
           name?: string
+          onboarding_email_sent_at?: string | null
           phone?: string | null
+          slack_channel_id?: string | null
+          slack_channel_name?: string | null
+          slack_joined_at?: string | null
+          slack_user_id?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -897,6 +912,71 @@ export type Database = {
             columns: ["talent_profile_id"]
             isOneToOne: false
             referencedRelation: "talent_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_deliverables: {
+        Row: {
+          class_number: number | null
+          course_id: string | null
+          course_name: string | null
+          created_at: string
+          faculty_id: string
+          id: string
+          proof_url: string | null
+          reviewed_at: string | null
+          reviewer_note: string | null
+          score: number | null
+          status: string
+          summary: string | null
+          title: string
+          updated_at: string
+          user_id: string
+          week_of: string
+        }
+        Insert: {
+          class_number?: number | null
+          course_id?: string | null
+          course_name?: string | null
+          created_at?: string
+          faculty_id: string
+          id?: string
+          proof_url?: string | null
+          reviewed_at?: string | null
+          reviewer_note?: string | null
+          score?: number | null
+          status?: string
+          summary?: string | null
+          title: string
+          updated_at?: string
+          user_id?: string
+          week_of?: string
+        }
+        Update: {
+          class_number?: number | null
+          course_id?: string | null
+          course_name?: string | null
+          created_at?: string
+          faculty_id?: string
+          id?: string
+          proof_url?: string | null
+          reviewed_at?: string | null
+          reviewer_note?: string | null
+          score?: number | null
+          status?: string
+          summary?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          week_of?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_deliverables_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
             referencedColumns: ["id"]
           },
         ]

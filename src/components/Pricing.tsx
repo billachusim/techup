@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { onboardStudent } from "@/lib/student-onboarding.functions";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -122,7 +124,7 @@ const departmentPlans: DepartmentPlan[] = [
   {
     id: "bootcamp-starter",
     name: "Bootcamp Starter",
-    fancyName: "Free Foundation",
+    fancyName: "Everyday AI & Digital Productivity",
     icon: Users,
     category: "beginner",
     description: "Start your tech journey with essential free courses",
@@ -146,7 +148,7 @@ const departmentPlans: DepartmentPlan[] = [
   {
     id: "developer-pro",
     name: "Developer Pro",
-    fancyName: "Web Development Mastery",
+    fancyName: "AI for Full-Stack Web Development",
     icon: Code,
     category: "development",
     description: "Master full-stack web development from scratch",
@@ -171,7 +173,7 @@ const departmentPlans: DepartmentPlan[] = [
   {
     id: "data-wizard",
     name: "Data Wizard",
-    fancyName: "Data Science & Analytics",
+    fancyName: "AI for Data Analytics & Business Intelligence",
     icon: Database,
     category: "data-ai",
     description: "Become a data science expert and unlock insights",
@@ -196,7 +198,7 @@ const departmentPlans: DepartmentPlan[] = [
   {
     id: "ai-innovator",
     name: "AI Innovator",
-    fancyName: "AI & Machine Learning",
+    fancyName: "AI & Autonomous Agents Engineering",
     icon: Sparkles,
     category: "data-ai",
     description: "Lead the AI revolution with cutting-edge skills",
@@ -222,7 +224,7 @@ const departmentPlans: DepartmentPlan[] = [
   {
     id: "security-shield",
     name: "Security Shield",
-    fancyName: "Cybersecurity & Ethical Hacking",
+    fancyName: "AI for Cybersecurity & Threat Intelligence",
     icon: Shield,
     category: "security",
     description: "Master cybersecurity and protect digital assets",
@@ -247,7 +249,7 @@ const departmentPlans: DepartmentPlan[] = [
   {
     id: "mobile-app-developer",
     name: "Mobile App Developer",
-    fancyName: "Mobile App Development",
+    fancyName: "AI for Mobile App Development",
     icon: Smartphone,
     category: "development",
     description: "Build powerful mobile apps for iOS and Android",
@@ -272,7 +274,7 @@ const departmentPlans: DepartmentPlan[] = [
   {
     id: "cloud-architect",
     name: "Cloud Architect",
-    fancyName: "Cloud Computing & DevOps",
+    fancyName: "AI for Cloud & DevOps Engineering",
     icon: Cloud,
     category: "development",
     description: "Master cloud platforms and modern DevOps practices",
@@ -297,7 +299,7 @@ const departmentPlans: DepartmentPlan[] = [
   {
     id: "design-master",
     name: "Design Master",
-    fancyName: "UI/UX Design Excellence",
+    fancyName: "AI for UI/UX & Product Design",
     icon: Palette,
     category: "creative",
     description: "Create stunning user experiences and interfaces",
@@ -321,7 +323,7 @@ const departmentPlans: DepartmentPlan[] = [
   {
     id: "digital-marketing-pro",
     name: "Digital Marketing Pro",
-    fancyName: "Digital Marketing & Growth",
+    fancyName: "AI for Digital Marketing & Growth",
     icon: TrendingUp,
     category: "creative",
     description: "Master digital marketing and growth strategies",
@@ -345,7 +347,7 @@ const departmentPlans: DepartmentPlan[] = [
   {
     id: "custom-builder",
     name: "Custom Program",
-    fancyName: "Build Your Own Path",
+    fancyName: "AI-Powered Custom Programme",
     icon: Trophy,
     category: "custom",
     description: "Create your own custom learning journey",
@@ -377,6 +379,7 @@ const Pricing = () => {
   const [enrollmentData, setEnrollmentData] = useState<any>(null);
   const { toast } = useToast();
   const { formatPrice, symbol, convertPrice, isNigeria } = useCurrency();
+  const runOnboarding = useServerFn(onboardStudent);
 
   const [selections, setSelections] = useState<Record<string, Selection>>({});
   const [totalPrices, setTotalPrices] = useState<Record<string, number>>({});
@@ -713,6 +716,15 @@ const Pricing = () => {
         status: enrollmentStatus,
         learning_mode: selectedMode,
       });
+
+      // Slack class group + welcome email (best effort, never blocks enrolment)
+      try {
+        await runOnboarding({ data: {} } as any);
+      } catch (onboardErr) {
+        console.warn('Student onboarding automation failed:', onboardErr);
+      }
+
+
 
       const courses = plan.isCustom 
         ? allAvailableCourses.filter(c => selection.selectedCourses.includes(c.id))

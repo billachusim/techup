@@ -43,6 +43,9 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'intro-approved': introApproved,
   'hiring-request-received': hiringRequestReceived,
   'hiring-request-admin': hiringRequestAdmin,
+  'student-welcome': studentWelcome,
+  'class-unlocked': classUnlocked,
+  'student-work-reviewed': studentWorkReviewed,
   // Add templates here as they are created, e.g.:
   // 'welcome': welcomeTemplate,
 }

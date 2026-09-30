@@ -29,6 +29,7 @@ import { Route as TinypeopleRouteImport } from './routes/tinypeople'
 import { Route as VirtualSiwesRouteImport } from './routes/virtual-siwes'
 import { Route as Why90OfTechLearnersQuitButYouDontHaveToRouteImport } from './routes/why-90-of-tech-learners-quit-but-you-dont-have-to'
 import { Route as AdminCertificatesRouteImport } from './routes/admin.certificates'
+import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminTalentRouteImport } from './routes/admin.talent'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -157,6 +158,11 @@ const Why90OfTechLearnersQuitButYouDontHaveToRoute =
 const AdminCertificatesRoute = AdminCertificatesRouteImport.update({
   id: '/admin/certificates',
   path: '/admin/certificates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminStudentsRoute = AdminStudentsRouteImport.update({
+  id: '/admin/students',
+  path: '/admin/students',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminTalentRoute = AdminTalentRouteImport.update({
@@ -323,6 +329,7 @@ export interface FileRoutesByFullPath {
   '/virtual-siwes': typeof VirtualSiwesRoute
   '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
   '/admin/certificates': typeof AdminCertificatesRoute
+  '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
@@ -373,6 +380,7 @@ export interface FileRoutesByTo {
   '/virtual-siwes': typeof VirtualSiwesRoute
   '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
   '/admin/certificates': typeof AdminCertificatesRoute
+  '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
@@ -424,6 +432,7 @@ export interface FileRoutesById {
   '/virtual-siwes': typeof VirtualSiwesRoute
   '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
   '/admin/certificates': typeof AdminCertificatesRoute
+  '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
@@ -476,6 +485,7 @@ export interface FileRouteTypes {
     | '/virtual-siwes'
     | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
     | '/admin/certificates'
+    | '/admin/students'
     | '/admin/talent'
     | '/blog/$slug'
     | '/category/$'
@@ -526,6 +536,7 @@ export interface FileRouteTypes {
     | '/virtual-siwes'
     | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
     | '/admin/certificates'
+    | '/admin/students'
     | '/admin/talent'
     | '/blog/$slug'
     | '/category/$'
@@ -576,6 +587,7 @@ export interface FileRouteTypes {
     | '/virtual-siwes'
     | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
     | '/admin/certificates'
+    | '/admin/students'
     | '/admin/talent'
     | '/blog/$slug'
     | '/category/$'
@@ -627,6 +639,7 @@ export interface RootRouteChildren {
   VirtualSiwesRoute: typeof VirtualSiwesRoute
   Why90OfTechLearnersQuitButYouDontHaveToRoute: typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
   AdminCertificatesRoute: typeof AdminCertificatesRoute
+  AdminStudentsRoute: typeof AdminStudentsRoute
   AdminTalentRoute: typeof AdminTalentRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CategorySplatRoute: typeof CategorySplatRoute
@@ -794,6 +807,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/certificates'
       fullPath: '/admin/certificates'
       preLoaderRoute: typeof AdminCertificatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/students': {
+      id: '/admin/students'
+      path: '/admin/students'
+      fullPath: '/admin/students'
+      preLoaderRoute: typeof AdminStudentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/talent': {
@@ -1032,6 +1052,7 @@ const rootRouteChildren: RootRouteChildren = {
   Why90OfTechLearnersQuitButYouDontHaveToRoute:
     Why90OfTechLearnersQuitButYouDontHaveToRoute,
   AdminCertificatesRoute: AdminCertificatesRoute,
+  AdminStudentsRoute: AdminStudentsRoute,
   AdminTalentRoute: AdminTalentRoute,
   BlogSlugRoute: BlogSlugRoute,
   CategorySplatRoute: CategorySplatRoute,

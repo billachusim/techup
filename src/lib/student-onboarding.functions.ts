@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { findProgram, SLACK_WORKSPACE_URL } from "@/data/coursePrograms";
+import { findProgram, SLACK_WORKSPACE_URL, SLACK_JOIN_URL } from "@/data/coursePrograms";
 
 /**
  * Student onboarding automation: Slack cohort channel + welcome email.
@@ -17,7 +17,7 @@ export const onboardStudent = createServerFn({ method: "POST" })
       .eq("id", context.userId)
       .maybeSingle();
 
-    if (!profile) return { ok: false as const, notes: ["Profile not found"], joinUrl: SLACK_WORKSPACE_URL };
+    if (!profile) return { ok: false as const, notes: ["Profile not found"], joinUrl: SLACK_JOIN_URL };
 
     const program = findProgram(profile.department);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -81,7 +81,7 @@ export const onboardStudent = createServerFn({ method: "POST" })
             facultyId: profile.faculty_id,
             programme: program.title,
             channel: channelName ?? program.channel,
-            slackUrl: process.env["SLACK_JOIN_URL"] || SLACK_WORKSPACE_URL,
+            slackUrl: SLACK_JOIN_URL,
             learningMode: profile.learning_mode,
           },
           idempotencyKey: `student-welcome-${profile.id}-${profile.faculty_id ?? "none"}`,
@@ -101,7 +101,7 @@ export const onboardStudent = createServerFn({ method: "POST" })
       programme: program.title,
       channelName: channelName ?? program.channel,
       slackLinked: !!slackUserId,
-      joinUrl: process.env["SLACK_JOIN_URL"] || SLACK_WORKSPACE_URL,
+      joinUrl: SLACK_JOIN_URL,
       notes,
     };
   });

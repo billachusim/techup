@@ -10,7 +10,7 @@ import { Hash, ExternalLink, Upload, CheckCircle2, Clock, AlertCircle, Loader2 }
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { onboardStudent, notifyStudentWork } from "@/lib/student-onboarding.functions";
-import { findProgram, SLACK_WORKSPACE_URL } from "@/data/coursePrograms";
+import { findProgram, SLACK_JOIN_URL } from "@/data/coursePrograms";
 
 interface Props {
   facultyId?: string | null;
@@ -45,7 +45,7 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
   const program = findProgram(department);
   const [channelName, setChannelName] = useState<string>(program.channel);
   const [slackLinked, setSlackLinked] = useState<boolean | null>(null);
-  const [joinUrl, setJoinUrl] = useState<string>(SLACK_WORKSPACE_URL);
+  const [joinUrl, setJoinUrl] = useState<string>(SLACK_JOIN_URL);
   const [connecting, setConnecting] = useState(false);
   const [items, setItems] = useState<Deliverable[]>([]);
   const [title, setTitle] = useState("");

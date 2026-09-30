@@ -62,6 +62,6 @@
 - [x] Rolling Slack cohort channels per programme (#course-ai-web-dev, #course-general-tech, ...) created by the bot when missing
 - [x] Enrolment auto-adds the student to #general and their course channel, posts a welcome, and sends the student welcome email (Faculty ID, programme, channel, dashboard)
 - [x] Dashboard: "Your class group" card (connect/re-check) + weekly work submission with status, score and tutor feedback; submissions post to the course channel
-- [ ] Slack workspace shared invite link still needed (SLACK_JOIN_URL) so students who aren't on Slack can join in one click
+- [x] Slack one-click invite link wired into welcome email and dashboard
 - [x] Admin review page at /admin/students (score, feedback, email + Slack notice, running average)
 - [x] Once-per-class Slack briefing + "next class ready" email from the dashboard

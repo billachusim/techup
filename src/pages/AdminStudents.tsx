@@ -61,7 +61,7 @@ export default function AdminStudents() {
   const save = async (id: string, status: "reviewed" | "needs_changes", score: number | null, note: string) => {
     setSaving(id);
     try {
-      await review({ data: { id, status, score, note: d.note } });
+      await review({ data: { id, status, score, note } });
       toast.success(status === "reviewed" ? "Accepted — student notified" : "Changes requested — student notified");
       await load();
     } catch (e) {

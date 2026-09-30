@@ -717,6 +717,15 @@ const Pricing = () => {
         learning_mode: selectedMode,
       });
 
+      // Slack class group + welcome email (best effort, never blocks enrolment)
+      try {
+        await runOnboarding({ data: {} } as any);
+      } catch (onboardErr) {
+        console.warn('Student onboarding automation failed:', onboardErr);
+      }
+
+
+
       const courses = plan.isCustom 
         ? allAvailableCourses.filter(c => selection.selectedCourses.includes(c.id))
         : plan.courses;

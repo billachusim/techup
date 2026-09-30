@@ -13,6 +13,8 @@ import { useUser } from "@/contexts/UserContext";
 import { HandoutModal } from "@/components/HandoutModal";
 import { CertificateCard } from "@/components/CertificateCard";
 import { StudentClassroom } from "@/components/student/StudentClassroom";
+import { useServerFn } from "@tanstack/react-start";
+import { briefNextClass } from "@/lib/student-review.functions";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Link, useNavigate } from "@/lib/router-compat";
@@ -279,6 +281,23 @@ const Dashboard = () => {
       toast({ title: "Error", description: "Failed to update progress. Please try again.", variant: "destructive" });
     }
   };
+
+  // Once per class: brief the student's Slack class group and email them.
+  const runBrief = useServerFn(briefNextClass);
+  useEffect(() => {
+    if (!nextLecture?.title || !facultyId) return;
+    const title = String(nextLecture.title).replace(/\s*-?\s*(Session|Class)\s+\d+/gi, "").slice(0, 200) || "Your next class";
+    const classKey = `${nextLecture.course_id ?? "general"}:${nextClassNumber}`;
+    void runBrief({
+      data: {
+        classKey,
+        classTitle: title,
+        classNumber: nextClassNumber,
+        date: nextLecture.scheduled_at ? new Date(nextLecture.scheduled_at).toDateString() : undefined,
+      },
+    }).catch(() => { /* best effort */ });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nextLecture?.course_id, nextLecture?.title, nextClassNumber, facultyId]);
 
   const handleRefreshContent = async () => {
     if (!nextLecture?.course_id || !facultyId) return;

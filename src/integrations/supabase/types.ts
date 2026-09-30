@@ -916,6 +916,27 @@ export type Database = {
           },
         ]
       }
+      student_class_briefings: {
+        Row: {
+          class_key: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          class_key: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          class_key?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       student_deliverables: {
         Row: {
           class_number: number | null

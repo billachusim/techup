@@ -463,27 +463,6 @@ const Dashboard = () => {
                         <RefreshCw className={`mr-2 ${isRefreshingContent ? 'animate-spin' : ''}`} size={16} />
                         {isRefreshingContent ? 'Refreshing...' : 'Refresh Content'}
                       </Button>
-                      {nextLecture.meeting_link && !nextLecture.isAiGenerated && (
-                        <Button size="sm" className="w-full" onClick={() => window.open(nextLecture.meeting_link, "_blank")}>
-                          Join Class<ExternalLink className="ml-2" size={16} />
-                        </Button>
-                      )}
-                      <Button size="sm" variant="outline" className="w-full" onClick={() => {
-                        const message = `Hi! I'm ready for the next class: ${nextLecture.title} (${nextLecture.courses?.name})`;
-                        window.open(`https://wa.me/2348068597140?text=${encodeURIComponent(message)}`, "_blank");
-                      }}>
-                        Join Live Class
-                      </Button>
-                      {slackChannelUrl(userData?.slack_channel_id) && (
-                        <Button variant="outline" size="sm" className="w-full" onClick={() => window.open(slackChannelUrl(userData?.slack_channel_id)!, "_blank")}>
-                          <MessageCircle className="mr-2" size={16} />Course Slack channel{userData?.slack_channel_name ? ` (#${userData.slack_channel_name})` : ""}
-                        </Button>
-                      )}
-                      {nextLecture.courses?.whatsapp_group_link && !nextLecture.isAiGenerated && (
-                        <Button variant="outline" size="sm" className="w-full" onClick={() => window.open(nextLecture.courses.whatsapp_group_link, "_blank")}>
-                          <MessageCircle className="mr-2" size={16} />Class WhatsApp Group
-                        </Button>
-                      )}
                     </div>
                   ) : (
                     <div className="text-center py-8 text-muted-foreground">
@@ -495,13 +474,16 @@ const Dashboard = () => {
               </Card>
             </div>
 
-            {/* Slack class group + weekly work submission */}
+            {/* Class group (Slack, WhatsApp, live class) + weekly work submission */}
             <StudentClassroom
               facultyId={facultyId || userData?.faculty_id}
               department={userData?.department}
               courseName={nextLecture?.courses?.name}
               classNumber={nextClassNumber}
               classTitle={(aiGeneratedContent?.title || nextLecture?.title || '').replace(/\s*-?\s*(Session|Class)\s+\d+/gi, '')}
+              meetingLink={nextLecture && !nextLecture.isAiGenerated ? nextLecture.meeting_link : null}
+              whatsappGroupLink={nextLecture && !nextLecture.isAiGenerated ? nextLecture.courses?.whatsapp_group_link : null}
+              liveClassMessage={nextLecture ? `Hi! I'm ready for the next class: ${nextLecture.title} (${nextLecture.courses?.name})` : null}
             />
 
 

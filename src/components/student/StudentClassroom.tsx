@@ -18,6 +18,9 @@ interface Props {
   courseName?: string | null;
   classNumber?: number;
   classTitle?: string | null;
+  meetingLink?: string | null;
+  whatsappGroupLink?: string | null;
+  liveClassMessage?: string | null;
 }
 
 interface Deliverable {
@@ -37,7 +40,7 @@ const STATUS_LABEL: Record<string, string> = {
   needs_changes: "Needs changes",
 };
 
-export const StudentClassroom = ({ facultyId, department, courseName, classNumber, classTitle }: Props) => {
+export const StudentClassroom = ({ facultyId, department, courseName, classNumber, classTitle, meetingLink, whatsappGroupLink, liveClassMessage }: Props) => {
   const { toast } = useToast();
   const runOnboarding = useServerFn(onboardStudent);
   const runNotify = useServerFn(notifyStudentWork);
@@ -182,10 +185,25 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
             <Button size="sm" variant="outline" onClick={() => window.open(joinUrl, "_blank")}>
               Tech Faculty Slack <ExternalLink className="ml-2 h-4 w-4" />
             </Button>
-            <Button size="sm" onClick={() => connect(false)} disabled={connecting}>
-              {connecting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              {slackLinked ? "Re-check my access" : "Connect my class group"}
+            {meetingLink && (
+              <Button size="sm" onClick={() => window.open(meetingLink, "_blank")}>
+                Join Class <ExternalLink className="ml-2 h-4 w-4" />
+              </Button>
+            )}
+            <Button size="sm" variant="outline" onClick={() => window.open(`https://wa.me/2348068597140?text=${encodeURIComponent(liveClassMessage ?? `Hi! I'm ready for my next ${program.title} class`)}`, "_blank")}>
+              Join Live Class
             </Button>
+            {whatsappGroupLink && (
+              <Button size="sm" variant="outline" onClick={() => window.open(whatsappGroupLink, "_blank")}>
+                Class WhatsApp Group <ExternalLink className="ml-2 h-4 w-4" />
+              </Button>
+            )}
+            {!slackLinked && (
+              <Button size="sm" variant="secondary" onClick={() => connect(false)} disabled={connecting}>
+                {connecting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                Connect my class group
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>

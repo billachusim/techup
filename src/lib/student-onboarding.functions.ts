@@ -100,6 +100,7 @@ export const onboardStudent = createServerFn({ method: "POST" })
       ok: true as const,
       programme: program.title,
       channelName: channelName ?? program.channel,
+      channelId,
       slackLinked: !!slackUserId,
       joinUrl: SLACK_JOIN_URL,
       notes,

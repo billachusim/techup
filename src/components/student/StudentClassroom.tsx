@@ -10,7 +10,7 @@ import { Hash, ExternalLink, Upload, CheckCircle2, Clock, AlertCircle, Loader2 }
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { onboardStudent, notifyStudentWork } from "@/lib/student-onboarding.functions";
-import { findProgram, SLACK_JOIN_URL } from "@/data/coursePrograms";
+import { findProgram, SLACK_JOIN_URL, slackChannelUrl } from "@/data/coursePrograms";
 
 interface Props {
   facultyId?: string | null;
@@ -44,6 +44,7 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
 
   const program = findProgram(department);
   const [channelName, setChannelName] = useState<string>(program.channel);
+  const [channelId, setChannelId] = useState<string | null>(null);
   const [slackLinked, setSlackLinked] = useState<boolean | null>(null);
   const [joinUrl, setJoinUrl] = useState<string>(SLACK_JOIN_URL);
   const [connecting, setConnecting] = useState(false);
@@ -68,6 +69,7 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
       const res: any = await runOnboarding({ data: {} } as any);
       if (res?.ok) {
         setChannelName(res.channelName ?? program.channel);
+        if (res.channelId) setChannelId(res.channelId);
         setSlackLinked(!!res.slackLinked);
         if (res.joinUrl) setJoinUrl(res.joinUrl);
         if (!silent) {
@@ -93,12 +95,13 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
       if (!user || cancelled) return;
       const { data: profile } = await supabase
         .from("profiles")
-        .select("slack_user_id, slack_channel_name")
+        .select("slack_user_id, slack_channel_name, slack_channel_id")
         .eq("id", user.id)
         .maybeSingle();
       if (cancelled) return;
       const p = profile as any;
       if (p?.slack_channel_name) setChannelName(p.slack_channel_name);
+      if (p?.slack_channel_id) setChannelId(p.slack_channel_id);
       setSlackLinked(!!p?.slack_user_id);
       await loadDeliverables();
       if (!p?.slack_channel_name || !p?.slack_user_id) void connect(true);
@@ -171,8 +174,13 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
               : "Join the Tech Faculty Slack with the same email you registered with, then connect to be added automatically."}
           </p>
           <div className="flex flex-wrap gap-2">
+            {slackChannelUrl(channelId) && (
+              <Button size="sm" onClick={() => window.open(slackChannelUrl(channelId)!, "_blank")}>
+                Open #{channelName} <ExternalLink className="ml-2 h-4 w-4" />
+              </Button>
+            )}
             <Button size="sm" variant="outline" onClick={() => window.open(joinUrl, "_blank")}>
-              Open Slack <ExternalLink className="ml-2 h-4 w-4" />
+              Tech Faculty Slack <ExternalLink className="ml-2 h-4 w-4" />
             </Button>
             <Button size="sm" onClick={() => connect(false)} disabled={connecting}>
               {connecting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}

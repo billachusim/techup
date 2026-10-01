@@ -6,6 +6,7 @@ import {
   Scripts,
   createRootRouteWithContext,
   useRouter,
+  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { HelmetProvider } from "react-helmet-async";
@@ -193,13 +194,7 @@ function RootComponent() {
   );
 }
 
-function RootErrorComponent({
-  error,
-  reset,
-}: {
-  error: Error;
-  reset: () => void;
-}) {
+function RootErrorComponent({ error, reset }: ErrorComponentProps) {
   const router = useRouter();
 
   useEffect(() => {

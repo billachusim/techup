@@ -123,3 +123,7 @@ export const SLACK_WORKSPACE_URL = "https://tech-faculty.slack.com";
 
 /** One-click Slack workspace invite for new students. */
 export const SLACK_JOIN_URL = "https://join.slack.com/t/tech-faculty/shared_invite/zt-4amaqqq6t-gxhTsCM~GunqRgjqHLzxtQ";
+
+/** Direct link to a student's course cohort channel. */
+export const slackChannelUrl = (channelId?: string | null) =>
+  channelId ? `${SLACK_WORKSPACE_URL}/archives/${channelId}` : null;

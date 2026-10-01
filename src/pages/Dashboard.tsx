@@ -13,6 +13,7 @@ import { useUser } from "@/contexts/UserContext";
 import { HandoutModal } from "@/components/HandoutModal";
 import { CertificateCard } from "@/components/CertificateCard";
 import { StudentClassroom } from "@/components/student/StudentClassroom";
+import { slackChannelUrl } from "@/data/coursePrograms";
 import { useServerFn } from "@tanstack/react-start";
 import { briefNextClass } from "@/lib/student-review.functions";
 import Header from "@/components/Header";
@@ -473,6 +474,11 @@ const Dashboard = () => {
                       }}>
                         Join Live Class
                       </Button>
+                      {slackChannelUrl(userData?.slack_channel_id) && (
+                        <Button variant="outline" size="sm" className="w-full" onClick={() => window.open(slackChannelUrl(userData?.slack_channel_id)!, "_blank")}>
+                          <MessageCircle className="mr-2" size={16} />Course Slack channel{userData?.slack_channel_name ? ` (#${userData.slack_channel_name})` : ""}
+                        </Button>
+                      )}
                       {nextLecture.courses?.whatsapp_group_link && !nextLecture.isAiGenerated && (
                         <Button variant="outline" size="sm" className="w-full" onClick={() => window.open(nextLecture.courses.whatsapp_group_link, "_blank")}>
                           <MessageCircle className="mr-2" size={16} />Class WhatsApp Group

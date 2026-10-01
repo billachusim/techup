@@ -13,7 +13,7 @@ import { useUser } from "@/contexts/UserContext";
 import { HandoutModal } from "@/components/HandoutModal";
 import { CertificateCard } from "@/components/CertificateCard";
 import { StudentClassroom } from "@/components/student/StudentClassroom";
-import { slackChannelUrl } from "@/data/coursePrograms";
+
 import { useServerFn } from "@tanstack/react-start";
 import { briefNextClass } from "@/lib/student-review.functions";
 import Header from "@/components/Header";

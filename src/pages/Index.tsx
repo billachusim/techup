@@ -15,7 +15,7 @@ import GetStarted from "@/components/GetStarted";
 import Footer from "@/components/Footer";
 import HomeWhatsAppPrompts from "@/components/HomeWhatsAppPrompts";
 
-const provider = { "@type": "Organization", "name": "Tech Faculty", "url": "https://techfaculty.ng" };
+const provider = { "@type": "Organization", "name": "Tech Faculty NG", "url": "https://techfaculty.ng" };
 
 const courses = [
   {
@@ -69,7 +69,7 @@ const courseSchema = {
   "@context": "https://schema.org",
   "@type": "ItemList",
   "name": "Tech Faculty Courses",
-  "description": "Accredited technology bootcamp courses offered by Tech Faculty in Africa",
+  "description": "Technology bootcamp courses from Tech Faculty NG, licensed by FMSTI through NBTI",
   "itemListElement": courses.map((c) => ({
     "@type": "ListItem",
     "position": c.position,

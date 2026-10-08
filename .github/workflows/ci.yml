@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so the sitemap generator can read real lastmod dates from git.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # The build's prebuild step runs scripts through bunx.
+      - uses: oven-sh/setup-bun@v2
+
+      # bun.lock resolves packages from Lovable's private registry, which CI can't reach,
+      # so install from the public npm registry instead.
+      - name: Install dependencies
+        run: npm install --no-package-lock --legacy-peer-deps
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build
+
+      - name: Check sitemap
+        run: |
+          xmllint --noout .output/public/sitemap.xml
+          echo "$(grep -c '<loc>' .output/public/sitemap.xml) URLs in sitemap.xml"

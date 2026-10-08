@@ -25,7 +25,7 @@ export default function AdminStudents() {
   const list = useServerFn(listStudentWork);
   const review = useServerFn(reviewStudentWork);
   const [filter, setFilter] = useState<Status>("submitted");
-  const [rows, setRows] = useState<any[]>([]);
+  const [rows, setRows] = useState<Awaited<ReturnType<typeof list>>>([]);
   const [busy, setBusy] = useState(false);
   const [drafts, setDrafts] = useState<Record<string, { score: string; note: string }>>({});
   const [saving, setSaving] = useState<string | null>(null);
@@ -35,7 +35,7 @@ export default function AdminStudents() {
     try {
       const data = await list({ data: { status: filter } });
       setRows(data);
-      setDrafts(Object.fromEntries(data.map((r: any) => [r.id, { score: r.score?.toString() ?? "", note: r.reviewer_note ?? "" }])));
+      setDrafts(Object.fromEntries(data.map((r) => [r.id, { score: r.score?.toString() ?? "", note: r.reviewer_note ?? "" }])));
     } catch (e) {
       toast.error((e as Error).message);
     } finally {

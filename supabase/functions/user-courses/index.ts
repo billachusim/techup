@@ -104,13 +104,14 @@ serve(async (req) => {
 
     // 4) Remove course enrollments that don't belong to the current plan
     if (currentEnrollments && currentEnrollments.length > 0) {
-      const enrollmentsToRemove = currentEnrollments.filter((enrollment: any) => {
-        const coursePlan = enrollment.courses?.plan_required;
+      const enrollmentsToRemove = currentEnrollments.filter((enrollment) => {
+        // Untyped client infers the join as an array, but a many-to-one join returns one row
+        const coursePlan = (enrollment.courses as unknown as { plan_required?: string } | null)?.plan_required;
         return coursePlan && coursePlan !== dbPlan;
       });
 
       if (enrollmentsToRemove.length > 0) {
-        const idsToRemove = enrollmentsToRemove.map((e: any) => e.id);
+        const idsToRemove = enrollmentsToRemove.map((e) => e.id);
         console.log(`Removing ${idsToRemove.length} outdated course enrollments for plan switch`);
         
         const { error: deleteErr } = await admin
@@ -121,7 +122,7 @@ serve(async (req) => {
         if (deleteErr) throw deleteErr;
 
         // Also clean up related progress records
-        const courseIdsToRemove = enrollmentsToRemove.map((e: any) => e.course_id);
+        const courseIdsToRemove = enrollmentsToRemove.map((e) => e.course_id);
         await admin
           .from("course_progress")
           .delete()
@@ -171,7 +172,7 @@ serve(async (req) => {
       .eq("faculty_id", facultyId);
 
     // 8) Fetch lectures for all courses
-    const courseIds = (enrollments || []).map((e: any) => e.course_id);
+    const courseIds = (enrollments || []).map((e) => e.course_id);
     const { data: lecturesData } = await admin
       .from("lectures")
       .select("*")
@@ -179,12 +180,12 @@ serve(async (req) => {
       .order("scheduled_at", { ascending: true });
 
     // 9) Manually attach progress and lectures to each enrollment
-    const enrichedEnrollments = (enrollments || []).map((enrollment: any) => {
+    const enrichedEnrollments = (enrollments || []).map((enrollment) => {
       const progress = (progressRecords || []).filter(
-        (p: any) => p.course_id === enrollment.course_id
+        (p) => p.course_id === enrollment.course_id
       );
       const lectures = (lecturesData || []).filter(
-        (l: any) => l.course_id === enrollment.course_id
+        (l) => l.course_id === enrollment.course_id
       );
       return {
         ...enrollment,

@@ -10,44 +10,32 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getSupabase, mightHaveSession } from "@/integrations/supabase/lazy";
+import type { Tables } from "@/integrations/supabase/types";
 import { useToast } from "@/hooks/use-toast";
 import { SignupForm } from "./Auth/SignupForm";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, ShieldCheck, Users, Trophy, AlertCircle, Code, Database, Shield, Cloud, Palette, TrendingUp, Sparkles, Smartphone } from "lucide-react";
+import { Check, ShieldCheck, Users, Trophy, AlertCircle, Code, Database, Shield, Cloud, Palette, TrendingUp, Sparkles, Smartphone, type LucideIcon } from "lucide-react";
 import { CourseSelector } from "./Pricing/CourseSelector";
 import { BenefitSelector } from "./Pricing/BenefitSelector";
 import { LearningModeSelector } from "./Pricing/LearningModeSelector";
 import { CheckoutDialog } from "./Pricing/CheckoutDialog";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import {
+  ALL_COURSES as allAvailableCourses,
+  LEARNING_MODES,
+  PLAN_PRICING,
+  type Benefit,
+  type Course,
+  type LearningMode,
+} from "../../supabase/functions/_shared/pricing.ts";
 
 type PlanCategory = "beginner" | "development" | "data-ai" | "creative" | "security" | "custom";
-
-interface Course {
-  id: string;
-  name: string;
-  price: number;
-  category?: string;
-}
-
-interface Benefit {
-  id: string;
-  name: string;
-  price: number;
-  description?: string;
-}
-
-interface LearningMode {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-}
 
 interface DepartmentPlan {
   id: string;
   name: string;
   fancyName: string;
-  icon: any;
+  icon: LucideIcon;
   category: PlanCategory;
   description: string;
   courses: Course[];
@@ -64,61 +52,6 @@ interface Selection {
   learningMode: string;
 }
 
-const LEARNING_MODES = [
-  { id: "online-only", name: "Online Only", price: 0, description: "Self-paced learning with recorded lectures" },
-  { id: "hybrid", name: "Hybrid Mode", price: 12000, description: "Online + Monthly physical meetups" },
-  { id: "physical", name: "Physical Classes", price: 22500, description: "Weekly on-site classes" },
-];
-
-// All available courses for custom builder
-const allAvailableCourses: Course[] = [
-  { id: "html-css", name: "HTML/CSS Fundamentals", price: 7500, category: "Web Development" },
-  { id: "javascript", name: "JavaScript Mastery", price: 12000, category: "Web Development" },
-  { id: "react", name: "React Development", price: 18000, category: "Web Development" },
-  { id: "nodejs", name: "Node.js & Backend", price: 18000, category: "Web Development" },
-  { id: "database", name: "Database Management", price: 12000, category: "Web Development" },
-  { id: "fullstack-projects", name: "Full-Stack Projects", price: 15000, category: "Web Development" },
-  { id: "python", name: "Python Programming", price: 10500, category: "Data Science" },
-  { id: "sql", name: "SQL & Databases", price: 9000, category: "Data Science" },
-  { id: "data-viz", name: "Data Visualization", price: 12000, category: "Data Science" },
-  { id: "statistics", name: "Statistical Analysis", price: 13500, category: "Data Science" },
-  { id: "ml-basics", name: "Machine Learning Basics", price: 22500, category: "AI/ML" },
-  { id: "deep-learning", name: "Deep Learning", price: 27000, category: "AI/ML" },
-  { id: "neural-networks", name: "Neural Networks", price: 22500, category: "AI/ML" },
-  { id: "nlp", name: "NLP Fundamentals", price: 21000, category: "AI/ML" },
-  { id: "computer-vision", name: "Computer Vision", price: 21000, category: "AI/ML" },
-  { id: "ai-deployment", name: "AI Deployment", price: 15000, category: "AI/ML" },
-  { id: "network-security", name: "Network Security", price: 15000, category: "Cybersecurity" },
-  { id: "ethical-hacking", name: "Ethical Hacking", price: 22500, category: "Cybersecurity" },
-  { id: "soc-ops", name: "SOC Operations", price: 18000, category: "Cybersecurity" },
-  { id: "incident-response", name: "Incident Response", price: 12000, category: "Cybersecurity" },
-  { id: "comptia-prep", name: "CompTIA Prep", price: 15000, category: "Cybersecurity" },
-  { id: "ceh-prep", name: "CEH Prep", price: 18000, category: "Cybersecurity" },
-  { id: "aws", name: "AWS Fundamentals", price: 18000, category: "Cloud/DevOps" },
-  { id: "azure", name: "Azure Basics", price: 18000, category: "Cloud/DevOps" },
-  { id: "gcp", name: "GCP Essentials", price: 18000, category: "Cloud/DevOps" },
-  { id: "kubernetes", name: "Kubernetes & Docker", price: 22500, category: "Cloud/DevOps" },
-  { id: "cicd", name: "CI/CD Pipelines", price: 15000, category: "Cloud/DevOps" },
-  { id: "cloud-cert", name: "Cloud Certifications", price: 12000, category: "Cloud/DevOps" },
-  { id: "figma", name: "Figma Mastery", price: 12000, category: "Design" },
-  { id: "adobe", name: "Adobe Suite", price: 15000, category: "Design" },
-  { id: "product-design", name: "Product Design", price: 18000, category: "Design" },
-  { id: "design-principles", name: "Design Principles", price: 9000, category: "Design" },
-  { id: "design-systems", name: "Design Systems", price: 13500, category: "Design" },
-  { id: "portfolio-projects", name: "Portfolio Projects", price: 10500, category: "Design" },
-  { id: "social-media", name: "Social Media Strategy", price: 10500, category: "Marketing" },
-  { id: "content-marketing", name: "Content Marketing", price: 12000, category: "Marketing" },
-  { id: "seo-sem", name: "SEO/SEM", price: 15000, category: "Marketing" },
-  { id: "video-editing", name: "Video Editing", price: 13500, category: "Marketing" },
-  { id: "photo-editing", name: "Photo Editing", price: 9000, category: "Marketing" },
-  { id: "analytics", name: "Analytics & Growth", price: 12000, category: "Marketing" },
-  { id: "react-native", name: "React Native Development", price: 18000, category: "Mobile Development" },
-  { id: "flutter-dart", name: "Flutter & Dart", price: 18000, category: "Mobile Development" },
-  { id: "ios-swift", name: "iOS with Swift", price: 21000, category: "Mobile Development" },
-  { id: "android-kotlin", name: "Android with Kotlin", price: 21000, category: "Mobile Development" },
-  { id: "mobile-uiux", name: "Mobile UI/UX Design", price: 12000, category: "Mobile Development" },
-  { id: "cross-platform-projects", name: "Cross-Platform Projects", price: 15000, category: "Mobile Development" },
-];
 
 const departmentPlans: DepartmentPlan[] = [
   {
@@ -129,21 +62,7 @@ const departmentPlans: DepartmentPlan[] = [
     category: "beginner",
     description: "Start your tech journey with essential free courses",
     isFree: true,
-    minimumAmount: 0,
-    courses: [
-      { id: "intro-programming", name: "Intro to Programming", price: 0 },
-      { id: "intro-ai-chatgpt", name: "Intro to AI & ChatGPT", price: 0 },
-      { id: "git-github", name: "Git & GitHub Basics", price: 0 },
-      { id: "tech-career", name: "Tech Career Guidance", price: 0 },
-    ],
-    learningModes: [
-      { id: "online-only", name: "Online Only", price: 0, description: "Self-paced learning" }
-    ],
-    benefits: [
-      { id: "community", name: "Community Access", price: 0, description: "Join our vibrant tech community" },
-      { id: "self-paced", name: "Self-Paced Learning", price: 0, description: "Learn at your own pace" },
-      { id: "basic-certificate", name: "Completion Certificate", price: 0, description: "Get certified on completion" },
-    ],
+    ...PLAN_PRICING["bootcamp-starter"],
   },
   {
     id: "developer-pro",
@@ -152,23 +71,7 @@ const departmentPlans: DepartmentPlan[] = [
     icon: Code,
     category: "development",
     description: "Master full-stack web development from scratch",
-    minimumAmount: 50000,
-    courses: [
-      { id: "html-css", name: "HTML/CSS Fundamentals", price: 7500 },
-      { id: "javascript", name: "JavaScript Mastery", price: 12000 },
-      { id: "react", name: "React Development", price: 18000 },
-      { id: "nodejs", name: "Node.js & Backend", price: 18000 },
-      { id: "database", name: "Database Management", price: 12000 },
-      { id: "fullstack-projects", name: "Full-Stack Projects", price: 15000 },
-    ],
-    learningModes: LEARNING_MODES,
-    benefits: [
-      { id: "job-placement", name: "Job Placement Support", price: 15000, description: "Get help finding your first job" },
-      { id: "internship", name: "Internship Access", price: 12000, description: "Access to partner internships" },
-      { id: "mentor-network", name: "Mentor Network Access", price: 18000, description: "Connect with industry mentors" },
-      { id: "certification-prep", name: "Industry Certification Prep", price: 22500, description: "Prepare for industry certifications" },
-      { id: "tech-certificate", name: "Tech Faculty Certificate", price: 0, description: "Official completion certificate" },
-    ],
+    ...PLAN_PRICING["developer-pro"],
   },
   {
     id: "data-wizard",
@@ -177,23 +80,7 @@ const departmentPlans: DepartmentPlan[] = [
     icon: Database,
     category: "data-ai",
     description: "Become a data science expert and unlock insights",
-    minimumAmount: 100000,
-    courses: [
-      { id: "python", name: "Python Programming", price: 10500 },
-      { id: "sql", name: "SQL & Databases", price: 9000 },
-      { id: "data-viz", name: "Data Visualization", price: 12000 },
-      { id: "statistics", name: "Statistical Analysis", price: 13500 },
-      { id: "ml-basics", name: "Machine Learning Basics", price: 22500 },
-      { id: "data-projects", name: "Real-world Data Projects", price: 15000 },
-    ],
-    learningModes: LEARNING_MODES,
-    benefits: [
-      { id: "job-placement", name: "Job Placement Support", price: 15000, description: "Get help finding your first job" },
-      { id: "internship", name: "Internship Access", price: 12000, description: "Access to partner internships" },
-      { id: "mentor-network", name: "Mentor Network Access", price: 18000, description: "Connect with industry mentors" },
-      { id: "one-on-one", name: "One-on-One Mentorship (1hr/week)", price: 30000, description: "Personal guidance from experts" },
-      { id: "tech-certificate", name: "Tech Faculty Certificate", price: 0, description: "Official completion certificate" },
-    ],
+    ...PLAN_PRICING["data-wizard"],
   },
   {
     id: "ai-innovator",
@@ -202,24 +89,7 @@ const departmentPlans: DepartmentPlan[] = [
     icon: Sparkles,
     category: "data-ai",
     description: "Lead the AI revolution with cutting-edge skills",
-    minimumAmount: 150000,
-    courses: [
-      { id: "deep-learning", name: "Deep Learning", price: 27000 },
-      { id: "neural-networks", name: "Neural Networks", price: 22500 },
-      { id: "tensorflow-pytorch", name: "TensorFlow/PyTorch", price: 18000 },
-      { id: "nlp", name: "NLP Fundamentals", price: 21000 },
-      { id: "computer-vision", name: "Computer Vision", price: 21000 },
-      { id: "ai-deployment", name: "AI Deployment", price: 15000 },
-    ],
-    learningModes: LEARNING_MODES,
-    benefits: [
-      { id: "job-placement", name: "Job Placement Support", price: 15000, description: "Get help finding your first job" },
-      { id: "internship", name: "Internship Access", price: 12000, description: "Access to partner internships" },
-      { id: "mentor-network", name: "Mentor Network Access", price: 18000, description: "Connect with industry mentors" },
-      { id: "one-on-one", name: "One-on-One Mentorship (1hr/week)", price: 30000, description: "Personal guidance from experts" },
-      { id: "vip-classes", name: "VIP Classes at Chosen Location", price: 75000, description: "Premium learning experience" },
-      { id: "tech-certificate", name: "Tech Faculty Certificate", price: 0, description: "Official completion certificate" },
-    ],
+    ...PLAN_PRICING["ai-innovator"],
   },
   {
     id: "security-shield",
@@ -228,23 +98,7 @@ const departmentPlans: DepartmentPlan[] = [
     icon: Shield,
     category: "security",
     description: "Master cybersecurity and protect digital assets",
-    minimumAmount: 120000,
-    courses: [
-      { id: "network-security", name: "Network Security", price: 15000 },
-      { id: "ethical-hacking", name: "Ethical Hacking", price: 22500 },
-      { id: "soc-ops", name: "SOC Operations", price: 18000 },
-      { id: "incident-response", name: "Incident Response", price: 12000 },
-      { id: "comptia-prep", name: "CompTIA Prep", price: 15000 },
-      { id: "ceh-prep", name: "CEH Prep", price: 18000 },
-    ],
-    learningModes: LEARNING_MODES,
-    benefits: [
-      { id: "job-placement", name: "Job Placement Support", price: 15000, description: "Get help finding your first job" },
-      { id: "internship", name: "Internship Access", price: 12000, description: "Access to partner internships" },
-      { id: "mentor-network", name: "Mentor Network Access", price: 18000, description: "Connect with industry mentors" },
-      { id: "certification-prep", name: "Industry Certification Prep", price: 22500, description: "Prepare for industry certifications" },
-      { id: "tech-certificate", name: "Tech Faculty Certificate", price: 0, description: "Official completion certificate" },
-    ],
+    ...PLAN_PRICING["security-shield"],
   },
   {
     id: "mobile-app-developer",
@@ -253,23 +107,7 @@ const departmentPlans: DepartmentPlan[] = [
     icon: Smartphone,
     category: "development",
     description: "Build powerful mobile apps for iOS and Android",
-    minimumAmount: 80000,
-    courses: [
-      { id: "react-native", name: "React Native Development", price: 18000 },
-      { id: "flutter-dart", name: "Flutter & Dart", price: 18000 },
-      { id: "ios-swift", name: "iOS with Swift", price: 21000 },
-      { id: "android-kotlin", name: "Android with Kotlin", price: 21000 },
-      { id: "mobile-uiux", name: "Mobile UI/UX Design", price: 12000 },
-      { id: "cross-platform-projects", name: "Cross-Platform Projects", price: 15000 },
-    ],
-    learningModes: LEARNING_MODES,
-    benefits: [
-      { id: "job-placement", name: "Job Placement Support", price: 15000, description: "Get help finding your first job" },
-      { id: "internship", name: "Internship Access", price: 12000, description: "Access to partner internships" },
-      { id: "mentor-network", name: "Mentor Network Access", price: 18000, description: "Connect with industry mentors" },
-      { id: "certification-prep", name: "Industry Certification Prep", price: 22500, description: "Prepare for industry certifications" },
-      { id: "tech-certificate", name: "Tech Faculty Certificate", price: 0, description: "Official completion certificate" },
-    ],
+    ...PLAN_PRICING["mobile-app-developer"],
   },
   {
     id: "cloud-architect",
@@ -278,23 +116,7 @@ const departmentPlans: DepartmentPlan[] = [
     icon: Cloud,
     category: "development",
     description: "Master cloud platforms and modern DevOps practices",
-    minimumAmount: 130000,
-    courses: [
-      { id: "aws", name: "AWS Fundamentals", price: 18000 },
-      { id: "azure", name: "Azure Basics", price: 18000 },
-      { id: "gcp", name: "GCP Essentials", price: 18000 },
-      { id: "kubernetes", name: "Kubernetes & Docker", price: 22500 },
-      { id: "cicd", name: "CI/CD Pipelines", price: 15000 },
-      { id: "cloud-cert", name: "Cloud Certifications", price: 12000 },
-    ],
-    learningModes: LEARNING_MODES,
-    benefits: [
-      { id: "job-placement", name: "Job Placement Support", price: 15000, description: "Get help finding your first job" },
-      { id: "internship", name: "Internship Access", price: 12000, description: "Access to partner internships" },
-      { id: "mentor-network", name: "Mentor Network Access", price: 18000, description: "Connect with industry mentors" },
-      { id: "certification-prep", name: "Industry Certification Prep", price: 22500, description: "Prepare for industry certifications" },
-      { id: "tech-certificate", name: "Tech Faculty Certificate", price: 0, description: "Official completion certificate" },
-    ],
+    ...PLAN_PRICING["cloud-architect"],
   },
   {
     id: "design-master",
@@ -303,22 +125,7 @@ const departmentPlans: DepartmentPlan[] = [
     icon: Palette,
     category: "creative",
     description: "Create stunning user experiences and interfaces",
-    minimumAmount: 70000,
-    courses: [
-      { id: "design-principles", name: "Design Principles", price: 9000 },
-      { id: "figma", name: "Figma Mastery", price: 12000 },
-      { id: "adobe", name: "Adobe Suite", price: 15000 },
-      { id: "product-design", name: "Product Design", price: 18000 },
-      { id: "design-systems", name: "Design Systems", price: 13500 },
-      { id: "portfolio-projects", name: "Portfolio Projects", price: 10500 },
-    ],
-    learningModes: LEARNING_MODES,
-    benefits: [
-      { id: "job-placement", name: "Job Placement Support", price: 15000, description: "Get help finding your first job" },
-      { id: "internship", name: "Internship Access", price: 12000, description: "Access to partner internships" },
-      { id: "mentor-network", name: "Mentor Network Access", price: 18000, description: "Connect with industry mentors" },
-      { id: "tech-certificate", name: "Tech Faculty Certificate", price: 0, description: "Official completion certificate" },
-    ],
+    ...PLAN_PRICING["design-master"],
   },
   {
     id: "digital-marketing-pro",
@@ -327,22 +134,7 @@ const departmentPlans: DepartmentPlan[] = [
     icon: TrendingUp,
     category: "creative",
     description: "Master digital marketing and growth strategies",
-    minimumAmount: 60000,
-    courses: [
-      { id: "social-media", name: "Social Media Strategy", price: 10500 },
-      { id: "content-marketing", name: "Content Marketing", price: 12000 },
-      { id: "seo-sem", name: "SEO/SEM", price: 15000 },
-      { id: "video-editing", name: "Video Editing", price: 13500 },
-      { id: "photo-editing", name: "Photo Editing", price: 9000 },
-      { id: "analytics", name: "Analytics & Growth", price: 12000 },
-    ],
-    learningModes: LEARNING_MODES,
-    benefits: [
-      { id: "job-placement", name: "Job Placement Support", price: 15000, description: "Get help finding your first job" },
-      { id: "internship", name: "Internship Access", price: 12000, description: "Access to partner internships" },
-      { id: "mentor-network", name: "Mentor Network Access", price: 18000, description: "Connect with industry mentors" },
-      { id: "tech-certificate", name: "Tech Faculty Certificate", price: 0, description: "Official completion certificate" },
-    ],
+    ...PLAN_PRICING["digital-marketing-pro"],
   },
   {
     id: "custom-builder",
@@ -352,15 +144,7 @@ const departmentPlans: DepartmentPlan[] = [
     category: "custom",
     description: "Create your own custom learning journey",
     isCustom: true,
-    minimumAmount: 50000,
-    courses: [],
-    learningModes: LEARNING_MODES,
-    benefits: [
-      { id: "job-placement", name: "Job Placement Support", price: 15000, description: "Get help finding your first job" },
-      { id: "internship", name: "Internship Access", price: 12000, description: "Access to partner internships" },
-      { id: "mentor-network", name: "Mentor Network Access", price: 18000, description: "Connect with industry mentors" },
-      { id: "certification-prep", name: "Industry Certification Prep", price: 22500, description: "Prepare for industry certifications" },
-    ],
+    ...PLAN_PRICING["custom-builder"],
   },
 ];
 
@@ -376,7 +160,7 @@ const Pricing = () => {
   const [requestDiscount, setRequestDiscount] = useState(false);
   const [customCourseSearch, setCustomCourseSearch] = useState("");
   const [userHasPaidPlan, setUserHasPaidPlan] = useState(false);
-  const [enrollmentData, setEnrollmentData] = useState<any>(null);
+  const [enrollmentData, setEnrollmentData] = useState<Tables<"enrollments"> | null>(null);
   const { toast } = useToast();
   const { formatPrice, symbol, convertPrice, isNigeria } = useCurrency();
   const runOnboarding = useServerFn(onboardStudent);
@@ -666,7 +450,7 @@ const Pricing = () => {
       const selectedMode = LEARNING_MODES.find(m => m.id === selection?.learningMode)?.name || 'online-only';
       
       // Generate new faculty ID with enrollment details
-      const { data: newFacultyId, error: idError } = await (supabase.rpc as any)('generate_faculty_id', {
+      const { data: newFacultyId, error: idError } = await supabase.rpc('generate_faculty_id', {
         dept_name: plan.name,
         learn_mode: selectedMode,
         cohort_mo: new Date().getMonth() + 1,
@@ -696,8 +480,9 @@ const Pricing = () => {
       }
 
       // Record the Faculty ID itself via a secure function (direct writes are blocked)
-      const { error: recordError } = await (supabase.rpc as any)('record_my_faculty_id', {
-        _old_id: currentFacultyId ?? null,
+      const { error: recordError } = await supabase.rpc('record_my_faculty_id', {
+        // The generated types say string, but the SQL function treats null as "no previous ID"
+        _old_id: (currentFacultyId ?? null) as string,
         _department: plan.name,
       });
       if (recordError) {
@@ -725,7 +510,7 @@ const Pricing = () => {
 
       // Slack class group + welcome email (best effort, never blocks enrolment)
       try {
-        await runOnboarding({ data: {} } as any);
+        await runOnboarding();
       } catch (onboardErr) {
         console.warn('Student onboarding automation failed:', onboardErr);
       }
@@ -756,12 +541,13 @@ const Pricing = () => {
       if (method === 'card') {
         const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
           body: {
+            planId: plan.id,
             planName: plan.fancyName,
             facultyId: newFacultyId,
-            courses: selectedCourseDetails,
-            benefits: selectedBenefitDetails,
-            learningMode: learningModeDetail ? { name: learningModeDetail.name, price: learningModeDetail.price, description: learningModeDetail.description } : null,
-            totalAmountNGN: total,
+            // The server looks up prices from these ids itself
+            courseIds: selection.selectedCourses,
+            benefitIds: selection.selectedBenefits,
+            learningModeId: selection.learningMode || null,
             currencyCode: isNigeria ? 'NGN' : 'USD',
             discountCode: discountCode || '',
             successUrl: `${window.location.origin}/payment-success`,
@@ -835,11 +621,11 @@ Please share the payment details so I can complete my enrollment. Thank you!`;
       // Reload to refresh user context with new faculty ID
       setTimeout(() => window.location.reload(), 2000);
       
-    } catch (error: any) {
+    } catch (error) {
       console.error('Enrollment error:', error);
       toast({
         title: "Enrollment Failed",
-        description: error.message || "An error occurred during enrollment",
+        description: (error instanceof Error && error.message) || "An error occurred during enrollment",
         variant: "destructive",
       });
       setIsSubmitting(false);

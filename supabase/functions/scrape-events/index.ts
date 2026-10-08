@@ -154,12 +154,14 @@ async function scrapeSource(source: Source, apiKey: string) {
   return Array.isArray(payload?.events) ? payload.events : [];
 }
 
+// Raw scraped JSON is untrusted and checked field by field below
 // deno-lint-ignore no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function normalize(raw: any, source: Source) {
   const title = String(raw?.title ?? "").trim();
   if (!title || title.length < 6 || title.length > 180) return null;
 
-  let sourceUrl = String(raw?.url ?? "").trim();
+  const sourceUrl = String(raw?.url ?? "").trim();
   if (!/^https?:\/\//i.test(sourceUrl)) return null;
   // Never let a scraped row impersonate one of our own pages.
   if (/techfaculty\.ng/i.test(sourceUrl)) return null;
@@ -243,8 +245,7 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    // deno-lint-ignore no-explicit-any
-    const byUrl: Record<string, any> = {};
+    const byUrl: Record<string, NonNullable<ReturnType<typeof normalize>>> = {};
 
     // Scrape in waves so we can stop as soon as we have enough upcoming events.
     for (let startIdx = 0; startIdx < SOURCES.length; startIdx += WAVE_SIZE) {

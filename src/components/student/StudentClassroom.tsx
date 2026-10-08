@@ -69,7 +69,7 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
   const connect = async (silent = false) => {
     setConnecting(true);
     try {
-      const res: any = await runOnboarding({ data: {} } as any);
+      const res = await runOnboarding();
       if (res?.ok) {
         setChannelName(res.channelName ?? program.channel);
         if (res.channelId) setChannelId(res.channelId);
@@ -102,12 +102,11 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
         .eq("id", user.id)
         .maybeSingle();
       if (cancelled) return;
-      const p = profile as any;
-      if (p?.slack_channel_name) setChannelName(p.slack_channel_name);
-      if (p?.slack_channel_id) setChannelId(p.slack_channel_id);
-      setSlackLinked(!!p?.slack_user_id);
+      if (profile?.slack_channel_name) setChannelName(profile.slack_channel_name);
+      if (profile?.slack_channel_id) setChannelId(profile.slack_channel_id);
+      setSlackLinked(!!profile?.slack_user_id);
       await loadDeliverables();
-      if (!p?.slack_channel_name || !p?.slack_user_id) void connect(true);
+      if (!profile?.slack_channel_name || !profile?.slack_user_id) void connect(true);
     };
     void init();
     return () => {
@@ -136,7 +135,7 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
           summary: summary.trim() ? summary.trim().slice(0, 1000) : null,
           course_name: courseName ?? program.title,
           class_number: classNumber ?? null,
-        } as any)
+        })
         .select("id")
         .single();
       if (error) throw error;

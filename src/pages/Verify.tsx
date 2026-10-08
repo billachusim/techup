@@ -44,7 +44,7 @@ const Verify = () => {
     if (error || !data) {
       setStatus("error");
       setResult(null);
-      setMessage(`Certificate ID \"${normalizedId}\" was not found in the Tech Faculty NG database.`);
+      setMessage(`Certificate ID "${normalizedId}" was not found in the Tech Faculty NG database.`);
       return;
     }
 

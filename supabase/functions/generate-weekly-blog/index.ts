@@ -118,8 +118,17 @@ function buildPrompt(category: Category, existingTitles: string[]): string {
   ].join("\n");
 }
 
-// deno-lint-ignore no-explicit-any
-async function generateArticle(category: Category, existingTitles: string[], apiKey: string): Promise<any | null> {
+// Arguments the model passes to publish_article; checked before use
+type GeneratedArticle = {
+  slug?: string;
+  title?: string;
+  description?: string;
+  content?: string;
+  tags?: unknown;
+  read_time?: number;
+};
+
+async function generateArticle(category: Category, existingTitles: string[], apiKey: string): Promise<GeneratedArticle | null> {
   const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
@@ -223,7 +232,7 @@ Deno.serve(async (req) => {
         : [category.name];
 
       const readTime = Number.isFinite(article.read_time)
-        ? Math.max(4, Math.min(20, Math.round(article.read_time)))
+        ? Math.max(4, Math.min(20, Math.round(Number(article.read_time))))
         : Math.max(4, Math.round(content.split(/\s+/).length / 200));
 
       const { error } = await supabase.from("blog_posts").insert({

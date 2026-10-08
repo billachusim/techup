@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { LogOut, Calendar, Users, BookOpen, ExternalLink, MessageCircle, CheckCircle2, Circle, FileText, BadgeCheck, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import type { Tables } from "@/integrations/supabase/types";
 import { Progress } from "@/components/ui/progress";
 import { useUser } from "@/contexts/UserContext";
 import { HandoutModal } from "@/components/HandoutModal";
@@ -24,17 +25,48 @@ import googleLogo from "@/assets/partners/google-logo.png";
 import microsoftLogo from "@/assets/partners/microsoft-logo.png";
 import fmstiLogo from "@/assets/partners/fmsti-logo.png";
 
+// whatsapp_group_link and meeting_link are read below but are not in the generated table types
+type Course = Tables<"courses"> & { whatsapp_group_link?: string };
+type Lecture = Tables<"lectures"> & { courses: Course | null; meeting_link?: string | null };
+
+// Shape returned by the user-courses edge function
+type CourseEnrollment = Tables<"course_enrollments"> & {
+  courses: Course | null;
+  course_progress: Tables<"course_progress">[];
+  lectures: Tables<"lectures">[];
+};
+
+// A scheduled lecture, or a placeholder the AI generates when none is scheduled
+type NextLecture = {
+  title: string;
+  description: string | null;
+  scheduled_at: string;
+  course_id?: string;
+  courses?: Pick<Course, "name" | "whatsapp_group_link"> | null;
+  meeting_link?: string | null;
+  isAiGenerated?: boolean;
+};
+
+// Shape returned by the generate-class-content edge function
+type ClassContent = {
+  title?: string;
+  summary?: string;
+  description?: string;
+  resources?: { type: string; title: string; url: string }[];
+  handoutContent?: string;
+};
+
 const Dashboard = () => {
-  const [enrollmentData, setEnrollmentData] = useState<any>(null);
-  const [coursesData, setCoursesData] = useState<any[]>([]);
-  const [lecturesData, setLecturesData] = useState<any[]>([]);
-  const [nextLecture, setNextLecture] = useState<any>(null);
+  const [enrollmentData, setEnrollmentData] = useState<Tables<"enrollments"> | null>(null);
+  const [coursesData, setCoursesData] = useState<CourseEnrollment[]>([]);
+  const [lecturesData, setLecturesData] = useState<Lecture[]>([]);
+  const [nextLecture, setNextLecture] = useState<NextLecture | null>(null);
   const [nextClassNumber, setNextClassNumber] = useState<number>(1);
   const [showAllCourses, setShowAllCourses] = useState(false);
   const [handoutModalOpen, setHandoutModalOpen] = useState(false);
-  const [aiGeneratedContent, setAiGeneratedContent] = useState<any>(null);
+  const [aiGeneratedContent, setAiGeneratedContent] = useState<ClassContent | null>(null);
   const [isLoadingAiContent, setIsLoadingAiContent] = useState(false);
-  const [certificates, setCertificates] = useState<any[]>([]);
+  const [certificates, setCertificates] = useState<Tables<"certificates">[]>([]);
   const [isRefreshingContent, setIsRefreshingContent] = useState(false);
   const { toast } = useToast();
   const { isLoggedIn, userData, logout, setUserData, facultyId } = useUser();
@@ -98,7 +130,7 @@ const Dashboard = () => {
         .eq('plan_required', dbPlanName)
         .eq('department', resolvedDepartment);
 
-      let courseEnrollments: any[] = [];
+      let courseEnrollments: CourseEnrollment[] = [];
       try {
         const { data: userCourses, error: userCoursesError } = await supabase.functions.invoke('user-courses', {
           body: { facultyId: facultyIdToFetch }
@@ -137,7 +169,7 @@ const Dashboard = () => {
       }
 
       if (courseEnrollments && courseEnrollments.length > 0) {
-        const courseIds = courseEnrollments.map((ce: any) => ce.course_id);
+        const courseIds = courseEnrollments.map((ce) => ce.course_id);
         const { data: allLectures } = await supabase
           .from('lectures')
           .select('*, courses (*)')
@@ -151,14 +183,14 @@ const Dashboard = () => {
           .select('*')
           .eq('faculty_id', facultyIdToFetch);
 
-        let nextLectureToShow = null;
+        let nextLectureToShow: NextLecture | null = null;
         let calculatedNextClassNumber = 1;
 
         for (const enrollment of courseEnrollments) {
           const progress = enrollment.course_progress?.[0];
           const classesCompleted = progress?.classes_completed || 0;
           if (classesCompleted < 4) {
-            const courseLectures = (allLectures || []).filter((l: any) => l.course_id === enrollment.course_id);
+            const courseLectures = (allLectures || []).filter((l) => l.course_id === enrollment.course_id);
             const nextClassIndex = classesCompleted;
             nextLectureToShow = courseLectures[nextClassIndex] || courseLectures[0];
             calculatedNextClassNumber = classesCompleted + 1;
@@ -172,7 +204,7 @@ const Dashboard = () => {
         if (nextLectureToShow && courseEnrollments.length > 0) {
           setIsLoadingAiContent(true);
           try {
-            const enrollmentForCourse = courseEnrollments.find((ce: any) => ce.course_id === nextLectureToShow.course_id);
+            const enrollmentForCourse = courseEnrollments.find((ce) => ce.course_id === nextLectureToShow.course_id);
             const courseName = enrollmentForCourse?.courses?.name || nextLectureToShow.courses?.name || 'General Tech Course';
             const { data: aiContent, error: aiError } = await supabase.functions.invoke('generate-class-content', {
               body: { classTitle: nextLectureToShow.title, courseName, classNumber: calculatedNextClassNumber, courseId: nextLectureToShow.course_id, forceRefresh: false }
@@ -322,6 +354,8 @@ const Dashboard = () => {
     if (isLoggedIn && facultyId) {
       fetchUserDashboardData(facultyId);
     }
+    // Refetch only when the signed-in student changes, not on every render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn, facultyId]);
 
   if (!isLoggedIn) {
@@ -496,12 +530,12 @@ const Dashboard = () => {
                 </h3>
                 {coursesData.length > 0 ? (
                   <div className="space-y-6">
-                    {(showAllCourses ? coursesData : coursesData.slice(0, 3)).map((enrollment: any, index: number) => {
+                    {(showAllCourses ? coursesData : coursesData.slice(0, 3)).map((enrollment, index) => {
                       const progress = enrollment.course_progress?.[0];
                       const classesCompleted = progress?.classes_completed || 0;
                       const progressPercentage = classesCompleted * 25;
                       const allCoursesToDisplay = showAllCourses ? coursesData : coursesData.slice(0, 3);
-                      const isPreviousCourseIncomplete = index > 0 && allCoursesToDisplay.slice(0, index).some((prev: any) => {
+                      const isPreviousCourseIncomplete = index > 0 && allCoursesToDisplay.slice(0, index).some((prev) => {
                         const prevCompleted = prev.course_progress?.[0]?.classes_completed || 0;
                         return prevCompleted < 4;
                       });
@@ -554,7 +588,7 @@ const Dashboard = () => {
                             )}
                             <div className="flex gap-2 pt-2">
                               {enrollment.courses?.whatsapp_group_link && (
-                                <Button variant="outline" size="sm" onClick={() => window.open(enrollment.courses.whatsapp_group_link, "_blank")}>
+                                <Button variant="outline" size="sm" onClick={() => window.open(enrollment.courses?.whatsapp_group_link, "_blank")}>
                                   <MessageCircle className="mr-2" size={14} />Course Group
                                 </Button>
                               )}
@@ -636,7 +670,7 @@ const Dashboard = () => {
         course={nextLecture?.courses?.name || ''}
         resources={aiGeneratedContent?.resources || []}
         handoutContent={aiGeneratedContent?.handoutContent || 'No handout content available yet. Check back later or contact your instructor.'}
-        description={aiGeneratedContent?.description || nextLecture?.description}
+        description={aiGeneratedContent?.description || nextLecture?.description || undefined}
       />
     </div>
   );

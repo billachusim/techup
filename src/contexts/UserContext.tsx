@@ -8,14 +8,17 @@ import {
   mightHaveSession,
   onSupabaseLoaded,
 } from "@/integrations/supabase/lazy";
+import type { Tables } from "@/integrations/supabase/types";
+
+type Profile = Tables<"profiles">;
 
 interface UserContextType {
   isLoggedIn: boolean;
   facultyId: string | null;
-  userData: any | null;
+  userData: Profile | null;
   user: User | null;
-  setUserData: (data: any) => void;
-  login: (user: User, profile: any) => void;
+  setUserData: (data: Profile | null) => void;
+  login: (user: User, profile: Profile) => void;
   logout: () => Promise<void>;
 }
 
@@ -24,7 +27,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [facultyId, setFacultyId] = useState<string | null>(null);
-  const [userData, setUserData] = useState<any | null>(null);
+  const [userData, setUserData] = useState<Profile | null>(null);
   const [user, setUser] = useState<User | null>(null);
 
   const pathname = useRouterState({ select: (state) => state.location.pathname });
@@ -106,7 +109,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     if (!isSupabaseLoaded() && mightHaveSession()) void getSupabase();
   }, [pathname]);
 
-  const login = (authUser: User, profile: any) => {
+  const login = (authUser: User, profile: Profile) => {
     setUser(authUser);
     setFacultyId(profile.faculty_id);
     setUserData(profile);

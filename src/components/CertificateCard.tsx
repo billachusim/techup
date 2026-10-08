@@ -7,7 +7,7 @@ interface CertificateCardProps {
     id: string;
     course_name: string;
     certificate_number: string;
-    issued_at: string;
+    issued_at: string | null;
   };
   studentName: string;
 }
@@ -68,7 +68,7 @@ export const CertificateCard = ({ certificate, studentName }: CertificateCardPro
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(100, 100, 100);
-    const issueDate = new Date(certificate.issued_at).toLocaleDateString('en-US', {
+    const issueDate = new Date(certificate.issued_at ?? 0).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -104,7 +104,7 @@ export const CertificateCard = ({ certificate, studentName }: CertificateCardPro
             <div>
               <h3 className="font-semibold text-lg">{certificate.course_name}</h3>
               <p className="text-sm text-muted-foreground mt-1">
-                Issued: {new Date(certificate.issued_at).toLocaleDateString()}
+                Issued: {new Date(certificate.issued_at ?? 0).toLocaleDateString()}
               </p>
               <p className="text-xs text-muted-foreground mt-1">
                 Certificate No: {certificate.certificate_number}

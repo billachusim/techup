@@ -96,9 +96,9 @@ const BlogActions = ({ slug, title, description }: BlogActionsProps) => {
   };
 
   const nativeShare = async () => {
-    if (typeof navigator !== "undefined" && (navigator as any).share) {
+    if (typeof navigator !== "undefined" && "share" in navigator) {
       try {
-        await (navigator as any).share({ title, text: description, url });
+        await navigator.share({ title, text: description, url });
         return true;
       } catch {
         return true; // user cancelled
@@ -129,7 +129,7 @@ const BlogActions = ({ slug, title, description }: BlogActionsProps) => {
   };
 
   const hasNativeShare =
-    typeof navigator !== "undefined" && !!(navigator as any).share;
+    typeof navigator !== "undefined" && "share" in navigator;
 
   return (
     <div className="flex items-center gap-2 my-6">

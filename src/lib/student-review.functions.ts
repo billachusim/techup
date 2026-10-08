@@ -1,11 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import type { Database } from "@/integrations/supabase/types";
 import { findProgram } from "@/data/coursePrograms";
 
-async function assertStaff(supabase: any, userId: string) {
+async function assertStaff(supabase: SupabaseClient<Database>, userId: string) {
   const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
-  const roles = (data ?? []).map((r: any) => r.role);
+  const roles = (data ?? []).map((r) => r.role);
   if (!roles.includes("admin") && !roles.includes("recruiter")) throw new Error("Staff only");
 }
 
@@ -23,22 +25,22 @@ export const listStudentWork = createServerFn({ method: "POST" })
     if (data.status !== "all") q = q.eq("status", data.status);
     const { data: rows, error } = await q;
     if (error) throw new Error(error.message);
-    const ids = [...new Set((rows ?? []).map((r: any) => r.user_id))];
+    const ids = [...new Set((rows ?? []).map((r) => r.user_id))];
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: profiles } = ids.length
       ? await supabaseAdmin.from("profiles").select("id, name, email").in("id", ids)
-      : { data: [] as any[] };
-    const byId = new Map((profiles ?? []).map((p: any) => [p.id, p]));
+      : { data: [] };
+    const byId = new Map((profiles ?? []).map((p) => [p.id, p]));
     // Running average per student across reviewed work.
     const { data: scored } = ids.length
       ? await supabaseAdmin.from("student_deliverables").select("user_id, score").in("user_id", ids).not("score", "is", null)
-      : { data: [] as any[] };
+      : { data: [] };
     const avg = new Map<string, { sum: number; n: number }>();
     for (const s of scored ?? []) {
       const a = avg.get(s.user_id) ?? { sum: 0, n: 0 };
       a.sum += s.score; a.n += 1; avg.set(s.user_id, a);
     }
-    return (rows ?? []).map((r: any) => {
+    return (rows ?? []).map((r) => {
       const a = avg.get(r.user_id);
       return {
         ...r,

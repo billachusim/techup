@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link, Navigate, useParams } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -76,19 +75,11 @@ const DepartmentDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{dept.metaTitle}</title>
-        <meta name="description" content={dept.metaDescription} />
-        <meta name="keywords" content={dept.keywords.join(", ")} />
-        <meta property="og:title" content={dept.metaTitle} />
-        <meta property="og:description" content={dept.metaDescription} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={url} />
-        <link rel="canonical" href={url} />
+      <>
         <script type="application/ld+json">{JSON.stringify(courseSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
-      </Helmet>
+      </>
       <Header />
       <main className="pt-20">
         <section className="px-4 pt-8">

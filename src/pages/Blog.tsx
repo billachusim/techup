@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -23,20 +22,7 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Blog & Resources - Tech Faculty NG | Tech Career Tips</title>
-        <meta
-          name="description"
-          content="Tech career guides, course deep-dives, SIWES tips, and AI insights from Tech Faculty NG. Practical advice for starting and growing your tech career in Nigeria."
-        />
-        <meta property="og:title" content="Blog & Resources - Tech Faculty NG" />
-        <meta
-          property="og:description"
-          content="Tech career guides, SIWES tips, and AI insights for Nigerian professionals and students."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://techfaculty.ng/blog" />
-        <link rel="canonical" href="https://techfaculty.ng/blog" />
+      <>
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -74,7 +60,7 @@ const Blog = () => {
             })),
           })}
         </script>
-      </Helmet>
+      </>
       <Header />
       <main className="pt-20">
         {/* Hero */}

@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { notifyMarketplaceEvent } from "@/lib/marketplace-emails.functions";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "@/lib/router-compat";
@@ -169,10 +168,6 @@ const TalentDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Talent dashboard | Tech Faculty</title>
-        <meta name="robots" content="noindex, nofollow" />
-      </Helmet>
       <Header />
 
       <main className="pt-20">

@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { Link } from "@/lib/router-compat";
 import { useQuery } from "@tanstack/react-query";
 import { BriefcaseBusiness, Search, Sparkles, UserRoundSearch } from "lucide-react";
@@ -63,14 +62,7 @@ const Careers = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Tech Jobs & Talent Marketplace | Tech Faculty</title>
-        <meta name="description" content="Build one talent profile and get matched to verified tech roles and business projects across Nigeria and Africa, or hire skilled African talent." />
-        <meta property="og:title" content="Tech Jobs & Talent Marketplace | Tech Faculty" />
-        <meta property="og:description" content="Join our African talent pipeline, find open roles, or hire skilled people for your next project." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://techfaculty.ng/careers" />
-        <link rel="canonical" href="https://techfaculty.ng/careers" />
+      <>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "CollectionPage",
@@ -79,7 +71,7 @@ const Careers = () => {
           url: "https://techfaculty.ng/careers",
           mainEntity: { "@type": "ItemList", numberOfItems: itemList.length, itemListElement: itemList },
         })}</script>
-      </Helmet>
+      </>
       <Header />
       <main className="pt-20">
         <TalentNav />

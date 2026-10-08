@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { Helmet } from "react-helmet-async";
 import { Link, Navigate, useParams } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -73,19 +72,11 @@ const LocationDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{campusMetaTitle(campus)}</title>
-        <meta name="description" content={campusMetaDescription(campus)} />
-        <meta name="keywords" content={campusKeywords(campus).join(", ")} />
-        <meta property="og:title" content={campusMetaTitle(campus)} />
-        <meta property="og:description" content={campusMetaDescription(campus)} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={url} />
-        <link rel="canonical" href={url} />
+      <>
         <script type="application/ld+json">{JSON.stringify(orgSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
-      </Helmet>
+      </>
 
       <Header />
 

@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CredibilityBanner from "@/components/CredibilityBanner";
@@ -61,14 +60,7 @@ const benefits = [
 const BusinessPartnerships = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Business Partnerships | Tech Faculty NG</title>
-        <meta name="description" content="Partner with Tech Faculty NG for corporate training, AI workshops, business digitization, and tech talent pipelines. FMSTI-licensed, based in Nnewi, Nigeria." />
-        <meta property="og:title" content="Business Partnerships - Tech Faculty NG" />
-        <meta property="og:description" content="Corporate training, AI workshops, and business digitization. Licensed by the Federal Ministry of Science, Technology & Innovation." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://techfaculty.ng/business-partnerships" />
-        <link rel="canonical" href="https://techfaculty.ng/business-partnerships" />
+      <>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Service",
@@ -79,7 +71,7 @@ const BusinessPartnerships = () => {
           "serviceType": ["Corporate Training", "AI Workshops", "Business Digitization", "Talent Pipeline"],
           "url": "https://techfaculty.ng/business-partnerships"
         })}</script>
-      </Helmet>
+      </>
       <Header />
       <main className="pt-20">
         {/* Hero */}

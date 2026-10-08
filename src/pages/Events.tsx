@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "@/lib/router-compat";
 import { useQuery } from "@tanstack/react-query";
@@ -110,15 +109,7 @@ const Events = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{PAGE_TITLE}</title>
-        <meta name="description" content={PAGE_DESCRIPTION} />
-        <meta property="og:title" content={PAGE_TITLE} />
-        <meta property="og:description" content={PAGE_DESCRIPTION} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://techfaculty.ng/events" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <link rel="canonical" href="https://techfaculty.ng/events" />
+      <>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "CollectionPage",
@@ -169,7 +160,7 @@ const Events = () => {
             { "@type": "ListItem", position: 2, name: "Tech Events", item: "https://techfaculty.ng/events" },
           ],
         })}</script>
-      </Helmet>
+      </>
       <Header />
       <main className="pt-20">
         {/* Hero */}

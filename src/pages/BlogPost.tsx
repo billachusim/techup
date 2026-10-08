@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { useParams, Link, Navigate } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -50,25 +49,7 @@ const BlogPost = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{post.seoTitle ?? `${post.title} | Tech Faculty NG Blog`}</title>
-        <meta name="description" content={post.description} />
-        <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={post.description} />
-        <meta property="og:type" content="article" />
-        <meta
-          property="og:url"
-          content={`https://techfaculty.ng/blog/${post.slug}`}
-        />
-        <meta property="article:published_time" content={post.date} />
-        <meta property="article:author" content={BLOG_AUTHOR.linkedin} />
-        {post.tags.map((tag) => (
-          <meta property="article:tag" content={tag} key={tag} />
-        ))}
-        <link
-          rel="canonical"
-          href={`https://techfaculty.ng/blog/${post.slug}`}
-        />
+      <>
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -90,7 +71,7 @@ const BlogPost = () => {
             },
           })}
         </script>
-      </Helmet>
+      </>
       <Header />
       <main className="pt-20">
         <article className="py-16 px-4">

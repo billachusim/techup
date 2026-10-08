@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -12,15 +11,6 @@ const LOVABLE_REFERRAL_URL = "https://lovable.dev/?via=YOUR_REFERRAL_CODE";
 const Lovable = () => {
   return (
     <>
-      <Helmet>
-        <title>Build Apps with Lovable | Tech Faculty</title>
-        <meta
-          name="description"
-          content="Tech Faculty recommends Lovable — the AI platform we use to build production web apps. Describe what you want, ship in minutes."
-        />
-        <link rel="canonical" href="https://techfaculty.ng/lovable" />
-      </Helmet>
-
       <Header />
 
       <main className="pt-24 pb-16">

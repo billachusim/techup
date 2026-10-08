@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "@/lib/router-compat";
 import { Loader2, Upload, FileCheck2, ArrowLeft, Sparkles } from "lucide-react";
@@ -319,10 +318,6 @@ const TalentProfile = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>My talent profile | Tech Faculty</title>
-        <meta name="robots" content="noindex, nofollow" />
-      </Helmet>
       <Header />
 
       <main className="pt-20">

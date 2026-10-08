@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -36,17 +35,10 @@ const DepartmentsIndex = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Tech Departments & Bootcamps in Nigeria | Tech Faculty</title>
-        <meta name="description" content={description} />
-        <meta property="og:title" content="Tech Departments & Bootcamps in Nigeria | Tech Faculty" />
-        <meta property="og:description" content={description} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={url} />
-        <link rel="canonical" href={url} />
+      <>
         <script type="application/ld+json">{JSON.stringify(itemListSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
-      </Helmet>
+      </>
       <Header />
       <main className="pt-20">
         <section className="px-4 pt-8 pb-10">

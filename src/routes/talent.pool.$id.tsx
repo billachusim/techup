@@ -18,7 +18,8 @@ export const Route = createFileRoute("/talent/pool/$id")({
           "Vetted tech talent on the Tech Faculty talent pool, available for remote and on-site work.",
       };
     } catch {
-      return null;
+      // A failed lookup isn't a missing page: keep the generic, indexable head.
+      return undefined;
     }
   },
   head: ({ loaderData, params }) =>
@@ -29,6 +30,7 @@ export const Route = createFileRoute("/talent/pool/$id")({
         "View this talent profile on the Tech Faculty talent pool.",
       path: `/talent/pool/${params.id}`,
       type: "profile",
+      noindex: loaderData === null,
     }),
   component: TalentPublicProfile,
 });

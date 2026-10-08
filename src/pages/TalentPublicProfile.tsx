@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "@/lib/router-compat";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, BriefcaseBusiness, ExternalLink, MapPin, ShieldCheck, Sparkles } from "lucide-react";
@@ -33,10 +32,6 @@ const TalentPublicProfile = () => {
   if (!person) {
     return (
       <div className="min-h-screen bg-background">
-        <Helmet>
-          <title>Profile not available | Tech Faculty Talent</title>
-          <meta name="robots" content="noindex" />
-        </Helmet>
         <Header />
         <main className="container mx-auto max-w-3xl px-4 pb-20 pt-28 text-center">
           <h1 className="mb-3 text-2xl font-bold">This profile is not public</h1>
@@ -63,14 +58,7 @@ const TalentPublicProfile = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{`${person.full_name} — ${person.headline ?? "Tech talent"}`.slice(0, 60)}</title>
-        <meta name="description" content={description} />
-        <meta property="og:title" content={`${person.full_name} | Tech Faculty Talent`} />
-        <meta property="og:description" content={description} />
-        <meta property="og:type" content="profile" />
-        <meta property="og:url" content={canonical} />
-        <link rel="canonical" href={canonical} />
+      <>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Person",
@@ -81,7 +69,7 @@ const TalentPublicProfile = () => {
           affiliation: { "@type": "Organization", name: "Tech Faculty", url: "https://techfaculty.ng" },
           url: canonical,
         })}</script>
-      </Helmet>
+      </>
       <Header />
 
       <main className="pt-20">

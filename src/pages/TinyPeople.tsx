@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -12,15 +11,6 @@ const LEARN_URL = "https://tinypeople.ai";
 const TinyPeople = () => {
   return (
     <>
-      <Helmet>
-        <title>Tiny People AI in Africa | Tech Faculty × Natura Inc</title>
-        <meta
-          name="description"
-          content="Tech Faculty has partnered with Natura Inc to bring Tiny People AI — a powerful personal AI agent on WhatsApp, Telegram and iMessage — to Africa."
-        />
-        <link rel="canonical" href="https://techfaculty.ng/tinypeople" />
-      </Helmet>
-
       <Header />
 
       <main className="pt-24 pb-16">

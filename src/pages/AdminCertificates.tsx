@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Helmet } from "react-helmet-async";
 import AdminNav from "@/components/admin/AdminNav";
 import { Award, Loader2, ShieldCheck } from "lucide-react";
 import Header from "@/components/Header";
@@ -68,10 +67,6 @@ const AdminCertificates = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Helmet>
-        <title>Admin · Add Certificate | Tech Faculty NG</title>
-        <meta name="robots" content="noindex, nofollow" />
-      </Helmet>
       <Header />
       <main className="container mx-auto px-4 pt-32 pb-16">
         <section className="mx-auto max-w-2xl space-y-6">

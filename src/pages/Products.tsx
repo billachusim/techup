@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
@@ -168,20 +167,7 @@ const ProductCard = ({ product }: { product: Product }) => (
 const Products = () => {
   return (
     <>
-      <Helmet>
-        <title>Software Products — Tech Faculty NG</title>
-        <meta
-          name="description"
-          content="Explore the mobile apps built by Tech Faculty and Social Faculty — Dear Claire, Alter Ego, Eavesdrop and AI Clopedia, live on the App Store and Google Play."
-        />
-        <link rel="canonical" href="https://techfaculty.ng/products" />
-        <meta property="og:title" content="Software Products — Tech Faculty NG" />
-        <meta
-          property="og:description"
-          content="Apps built by Tech Faculty NG: Dear Claire, Alter Ego, Eavesdrop and AI Clopedia — on iOS and Android."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://techfaculty.ng/products" />
+      <>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "CollectionPage",
@@ -198,7 +184,7 @@ const Products = () => {
             url: p.links.appstore || p.links.playstore,
           })),
         })}</script>
-      </Helmet>
+      </>
 
       <Header />
 

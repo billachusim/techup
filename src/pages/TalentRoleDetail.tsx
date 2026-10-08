@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { notifyMarketplaceEvent } from "@/lib/marketplace-emails.functions";
 import { Link, useNavigate, useParams } from "@/lib/router-compat";
 import { useQuery } from "@tanstack/react-query";
@@ -139,10 +138,6 @@ const TalentRoleDetail = () => {
   if (!role || role.status !== "published") {
     return (
       <div className="min-h-screen bg-background">
-        <Helmet>
-          <title>Role not available | Tech Faculty Talent</title>
-          <meta name="robots" content="noindex" />
-        </Helmet>
         <Header />
         <main className="container mx-auto max-w-3xl px-4 pt-28 pb-20 text-center">
           <h1 className="mb-3 text-2xl font-bold">This role is no longer open</h1>
@@ -158,14 +153,7 @@ const TalentRoleDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{`${role.title} at ${role.company} | Tech Faculty`}</title>
-        <meta name="description" content={role.summary.slice(0, 158)} />
-        <meta property="og:title" content={`${role.title} at ${role.company}`} />
-        <meta property="og:description" content={role.summary.slice(0, 158)} />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={canonical} />
-        <link rel="canonical" href={canonical} />
+      <>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "JobPosting",
@@ -209,7 +197,7 @@ const TalentRoleDetail = () => {
           identifier: { "@type": "PropertyValue", name: role.company, value: role.slug },
           ...(role.category ? { occupationalCategory: role.category } : {}),
         })}</script>
-      </Helmet>
+      </>
       <Header />
 
       <main className="pt-20">

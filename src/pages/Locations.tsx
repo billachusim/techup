@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { MapPin, Search, Navigation, Building2, ArrowRight } from "lucide-react";
 import { Link } from "@/lib/router-compat";
 import Header from "@/components/Header";
@@ -57,22 +56,9 @@ const Locations = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Tech Faculty Campuses in Nigeria — Find a Campus Near You</title>
-        <meta
-          name="description"
-          content="Tech Faculty operates physically inside Technology Incubation Centres nationwide via our partnership with the National Board for Technology Incubation."
-        />
-        <meta property="og:title" content="Tech Faculty Campuses in Nigeria" />
-        <meta
-          property="og:description"
-          content="Find a Tech Faculty campus in your city — nationwide presence through Technology Incubation Centres."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://techfaculty.ng/locations" />
-        <link rel="canonical" href="https://techfaculty.ng/locations" />
+      <>
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-      </Helmet>
+      </>
 
       <Header />
 

@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -22,20 +21,7 @@ import {
 
 const SuccessKit = () => (
   <div className="min-h-screen bg-background">
-    <Helmet>
-      <title>SIWES Success Kit — Templates, Logbook &amp; Report Pack</title>
-      <meta
-        name="description"
-        content="Land and finish your SIWES placement properly: free 7-step checklist plus the SIWES Success Kit — placement email templates, student CV, logbook pack and report outline."
-      />
-      <meta property="og:title" content="SIWES Success Kit | Tech Faculty NG" />
-      <meta
-        property="og:description"
-        content="Free SIWES placement checklist plus a complete digital kit of templates, logbook pack and technical report outline for Nigerian students."
-      />
-      <meta property="og:type" content="product" />
-      <meta property="og:url" content="https://techfaculty.ng/siwes-success-kit" />
-      <link rel="canonical" href="https://techfaculty.ng/siwes-success-kit" />
+    <>
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
@@ -82,7 +68,7 @@ const SuccessKit = () => (
           ],
         })}
       </script>
-    </Helmet>
+    </>
 
     <Header />
 

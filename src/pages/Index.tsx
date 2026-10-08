@@ -14,6 +14,7 @@ import Pricing from "@/components/Pricing";
 import GetStarted from "@/components/GetStarted";
 import Footer from "@/components/Footer";
 import HomeWhatsAppPrompts from "@/components/HomeWhatsAppPrompts";
+import { planMinimum } from "@/lib/fees";
 
 const provider = { "@type": "Organization", "name": "Tech Faculty NG", "url": "https://techfaculty.ng" };
 
@@ -24,6 +25,8 @@ const courseLocation = {
   "address": { "@type": "PostalAddress", "addressLocality": "Nnewi", "addressRegion": "Anambra State", "addressCountry": "NG" },
 };
 
+// Each course's offer price is its plan's lowest checkout amount, read from
+// the same pricing table checkout charges.
 const courses = [
   {
     position: 1,
@@ -33,7 +36,7 @@ const courses = [
     prerequisites: "Basic computer literacy",
     duration: "P12W",
     occupation: "Data Analyst",
-    price: "150000",
+    planId: "data-wizard",
   },
   {
     position: 2,
@@ -43,7 +46,7 @@ const courses = [
     prerequisites: "Basic computer literacy",
     duration: "P12W",
     occupation: "Full-Stack Developer",
-    price: "150000",
+    planId: "developer-pro",
   },
   {
     position: 3,
@@ -53,7 +56,7 @@ const courses = [
     prerequisites: "Basic networking knowledge",
     duration: "P12W",
     occupation: "Cybersecurity Analyst",
-    price: "180000",
+    planId: "security-shield",
   },
   {
     position: 4,
@@ -63,7 +66,7 @@ const courses = [
     prerequisites: "Basic Python programming",
     duration: "P16W",
     occupation: "AI/ML Engineer",
-    price: "200000",
+    planId: "ai-innovator",
   },
   {
     position: 5,
@@ -73,7 +76,7 @@ const courses = [
     prerequisites: "None",
     duration: "P8W",
     occupation: "Digital Marketing Specialist",
-    price: "100000",
+    planId: "digital-marketing-pro",
   },
 ];
 
@@ -97,7 +100,7 @@ const courseSchema = {
       "inLanguage": "en",
       "offers": {
         "@type": "Offer",
-        "price": c.price,
+        "price": String(planMinimum(c.planId)),
         "priceCurrency": "NGN",
         "availability": "https://schema.org/InStock",
         "category": "Paid",

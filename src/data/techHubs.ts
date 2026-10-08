@@ -49,6 +49,18 @@ export const COURSE_AREAS = [
 
 export type CourseArea = (typeof COURSE_AREAS)[number];
 
+/** The department page that teaches each course area. */
+export const COURSE_AREA_DEPARTMENT: Record<CourseArea, string> = {
+  "AI & Machine Learning": "ai-machine-learning",
+  "Software Engineering": "web-development",
+  "Data Analytics": "data-science-analytics",
+  Cybersecurity: "cybersecurity",
+  "Product & UI/UX Design": "design",
+  "Digital Marketing": "digital-marketing",
+  "Cloud & DevOps": "cloud-computing",
+  "Robotics & IoT": "robotics-iot",
+};
+
 export interface TechHub {
   slug: string;
   name: string;
@@ -629,6 +641,33 @@ export const techHubs: TechHub[] = [
       "iceaddis in Addis Ababa is publicly described as Ethiopia's first innovation hub and startup incubator, working with young technologists, designers and founders.",
   },
 ];
+
+/**
+ * Short city context for hub cities outside Nigeria, where we have no city
+ * guide or campus to link to. Keeps those hub pages from being template-only.
+ */
+export const HUB_CITY_CONTEXT: Record<string, string> = {
+  Nairobi:
+    "Nairobi, often called the Silicon Savannah, is the centre of Kenya's mobile-money and startup scene, with dense developer meetups and regional offices of global technology firms.",
+  Accra:
+    "Accra is Ghana's technology centre, strong in fintech and agritech. It is English-speaking and shares Nigeria's time zone, which makes it a natural next step for West African builders.",
+  Kigali:
+    "Kigali has made technology a national priority, with government-backed innovation programmes and a busy calendar of pan-African tech events.",
+  Johannesburg:
+    "Johannesburg is South Africa's business capital, where banks, telecoms and enterprise software firms hire data, cloud and security talent.",
+  "Cape Town":
+    "Cape Town has one of Africa's densest startup and developer communities, with e-commerce, fintech and remote roles for international companies.",
+  Cairo:
+    "Cairo is North Africa's largest startup market, with a deep pool of engineers and a fast-growing fintech sector.",
+  Kampala:
+    "Kampala's tech scene centres on mobile money, agritech and a young developer community.",
+  "Dar es Salaam":
+    "Dar es Salaam is Tanzania's commercial centre, where mobile money, logistics and agriculture shape most local technology work.",
+  Dakar:
+    "Dakar leads Francophone West Africa's tech scene, and most local programmes there run in French.",
+  "Addis Ababa":
+    "Addis Ababa has a large, young population and a growing software and outsourcing sector.",
+};
 
 export const hubCountries = Array.from(
   new Set(techHubs.map((h) => h.country)),

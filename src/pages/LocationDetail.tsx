@@ -17,6 +17,7 @@ import {
   campusMetaTitle,
   campusProgrammes,
 } from "@/data/campusContent";
+import { getCityGuidesForCampus, getHubsForCampus } from "@/data/internalLinks";
 
 const LocationDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -29,6 +30,8 @@ const LocationDetail = () => {
   const url = `https://techfaculty.ng/locations/${campus.slug}`;
   const faqs = campusFaqs(campus);
   const programmes = campusProgrammes(campus);
+  const cityGuides = getCityGuidesForCampus(campus.slug);
+  const hubs = getHubsForCampus(campus);
   const nearby = campuses.filter((c) => c.zone === campus.zone && c.slug !== campus.slug).slice(0, 4);
 
   const orgSchema = {
@@ -265,6 +268,60 @@ const LocationDetail = () => {
                 </p>
               </CardContent>
             </Card>
+          </div>
+        </section>
+
+        {/* City guides and hubs */}
+        <section className="container mx-auto px-4 mt-14">
+          <h2 className="text-2xl md:text-3xl font-bold mb-3">Tech hubs and local guides for {campus.city}</h2>
+          <div className="max-w-3xl space-y-3 text-muted-foreground">
+            {cityGuides.length > 0 ? (
+              <p>
+                For the wider local picture, read{" "}
+                {cityGuides.map((g, i) => (
+                  <span key={g.slug}>
+                    {i > 0 && (i === cityGuides.length - 1 ? " and " : ", ")}
+                    <Link to={`/blog/${g.slug}`} className="text-primary hover:underline">
+                      our guide to the {g.city} tech scene
+                    </Link>
+                  </span>
+                ))}
+                , which covers the courses, hubs and first projects that suit the area.
+              </p>
+            ) : (
+              <p>
+                See{" "}
+                <Link
+                  to="/blog/best-tech-hubs-and-training-institutes-in-nigeria-by-city-2026"
+                  className="text-primary hover:underline"
+                >
+                  the best tech hubs and training institutes in Nigeria by city
+                </Link>{" "}
+                for how {campus.city} compares with other cities.
+              </p>
+            )}
+            {hubs.length > 0 && (
+              <ul className="space-y-2">
+                {hubs.map((h) => (
+                  <li key={h.slug} className="flex items-start gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                    <span>
+                      <Link to={`/hubs/${h.slug}`} className="text-foreground font-medium hover:text-primary hover:underline">
+                        {h.name}
+                      </Link>{" "}
+                      — {h.focus}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <p>
+              Compare every listing in{" "}
+              <Link to="/hubs" className="text-primary hover:underline">
+                our directory of tech hubs in Nigeria and Africa
+              </Link>
+              .
+            </p>
           </div>
         </section>
 

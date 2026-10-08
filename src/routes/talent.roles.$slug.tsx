@@ -9,7 +9,7 @@ export const Route = createFileRoute("/talent/roles/$slug")({
       const role = await fetchRoleBySlug(params.slug);
       if (!role) return null;
       return {
-        title: `${role.title} at ${role.company} | Tech Faculty`.slice(0, 60),
+        title: `${role.title} at ${role.company}`,
         description: role.summary.slice(0, 158),
       };
     } catch {
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/talent/roles/$slug")({
   },
   head: ({ loaderData, params }) =>
     pageHead({
-      title: loaderData?.title ?? "Open Role | Tech Faculty Talent",
+      title: loaderData?.title ?? "Open Role",
       description:
         loaderData?.description ??
         "View this open role on the Tech Faculty talent marketplace.",

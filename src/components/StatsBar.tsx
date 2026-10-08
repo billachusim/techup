@@ -1,4 +1,5 @@
 import { GraduationCap, TrendingUp, BookOpen, Award } from "lucide-react";
+import { Link } from "@/lib/router-compat";
 
 const stats = [
   { icon: GraduationCap, value: "6,000+", label: "Students Trained" },
@@ -20,7 +21,10 @@ const StatsBar = () => {
             </div>
           ))}
         </div>
-        <p className="text-xs text-muted-foreground text-center mt-8 max-w-3xl mx-auto leading-relaxed">
+        <p className="text-xs text-muted-foreground text-center mt-6">
+          <Link to="/outcomes" className="underline hover:text-primary">How we count these numbers</Link>
+        </p>
+        <p className="text-xs text-muted-foreground text-center mt-4 max-w-3xl mx-auto leading-relaxed">
           According to the{" "}
           <a
             href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/"

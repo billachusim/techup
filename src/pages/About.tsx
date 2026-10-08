@@ -1,3 +1,4 @@
+import { Link } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CredibilityBanner from "@/components/CredibilityBanner";
@@ -53,6 +54,7 @@ const About = () => {
             "name": "Tech Faculty NG",
             "url": "https://techfaculty.ng",
             "foundingDate": "2022",
+            "founder": { "@type": "Person", "@id": "https://techfaculty.ng/team/bill-achusim#person", "name": "Bill Achusim", "url": "https://techfaculty.ng/team/bill-achusim" },
             "numberOfEmployees": { "@type": "QuantitativeValue", "value": 25 },
             "alumni": { "@type": "QuantitativeValue", "name": "Graduates", "value": 6000 },
             "areaServed": { "@type": "Country", "name": "Nigeria" },
@@ -80,7 +82,7 @@ const About = () => {
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Licensed by the Federal Ministry of Science, Technology & Innovation via NBTI.
-              Over 6,000 students trained since 2022. 87% of graduates employed within six months.
+              Over 6,000 students trained since 2022. 87% of graduates employed within six months (<Link to="/outcomes" className="underline hover:text-primary">how we count</Link>).
               We build Africa's remote and physical tech workforce.
             </p>
           </div>
@@ -106,10 +108,10 @@ const About = () => {
             <h2 className="text-3xl font-bold text-center mb-8">Our Story</h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
-                Tech Faculty NG was founded in 2022 at the Digital Village in Nnewi, Anambra State. South-East Nigeria is rich in entrepreneurial energy, but many young people lack access to quality tech education. We set out to change that.
+                Tech Faculty NG was founded in 2022 by <Link to="/team/bill-achusim" className="underline hover:text-primary">Bill Achusim</Link> at the Digital Village in Nnewi, Anambra State. South-East Nigeria is rich in entrepreneurial energy, but many young people lack access to quality tech education. We set out to change that.
               </p>
               <p>
-                In over four years, we've trained more than 6,000 students across 12 departments — from Web Development and Data Science to AI, Cybersecurity, and Digital Marketing. 87% of our graduates secure tech roles within six months of completing their program.
+                In over four years, we've trained more than 6,000 students across 12 departments — from Web Development and Data Science to AI, Cybersecurity, and Digital Marketing. 87% of our graduates secure tech roles within six months of completing their program. <Link to="/outcomes" className="underline hover:text-primary">See how we count our outcomes</Link>.
               </p>
               <p>
                 According to the <a href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">World Economic Forum Future of Jobs Report (2025)</a>, digital skills demand in Africa is projected to rise 25% annually. We're positioning our students at the forefront of this growth.

@@ -112,7 +112,7 @@ const BlogPost = () => {
               {post.title}
             </h1>
             <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
-              <span>By <a href={BLOG_AUTHOR.linkedin} target="_blank" rel="author noopener" className="font-medium text-foreground hover:underline">{BLOG_AUTHOR.name}</a>, {BLOG_AUTHOR.role}</span>
+              <span>By <Link to={BLOG_AUTHOR.path} rel="author" className="font-medium text-foreground hover:underline">{BLOG_AUTHOR.name}</Link>, {BLOG_AUTHOR.role}</span>
               <a href={BLOG_AUTHOR.linkedin} target="_blank" rel="author noopener" aria-label="Bill Achusim on LinkedIn" className="hover:text-foreground"><Linkedin size={15} /></a>
                 <a href={BLOG_AUTHOR.x} target="_blank" rel="author noopener" aria-label="Bill Achusim on X" className="hover:text-foreground"><Twitter size={15} /></a>
             </div>
@@ -149,7 +149,7 @@ const BlogPost = () => {
 
             <div className="mt-10 rounded-lg border border-border p-5">
               <p className="text-sm text-muted-foreground">Written by</p>
-              <p className="font-semibold">{BLOG_AUTHOR.name}</p>
+              <p className="font-semibold"><Link to={BLOG_AUTHOR.path} rel="author" className="hover:underline">{BLOG_AUTHOR.name}</Link></p>
               <p className="text-sm text-muted-foreground mb-3">{BLOG_AUTHOR.role}. Building Africa's remote and physical tech workforce.</p>
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <a href={BLOG_AUTHOR.linkedin} target="_blank" rel="author noopener" aria-label="Bill Achusim on LinkedIn" className="hover:text-foreground"><Linkedin size={15} /></a>

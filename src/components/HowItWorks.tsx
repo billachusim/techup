@@ -1,3 +1,4 @@
+import { Link } from "@/lib/router-compat";
 import { GraduationCap, Award, Briefcase, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -38,7 +39,7 @@ const HowItWorks = () => {
             <span className="text-primary">3</span> Months.
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Tech Faculty has trained over 6,000 students across physical and virtual campuses worldwide. 
+            Tech Faculty has trained <Link to="/outcomes" className="underline hover:text-primary">over 6,000 students</Link> across physical and virtual campuses worldwide.
             Our structured program takes you from beginner to employed professional with a 100% Return 
             on Tuition guarantee. Through our Work & Earn internship program, our top students start 
             earning back their tuition as early as month 3.

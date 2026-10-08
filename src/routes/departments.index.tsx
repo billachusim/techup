@@ -5,7 +5,7 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/departments/")({
   head: () =>
     pageHead({
-      title: "Tech Departments & Bootcamps in Nigeria | Tech Faculty",
+      title: "Tech Departments & Bootcamps in Nigeria",
       description:
         "Explore Tech Faculty departments: web development, data science, AI, cybersecurity, UI/UX design, digital marketing and more — in person nationwide or online.",
       path: "/departments",

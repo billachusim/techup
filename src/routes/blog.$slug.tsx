@@ -9,7 +9,7 @@ export const Route = createFileRoute("/blog/$slug")({
     const local = blogPosts.find((p) => p.slug === params.slug);
     if (local) {
       return {
-        title: local.seoTitle ?? `${local.title} | Tech Faculty NG Blog`,
+        title: local.seoTitle ?? local.title,
         description: local.description,
       };
     }
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/blog/$slug")({
         .maybeSingle();
       if (data) {
         return {
-          title: `${data.title} | Tech Faculty NG Blog`,
+          title: data.title,
           description: data.description,
         };
       }
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/blog/$slug")({
   },
   head: ({ loaderData, params }) =>
     pageHead({
-      title: loaderData?.title ?? "Blog & Resources - Tech Faculty NG",
+      title: loaderData?.title ?? "Blog & Resources",
       description:
         loaderData?.description ??
         "Tech career guides, course deep-dives, SIWES tips, and AI insights from Tech Faculty NG.",

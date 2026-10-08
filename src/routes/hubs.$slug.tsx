@@ -13,8 +13,8 @@ export const Route = createFileRoute("/hubs/$slug")({
   head: ({ loaderData: hub, params }) =>
     pageHead({
       title: hub
-        ? `${hub.name} — Tech Hub in ${hub.city}`.slice(0, 60)
-        : "Hub not found | Tech Faculty Hubs",
+        ? `${hub.name}, Tech Hub in ${hub.city}`
+        : "Hub Not Found",
       description: hub
         ? `${hub.name} in ${hub.city}: courses, programmes and how to enrol through Tech Faculty.`.slice(0, 160)
         : "This tech hub page is not available.",

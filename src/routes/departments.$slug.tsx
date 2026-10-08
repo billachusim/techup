@@ -14,7 +14,7 @@ export const Route = createFileRoute("/departments/$slug")({
   },
   head: ({ loaderData, params }) =>
     pageHead({
-      title: loaderData?.title ?? "Department not found | Tech Faculty",
+      title: loaderData?.title ?? "Department Not Found",
       description:
         loaderData?.description ??
         "This Tech Faculty department page is not available.",

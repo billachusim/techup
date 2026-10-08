@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
+import AdminNav from "@/components/admin/AdminNav";
 import { Award, Loader2, ShieldCheck } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -74,6 +75,7 @@ const AdminCertificates = () => {
       <Header />
       <main className="container mx-auto px-4 pt-32 pb-16">
         <section className="mx-auto max-w-2xl space-y-6">
+          <AdminNav />
           <div className="text-center space-y-2">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
               <ShieldCheck className="h-7 w-7 text-primary" />

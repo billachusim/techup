@@ -57,12 +57,14 @@ const organizationSchema = {
   foundingDate: "2022",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Digital Village, NBTI Zonal Office",
+    streetAddress: "27 G Achusim Drive, Umunnealam",
     addressLocality: "Nnewi",
+    postalCode: "435101",
     addressRegion: "Anambra State",
     addressCountry: "NG",
   },
-  geo: { "@type": "GeoCoordinates", latitude: 6.0178, longitude: 6.9174 },
+  geo: { "@type": "GeoCoordinates", latitude: 5.9735226, longitude: 6.9196639 },
+  hasMap: "https://www.google.com/maps/place/?q=place_id:ChIJodXXtba9QxARPM6Tyyb02a0",
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+234-806-859-7140",

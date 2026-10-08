@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/integrations/supabase/lazy";
 import { clampLeadField } from "@/lib/leads";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -120,6 +120,7 @@ const LeadCaptureForm = ({
       .map((f) => (extras[f.id]?.trim() ? `${f.label}: ${extras[f.id].trim()}` : null))
       .filter(Boolean)
       .join(" | ");
+    const supabase = await getSupabase();
     const { error: insertError } = await supabase.from("leads").insert({
       name: clampLeadField(name, "name"),
       channel,
@@ -147,20 +148,22 @@ const LeadCaptureForm = ({
       /* storage may be unavailable */
     }
     // Marker row so you can see who actually opened WhatsApp before downloading.
-    void supabase.from("leads").insert({
-      name: clampLeadField(name, "name"),
-      channel,
-      contact: clampLeadField(contact, "contact") ?? "",
-      school: clampLeadField(school, "school"),
-      interest,
-      source: clampLeadField(`${source}#whatsapp-unlock`, "source"),
-      notes: clampLeadField(
-        [notesValue, "WhatsApp unlock clicked (checklist download unlocked)"]
-          .filter(Boolean)
-          .join(" | "),
-        "notes",
-      ),
-    });
+    void getSupabase().then((supabase) =>
+      supabase.from("leads").insert({
+        name: clampLeadField(name, "name"),
+        channel,
+        contact: clampLeadField(contact, "contact") ?? "",
+        school: clampLeadField(school, "school"),
+        interest,
+        source: clampLeadField(`${source}#whatsapp-unlock`, "source"),
+        notes: clampLeadField(
+          [notesValue, "WhatsApp unlock clicked (checklist download unlocked)"]
+            .filter(Boolean)
+            .join(" | "),
+          "notes",
+        ),
+      }),
+    );
     window.setTimeout(() => {
       setUnlocked(true);
       setUnlocking(false);

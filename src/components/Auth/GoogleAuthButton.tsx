@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { lovable } from "@/integrations/lovable/index";
+import { getSupabase } from "@/integrations/supabase/lazy";
+
+// Loads the sign-in code (and the Supabase client it uses) on demand.
+const loadLovable = () =>
+  Promise.all([import("@/integrations/lovable/index"), getSupabase()]).then(([m]) => m.lovable);
 
 interface GoogleAuthButtonProps {
   label?: string;
@@ -13,8 +17,15 @@ export const GoogleAuthButton = ({ label = "Continue with Google", onSuccess }: 
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
+  // Start loading as soon as the button shows, so the click can open the
+  // sign-in popup straight away instead of after a download.
+  useEffect(() => {
+    loadLovable().catch(() => {});
+  }, []);
+
   const handleClick = async () => {
     setIsLoading(true);
+    const lovable = await loadLovable();
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin,
     });

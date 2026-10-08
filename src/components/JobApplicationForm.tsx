@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/integrations/supabase/lazy";
 import { Briefcase, X } from "lucide-react";
 
 const companies = [
@@ -43,6 +43,7 @@ export const JobApplicationForm = ({ facultyId, onClose, onSuccess }: JobApplica
     setIsSubmitting(true);
 
     try {
+      const supabase = await getSupabase();
       const { error } = await supabase
         .from('job_applications')
         .insert({

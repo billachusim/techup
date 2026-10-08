@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { LayoutDashboard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/integrations/supabase/lazy";
 import { useUser } from "@/contexts/UserContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SignupForm } from "@/components/Auth/SignupForm";
@@ -43,6 +43,7 @@ const GetStarted = () => {
     }
     setIsResettingPassword(true);
     try {
+      const supabase = await getSupabase();
       const { error } = await supabase.auth.resetPasswordForEmail(forgotPasswordEmail.trim(), {
         redirectTo: `${window.location.origin}/`,
       });

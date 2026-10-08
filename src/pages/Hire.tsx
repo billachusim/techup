@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/integrations/supabase/lazy";
 import { parseList, talentWhatsAppUrl } from "@/lib/talent";
 import { notifyHiringRequest } from "@/lib/public-requests.functions";
 
@@ -41,6 +41,7 @@ const Hire = () => {
     setSubmitting(true);
     try {
       const briefId = crypto.randomUUID();
+      const supabase = await getSupabase();
       const { error } = await supabase
         .from("business_briefs")
         .insert({

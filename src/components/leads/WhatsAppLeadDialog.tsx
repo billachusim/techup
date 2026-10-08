@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/integrations/supabase/lazy";
 import { clampLeadField } from "@/lib/leads";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -138,6 +138,7 @@ const WhatsAppLeadDialog = ({
       .filter(Boolean)
       .join(" | ");
 
+    const supabase = await getSupabase();
     const { error: insertError } = await supabase.from("leads").insert({
       name: clampLeadField(name, "name"),
       channel: "whatsapp",
@@ -166,15 +167,17 @@ const WhatsAppLeadDialog = ({
 
   const markSaidHi = () => {
     setSaidHi(true);
-    void supabase.from("leads").insert({
-      name: clampLeadField(name, "name"),
-      channel: "whatsapp",
-      contact: clampLeadField(phone, "contact") ?? "",
-      school: clampLeadField(city, "school"),
-      interest: variant === "community" ? "community_join" : "whatsapp_chat",
-      source: clampLeadField(`${source}#said-hi`, "source"),
-      notes: "Said hi on WhatsApp (direct chat opened)",
-    });
+    void getSupabase().then((supabase) =>
+      supabase.from("leads").insert({
+        name: clampLeadField(name, "name"),
+        channel: "whatsapp",
+        contact: clampLeadField(phone, "contact") ?? "",
+        school: clampLeadField(city, "school"),
+        interest: variant === "community" ? "community_join" : "whatsapp_chat",
+        source: clampLeadField(`${source}#said-hi`, "source"),
+        notes: "Said hi on WhatsApp (direct chat opened)",
+      }),
+    );
   };
 
   const downloadVCard = () => {

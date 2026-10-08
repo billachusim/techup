@@ -26,11 +26,6 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { facultyId } = await req.json();
-    if (!facultyId || typeof facultyId !== "string") {
-      return new Response(JSON.stringify({ error: "facultyId is required" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-    }
-
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
@@ -39,6 +34,33 @@ serve(async (req) => {
     }
 
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
+
+    // Only signed-in users, acting on their own Faculty ID unless they are staff.
+    const json = (body: unknown, status: number) =>
+      new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    const token = req.headers.get("Authorization")?.replace(/^Bearer\s+/i, "") ?? "";
+    const { data: auth } = token ? await admin.auth.getUser(token) : { data: { user: null } };
+    if (!auth.user) return json({ error: "Please sign in" }, 401);
+
+    const { data: callerProfile } = await admin
+      .from("profiles")
+      .select("faculty_id")
+      .eq("id", auth.user.id)
+      .maybeSingle();
+
+    const body = await req.json().catch(() => ({}));
+    const requested = typeof body?.facultyId === "string" ? body.facultyId : null;
+    const facultyId = requested ?? callerProfile?.faculty_id ?? null;
+    if (!facultyId) return json({ error: "No Faculty ID on this account" }, 400);
+
+    if (facultyId !== callerProfile?.faculty_id) {
+      const { data: roles } = await admin
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", auth.user.id)
+        .in("role", ["admin", "recruiter"]);
+      if (!roles || roles.length === 0) return json({ error: "You can only view your own courses" }, 403);
+    }
 
     // 1) Newest enrollment that grants access: free, or paid and confirmed.
     // An unpaid plan falls back to the free bootcamp until payment lands.

@@ -33,7 +33,8 @@
 - [x] /admin/talent staff area (roles, talent vetting, match approval, applications, briefs)
 - [x] match-talent edge function (keyword pre-rank + Gemini scoring, admin approval required)
 - [x] Careers page openings block + talent/hire CTAs, sitemap and footer entries
-- [ ] Seed early talents from the Google Form export (waiting on the CSV from you)
+- [x] Google Form CSV import on /admin/talent (preview, duplicate check by email/phone, imports hidden until reviewed)
+- [ ] Seed early talents from the Google Form export (import tool ready; run it once the CSV is downloaded)
 
 ## Careers marketplace consolidation
 - [x] Make Tech Faculty Talent the main `/careers` experience
@@ -55,6 +56,7 @@
 - [x] Talent email at every stage: profile submitted, application received, matched/selected/assessment/interview/hired, work log reviewed, profile approved
 - [x] Slack: matched talent auto-added to #general; talent selected for a project auto-added to that project's Slack channel
 - [x] Admin Slack channel picker per project + manual "Slack access" button
+- [x] "Send test email" button on /admin/talent shows whether delivery works and the provider's error if not
 - [ ] Emails only start delivering once alerts.techfaculty.ng finishes verifying, and after publishing
 
 ## Student onboarding automation (Slack + email)

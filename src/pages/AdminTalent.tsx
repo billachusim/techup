@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { notifyMarketplaceEvent } from "@/lib/marketplace-emails.functions";
+import { notifyMarketplaceEvent, sendTestEmail } from "@/lib/marketplace-emails.functions";
 import { listSlackChannels, syncSlackForMatch } from "@/lib/slack.functions";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "@/lib/router-compat";
@@ -7,6 +7,7 @@ import { Loader2, Sparkles, Download, Check, X, Plus, MessageCircle, Wallet } fr
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TalentNav from "@/components/talent/TalentNav";
+import TalentCsvImport from "@/components/talent/TalentCsvImport";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -98,6 +99,7 @@ const AdminTalent = () => {
   const [newEngagement, setNewEngagement] = useState({ talent: "", role: "", amount: "", currency: "NGN", note: "" });
   const [slackChannels, setSlackChannels] = useState<{ id: string; name: string; is_private: boolean }[]>([]);
   const [slackBusyMatch, setSlackBusyMatch] = useState<string | null>(null);
+  const [testingEmail, setTestingEmail] = useState(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setSignedIn(Boolean(data.user)));
@@ -164,6 +166,19 @@ const AdminTalent = () => {
   }, []);
 
   useEffect(() => { if (isStaff) load(); else if (!roleLoading) setLoading(false); }, [isStaff, roleLoading, load]);
+
+  const runEmailTest = async () => {
+    setTestingEmail(true);
+    try {
+      const res = await sendTestEmail();
+      if (res.ok) toast({ title: "Test email sent", description: `Check ${res.to}.` });
+      else toast({ title: "Email is not delivering yet", description: res.error, variant: "destructive" });
+    } catch (e) {
+      toast({ title: "Email is not delivering yet", description: (e as Error).message, variant: "destructive" });
+    } finally {
+      setTestingEmail(false);
+    }
+  };
 
   const createRole = async () => {
     if (!newRole.title.trim() || !newRole.summary.trim() || !newRole.description.trim()) {
@@ -468,7 +483,15 @@ const AdminTalent = () => {
         <TalentNav />
         <div className="container mx-auto max-w-6xl px-4 py-12">
           <h1 className="text-3xl font-bold">Talent admin</h1>
-          <p className="mt-1 text-muted-foreground">Add roles, review talent, approve matches and read business briefs.</p>
+          <div className="mt-1 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-muted-foreground">Add roles, review talent, approve matches and read business briefs.</p>
+            {isStaff && (
+              <Button size="sm" variant="outline" disabled={testingEmail} onClick={runEmailTest}>
+                {testingEmail && <Loader2 size={14} className="mr-1.5 animate-spin" />}
+                Send test email
+              </Button>
+            )}
+          </div>
 
           {loading ? (
             <Loader2 className="mx-auto mt-12 animate-spin text-muted-foreground" />
@@ -719,6 +742,7 @@ const AdminTalent = () => {
 
               {/* TALENT */}
               <TabsContent value="talent" className="space-y-3 pt-6">
+                <TalentCsvImport existing={talents} onImported={load} />
                 {talents.length === 0 && (
                   <p className="rounded-lg border border-border bg-card p-8 text-center text-sm text-muted-foreground">
                     No talent profiles yet. Share techfaculty.ng/talent in the WhatsApp group.

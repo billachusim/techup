@@ -117,3 +117,25 @@ export const notifyMarketplaceEvent = createServerFn({ method: "POST" })
     await send("talent-approved", t.email, { name: t.full_name, facultyId: t.faculty_id }, t.id);
     return { ok: true };
   });
+
+/**
+ * Staff-only check that email delivery works: sends one sample email to the
+ * signed-in staff member and returns the provider's error instead of hiding it,
+ * so "domain not verified" shows up plainly until alerts.techfaculty.ng is live.
+ */
+export const sendTestEmail = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: staff } = await context.supabase.rpc("is_staff", { _user_id: context.userId });
+    if (!staff) return { ok: false as const, error: "Staff only" };
+    const to = context.claims.email as string | undefined;
+    if (!to) return { ok: false as const, error: "Your account has no email address" };
+    try {
+      const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
+      const res = await sendTemplateEmail("talent-approved", to, { templateData: { name: "Test", facultyId: "TF-TEST-0000" } });
+      return res.sent ? { ok: true as const, to } : { ok: false as const, error: `${to} is on the suppression list` };
+    } catch (e) {
+      const err = e as Error & { code?: string; status?: number };
+      return { ok: false as const, error: [err.code, err.status, err.message].filter(Boolean).join(" · ") };
+    }
+  });

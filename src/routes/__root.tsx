@@ -85,11 +85,6 @@ const webSiteSchema = {
   "@type": "WebSite",
   name: "Tech Faculty NG",
   url: "https://techfaculty.ng",
-  potentialAction: {
-    "@type": "SearchAction",
-    target: "https://techfaculty.ng/?q={search_term_string}",
-    "query-input": "required name=search_term_string",
-  },
 };
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({

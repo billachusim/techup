@@ -11,6 +11,7 @@ import { BLOG_AUTHOR, authorSchema } from "@/data/author";
 import { Linkedin, Twitter } from "lucide-react";
 import BlogActions from "@/components/BlogActions";
 import SuccessKitCTA from "@/components/siwes/SuccessKitCTA";
+import PostInternalLinks from "@/components/blog/PostInternalLinks";
 import { useAllBlogPosts } from "@/hooks/useBlogPostsData";
 import { formatDate } from "@/components/LastUpdated";
 
@@ -152,6 +153,8 @@ const BlogPost = () => {
                 {post.content.replace(/^\s*\*By [^*\n]+\*[ \t]*\n?/m, "")}
               </ReactMarkdown>
             </div>
+
+            <PostInternalLinks post={post} />
 
             <div className="mt-10 rounded-lg border border-border p-5">
               <p className="text-sm text-muted-foreground">Written by</p>

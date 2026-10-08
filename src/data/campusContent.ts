@@ -68,7 +68,12 @@ export function campusFaqs(c: Campus): CampusFaq[] {
 }
 
 export function campusMetaTitle(c: Campus) {
-  return `Tech Training in ${c.city} | Tech Faculty ${c.city}`;
+  // "Lagos, Lagos" and "Abuja, Federal Capital Territory" read badly.
+  const place =
+    c.city === c.state || c.state === "Federal Capital Territory"
+      ? c.city
+      : `${c.city}, ${c.state}`;
+  return `Tech Training in ${place}`;
 }
 
 export function campusMetaDescription(c: Campus) {

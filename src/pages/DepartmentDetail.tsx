@@ -14,6 +14,7 @@ import {
   departmentUpdated,
   getDepartmentBySlug,
 } from "@/data/departments";
+import { DEPARTMENT_GUIDES } from "@/data/internalLinks";
 
 const DepartmentDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -83,6 +84,7 @@ const DepartmentDetail = () => {
   };
 
   const related = departments.filter((d) => d.slug !== dept.slug).slice(0, 3);
+  const guides = DEPARTMENT_GUIDES[dept.slug] ?? [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -209,6 +211,26 @@ const DepartmentDetail = () => {
             </p>
           </div>
         </section>
+
+        {/* Guides */}
+        {guides.length > 0 && (
+          <section className="px-4 pb-10">
+            <div className="container mx-auto max-w-4xl">
+              <h2 className="text-2xl font-bold mb-4">{dept.title} guides from our blog</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {guides.map((g) => (
+                  <Link key={g.slug} to={`/blog/${g.slug}`}>
+                    <Card className="h-full hover:border-primary/50 transition-colors">
+                      <CardContent className="p-5">
+                        <p className="font-semibold">{g.label}</p>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* How to join */}
         <section className="px-4 pb-10">

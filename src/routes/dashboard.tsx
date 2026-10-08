@@ -5,7 +5,7 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/dashboard")({
   head: () =>
     pageHead({
-      title: "Dashboard - Tech Faculty NG",
+      title: "Dashboard",
       description:
         "Access your Tech Faculty student dashboard. Track course progress, view upcoming classes, and manage your certifications.",
       path: "/dashboard",

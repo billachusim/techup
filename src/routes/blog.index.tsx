@@ -5,7 +5,7 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/blog/")({
   head: () =>
     pageHead({
-      title: "Blog & Resources - Tech Faculty NG | Tech Career Tips",
+      title: "Blog: Tech Career Tips & Guides",
       description:
         "Tech career guides, course deep-dives, SIWES tips, and AI insights from Tech Faculty NG. Practical advice for starting and growing your tech career in Nigeria.",
       path: "/blog",

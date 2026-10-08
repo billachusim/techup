@@ -11,6 +11,7 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useIsStaff } from "@/hooks/useIsStaff";
 import { listStudentWork, reviewStudentWork } from "@/lib/student-review.functions";
+import AdminNav from "@/components/admin/AdminNav";
 import { PendingPayments } from "@/components/student/PendingPayments";
 
 type Status = "submitted" | "reviewed" | "needs_changes" | "all";
@@ -75,7 +76,8 @@ export default function AdminStudents() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-10 max-w-4xl space-y-6">
+      <main className="flex-1 container mx-auto px-4 pt-28 pb-16 max-w-4xl space-y-6">
+        <AdminNav />
         <div>
           <h1 className="text-2xl font-bold">Student work review</h1>
           <p className="text-sm text-muted-foreground">Score weekly submissions. Each review emails the student and, when accepted, posts in their class group on Slack.</p>

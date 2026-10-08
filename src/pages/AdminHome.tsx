@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/router-compat";
 import { Award, BriefcaseBusiness, GraduationCap, Loader2, type LucideIcon } from "lucide-react";
 import { useIsStaff } from "@/hooks/useIsStaff";
+import AdminNav from "@/components/admin/AdminNav";
 import { AdminMetrics } from "@/components/admin/AdminMetrics";
 
 interface Section {
@@ -46,6 +47,7 @@ export default function AdminHome() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1 container mx-auto px-4 pt-28 pb-16 max-w-6xl space-y-8">
+        <AdminNav />
         <div>
           <h1 className="text-2xl font-bold">Admin</h1>
           <p className="text-sm text-muted-foreground">Choose an area to manage.</p>

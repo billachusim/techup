@@ -3,7 +3,7 @@ import { Link } from "@/lib/router-compat";
 
 const stats = [
   { icon: GraduationCap, value: "6,000+", label: "Students Trained" },
-  { icon: TrendingUp, value: "87%", label: "Employed Within 6 Months" },
+  { icon: TrendingUp, value: "75%", label: "Employed Within 6 Months" },
   { icon: BookOpen, value: "12", label: "Industry-Recognized Courses" },
   { icon: Award, value: "4+", label: "Years Training Excellence" },
 ];

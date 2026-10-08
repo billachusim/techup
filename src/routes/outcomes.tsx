@@ -7,7 +7,7 @@ export const Route = createFileRoute("/outcomes")({
     pageHead({
       title: "Student Outcomes - Tech Faculty NG | How We Count",
       description:
-        "How Tech Faculty NG counts its 6,000+ students trained and 87% employed within six months, with live Talent Pool numbers, Google reviews and certificate checks.",
+        "How Tech Faculty NG counts its 6,000+ students trained and 75% employed within six months, with live Talent Pool numbers, Google reviews and certificate checks.",
       path: "/outcomes",
     }),
   component: Outcomes,

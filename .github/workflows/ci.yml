@@ -33,6 +33,5 @@ jobs:
         run: npm run build
 
       - name: Check sitemap
-        run: |
-          xmllint --noout .output/public/sitemap.xml
-          echo "$(grep -c '<loc>' .output/public/sitemap.xml) URLs in sitemap.xml"
+        # Fails if the generated sitemap is not well-formed XML.
+        run: python3 -c "import sys, xml.etree.ElementTree as ET; print(len(ET.parse(sys.argv[1]).getroot()), 'URLs in sitemap.xml')" .output/public/sitemap.xml

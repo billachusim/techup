@@ -14,6 +14,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { UserProvider } from "@/contexts/UserContext";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
+import { DEFAULT_OG_IMAGE, LOGO_URL } from "@/lib/seo";
 import NotFound from "@/pages/NotFound";
 import appCss from "../styles.css?url";
 
@@ -42,8 +43,7 @@ function DeferredToasters() {
 const SITE_TITLE = "Tech Faculty NG — Nigerian Tech Bootcamps & Certification";
 const SITE_DESCRIPTION =
   "Get trained, certified, and employed in software, AI, data and cybersecurity. Licensed institute with nationwide in-person bootcamps and online programs.";
-const OG_IMAGE =
-  "https://storage.googleapis.com/gpt-engineer-file-uploads/Nz94FlzZhAUL7Qyy7N9OzcfiFDW2/social-images/social-1762032884675-20251101_223347.jpg";
+const OG_IMAGE = DEFAULT_OG_IMAGE;
 
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -51,25 +51,37 @@ const organizationSchema = {
   name: "Tech Faculty NG",
   alternateName: "Tech Faculty",
   url: "https://techfaculty.ng",
-  logo: "https://storage.googleapis.com/gpt-engineer-file-uploads/Nz94FlzZhAUL7Qyy7N9OzcfiFDW2/uploads/1762881794512-IMG-20251103-WA0014.jpg",
+  logo: LOGO_URL,
   description:
     "Tech Faculty NG is a licensed Nigerian technology training institute delivering nationwide in-person bootcamps and online programs worldwide in Software Engineering, Data Science, Cybersecurity, AI, and more. We train, certify, and place graduates into tech careers.",
   foundingDate: "2022",
+  // Administrative HQ and official address: the Technology Incubation Centre, Umudim.
+  // The "Tech Faculty NG" Google profile at 27 G Achusim Drive (registered office) is listed in sameAs only.
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Digital Village, NBTI Zonal Office",
+    streetAddress:
+      "Technology Incubation Center, Onitsha-Okigwe Expressway, by Area Command, Umudim",
     addressLocality: "Nnewi",
+    postalCode: "435101",
     addressRegion: "Anambra State",
     addressCountry: "NG",
   },
-  geo: { "@type": "GeoCoordinates", latitude: 6.0178, longitude: 6.9174 },
+  geo: { "@type": "GeoCoordinates", latitude: 6.0089671, longitude: 6.9086291 },
+  hasMap: "https://www.google.com/maps/place/?q=place_id:ChIJ5ZxSzmi9QxAR23OzR7YbAkM",
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+234-806-859-7140",
     contactType: "admissions",
     availableLanguage: "English",
   },
-  sameAs: ["https://wa.me/2348068597140"],
+  sameAs: [
+    "https://www.linkedin.com/company/techfaculty",
+    "https://x.com/TechFacultyNG",
+    "https://www.facebook.com/techfacultyng",
+    "https://www.google.com/maps/place/?q=place_id:ChIJ5ZxSzmi9QxAR23OzR7YbAkM",
+    "https://www.google.com/maps/place/?q=place_id:ChIJodXXtba9QxARPM6Tyyb02a0",
+    "https://wa.me/2348068597140",
+  ],
   areaServed: { "@type": "Place", name: "Nigeria" },
   knowsAbout: [
     "Software Engineering",

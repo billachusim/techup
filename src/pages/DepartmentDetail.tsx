@@ -7,7 +7,14 @@ import { Button } from "@/components/ui/button";
 import JoinWhatsAppButton from "@/components/JoinWhatsAppButton";
 import { COMMUNITY_WHATSAPP_URL } from "@/lib/whatsapp";
 import { ArrowLeft, CheckCircle2, Clock, MessageCircle, Users, TrendingUp } from "lucide-react";
-import { departments, getDepartmentBySlug } from "@/data/departments";
+import LastUpdated from "@/components/LastUpdated";
+import {
+  departmentFaqs,
+  departments,
+  departmentUpdated,
+  getDepartmentBySlug,
+} from "@/data/departments";
+import { DEPARTMENT_GUIDES } from "@/data/internalLinks";
 
 const DepartmentDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -19,6 +26,8 @@ const DepartmentDetail = () => {
   // Structured data needs an ISO 8601 duration; "12-16 weeks" becomes P16W (the longest pace).
   const weeks = dept.duration.match(/\d+/g);
   const courseWorkload = weeks ? `P${weeks[weeks.length - 1]}W` : undefined;
+  const faqs = departmentFaqs(dept);
+  const updated = departmentUpdated(dept);
 
   const courseSchema = {
     "@context": "https://schema.org",
@@ -26,6 +35,7 @@ const DepartmentDetail = () => {
     name: `${dept.title} Programme — Tech Faculty NG`,
     description: dept.metaDescription,
     url,
+    dateModified: updated,
     keywords: dept.keywords.join(", "),
     inLanguage: "en-NG",
     teaches: dept.courses,
@@ -59,7 +69,9 @@ const DepartmentDetail = () => {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: dept.faqs.map((f) => ({
+    url,
+    dateModified: updated,
+    mainEntity: faqs.map((f) => ({
       "@type": "Question",
       name: f.q,
       acceptedAnswer: { "@type": "Answer", text: f.a },
@@ -77,6 +89,7 @@ const DepartmentDetail = () => {
   };
 
   const related = departments.filter((d) => d.slug !== dept.slug).slice(0, 3);
+  const guides = DEPARTMENT_GUIDES[dept.slug] ?? [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -127,6 +140,7 @@ const DepartmentDetail = () => {
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-4">
               {dept.intro}
             </p>
+            <LastUpdated date={updated} className="mb-4" />
             <JoinWhatsAppButton
               url={COMMUNITY_WHATSAPP_URL}
               groupName="the Tech Faculty WhatsApp community"
@@ -203,6 +217,26 @@ const DepartmentDetail = () => {
           </div>
         </section>
 
+        {/* Guides */}
+        {guides.length > 0 && (
+          <section className="px-4 pb-10">
+            <div className="container mx-auto max-w-4xl">
+              <h2 className="text-2xl font-bold mb-4">{dept.title} guides from our blog</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {guides.map((g) => (
+                  <Link key={g.slug} to={`/blog/${g.slug}`}>
+                    <Card className="h-full hover:border-primary/50 transition-colors">
+                      <CardContent className="p-5">
+                        <p className="font-semibold">{g.label}</p>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* How to join */}
         <section className="px-4 pb-10">
           <div className="container mx-auto max-w-4xl">
@@ -234,7 +268,7 @@ const DepartmentDetail = () => {
           <div className="container mx-auto max-w-4xl">
             <h2 className="text-2xl font-bold mb-4">{dept.title} — frequently asked questions</h2>
             <div className="space-y-4">
-              {dept.faqs.map((f) => (
+              {faqs.map((f) => (
                 <Card key={f.q}>
                   <CardContent className="p-5">
                     <h3 className="font-semibold mb-2">{f.q}</h3>

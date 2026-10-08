@@ -11,7 +11,9 @@ import { BLOG_AUTHOR, authorSchema } from "@/data/author";
 import { Linkedin, Twitter } from "lucide-react";
 import BlogActions from "@/components/BlogActions";
 import SuccessKitCTA from "@/components/siwes/SuccessKitCTA";
+import PostInternalLinks from "@/components/blog/PostInternalLinks";
 import { useAllBlogPosts } from "@/hooks/useBlogPostsData";
+import { formatDate } from "@/components/LastUpdated";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -41,6 +43,9 @@ const BlogPost = () => {
     .filter((p) => p.slug !== post.slug && p.tags.some((tag) => post.tags.includes(tag)))
     .slice(0, 2);
   const category = getCategoryByName(post.tags[0]);
+  const modified = post.updated ?? post.date;
+  // Only call out an edit made on a later day than publication.
+  const showUpdated = modified.slice(0, 10) > post.date.slice(0, 10);
 
   // SIWES/internship articles get the Success Kit funnel; other posts are untouched.
   const isSiwesPost = /siwes|internship|industrial training|\bIT placement\b/i.test(
@@ -57,6 +62,7 @@ const BlogPost = () => {
             headline: post.title,
             description: post.description,
             datePublished: post.date,
+            dateModified: modified,
             author: authorSchema,
             publisher: {
               "@type": "Organization",
@@ -96,12 +102,13 @@ const BlogPost = () => {
               )}
               <span className="text-sm text-muted-foreground flex items-center gap-1">
                 <Calendar size={14} />{" "}
-                {new Date(post.date).toLocaleDateString("en-NG", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
+                <time dateTime={post.date}>{formatDate(post.date)}</time>
               </span>
+              {showUpdated && (
+                <span className="text-sm text-muted-foreground">
+                  Last updated <time dateTime={modified}>{formatDate(modified)}</time>
+                </span>
+              )}
               <span className="text-sm text-muted-foreground flex items-center gap-1">
                 <Clock size={14} /> {post.readTime} min read
               </span>
@@ -112,7 +119,7 @@ const BlogPost = () => {
               {post.title}
             </h1>
             <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
-              <span>By <a href={BLOG_AUTHOR.linkedin} target="_blank" rel="author noopener" className="font-medium text-foreground hover:underline">{BLOG_AUTHOR.name}</a>, {BLOG_AUTHOR.role}</span>
+              <span>By <Link to={BLOG_AUTHOR.path} rel="author" className="font-medium text-foreground hover:underline">{BLOG_AUTHOR.name}</Link>, {BLOG_AUTHOR.role}</span>
               <a href={BLOG_AUTHOR.linkedin} target="_blank" rel="author noopener" aria-label="Bill Achusim on LinkedIn" className="hover:text-foreground"><Linkedin size={15} /></a>
                 <a href={BLOG_AUTHOR.x} target="_blank" rel="author noopener" aria-label="Bill Achusim on X" className="hover:text-foreground"><Twitter size={15} /></a>
             </div>
@@ -147,9 +154,11 @@ const BlogPost = () => {
               </ReactMarkdown>
             </div>
 
+            <PostInternalLinks post={post} />
+
             <div className="mt-10 rounded-lg border border-border p-5">
               <p className="text-sm text-muted-foreground">Written by</p>
-              <p className="font-semibold">{BLOG_AUTHOR.name}</p>
+              <p className="font-semibold"><Link to={BLOG_AUTHOR.path} rel="author" className="hover:underline">{BLOG_AUTHOR.name}</Link></p>
               <p className="text-sm text-muted-foreground mb-3">{BLOG_AUTHOR.role}. Building Africa's remote and physical tech workforce.</p>
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <a href={BLOG_AUTHOR.linkedin} target="_blank" rel="author noopener" aria-label="Bill Achusim on LinkedIn" className="hover:text-foreground"><Linkedin size={15} /></a>

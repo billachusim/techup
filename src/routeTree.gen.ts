@@ -17,6 +17,7 @@ import { Route as FeedDotxmlRouteImport } from './routes/feed[.]xml'
 import { Route as HireRouteImport } from './routes/hire'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LovableRouteImport } from './routes/lovable'
+import { Route as OutcomesRouteImport } from './routes/outcomes'
 import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
@@ -48,6 +49,7 @@ import { Route as TagSplatRouteImport } from './routes/tag.$'
 import { Route as TalentIndexRouteImport } from './routes/talent.index'
 import { Route as TalentDashboardRouteImport } from './routes/talent.dashboard'
 import { Route as TalentProfileRouteImport } from './routes/talent.profile'
+import { Route as TeamBillAchusimRouteImport } from './routes/team.bill-achusim'
 import { Route as VerifySplatRouteImport } from './routes/verify.$'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as BlogCategorySlugRouteImport } from './routes/blog.category.$slug'
@@ -98,6 +100,11 @@ const LoginRoute = LoginRouteImport.update({
 const LovableRoute = LovableRouteImport.update({
   id: '/lovable',
   path: '/lovable',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OutcomesRoute = OutcomesRouteImport.update({
+  id: '/outcomes',
+  path: '/outcomes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
@@ -256,6 +263,11 @@ const TalentProfileRoute = TalentProfileRouteImport.update({
   path: '/talent/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TeamBillAchusimRoute = TeamBillAchusimRouteImport.update({
+  id: '/team/bill-achusim',
+  path: '/team/bill-achusim',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VerifySplatRoute = VerifySplatRouteImport.update({
   id: '/verify/$',
   path: '/verify/$',
@@ -323,6 +335,7 @@ export interface FileRoutesByFullPath {
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
   '/lovable': typeof LovableRouteWithChildren
+  '/outcomes': typeof OutcomesRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
   '/rss.xml': typeof RssDotxmlRoute
@@ -346,6 +359,7 @@ export interface FileRoutesByFullPath {
   '/tag/$': typeof TagSplatRoute
   '/talent/dashboard': typeof TalentDashboardRoute
   '/talent/profile': typeof TalentProfileRoute
+  '/team/bill-achusim': typeof TeamBillAchusimRoute
   '/verify/$': typeof VerifySplatRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
@@ -375,6 +389,7 @@ export interface FileRoutesByTo {
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
   '/lovable': typeof LovableRouteWithChildren
+  '/outcomes': typeof OutcomesRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
   '/rss.xml': typeof RssDotxmlRoute
@@ -398,6 +413,7 @@ export interface FileRoutesByTo {
   '/tag/$': typeof TagSplatRoute
   '/talent/dashboard': typeof TalentDashboardRoute
   '/talent/profile': typeof TalentProfileRoute
+  '/team/bill-achusim': typeof TeamBillAchusimRoute
   '/verify/$': typeof VerifySplatRoute
   '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
@@ -428,6 +444,7 @@ export interface FileRoutesById {
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
   '/lovable': typeof LovableRouteWithChildren
+  '/outcomes': typeof OutcomesRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
   '/rss.xml': typeof RssDotxmlRoute
@@ -451,6 +468,7 @@ export interface FileRoutesById {
   '/tag/$': typeof TagSplatRoute
   '/talent/dashboard': typeof TalentDashboardRoute
   '/talent/profile': typeof TalentProfileRoute
+  '/team/bill-achusim': typeof TeamBillAchusimRoute
   '/verify/$': typeof VerifySplatRoute
   '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
@@ -482,6 +500,7 @@ export interface FileRouteTypes {
     | '/hire'
     | '/login'
     | '/lovable'
+    | '/outcomes'
     | '/payment-success'
     | '/products'
     | '/rss.xml'
@@ -505,6 +524,7 @@ export interface FileRouteTypes {
     | '/tag/$'
     | '/talent/dashboard'
     | '/talent/profile'
+    | '/team/bill-achusim'
     | '/verify/$'
     | '/admin/'
     | '/blog/'
@@ -534,6 +554,7 @@ export interface FileRouteTypes {
     | '/hire'
     | '/login'
     | '/lovable'
+    | '/outcomes'
     | '/payment-success'
     | '/products'
     | '/rss.xml'
@@ -557,6 +578,7 @@ export interface FileRouteTypes {
     | '/tag/$'
     | '/talent/dashboard'
     | '/talent/profile'
+    | '/team/bill-achusim'
     | '/verify/$'
     | '/admin'
     | '/blog'
@@ -586,6 +608,7 @@ export interface FileRouteTypes {
     | '/hire'
     | '/login'
     | '/lovable'
+    | '/outcomes'
     | '/payment-success'
     | '/products'
     | '/rss.xml'
@@ -609,6 +632,7 @@ export interface FileRouteTypes {
     | '/tag/$'
     | '/talent/dashboard'
     | '/talent/profile'
+    | '/team/bill-achusim'
     | '/verify/$'
     | '/admin/'
     | '/blog/'
@@ -639,6 +663,7 @@ export interface RootRouteChildren {
   HireRoute: typeof HireRoute
   LoginRoute: typeof LoginRoute
   LovableRoute: typeof LovableRouteWithChildren
+  OutcomesRoute: typeof OutcomesRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
   ProductsRoute: typeof ProductsRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
@@ -662,6 +687,7 @@ export interface RootRouteChildren {
   TagSplatRoute: typeof TagSplatRoute
   TalentDashboardRoute: typeof TalentDashboardRoute
   TalentProfileRoute: typeof TalentProfileRoute
+  TeamBillAchusimRoute: typeof TeamBillAchusimRoute
   VerifySplatRoute: typeof VerifySplatRoute
   AdminIndexRoute: typeof AdminIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -736,6 +762,13 @@ declare module '@tanstack/react-router' {
       path: '/lovable'
       fullPath: '/lovable'
       preLoaderRoute: typeof LovableRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/outcomes': {
+      id: '/outcomes'
+      path: '/outcomes'
+      fullPath: '/outcomes'
+      preLoaderRoute: typeof OutcomesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/payment-success': {
@@ -955,6 +988,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TalentProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/team/bill-achusim': {
+      id: '/team/bill-achusim'
+      path: '/team/bill-achusim'
+      fullPath: '/team/bill-achusim'
+      preLoaderRoute: typeof TeamBillAchusimRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/verify/$': {
       id: '/verify/$'
       path: '/verify/$'
@@ -1059,6 +1099,7 @@ const rootRouteChildren: RootRouteChildren = {
   HireRoute: HireRoute,
   LoginRoute: LoginRoute,
   LovableRoute: LovableRouteWithChildren,
+  OutcomesRoute: OutcomesRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
   ProductsRoute: ProductsRoute,
   RssDotxmlRoute: RssDotxmlRoute,
@@ -1083,6 +1124,7 @@ const rootRouteChildren: RootRouteChildren = {
   TagSplatRoute: TagSplatRoute,
   TalentDashboardRoute: TalentDashboardRoute,
   TalentProfileRoute: TalentProfileRoute,
+  TeamBillAchusimRoute: TeamBillAchusimRoute,
   VerifySplatRoute: VerifySplatRoute,
   AdminIndexRoute: AdminIndexRoute,
   BlogIndexRoute: BlogIndexRoute,

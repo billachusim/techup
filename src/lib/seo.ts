@@ -1,7 +1,11 @@
 export const SITE_URL = "https://techfaculty.ng";
 
-export const DEFAULT_OG_IMAGE =
-  "https://storage.googleapis.com/gpt-engineer-file-uploads/Nz94FlzZhAUL7Qyy7N9OzcfiFDW2/social-images/social-1762032884675-20251101_223347.jpg";
+/** Social preview images live in public/og (see scripts/generate-og-images.py). */
+export const ogImage = (file: string) => `${SITE_URL}/og/${file}`;
+
+export const DEFAULT_OG_IMAGE = ogImage("default.jpg");
+
+export const LOGO_URL = `${SITE_URL}/logo.png`;
 
 export const TITLE_SUFFIX = " | Tech Faculty NG";
 const MAX_TITLE_LENGTH = 60;

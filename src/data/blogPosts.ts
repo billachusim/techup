@@ -4,6 +4,466 @@ import cityBlogPosts from './cityBlogPosts';
 const blogPosts: BlogPost[] = [
   ...cityBlogPosts,
   {
+    slug: "tech-course-fees-nigeria-2026",
+    title: "How Much Do Tech Courses Cost in Nigeria in 2026? Real Naira Prices",
+    seoTitle: "Tech Course Fees in Nigeria 2026: Naira Prices | Tech Faculty NG",
+    description: "What tech courses cost in Nigeria in 2026, with Tech Faculty NG's real naira prices for web, data, AI, cybersecurity, cloud, design and marketing, plus SIWES fees.",
+    content: `# How Much Do Tech Courses Cost in Nigeria in 2026? Real Naira Prices
+
+*By Bill Achusim · Published Oct 8, 2026 · Last updated Oct 8, 2026*
+
+**Short answer:** At Tech Faculty NG, a tech course in 2026 costs nothing for the free online foundation bootcamp, and a full department track starts at between ₦50,000 and ₦150,000, depending on the skill. Hybrid study adds ₦12,000 and weekly physical classes add ₦22,500. Fees elsewhere vary widely, so always compare what each fee actually includes.
+
+Most "how much is a tech course" answers online give a vague range. This page gives our own prices, line by line, as they appear on our [pricing page](/#pricing) and as our checkout charges them. We cannot speak for other schools' fees, so where we mention the wider market we tell you what to check rather than quoting numbers we cannot verify.
+
+## Tech Faculty NG course fees in 2026
+
+Every paid track has a **minimum fee**, which is the least you can pay to enrol in that department. You build your plan from individual courses and optional benefits, and the total must reach that minimum.
+
+| Track | Department | Starts from | All courses in the track | Typical duration |
+|---|---|---|---|---|
+| Everyday AI & Digital Productivity (Bootcamp Starter) | Foundation for [every department](/departments) | Free | Free | Self-paced |
+| AI for Full-Stack Web Development | [Web Development](/departments/web-development) | ₦50,000 | ₦82,500 | 12 to 16 weeks |
+| AI for Digital Marketing & Growth | [Social Media & Digital Marketing](/departments/digital-marketing) | ₦60,000 | ₦72,000 | 10 to 14 weeks |
+| AI for UI/UX & Product Design | [Design](/departments/design) | ₦70,000 | ₦78,000 | 12 to 16 weeks |
+| AI for Mobile App Development | [Mobile App Development](/departments/mobile-app-development) | ₦80,000 | ₦105,000 | 14 to 18 weeks |
+| AI for Data Analytics & Business Intelligence | [Data Science & Analytics](/departments/data-science-analytics) | ₦100,000 | ₦82,500 | 12 to 16 weeks |
+| AI for Cybersecurity & Threat Intelligence | [Cybersecurity](/departments/cybersecurity) | ₦120,000 | ₦100,500 | 16 to 20 weeks |
+| AI for Cloud & DevOps Engineering | [Cloud Computing](/departments/cloud-computing) | ₦130,000 | ₦103,500 | 14 to 18 weeks |
+| AI & Autonomous Agents Engineering | [AI & Machine Learning](/departments/ai-machine-learning) | ₦150,000 | ₦124,500 | 16 to 20 weeks |
+| Custom Programme (pick any courses) | [All departments](/departments) | ₦50,000 | Depends on choice | Depends on choice |
+
+Where "all courses" is lower than "starts from", the minimum is reached by adding a learning mode or one of the benefits below.
+
+### The free option
+
+The Bootcamp Starter track costs ₦0. It covers Intro to Programming, Intro to AI & ChatGPT, Git & GitHub Basics and Tech Career Guidance, online and self-paced, with a completion certificate. It is the cheapest honest way to find out whether tech suits you before you pay for anything.
+
+## What changes the price
+
+**Learning mode.** Online-only study with recorded lectures adds nothing. Hybrid mode, which is online study plus monthly physical meetups, adds ₦12,000. Physical classes, meaning weekly on-site classes at a campus, add ₦22,500. Our [online vs physical guide](/blog/online-vs-physical-tech-bootcamp-nigeria-2026) covers which one suits you.
+
+**Benefits you choose.** These are optional and priced separately:
+
+- Job Placement Support: ₦15,000
+- Internship Access: ₦12,000
+- Mentor Network Access: ₦18,000
+- Industry Certification Prep (web, mobile, cybersecurity and cloud tracks): ₦22,500
+- One-on-One Mentorship, one hour a week (data and AI tracks): ₦30,000
+- VIP Classes at a chosen location (AI track): ₦75,000
+- Tech Faculty Certificate: included at no cost
+
+**A worked example.** A student taking every course in the web development track (₦82,500), choosing physical classes (₦22,500) and adding Job Placement Support (₦15,000) pays ₦120,000 in total.
+
+## SIWES and industrial training fees
+
+Computer science and ICT students on industrial training have separate options:
+
+- **Virtual IT placement:** ₦45,000 for the full duration of the placement.
+- **Logbook review, signing, stamping and two-way courier delivery:** ₦15,000.
+
+Details are on the [Virtual SIWES page](/virtual-siwes), and our [SIWES guide for computer science and ICT students](/blog/siwes-computer-science-ict-students-nigeria-2026) explains how it fits your school's requirements.
+
+## How to compare fees between schools
+
+A lower fee is not always cheaper, and a higher one is not always better. Before you pay any school, including us, ask:
+
+1. **What exactly is included?** Courses, mentorship, exam prep and certificates are often priced separately.
+2. **Is the certificate verifiable?** Anyone should be able to check it on a public page. Ours is at [techfaculty.ng/verify](/verify). Our guide on [how to verify a tech certificate in Nigeria](/blog/how-to-verify-tech-certificate-nigeria) shows what to look for.
+3. **How long is the programme, and how many contact hours?** A low fee for a short course can cost more per hour than a longer one.
+4. **Are international exam fees included?** Vendor certification exams are usually paid to the vendor in dollars and are not part of most training fees. Check the vendor's own site for the current exam price.
+5. **What does the laptop cost you?** Most tracks need one. Factor it into your budget.
+
+## Frequently asked questions
+
+### What is the cheapest way to learn tech in Nigeria in 2026?
+Start free. Tech Faculty NG's Bootcamp Starter track costs ₦0 and covers programming basics, AI tools, Git and career guidance online. Once you know which skill you want, the lowest-priced paid track is web development, starting at ₦50,000.
+
+### How much is a data analytics course in Nigeria?
+At Tech Faculty NG, the data analytics and business intelligence track starts at ₦100,000. It covers Python, SQL, data visualisation, statistics, machine learning basics and real-world projects, and runs for 12 to 16 weeks. See the [Data Science & Analytics department](/departments/data-science-analytics).
+
+### How much is a cybersecurity course in Nigeria?
+Our cybersecurity and threat intelligence track starts at ₦120,000 and runs for 16 to 20 weeks. It covers network security, ethical hacking, SOC operations, incident response and certification prep. See the [Cybersecurity department](/departments/cybersecurity).
+
+### Do physical classes cost more than online classes?
+Yes. Online-only study adds nothing to the track fee, hybrid study adds ₦12,000 and weekly physical classes add ₦22,500.
+
+### Can I pay in instalments?
+Message us on [WhatsApp](https://wa.me/2348068597140?text=Hello%20Tech%20Faculty%20NG%2C%20I%20read%20your%20course%20fees%20guide.%20Can%20I%20pay%20in%20instalments%3F) with the track you want and we will tell you the payment options for the next cohort.
+
+## Next step
+
+Browse the [departments](/departments), pick a track, and build your plan on the [pricing page](/#pricing). If you are unsure which skill to choose, start with the free Bootcamp Starter.`,
+    date: "2026-10-08",
+    author: "Bill Achusim",
+    tags: ["Tech Careers", "tech course fees Nigeria 2026", "cost of tech training Nigeria", "bootcamp prices Nigeria", "how much is a tech course in Nigeria"],
+    readTime: 7,
+  },
+  {
+    slug: "best-tech-bootcamps-anambra-south-east-nigeria-2026",
+    title: "Best Tech Bootcamps in Anambra and the South East (2026): An Honest Guide",
+    seoTitle: "Best Tech Bootcamps in Anambra & South East 2026 | Tech Faculty NG",
+    description: "An honest 2026 guide to tech bootcamps and training hubs in Anambra and the South East: Awka, Nnewi, Onitsha, Enugu, Owerri and Aba, and how to choose one.",
+    content: `# Best Tech Bootcamps in Anambra and the South East (2026): An Honest Guide
+
+*By Bill Achusim · Published Oct 8, 2026 · Last updated Oct 8, 2026*
+
+**Short answer:** There is no single best tech bootcamp in Anambra or the South East. Well-known options include Tech Faculty NG (headquartered in Nnewi, with centres in Awka, Onitsha, Enugu, Owerri, Aba and Abakaliki), Tekhub NG, LM Tech Hub and Kodex Africa in Awka, Genesys Tech Hub in Enugu and LearnFactory in Aba. Choose by curriculum, schedule, verifiable certificate and cost.
+
+## Read this first: who is writing
+
+We run Tech Faculty NG, so we are one of the options on this list. We have tried to be fair. Every other school below is an independent organisation, and we describe each one only from what it says about itself on its own public pages. We do not speak for them, and we have not invented ratings or rankings. Visit each one, ask the questions at the end of this guide, and decide for yourself.
+
+## Tech bootcamps and hubs in Anambra
+
+### Tech Faculty NG (Nnewi, Awka and Onitsha)
+
+Our headquarters is inside the Technology Incubation Centre, Nnewi. We also run the Awka centre at Sea Shelters Plaza, Amawbia Junction, and a standalone Onitsha centre at Anene Close, Awada. Tech Faculty NG is licensed by the Federal Ministry of Science, Technology and Innovation through the National Board for Technology Incubation (NBTI).
+
+- **Courses:** web and mobile development, data science and analytics, AI and machine learning, cybersecurity, cloud, design, digital marketing, robotics and IoT, and basic internet and AI skills. See all [departments](/departments).
+- **Format:** online, hybrid or weekly physical classes.
+- **Fees:** a free online foundation bootcamp, then paid tracks from ₦50,000. See our [2026 course fees guide](/blog/tech-course-fees-nigeria-2026).
+- **Also:** SIWES placements on site and online, teen holiday bootcamps, and certificates anyone can check at [techfaculty.ng/verify](/verify).
+
+### Tekhub NG (Awka)
+
+Tekhub NG describes itself as an applied AI and tech training hub headquartered in Awka. Its website lists web development, machine learning, kids coding and ethical hacking among its courses, alongside software development and co-working services.
+
+### LM Tech Hub (Awka)
+
+LM Tech Hub describes itself as a learning academy in Awka that provides tech skills training to young people.
+
+### Kodex Africa (Awka)
+
+Kodex Africa promotes itself on social media as a tech academy in Awka and recruits in cohorts.
+
+## Tech bootcamps and hubs elsewhere in the South East
+
+### Enugu: Genesys Tech Hub and Tech Faculty NG Enugu
+
+Genesys Tech Hub is on the Enugu–Port Harcourt Expressway. Its Genesys Academy offers paths in software engineering, data science and product design. Our own [Enugu campus](/locations/enugu) is inside the Technology Incubation Centre, Enugu, with particular depth in data analytics and cybersecurity.
+
+### Aba: LearnFactory Nigeria and Tech Faculty NG Aba
+
+LearnFactory Nigeria describes itself as a full-stack software development training and technology hub based in Aba. Our [Aba campus](/locations/aba) is inside the Technology Incubation Centre, Aba, and focuses on e-commerce, design, WhatsApp AI agents and business dashboards.
+
+### Owerri and Abakaliki: Tech Faculty NG
+
+We run campuses inside the Technology Incubation Centres in [Owerri](/locations/owerri) and [Abakaliki](/locations/abakaliki).
+
+### Nsukka: Roar Nigeria Hub
+
+Roar Nigeria Hub at the University of Nigeria is a university-based incubation hub for student builders, better suited to starting a product than to a structured course.
+
+For more hubs by city, see our [tech hubs directory](/hubs).
+
+## At a glance
+
+| Name | City | What it says it offers |
+|---|---|---|
+| Tech Faculty NG | Nnewi (HQ), Awka, Onitsha, Enugu, Owerri, Aba, Abakaliki, plus online | Ten departments, SIWES, teen bootcamps, verifiable certificates |
+| Tekhub NG | Awka | Web development, machine learning, kids coding, ethical hacking |
+| LM Tech Hub | Awka | Tech skills training for young people |
+| Kodex Africa | Awka | Cohort-based tech academy |
+| Genesys Tech Hub | Enugu | Software engineering, data science, product design |
+| LearnFactory Nigeria | Aba | Full-stack software development training |
+| Roar Nigeria Hub | Nsukka | University-based incubation |
+
+## How to choose a bootcamp in the South East
+
+Ask every school the same questions, including us:
+
+1. **Can I see the full curriculum and the tools taught?** Vague course lists are a warning sign.
+2. **Can I check a past graduate's certificate online?** If there is no public verification page, the certificate is weak evidence for employers.
+3. **Who teaches, and can I meet them before paying?**
+4. **What do I build?** You should leave with projects you can show, not just notes.
+5. **What is the total cost, including exams, laptop and transport?**
+6. **Does the schedule fit my life?** Weekend, evening, online and hybrid options matter if you work, trade or study.
+7. **What happens after the course?** Ask how they help with internships, SIWES or job applications, and ask to speak to a graduate.
+
+## Frequently asked questions
+
+### Which is the best tech school in Awka?
+It depends on what you want to learn and how you want to study. Tech Faculty NG, Tekhub NG, LM Tech Hub and Kodex Africa all train in Awka. Compare their curricula, schedules, fees and whether their certificates can be verified online before you choose.
+
+### Is there a tech bootcamp in Nnewi?
+Yes. Tech Faculty NG's headquarters is inside the Technology Incubation Centre, Nnewi, and every department runs there in person, alongside SIWES placements and teen holiday bootcamps. See the [Nnewi campus page](/locations/nnewi).
+
+### Can I learn tech in the South East without moving to Lagos?
+Yes. Several schools train in Awka, Nnewi, Onitsha, Enugu, Owerri and Aba, and many tech jobs are now remote. What employers check is your portfolio and whether your certificate is genuine, not where you trained.
+
+### Are online bootcamps as good as physical ones?
+They can be, if you are disciplined and have reliable power and data. Our [online vs physical comparison](/blog/online-vs-physical-tech-bootcamp-nigeria-2026) explains who each format suits.
+
+### How much do bootcamps in Anambra cost?
+Fees vary by school and course, so ask each one directly. Tech Faculty NG's foundation bootcamp is free online, and paid tracks start from ₦50,000.
+
+## Next step
+
+Visit two or three schools, ask the questions above, and compare. To see what we teach, browse the [departments](/departments) or [message us on WhatsApp](https://wa.me/2348068597140?text=Hello%20Tech%20Faculty%20NG%2C%20I%20read%20your%20South%20East%20bootcamps%20guide%20and%20want%20to%20visit%20a%20centre).`,
+    date: "2026-10-08",
+    author: "Bill Achusim",
+    tags: ["Tech Careers", "best tech bootcamp Anambra", "tech training Awka", "tech hubs South East Nigeria", "coding school Enugu Owerri Aba"],
+    readTime: 7,
+  },
+  {
+    slug: "siwes-computer-science-ict-students-nigeria-2026",
+    title: "SIWES for Computer Science and ICT Students in Nigeria (2026 Guide)",
+    seoTitle: "SIWES for Computer Science & ICT Students 2026 | Tech Faculty NG",
+    description: "A 2026 guide to SIWES for computer science and ICT students in Nigeria: where to do it, what work to do, what to write in your logbook, online IT, and costs.",
+    content: `# SIWES for Computer Science and ICT Students in Nigeria (2026 Guide)
+
+*By Bill Achusim · Published Oct 8, 2026 · Last updated Oct 8, 2026*
+
+**Short answer:** Computer science and ICT students should do SIWES somewhere that gives them real software, data, networking or security work under a named supervisor who will sign their logbook and ITF forms. Good options are tech companies, bank and telecom IT units, and licensed training institutes. Many schools also accept online placements; confirm with your SIWES coordinator first.
+
+This guide is for students of computer science, information technology, software engineering, computer engineering, data science, cybersecurity and related ICT courses. For the general rules of the scheme, see our [complete SIWES guide](/blog/everything-you-need-to-know-about-siwes-nigeria). For finding a host, see [how to find a tech SIWES placement](/blog/how-to-find-siwes-placement-tech-nigeria-2026).
+
+## What SIWES should give a computer science student
+
+SIWES (the Student Industrial Work Experience Scheme) is run with the Industrial Training Fund (ITF). For an ICT student, a good placement leaves you with three things:
+
+1. **Work you can show.** A feature you shipped, a dashboard you built, a network you configured or a security review you helped run.
+2. **A logbook that describes real work.** Weekly entries your supervisor can sign honestly.
+3. **A reference.** Someone senior who can vouch for you after you graduate.
+
+A placement where you spend months typing documents or fixing printers gives you none of these, even if it is easy to get.
+
+## Where computer science and ICT students can do SIWES
+
+- **Software and fintech companies.** The best experience if you can get in, though places are limited and competitive.
+- **IT units of banks, telecoms, hospitals and government agencies.** Good for networking, support, databases and security.
+- **Digital agencies and startups.** Fast exposure to web, mobile and design work.
+- **Licensed tech training institutes.** Structured projects and mentors, and a reliable signature. Tech Faculty NG is licensed by the Federal Ministry of Science, Technology and Innovation through the National Board for Technology Incubation (NBTI), and hosts SIWES students at its centres and online.
+
+Whichever you choose, your school checks that the host is real, registered, relevant to your course and willing to supervise you, so confirm with your department's SIWES coordinator before you resume.
+
+## What work to do, by specialisation
+
+| Your interest | Work to ask for | Department to learn it |
+|---|---|---|
+| Software development | Build or fix features on a real web or mobile app, write tests, use Git | [Web Development](/departments/web-development), [Mobile App Development](/departments/mobile-app-development) |
+| Data | Clean data, write SQL, build a dashboard that someone uses | [Data Science & Analytics](/departments/data-science-analytics) |
+| Networking and cloud | Set up and document networks, servers or cloud services | [Cloud Computing](/departments/cloud-computing) |
+| Security | Monitor logs, review access, help with a security assessment | [Cybersecurity](/departments/cybersecurity) |
+| AI | Build an AI assistant or automation for a real business task | [AI & Machine Learning](/departments/ai-machine-learning) |
+
+## What to write in your logbook
+
+Weak entries describe attendance. Strong entries describe work. Compare:
+
+- **Weak:** "Came to the office. Worked on the computer."
+- **Strong:** "Built the login page for the client portal in React. Connected it to the authentication API and fixed two validation bugs found in review."
+
+Write every week, while you still remember what you did. Our guide to [common SIWES logbook mistakes](/blog/siwes-logbook-mistakes-nigeria-fix) covers the errors that cause trouble at defence.
+
+## Documents you will handle
+
+Your school will tell you exactly which forms it uses. ICT students typically deal with:
+
+- An **acceptance or placement letter** from the host, addressed to your institution.
+- The **SPE-1 form**, which ITF uses for your records and allowance.
+- The **logbook**, signed and stamped by your industry supervisor.
+- **ITF Form 8**, completed by the host at the end of your training.
+
+For how the ITF allowance works, see our [SIWES allowance guide](/blog/siwes-allowance-nigeria-2026-itf-rates).
+
+## Doing SIWES online
+
+Many institutions now accept remote or hybrid industrial training for computer science, IT, software engineering and data courses, as long as the host is real, relevant and supervises you properly. Online IT suits students who study far from a suitable host, who already work, or whose host fell through late.
+
+At Tech Faculty NG, the [virtual IT placement](/virtual-siwes) costs ₦45,000 for the full duration of your training. It includes a placement letter for your school, weekly live sessions with a mentor and real project work. The logbook service costs ₦15,000 and covers courier pickup, review, signing, stamping and return delivery from any Nigerian city.
+
+## Doing SIWES on site with Tech Faculty NG
+
+Students can also do IT in person at our centres in Nnewi, Awka, Onitsha, Enugu, Owerri, Aba, Abakaliki and other cities. There are two tracks:
+
+- **Learn & Pay:** pay a training fee and get structured, mentored project work across our departments.
+- **Tutor & Earn:** for students already skilled enough to teach, who tutor other learners and earn while completing their IT.
+
+See the [SIWES page](/siwes) for how to apply.
+
+## Frequently asked questions
+
+### Can computer science students do SIWES online in Nigeria?
+Often, yes. Many schools accept remote or hybrid industrial training for computer science and ICT courses if the host is real, relevant and supervises you. Ask your SIWES coordinator before you apply. Tech Faculty NG's virtual IT placement costs ₦45,000.
+
+### Is a tech training institute acceptable for SIWES?
+Usually, if it is a registered organisation that does relevant work, supervises you and signs your logbook and ITF forms. Your department makes the final decision, so confirm before you resume.
+
+### How long is SIWES for computer science students?
+Your institution sets the length. For computer science and ICT it commonly runs between four and six months. Check your school's SIWES calendar.
+
+### What should a computer science student do during SIWES?
+Real technical work you can show afterwards: building software, working with data, configuring networks or helping with security. Log it weekly and ask your supervisor for feedback.
+
+### Who signs my logbook if I do SIWES online?
+Your assigned supervisor at the host signs it. At Tech Faculty NG, your supervisor signs and our official stamp is applied, and the logbook service returns it to you by courier.
+
+## Next step
+
+Talk to your SIWES coordinator, then apply on the [SIWES page](/siwes) or the [Virtual SIWES page](/virtual-siwes). Questions? [Message us on WhatsApp](https://wa.me/2348068597140?text=Hello%20Tech%20Faculty%20NG%2C%20I%20am%20a%20computer%20science%20student%20and%20I%20want%20to%20do%20my%20SIWES%20with%20you).`,
+    date: "2026-10-08",
+    author: "Bill Achusim",
+    tags: ["SIWES & Internships", "SIWES for computer science students", "ICT industrial training Nigeria", "online SIWES Nigeria", "SIWES logbook computer science"],
+    readTime: 8,
+  },
+  {
+    slug: "online-vs-physical-tech-bootcamp-nigeria-2026",
+    title: "Online vs Physical Tech Bootcamps in Nigeria: Which Should You Choose in 2026?",
+    seoTitle: "Online vs Physical Tech Bootcamp in Nigeria 2026 | Tech Faculty NG",
+    description: "Online, hybrid or physical tech bootcamp in Nigeria? Compare cost, discipline, power and data, networking and certificates, with Tech Faculty NG's 2026 prices.",
+    content: `# Online vs Physical Tech Bootcamps in Nigeria: Which Should You Choose in 2026?
+
+*By Bill Achusim · Published Oct 8, 2026 · Last updated Oct 8, 2026*
+
+**Short answer:** Choose online if you are self-disciplined, have reliable power and data, and need to fit learning around work or school. Choose physical classes if you need structure, a workstation or face-to-face help. Hybrid gives you both. At Tech Faculty NG, online adds nothing to the fee, hybrid adds ₦12,000 and physical adds ₦22,500.
+
+## The three formats
+
+| | Online | Hybrid | Physical |
+|---|---|---|---|
+| How it works | Self-paced recorded lectures | Online study plus monthly physical meetups | Weekly on-site classes at a campus |
+| Extra cost at Tech Faculty NG | ₦0 | ₦12,000 | ₦22,500 |
+| Best for | Workers, distant students, disciplined self-starters | People who want flexibility and some in-person contact | Beginners, people without steady power or a laptop, people who learn best in a room |
+| Main risk | Falling behind without anyone noticing | Missing the meetups that hold you accountable | Transport time and cost |
+
+These are added to the track fee for the department you choose. Full prices are in our [2026 course fees guide](/blog/tech-course-fees-nigeria-2026).
+
+## When online is the better choice
+
+- **You live far from a training centre.** Online removes transport cost and time.
+- **You work, trade or are in school.** Self-paced study fits around fixed hours.
+- **You are already comfortable with a computer.** Online suits learners who can follow instructions and search for answers alone.
+- **You want to start for free.** Our Bootcamp Starter track is free and fully online.
+
+## When physical classes are the better choice
+
+- **You are a complete beginner.** Someone beside you can fix a problem in a minute that might stop you for a day alone.
+- **Power or data is unreliable where you live.** A campus gives you a working environment. On-campus students can use centre workstations during class hours.
+- **You do not yet own a suitable laptop.** Physical classes let you start while you save for one.
+- **You need a routine.** A fixed weekly class is the strongest protection against quitting.
+- **You want to build a local network.** Classmates become collaborators, referrals and sometimes co-founders.
+
+## Why hybrid works for many Nigerian learners
+
+Hybrid study gives you the flexibility of learning online with a regular in-person checkpoint. The monthly meetup is where you get unstuck, show your work and meet the people in your cohort. For many working adults it is the best balance of cost, time and support.
+
+## Questions to ask before you choose
+
+1. **How much time can I give each week, honestly?**
+2. **What are power and internet like where I will study?**
+3. **Do I have a laptop with at least 8GB of RAM?** That is what we recommend for most technical tracks.
+4. **How far is the nearest campus, and what does the trip cost?** See our [campus locations](/locations).
+5. **Have I finished an online course before?** If not, consider hybrid or physical.
+
+## Does the format change the certificate?
+
+At Tech Faculty NG, no. Graduates in every format receive the same Tech Faculty NG certificate, and anyone can confirm it on our public [verification page](/verify). Employers care about two things: whether your certificate is genuine and what you can build. Our guide on [how to verify a tech certificate in Nigeria](/blog/how-to-verify-tech-certificate-nigeria) explains what employers check.
+
+## Frequently asked questions
+
+### Is an online tech bootcamp worth it in Nigeria?
+Yes, if you are disciplined and have reliable power and internet. You get the same content without transport costs. If you have never finished an online course, hybrid or physical classes are safer.
+
+### Are physical tech classes more expensive?
+At Tech Faculty NG, weekly physical classes add ₦22,500 to the track fee, hybrid adds ₦12,000 and online adds nothing. Remember to budget for transport too.
+
+### Can I switch from online to physical later?
+Ask us before you enrol. Message us on [WhatsApp](https://wa.me/2348068597140?text=Hello%20Tech%20Faculty%20NG%2C%20can%20I%20switch%20from%20online%20to%20physical%20classes%20later%3F) with your track and campus, and we will tell you what is possible for your cohort.
+
+### Do employers accept online certificates?
+They accept certificates they can verify, backed by work they can see. A certificate with a public verification page and a portfolio of projects is strong evidence, whether you studied online or in person.
+
+### Which format is best for a complete beginner?
+Physical or hybrid. Beginners benefit most from someone who can help in person. You can also try the free online Bootcamp Starter track first, or the [Basic Internet & AI Studies](/departments/basic-internet-ai-studies) department if you are new to computers.
+
+## Next step
+
+Pick a skill from the [departments](/departments), then choose online, hybrid or physical on the [pricing page](/#pricing). If you are not sure, start with the free online Bootcamp Starter and decide after the first few weeks.`,
+    date: "2026-10-08",
+    author: "Bill Achusim",
+    tags: ["Tech Careers", "online vs physical bootcamp Nigeria", "online tech course Nigeria", "hybrid tech training Nigeria", "physical coding classes Nigeria"],
+    readTime: 6,
+  },
+  {
+    slug: "how-to-verify-tech-certificate-nigeria",
+    title: "How to Verify a Tech Certificate in Nigeria (2026 Guide for Employers and Graduates)",
+    seoTitle: "How to Verify a Tech Certificate in Nigeria | Tech Faculty NG",
+    description: "How to check that a tech or bootcamp certificate in Nigeria is genuine: use the issuer's verification page, match the details, and spot fakes. Includes Tech Faculty NG.",
+    content: `# How to Verify a Tech Certificate in Nigeria (2026 Guide for Employers and Graduates)
+
+*By Bill Achusim · Published Oct 8, 2026 · Last updated Oct 8, 2026*
+
+**Short answer:** To verify a tech certificate in Nigeria, find the issuer's own verification page, enter the certificate ID printed on the certificate, and check that the name, course and date match. For a Tech Faculty NG certificate, go to techfaculty.ng/verify. If the issuer has no verification page, contact the issuer directly using details from its official website.
+
+## Why verification matters
+
+A tech certificate is only worth something if someone can check it. Employers, schools and clients increasingly ask for proof, and a certificate that cannot be checked is easy to fake. As a graduate, a verifiable certificate is the simplest way to stand out. As an employer, checking takes a minute and protects you from hiring on false claims.
+
+## How to verify any tech certificate: five steps
+
+1. **Find the issuer.** Read the name of the school or vendor exactly as printed on the certificate.
+2. **Go to the issuer's official website yourself.** Type the address or search for it. Do not rely on a link, QR code or phone number supplied only by the certificate holder, because a fake certificate can point to a fake page.
+3. **Use the issuer's verification page.** Enter the certificate ID or credential number printed on the certificate.
+4. **Match every detail.** The name, course or credential, certificate type and issue date on the record should match the paper or PDF exactly.
+5. **If there is no verification page, contact the issuer.** Use the email or phone number on the issuer's official website and ask them to confirm the certificate ID and holder.
+
+## How to verify a Tech Faculty NG certificate
+
+Every Tech Faculty NG certificate can be checked on our public verification portal at [techfaculty.ng/verify](/verify).
+
+1. Open [techfaculty.ng/verify](/verify).
+2. Enter the certificate ID printed on the certificate, for example **TFNG202601**. Capital or small letters both work.
+3. Select **Verify Certificate**.
+
+A genuine certificate shows the holder's **full name**, the **course**, the **certificate type**, the **certificate ID**, the issuer (**Tech Faculty NG**) and the **date issued**. If the ID is not in our database, the page says so. If you believe a real certificate is missing, or you suspect a fake, [message us on WhatsApp](https://wa.me/2348068597140?text=Hello%20Tech%20Faculty%20NG%2C%20I%20want%20to%20confirm%20a%20certificate) with the ID and we will check.
+
+## International vendor certifications
+
+Many tech certifications are issued by international vendors rather than Nigerian schools. Most issue a digital badge or credential record that you can check on the vendor's own site or on the badge platform the vendor names, such as Credly. The same rule applies: start from the vendor's official website, not from a link the candidate sends you, and check that the name and credential match.
+
+## Warning signs of a fake certificate
+
+- No certificate ID or credential number anywhere on it.
+- The issuer has no verification page and does not respond when contacted.
+- The ID returns no record, or a record for a different person or course.
+- The verification link goes to a domain that is not the issuer's.
+- Spelling mistakes in the school's name, the course name or the signatory's title.
+- The holder cannot describe the course or show any project from it.
+
+## For graduates: make your certificate easy to check
+
+- Put your certificate ID on your CV and LinkedIn profile, next to the course name.
+- Link straight to the issuer's verification page.
+- Pair the certificate with a portfolio. A verifiable certificate shows you finished; projects show what you can do.
+
+## Frequently asked questions
+
+### How do I verify a Tech Faculty NG certificate?
+Go to techfaculty.ng/verify, enter the certificate ID printed on the certificate and select Verify Certificate. A genuine certificate shows the holder's name, course, certificate type, certificate ID, issuer and date issued.
+
+### Where is the certificate ID on a Tech Faculty NG certificate?
+It is printed on the certificate itself. It looks like TFNG202601. Enter it exactly as printed.
+
+### What if the verification page says the certificate was not found?
+Check that you typed the ID correctly. If it still fails, contact the issuer using the details on its official website. For Tech Faculty NG, message us on WhatsApp with the ID.
+
+### Can employers verify a certificate without the graduate's permission?
+At Tech Faculty NG, yes. Anyone with the certificate ID can check it on our public verification page. The graduate shares the ID by giving you the certificate.
+
+### Is a bootcamp certificate valid in Nigeria?
+A bootcamp certificate shows that you completed a course with that provider. Its value to employers depends on whether it can be verified and on the skills behind it. Tech Faculty NG is licensed by the Federal Ministry of Science, Technology and Innovation through the National Board for Technology Incubation (NBTI).
+
+## Next step
+
+To earn a certificate employers can check, browse the [departments](/departments) and pick a track, or start with the free online Bootcamp Starter on the [pricing page](/#pricing).`,
+    date: "2026-10-08",
+    author: "Bill Achusim",
+    tags: ["Tech Careers", "verify certificate Nigeria", "tech certificate verification", "check bootcamp certificate", "Tech Faculty NG verify"],
+    readTime: 5,
+  },
+  {
     slug: "ai-automation-for-nigerian-businesses-2026",
     title: "AI Automation for Nigerian Businesses: A Practical 2026 Playbook",
     description: "How Nigerian businesses automate sales, support and reporting with AI in 2026 — the tools, realistic costs in naira, rollout steps and mistakes that waste money.",
@@ -3163,7 +3623,7 @@ Graduates of a well-run data analytics and visualization bootcamp move into role
 - **Junior Data Scientist** — after adding Python and statistics
 - **Remote freelance analyst** — Upwork, Toptal, and direct contracts; $25–$60/hour
 
-87% of Tech Faculty graduates are employed within six months of finishing the program.
+75% of Tech Faculty graduates are employed within six months of finishing the program ([how we count](/outcomes)).
 
 ## How to choose a data analytics and visualization bootcamp in Nigeria
 
@@ -3978,7 +4438,7 @@ Both fees are paid before work starts. You submit the form, we send payment deta
 | | Virtual IT | On-site IT |
 |---|---|---|
 | Best for | Students far from our centres, working or part-time students, late placements | Students who want daily in-person supervision and lab access |
-| Location | Anywhere in Nigeria | 21 cities including Nnewi, Onitsha, Owerri, Aba, Enugu, Abakaliki, Abuja |
+| Location | Anywhere in Nigeria | 22 cities including Nnewi, Onitsha, Owerri, Aba, Enugu, Abakaliki, Abuja |
 | Logbook | Reviewed, signed, stamped and delivered both ways | Signed and stamped in person |
 | Cost | ₦45,000 placement + ₦15,000 logbook service | See the [SIWES tracks page](/siwes) |
 

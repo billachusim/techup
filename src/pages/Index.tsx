@@ -15,7 +15,7 @@ import GetStarted from "@/components/GetStarted";
 import Footer from "@/components/Footer";
 import HomeWhatsAppPrompts from "@/components/HomeWhatsAppPrompts";
 
-const provider = { "@type": "Organization", "name": "Tech Faculty", "url": "https://techfaculty.ng" };
+const provider = { "@type": "Organization", "name": "Tech Faculty NG", "url": "https://techfaculty.ng" };
 
 // Blended and onsite course instances must name where the in-person sessions happen.
 const courseLocation = {
@@ -29,7 +29,7 @@ const courses = [
     position: 1,
     name: "Data Analytics & Data Science",
     slug: "data-science-analytics",
-    description: "12-week intensive bootcamp covering Python, SQL, Power BI, and machine learning fundamentals. 87% graduate employment rate.",
+    description: "12-week intensive bootcamp covering Python, SQL, Power BI, and machine learning fundamentals. 75% graduate employment rate.",
     prerequisites: "Basic computer literacy",
     duration: "P12W",
     occupation: "Data Analyst",
@@ -81,7 +81,7 @@ const courseSchema = {
   "@context": "https://schema.org",
   "@type": "ItemList",
   "name": "Tech Faculty Courses",
-  "description": "Accredited technology bootcamp courses offered by Tech Faculty in Africa",
+  "description": "Technology bootcamp courses from Tech Faculty NG, licensed by FMSTI through NBTI",
   "itemListElement": courses.map((c) => ({
     "@type": "ListItem",
     "position": c.position,

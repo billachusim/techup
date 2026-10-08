@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase, mightHaveSession } from "@/integrations/supabase/lazy";
 
 /**
  * Server-enforced staff check. The user_roles policies only ever return the
@@ -14,11 +14,14 @@ export function useIsStaff() {
   useEffect(() => {
     let active = true;
     (async () => {
-      const { data: auth } = await supabase.auth.getUser();
-      if (!auth.user) {
+      const notStaff = () => {
         if (active) { setIsStaff(false); setIsAdmin(false); setLoading(false); }
-        return;
-      }
+      };
+      // Signed-out visitors can't be staff, so skip loading the client for them.
+      if (!mightHaveSession()) return notStaff();
+      const supabase = await getSupabase();
+      const { data: auth } = await supabase.auth.getUser();
+      if (!auth.user) return notStaff();
       const { data } = await supabase.from("user_roles").select("role").eq("user_id", auth.user.id);
       if (!active) return;
       const roles = (data ?? []).map((r) => r.role);

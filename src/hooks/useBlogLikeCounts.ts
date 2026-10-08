@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/integrations/supabase/lazy";
 
 export function useBlogLikeCounts() {
   const [counts, setCounts] = useState<Record<string, number>>({});
@@ -7,6 +7,7 @@ export function useBlogLikeCounts() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      const supabase = await getSupabase();
       const { data, error } = await supabase
         .from("blog_post_likes")
         .select("post_slug");

@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/integrations/supabase/lazy";
 
 export type TechEvent = {
   id: string;
@@ -102,6 +102,7 @@ export function localFirst(a: TechEvent, b: TechEvent) {
 }
 
 export async function fetchEvents(limit = 300): Promise<TechEvent[]> {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from("events")
     .select("*")
@@ -112,6 +113,7 @@ export async function fetchEvents(limit = 300): Promise<TechEvent[]> {
 }
 
 export async function fetchEventBySlug(slug: string): Promise<TechEvent | null> {
+  const supabase = await getSupabase();
   const { data, error } = await supabase.from("events").select("*").eq("slug", slug).maybeSingle();
   if (error) throw error;
   return (data as unknown as TechEvent) ?? null;

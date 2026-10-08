@@ -374,49 +374,34 @@ export type Database = {
       }
       enrollments: {
         Row: {
-          amount_due: number | null
           coupon_code: string | null
           created_at: string
-          currency: string | null
           enrollment_date: string
           faculty_id: string
           id: string
           learning_mode: string | null
-          paid_at: string | null
-          payment_reference: string | null
           plan_name: string
           status: string
-          tx_ref: string | null
         }
         Insert: {
-          amount_due?: number | null
           coupon_code?: string | null
           created_at?: string
-          currency?: string | null
           enrollment_date?: string
           faculty_id: string
           id?: string
           learning_mode?: string | null
-          paid_at?: string | null
-          payment_reference?: string | null
           plan_name: string
           status?: string
-          tx_ref?: string | null
         }
         Update: {
-          amount_due?: number | null
           coupon_code?: string | null
           created_at?: string
-          currency?: string | null
           enrollment_date?: string
           faculty_id?: string
           id?: string
           learning_mode?: string | null
-          paid_at?: string | null
-          payment_reference?: string | null
           plan_name?: string
           status?: string
-          tx_ref?: string | null
         }
         Relationships: [
           {

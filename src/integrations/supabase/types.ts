@@ -1501,7 +1501,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      admin_dashboard_metrics: { Args: { _days?: number }; Returns: Json }
       approve_talent: { Args: { _talent_id: string }; Returns: string }
       archive_stale_listings: { Args: never; Returns: undefined }
       claim_my_talent_profile: { Args: never; Returns: string }

@@ -188,7 +188,8 @@ export function AdminMetrics() {
     try {
       const supabase = await getSupabase();
       // The database function checks the admin role itself and refuses everyone else.
-      const { data: result, error: rpcError } = await supabase.rpc("admin_dashboard_metrics", { _days: period });
+      const rpc = supabase.rpc as unknown as (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: { message: string } | null }>;
+      const { data: result, error: rpcError } = await rpc.call(supabase, "admin_dashboard_metrics", { _days: period });
       if (rpcError) throw new Error(rpcError.message);
       setData(result as unknown as DashboardMetrics);
     } catch (e) {

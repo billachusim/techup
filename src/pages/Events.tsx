@@ -20,6 +20,7 @@ import {
   EVENT_CATEGORIES,
   EVENT_FORMATS,
 } from "@/lib/events";
+import { TEEN_HOLIDAY_FROM, naira } from "@/lib/fees";
 
 const PAGE_TITLE = "Tech Events in Nigeria 2026 — AI, Data & Developer Conferences";
 const PAGE_DESCRIPTION =
@@ -28,23 +29,23 @@ const PAGE_DESCRIPTION =
 const FAQS = [
   {
     q: "What tech events are happening in Nigeria in 2026?",
-    a: "This page lists upcoming technology events across Nigeria and Africa — AI and data science conferences, developer meetups, hackathons, cybersecurity workshops, product and design sessions, remote work summits and free online webinars. The listings refresh every week from public event platforms, and Tech Faculty's own meetups, workshops and holiday bootcamps are included.",
+    a: "This page lists upcoming AI and data conferences, developer meetups, hackathons, cybersecurity workshops, design sessions, remote work summits and free webinars across Nigeria and Africa. Listings refresh every week from public event platforms, and Tech Faculty NG's own meetups, workshops and holiday bootcamps appear alongside them.",
   },
   {
     q: "Are there free tech events and webinars I can attend?",
-    a: "Yes. Use the price filter to show only free events. Community meetups such as the Nnewi Tech Meetup, Google Developer Group sessions and most online webinars are free to attend; you only need to register on the organiser's page.",
+    a: "Yes. Use the price filter to show only free events. Community meetups such as the Nnewi Tech Meetup, Google Developer Group sessions and most online webinars cost nothing to attend; you only register on the organiser's page. The same filter shows paid events if you are looking for larger conferences.",
   },
   {
     q: "How do I register for an event listed here?",
-    a: "Open the event's page on this site to read the full details, then use the register link to go straight to the organiser's official registration or ticket page. Tech Faculty does not collect ticket payments for events we do not organise.",
+    a: "Open the event's page on this site to read the full details, then use the register link to go straight to the organiser's official registration or ticket page. Tech Faculty NG does not collect ticket payments for events we do not organise, so you always pay the organiser directly.",
   },
   {
     q: "Does Tech Faculty host its own tech events?",
-    a: "Yes. We run the monthly Nnewi Tech Meetup at the Technology Incubation Centre in Nnewi, practical AI workshops for business owners, and holiday tech bootcamps for kids and teenagers across our campuses in Nnewi, Onitsha, Enugu, Owerri, Aba and other Nigerian cities.",
+    a: `Yes. Tech Faculty NG runs the monthly Nnewi Tech Meetup at the Technology Incubation Centre in Nnewi, practical AI workshops for business owners, and holiday tech bootcamps for children and teenagers in Nnewi, Onitsha, Enugu, Owerri, Aba and other cities. Teen holiday tracks start from ${naira(TEEN_HOLIDAY_FROM.amount)}.`,
   },
   {
     q: "Can I list or co-host an event with Tech Faculty?",
-    a: "Yes. Community organisers, companies and developer groups can co-host or sponsor events with us, or send an event for inclusion in this directory. Message us on WhatsApp or email thetechfaculty@gmail.com with the event details and registration link.",
+    a: "Yes. Community organisers, companies and developer groups can co-host or sponsor events with Tech Faculty NG, or send an event for inclusion in this directory. Message us on WhatsApp or email thetechfaculty@gmail.com with the event name, date, city and registration link, and we reply with the next steps.",
   },
 ];
 

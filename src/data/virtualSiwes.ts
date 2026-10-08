@@ -4,6 +4,11 @@
  * Payment is reserve-then-confirm: no live checkout yet.
  */
 
+import { campuses } from "@/data/campuses";
+
+export const CAMPUS_COUNT = campuses.length;
+export const CITY_COUNT = new Set(campuses.map((c) => c.city)).size;
+
 export const VIRTUAL_SIWES = {
   placementPriceNGN: 45000,
   logbookPriceNGN: 15000,
@@ -69,50 +74,50 @@ export const virtualSteps: { title: string; detail: string }[] = [
 export const virtualFaqs: { q: string; a: string }[] = [
   {
     q: "Can I do my SIWES or IT online in Nigeria?",
-    a: "Yes — many institutions now accept a remote or hybrid industrial training placement, especially for Computer Science, IT, Software Engineering, Data Science and related courses. What your school checks is that the host organisation is real, registered, relevant to your course and willing to supervise, sign and stamp your logbook. Tech Faculty NG is licensed by the Federal Ministry of Science, Technology and Innovation via the National Board for Technology Incubation, and our headquarters sits inside the Technology Incubation Centre, Nnewi. Confirm with your department coordinator first, then apply.",
+    a: `Yes. Many institutions accept a remote or hybrid placement for Computer Science, IT, Software Engineering, Data Science and related courses, provided the host is real, registered, relevant and willing to supervise and stamp your logbook. Tech Faculty NG is licensed by the Federal Ministry of Science, Technology and Innovation through NBTI. Virtual SIWES costs ${formatNaira(VIRTUAL_SIWES.placementPriceNGN)}.`,
   },
   {
     q: "How much does Virtual SIWES cost?",
-    a: "The virtual IT placement is ₦45,000 for the full duration of your training, paid before onboarding. The logbook review, signing, stamping and two-way delivery service is a separate ₦15,000. Nothing is charged automatically online — we send payment details after you submit the form.",
+    a: `The virtual IT placement costs ${formatNaira(VIRTUAL_SIWES.placementPriceNGN)} for the full duration of your training, whether that is three or six months, paid before onboarding. The logbook review, signing, stamping and two-way delivery service is a separate ${formatNaira(VIRTUAL_SIWES.logbookPriceNGN)}. Nothing is charged automatically online; we send payment details after you submit the form.`,
   },
   {
     q: "Who signs and stamps my SIWES logbook?",
-    a: "Your assigned Tech Faculty supervisor signs your logbook and it is stamped with our official company stamp, exactly as it would be if you sat in our Nnewi office every day. Attendance and supervision records are kept throughout your placement, so the signature reflects real supervised work.",
+    a: `Your assigned Tech Faculty supervisor signs your logbook, and it is stamped with our official company stamp, exactly as it would be if you sat in our Nnewi office every day. Attendance and supervision records are kept for your school and the ITF throughout your placement, so the signature reflects real supervised work.`,
   },
   {
     q: "How do I send my logbook for review and signing?",
-    a: "You do not have to travel. Book the logbook service and our courier partner collects the logbook and any ITF forms from your address in any Nigerian city. We review, complete, sign and stamp, then waybill the documents back to you. Both the pickup and the return delivery are included in the ₦15,000.",
+    a: `You do not have to travel. Book the ${formatNaira(VIRTUAL_SIWES.logbookPriceNGN)} logbook service and our courier partner collects your logbook and ITF forms from your address in any Nigerian city. We review, complete, sign and stamp them, then waybill everything back to you. Both the pickup and the return delivery are included in that price.`,
   },
   {
     q: "How long does the logbook turnaround take?",
-    a: "Plan for 5–7 working days from the day your logbook reaches our headquarters, plus courier time each way. If your submission deadline is tight, tell us the date on the form and we prioritise it.",
+    a: `Plan for ${VIRTUAL_SIWES.turnaround}, plus courier time each way. If your school's submission deadline is tight, write the date on the form and we prioritise your logbook. Booking the pickup a few weeks before the end of your IT leaves room for corrections before the deadline.`,
   },
   {
     q: "What if my school insists on a physical placement?",
-    a: "Then use one of our 21 physical centres instead — Nnewi, Onitsha, Owerri, Aba, Enugu, Abakaliki, Abuja and more — and keep the same tracks and mentors. Some students also do a hybrid: online weekly work with a few on-site weeks. We write your letter to match whatever your school approved.",
+    a: `Then use one of our ${CAMPUS_COUNT} physical centres instead, including Nnewi, Onitsha, Owerri, Aba, Enugu, Abakaliki and Abuja, with the same tracks and mentors. Some students also do a hybrid: weekly online work with a few on-site weeks. We write your placement letter to match whatever arrangement your school approved.`,
   },
   {
     q: "Which tracks can I do virtually?",
-    a: "Both. Learn & Pay is for students who want structured, mentored experience across web development, data analytics, AI, cybersecurity, design or digital marketing. Tutor & Earn is for students already skilled enough to teach — you tutor other learners online, gain teaching experience and earn while completing your IT.",
+    a: `Both. Learn & Pay is for students who want structured, mentored experience across web development, data analytics, AI, cybersecurity, design or digital marketing. Tutor & Earn is for students already skilled enough to teach: you tutor other learners online, gain teaching experience and earn money while completing your industrial training.`,
   },
   {
     q: "Do I still get a placement letter and completion certificate?",
-    a: "Yes. You receive an official acceptance and placement letter addressed to your institution before you resume, and a completion certificate plus recommendation letter at the end. Virtual interns are documented exactly like on-site interns.",
+    a: `Yes. You receive an official acceptance and placement letter addressed to your institution within 48 hours of payment, before you resume. At the end you receive a completion certificate, a recommendation letter and a project portfolio link. Virtual interns are documented exactly like on-site interns, so your school sees the same paperwork.`,
   },
   {
     q: "Will my ITF allowance be affected?",
-    a: "Your ITF SIWES allowance depends on your school and the ITF processing your SPE-1 and Form 8 correctly and on time — not on whether your placement is remote. We complete our sections of those forms as part of the logbook service so nothing stalls on our side.",
+    a: `No. Your ITF SIWES allowance depends on your school and the ITF processing your SPE-1 and Form 8 correctly and on time, not on whether your placement is remote. We complete our company sections of those ITF forms as part of the logbook service, so nothing stalls on our side.`,
   },
   {
     q: "Can final-year and part-time students use this?",
-    a: "Yes. Virtual IT is built for students who cannot relocate: those studying far from our centres, those already working, part-time and sandwich students, and anyone whose approved host fell through late in the session.",
+    a: `Yes. Virtual IT is built for students who cannot relocate: those studying far from our centres, those already working, part-time and sandwich students, and anyone whose approved host fell through late in the session. The same placement letter, weekly mentoring and logbook service apply to every one of them.`,
   },
   {
     q: "What do I need before I start?",
-    a: "A laptop where possible, a working internet connection, your school's IT duration and start date, and your logbook and ITF forms once your department issues them. If your laptop is the blocker, ask us — our store and payment-plan options exist for exactly that reason.",
+    a: `A laptop where possible, a working internet connection, your school's IT duration and start date, and your logbook and ITF forms once your department issues them. If a laptop is the blocker, ask us: our tech store sells tested student laptops with pay on delivery and part-payment options for exactly this reason.`,
   },
   {
     q: "Is Tech Faculty NG a registered organisation my school can verify?",
-    a: "Yes. We are a licensed technology training institute operating from the Technology Incubation Centre, Nnewi, with centres in 21 Nigerian cities. Your coordinator can verify our licence and address, and our certificates are verifiable on our own verification portal.",
+    a: `Yes. Tech Faculty NG is a licensed technology training institute, licensed by the Federal Ministry of Science, Technology and Innovation through NBTI and headquartered at the Technology Incubation Centre, Nnewi, with centres in ${CITY_COUNT} Nigerian cities. Your coordinator can verify our licence and address, and our certificates are verifiable online.`,
   },
 ];

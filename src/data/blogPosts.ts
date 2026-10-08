@@ -3978,7 +3978,7 @@ Both fees are paid before work starts. You submit the form, we send payment deta
 | | Virtual IT | On-site IT |
 |---|---|---|
 | Best for | Students far from our centres, working or part-time students, late placements | Students who want daily in-person supervision and lab access |
-| Location | Anywhere in Nigeria | 21 cities including Nnewi, Onitsha, Owerri, Aba, Enugu, Abakaliki, Abuja |
+| Location | Anywhere in Nigeria | 22 cities including Nnewi, Onitsha, Owerri, Aba, Enugu, Abakaliki, Abuja |
 | Logbook | Reviewed, signed, stamped and delivered both ways | Signed and stamped in person |
 | Cost | ₦45,000 placement + ₦15,000 logbook service | See the [SIWES tracks page](/siwes) |
 

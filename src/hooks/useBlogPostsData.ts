@@ -14,6 +14,7 @@ type DbPost = {
   author: string;
   read_time: string;
   published_at: string;
+  updated_at: string | null;
 };
 
 /** Generated posts repeat the title as an H1; the page renders its own H1. */
@@ -30,6 +31,7 @@ function toBlogPost(row: DbPost): BlogPost {
     description: row.description,
     content: stripLeadingH1(row.content),
     date: row.published_at,
+    ...(row.updated_at ? { updated: row.updated_at } : {}),
     author: row.author || "Tech Faculty NG",
     tags: tags[0] === row.category ? tags : [row.category, ...tags],
     readTime: Number.isFinite(minutes) ? minutes : 8,
@@ -40,7 +42,7 @@ async function fetchDbPosts(): Promise<BlogPost[]> {
   const supabase = await getSupabase();
   const { data, error } = await supabase
     .from("blog_posts")
-    .select("slug, title, description, content, category, tags, author, read_time, published_at")
+    .select("slug, title, description, content, category, tags, author, read_time, published_at, updated_at")
     .eq("is_published", true)
     .order("published_at", { ascending: false });
   if (error) throw error;

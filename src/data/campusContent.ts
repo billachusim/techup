@@ -1,4 +1,6 @@
 import type { Campus } from "@/data/campuses";
+import { VIRTUAL_SIWES } from "@/data/virtualSiwes";
+import { HYBRID_FEE, PHYSICAL_FEE, TEEN_HOLIDAY_FROM, naira } from "@/lib/fees";
 
 export interface CampusFaq {
   q: string;
@@ -42,23 +44,25 @@ export function campusProgrammes(c: Campus) {
 }
 
 export function campusFaqs(c: Campus): CampusFaq[] {
-  const inst = c.nearbyInstitutions.slice(0, 3).join(", ");
+  const inst = c.nearbyInstitutions.slice(0, 2).join(", ");
   return [
     {
       q: `Where exactly is Tech Faculty in ${c.city}?`,
-      a: `We operate from ${c.address}. Tech Faculty runs inside the Technology Incubation Centre network of the National Board for Technology Incubation, an agency of the Federal Ministry of Science, Technology and Innovation, so the venue is a federally-run facility rather than a private shopfront.`,
+      a: /incubation/i.test(c.address)
+        ? `Tech Faculty ${c.city} operates from ${c.address}, inside the Technology Incubation Centre network of the National Board for Technology Incubation, an agency of the Federal Ministry of Science, Technology and Innovation. You train in a federally-run facility rather than a private shopfront, with labs and mentors on site.`
+        : `Tech Faculty ${c.city} operates from ${c.address}. It is a Tech Faculty NG centre, licensed by the Federal Ministry of Science, Technology and Innovation through the National Board for Technology Incubation, with labs and mentors on site. Message us on WhatsApp for directions before your first visit.`,
     },
     {
       q: `Can I study online instead of attending the ${c.city} centre?`,
-      a: `Yes. Every department is available online, hybrid, or fully in person. Many ${c.city} students take lectures online and use the centre for labs, mentoring and project reviews.`,
+      a: `Yes. Every Tech Faculty department can be studied online, hybrid or fully in person. Online study is included in the course fee, hybrid study with monthly meetups adds ${naira(HYBRID_FEE)}, and weekly on-site classes add ${naira(PHYSICAL_FEE)}. Many ${c.city} students take lectures online and use the centre for labs and project reviews.`,
     },
     {
       q: `Do you accept SIWES and industrial training students in ${c.city}?`,
-      a: `Yes. We take SIWES and IT students each session${inst ? ` from institutions such as ${inst}` : ""}, on our Learn & Pay and Tutor & Earn tracks, with supervised project work and logbook support. Places are limited, so apply early.`,
+      a: `Yes. We take SIWES and IT students each session${inst ? ` from institutions such as ${inst}` : ""}, on our Learn & Pay and Tutor & Earn tracks. Virtual SIWES costs ${naira(VIRTUAL_SIWES.placementPriceNGN)}, and our ${naira(VIRTUAL_SIWES.logbookPriceNGN)} logbook service completes the company sections of your ITF SPE-1 and Form 8 if you cannot attend in person.`,
     },
     {
       q: `Are there holiday tech programmes for children and teenagers in ${c.city}?`,
-      a: `Yes. During school holidays we run teen tracks in Digital Creation, Coding, Artificial Intelligence and Cybersecurity for JSS and SSS students in ${c.city}, project-based and supervised, ending with each student presenting what they built.`,
+      a: `Yes. During school holidays we run teen tracks in Digital Creation, Coding, Artificial Intelligence and Cybersecurity for JSS and SSS students in ${c.city}. Classes are project-based and supervised, each student ends by presenting what they built, and fees start from ${naira(TEEN_HOLIDAY_FROM.amount)} for a ${TEEN_HOLIDAY_FROM.weeks}-week track.`,
     },
   ];
 }

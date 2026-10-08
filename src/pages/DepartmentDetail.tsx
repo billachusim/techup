@@ -7,7 +7,13 @@ import { Button } from "@/components/ui/button";
 import JoinWhatsAppButton from "@/components/JoinWhatsAppButton";
 import { COMMUNITY_WHATSAPP_URL } from "@/lib/whatsapp";
 import { ArrowLeft, CheckCircle2, Clock, MessageCircle, Users, TrendingUp } from "lucide-react";
-import { departments, getDepartmentBySlug } from "@/data/departments";
+import LastUpdated from "@/components/LastUpdated";
+import {
+  departmentFaqs,
+  departments,
+  departmentUpdated,
+  getDepartmentBySlug,
+} from "@/data/departments";
 
 const DepartmentDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -16,6 +22,8 @@ const DepartmentDetail = () => {
   if (!dept) return <Navigate to="/departments" replace />;
 
   const url = `https://techfaculty.ng/departments/${dept.slug}`;
+  const faqs = departmentFaqs(dept);
+  const updated = departmentUpdated(dept);
 
   const courseSchema = {
     "@context": "https://schema.org",
@@ -23,6 +31,7 @@ const DepartmentDetail = () => {
     name: `${dept.title} Programme — Tech Faculty NG`,
     description: dept.metaDescription,
     url,
+    dateModified: updated,
     keywords: dept.keywords.join(", "),
     inLanguage: "en-NG",
     teaches: dept.courses,
@@ -54,7 +63,9 @@ const DepartmentDetail = () => {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: dept.faqs.map((f) => ({
+    url,
+    dateModified: updated,
+    mainEntity: faqs.map((f) => ({
       "@type": "Question",
       name: f.q,
       acceptedAnswer: { "@type": "Answer", text: f.a },
@@ -122,6 +133,7 @@ const DepartmentDetail = () => {
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-4">
               {dept.intro}
             </p>
+            <LastUpdated date={updated} className="mb-4" />
             <JoinWhatsAppButton
               url={COMMUNITY_WHATSAPP_URL}
               groupName="the Tech Faculty WhatsApp community"
@@ -229,7 +241,7 @@ const DepartmentDetail = () => {
           <div className="container mx-auto max-w-4xl">
             <h2 className="text-2xl font-bold mb-4">{dept.title} — frequently asked questions</h2>
             <div className="space-y-4">
-              {dept.faqs.map((f) => (
+              {faqs.map((f) => (
                 <Card key={f.q}>
                   <CardContent className="p-5">
                     <h3 className="font-semibold mb-2">{f.q}</h3>

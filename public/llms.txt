@@ -41,7 +41,7 @@
 ## Campuses
 
 - [All campuses](https://techfaculty.ng/locations): 22 Tech Faculty centres across Nigeria.
-- [Tech Faculty Nnewi (headquarters)](https://techfaculty.ng/locations/nnewi): Technology Incubation Center, Onitsha-Okigwe Expressway, by Area Command, Umudim, Nnewi, Anambra State. Main campus and South-East zonal base — full-time labs, mentors and exam venue.
+- [Tech Faculty Nnewi (headquarters)](https://techfaculty.ng/locations/nnewi): Technology Incubation Center, Onitsha-Okigwe Expressway, by Area Command, Umudim, Nnewi, Anambra State. Headquarters and South-East zonal base — full-time labs, mentors and exam venue.
 - [Tech Faculty Awka](https://techfaculty.ng/locations/awka): Sea Shelters Plaza, Amawbia Junction, Opposite MRS Filling Station, Amawbia, Awka, Anambra State. Anambra State capital campus serving students, civil servants and businesses.
 - [Tech Faculty Onitsha](https://techfaculty.ng/locations/onitsha): No 8 Anene Close, Off Ezeiweka Road, Awada-Obosi, Onitsha, Anambra State. Standalone Awada centre serving Nigeria's largest commercial hub.
 - [Tech Faculty Owerri](https://techfaculty.ng/locations/owerri): Technology Incubation Centre, Owerri, Imo State. Imo State campus with a strong student and youth pipeline.

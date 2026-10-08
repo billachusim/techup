@@ -111,7 +111,7 @@ const LocationDetail = () => {
           </Link>
 
           <div className="flex flex-wrap items-center gap-2 mb-4">
-            {campus.isHeadquarters && <Badge>Main campus</Badge>}
+            {campus.isHeadquarters && <Badge>Headquarters</Badge>}
             <Badge variant="secondary">{campus.zone}</Badge>
             <Badge variant="outline">{campus.state} State</Badge>
           </div>

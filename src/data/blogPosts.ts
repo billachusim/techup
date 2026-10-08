@@ -4075,7 +4075,7 @@ This is where we started, and the economics here are unusual in the best way: th
 
 | Hub / institute | City | Course areas | Format |
 |---|---|---|---|
-| Tech Faculty Nnewi main campus (Technology Incubation Centre, Nnewi) | Nnewi | Every department, plus SIWES and teen bootcamps | In-person, hybrid, online |
+| Tech Faculty Headquarters (Technology Incubation Centre, Nnewi) | Nnewi | Every department, plus SIWES and teen bootcamps | In-person, hybrid, online |
 | Tech Faculty Onitsha (Awada centre) | Onitsha | Engineering, data, AI, marketing, design | In-person, hybrid, online |
 
 Students here often finish a track with a paying client already, because the auto-parts and trading businesses around them are the customers. See [Nnewi](/locations/nnewi) and [Onitsha](/locations/onitsha) for schedules.

@@ -88,9 +88,9 @@ export const techHubs: TechHub[] = [
       "Cloud & DevOps",
       "Robotics & IoT",
     ],
-    focus: "Our main campus and South-East zonal base — every department runs here in person.",
+    focus: "Our headquarters and South-East zonal base — every department runs here in person.",
     intro:
-      "Tech Faculty's main campus sits inside the Technology Incubation Centre in Nnewi, which also serves as the South-East zonal base of the Technology Incubation Centre network. Nnewi's manufacturing and auto-parts economy means students build automation, dashboards and online storefronts for real local businesses while they train. Every department runs here in person, alongside SIWES placement and teen holiday bootcamps.",
+      "Tech Faculty's headquarters sits inside the Technology Incubation Centre in Nnewi, which also serves as the South-East zonal base of the Technology Incubation Centre network. Nnewi's manufacturing and auto-parts economy means students build automation, dashboards and online storefronts for real local businesses while they train. Every department runs here in person, alongside SIWES placement and teen holiday bootcamps.",
     isTechFaculty: true,
     campusSlug: "nnewi",
   },

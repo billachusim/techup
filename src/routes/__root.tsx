@@ -55,16 +55,19 @@ const organizationSchema = {
   description:
     "Tech Faculty NG is a licensed Nigerian technology training institute delivering nationwide in-person bootcamps and online programs worldwide in Software Engineering, Data Science, Cybersecurity, AI, and more. We train, certify, and place graduates into tech careers.",
   foundingDate: "2022",
+  // Administrative HQ and public contact address: the Technology Incubation Centre, Umudim.
+  // 27 G Achusim Drive, Umunnealam is only the registered (paper) address, so it stays out of public listings.
   address: {
     "@type": "PostalAddress",
-    streetAddress: "27 G Achusim Drive, Umunnealam",
+    streetAddress:
+      "Technology Incubation Center, Onitsha-Okigwe Expressway, by Area Command, Umudim",
     addressLocality: "Nnewi",
     postalCode: "435101",
     addressRegion: "Anambra State",
     addressCountry: "NG",
   },
-  geo: { "@type": "GeoCoordinates", latitude: 5.9735226, longitude: 6.9196639 },
-  hasMap: "https://www.google.com/maps/place/?q=place_id:ChIJodXXtba9QxARPM6Tyyb02a0",
+  geo: { "@type": "GeoCoordinates", latitude: 6.0089671, longitude: 6.9086291 },
+  hasMap: "https://www.google.com/maps/place/?q=place_id:ChIJ5ZxSzmi9QxAR23OzR7YbAkM",
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+234-806-859-7140",
@@ -75,7 +78,7 @@ const organizationSchema = {
     "https://www.linkedin.com/company/techfaculty",
     "https://x.com/TechFacultyNG",
     "https://www.facebook.com/techfacultyng",
-    "https://www.google.com/maps/place/?q=place_id:ChIJodXXtba9QxARPM6Tyyb02a0",
+    "https://www.google.com/maps/place/?q=place_id:ChIJ5ZxSzmi9QxAR23OzR7YbAkM",
     "https://wa.me/2348068597140",
   ],
   areaServed: { "@type": "Place", name: "Nigeria" },

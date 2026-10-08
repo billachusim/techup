@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { findProgram, SLACK_WORKSPACE_URL, SLACK_JOIN_URL } from "@/data/coursePrograms";
+import { accessEnrollment, awaitingPayment } from "../../supabase/functions/_shared/enrollment-access.ts";
 
 /**
  * Student onboarding automation: Slack cohort channel + welcome email.
@@ -19,7 +20,21 @@ export const onboardStudent = createServerFn({ method: "POST" })
 
     if (!profile) return { ok: false as const, notes: ["Profile not found"], joinUrl: SLACK_JOIN_URL };
 
-    const program = findProgram(profile.department);
+    // The class group follows the plan the student has access to, so an
+    // unpaid plan doesn't open its cohort channel or send its welcome email.
+    const { data: enrollments } = profile.faculty_id
+      ? await context.supabase
+          .from("enrollments")
+          .select("plan_name, status")
+          .eq("faculty_id", profile.faculty_id)
+          .order("created_at", { ascending: false })
+      : { data: null };
+    const access = accessEnrollment(enrollments);
+    if (!access && awaitingPayment(enrollments)) {
+      return { ok: false as const, notes: ["Your payment hasn't been confirmed yet. Your class group opens once it is."], joinUrl: SLACK_JOIN_URL };
+    }
+
+    const program = findProgram(access?.plan_name ?? "Bootcamp Starter");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     let slackUserId = profile.slack_user_id ?? null;

@@ -3,21 +3,65 @@ import { useSearchParams, Link } from "@/lib/router-compat";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle, LayoutDashboard, ArrowRight } from "lucide-react";
+import { CheckCircle, LayoutDashboard, ArrowRight, Loader2, Clock, XCircle } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { getSupabase } from "@/integrations/supabase/lazy";
+
+type PaymentState = "checking" | "active" | "pending" | "failed";
+
+// Flutterwave's webhook can land a few seconds after the redirect, so a
+// payment that isn't confirmed yet is checked again a few times.
+const RETRIES = 5;
+const RETRY_MS = 3000;
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const facultyId = searchParams.get("faculty_id") || "";
   const plan = searchParams.get("plan") || "";
   const txRef = searchParams.get("tx_ref") || "";
-  const transactionId = searchParams.get("transaction_id") || "";
+  const redirectStatus = searchParams.get("status") || "";
+  const [state, setState] = useState<PaymentState>(
+    !txRef || redirectStatus === "cancelled" || redirectStatus === "failed" ? "failed" : "checking",
+  );
+
+  useEffect(() => {
+    if (state !== "checking") return;
+    let cancelled = false;
+    (async () => {
+      const supabase = await getSupabase();
+      for (let attempt = 0; attempt < RETRIES && !cancelled; attempt++) {
+        const { data } = await supabase.functions.invoke("verify-payment", { body: { txRef } });
+        const status = data?.status;
+        if (status === "active" || status === "failed" || status === "not_found") {
+          if (!cancelled) setState(status === "active" ? "active" : "failed");
+          return;
+        }
+        await new Promise((r) => setTimeout(r, RETRY_MS));
+      }
+      if (!cancelled) setState("pending");
+    })();
+    return () => { cancelled = true; };
+  }, [state, txRef]);
+
+  const heading = {
+    checking: "Confirming your payment…",
+    active: "Payment Successful! 🎉",
+    pending: "Payment is still processing",
+    failed: "Payment not completed",
+  }[state];
+  const subheading = {
+    checking: "This takes a few seconds. Please keep this page open.",
+    active: "Your enrollment has been confirmed and activated.",
+    pending: "We haven't received confirmation from the payment provider yet. Your plan activates automatically once it arrives. Check your dashboard in a few minutes.",
+    failed: "We couldn't confirm a payment for this enrollment, so it hasn't been activated. If you were charged, message us on WhatsApp with your reference below.",
+  }[state];
+  const StatusIcon = { checking: Loader2, active: CheckCircle, pending: Clock, failed: XCircle }[state];
 
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>Payment Successful — Tech Faculty</title>
+        <title>Payment Status — Tech Faculty</title>
         <meta name="robots" content="noindex" />
       </Helmet>
       <Header />
@@ -27,15 +71,13 @@ const PaymentSuccess = () => {
             <CardContent className="p-8 text-center space-y-6">
               <div className="flex justify-center">
                 <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
-                  <CheckCircle className="w-10 h-10 text-primary" />
+                  <StatusIcon className={`w-10 h-10 text-primary ${state === "checking" ? "animate-spin" : ""}`} />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <h1 className="text-2xl md:text-3xl font-bold">Payment Successful! 🎉</h1>
-                <p className="text-muted-foreground">
-                  Your enrollment has been confirmed and activated.
-                </p>
+                <h1 className="text-2xl md:text-3xl font-bold">{heading}</h1>
+                <p className="text-muted-foreground">{subheading}</p>
               </div>
 
               {facultyId && (
@@ -52,6 +94,11 @@ const PaymentSuccess = () => {
                 </div>
               )}
 
+              {state !== "active" && txRef && (
+                <p className="text-xs text-muted-foreground break-all">Payment reference: {txRef}</p>
+              )}
+
+              {state === "active" && (
               <div className="space-y-3 text-left text-sm text-muted-foreground bg-muted/50 rounded-lg p-4">
                 <p className="font-semibold text-foreground">What's Next?</p>
                 <ul className="space-y-2">
@@ -61,6 +108,7 @@ const PaymentSuccess = () => {
                   <li>📚 Start accessing your courses immediately</li>
                 </ul>
               </div>
+              )}
 
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link to="/dashboard" className="flex-1">

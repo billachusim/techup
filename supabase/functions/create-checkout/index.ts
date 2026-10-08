@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { priceSelection } from "../_shared/pricing.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { PLAN_NAMES, priceSelection } from "../_shared/pricing.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -23,6 +24,15 @@ serve(async (req) => {
       return jsonResponse({ error: 'Flutterwave is not configured yet. Please add your Flutterwave secret key.' }, 500);
     }
 
+    const admin = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
+      auth: { persistSession: false },
+    });
+    const token = (req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '');
+    const { data: { user } } = await admin.auth.getUser(token);
+    if (!user) {
+      return jsonResponse({ error: 'Please sign in to pay' }, 401);
+    }
+
     const {
       planId,
       planName,
@@ -36,6 +46,16 @@ serve(async (req) => {
     } = await req.json();
 
     const currencyCode = (rawCurrencyCode || 'NGN').toUpperCase();
+
+    // The enrolment is created for the signed-in student only.
+    const { data: profile } = await admin.from('profiles').select('faculty_id').eq('id', user.id).maybeSingle();
+    if (!profile?.faculty_id || profile.faculty_id !== facultyId) {
+      return jsonResponse({ error: 'This Faculty ID is not yours' }, 403);
+    }
+    const planNameForEnrollment = PLAN_NAMES[String(planId ?? '')];
+    if (!planNameForEnrollment) {
+      return jsonResponse({ error: 'Unknown plan' }, 400);
+    }
 
     // Prices come from the shared catalogue, never from the request.
     const priced = priceSelection(
@@ -72,12 +92,30 @@ serve(async (req) => {
     if (learningMode?.name) itemNames.push(`Mode: ${learningMode.name}`);
     benefits.forEach((b) => { if (b.price > 0) itemNames.push(b.name); });
 
-    const txRef = `TF-${facultyId}-${Date.now()}`;
+    const txRef = `TF-${facultyId}-${crypto.randomUUID()}`;
+    const currency = currencyCode === 'USD' ? 'USD' : 'NGN';
+
+    // Saved as pending with the amount due. Only a payment Flutterwave
+    // verifies for this amount activates it (flutterwave-webhook / verify-payment).
+    const { error: enrollErr } = await admin.from('enrollments').insert({
+      faculty_id: facultyId,
+      plan_name: planNameForEnrollment,
+      status: 'pending',
+      learning_mode: learningMode?.name ?? 'online-only',
+      coupon_code: discountCode ? String(discountCode).toUpperCase() : null,
+      tx_ref: txRef,
+      amount_due: amount,
+      currency,
+    });
+    if (enrollErr) {
+      console.error('Failed to save pending enrolment:', enrollErr);
+      return jsonResponse({ error: 'Could not start your enrolment. Please try again.' }, 500);
+    }
 
     const flutterwavePayload = {
       tx_ref: txRef,
       amount,
-      currency: currencyCode === 'USD' ? 'USD' : 'NGN',
+      currency,
       redirect_url: `${successUrl}?tx_ref=${encodeURIComponent(txRef)}&faculty_id=${encodeURIComponent(facultyId)}&plan=${encodeURIComponent(planName)}`,
       meta: {
         faculty_id: facultyId,
@@ -105,6 +143,7 @@ serve(async (req) => {
     });
 
     const rawResponse = await flwResponse.text();
+    const dropPending = () => admin.from('enrollments').delete().eq('tx_ref', txRef).eq('status', 'pending');
     let flwData: { status?: string; message?: string; data?: { link?: string } } | null = null;
 
     try {
@@ -115,6 +154,7 @@ serve(async (req) => {
         contentType: flwResponse.headers.get('content-type'),
         bodyPreview: rawResponse.slice(0, 300),
       });
+      await dropPending();
 
       return jsonResponse(
         { error: 'Payment provider returned an unexpected response. Please try again or use WhatsApp or Email enrollment.' },
@@ -127,6 +167,7 @@ serve(async (req) => {
         status: flwResponse.status,
         data: flwData,
       });
+      await dropPending();
 
       return jsonResponse(
         { error: flwData?.message || 'Failed to create payment link' },

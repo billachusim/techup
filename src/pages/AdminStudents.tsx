@@ -11,6 +11,7 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useIsStaff } from "@/hooks/useIsStaff";
 import { listStudentWork, reviewStudentWork } from "@/lib/student-review.functions";
+import { PendingPayments } from "@/components/student/PendingPayments";
 
 type Status = "submitted" | "reviewed" | "needs_changes" | "all";
 const FILTERS: { v: Status; label: string }[] = [
@@ -21,7 +22,7 @@ const FILTERS: { v: Status; label: string }[] = [
 ];
 
 export default function AdminStudents() {
-  const { loading, isStaff } = useIsStaff();
+  const { loading, isStaff, isAdmin } = useIsStaff();
   const list = useServerFn(listStudentWork);
   const review = useServerFn(reviewStudentWork);
   const [filter, setFilter] = useState<Status>("submitted");
@@ -85,6 +86,8 @@ export default function AdminStudents() {
           <p className="text-sm text-muted-foreground">This page is for Tech Faculty staff. Sign in with a staff account.</p>
         ) : (
           <>
+            {isAdmin && <PendingPayments />}
+            <h2 className="text-xl font-bold pt-2">Submissions</h2>
             <div className="flex flex-wrap gap-2">
               {FILTERS.map((f) => (
                 <Button key={f.v} size="sm" variant={filter === f.v ? "default" : "outline"} onClick={() => setFilter(f.v)}>{f.label}</Button>

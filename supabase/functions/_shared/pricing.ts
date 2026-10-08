@@ -292,6 +292,20 @@ export const ALL_COURSES: Course[] = [
   },
 ];
 
+/** The enrollments.plan_name each plan id is saved under. */
+export const PLAN_NAMES: Record<string, string> = {
+  "bootcamp-starter": "Bootcamp Starter",
+  "developer-pro": "Developer Pro",
+  "data-wizard": "Data Wizard",
+  "ai-innovator": "AI Innovator",
+  "security-shield": "Security Shield",
+  "mobile-app-developer": "Mobile App Developer",
+  "cloud-architect": "Cloud Architect",
+  "design-master": "Design Master",
+  "digital-marketing-pro": "Digital Marketing Pro",
+  "custom-builder": "Custom Program",
+};
+
 export const PLAN_PRICING: Record<string, PlanPricing> = {
   "bootcamp-starter": {
     minimumAmount: 0,

@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { accessEnrollment, awaitingPayment } from "../_shared/enrollment-access.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -39,18 +40,18 @@ serve(async (req) => {
 
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
-    // 1) Get latest enrollment for this facultyId
-    const { data: enrollment, error: enrollmentErr } = await admin
+    // 1) Newest enrollment that grants access: free, or paid and confirmed.
+    // An unpaid plan falls back to the free bootcamp until payment lands.
+    const { data: planEnrollments, error: enrollmentErr } = await admin
       .from("enrollments")
-      .select("plan_name")
+      .select("plan_name, status")
       .eq("faculty_id", facultyId)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
+      .order("created_at", { ascending: false });
 
     if (enrollmentErr) throw enrollmentErr;
 
-    const planName = enrollment?.plan_name ?? "Bootcamp Starter";
+    const planName = accessEnrollment(planEnrollments)?.plan_name ?? "Bootcamp Starter";
+    const pendingPlan = awaitingPayment(planEnrollments)?.plan_name ?? null;
     const dbPlan: PlanKey = planMapping[planName] || "bootcamp_starter";
 
     // Map plans to their departments
@@ -197,7 +198,7 @@ serve(async (req) => {
     console.log(`Returning ${enrichedEnrollments.length} courses for plan: ${planName}`);
 
     return new Response(
-      JSON.stringify({ plan: planName, planKey: dbPlan, enrollments: enrichedEnrollments }),
+      JSON.stringify({ plan: planName, planKey: dbPlan, pendingPlan, enrollments: enrichedEnrollments }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (e) {

@@ -14,6 +14,7 @@ import { useUser } from "@/contexts/UserContext";
 import { HandoutModal } from "@/components/HandoutModal";
 import { CertificateCard } from "@/components/CertificateCard";
 import { StudentClassroom } from "@/components/student/StudentClassroom";
+import { isFreePlan } from "../../supabase/functions/_shared/enrollment-access.ts";
 
 import { useServerFn } from "@tanstack/react-start";
 import { briefNextClass } from "@/lib/student-review.functions";
@@ -436,6 +437,9 @@ const Dashboard = () => {
                           {enrollmentData?.plan_name || "Free Bootcamp"}
                         </Badge>
                         <p className="text-xs text-muted-foreground mt-1">Plan</p>
+                        {enrollmentData?.status === "pending" && !isFreePlan(enrollmentData.plan_name) && (
+                          <p className="text-xs font-medium text-amber-600 mt-1">Awaiting payment</p>
+                        )}
                       </div>
                     </div>
                     <div className="text-center border-t border-border/50 pt-4 space-y-2">

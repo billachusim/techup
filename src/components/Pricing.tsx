@@ -28,6 +28,7 @@ import {
   type Course,
   type LearningMode,
 } from "../../supabase/functions/_shared/pricing.ts";
+import { grantsAccess, isFreePlan } from "../../supabase/functions/_shared/enrollment-access.ts";
 
 type PlanCategory = "beginner" | "development" | "data-ai" | "creative" | "security" | "custom";
 
@@ -189,7 +190,8 @@ const Pricing = () => {
             .eq("faculty_id", profile.faculty_id)
             .order("created_at", { ascending: false });
 
-          const hasPaidPlan = enrollments?.some(e => e.plan_name !== "Bootcamp Starter");
+          // Only a confirmed payment counts, so an abandoned checkout can be retried.
+          const hasPaidPlan = enrollments?.some(e => !isFreePlan(e.plan_name) && grantsAccess(e));
           setUserHasPaidPlan(hasPaidPlan || false);
           
           // Set latest enrollment
@@ -499,14 +501,21 @@ const Pricing = () => {
         ]);
       }
 
-      // Create new enrollment with status based on payment method
-      const enrollmentStatus = plan.isFree ? "active" : (method === 'card' ? "active" : "pending");
-      await supabase.from("enrollments").insert({
-        faculty_id: newFacultyId,
-        plan_name: plan.name,
-        status: enrollmentStatus,
-        learning_mode: selectedMode,
-      });
+      // Free plans start straight away. A paid plan stays pending until its
+      // payment is confirmed: card checkouts are saved by create-checkout and
+      // activated by Flutterwave's confirmation, WhatsApp/email ones by an admin.
+      if (plan.isFree || method !== 'card') {
+        const { error: enrollError } = await supabase.from("enrollments").insert({
+          faculty_id: newFacultyId,
+          plan_name: plan.name,
+          status: plan.isFree ? "active" : "pending",
+          learning_mode: selectedMode,
+        });
+        if (enrollError) {
+          console.error('Error creating enrollment:', enrollError);
+          throw new Error('Failed to save your enrollment');
+        }
+      }
 
       // Slack class group + welcome email (best effort, never blocks enrolment)
       try {

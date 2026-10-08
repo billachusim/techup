@@ -28,6 +28,7 @@ import { Route as TechStoreRouteImport } from './routes/tech-store'
 import { Route as TinypeopleRouteImport } from './routes/tinypeople'
 import { Route as VirtualSiwesRouteImport } from './routes/virtual-siwes'
 import { Route as Why90OfTechLearnersQuitButYouDontHaveToRouteImport } from './routes/why-90-of-tech-learners-quit-but-you-dont-have-to'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCertificatesRouteImport } from './routes/admin.certificates'
 import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminTalentRouteImport } from './routes/admin.talent'
@@ -155,6 +156,11 @@ const Why90OfTechLearnersQuitButYouDontHaveToRoute =
     path: '/why-90-of-tech-learners-quit-but-you-dont-have-to',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminCertificatesRoute = AdminCertificatesRouteImport.update({
   id: '/admin/certificates',
   path: '/admin/certificates',
@@ -341,6 +347,7 @@ export interface FileRoutesByFullPath {
   '/talent/dashboard': typeof TalentDashboardRoute
   '/talent/profile': typeof TalentProfileRoute
   '/verify/$': typeof VerifySplatRoute
+  '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/careers/': typeof CareersIndexRoute
   '/departments/': typeof DepartmentsIndexRoute
@@ -392,6 +399,7 @@ export interface FileRoutesByTo {
   '/talent/dashboard': typeof TalentDashboardRoute
   '/talent/profile': typeof TalentProfileRoute
   '/verify/$': typeof VerifySplatRoute
+  '/admin': typeof AdminIndexRoute
   '/blog': typeof BlogIndexRoute
   '/careers': typeof CareersIndexRoute
   '/departments': typeof DepartmentsIndexRoute
@@ -444,6 +452,7 @@ export interface FileRoutesById {
   '/talent/dashboard': typeof TalentDashboardRoute
   '/talent/profile': typeof TalentProfileRoute
   '/verify/$': typeof VerifySplatRoute
+  '/admin/': typeof AdminIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/careers/': typeof CareersIndexRoute
   '/departments/': typeof DepartmentsIndexRoute
@@ -497,6 +506,7 @@ export interface FileRouteTypes {
     | '/talent/dashboard'
     | '/talent/profile'
     | '/verify/$'
+    | '/admin/'
     | '/blog/'
     | '/careers/'
     | '/departments/'
@@ -548,6 +558,7 @@ export interface FileRouteTypes {
     | '/talent/dashboard'
     | '/talent/profile'
     | '/verify/$'
+    | '/admin'
     | '/blog'
     | '/careers'
     | '/departments'
@@ -599,6 +610,7 @@ export interface FileRouteTypes {
     | '/talent/dashboard'
     | '/talent/profile'
     | '/verify/$'
+    | '/admin/'
     | '/blog/'
     | '/careers/'
     | '/departments/'
@@ -651,6 +663,7 @@ export interface RootRouteChildren {
   TalentDashboardRoute: typeof TalentDashboardRoute
   TalentProfileRoute: typeof TalentProfileRoute
   VerifySplatRoute: typeof VerifySplatRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   BlogIndexRoute: typeof BlogIndexRoute
   CareersIndexRoute: typeof CareersIndexRoute
   DepartmentsIndexRoute: typeof DepartmentsIndexRoute
@@ -800,6 +813,13 @@ declare module '@tanstack/react-router' {
       path: '/why-90-of-tech-learners-quit-but-you-dont-have-to'
       fullPath: '/why-90-of-tech-learners-quit-but-you-dont-have-to'
       preLoaderRoute: typeof Why90OfTechLearnersQuitButYouDontHaveToRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/certificates': {
@@ -1064,6 +1084,7 @@ const rootRouteChildren: RootRouteChildren = {
   TalentDashboardRoute: TalentDashboardRoute,
   TalentProfileRoute: TalentProfileRoute,
   VerifySplatRoute: VerifySplatRoute,
+  AdminIndexRoute: AdminIndexRoute,
   BlogIndexRoute: BlogIndexRoute,
   CareersIndexRoute: CareersIndexRoute,
   DepartmentsIndexRoute: DepartmentsIndexRoute,

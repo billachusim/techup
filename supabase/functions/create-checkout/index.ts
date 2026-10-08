@@ -5,6 +5,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
+type LineItem = { name: string; price: number };
+
 const jsonResponse = (body: Record<string, unknown>, status = 200) =>
   new Response(JSON.stringify(body), {
     status,
@@ -73,9 +75,9 @@ serve(async (req) => {
       : totalAmount;
 
     const itemNames: string[] = [];
-    if (courses) courses.forEach((c: any) => itemNames.push(c.name));
+    if (courses) courses.forEach((c: LineItem) => itemNames.push(c.name));
     if (learningMode?.name) itemNames.push(`Mode: ${learningMode.name}`);
-    if (benefits) benefits.forEach((b: any) => { if (b.price > 0) itemNames.push(b.name); });
+    if (benefits) benefits.forEach((b: LineItem) => { if (b.price > 0) itemNames.push(b.name); });
 
     const txRef = `TF-${facultyId}-${Date.now()}`;
 
@@ -110,7 +112,7 @@ serve(async (req) => {
     });
 
     const rawResponse = await flwResponse.text();
-    let flwData: any = null;
+    let flwData: { status?: string; message?: string; data?: { link?: string } } | null = null;
 
     try {
       flwData = rawResponse ? JSON.parse(rawResponse) : null;

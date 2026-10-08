@@ -64,10 +64,11 @@ const AdminCertificates = () => {
     });
     setSubmitting(false);
 
-    if (error || (data as any)?.error) {
+    const fnError = (data as { error?: string } | null)?.error;
+    if (error || fnError) {
       toast({
         title: "Failed to add certificate",
-        description: (data as any)?.error || error?.message || "Unknown error",
+        description: fnError || error?.message || "Unknown error",
         variant: "destructive",
       });
       return;

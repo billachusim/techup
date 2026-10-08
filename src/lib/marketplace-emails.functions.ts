@@ -43,7 +43,7 @@ export const notifyMarketplaceEvent = createServerFn({ method: "POST" })
         .select("id, talent_profiles(user_id, full_name, email), talent_roles(title, company)")
         .eq("id", data.id)
         .maybeSingle();
-      const p = app?.talent_profiles as any, r = app?.talent_roles as any;
+      const p = app?.talent_profiles, r = app?.talent_roles;
       if (!app || p?.user_id !== context.userId) return { ok: false };
       await send("application-received", p.email, { name: p.full_name, roleTitle: r?.title, company: r?.company }, app.id);
       await send("new-application-admin", "staff", { talentName: p.full_name, roleTitle: r?.title, company: r?.company }, app.id);
@@ -78,7 +78,7 @@ export const notifyMarketplaceEvent = createServerFn({ method: "POST" })
       await send(
         "intro-approved",
         req.requester_contact,
-        { requesterName: req.requester_name, talentName: (req.talent_profiles as any)?.full_name },
+        { requesterName: req.requester_name, talentName: req.talent_profiles?.full_name },
         req.id,
       );
       return { ok: true };
@@ -91,7 +91,7 @@ export const notifyMarketplaceEvent = createServerFn({ method: "POST" })
         .eq("id", data.id)
         .maybeSingle();
       if (!m || !MATCH_EMAIL_STATUSES.includes(m.status)) return { ok: false };
-      const p = m.talent_profiles as any, r = m.talent_roles as any;
+      const p = m.talent_profiles, r = m.talent_roles;
       await send("match-update", p?.email, { name: p?.full_name, roleTitle: r?.title, company: r?.company, status: m.status }, `${m.id}-${m.status}`);
       return { ok: true };
     }
@@ -103,7 +103,7 @@ export const notifyMarketplaceEvent = createServerFn({ method: "POST" })
         .eq("id", data.id)
         .maybeSingle();
       if (!d || d.status === "submitted") return { ok: false };
-      const p = d.talent_profiles as any, r = d.talent_roles as any;
+      const p = d.talent_profiles, r = d.talent_roles;
       await send("deliverable-reviewed", p?.email, { name: p?.full_name, title: d.title, roleTitle: r?.title, status: d.status, note: d.reviewer_note }, `${d.id}-${d.updated_at}`);
       return { ok: true };
     }

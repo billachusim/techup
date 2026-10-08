@@ -50,7 +50,7 @@ export interface ShopifyProduct {
   };
 }
 
-export async function storefrontApiRequest(query: string, variables: any = {}) {
+export async function storefrontApiRequest(query: string, variables: Record<string, unknown> = {}) {
   const response = await fetch(SHOPIFY_STOREFRONT_URL, {
     method: 'POST',
     headers: {

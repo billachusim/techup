@@ -15,10 +15,12 @@ import {
 import { studentWelcome, classUnlocked, studentWorkReviewed } from './student'
 
 export interface TemplateEntry {
+  // Each template has its own props, so the registry can't name one props type
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   component: ComponentType<any>
-  subject: string | ((data: Record<string, any>) => string)
+  subject: string | ((data: Record<string, unknown>) => string)
   displayName?: string
-  previewData?: Record<string, any>
+  previewData?: Record<string, unknown>
   /** Fixed recipient — overrides caller-provided recipientEmail when set. */
   to?: string
 }

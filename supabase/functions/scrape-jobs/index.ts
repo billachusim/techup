@@ -133,6 +133,8 @@ function parsePostedAt(value: unknown): string | null {
   return d.toISOString().slice(0, 10);
 }
 
+// Raw scraped JSON is untrusted and checked field by field below
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function normalize(raw: any, source: Source) {
   const title = String(raw?.title ?? "").trim();
   if (!title || title.length > 160) return null;
@@ -197,7 +199,7 @@ Deno.serve(async (req) => {
     );
 
     // Dedupe by source_url — the table has a unique constraint on it.
-    const byUrl: Record<string, any> = {};
+    const byUrl: Record<string, NonNullable<ReturnType<typeof normalize>>> = {};
 
     // Scrape in small waves so we can stop as soon as we have enough fresh jobs.
     for (let start = 0; start < SOURCES.length; start += WAVE_SIZE) {

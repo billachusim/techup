@@ -1,14 +1,17 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
+import type { Tables } from "@/integrations/supabase/types";
+
+type Profile = Tables<"profiles">;
 
 interface UserContextType {
   isLoggedIn: boolean;
   facultyId: string | null;
-  userData: any | null;
+  userData: Profile | null;
   user: User | null;
-  setUserData: (data: any) => void;
-  login: (user: User, profile: any) => void;
+  setUserData: (data: Profile | null) => void;
+  login: (user: User, profile: Profile) => void;
   logout: () => Promise<void>;
 }
 
@@ -17,7 +20,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [facultyId, setFacultyId] = useState<string | null>(null);
-  const [userData, setUserData] = useState<any | null>(null);
+  const [userData, setUserData] = useState<Profile | null>(null);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -73,7 +76,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const login = (authUser: User, profile: any) => {
+  const login = (authUser: User, profile: Profile) => {
     setUser(authUser);
     setFacultyId(profile.faculty_id);
     setUserData(profile);

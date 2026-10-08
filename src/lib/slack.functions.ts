@@ -42,8 +42,8 @@ export const syncSlackForMatch = createServerFn({ method: "POST" })
       .maybeSingle();
     if (!match) return { ok: false as const, notes: ["Match not found"] };
 
-    const profile = match.talent_profiles as any;
-    const role = match.talent_roles as any;
+    const profile = match.talent_profiles;
+    const role = match.talent_roles;
     const notes: string[] = [];
 
     let slackUserId: string | null = profile?.slack_user_id ?? null;

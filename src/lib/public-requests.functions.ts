@@ -33,7 +33,7 @@ export const notifyIntroRequest = createServerFn({ method: "POST" })
       .maybeSingle();
     if (!req || Date.now() - new Date(req.created_at).getTime() > RECENT_MS) return { ok: false };
 
-    const talentName = (req.talent_profiles as any)?.full_name as string | undefined;
+    const talentName = req.talent_profiles?.full_name as string | undefined;
     if (isEmail(req.requester_contact)) {
       await sendSafely("intro-request-received", req.requester_contact, { requesterName: req.requester_name, talentName }, req.id);
     }

@@ -50,8 +50,8 @@ const GetStarted = () => {
       toast({ title: "Password Reset Email Sent", description: "Check your email for a password reset link." });
       setShowForgotPasswordDialog(false);
       setForgotPasswordEmail("");
-    } catch (error: any) {
-      toast({ title: "Reset Failed", description: error.message || "Unable to send password reset email.", variant: "destructive" });
+    } catch (error) {
+      toast({ title: "Reset Failed", description: (error instanceof Error && error.message) || "Unable to send password reset email.", variant: "destructive" });
     } finally {
       setIsResettingPassword(false);
     }

@@ -4,7 +4,17 @@ const GATEWAY = "https://connector-gateway.lovable.dev/slack/api";
 /** The workspace-wide channel every vetted talent is added to. */
 export const SLACK_GENERAL_CHANNEL_ID = process.env["SLACK_GENERAL_CHANNEL_ID"] || "C05DJTURDM4";
 
-type SlackResponse = Record<string, any> & { ok: boolean; error?: string };
+type SlackRawChannel = { id: string; name: string; is_private?: boolean; num_members?: number };
+
+// The parts of Slack Web API responses this file reads
+type SlackResponse = {
+  ok: boolean;
+  error?: string;
+  channels?: SlackRawChannel[];
+  channel?: SlackRawChannel;
+  user?: { id: string };
+  response_metadata?: { next_cursor?: string };
+};
 
 async function call(method: string, init: { query?: Record<string, string>; body?: Record<string, unknown> }): Promise<SlackResponse> {
   const lovableKey = process.env["LOVABLE_API_KEY"];
@@ -72,7 +82,7 @@ export async function ensureChannel(name: string, topic?: string): Promise<Slack
   if (existing) return existing;
 
   const created = await slackPost("conversations.create", { name: clean, is_private: false });
-  if (!created.ok) throw new Error(`Could not create #${clean}: ${created.error}`);
+  if (!created.ok || !created.channel) throw new Error(`Could not create #${clean}: ${created.error}`);
   const channel: SlackChannel = {
     id: created.channel.id,
     name: created.channel.name,

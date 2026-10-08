@@ -1,9 +1,33 @@
 import { useEffect, useRef } from "react";
 import { campuses, directionsUrl, type Campus } from "@/data/campuses";
 
+// Minimal typings for the parts of the Google Maps JS API this component uses.
+type LatLng = { lat: number; lng: number };
+interface GMap {
+  panTo(position: LatLng): void;
+  setZoom(zoom: number): void;
+}
+interface GMarker {
+  addListener(event: "click", handler: () => void): void;
+}
+interface GInfoWindow {
+  setContent(html: string): void;
+  open(options: { anchor: GMarker; map: GMap }): void;
+}
+interface GoogleMapsApi {
+  maps: {
+    Map: new (
+      el: HTMLElement,
+      options: { center: LatLng; zoom: number; mapTypeControl?: boolean; streetViewControl?: boolean; fullscreenControl?: boolean },
+    ) => GMap;
+    Marker: new (options: { position: LatLng; map: GMap; title?: string }) => GMarker;
+    InfoWindow: new () => GInfoWindow;
+  };
+}
+
 declare global {
   interface Window {
-    google?: any;
+    google?: GoogleMapsApi;
     __initTfMap?: () => void;
   }
 }
@@ -54,9 +78,9 @@ const CampusMap = ({
 }: Props) => {
   const points = items ?? campuses;
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<any>(null);
-  const markersRef = useRef<Record<string, any>>({});
-  const infoRef = useRef<any>(null);
+  const mapRef = useRef<GMap | null>(null);
+  const markersRef = useRef<Record<string, GMarker>>({});
+  const infoRef = useRef<GInfoWindow | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -80,10 +104,10 @@ const CampusMap = ({
             title: c.name,
           });
           marker.addListener("click", () => {
-            infoRef.current.setContent(
+            infoRef.current?.setContent(
               `<div style="max-width:240px;font-family:inherit"><div style="font-weight:600;margin-bottom:4px">${c.name}</div><div style="font-size:12px;color:#555;margin-bottom:6px">${c.address}</div><a href="${directionsUrl(c)}" target="_blank" rel="noopener" style="color:#0ea5a4;font-size:12px;font-weight:600">Get directions →</a></div>`,
             );
-            infoRef.current.open({ anchor: marker, map });
+            infoRef.current?.open({ anchor: marker, map });
             onSelect?.(c.id);
           });
           markersRef.current[c.id] = marker;

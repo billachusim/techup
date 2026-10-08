@@ -10,10 +10,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
+import type { Tables } from "@/integrations/supabase/types";
 import { useToast } from "@/hooks/use-toast";
 import { SignupForm } from "./Auth/SignupForm";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, ShieldCheck, Users, Trophy, AlertCircle, Code, Database, Shield, Cloud, Palette, TrendingUp, Sparkles, Smartphone } from "lucide-react";
+import { Check, ShieldCheck, Users, Trophy, AlertCircle, Code, Database, Shield, Cloud, Palette, TrendingUp, Sparkles, Smartphone, type LucideIcon } from "lucide-react";
 import { CourseSelector } from "./Pricing/CourseSelector";
 import { BenefitSelector } from "./Pricing/BenefitSelector";
 import { LearningModeSelector } from "./Pricing/LearningModeSelector";
@@ -47,7 +48,7 @@ interface DepartmentPlan {
   id: string;
   name: string;
   fancyName: string;
-  icon: any;
+  icon: LucideIcon;
   category: PlanCategory;
   description: string;
   courses: Course[];
@@ -376,7 +377,7 @@ const Pricing = () => {
   const [requestDiscount, setRequestDiscount] = useState(false);
   const [customCourseSearch, setCustomCourseSearch] = useState("");
   const [userHasPaidPlan, setUserHasPaidPlan] = useState(false);
-  const [enrollmentData, setEnrollmentData] = useState<any>(null);
+  const [enrollmentData, setEnrollmentData] = useState<Tables<"enrollments"> | null>(null);
   const { toast } = useToast();
   const { formatPrice, symbol, convertPrice, isNigeria } = useCurrency();
   const runOnboarding = useServerFn(onboardStudent);
@@ -660,7 +661,7 @@ const Pricing = () => {
       const selectedMode = LEARNING_MODES.find(m => m.id === selection?.learningMode)?.name || 'online-only';
       
       // Generate new faculty ID with enrollment details
-      const { data: newFacultyId, error: idError } = await (supabase.rpc as any)('generate_faculty_id', {
+      const { data: newFacultyId, error: idError } = await supabase.rpc('generate_faculty_id', {
         dept_name: plan.name,
         learn_mode: selectedMode,
         cohort_mo: new Date().getMonth() + 1,
@@ -690,8 +691,9 @@ const Pricing = () => {
       }
 
       // Record the Faculty ID itself via a secure function (direct writes are blocked)
-      const { error: recordError } = await (supabase.rpc as any)('record_my_faculty_id', {
-        _old_id: currentFacultyId ?? null,
+      const { error: recordError } = await supabase.rpc('record_my_faculty_id', {
+        // The generated types say string, but the SQL function treats null as "no previous ID"
+        _old_id: (currentFacultyId ?? null) as string,
         _department: plan.name,
       });
       if (recordError) {
@@ -719,7 +721,7 @@ const Pricing = () => {
 
       // Slack class group + welcome email (best effort, never blocks enrolment)
       try {
-        await runOnboarding({ data: {} } as any);
+        await runOnboarding();
       } catch (onboardErr) {
         console.warn('Student onboarding automation failed:', onboardErr);
       }
@@ -829,11 +831,11 @@ Please share the payment details so I can complete my enrollment. Thank you!`;
       // Reload to refresh user context with new faculty ID
       setTimeout(() => window.location.reload(), 2000);
       
-    } catch (error: any) {
+    } catch (error) {
       console.error('Enrollment error:', error);
       toast({
         title: "Enrollment Failed",
-        description: error.message || "An error occurred during enrollment",
+        description: (error instanceof Error && error.message) || "An error occurred during enrollment",
         variant: "destructive",
       });
       setIsSubmitting(false);

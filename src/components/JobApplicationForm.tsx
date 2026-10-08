@@ -59,7 +59,7 @@ export const JobApplicationForm = ({ facultyId, onClose, onSuccess }: JobApplica
       toast.success("Application submitted successfully!");
       onSuccess();
       onClose();
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error submitting application:", error);
       toast.error("Failed to submit application");
     } finally {

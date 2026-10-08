@@ -167,7 +167,7 @@ export function eventSchema(event: TechEvent) {
 
   const priceNumber = event.is_free
     ? "0"
-    : (event.price_text?.match(/[\d][\d,\.]*/)?.[0]?.replace(/,/g, "") ?? null);
+    : (event.price_text?.match(/[\d][\d,.]*/)?.[0]?.replace(/,/g, "") ?? null);
 
   return {
     "@context": "https://schema.org",

@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import EventDetail from "@/pages/EventDetail";
-import { fetchEventBySlug } from "@/lib/events";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/events/$slug")({
   loader: async ({ params }) => {
     try {
+      const { fetchEventBySlug } = await import("@/lib/events");
       const event = await fetchEventBySlug(params.slug);
       if (!event) return null;
       return {

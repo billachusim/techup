@@ -8,17 +8,37 @@ import {
   useRouter,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { Suspense, lazy, useEffect, useState, type ReactNode } from "react";
 import { HelmetProvider } from "react-helmet-async";
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { UserProvider } from "@/contexts/UserContext";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
 import NotFound from "@/pages/NotFound";
 import appCss from "../styles.css?url";
+
+// Toast UIs are only needed once something calls toast(), so they load after
+// hydration instead of shipping in the main bundle. Both toast stores keep
+// toasts raised before the Toaster mounts and show them once it does.
+const Toaster = lazy(() =>
+  import("@/components/ui/toaster").then((m) => ({ default: m.Toaster })),
+);
+const Sonner = lazy(() =>
+  import("@/components/ui/sonner").then((m) => ({ default: m.Toaster })),
+);
+
+function DeferredToasters() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+  return (
+    <Suspense fallback={null}>
+      <Toaster />
+      <Sonner />
+    </Suspense>
+  );
+}
 
 const SITE_TITLE = "Tech Faculty NG — Nigerian Tech Bootcamps & Certification";
 const SITE_DESCRIPTION =
@@ -177,8 +197,7 @@ function RootComponent() {
         <UserProvider>
           <CurrencyProvider>
             <TooltipProvider>
-              <Toaster />
-              <Sonner />
+              <DeferredToasters />
               <Outlet />
 
             </TooltipProvider>

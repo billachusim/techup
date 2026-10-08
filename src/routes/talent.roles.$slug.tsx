@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import TalentRoleDetail from "@/pages/TalentRoleDetail";
-import { fetchRoleBySlug } from "@/lib/talent";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/talent/roles/$slug")({
   loader: async ({ params }) => {
     try {
+      const { fetchRoleBySlug } = await import("@/lib/talent");
       const role = await fetchRoleBySlug(params.slug);
       if (!role) return null;
       return {

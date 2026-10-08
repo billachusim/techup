@@ -30,7 +30,7 @@ const tracks = [
     subtitle: "Gain Real-World Experience",
     color: "hsl(217 91% 60%)",
     gradient: "from-blue-500/10 to-indigo-500/10",
-    description: "Pay a training fee and gain structured, hands-on tech experience during your IT placement. Perfect for students who want to build real skills beyond what the classroom offers.",
+    description: "Gain structured, hands-on tech experience during your IT placement, with no fee when you do it on site at our campuses. Perfect for students who want to build real skills beyond what the classroom offers.",
     features: [
       "Structured mentorship from industry professionals",
       "Hands-on projects with real clients and products",
@@ -68,7 +68,7 @@ const whatYouGet = [
 const siwesFaqs = [
   {
     q: "How much does SIWES with Tech Faculty NG cost?",
-    a: `The Learn & Pay track charges a training fee that we confirm when you apply, based on your department and IT duration, while Tutor & Earn pays you instead. Virtual SIWES costs ${formatNaira(VIRTUAL_SIWES.placementPriceNGN)} for the full placement, and the logbook service costs ${formatNaira(VIRTUAL_SIWES.logbookPriceNGN)} including two-way courier delivery.`,
+    a: `On-site SIWES at our campuses is free on both tracks: Learn & Pay has no training fee, and Tutor & Earn pays you. We only charge for Virtual SIWES, because it includes courier delivery of your logbook and kit. That costs ${formatNaira(VIRTUAL_SIWES.placementPriceNGN)} for the full placement and ${formatNaira(VIRTUAL_SIWES.logbookPriceNGN)} for the logbook service.`,
   },
   {
     q: "How long is a SIWES placement at Tech Faculty NG?",
@@ -80,7 +80,7 @@ const siwesFaqs = [
   },
   {
     q: "What is the difference between Learn & Pay and Tutor & Earn?",
-    a: "Learn & Pay is for students who want structured mentorship and real client projects, and you pay a training fee for it. Tutor & Earn is for students already skilled in a tech area: you teach other learners and get paid while completing your IT. Both tracks end with a certificate and a recommendation letter.",
+    a: "Learn & Pay is for students who want structured mentorship and real client projects, and it is free when done on site. Tutor & Earn is for students already skilled in a tech area: you teach other learners and get paid while completing your IT. Both tracks end with a certificate and a recommendation letter.",
   },
   {
     q: "How do I apply for SIWES at Tech Faculty NG?",
@@ -108,7 +108,7 @@ const SIWES = () => {
           "programType": "Internship",
           "timeToComplete": "P3M",
           "offers": [
-            { "@type": "Offer", "name": "Learn & Pay Track", "description": "Structured mentorship with hands-on projects" },
+            { "@type": "Offer", "name": "Learn & Pay Track", "description": "Structured mentorship with hands-on projects, free on site", "price": "0", "priceCurrency": "NGN" },
             { "@type": "Offer", "name": "Tutor & Earn Track", "description": "Teach other students and earn during your IT placement" }
           ],
           "url": "https://techfaculty.ng/siwes"
@@ -143,7 +143,7 @@ const SIWES = () => {
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
               Over 120 university students have completed their SIWES/IT placement with us since 2022.
               Our program is regulated under Federal Ministry of Education policies.
-              Choose to learn and pay, or tutor and earn — either way, you leave with real skills, a certificate, and industry connections.
+              On-site SIWES is free. Choose Learn &amp; Pay or Tutor &amp; Earn — either way, you leave with real skills, a certificate, and industry connections.
             </p>
             <LastUpdated date={SIWES_UPDATED} className="-mt-4 mb-8" />
             <Button size="lg" className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background font-semibold" asChild>

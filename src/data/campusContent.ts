@@ -58,7 +58,7 @@ export function campusFaqs(c: Campus): CampusFaq[] {
     },
     {
       q: `Do you accept SIWES and industrial training students in ${c.city}?`,
-      a: `Yes. We take SIWES and IT students each session${inst ? ` from institutions such as ${inst}` : ""}, on our Learn & Pay and Tutor & Earn tracks. Virtual SIWES costs ${naira(VIRTUAL_SIWES.placementPriceNGN)}, and our ${naira(VIRTUAL_SIWES.logbookPriceNGN)} logbook service completes the company sections of your ITF SPE-1 and Form 8 if you cannot attend in person.`,
+      a: `Yes. We take SIWES and IT students each session${inst ? ` from institutions such as ${inst}` : ""}, on our Learn & Pay and Tutor & Earn tracks. On-site SIWES is free. Virtual SIWES costs ${naira(VIRTUAL_SIWES.placementPriceNGN)}, and our ${naira(VIRTUAL_SIWES.logbookPriceNGN)} logbook service completes the company sections of your ITF SPE-1 and Form 8 if you cannot attend in person.`,
     },
     {
       q: `Are there holiday tech programmes for children and teenagers in ${c.city}?`,

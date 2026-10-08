@@ -41,7 +41,7 @@
 ## Campuses
 
 - [All campuses](https://techfaculty.ng/locations): 22 Tech Faculty centres across Nigeria.
-- [Tech Faculty Nnewi (headquarters)](https://techfaculty.ng/locations/nnewi): Technology Incubation Center, Onitsha-Okigwe Expressway, by Area Command, Umudim, Nnewi, Anambra State. Main campus and South-East zonal base — full-time labs, mentors and exam venue.
+- [Tech Faculty Nnewi (headquarters)](https://techfaculty.ng/locations/nnewi): Technology Incubation Center, Onitsha-Okigwe Expressway, by Area Command, Umudim, Nnewi, Anambra State. Headquarters and South-East zonal base — full-time labs, mentors and exam venue.
 - [Tech Faculty Awka](https://techfaculty.ng/locations/awka): Sea Shelters Plaza, Amawbia Junction, Opposite MRS Filling Station, Amawbia, Awka, Anambra State. Anambra State capital campus serving students, civil servants and businesses.
 - [Tech Faculty Onitsha](https://techfaculty.ng/locations/onitsha): No 8 Anene Close, Off Ezeiweka Road, Awada-Obosi, Onitsha, Anambra State. Standalone Awada centre serving Nigeria's largest commercial hub.
 - [Tech Faculty Owerri](https://techfaculty.ng/locations/owerri): Technology Incubation Centre, Owerri, Imo State. Imo State campus with a strong student and youth pipeline.
@@ -84,6 +84,11 @@
 ## Guides
 
 - [Blog](https://techfaculty.ng/blog): Tech career, bootcamp, SIWES and AI guides for Nigeria.
+- [How Much Do Tech Courses Cost in Nigeria in 2026? Real Naira Prices](https://techfaculty.ng/blog/tech-course-fees-nigeria-2026): What tech courses cost in Nigeria in 2026, with Tech Faculty NG's real naira prices for web, data, AI, cybersecurity, cloud, design and marketing, plus SIWES fees.
+- [Best Tech Bootcamps in Anambra and the South East (2026): An Honest Guide](https://techfaculty.ng/blog/best-tech-bootcamps-anambra-south-east-nigeria-2026): An honest 2026 guide to tech bootcamps and training hubs in Anambra and the South East: Awka, Nnewi, Onitsha, Enugu, Owerri and Aba, and how to choose one.
+- [SIWES for Computer Science and ICT Students in Nigeria (2026 Guide)](https://techfaculty.ng/blog/siwes-computer-science-ict-students-nigeria-2026): A 2026 guide to SIWES for computer science and ICT students in Nigeria: where to do it, what work to do, what to write in your logbook, online IT, and costs.
+- [Online vs Physical Tech Bootcamps in Nigeria: Which Should You Choose in 2026?](https://techfaculty.ng/blog/online-vs-physical-tech-bootcamp-nigeria-2026): Online, hybrid or physical tech bootcamp in Nigeria? Compare cost, discipline, power and data, networking and certificates, with Tech Faculty NG's 2026 prices.
+- [How to Verify a Tech Certificate in Nigeria (2026 Guide for Employers and Graduates)](https://techfaculty.ng/blog/how-to-verify-tech-certificate-nigeria): How to check that a tech or bootcamp certificate in Nigeria is genuine: use the issuer's verification page, match the details, and spot fakes. Includes Tech Faculty NG.
 - [Nnewi Tech Scene: Hubs, Courses & Training Guide (2026)](https://techfaculty.ng/blog/tech-scene-hubs-and-training-in-nnewi-2026): Explore Nnewi's tech scene, local training hubs and practical courses for manufacturing, commerce and remote work, with guidance from Tech Faculty.
 - [Onitsha Tech Scene: Hubs, Courses & Training Guide (2026)](https://techfaculty.ng/blog/tech-scene-hubs-and-training-in-onitsha-2026): Discover Onitsha's growing tech scene, Awada training options and courses for commerce, e-commerce, data and digital careers with Tech Faculty.
 - [Enugu Tech Scene: Hubs, Courses & Training Guide (2026)](https://techfaculty.ng/blog/tech-scene-hubs-and-training-in-enugu-2026): Understand Enugu's tech scene, leading innovation hubs and courses in software, data, AI and cybersecurity, plus Tech Faculty study support.

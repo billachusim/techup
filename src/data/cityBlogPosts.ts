@@ -33,7 +33,7 @@ const cityGuides: CityGuide[] = [
     scene: "Nnewi is known for manufacturing, vehicle parts and owner-led businesses. That commercial base creates practical technology problems: factories need production dashboards, distributors need inventory systems, and growing businesses need secure online sales and customer support. A learner who builds for these real needs can create a locally relevant portfolio without waiting for a large startup to hire them.",
     sectors: ["manufacturing and industrial automation", "vehicle-parts distribution and inventory", "e-commerce for local brands", "remote software and data work"],
     skills: ["Data Analytics", "Software Engineering", "AI & Machine Learning", "Robotics & IoT"],
-    hubs: [{ name: "Tech Faculty — Technology Incubation Centre, Nnewi", slug: "tech-faculty-nnewi", note: "our main campus, with in-person, hybrid and online study routes across every department" }],
+    hubs: [{ name: "Tech Faculty — Technology Incubation Centre, Nnewi", slug: "tech-faculty-nnewi", note: "our headquarters, with in-person, hybrid and online study routes across every department" }],
     campusSlug: "nnewi",
     studentRoute: "Start with a local business problem: track stock movement, analyse production waste, build a simple ordering tool or automate repeated WhatsApp questions. That project can become both your portfolio and your introduction to a Nnewi employer.",
     skillNotes: {

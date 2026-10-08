@@ -57,7 +57,7 @@
 - [x] Slack: matched talent auto-added to #general; talent selected for a project auto-added to that project's Slack channel
 - [x] Admin Slack channel picker per project + manual "Slack access" button
 - [x] "Send test email" button on /admin/talent shows whether delivery works and the provider's error if not
-- [ ] Emails only start delivering once alerts.techfaculty.ng finishes verifying, and after publishing
+- [x] alerts.techfaculty.ng verified; transactional emails are delivering
 
 ## Student onboarding automation (Slack + email)
 - [x] Programmes renamed AI-first (AI for Full-Stack Web Development, AI for Data Analytics & BI, AI & Autonomous Agents Engineering, etc.); departments unchanged

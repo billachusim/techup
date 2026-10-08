@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import JobDetail from "@/pages/JobDetail";
-import { fetchJobBySlug } from "@/lib/jobs";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/careers/jobs/$slug")({
   loader: async ({ params }) => {
     try {
+      const { fetchJobBySlug } = await import("@/lib/jobs");
       const job = await fetchJobBySlug(params.slug);
       if (!job) return null;
       return {

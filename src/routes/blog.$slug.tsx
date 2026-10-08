@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import BlogPost from "@/pages/BlogPost";
-import blogPosts from "@/data/blogPosts";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
+    // Imported here, not at the top, so the posts table stays out of the main bundle.
+    const { default: blogPosts } = await import("@/data/blogPosts");
     const local = blogPosts.find((p) => p.slug === params.slug);
     if (local) {
       return {

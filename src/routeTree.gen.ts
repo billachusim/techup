@@ -24,6 +24,7 @@ import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as SchoolCollaborationsRouteImport } from './routes/school-collaborations'
 import { Route as SiwesRouteImport } from './routes/siwes'
 import { Route as SiwesSuccessKitRouteImport } from './routes/siwes-success-kit'
+import { Route as StudyOnlineAfricaRouteImport } from './routes/study-online-africa'
 import { Route as TechRouteImport } from './routes/tech'
 import { Route as TechStoreRouteImport } from './routes/tech-store'
 import { Route as TinypeopleRouteImport } from './routes/tinypeople'
@@ -135,6 +136,11 @@ const SiwesRoute = SiwesRouteImport.update({
 const SiwesSuccessKitRoute = SiwesSuccessKitRouteImport.update({
   id: '/siwes-success-kit',
   path: '/siwes-success-kit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudyOnlineAfricaRoute = StudyOnlineAfricaRouteImport.update({
+  id: '/study-online-africa',
+  path: '/study-online-africa',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TechRoute = TechRouteImport.update({
@@ -342,6 +348,7 @@ export interface FileRoutesByFullPath {
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
+  '/study-online-africa': typeof StudyOnlineAfricaRoute
   '/tech': typeof TechRoute
   '/tech-store': typeof TechStoreRoute
   '/tinypeople': typeof TinypeopleRoute
@@ -396,6 +403,7 @@ export interface FileRoutesByTo {
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
+  '/study-online-africa': typeof StudyOnlineAfricaRoute
   '/tech': typeof TechRoute
   '/tech-store': typeof TechStoreRoute
   '/tinypeople': typeof TinypeopleRoute
@@ -451,6 +459,7 @@ export interface FileRoutesById {
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
+  '/study-online-africa': typeof StudyOnlineAfricaRoute
   '/tech': typeof TechRoute
   '/tech-store': typeof TechStoreRoute
   '/tinypeople': typeof TinypeopleRoute
@@ -507,6 +516,7 @@ export interface FileRouteTypes {
     | '/school-collaborations'
     | '/siwes'
     | '/siwes-success-kit'
+    | '/study-online-africa'
     | '/tech'
     | '/tech-store'
     | '/tinypeople'
@@ -561,6 +571,7 @@ export interface FileRouteTypes {
     | '/school-collaborations'
     | '/siwes'
     | '/siwes-success-kit'
+    | '/study-online-africa'
     | '/tech'
     | '/tech-store'
     | '/tinypeople'
@@ -615,6 +626,7 @@ export interface FileRouteTypes {
     | '/school-collaborations'
     | '/siwes'
     | '/siwes-success-kit'
+    | '/study-online-africa'
     | '/tech'
     | '/tech-store'
     | '/tinypeople'
@@ -670,6 +682,7 @@ export interface RootRouteChildren {
   SchoolCollaborationsRoute: typeof SchoolCollaborationsRoute
   SiwesRoute: typeof SiwesRoute
   SiwesSuccessKitRoute: typeof SiwesSuccessKitRoute
+  StudyOnlineAfricaRoute: typeof StudyOnlineAfricaRoute
   TechRoute: typeof TechRoute
   TechStoreRoute: typeof TechStoreRoute
   TinypeopleRoute: typeof TinypeopleRoute
@@ -811,6 +824,13 @@ declare module '@tanstack/react-router' {
       path: '/siwes-success-kit'
       fullPath: '/siwes-success-kit'
       preLoaderRoute: typeof SiwesSuccessKitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/study-online-africa': {
+      id: '/study-online-africa'
+      path: '/study-online-africa'
+      fullPath: '/study-online-africa'
+      preLoaderRoute: typeof StudyOnlineAfricaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tech': {
@@ -1106,6 +1126,7 @@ const rootRouteChildren: RootRouteChildren = {
   SchoolCollaborationsRoute: SchoolCollaborationsRoute,
   SiwesRoute: SiwesRoute,
   SiwesSuccessKitRoute: SiwesSuccessKitRoute,
+  StudyOnlineAfricaRoute: StudyOnlineAfricaRoute,
   TechRoute: TechRoute,
   TechStoreRoute: TechStoreRoute,
   TinypeopleRoute: TinypeopleRoute,

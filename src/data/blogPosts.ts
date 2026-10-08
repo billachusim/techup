@@ -4709,6 +4709,8 @@ Cairo combines a very large graduate pipeline with an established accelerator ec
 
 You do not need to be in one of these cities, and you do not need to be in Nigeria.
 
+Our campuses are all in Nigeria, but every department except Robotics & IoT runs fully online. Prices, the certificate and how to pay from outside Nigeria are on our [study online from anywhere in Africa](/study-online-africa) page.
+
 - Our **online tracks** run for students across Africa, in English, with cohort schedules that account for different time zones.
 - **Certificates are publicly verifiable** at [techfaculty.ng/verify](/verify), which matters when you apply across borders.
 - Our **[remote jobs board](/careers)** aggregates AI and tech roles that hire pan-African talent weekly.
@@ -4721,7 +4723,7 @@ You do not need to be in one of these cities, and you do not need to be in Niger
 There is no single answer, and that is the point. Lagos has the deepest hiring market, Nairobi the strongest community history, Kigali the most deliberate policy support, Johannesburg the most enterprise demand, Cairo the biggest graduate pipeline. The best city for you is usually the one you already live in, paired with a structured online track.
 
 ### Can I join Tech Faculty from outside Nigeria?
-Yes. Our online tracks are open across Africa and internationally, billed in USD for international students and naira for Nigeria.
+Yes. Our online tracks are open across Africa and internationally, billed in USD for international students and naira for Nigeria. See [studying online from outside Nigeria](/study-online-africa) for prices and how to pay.
 
 ### Do African employers respect online certificates?
 They respect verifiable ones attached to visible work. Any certificate you cannot check on a public page is weak evidence; a portfolio plus a verifiable certificate is strong.

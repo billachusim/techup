@@ -3,6 +3,12 @@
 // every answer that mentions it.
 import { LEARNING_MODES, PLAN_PRICING } from "../../supabase/functions/_shared/pricing.ts";
 
+/** Naira per US dollar, the same rate create-checkout uses for USD payments. */
+export const NGN_TO_USD_RATE = 1400;
+
+/** A naira amount in whole US dollars at the checkout rate. */
+export const toUsd = (amount: number) => Math.round(amount / NGN_TO_USD_RATE);
+
 export const naira = (amount: number) => `₦${amount.toLocaleString("en-NG")}`;
 
 const modeFee = (id: string) => LEARNING_MODES.find((m) => m.id === id)?.price ?? 0;

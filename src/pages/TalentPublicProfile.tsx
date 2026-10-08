@@ -43,7 +43,6 @@ const TalentPublicProfile = () => {
     );
   }
 
-  const canonical = `https://techfaculty.ng/talent/pool/${person.id}`;
   const location = [person.city, person.country].filter(Boolean).join(", ");
   const description = (person.headline ?? `${person.skills.slice(0, 4).join(", ")} talent based in ${location}`).slice(0, 158);
   const links = [
@@ -58,18 +57,6 @@ const TalentPublicProfile = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <>
-        <script type="application/ld+json">{JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Person",
-          name: person.full_name,
-          jobTitle: person.headline ?? undefined,
-          knowsAbout: person.skills,
-          address: { "@type": "PostalAddress", addressLocality: person.city ?? undefined, addressCountry: person.country },
-          affiliation: { "@type": "Organization", name: "Tech Faculty NG", url: "https://techfaculty.ng" },
-          url: canonical,
-        })}</script>
-      </>
       <Header />
 
       <main className="pt-20">

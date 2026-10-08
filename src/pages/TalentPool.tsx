@@ -110,16 +110,6 @@ const TalentPool = () => {
           name: "Tech Faculty talent pool",
           description: "Searchable directory of skilled African tech talent available for projects and roles.",
           url: canonical,
-          mainEntity: {
-            "@type": "ItemList",
-            numberOfItems: filtered.length,
-            itemListElement: filtered.slice(0, 50).map((person, index) => ({
-              "@type": "ListItem",
-              position: index + 1,
-              url: `${canonical}/${person.id}`,
-              name: person.full_name,
-            })),
-          },
         })}</script>
       </>
       <Header />

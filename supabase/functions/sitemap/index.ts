@@ -41,7 +41,7 @@ Deno.serve(async (req) => {
     const [posts, jobs, events, roles] = await Promise.all([
       supabase.from("blog_posts").select("slug, published_at, updated_at").eq("is_published", true).order("published_at", { ascending: false }).limit(500),
       supabase.from("jobs").select("slug, last_seen_at").eq("is_expired", false).order("last_seen_at", { ascending: false }).limit(500),
-      supabase.from("events").select("slug, updated_at").eq("is_expired", false).order("updated_at", { ascending: false }).limit(500),
+      supabase.from("events").select("slug, updated_at").eq("is_expired", false).eq("source_platform", "Tech Faculty").order("updated_at", { ascending: false }).limit(500),
       supabase.from("talent_roles").select("slug, updated_at").eq("status", "published").order("updated_at", { ascending: false }).limit(200),
     ]);
 

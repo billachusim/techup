@@ -13,7 +13,7 @@ Allow: /
 User-agent: *
 Allow: /
 
+# sitemap.xml is rebuilt on every deploy; the second sitemap is served live
+# from the database so jobs, events and posts added between deploys are found.
 Sitemap: https://techfaculty.ng/sitemap.xml
 Sitemap: https://flxwtwzjslufglpwfjdx.supabase.co/functions/v1/sitemap
-
-RSS: https://techfaculty.ng/rss.xml

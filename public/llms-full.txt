@@ -9,7 +9,7 @@ Short version with links: https://techfaculty.ng/llms.txt
 ## Key facts
 
 - Tech Faculty NG is a Nigerian technology training institute. Licensed by the Federal Ministry of Science, Technology and Innovation (FMSTI) through the National Board for Technology Incubation (NBTI).
-- Headquarters: Technology Incubation Centre, Nnewi, Anambra State.
+- Headquarters: Technology Incubation Center, Onitsha-Okigwe Expressway, by Area Command, Umudim, Nnewi, Anambra State.
 - Campuses: 22 centres in 19 states and the FCT (Nnewi, Awka, Onitsha, Owerri, Aba, Enugu, Abakaliki, Abuja, Lagos, Ibadan, Port Harcourt, Benin City, Kaduna, Kano, Jos, Bauchi, Makurdi, Uyo, Calabar, Sokoto, Ilorin, Akure). 20 of them operate inside NBTI Technology Incubation Centres.
 - Departments: Web Development, Mobile App Development, Data Science & Analytics, Cybersecurity, AI & Machine Learning, Basic Internet & AI Studies, Social Media & Digital Marketing, Design, Cloud Computing, Robotics & IoT.
 - Every department can be studied online, hybrid or in person.
@@ -318,9 +318,9 @@ A: Yes. The kit is written for any Nigerian student on SIWES or industrial train
 ### Tech Faculty Nnewi (headquarters)
 
 Page: https://techfaculty.ng/locations/nnewi
-Address: Technology Incubation Centre, Nnewi, Anambra State. State: Anambra (South-East).
+Address: Technology Incubation Center, Onitsha-Okigwe Expressway, by Area Command, Umudim, Nnewi, Anambra State. State: Anambra (South-East).
 
-Nnewi is where Tech Faculty began, and our headquarters sits inside the Technology Incubation Centre that also serves as the South-East zonal headquarters of the Technology Incubation Centre network. Nnewi's manufacturing and auto-parts economy gives our students something rare: local businesses that need automation, dashboards and online storefronts immediately. Every department runs here in person, alongside teen holiday bootcamps, SIWES placements and the community meetups that draw builders from across Anambra State.
+Nnewi is where Tech Faculty began, and our main campus sits inside the Technology Incubation Centre that also serves as the South-East zonal headquarters of the Technology Incubation Centre network. Nnewi's manufacturing and auto-parts economy gives our students something rare: local businesses that need automation, dashboards and online storefronts immediately. Every department runs here in person, alongside teen holiday bootcamps, SIWES placements and the community meetups that draw builders from across Anambra State.
 
 ### Tech Faculty Awka
 
@@ -474,7 +474,7 @@ Akure's engineering culture shows in what students ask for: robotics, embedded s
 Answers below are for Nnewi; each campus page gives the same answers for its own city and address.
 
 Q: Where exactly is Tech Faculty in Nnewi?
-A: We operate from Technology Incubation Centre, Nnewi, Anambra State. Tech Faculty runs inside the Technology Incubation Centre network of the National Board for Technology Incubation, an agency of the Federal Ministry of Science, Technology and Innovation, so the venue is a federally-run facility rather than a private shopfront.
+A: We operate from Technology Incubation Center, Onitsha-Okigwe Expressway, by Area Command, Umudim, Nnewi, Anambra State. Tech Faculty runs inside the Technology Incubation Centre network of the National Board for Technology Incubation, an agency of the Federal Ministry of Science, Technology and Innovation, so the venue is a federally-run facility rather than a private shopfront.
 
 Q: Can I study online instead of attending the Nnewi centre?
 A: Yes. Every department is available online, hybrid, or fully in person. Many Nnewi students take lectures online and use the centre for labs, mentoring and project reviews.
@@ -487,23 +487,23 @@ A: Yes. During school holidays we run teen tracks in Digital Creation, Coding, A
 
 ## Other pages
 
-- Home (https://techfaculty.ng/): Accredited bootcamps in software engineering, data science, AI and cybersecurity. 6,000+ students trained, 87% employed. Learn in person or online.
-- About Us (https://techfaculty.ng/about): Tech Faculty NG — licensed by FMSTI via NBTI. We train, certify, and place the next generation of Nigerian tech professionals from Nnewi, Anambra State.
-- Blog & Resources (https://techfaculty.ng/blog): Tech career guides, course deep-dives, SIWES tips, and AI insights from Tech Faculty NG. Practical advice for starting and growing your tech career in Nigeria.
+- Home (https://techfaculty.ng/): FMSTI-licensed bootcamps in software engineering, data science, AI and cybersecurity. 6,000+ students trained, 87% employed. Learn in person or online.
+- About Us: Our Mission & Story (https://techfaculty.ng/about): Tech Faculty NG — licensed by FMSTI via NBTI. We train, certify, and place the next generation of Nigerian tech professionals from Nnewi, Anambra State.
+- Blog: Tech Career Tips & Guides (https://techfaculty.ng/blog): Tech career guides, course deep-dives, SIWES tips, and AI insights from Tech Faculty NG. Practical advice for starting and growing your tech career in Nigeria.
 - Business Partnerships (https://techfaculty.ng/business-partnerships): Partner with Tech Faculty NG for corporate training, AI workshops, business digitization, and tech talent pipelines. FMSTI-licensed, based in Nnewi, Nigeria.
 - Tech Jobs & Talent Marketplace (https://techfaculty.ng/careers): Build one talent profile and get matched to verified tech roles and business projects across Nigeria and Africa, or hire skilled African talent.
 - Tech Departments & Bootcamps in Nigeria (https://techfaculty.ng/departments): Explore Tech Faculty departments: web development, data science, AI, cybersecurity, UI/UX design, digital marketing and more — in person nationwide or online.
-- Tech Events in Nigeria 2026 (https://techfaculty.ng/events): Find upcoming tech events in Nigeria and Africa: AI and data conferences, developer meetups, hackathons, cybersecurity workshops, remote work summits and free online webinars, updated weekly.
+- Tech Events in Nigeria 2026: AI & Data (https://techfaculty.ng/events): Find upcoming tech events in Nigeria and Africa: AI and data conferences, developer meetups, hackathons, cybersecurity workshops, remote work summits and free online webinars, updated weekly.
 - Hire Vetted Tech Talent in Nigeria (https://techfaculty.ng/hire): Tell us what your business needs and we match you with vetted Nigerian tech talent — developers, data analysts, designers, marketers and support — remote or on-site.
-- Tech Hubs in Nigeria & Africa (https://techfaculty.ng/hubs): Find tech hubs, innovation centres and training institutes across Nigeria and Africa by city and course area. Tell us what you want to study and we help you enrol.
-- Tech Faculty Campuses in Nigeria (https://techfaculty.ng/locations): Tech Faculty operates physically inside Technology Incubation Centres nationwide via our partnership with the National Board for Technology Incubation.
+- Tech Hubs in Nigeria & Africa by City (https://techfaculty.ng/hubs): Find tech hubs, innovation centres and training institutes across Nigeria and Africa by city and course area. Tell us what you want to study and we help you enrol.
+- Tech Training Campuses Across Nigeria (https://techfaculty.ng/locations): Tech Faculty operates physically inside Technology Incubation Centres nationwide via our partnership with the National Board for Technology Incubation.
 - Build Apps with Lovable (https://techfaculty.ng/lovable): Tech Faculty recommends Lovable — the AI platform we use to build production web apps. Describe what you want, ship in minutes.
 - Software Products (https://techfaculty.ng/products): Explore the mobile apps built by Tech Faculty and Social Faculty — Dear Claire, Alter Ego, Eavesdrop and AI Clopedia, live on the App Store and Google Play.
-- School Collaborations (https://techfaculty.ng/school-collaborations): Bring tech bootcamps to your campus. Tech Faculty NG partners with universities for Python, AI, Data Science training and student certification programs. Licensed by FMSTI via NBTI.
-- SIWES & Industrial Training (https://techfaculty.ng/siwes): Do your SIWES/IT placement at Tech Faculty NG, Nnewi. Learn & Pay for mentored real-world experience or Tutor & Earn to teach and get paid. FMSTI-licensed.
-- SIWES Success Kit (https://techfaculty.ng/siwes-success-kit): Land and finish your SIWES placement properly: free 7-step checklist plus the SIWES Success Kit — placement email templates, student CV, logbook pack and report outline.
-- Tech Faculty Talent Pool (https://techfaculty.ng/talent): Join the Tech Faculty talent pool: build one profile, get matched to paid remote and on-site tech work with businesses across Nigeria and Africa. Free to join.
+- University Bootcamps & School Partnerships (https://techfaculty.ng/school-collaborations): Bring tech bootcamps to your campus. Tech Faculty NG partners with universities for Python, AI, Data Science training and student certification programs. Licensed by FMSTI via NBTI.
+- SIWES & IT Placement in Nigeria (https://techfaculty.ng/siwes): Do your SIWES/IT placement at Tech Faculty NG, Nnewi. Learn & Pay for mentored real-world experience or Tutor & Earn to teach and get paid. FMSTI-licensed.
+- SIWES Success Kit: Logbook & Report Pack (https://techfaculty.ng/siwes-success-kit): Land and finish your SIWES placement properly: free 7-step checklist plus the SIWES Success Kit — placement email templates, student CV, logbook pack and report outline.
+- Talent Pool: Remote Tech Work in Nigeria (https://techfaculty.ng/talent): Join the Tech Faculty talent pool: build one profile, get matched to paid remote and on-site tech work with businesses across Nigeria and Africa. Free to join.
 - Hire Vetted African Tech Talent (https://techfaculty.ng/talent/pool): Browse the Tech Faculty talent pool: developers, designers, analysts, marketers and project managers across Nigeria and Africa, ready for remote and on-site work.
-- Tech Store Nigeria (https://techfaculty.ng/tech-store): Buy affordable tech in Nigeria: locally assembled Battery Bank power banks, student laptops, laptop accessories, custom phone cases and robotics kits. Order on WhatsApp — nationwide delivery, pay on delivery.
-- Tiny People AI in Africa (https://techfaculty.ng/tinypeople): Tech Faculty has partnered with Natura Inc to bring Tiny People AI — a powerful personal AI agent on WhatsApp, Telegram and iMessage — to Africa.
-- Virtual SIWES Nigeria (https://techfaculty.ng/virtual-siwes): Do your SIWES or IT online from any Nigerian city with a licensed host. We review, fill, sign and stamp your logbook, then waybill it back to you — ₦45,000 + ₦15,000.
+- Tech Store: Power Banks & Laptops (https://techfaculty.ng/tech-store): Buy affordable tech in Nigeria: locally assembled Battery Bank power banks, student laptops, laptop accessories, custom phone cases and robotics kits. Order on WhatsApp — nationwide delivery, pay on delivery.
+- Tiny People AI in Africa, with Natura Inc (https://techfaculty.ng/tinypeople): Tech Faculty has partnered with Natura Inc to bring Tiny People AI — a powerful personal AI agent on WhatsApp, Telegram and iMessage — to Africa.
+- Virtual SIWES Nigeria: Online IT Placement (https://techfaculty.ng/virtual-siwes): Do your SIWES or IT online from any Nigerian city with a licensed host. We review, fill, sign and stamp your logbook, then waybill it back to you — ₦45,000 + ₦15,000.

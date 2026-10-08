@@ -183,7 +183,7 @@ const llms = [
   "",
   "## Optional",
   "",
-  `- [Tech hubs directory](${url("/hubs")}): Editorial directory of ${techHubs.length} tech hubs and training institutes in Nigeria and Africa. Listing a hub does not imply a partnership.`,
+  `- [Tech hubs directory](${url("/hubs")}): Editorial directory of ${techHubs.length} tech hubs and training institutes in Nigeria. Listing a hub does not imply a partnership.`,
   ...otherHubs.map((h) => `- [${h.name}](${url(`/hubs/${h.slug}`)}): ${h.city}, ${h.country}. ${oneLine(h.focus)}`),
   "",
 ].join("\n");

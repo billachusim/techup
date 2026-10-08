@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/select";
 import {
   COURSE_AREA_DEPARTMENT,
-  HUB_CITY_CONTEXT,
   HUBS_DISCLAIMER,
   getHub,
   hubWhatsAppUrl,
@@ -46,12 +45,11 @@ const HubDetail = () => {
   const title = `${hub.name} — Courses in ${hub.city}`;
   const description = `${hub.name} in ${hub.city}, ${hub.country}: course areas, learning formats and how Tech Faculty helps you choose a track, enrol and get certified — online, hybrid or in person.`;
   const related = hubsInCity(hub.city, hub.slug);
-  const cityGuide = hub.country === "Nigeria" ? getCityGuideForCity(hub.city) : undefined;
+  const cityGuide = getCityGuideForCity(hub.city);
   const campus =
     (hub.campusSlug && getCampusBySlug(hub.campusSlug)) ||
-    (hub.country === "Nigeria" ? campuses.find((c) => c.city === hub.city) : undefined) ||
+    campuses.find((c) => c.city === hub.city) ||
     (cityGuide?.nearestCampusSlug ? getCampusBySlug(cityGuide.nearestCampusSlug) : undefined);
-  const cityContext = HUB_CITY_CONTEXT[hub.city];
 
   const faqs = [
     {
@@ -142,7 +140,7 @@ const HubDetail = () => {
         </section>
 
         {/* City context and links to the city guide and nearest campus */}
-        {(cityGuide || cityContext || campus) && (
+        {(cityGuide || campus) && (
           <section className="container mx-auto px-4 mt-8">
             <div className="max-w-3xl space-y-3 text-sm md:text-base text-muted-foreground leading-relaxed">
               <h2 className="text-xl font-bold text-foreground">Learning tech in {hub.city}</h2>
@@ -160,22 +158,6 @@ const HubDetail = () => {
                       guide to the {hub.city} tech scene
                     </Link>{" "}
                     covers the courses and first projects that fit those sectors.
-                  </p>
-                </>
-              )}
-              {cityContext && (
-                <>
-                  <p>{cityContext}</p>
-                  <p>
-                    Every Tech Faculty department also runs online, so you can{" "}
-                    <Link to="/departments" className="text-primary hover:underline">
-                      study a Tech Faculty course from {hub.city}
-                    </Link>
-                    . For more options across the continent, see{" "}
-                    <Link to="/blog/top-tech-hubs-in-africa-where-to-learn-tech-2026" className="text-primary hover:underline">
-                      our guide to Africa&apos;s top tech hubs
-                    </Link>
-                    .
                   </p>
                 </>
               )}

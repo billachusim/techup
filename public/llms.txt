@@ -160,7 +160,7 @@
 
 ## Optional
 
-- [Tech hubs directory](https://techfaculty.ng/hubs): Editorial directory of 34 tech hubs and training institutes in Nigeria and Africa. Listing a hub does not imply a partnership.
+- [Tech hubs directory](https://techfaculty.ng/hubs): Editorial directory of 19 tech hubs and training institutes in Nigeria. Listing a hub does not imply a partnership.
 - [Co-Creation Hub (CcHUB)](https://techfaculty.ng/hubs/co-creation-hub-lagos): Lagos, Nigeria. One of Africa's best-known innovation hubs, based in Yaba, Lagos.
 - [Ventures Platform Hub](https://techfaculty.ng/hubs/ventures-platform-hub-abuja): Abuja, Nigeria. Abuja hub and community space associated with startup and founder programmes.
 - [Genesys Tech Hub](https://techfaculty.ng/hubs/genesys-tech-hub-enugu): Enugu, Nigeria. Enugu-based hub widely known for engineering training and talent development.
@@ -170,18 +170,3 @@
 - [Wennovation Hub](https://techfaculty.ng/hubs/wennovation-hub-ibadan): Ibadan, Nigeria. Early-stage innovation accelerator with an Ibadan presence.
 - [Hebron Startup Lab, Covenant University](https://techfaculty.ng/hubs/hebron-startup-lab-ota): Ota, Nigeria. University-based startup lab for student technology founders.
 - [Innovation Growth Hub (iGHub)](https://techfaculty.ng/hubs/innovation-growth-hub-port-harcourt): Port Harcourt, Nigeria. Rivers State innovation and coworking hub for young technologists.
-- [iHub](https://techfaculty.ng/hubs/ihub-nairobi): Nairobi, Kenya. Nairobi's landmark innovation hub and startup community.
-- [Nailab](https://techfaculty.ng/hubs/nailab-nairobi): Nairobi, Kenya. Kenyan startup incubator with entrepreneurship programmes.
-- [MEST Africa](https://techfaculty.ng/hubs/mest-africa-accra): Accra, Ghana. Accra-based training programme and incubator for African founders.
-- [Impact Hub Accra](https://techfaculty.ng/hubs/impact-hub-accra): Accra, Ghana. Part of the global Impact Hub network, based in Accra.
-- [kLab](https://techfaculty.ng/hubs/klab-kigali): Kigali, Rwanda. Kigali's open technology innovation space for young developers.
-- [Norrsken House Kigali](https://techfaculty.ng/hubs/norrsken-house-kigali): Kigali, Rwanda. Large Kigali campus for founders, investors and tech teams.
-- [Tshimologong Precinct](https://techfaculty.ng/hubs/tshimologong-johannesburg): Johannesburg, South Africa. Wits University digital innovation precinct in Braamfontein.
-- [Workshop17](https://techfaculty.ng/hubs/workshop17-cape-town): Cape Town, South Africa. Cape Town workspace network at the centre of the local tech scene.
-- [The GrEEK Campus](https://techfaculty.ng/hubs/greek-campus-cairo): Cairo, Egypt. Downtown Cairo technology and innovation park.
-- [Flat6Labs Cairo](https://techfaculty.ng/hubs/flat6labs-cairo): Cairo, Egypt. Regional seed accelerator with a long-running Cairo programme.
-- [The Innovation Village](https://techfaculty.ng/hubs/innovation-village-kampala): Kampala, Uganda. Uganda's flagship innovation community and coworking campus.
-- [Outbox Hub](https://techfaculty.ng/hubs/outbox-kampala): Kampala, Uganda. Long-running Kampala incubator and developer community.
-- [Buni Innovation Hub](https://techfaculty.ng/hubs/buni-hub-dar-es-salaam): Dar es Salaam, Tanzania. Tanzania's best-known innovation space for young technologists.
-- [CTIC Dakar](https://techfaculty.ng/hubs/ctic-dakar): Dakar, Senegal. Francophone West Africa's pioneering ICT incubator.
-- [iceaddis](https://techfaculty.ng/hubs/iceaddis-addis-ababa): Addis Ababa, Ethiopia. Ethiopia's first innovation hub and startup incubator.

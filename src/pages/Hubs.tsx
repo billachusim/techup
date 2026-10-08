@@ -19,7 +19,6 @@ import {
   HUBS_DISCLAIMER,
   directoryWhatsAppUrl,
   hubCities,
-  hubCountries,
   hubWhatsAppUrl,
   techHubs,
 } from "@/data/techHubs";
@@ -28,14 +27,12 @@ const CANONICAL = "https://techfaculty.ng/hubs";
 
 const Hubs = () => {
   const [query, setQuery] = useState("");
-  const [country, setCountry] = useState<string>("All");
   const [city, setCity] = useState<string>("All");
   const [courseArea, setCourseArea] = useState<string>("All");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return techHubs.filter((h) => {
-      if (country !== "All" && h.country !== country) return false;
       if (city !== "All" && h.city !== city) return false;
       if (courseArea !== "All" && !h.courseAreas.includes(courseArea as never)) return false;
       if (!q) return true;
@@ -43,18 +40,17 @@ const Hubs = () => {
         h.name.toLowerCase().includes(q) ||
         h.city.toLowerCase().includes(q) ||
         h.region.toLowerCase().includes(q) ||
-        h.country.toLowerCase().includes(q) ||
         h.focus.toLowerCase().includes(q) ||
         h.courseAreas.some((c) => c.toLowerCase().includes(q))
       );
     });
-  }, [query, country, city, courseArea]);
+  }, [query, city, courseArea]);
 
   const jsonLd = [
     {
       "@context": "https://schema.org",
       "@type": "ItemList",
-      name: "Tech hubs and training institutes in Nigeria and Africa",
+      name: "Tech hubs and training institutes in Nigeria",
       numberOfItems: techHubs.length,
       itemListElement: techHubs.map((h, i) => ({
         "@type": "ListItem",
@@ -86,7 +82,7 @@ const Hubs = () => {
           <div className="max-w-3xl">
             <Badge variant="secondary" className="mb-4">The hub of hubs</Badge>
             <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
-              Tech hubs and training institutes across Nigeria and Africa
+              Tech hubs and training institutes across Nigeria
             </h1>
             <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
               Our mission is to move Nigerians and Africans into the AI future — wherever
@@ -117,7 +113,7 @@ const Hubs = () => {
 
         {/* Filters */}
         <section className="container mx-auto px-4 mt-10">
-          <div className="grid gap-3 md:grid-cols-4">
+          <div className="grid gap-3 md:grid-cols-3">
             <div className="relative md:col-span-1">
               <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <Input
@@ -128,17 +124,6 @@ const Hubs = () => {
                 aria-label="Search tech hubs"
               />
             </div>
-            <Select value={country} onValueChange={setCountry}>
-              <SelectTrigger aria-label="Filter by country">
-                <SelectValue placeholder="Country" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="All">All countries</SelectItem>
-                {hubCountries.map((c) => (
-                  <SelectItem key={c} value={c}>{c}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
             <Select value={city} onValueChange={setCity}>
               <SelectTrigger aria-label="Filter by city">
                 <SelectValue placeholder="City" />

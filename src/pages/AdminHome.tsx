@@ -7,6 +7,7 @@ import { Award, BriefcaseBusiness, GraduationCap, Loader2, type LucideIcon } fro
 import { useIsStaff } from "@/hooks/useIsStaff";
 import AdminNav from "@/components/admin/AdminNav";
 import { AdminMetrics } from "@/components/admin/AdminMetrics";
+import { NotifySearchEngines } from "@/components/admin/NotifySearchEngines";
 
 interface Section {
   to: string;
@@ -78,6 +79,7 @@ export default function AdminHome() {
             </div>
             {/* Business numbers are for admins; recruiters only see the areas above. */}
             {isAdmin && <AdminMetrics />}
+            {isAdmin && <NotifySearchEngines />}
           </>
         )}
       </main>

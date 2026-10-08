@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { pingIndexNow } from "../_shared/indexnow.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -207,6 +208,7 @@ Deno.serve(async (req) => {
     }).slice(0, POSTS_PER_RUN);
 
     let published = 0;
+    const publishedPaths: string[] = [];
     for (const category of queue) {
       const article = await generateArticle(category, titles, apiKey);
       if (!article) {
@@ -257,7 +259,13 @@ Deno.serve(async (req) => {
       takenSlugs.add(slug);
       titles.push(String(article.title));
       report[category.name] = `published /blog/${slug}`;
+      publishedPaths.push(`/blog/${slug}`);
       published++;
+    }
+
+    if (publishedPaths.length > 0) {
+      const ping = await pingIndexNow([...publishedPaths, "/blog"]);
+      report.indexnow = ping.ok ? `pinged ${ping.sent} URLs (${ping.status})` : `ping failed: ${ping.error ?? ping.status}`;
     }
 
     // Housekeeping runs here too so archiving happens even if a scrape fails.

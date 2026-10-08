@@ -9,7 +9,7 @@ export const Route = createFileRoute("/events/$slug")({
       const event = await fetchEventBySlug(params.slug);
       if (!event) return null;
       return {
-        title: event.title.slice(0, 60),
+        title: event.title,
         description: event.description.slice(0, 160),
         image: event.image_url ?? undefined,
         // Only our own, still-listed events are worth indexing; listings
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/events/$slug")({
   },
   head: ({ loaderData, params }) =>
     pageHead({
-      title: loaderData?.title ?? "Tech Event | Tech Faculty Events",
+      title: loaderData?.title ?? "Tech Event",
       description:
         loaderData?.description ??
         "Details for this tech event in Nigeria or Africa, curated by Tech Faculty.",

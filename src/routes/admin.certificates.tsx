@@ -5,7 +5,7 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/admin/certificates")({
   head: () =>
     pageHead({
-      title: "Admin · Add Certificate | Tech Faculty NG",
+      title: "Admin · Add Certificate",
       description: "Administrative certificate management for Tech Faculty NG.",
       path: "/admin/certificates",
       noindex: true,

@@ -66,7 +66,7 @@ const TalentPublicProfile = () => {
           jobTitle: person.headline ?? undefined,
           knowsAbout: person.skills,
           address: { "@type": "PostalAddress", addressLocality: person.city ?? undefined, addressCountry: person.country },
-          affiliation: { "@type": "Organization", name: "Tech Faculty", url: "https://techfaculty.ng" },
+          affiliation: { "@type": "Organization", name: "Tech Faculty NG", url: "https://techfaculty.ng" },
           url: canonical,
         })}</script>
       </>

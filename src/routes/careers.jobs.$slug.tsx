@@ -9,7 +9,7 @@ export const Route = createFileRoute("/careers/jobs/$slug")({
       const job = await fetchJobBySlug(params.slug);
       if (!job) return null;
       return {
-        title: `${job.title} at ${job.company} | Tech Faculty Jobs`.slice(0, 60),
+        title: `${job.title} at ${job.company}`,
         description: job.description.slice(0, 155),
       };
     } catch {
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/careers/jobs/$slug")({
   },
   head: ({ loaderData, params }) =>
     pageHead({
-      title: loaderData?.title ?? "Tech Job | Tech Faculty Careers",
+      title: loaderData?.title ?? "Tech Job",
       description:
         loaderData?.description ??
         "View this tech role on the Tech Faculty talent marketplace.",

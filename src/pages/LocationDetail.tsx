@@ -8,8 +8,15 @@ import { COMMUNITY_WHATSAPP_URL } from "@/lib/whatsapp";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Building2, CheckCircle2, MapPin, MessageCircle, Navigation } from "lucide-react";
-import { campuses, directionsUrl, getCampusBySlug } from "@/data/campuses";
+import { ArrowLeft, ArrowRight, Building2, CheckCircle2, MapPin, MessageCircle, Navigation, Phone, Star } from "lucide-react";
+import {
+  CAMPUS_PHONE,
+  campuses,
+  directionsUrl,
+  getCampusBySlug,
+  googleMapsUrl,
+  googleReviewUrl,
+} from "@/data/campuses";
 import {
   campusFaqs,
   campusKeywords,
@@ -31,10 +38,16 @@ const LocationDetail = () => {
   const programmes = campusProgrammes(campus);
   const nearby = campuses.filter((c) => c.zone === campus.zone && c.slug !== campus.slug).slice(0, 4);
 
+  const mapsUrl = googleMapsUrl(campus);
+  const reviewUrl = googleReviewUrl(campus);
+  const sameAs = [mapsUrl, ...(campus.profiles ?? [])].filter(Boolean);
+
   const orgSchema = {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
-    name: `Tech Faculty ${campus.city}`,
+    name: campus.name,
+    alternateName: `Tech Faculty ${campus.city}`,
+    telephone: CAMPUS_PHONE,
     description: campusMetaDescription(campus),
     url,
     parentOrganization: { "@type": "EducationalOrganization", name: "Tech Faculty NG", url: "https://techfaculty.ng/" },
@@ -48,6 +61,8 @@ const LocationDetail = () => {
     geo: { "@type": "GeoCoordinates", latitude: campus.lat, longitude: campus.lng },
     areaServed: { "@type": "AdministrativeArea", name: `${campus.state} State, Nigeria` },
     keywords: campusKeywords(campus).join(", "),
+    ...(mapsUrl ? { hasMap: mapsUrl } : {}),
+    ...(sameAs.length ? { sameAs } : {}),
   };
 
   const faqSchema = {
@@ -96,7 +111,7 @@ const LocationDetail = () => {
           </Link>
 
           <div className="flex flex-wrap items-center gap-2 mb-4">
-            {campus.isHeadquarters && <Badge>Headquarters</Badge>}
+            {campus.isHeadquarters && <Badge>Main campus</Badge>}
             <Badge variant="secondary">{campus.zone}</Badge>
             <Badge variant="outline">{campus.state} State</Badge>
           </div>
@@ -136,9 +151,29 @@ const LocationDetail = () => {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
+                  <Phone className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                  <a href={`tel:${CAMPUS_PHONE.replace(/-/g, "")}`} className="text-sm text-muted-foreground hover:text-primary">
+                    {CAMPUS_PHONE.replace(/-/g, " ")}
+                  </a>
+                </div>
+                {mapsUrl && reviewUrl && (
+                  <div className="flex flex-wrap gap-2">
+                    <Button asChild size="sm" variant="outline">
+                      <a href={mapsUrl} target="_blank" rel="noopener noreferrer">
+                        <MapPin className="w-4 h-4 mr-1" /> View on Google Maps
+                      </a>
+                    </Button>
+                    <Button asChild size="sm" variant="outline">
+                      <a href={reviewUrl} target="_blank" rel="noopener noreferrer">
+                        <Star className="w-4 h-4 mr-1" /> Review us on Google
+                      </a>
+                    </Button>
+                  </div>
+                )}
+                <div className="flex items-start gap-3">
                   <Building2 className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                   <p className="text-sm text-muted-foreground">
-                    {campus.slug === "onitsha"
+                    {["onitsha", "awka"].includes(campus.slug)
                       ? "A standalone Tech Faculty centre, operated directly by us."
                       : "Hosted inside the Technology Incubation Centre network of the National Board for Technology Incubation, an agency of the Federal Ministry of Science, Technology and Innovation."}
                   </p>

@@ -89,7 +89,7 @@ const Locations = () => {
               </div>
               <div className="flex-1">
                 <div className="text-xs uppercase tracking-wider text-primary font-semibold mb-1">
-                  Main Campus / Headquarters
+                  Main Campus
                 </div>
                 <h2 className="text-xl md:text-2xl font-bold mb-2">
                   Technology Incubation Centre, Nnewi
@@ -174,7 +174,7 @@ const Locations = () => {
                           {c.name}
                         </h3>
                         {c.isHeadquarters && (
-                          <Badge variant="default" className="text-[10px]">HQ</Badge>
+                          <Badge variant="default" className="text-[10px]">Main campus</Badge>
                         )}
                       </div>
                       <p className="text-xs text-muted-foreground mt-1">{c.address}</p>

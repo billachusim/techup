@@ -53,7 +53,7 @@ export const departments: Department[] = [
     tagline: "Learn front-end and full-stack web development with AI-assisted workflows.",
     description:
       "Master modern web technologies and frameworks to build stunning, responsive, production-ready applications.",
-    metaTitle: "Web Development Bootcamp Nigeria | Tech Faculty",
+    metaTitle: "Web Development Bootcamp Nigeria",
     metaDescription:
       "Learn web development in Nigeria: HTML, CSS, JavaScript, React, Next.js and Node. Online and on-campus bootcamp with projects, certification and job support.",
     keywords: [
@@ -116,7 +116,7 @@ export const departments: Department[] = [
     tagline: "Build and publish Android and iOS apps with React Native and Flutter.",
     description:
       "Create powerful mobile applications for iOS and Android, from first screen to a live listing on the app stores.",
-    metaTitle: "Mobile App Development Course Nigeria | Tech Faculty",
+    metaTitle: "Mobile App Development Course Nigeria",
     metaDescription:
       "Learn mobile app development in Nigeria with React Native, Flutter, Swift and Kotlin. Build, test and publish real Android and iOS apps to the app stores.",
     keywords: [
@@ -175,7 +175,7 @@ export const departments: Department[] = [
     tagline: "Turn raw data into dashboards and decisions with Excel, SQL, Power BI and Python.",
     description:
       "Learn to analyse, visualise and derive insights from complex datasets using the tools Nigerian employers actually use.",
-    metaTitle: "Data Analytics Bootcamp Nigeria | Tech Faculty",
+    metaTitle: "Data Analytics Bootcamp Nigeria",
     metaDescription:
       "Data analytics and data science training in Nigeria. Master Excel, SQL, Power BI, Tableau and Python, build a dashboard portfolio, and get certified for analyst roles.",
     keywords: [
@@ -235,7 +235,7 @@ export const departments: Department[] = [
     tagline: "Train for SOC analyst, ethical hacking and compliance roles in Nigeria.",
     description:
       "Protect digital assets and infrastructure with hands-on security operations, offensive security and compliance training.",
-    metaTitle: "Cybersecurity Training Nigeria | Tech Faculty",
+    metaTitle: "Cybersecurity Training Nigeria",
     metaDescription:
       "Cybersecurity bootcamp in Nigeria covering network security, ethical hacking, SOC analysis, incident response and NDPR compliance, with CompTIA and CEH exam prep.",
     keywords: [
@@ -294,7 +294,7 @@ export const departments: Department[] = [
     tagline: "Build AI agents, RAG systems and machine learning models that ship.",
     description:
       "Build intelligent systems and applications using modern machine learning, generative AI and agent frameworks.",
-    metaTitle: "AI & Machine Learning Course Nigeria | Tech Faculty",
+    metaTitle: "AI & Machine Learning Course Nigeria",
     metaDescription:
       "Learn artificial intelligence and machine learning in Nigeria. Python, deep learning, generative AI, RAG and AI agents, with deployment and a job-ready portfolio.",
     keywords: [
@@ -354,7 +354,7 @@ export const departments: Department[] = [
     tagline: "Digital literacy and everyday AI skills for complete beginners.",
     description:
       "Start your digital journey with foundational internet skills, computer confidence and practical AI literacy.",
-    metaTitle: "Computer & AI Literacy Classes Nigeria | Tech Faculty",
+    metaTitle: "Computer & AI Literacy Classes Nigeria",
     metaDescription:
       "Beginner computer and AI classes in Nigeria. Learn internet basics, email, Microsoft Office, ChatGPT and AI tools for work in a short, practical, guided programme.",
     keywords: [
@@ -412,7 +412,7 @@ export const departments: Department[] = [
     tagline: "Grow brands with content, paid ads, SEO and AI-powered marketing.",
     description:
       "Master digital marketing strategy, content creation, paid advertising and analytics across every major platform.",
-    metaTitle: "Digital Marketing Course Nigeria | Tech Faculty",
+    metaTitle: "Digital Marketing Course Nigeria",
     metaDescription:
       "Digital marketing and social media training in Nigeria. Learn content strategy, SEO, Meta and Google Ads, analytics and AI marketing tools, with live client projects.",
     keywords: [
@@ -472,7 +472,7 @@ export const departments: Department[] = [
     tagline: "Graphic design, UI/UX and product design with Figma and Adobe tools.",
     description:
       "Master visual design, user experience and product design principles, from brand identity to shipped interfaces.",
-    metaTitle: "Graphic & UI/UX Design Course Nigeria | Tech Faculty",
+    metaTitle: "Graphic & UI/UX Design Course Nigeria",
     metaDescription:
       "Learn graphic design and UI/UX in Nigeria. Figma, Adobe Photoshop and Illustrator, design systems, prototyping and a portfolio built for hiring and freelance work.",
     keywords: [
@@ -531,7 +531,7 @@ export const departments: Department[] = [
     tagline: "Deploy, automate and secure infrastructure on AWS, Azure and Google Cloud.",
     description:
       "Deploy and manage scalable applications on leading cloud platforms with modern DevOps practice.",
-    metaTitle: "Cloud Computing & DevOps Training Nigeria | Tech Faculty",
+    metaTitle: "Cloud Computing & DevOps Training Nigeria",
     metaDescription:
       "Cloud computing and DevOps training in Nigeria. Learn AWS, Azure, Google Cloud, Docker, Kubernetes and CI/CD with hands-on labs and certification preparation.",
     keywords: [
@@ -590,7 +590,7 @@ export const departments: Department[] = [
     tagline: "Build robots, smart devices and embedded systems with Arduino and Raspberry Pi.",
     description:
       "Build and programme intelligent robots and connected devices, from sensors and circuits to automated systems.",
-    metaTitle: "Robotics & IoT Training Nigeria | Tech Faculty",
+    metaTitle: "Robotics & IoT Training Nigeria",
     metaDescription:
       "Robotics and Internet of Things training in Nigeria. Learn Arduino, Raspberry Pi, sensors, embedded C, automation and edge AI through hands-on hardware projects.",
     keywords: [

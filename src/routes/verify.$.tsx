@@ -5,7 +5,7 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/verify/$")({
   head: () =>
     pageHead({
-      title: "Verify Certificate | Tech Faculty NG",
+      title: "Verify Certificate",
       description:
         "Verify and authenticate certificates issued by Tech Faculty NG using the official online certificate verification system.",
       path: "/verify",

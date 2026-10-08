@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
     pageHead({
       title: "Tech Faculty — Get Certified & Employed in Tech",
       description:
-        "Accredited bootcamps in software engineering, data science, AI and cybersecurity. 6,000+ students trained, 87% employed. Learn in person or online.",
+        "FMSTI-licensed bootcamps in software engineering, data science, AI and cybersecurity. 6,000+ students trained, 87% employed. Learn in person or online.",
       path: "/",
     }),
   component: Index,

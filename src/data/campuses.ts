@@ -16,6 +16,8 @@ export interface Campus {
   lat: number;
   lng: number;
   isHeadquarters?: boolean;
+  /** Campus-level profiles (Google Business Profile, social pages) used as schema.org sameAs */
+  profiles?: string[];
   /** URL slug used at /locations/:slug */
   slug: string;
   /** Short venue label used in copy and metadata */
@@ -42,6 +44,12 @@ export const campuses: Campus[] = [
     lat: 6.0086933,
     lng: 6.9086904,
     isHeadquarters: true,
+    profiles: [
+      "https://www.google.com/maps/place/?q=place_id:ChIJ5ZxSzmi9QxAR23OzR7YbAkM",
+      "https://x.com/NnewiTech",
+      "https://www.facebook.com/NnewiTech",
+      "https://www.instagram.com/nnewitech/",
+    ],
   },
   { id: "awka", slug: "awka", shortVenue: "our Amawbia Junction centre in Awka", tagline: "Anambra State capital campus serving students, civil servants and businesses.", intro: "Awka is Anambra's administrative and student capital, and Awka Tech Faculty at Sea Shelters Plaza, Amawbia Junction is built for exactly that mix: civil servants digitising their work, undergraduates building skills alongside their degrees, and businesses moving their sales online. The free foundation bootcamp, data analytics, web development and digital marketing are the busiest tracks here, with SIWES placements every session.", sectors: ["public sector and civil service", "education", "trading and commerce", "hospitality"], nearbyInstitutions: ["Nnamdi Azikiwe University", "Anambra State Polytechnic Mgbakwu", "Federal College of Education Technical Umunze", "Paul University Awka"], name: "Awka Tech Faculty", city: "Awka", state: "Anambra", zone: "South-East", address: "Sea Shelters Plaza, Amawbia Junction, Opposite MRS Filling Station, Amawbia, Awka, Anambra State", lat: 6.0667, lng: 7.0333 },
   { id: "onitsha", slug: "onitsha", shortVenue: "our Awada centre in Onitsha", tagline: "Standalone Awada centre serving Nigeria's largest commercial hub.", intro: "Our Onitsha centre is a standalone Tech Faculty facility at Anene Close, off Ezeiweka Road, Awada — not inside a Technology Incubation Centre. It exists because Onitsha's traders and distributors are digitising faster than anywhere else in the South-East: WhatsApp storefronts, inventory dashboards and AI customer agents are everyday requests here. Classes run for beginners through to full-stack engineers, with weekend cohorts built around market schedules.", sectors: ["wholesale trading", "distribution and haulage", "pharmaceuticals", "retail e-commerce"], nearbyInstitutions: ["Nnamdi Azikiwe University", "Federal Polytechnic Oko", "Anambra State Polytechnic", "Tansian University"], name: "Awada Tech Faculty (Onitsha)", city: "Onitsha", state: "Anambra", zone: "South-East", address: "No 8 Anene Close, Off Ezeiweka Road, Awada-Obosi, Onitsha, Anambra State", lat: 6.1233161, lng: 6.8035445 },

@@ -69,7 +69,13 @@ const organizationSchema = {
     contactType: "admissions",
     availableLanguage: "English",
   },
-  sameAs: ["https://wa.me/2348068597140"],
+  sameAs: [
+    "https://www.linkedin.com/company/techfaculty",
+    "https://x.com/TechFacultyNG",
+    "https://www.facebook.com/techfacultyng",
+    "https://www.google.com/maps/place/?q=place_id:ChIJodXXtba9QxARPM6Tyyb02a0",
+    "https://wa.me/2348068597140",
+  ],
   areaServed: { "@type": "Place", name: "Nigeria" },
   knowsAbout: [
     "Software Engineering",

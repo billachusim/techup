@@ -48,6 +48,7 @@ const LocationDetail = () => {
     geo: { "@type": "GeoCoordinates", latitude: campus.lat, longitude: campus.lng },
     areaServed: { "@type": "AdministrativeArea", name: `${campus.state} State, Nigeria` },
     keywords: campusKeywords(campus).join(", "),
+    ...(campus.profiles?.length ? { sameAs: campus.profiles } : {}),
   };
 
   const faqSchema = {

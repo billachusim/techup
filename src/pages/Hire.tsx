@@ -89,7 +89,7 @@ const Hire = () => {
           "@type": "Service",
           name: "Hire vetted tech talent",
           serviceType: "Tech talent placement and project delivery",
-          provider: { "@type": "Organization", name: "Tech Faculty", url: "https://techfaculty.ng" },
+          provider: { "@type": "Organization", name: "Tech Faculty NG", url: "https://techfaculty.ng" },
           areaServed: [{ "@type": "Country", name: "Nigeria" }, { "@type": "Place", name: "Africa" }],
           description:
             "Tech Faculty matches businesses in Nigeria and Africa with vetted developers, data analysts, designers, marketers and support talent for remote and on-site work.",

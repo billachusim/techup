@@ -25,7 +25,7 @@ const programs: Program[] = [
     title: "SIWES / Industrial Training",
     badge: "Hot right now",
     description:
-      "Accredited IT placement for university students — choose the Learn & Pay track or the Tutor & Earn track, complete real projects, and get your logbook signed.",
+      "IT placement for university students at an FMSTI-licensed centre — choose the Learn & Pay track or the Tutor & Earn track, complete real projects, and get your logbook signed.",
     image: siwesCover,
     alt: "SIWES and Industrial Training programme at Tech Faculty",
     cta: "Explore SIWES",

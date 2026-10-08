@@ -15,6 +15,9 @@ export const PHYSICAL_FEE = modeFee("physical");
 export const planMinimum = (planId: string): number | undefined =>
   PLAN_PRICING[planId]?.minimumAmount;
 
+/** Most a SIWES/IT student can get off a Learn & Pay course fee (codes are given on request). */
+export const SIWES_MAX_DISCOUNT_PCT = 50;
+
 /** Holiday teen programme fees (2026), as published on the blog. */
 export const TEEN_HOLIDAY_FROM = { amount: 45000, weeks: 4 };
 

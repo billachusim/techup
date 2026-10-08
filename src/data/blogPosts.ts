@@ -59,6 +59,7 @@ The Bootcamp Starter track costs ₦0. It covers Intro to Programming, Intro to 
 
 Computer science and ICT students on industrial training have separate options:
 
+- **On-site SIWES at our campuses:** no separate placement fee. Learn & Pay students pay the regular course fee for their department, with up to 50% off for SIWES and IT students (ask us for your SIWES discount); Tutor & Earn students are paid.
 - **Virtual IT placement:** ₦45,000 for the full duration of the placement.
 - **Logbook review, signing, stamping and two-way courier delivery:** ₦15,000.
 
@@ -276,9 +277,9 @@ At Tech Faculty NG, the [virtual IT placement](/virtual-siwes) costs ₦45,000 f
 
 ## Doing SIWES on site with Tech Faculty NG
 
-Students can also do IT in person at our centres in Nnewi, Awka, Onitsha, Enugu, Owerri, Aba, Abakaliki and other cities. There are two tracks:
+Students can also do IT in person at our centres in Nnewi, Awka, Onitsha, Enugu, Owerri, Aba, Abakaliki and other cities. There is no separate placement fee on site; virtual IT is charged because it includes courier delivery of your logbook. There are two tracks:
 
-- **Learn & Pay:** pay a training fee and get structured, mentored project work across our departments.
+- **Learn & Pay:** structured, mentored project work across our departments, paying your department's regular course fee, with up to 50% off for SIWES students.
 - **Tutor & Earn:** for students already skilled enough to teach, who tutor other learners and earn while completing their IT.
 
 See the [SIWES page](/siwes) for how to apply.
@@ -4440,7 +4441,7 @@ Both fees are paid before work starts. You submit the form, we send payment deta
 | Best for | Students far from our centres, working or part-time students, late placements | Students who want daily in-person supervision and lab access |
 | Location | Anywhere in Nigeria | 22 cities including Nnewi, Onitsha, Owerri, Aba, Enugu, Abakaliki, Abuja |
 | Logbook | Reviewed, signed, stamped and delivered both ways | Signed and stamped in person |
-| Cost | ₦45,000 placement + ₦15,000 logbook service | See the [SIWES tracks page](/siwes) |
+| Cost | ₦45,000 placement + ₦15,000 logbook service | No separate placement fee; Learn & Pay pays the course fee, up to 50% off for SIWES students |
 
 Some students do a hybrid: online weekly work with a few on-site weeks. We write the acceptance letter to match whatever your department approved.
 

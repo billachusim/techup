@@ -15,6 +15,7 @@ Short version with links: https://techfaculty.ng/llms.txt
 - Every department can be studied online, hybrid or in person.
 - Free starting point: Basic Internet & AI Studies (4-6 weeks), no fee.
 - Paid programmes are priced per module in naira and shown in US dollars outside Nigeria. Learning mode adds to the module total: online only is included, hybrid mode +₦12,000, physical classes +₦22,500.
+- On-site SIWES at any campus: no separate placement fee. Learn & Pay students pay the regular course fee for their department, with up to 50% off for SIWES and IT students on request; Tutor & Earn students are paid. Virtual SIWES is charged because it covers courier delivery.
 - Virtual SIWES (online industrial training placement): ₦45,000. Logbook review, signing, stamping and two-way courier delivery: ₦15,000.
 - SIWES Success Kit: ₦4,500.
 - Certificates are verifiable at https://techfaculty.ng/verify.
@@ -474,7 +475,7 @@ Q: Can I study online instead of attending the Nnewi centre?
 A: Yes. Every Tech Faculty department can be studied online, hybrid or fully in person. Online study is included in the course fee, hybrid study with monthly meetups adds ₦12,000, and weekly on-site classes add ₦22,500. Many Nnewi students take lectures online and use the centre for labs and project reviews.
 
 Q: Do you accept SIWES and industrial training students in Nnewi?
-A: Yes. We take SIWES and IT students each session from institutions such as Nnamdi Azikiwe University, Chukwuemeka Odumegwu Ojukwu University, on our Learn & Pay and Tutor & Earn tracks. Virtual SIWES costs ₦45,000, and our ₦15,000 logbook service completes the company sections of your ITF SPE-1 and Form 8 if you cannot attend in person.
+A: Yes. We take SIWES and IT students each session from institutions such as Nnamdi Azikiwe University, Chukwuemeka Odumegwu Ojukwu University, on our Learn & Pay and Tutor & Earn tracks. There is no separate placement fee on site, and SIWES students can get up to 50% off Learn & Pay course fees. Virtual SIWES costs ₦45,000, and our ₦15,000 logbook service completes the company sections of your ITF SPE-1 and Form 8 if you cannot attend in person.
 
 Q: Are there holiday tech programmes for children and teenagers in Nnewi?
 A: Yes. During school holidays we run teen tracks in Digital Creation, Coding, Artificial Intelligence and Cybersecurity for JSS and SSS students in Nnewi. Classes are project-based and supervised, each student ends by presenting what they built, and fees start from ₦45,000 for a 4-week track.
@@ -494,7 +495,7 @@ A: Yes. During school holidays we run teen tracks in Digital Creation, Coding, A
 - Build Apps with Lovable (https://techfaculty.ng/lovable): Tech Faculty recommends Lovable — the AI platform we use to build production web apps. Describe what you want, ship in minutes.
 - Software Products (https://techfaculty.ng/products): Explore the mobile apps built by Tech Faculty and Social Faculty — Dear Claire, Alter Ego, Eavesdrop and AI Clopedia, live on the App Store and Google Play.
 - University Bootcamps & School Partnerships (https://techfaculty.ng/school-collaborations): Bring tech bootcamps to your campus. Tech Faculty NG partners with universities for Python, AI, Data Science training and student certification programs. Licensed by FMSTI via NBTI.
-- SIWES & IT Placement in Nigeria (https://techfaculty.ng/siwes): Do your SIWES/IT placement at Tech Faculty NG, Nnewi. Learn & Pay for mentored real-world experience or Tutor & Earn to teach and get paid. FMSTI-licensed.
+- SIWES & IT Placement in Nigeria (https://techfaculty.ng/siwes): Do your SIWES/IT placement at Tech Faculty NG, with no separate placement fee on site. Learn & Pay for mentored real-world experience or Tutor & Earn to teach and get paid.
 - SIWES Success Kit: Logbook & Report Pack (https://techfaculty.ng/siwes-success-kit): Land and finish your SIWES placement properly: free 7-step checklist plus the SIWES Success Kit — placement email templates, student CV, logbook pack and report outline.
 - Talent Pool: Remote Tech Work in Nigeria (https://techfaculty.ng/talent): Join the Tech Faculty talent pool: build one profile, get matched to paid remote and on-site tech work with businesses across Nigeria and Africa. Free to join.
 - Hire Vetted African Tech Talent (https://techfaculty.ng/talent/pool): Browse the Tech Faculty talent pool: developers, designers, analysts, marketers and project managers across Nigeria and Africa, ready for remote and on-site work.

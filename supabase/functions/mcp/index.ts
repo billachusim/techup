@@ -4510,7 +4510,7 @@ Both fees are paid before work starts. You submit the form, we send payment deta
 | Best for | Students far from our centres, working or part-time students, late placements | Students who want daily in-person supervision and lab access |
 | Location | Anywhere in Nigeria | 21 cities including Nnewi, Onitsha, Owerri, Aba, Enugu, Abakaliki, Abuja |
 | Logbook | Reviewed, signed, stamped and delivered both ways | Signed and stamped in person |
-| Cost | \u20A645,000 placement + \u20A615,000 logbook service | See the [SIWES tracks page](/siwes) |
+| Cost | \u20A645,000 placement + \u20A615,000 logbook service | No separate placement fee; Learn & Pay pays the course fee, up to 50% off for SIWES students |
 
 Some students do a hybrid: online weekly work with a few on-site weeks. We write the acceptance letter to match whatever your department approved.
 

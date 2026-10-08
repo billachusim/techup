@@ -7,7 +7,7 @@ export const Route = createFileRoute("/siwes")({
     pageHead({
       title: "SIWES & IT Placement in Nigeria",
       description:
-        "Do your SIWES/IT placement at Tech Faculty NG for free on site. Learn & Pay for mentored real-world experience or Tutor & Earn to teach and get paid.",
+        "Do your SIWES/IT placement at Tech Faculty NG, with no separate SIWES fee on site. Learn & Pay for mentored real-world experience or Tutor & Earn to teach and get paid.",
       path: "/siwes",
       image: ogImage("siwes.jpg"),
     }),

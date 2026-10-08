@@ -13,7 +13,7 @@
 - Every department can be studied online, hybrid or in person.
 - Free starting point: Basic Internet & AI Studies (4-6 weeks), no fee.
 - Paid programmes are priced per module in naira and shown in US dollars outside Nigeria. Learning mode adds to the module total: online only is included, hybrid mode +₦12,000, physical classes +₦22,500.
-- On-site SIWES at any campus: free (Learn & Pay or Tutor & Earn track). Only Virtual SIWES is charged, because it covers courier delivery.
+- On-site SIWES at any campus: no separate SIWES fee. Learn & Pay students pay the regular course fee for their department; Tutor & Earn students are paid. Virtual SIWES is charged because it covers courier delivery.
 - Virtual SIWES (online industrial training placement): ₦45,000. Logbook review, signing, stamping and two-way courier delivery: ₦15,000.
 - SIWES Success Kit: ₦4,500.
 - Certificates are verifiable at https://techfaculty.ng/verify.
@@ -36,7 +36,7 @@
 
 ## SIWES and industrial training
 
-- [SIWES and IT placement](https://techfaculty.ng/siwes): Free on site at our campuses, on the Learn & Pay or Tutor & Earn track.
+- [SIWES and IT placement](https://techfaculty.ng/siwes): On site at our campuses with no separate SIWES fee: Learn & Pay (regular course fee) or Tutor & Earn (paid).
 - [Virtual SIWES](https://techfaculty.ng/virtual-siwes): Online IT placement for ₦45,000, plus logbook review, signing, stamping and two-way delivery for ₦15,000.
 - [SIWES Success Kit](https://techfaculty.ng/siwes-success-kit): Everything a Nigerian student needs to land, survive and convert a SIWES placement. ₦4,500, with a free placement checklist.
 
@@ -77,7 +77,7 @@
 - [Build Apps with Lovable](https://techfaculty.ng/lovable): Tech Faculty recommends Lovable — the AI platform we use to build production web apps. Describe what you want, ship in minutes.
 - [Software Products](https://techfaculty.ng/products): Explore the mobile apps built by Tech Faculty and Social Faculty — Dear Claire, Alter Ego, Eavesdrop and AI Clopedia, live on the App Store and Google Play.
 - [University Bootcamps & School Partnerships](https://techfaculty.ng/school-collaborations): Bring tech bootcamps to your campus. Tech Faculty NG partners with universities for Python, AI, Data Science training and student certification programs. Licensed by FMSTI via NBTI.
-- [SIWES & IT Placement in Nigeria](https://techfaculty.ng/siwes): Do your SIWES/IT placement at Tech Faculty NG for free on site. Learn & Pay for mentored real-world experience or Tutor & Earn to teach and get paid.
+- [SIWES & IT Placement in Nigeria](https://techfaculty.ng/siwes): Do your SIWES/IT placement at Tech Faculty NG, with no separate SIWES fee on site. Learn & Pay for mentored real-world experience or Tutor & Earn to teach and get paid.
 - [Talent Pool: Remote Tech Work in Nigeria](https://techfaculty.ng/talent): Join the Tech Faculty talent pool: build one profile, get matched to paid remote and on-site tech work with businesses across Nigeria and Africa. Free to join.
 - [Hire Vetted African Tech Talent](https://techfaculty.ng/talent/pool): Browse the Tech Faculty talent pool: developers, designers, analysts, marketers and project managers across Nigeria and Africa, ready for remote and on-site work.
 - [Tech Store: Power Banks & Laptops](https://techfaculty.ng/tech-store): Buy affordable tech in Nigeria: locally assembled Battery Bank power banks, student laptops, laptop accessories, custom phone cases and robotics kits. Order on WhatsApp — nationwide delivery, pay on delivery.

@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "@/lib/router-compat";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -57,10 +56,6 @@ const EventDetail = () => {
   if (!event) {
     return (
       <div className="min-h-screen bg-background">
-        <Helmet>
-          <title>Event not found | Tech Faculty Events</title>
-          <meta name="robots" content="noindex" />
-        </Helmet>
         <Header />
         <main className="pt-32 px-4 container mx-auto max-w-3xl text-center space-y-6">
           <h1 className="text-2xl md:text-3xl font-bold">This event is no longer listed</h1>
@@ -89,16 +84,7 @@ const EventDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={eventUrl(event)} />
-        <meta name="twitter:card" content="summary_large_image" />
-        {event.image_url && <meta property="og:image" content={event.image_url} />}
-        <link rel="canonical" href={eventUrl(event)} />
+      <>
         {(() => {
           const schema = eventSchema(event);
           return schema ? <script type="application/ld+json">{JSON.stringify(schema)}</script> : null;
@@ -113,7 +99,7 @@ const EventDetail = () => {
             { "@type": "ListItem", position: 3, name: event.title, item: eventUrl(event) },
           ],
         })}</script>
-      </Helmet>
+      </>
       <Header />
       <main className="pt-24 pb-20 px-4">
         <div className="container mx-auto max-w-3xl space-y-8">

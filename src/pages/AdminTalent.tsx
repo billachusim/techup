@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { notifyMarketplaceEvent } from "@/lib/marketplace-emails.functions";
 import { listSlackChannels, syncSlackForMatch } from "@/lib/slack.functions";
 import { useCallback, useEffect, useState } from "react";
@@ -431,10 +430,6 @@ const AdminTalent = () => {
   if (!isStaff) {
     return (
       <div className="min-h-screen bg-background">
-        <Helmet>
-          <title>Talent admin | Tech Faculty</title>
-          <meta name="robots" content="noindex, nofollow" />
-        </Helmet>
         <Header />
         <main className="container mx-auto max-w-lg px-4 pb-20 pt-28 text-center">
           <h1 className="text-2xl font-bold">Staff access only</h1>
@@ -459,10 +454,6 @@ const AdminTalent = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Talent admin | Tech Faculty</title>
-        <meta name="robots" content="noindex, nofollow" />
-      </Helmet>
       <Header />
 
       <main className="pt-20">

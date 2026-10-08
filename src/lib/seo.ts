@@ -12,6 +12,11 @@ export interface PageHeadOptions {
   /** "website" (default) or "article" etc. */
   type?: string;
   noindex?: boolean;
+  /** With noindex: still let crawlers follow the page's links. */
+  follow?: boolean;
+  /** ISO dates for articles (article:published_time / modified_time). */
+  publishedTime?: string;
+  modifiedTime?: string;
 }
 
 /**
@@ -27,7 +32,12 @@ export function pageHead(opts: PageHeadOptions) {
       { title: opts.title },
       { name: "description", content: opts.description },
       ...(opts.noindex
-        ? [{ name: "robots", content: "noindex, nofollow" }]
+        ? [
+            {
+              name: "robots",
+              content: opts.follow ? "noindex, follow" : "noindex, nofollow",
+            },
+          ]
         : []),
       { property: "og:title", content: opts.title },
       { property: "og:description", content: opts.description },
@@ -38,6 +48,12 @@ export function pageHead(opts: PageHeadOptions) {
       { name: "twitter:title", content: opts.title },
       { name: "twitter:description", content: opts.description },
       { name: "twitter:image", content: image },
+      ...(opts.publishedTime
+        ? [{ property: "article:published_time", content: opts.publishedTime }]
+        : []),
+      ...(opts.modifiedTime
+        ? [{ property: "article:modified_time", content: opts.modifiedTime }]
+        : []),
     ],
     links: [{ rel: "canonical", href: url }],
   };

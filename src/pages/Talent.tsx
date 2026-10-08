@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "@/lib/router-compat";
 import { useQuery } from "@tanstack/react-query";
 import { UserCheck, Sparkles, Briefcase, Building2, ArrowRight, ShieldCheck } from "lucide-react";
@@ -40,17 +39,7 @@ const Talent = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Tech Faculty Talent Pool | Remote Tech Work in Nigeria</title>
-        <meta
-          name="description"
-          content="Join the Tech Faculty talent pool: build one profile, get matched to paid remote and on-site tech work with businesses across Nigeria and Africa. Free to join."
-        />
-        <meta property="og:title" content="Tech Faculty Talent Pool | Remote Tech Work in Nigeria" />
-        <meta property="og:description" content="One profile, matched to paid tech work with businesses across Nigeria and Africa." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://techfaculty.ng/talent" />
-        <link rel="canonical" href="https://techfaculty.ng/talent" />
+      <>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebPage",
@@ -60,7 +49,7 @@ const Talent = () => {
             "A vetted pool of Nigerian and African tech talent matched to paid remote and on-site work for local and international businesses.",
           provider: { "@type": "Organization", name: "Tech Faculty", url: "https://techfaculty.ng" },
         })}</script>
-      </Helmet>
+      </>
       <Header />
 
       <main className="pt-20">

@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import { Link } from "@/lib/router-compat";
 import { CheckCircle2, MessageCircle } from "lucide-react";
@@ -84,17 +83,7 @@ const Hire = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Hire Vetted Tech Talent in Nigeria | Tech Faculty</title>
-        <meta
-          name="description"
-          content="Tell us what your business needs and we match you with vetted Nigerian tech talent — developers, data analysts, designers, marketers and support — remote or on-site."
-        />
-        <meta property="og:title" content="Hire Vetted Tech Talent in Nigeria | Tech Faculty" />
-        <meta property="og:description" content="Send a brief and get matched with vetted Nigerian tech talent in 48 hours." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://techfaculty.ng/hire" />
-        <link rel="canonical" href="https://techfaculty.ng/hire" />
+      <>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Service",
@@ -105,7 +94,7 @@ const Hire = () => {
           description:
             "Tech Faculty matches businesses in Nigeria and Africa with vetted developers, data analysts, designers, marketers and support talent for remote and on-site work.",
         })}</script>
-      </Helmet>
+      </>
       <Header />
 
       <main className="pt-20">

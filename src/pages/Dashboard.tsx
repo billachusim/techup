@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { useState, useEffect } from "react";
 import JoinWhatsAppButton from "@/components/JoinWhatsAppButton";
 import { COMMUNITY_WHATSAPP_URL } from "@/lib/whatsapp";
@@ -379,11 +378,6 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Dashboard - Tech Faculty NG</title>
-        <meta name="description" content="Access your Tech Faculty student dashboard. Track course progress, view upcoming classes, and manage your certifications." />
-        <meta name="robots" content="noindex" />
-      </Helmet>
       <Header />
       <main className="pt-20">
         <section className="py-16 px-4">

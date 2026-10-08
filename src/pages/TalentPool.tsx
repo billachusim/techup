@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { Link } from "@/lib/router-compat";
 import { useQuery } from "@tanstack/react-query";
 import { MapPin, MessageCircle, Search, ShieldCheck, Sparkles, BriefcaseBusiness } from "lucide-react";
@@ -104,14 +103,7 @@ const TalentPool = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Hire Vetted African Tech Talent | Tech Faculty</title>
-        <meta name="description" content="Browse the Tech Faculty talent pool: developers, designers, analysts, marketers and project managers across Nigeria and Africa, ready for remote and on-site work." />
-        <meta property="og:title" content="Hire Vetted African Tech Talent | Tech Faculty" />
-        <meta property="og:description" content="Search skilled African tech talent by skill, city and availability, then ask us for an introduction." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={canonical} />
-        <link rel="canonical" href={canonical} />
+      <>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "CollectionPage",
@@ -129,7 +121,7 @@ const TalentPool = () => {
             })),
           },
         })}</script>
-      </Helmet>
+      </>
       <Header />
 
       <main className="pt-20">

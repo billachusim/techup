@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import StatsBar from "@/components/StatsBar";
@@ -102,16 +101,9 @@ const courseSchema = {
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Tech Faculty — Get Certified & Employed in Tech</title>
-        <meta name="description" content="Accredited bootcamps in software engineering, data science, AI and cybersecurity. 6,000+ students trained, 87% employed. Learn in person or online." />
-        <meta property="og:title" content="Tech Faculty — World-Class Tech Training" />
-        <meta property="og:description" content="Over 6,000 students trained. 87% employment rate. Accredited bootcamps in Software Engineering, Data Science, Cybersecurity & AI. Training professionals worldwide." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://techfaculty.ng/" />
-        <link rel="canonical" href="https://techfaculty.ng/" />
+      <>
         <script type="application/ld+json">{JSON.stringify(courseSchema)}</script>
-      </Helmet>
+      </>
       <Header />
       <main>
         <Hero />

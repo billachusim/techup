@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { Link } from "@/lib/router-compat";
 import { ArrowRight, Building2, Globe2, MapPin, MessageCircle, Search } from "lucide-react";
 import Header from "@/components/Header";
@@ -76,22 +75,9 @@ const Hubs = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Tech Hubs in Nigeria & Africa — Directory by City</title>
-        <meta
-          name="description"
-          content="Find tech hubs, innovation centres and training institutes across Nigeria and Africa by city and course area. Tell us what you want to study and we help you enrol."
-        />
-        <meta property="og:title" content="Tech Hubs in Nigeria & Africa — Directory by City" />
-        <meta
-          property="og:description"
-          content="A curated directory of tech hubs and training institutes across Nigeria and Africa, searchable by city and course area."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={CANONICAL} />
-        <link rel="canonical" href={CANONICAL} />
+      <>
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-      </Helmet>
+      </>
 
       <Header />
 

@@ -152,7 +152,8 @@ const DYNAMIC: Record<string, Resolver | null> = {
     (
       await fetchRows<{ slug: string; updated_at: string }>(
         "events",
-        "select=slug,updated_at&is_expired=eq.false&order=updated_at.desc&limit=500",
+        // Own events only: third-party listings are noindexed on the page.
+        "select=slug,updated_at&is_expired=eq.false&source_platform=eq.Tech%20Faculty&order=updated_at.desc&limit=500",
       )
     ).map((e) => ({ path: `/events/${e.slug}`, lastmod: day(e.updated_at) })),
   "/talent/roles/$slug": async () =>

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "@/lib/router-compat";
 import {
   ArrowRight,
@@ -94,16 +93,9 @@ const HubDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{title.length > 60 ? `${hub.city} Tech Hub — ${hub.name.slice(0, 40)}` : title}</title>
-        <meta name="description" content={description.slice(0, 160)} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description.slice(0, 160)} />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={canonical} />
-        <link rel="canonical" href={canonical} />
+      <>
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-      </Helmet>
+      </>
 
       <Header />
 

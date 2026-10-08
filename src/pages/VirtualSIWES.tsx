@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -47,21 +46,7 @@ const VirtualSIWES = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{TITLE}</title>
-        <meta name="description" content={DESCRIPTION} />
-        <meta
-          name="keywords"
-          content="virtual SIWES, online SIWES Nigeria, online industrial training Nigeria, SIWES logbook signing, IT logbook stamp, remote IT placement Nigeria"
-        />
-        <link rel="canonical" href={URL} />
-        <meta property="og:title" content={TITLE} />
-        <meta property="og:description" content={DESCRIPTION} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={URL} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={TITLE} />
-        <meta name="twitter:description" content={DESCRIPTION} />
+      <>
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -128,7 +113,7 @@ const VirtualSIWES = () => {
             ],
           })}
         </script>
-      </Helmet>
+      </>
 
       <Header />
 

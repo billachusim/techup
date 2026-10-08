@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link, useParams, Navigate } from "@/lib/router-compat";
 import { useMemo } from "react";
 import Header from "@/components/Header";
@@ -58,18 +57,10 @@ const BlogCategory = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{category.title}</title>
-        <meta name="description" content={category.description} />
-        <meta name="keywords" content={category.keywords.join(", ")} />
-        <meta property="og:title" content={category.title} />
-        <meta property="og:description" content={category.description} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={url} />
-        <link rel="canonical" href={url} />
+      <>
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(collectionSchema)}</script>
-      </Helmet>
+      </>
       <Header />
       <main className="pt-20">
         {/* Breadcrumb + back */}

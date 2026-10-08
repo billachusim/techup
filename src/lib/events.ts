@@ -28,7 +28,15 @@ export type TechEvent = {
   tags: string[];
   is_featured: boolean;
   last_seen_at: string;
+  is_expired?: boolean;
 };
+
+/** Events we organise ourselves, as opposed to listings gathered from other organisers. */
+export const OWN_EVENT_SOURCE = "Tech Faculty";
+
+export function isOwnEvent(event: Pick<TechEvent, "source_platform">) {
+  return event.source_platform === OWN_EVENT_SOURCE;
+}
 
 export const EVENT_CATEGORIES = [
   { value: "CONFERENCE", label: "Conferences" },

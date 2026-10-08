@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { Award, BadgeCheck, Search, ShieldCheck } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -65,21 +64,6 @@ const Verify = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Helmet>
-        <title>Verify Certificate | Tech Faculty NG</title>
-        <meta
-          name="description"
-          content="Verify and authenticate certificates issued by Tech Faculty NG using the official online certificate verification system."
-        />
-        <meta property="og:title" content="Verify Certificate | Tech Faculty NG" />
-        <meta
-          property="og:description"
-          content="Use the official Tech Faculty NG certificate verification system to confirm certificate authenticity online."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://techfaculty.ng/verify" />
-        <link rel="canonical" href="https://techfaculty.ng/verify" />
-      </Helmet>
 
       <Header />
 

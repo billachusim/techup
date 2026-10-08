@@ -9,7 +9,6 @@ import {
   type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { Suspense, lazy, useEffect, useState, type ReactNode } from "react";
-import { HelmetProvider } from "react-helmet-async";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
@@ -192,19 +191,16 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
-    <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <UserProvider>
-          <CurrencyProvider>
-            <TooltipProvider>
-              <DeferredToasters />
-              <Outlet />
-
-            </TooltipProvider>
-          </CurrencyProvider>
-        </UserProvider>
-      </QueryClientProvider>
-    </HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <UserProvider>
+        <CurrencyProvider>
+          <TooltipProvider>
+            <DeferredToasters />
+            <Outlet />
+          </TooltipProvider>
+        </CurrencyProvider>
+      </UserProvider>
+    </QueryClientProvider>
   );
 }
 

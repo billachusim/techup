@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CredibilityBanner from "@/components/CredibilityBanner";
@@ -64,14 +63,7 @@ const benefits = [
 const SchoolCollaborations = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>School Collaborations - Tech Faculty NG | University Bootcamps</title>
-        <meta name="description" content="Bring tech bootcamps to your campus. Tech Faculty NG partners with universities for Python, AI, Data Science training and student certification programs. Licensed by FMSTI via NBTI." />
-        <meta property="og:title" content="School Collaborations - Tech Faculty NG" />
-        <meta property="og:description" content="University bootcamp partnerships — Python, AI, Data Science training and student certifications. Licensed by FMSTI via NBTI." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://techfaculty.ng/school-collaborations" />
-        <link rel="canonical" href="https://techfaculty.ng/school-collaborations" />
+      <>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Service",
@@ -82,7 +74,7 @@ const SchoolCollaborations = () => {
           "serviceType": ["University Bootcamps", "Curriculum Integration", "Student Certification"],
           "url": "https://techfaculty.ng/school-collaborations"
         })}</script>
-      </Helmet>
+      </>
       <Header />
       <main className="pt-20">
         {/* Hero */}

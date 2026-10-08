@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -64,14 +63,7 @@ const whatYouGet = [
 const SIWES = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>SIWES & Industrial Training - Tech Faculty NG | IT Placement</title>
-        <meta name="description" content="Do your SIWES/IT placement at Tech Faculty NG, Nnewi. Learn & Pay for mentored real-world experience or Tutor & Earn to teach and get paid. FMSTI-licensed." />
-        <meta property="og:title" content="SIWES & Industrial Training - Tech Faculty NG" />
-        <meta property="og:description" content="SIWES & IT placements — Learn & Pay for real-world experience or Tutor & Earn while completing your industrial training in Nnewi." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://techfaculty.ng/siwes" />
-        <link rel="canonical" href="https://techfaculty.ng/siwes" />
+      <>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "EducationalOccupationalProgram",
@@ -93,7 +85,7 @@ const SIWES = () => {
           ],
           "url": "https://techfaculty.ng/siwes"
         })}</script>
-      </Helmet>
+      </>
       <Header />
       <main className="pt-20">
         {/* Hero */}

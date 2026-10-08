@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { Link } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -156,31 +155,12 @@ const TechStore = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Tech Store Nigeria — Power Banks, Laptops & Accessories | Tech Faculty</title>
-        <meta
-          name="description"
-          content="Buy affordable tech in Nigeria: locally assembled Battery Bank power banks, student laptops, laptop accessories, custom phone cases and robotics kits. Order on WhatsApp — nationwide delivery, pay on delivery."
-        />
-        <link rel="canonical" href={CANONICAL} />
-        <meta property="og:title" content="Tech Store Nigeria — Power Banks, Laptops & Accessories" />
-        <meta
-          property="og:description"
-          content="Affordable tech products in Naira, assembled and printed in Nigeria. Order on WhatsApp with nationwide delivery and pay on delivery."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={CANONICAL} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Tech Store Nigeria — Power Banks, Laptops & Accessories" />
-        <meta
-          name="twitter:description"
-          content="Buy power banks, laptops, accessories and robotics kits in Naira. Order on WhatsApp, pay on delivery, nationwide."
-        />
+      <>
         <script type="application/ld+json">{JSON.stringify(storeSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(itemListSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
-      </Helmet>
+      </>
 
       <Header />
 

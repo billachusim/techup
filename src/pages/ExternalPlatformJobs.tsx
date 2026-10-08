@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "@/lib/router-compat";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ExternalLink, Search, UserPlus } from "lucide-react";
@@ -38,7 +37,6 @@ const ExternalPlatformJobs = () => {
   if (!platform) {
     return (
       <div className="min-h-screen bg-background">
-        <Helmet><title>Platform not found | Tech Faculty</title><meta name="robots" content="noindex" /></Helmet>
         <Header />
         <main className="container mx-auto max-w-3xl px-4 pb-20 pt-32 text-center">
           <h1 className="text-3xl font-bold">Platform not found</h1>
@@ -54,15 +52,6 @@ const ExternalPlatformJobs = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{`${title} | Tech Faculty`.slice(0, 60)}</title>
-        <meta name="description" content={description} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={`https://techfaculty.ng/careers/platforms/${platform.slug}`} />
-        <link rel="canonical" href={`https://techfaculty.ng/careers/platforms/${platform.slug}`} />
-      </Helmet>
       <Header />
       <main className="px-4 pb-20 pt-24">
         <div className="container mx-auto max-w-6xl">

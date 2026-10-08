@@ -13,7 +13,8 @@ export const Route = createFileRoute("/talent/roles/$slug")({
         description: role.summary.slice(0, 158),
       };
     } catch {
-      return null;
+      // A failed lookup isn't a missing page: keep the generic, indexable head.
+      return undefined;
     }
   },
   head: ({ loaderData, params }) =>
@@ -24,6 +25,7 @@ export const Route = createFileRoute("/talent/roles/$slug")({
         "View this open role on the Tech Faculty talent marketplace.",
       path: `/talent/roles/${params.slug}`,
       type: "article",
+      noindex: loaderData === null,
     }),
   component: TalentRoleDetail,
 });

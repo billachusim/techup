@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "@/lib/router-compat";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Building2, Globe, MapPin, ExternalLink } from "lucide-react";
@@ -40,10 +39,6 @@ const JobDetail = () => {
   if (!job) {
     return (
       <div className="min-h-screen bg-background">
-        <Helmet>
-          <title>Job not found | Tech Faculty Careers</title>
-          <meta name="robots" content="noindex" />
-        </Helmet>
         <Header />
         <main className="pt-32 px-4 container mx-auto max-w-3xl text-center space-y-6">
           <h1 className="text-2xl md:text-3xl font-bold">This role is no longer listed</h1>
@@ -64,14 +59,7 @@ const JobDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>{`${title} | Tech Faculty Jobs`.slice(0, 60)}</title>
-        <meta name="description" content={description} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://techfaculty.ng/careers/jobs/${job.slug}`} />
-        <link rel="canonical" href={`https://techfaculty.ng/careers/jobs/${job.slug}`} />
+      <>
         <script type="application/ld+json">{JSON.stringify(jobPostingSchema(job))}</script>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
@@ -82,7 +70,7 @@ const JobDetail = () => {
             { "@type": "ListItem", position: 3, name: title, item: `https://techfaculty.ng/careers/jobs/${job.slug}` },
           ],
         })}</script>
-      </Helmet>
+      </>
       <Header />
       <main className="pt-24 pb-20 px-4">
         <article className="container mx-auto max-w-3xl space-y-8">

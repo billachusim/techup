@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "@/lib/router-compat";
-import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, LayoutDashboard, ArrowRight, Loader2, Clock, XCircle } from "lucide-react";
@@ -60,10 +59,6 @@ const PaymentSuccess = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Payment Status — Tech Faculty</title>
-        <meta name="robots" content="noindex" />
-      </Helmet>
       <Header />
       <main className="pt-24 pb-16 px-4">
         <div className="container mx-auto max-w-lg">

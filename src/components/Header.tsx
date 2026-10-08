@@ -13,9 +13,11 @@ import {
   LogOut,
   MapPin,
   Menu,
+  ShieldCheck,
   ShoppingBag,
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
+import { useIsStaff } from "@/hooks/useIsStaff";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -70,6 +72,8 @@ const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const { isLoggedIn, logout } = useUser();
+  // Only staff accounts see the Admin link; the admin pages check the role again.
+  const { isStaff } = useIsStaff();
 
   useEffect(() => {
     let ticking = false;
@@ -187,6 +191,13 @@ const Header = () => {
               <CurrencyToggle />
             {isLoggedIn ? (
               <>
+                {isStaff && (
+                  <Button asChild size="sm" variant="ghost" className={`gap-1 ${isActive("/admin") ? "bg-muted font-semibold" : ""}`}>
+                    <Link to="/admin">
+                      <ShieldCheck size={14} /> Admin
+                    </Link>
+                  </Button>
+                )}
                 <Button asChild size="sm" variant="ghost" className="gap-1">
                   <Link to="/dashboard">
                     <LayoutDashboard size={14} /> Dashboard
@@ -271,6 +282,13 @@ const Header = () => {
 
                   {isLoggedIn ? (
                     <div className="space-y-2 border-t border-border pt-4">
+                      {isStaff && (
+                        <Button asChild variant="outline" className="w-full justify-start gap-2">
+                          <Link to="/admin" onClick={() => setMobileOpen(false)}>
+                            <ShieldCheck size={16} /> Admin
+                          </Link>
+                        </Button>
+                      )}
                       <Button asChild variant="outline" className="w-full justify-start gap-2">
                         <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
                           <LayoutDashboard size={16} /> Dashboard

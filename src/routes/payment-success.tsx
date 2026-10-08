@@ -5,8 +5,8 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/payment-success")({
   head: () =>
     pageHead({
-      title: "Payment Successful — Tech Faculty",
-      description: "Your Tech Faculty payment was received successfully.",
+      title: "Payment Status — Tech Faculty",
+      description: "Check whether your Tech Faculty payment has been confirmed.",
       path: "/payment-success",
       noindex: true,
     }),

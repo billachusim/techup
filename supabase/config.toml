@@ -24,3 +24,7 @@ verify_jwt = false
 
 [functions.sitemap]
 verify_jwt = false
+
+# Flutterwave calls this without a Supabase JWT; it checks verif-hash instead.
+[functions.flutterwave-webhook]
+verify_jwt = false

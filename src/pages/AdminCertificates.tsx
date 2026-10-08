@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Award, LogOut, ShieldCheck } from "lucide-react";
+import { Award, Loader2, ShieldCheck } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -8,17 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-
-const ADMIN_EMAIL = "nnewitech@gmail.com";
-const ADMIN_PASSWORD = "nnewitech7242";
-const SESSION_KEY = "tfng_admin_cert_session";
+import { useIsStaff } from "@/hooks/useIsStaff";
+import { getSupabase } from "@/integrations/supabase/lazy";
 
 const AdminCertificates = () => {
   const { toast } = useToast();
-  const [authed, setAuthed] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // Enforced again by the admin-add-certificate function, which checks the admin role
+  const { loading, isAdmin } = useIsStaff();
 
   const [form, setForm] = useState({
     certificateNumber: "",
@@ -31,27 +27,6 @@ const AdminCertificates = () => {
   });
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    if (sessionStorage.getItem(SESSION_KEY) === "1") setAuthed(true);
-  }, []);
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email.trim().toLowerCase() === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-      sessionStorage.setItem(SESSION_KEY, "1");
-      setAuthed(true);
-    } else {
-      toast({ title: "Invalid credentials", description: "Email or password is incorrect.", variant: "destructive" });
-    }
-  };
-
-  const handleLogout = () => {
-    sessionStorage.removeItem(SESSION_KEY);
-    setAuthed(false);
-    setEmail("");
-    setPassword("");
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.certificateNumber || !form.studentName || !form.courseName || !form.dateIssued) {
@@ -59,8 +34,9 @@ const AdminCertificates = () => {
       return;
     }
     setSubmitting(true);
+    const supabase = await getSupabase();
     const { data, error } = await supabase.functions.invoke("admin-add-certificate", {
-      body: { email: ADMIN_EMAIL, password: ADMIN_PASSWORD, ...form },
+      body: form,
     });
     setSubmitting(false);
 
@@ -108,30 +84,18 @@ const AdminCertificates = () => {
             </p>
           </div>
 
-          {!authed ? (
+          {loading ? (
+            <Loader2 className="mx-auto h-6 w-6 animate-spin" />
+          ) : !isAdmin ? (
             <Card>
-              <CardHeader>
-                <CardTitle>Admin sign-in</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleLogin} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
-                    <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                  </div>
-                  <Button type="submit" className="w-full">Sign in</Button>
-                </form>
+              <CardContent className="pt-6 text-center text-sm text-muted-foreground">
+                This page is for Tech Faculty admins. Sign in with an admin account to add certificates.
               </CardContent>
             </Card>
           ) : (
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="flex items-center gap-2"><Award className="h-5 w-5 text-primary" /> Add new certificate</CardTitle>
-                <Button variant="ghost" size="sm" onClick={handleLogout}><LogOut className="h-4 w-4 mr-1" /> Sign out</Button>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">

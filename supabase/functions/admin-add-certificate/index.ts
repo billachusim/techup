@@ -6,19 +6,40 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const ADMIN_EMAIL = "nnewitech@gmail.com";
-const ADMIN_PASSWORD = "nnewitech7242";
-
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+
+    // Only signed-in admins may add certificates.
+    const token = req.headers.get("Authorization")?.replace(/^Bearer\s+/i, "") ?? "";
+    const { data: auth } = token ? await supabase.auth.getUser(token) : { data: { user: null } };
+    if (!auth.user) {
+      return new Response(JSON.stringify({ error: "Please sign in with an admin account" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const { data: roles } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", auth.user.id)
+      .eq("role", "admin");
+    if (!roles || roles.length === 0) {
+      return new Response(JSON.stringify({ error: "Admins only" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const body = await req.json();
     const {
-      email,
-      password,
       certificateNumber,
       studentName,
       courseName,
@@ -28,24 +49,12 @@ serve(async (req) => {
       facultyId,
     } = body ?? {};
 
-    if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
-      return new Response(JSON.stringify({ error: "Invalid admin credentials" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
     if (!certificateNumber || !studentName || !courseName || !dateIssued) {
       return new Response(
         JSON.stringify({ error: "certificateNumber, studentName, courseName, and dateIssued are required" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
-
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
 
     const normalizedNumber = String(certificateNumber).trim().toUpperCase();
 

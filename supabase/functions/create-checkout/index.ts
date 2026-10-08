@@ -1,11 +1,10 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { priceSelection } from "../_shared/pricing.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
-
-type LineItem = { name: string; price: number };
 
 const jsonResponse = (body: Record<string, unknown>, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -25,11 +24,12 @@ serve(async (req) => {
     }
 
     const {
+      planId,
       planName,
       facultyId,
-      courses,
-      benefits,
-      learningMode,
+      courseIds,
+      benefitIds,
+      learningModeId,
       currencyCode: rawCurrencyCode,
       discountCode,
       successUrl,
@@ -37,25 +37,18 @@ serve(async (req) => {
 
     const currencyCode = (rawCurrencyCode || 'NGN').toUpperCase();
 
-    let totalAmount = 0;
-
-    if (courses && courses.length > 0) {
-      for (const course of courses) {
-        totalAmount += course.price;
-      }
+    // Prices come from the shared catalogue, never from the request.
+    const priced = priceSelection(
+      String(planId ?? ''),
+      Array.isArray(courseIds) ? courseIds.map(String) : [],
+      Array.isArray(benefitIds) ? benefitIds.map(String) : [],
+      learningModeId ? String(learningModeId) : null,
+    );
+    if (!priced.ok) {
+      return jsonResponse({ error: priced.error }, 400);
     }
-
-    if (learningMode && learningMode.price > 0) {
-      totalAmount += learningMode.price;
-    }
-
-    if (benefits && benefits.length > 0) {
-      for (const benefit of benefits) {
-        if (benefit.price > 0) {
-          totalAmount += benefit.price;
-        }
-      }
-    }
+    const { courses, benefits, learningMode } = priced;
+    let totalAmount = priced.total;
 
     if (totalAmount <= 0) {
       return jsonResponse({ error: 'No items selected for checkout' }, 400);
@@ -75,9 +68,9 @@ serve(async (req) => {
       : totalAmount;
 
     const itemNames: string[] = [];
-    if (courses) courses.forEach((c: LineItem) => itemNames.push(c.name));
+    courses.forEach((c) => itemNames.push(c.name));
     if (learningMode?.name) itemNames.push(`Mode: ${learningMode.name}`);
-    if (benefits) benefits.forEach((b: LineItem) => { if (b.price > 0) itemNames.push(b.name); });
+    benefits.forEach((b) => { if (b.price > 0) itemNames.push(b.name); });
 
     const txRef = `TF-${facultyId}-${Date.now()}`;
 

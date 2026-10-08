@@ -23,6 +23,7 @@ import {
   virtualFaqs,
 } from "../src/data/virtualSiwes";
 import { LEARNING_MODES, PLAN_PRICING } from "../supabase/functions/_shared/pricing";
+import { SIWES_MAX_DISCOUNT_PCT } from "../src/lib/fees";
 
 const BASE_URL = "https://techfaculty.ng";
 const BRAND = "Tech Faculty NG";
@@ -130,7 +131,7 @@ const facts = [
   "Every department can be studied online, hybrid or in person.",
   ...(freeDept ? [`Free starting point: ${freeDept.title} (${freeDept.duration}), no fee.`] : []),
   `Paid programmes are priced per module in naira and shown in US dollars outside Nigeria. Learning mode adds to the module total: online only is included, ${modeSurcharges}.`,
-  "On-site SIWES at any campus: no separate SIWES fee. Learn & Pay students pay the regular course fee for their department; Tutor & Earn students are paid. Virtual SIWES is charged because it covers courier delivery.",
+  `On-site SIWES at any campus: no separate placement fee. Learn & Pay students pay the regular course fee for their department, with up to ${SIWES_MAX_DISCOUNT_PCT}% off for SIWES and IT students on request; Tutor & Earn students are paid. Virtual SIWES is charged because it covers courier delivery.`,
   `Virtual SIWES (online industrial training placement): ${naira(VIRTUAL_SIWES.placementPriceNGN)}. Logbook review, signing, stamping and two-way courier delivery: ${naira(VIRTUAL_SIWES.logbookPriceNGN)}.`,
   `${SUCCESS_KIT.name}: ${naira(SUCCESS_KIT.priceNGN)}.`,
   `Certificates are verifiable at ${url("/verify")}.`,
@@ -165,7 +166,7 @@ const llms = [
   "",
   "## SIWES and industrial training",
   "",
-  `- [SIWES and IT placement](${url("/siwes")}): On site at our campuses with no separate SIWES fee: Learn & Pay (regular course fee) or Tutor & Earn (paid).`,
+  `- [SIWES and IT placement](${url("/siwes")}): On site at our campuses with no separate placement fee: Learn & Pay (regular course fee, up to ${SIWES_MAX_DISCOUNT_PCT}% off for SIWES students) or Tutor & Earn (paid).`,
   `- [Virtual SIWES](${url("/virtual-siwes")}): Online IT placement for ${naira(VIRTUAL_SIWES.placementPriceNGN)}, plus logbook review, signing, stamping and two-way delivery for ${naira(VIRTUAL_SIWES.logbookPriceNGN)}.`,
   `- [${SUCCESS_KIT.name}](${url("/siwes-success-kit")}): ${SUCCESS_KIT.tagline} ${naira(SUCCESS_KIT.priceNGN)}, with a free placement checklist.`,
   "",

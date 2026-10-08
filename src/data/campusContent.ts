@@ -1,6 +1,6 @@
 import type { Campus } from "@/data/campuses";
 import { VIRTUAL_SIWES } from "@/data/virtualSiwes";
-import { HYBRID_FEE, PHYSICAL_FEE, TEEN_HOLIDAY_FROM, naira } from "@/lib/fees";
+import { HYBRID_FEE, PHYSICAL_FEE, SIWES_MAX_DISCOUNT_PCT, TEEN_HOLIDAY_FROM, naira } from "@/lib/fees";
 
 export interface CampusFaq {
   q: string;
@@ -58,7 +58,7 @@ export function campusFaqs(c: Campus): CampusFaq[] {
     },
     {
       q: `Do you accept SIWES and industrial training students in ${c.city}?`,
-      a: `Yes. We take SIWES and IT students each session${inst ? ` from institutions such as ${inst}` : ""}, on our Learn & Pay and Tutor & Earn tracks. There is no separate SIWES fee on site. Virtual SIWES costs ${naira(VIRTUAL_SIWES.placementPriceNGN)}, and our ${naira(VIRTUAL_SIWES.logbookPriceNGN)} logbook service completes the company sections of your ITF SPE-1 and Form 8 if you cannot attend in person.`,
+      a: `Yes. We take SIWES and IT students each session${inst ? ` from institutions such as ${inst}` : ""}, on our Learn & Pay and Tutor & Earn tracks. There is no separate placement fee on site, and SIWES students can get up to ${SIWES_MAX_DISCOUNT_PCT}% off Learn & Pay course fees. Virtual SIWES costs ${naira(VIRTUAL_SIWES.placementPriceNGN)}, and our ${naira(VIRTUAL_SIWES.logbookPriceNGN)} logbook service completes the company sections of your ITF SPE-1 and Form 8 if you cannot attend in person.`,
     },
     {
       q: `Are there holiday tech programmes for children and teenagers in ${c.city}?`,

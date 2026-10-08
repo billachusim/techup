@@ -32,6 +32,8 @@ import {
 } from "@/data/techHubs";
 import { campuses, getCampusBySlug } from "@/data/campuses";
 import { getCityGuideForCity } from "@/data/internalLinks";
+import { VIRTUAL_SIWES } from "@/data/virtualSiwes";
+import { HYBRID_FEE, LOWEST_PAID_PLAN, PHYSICAL_FEE, naira } from "@/lib/fees";
 
 const HubDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -54,21 +56,21 @@ const HubDetail = () => {
   const faqs = [
     {
       q: `What can I study in ${hub.city}?`,
-      a: `In ${hub.city} the course areas most commonly available are ${hub.courseAreas.join(", ")}. Tech Faculty teaches all of these as structured tracks with certification, and can run them online, hybrid or in person depending on what is nearest to you.`,
+      a: `In ${hub.city} the course areas most commonly available are ${hub.courseAreas.join(", ")}. Tech Faculty NG teaches all of these as structured tracks with a verifiable certificate. Online study is included in the fee, hybrid adds ${naira(HYBRID_FEE)} and weekly on-site classes add ${naira(PHYSICAL_FEE)}.`,
     },
     {
       q: `Is Tech Faculty the same as ${hub.name}?`,
       a: hub.isTechFaculty
-        ? `Yes — this is one of our own campuses. You enrol with Tech Faculty directly and study on site.`
-        : `No. ${hub.name} is an independent hub we list so students can see every option in ${hub.city}. Tech Faculty is a licensed training institute that advises you, teaches the track and issues the certificate. We do not claim affiliation with hubs we list.`,
+        ? `Yes. ${hub.name} is one of our own campuses, so you enrol with Tech Faculty NG directly, study on site with our mentors and receive a Tech Faculty certificate that employers can verify online. You can also take the same departments online or hybrid if you cannot attend every class in person.`
+        : `No. ${hub.name} is an independent hub we list so students can compare every option in ${hub.city}, and we do not claim any affiliation with it. Tech Faculty NG is a separate licensed training institute that advises you on a track, teaches it and issues a verifiable certificate.`,
     },
     {
       q: `How do I start if I am in ${hub.city}?`,
-      a: `Message us on WhatsApp with the course you want. We confirm the next cohort, the mode (online, hybrid or in person), the fee and how long it takes, then send enrolment details the same day.`,
+      a: `Message us on WhatsApp with the course you want. We confirm the next cohort, the study mode, the fee and the duration, then send enrolment details the same day. Paid departments start from ${naira(LOWEST_PAID_PLAN)} online and run 10 to 20 weeks, and Basic Internet & AI Studies is free.`,
     },
     {
       q: `Can I do my SIWES or industrial training from ${hub.city}?`,
-      a: `Yes. We place students on SIWES nationwide, and our virtual SIWES service covers online placement plus logbook review, signing, stamping and two-way courier delivery for students who cannot attend physically.`,
+      a: `Yes. We place SIWES students nationwide. If you cannot attend in person, Virtual SIWES costs ${naira(VIRTUAL_SIWES.placementPriceNGN)} for your full placement, with a mentor, weekly live sessions and a placement letter. Our ${naira(VIRTUAL_SIWES.logbookPriceNGN)} logbook service covers courier pickup, signing, stamping and the company sections of your ITF forms.`,
     },
   ];
 

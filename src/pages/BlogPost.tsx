@@ -13,6 +13,7 @@ import BlogActions from "@/components/BlogActions";
 import SuccessKitCTA from "@/components/siwes/SuccessKitCTA";
 import PostInternalLinks from "@/components/blog/PostInternalLinks";
 import { useAllBlogPosts } from "@/hooks/useBlogPostsData";
+import { formatDate } from "@/components/LastUpdated";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -42,6 +43,9 @@ const BlogPost = () => {
     .filter((p) => p.slug !== post.slug && p.tags.some((tag) => post.tags.includes(tag)))
     .slice(0, 2);
   const category = getCategoryByName(post.tags[0]);
+  const modified = post.updated ?? post.date;
+  // Only call out an edit made on a later day than publication.
+  const showUpdated = modified.slice(0, 10) > post.date.slice(0, 10);
 
   // SIWES/internship articles get the Success Kit funnel; other posts are untouched.
   const isSiwesPost = /siwes|internship|industrial training|\bIT placement\b/i.test(
@@ -58,6 +62,7 @@ const BlogPost = () => {
             headline: post.title,
             description: post.description,
             datePublished: post.date,
+            dateModified: modified,
             author: authorSchema,
             publisher: {
               "@type": "Organization",
@@ -97,12 +102,13 @@ const BlogPost = () => {
               )}
               <span className="text-sm text-muted-foreground flex items-center gap-1">
                 <Calendar size={14} />{" "}
-                {new Date(post.date).toLocaleDateString("en-NG", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
+                <time dateTime={post.date}>{formatDate(post.date)}</time>
               </span>
+              {showUpdated && (
+                <span className="text-sm text-muted-foreground">
+                  Last updated <time dateTime={modified}>{formatDate(modified)}</time>
+                </span>
+              )}
               <span className="text-sm text-muted-foreground flex items-center gap-1">
                 <Clock size={14} /> {post.readTime} min read
               </span>

@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import {
   VIRTUAL_SIWES,
+  CITY_COUNT,
   formatNaira,
   placementIncludes,
   logbookIncludes,
@@ -314,7 +315,7 @@ const VirtualSIWES = () => {
                   Tech Faculty NG is a licensed technology training institute operating under the
                   Federal Ministry of Science, Technology &amp; Innovation via the National Board for
                   Technology Incubation. Our main campus sits inside the{" "}
-                  <strong>{VIRTUAL_SIWES.hqAddress}</strong>, and we run centres in 21 Nigerian
+                  <strong>{VIRTUAL_SIWES.hqAddress}</strong>, and we run centres in {CITY_COUNT} Nigerian
                   cities, so your coordinator can verify a real address, a real licence and real
                   supervisors.
                 </p>

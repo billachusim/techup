@@ -11,19 +11,23 @@ export const Route = createFileRoute("/blog/$slug")({
       return {
         title: local.seoTitle ?? local.title,
         description: local.description,
+        published: local.date,
+        modified: local.updated ?? local.date,
       };
     }
     try {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data } = await supabase
         .from("blog_posts")
-        .select("title, description")
+        .select("title, description, published_at, updated_at")
         .eq("slug", params.slug)
         .maybeSingle();
       if (data) {
         return {
           title: data.title,
           description: data.description,
+          published: data.published_at,
+          modified: data.updated_at ?? data.published_at,
         };
       }
     } catch {
@@ -39,6 +43,8 @@ export const Route = createFileRoute("/blog/$slug")({
         "Tech career guides, course deep-dives, SIWES tips, and AI insights from Tech Faculty NG.",
       path: `/blog/${params.slug}`,
       type: "article",
+      publishedTime: loaderData?.published,
+      modifiedTime: loaderData?.modified,
     }),
   component: BlogPost,
 });

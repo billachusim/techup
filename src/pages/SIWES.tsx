@@ -17,6 +17,11 @@ import {
   Monitor,
   Stamp,
 } from "lucide-react";
+import LastUpdated from "@/components/LastUpdated";
+import { VIRTUAL_SIWES, formatNaira } from "@/data/virtualSiwes";
+
+/** When this page's copy last changed. Bump it when you edit the page. */
+const SIWES_UPDATED = "2026-10-08";
 
 const tracks = [
   {
@@ -60,6 +65,29 @@ const whatYouGet = [
   { icon: GraduationCap, label: "IT Completion Letter" },
 ];
 
+const siwesFaqs = [
+  {
+    q: "How much does SIWES with Tech Faculty NG cost?",
+    a: `The Learn & Pay track charges a training fee that we confirm when you apply, based on your department and IT duration, while Tutor & Earn pays you instead. Virtual SIWES costs ${formatNaira(VIRTUAL_SIWES.placementPriceNGN)} for the full placement, and the logbook service costs ${formatNaira(VIRTUAL_SIWES.logbookPriceNGN)} including two-way courier delivery.`,
+  },
+  {
+    q: "How long is a SIWES placement at Tech Faculty NG?",
+    a: "As long as your school requires. Most students come for three or six months, and you tell us your IT duration and start date when you apply. Your placement letter, mentor schedule and project work are planned around that duration, and you leave with an IT completion letter and a certificate.",
+  },
+  {
+    q: "Is Tech Faculty NG accepted for SIWES and ITF paperwork?",
+    a: "Tech Faculty NG is licensed by the Federal Ministry of Science, Technology and Innovation through NBTI, and over 120 students have completed SIWES with us since 2022. We complete the company sections of your ITF SPE-1 and Form 8, but your school decides which hosts it accepts, so confirm with your SIWES coordinator first.",
+  },
+  {
+    q: "What is the difference between Learn & Pay and Tutor & Earn?",
+    a: "Learn & Pay is for students who want structured mentorship and real client projects, and you pay a training fee for it. Tutor & Earn is for students already skilled in a tech area: you teach other learners and get paid while completing your IT. Both tracks end with a certificate and a recommendation letter.",
+  },
+  {
+    q: "How do I apply for SIWES at Tech Faculty NG?",
+    a: "Send a WhatsApp message to 0806 859 7140 or email thetechfaculty@gmail.com with your name, school, department, preferred track, IT duration and start date. We review your application and schedule an onboarding call within 48 hours, then send your placement letter and onboarding materials once you are accepted.",
+  },
+];
+
 const SIWES = () => {
   return (
     <div className="min-h-screen bg-background">
@@ -85,6 +113,17 @@ const SIWES = () => {
           ],
           "url": "https://techfaculty.ng/siwes"
         })}</script>
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          url: "https://techfaculty.ng/siwes",
+          dateModified: SIWES_UPDATED,
+          mainEntity: siwesFaqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        })}</script>
       </>
       <Header />
       <main className="pt-20">
@@ -106,6 +145,7 @@ const SIWES = () => {
               Our program is regulated under Federal Ministry of Education policies.
               Choose to learn and pay, or tutor and earn — either way, you leave with real skills, a certificate, and industry connections.
             </p>
+            <LastUpdated date={SIWES_UPDATED} className="-mt-4 mb-8" />
             <Button size="lg" className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background font-semibold" asChild>
               <a href="https://wa.me/2348068597140?text=Hello%2C%20I'm%20a%20student%20interested%20in%20doing%20my%20SIWES%2FIT%20with%20Tech%20Faculty%20NG" target="_blank" rel="noopener noreferrer">
                 <MessageCircle className="mr-2" size={20} />
@@ -242,6 +282,23 @@ const SIWES = () => {
                   </div>
                   <p className="text-sm md:text-base pt-1">{step}</p>
                 </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="py-16 px-4 bg-muted/30">
+          <div className="container mx-auto max-w-3xl">
+            <h2 className="text-3xl font-bold text-center mb-8">SIWES questions, answered</h2>
+            <div className="space-y-4">
+              {siwesFaqs.map((f) => (
+                <Card key={f.q}>
+                  <CardContent className="p-5">
+                    <h3 className="font-semibold mb-2">{f.q}</h3>
+                    <p className="text-sm text-muted-foreground">{f.a}</p>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           </div>

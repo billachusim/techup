@@ -20,42 +20,45 @@ import { MessageCircle, Truck, MapPin, Banknote, Search, ShieldCheck } from "luc
 
 const CANONICAL = "https://techfaculty.ng/tech-store";
 
+const priceOf = (slug: string) =>
+  formatNaira(storeProducts.find((p) => p.slug === slug)?.price ?? 0);
+
 const faqs = [
   {
     q: "How do I buy from the Tech Faculty tech store?",
-    a: "Tap “Order on WhatsApp” on any product. That opens a chat with the product and price already written in the message. We confirm availability, take your delivery address, agree payment, and dispatch. No account or online checkout needed.",
+    a: "Tap “Order on WhatsApp” on any product. That opens a chat with the product and its naira price already written in the message. We confirm availability, take your delivery address, agree payment and dispatch the order. You do not need an account or an online checkout to buy from us.",
   },
   {
     q: "Do you deliver nationwide in Nigeria?",
-    a: "Yes. We deliver to every state in Nigeria through trusted courier partners. Delivery is usually 1–2 working days within the South East and Lagos, and 2–4 working days to other states. Delivery fees depend on your location and the size of the item, and we tell you the exact amount on WhatsApp before you pay.",
+    a: "Yes. We deliver to every state in Nigeria through trusted courier partners. Delivery usually takes 1–2 working days within the South East and Lagos, and 2–4 working days to other states. The fee depends on your location and the item's size, and we tell you the exact amount before you pay.",
   },
   {
     q: "Is pay on delivery available?",
-    a: "Yes, pay on delivery is available for most locations and most items. For high-value items such as laptops, we may ask for a part payment to cover logistics, and you pay the balance when the item reaches you. We confirm what applies to your order on WhatsApp.",
+    a: "Yes, pay on delivery is available for most locations and most items. For high-value items such as laptops, we may ask for a part payment to cover logistics, and you pay the balance when the item reaches you. We confirm on WhatsApp which option applies to your order before dispatch.",
   },
   {
     q: "Can I pick up my order instead of paying for delivery?",
-    a: "Yes. You can pick up at our Nnewi headquarters or at any Technology Incubation Centre where we operate — including Onitsha, Awka, Enugu, Owerri, Aba, Abakaliki, Abuja, Lagos and other major cities. Pickup is free.",
+    a: "Yes, and pickup is free. Collect your order at our Nnewi headquarters or at any Technology Incubation Centre where we operate, including Onitsha, Awka, Enugu, Owerri, Aba, Abakaliki, Abuja, Lagos and other major cities. Tell us your preferred centre in the WhatsApp chat and we confirm when it is ready.",
   },
   {
     q: "What is the Battery Bank power bank and why is it different?",
-    a: "Battery Bank is a power bank assembled by our Hardware & Robotics Department in Nnewi. Instead of a sealed battery that dies and becomes waste, you open it and replace the 18650 or AA batteries yourself, so one casing lasts for years. It also comes with a one-year battery replacement guarantee at our centres.",
+    a: `Battery Bank is a ${priceOf("battery-bank-replaceable-power-bank")} power bank assembled by our Hardware & Robotics Department in Nnewi. Instead of a sealed battery that dies and becomes waste, you open it and replace the 18650 or AA batteries yourself, so one casing lasts for years. It comes with a one-year battery replacement guarantee.`,
   },
   {
     q: "Are the laptops new or used?",
-    a: "Our student laptops are tested, refurbished business-class machines (commonly called UK-used). Each one is cleaned, battery-checked and set up with Windows, VS Code, Python and Chrome before dispatch, and comes with three months of hardware support from Tech Faculty NG.",
+    a: `Our student laptops are tested, refurbished business-class machines, commonly called UK-used, from ${priceOf("student-business-laptop-core-i5")} for a Core i5 with 8GB RAM and a 256GB SSD. Each one is cleaned, battery-checked and set up with Windows, VS Code, Python and Chrome, and comes with three months of hardware support.`,
   },
   {
     q: "Do Tech Faculty students get a discount?",
-    a: "Yes. Send your Faculty ID in the WhatsApp chat and we apply the current student price on accessories and learning kits before you pay.",
+    a: "Yes. Send your Faculty ID in the WhatsApp chat and we apply the current student price on accessories and learning kits before you pay. You receive a Faculty ID when you create your Tech Faculty account, so new students can claim the discount from their first order onwards.",
   },
   {
     q: "Can I order in bulk for a school, church or company?",
-    a: "Yes. We handle bulk orders of custom phone cases, robotics kits, headsets and laptops for schools, churches, companies and NGOs, with bulk pricing and invoices. Message us with the quantity and we send a quote.",
+    a: "Yes. We handle bulk orders of custom phone cases, robotics kits, headsets and laptops for schools, churches, companies and NGOs, with bulk pricing and proper invoices. Message us on WhatsApp with the product and quantity you need, and we send a written quote in naira before you commit to anything.",
   },
   {
     q: "Do the products have a warranty?",
-    a: "Accessories carry a 7-day replacement window for defects, laptops carry three months of hardware support, and Battery Bank carries a one-year battery replacement guarantee. Keep your receipt or WhatsApp order chat as proof of purchase.",
+    a: "Yes. Accessories carry a 7-day replacement window for defects, laptops carry three months of hardware support, and Battery Bank carries a one-year battery replacement guarantee at our centres. Keep your receipt or your WhatsApp order chat as proof of purchase when you bring an item back.",
   },
 ];
 

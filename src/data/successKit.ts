@@ -82,22 +82,22 @@ export const kitContents: { title: string; detail: string }[] = [
 export const kitFaqs: { q: string; a: string }[] = [
   {
     q: "What exactly do I receive after paying?",
-    a: "A downloadable pack of editable documents and templates, plus access to the Tech Faculty student support channel on WhatsApp for questions during your placement.",
+    a: `For ${formatNaira(SUCCESS_KIT.priceNGN)} you receive a downloadable pack of editable documents and templates for finding, starting and finishing your SIWES placement, plus access to the Tech Faculty student support channel on WhatsApp, where you can ask questions at any point during your industrial training.`,
   },
   {
     q: "Is the free checklist really free?",
-    a: "Yes. Enter your email or WhatsApp number and we send the 7-step placement checklist immediately, with no obligation to buy the kit.",
+    a: "Yes. Enter your email or WhatsApp number and we send the 7-step placement checklist immediately, with no obligation to buy the kit. It covers the same steps our placed students follow, from confirming your course is on the ITF-approved SIWES list to collecting your SPE-1 and ITF Form 8 early.",
   },
   {
     q: "Does the kit guarantee a placement?",
-    a: "No honest guide can promise a placement. The kit gives you the documents, templates and outreach system that our placed students used — you still have to send the emails.",
+    a: "No. No honest guide can promise a SIWES placement. The kit gives you the documents, templates and outreach system that our placed students used, but you still have to send the emails and attend the interviews. What it removes is the guesswork about what to send and when.",
   },
   {
     q: "How do I pay?",
-    a: "Reserve your kit here and our team confirms your order on WhatsApp or email with current payment details. Card checkout is being finalised.",
+    a: `Reserve your kit on this page and our team confirms your order on WhatsApp or email with current payment details for the ${formatNaira(SUCCESS_KIT.priceNGN)} price. Card checkout is being finalised, so nothing is charged automatically. Your kit is sent as soon as your payment is confirmed.`,
   },
   {
     q: "Can I use it if I'm not a Tech Faculty student?",
-    a: "Yes. The kit is written for any Nigerian student on SIWES or industrial training, in any institution.",
+    a: "Yes. The SIWES Success Kit is written for any Nigerian student on SIWES or industrial training, from any university, polytechnic or college of education. You do not need a Faculty ID or a Tech Faculty placement to use the templates, the checklist or the WhatsApp support channel.",
   },
 ];

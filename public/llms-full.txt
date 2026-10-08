@@ -58,13 +58,10 @@ Who it is for: Complete beginners who want a first tech skill; Students and NYSC
 Career outcomes (Nigerian salary bands): Junior Front-End Developer ₦250,000 – ₦450,000 / month; Full-Stack Developer ₦500,000 – ₦1,200,000 / month; Remote Contract Developer $1,500 – $4,000 / month.
 
 Q: Do I need a laptop to join the Web Development department?
-A: Yes. A laptop with at least 8GB RAM is recommended. Our tech store offers member pricing, and on-campus students can use centre workstations during class hours.
-
-Q: How long does the web development programme take?
-A: 12 to 16 weeks depending on your pace. Part-time weekend and evening cohorts run alongside the weekday track.
+A: Yes. A laptop with at least 8GB RAM is recommended, because you will run a code editor, a browser and a local server together. Our tech store sells tested student laptops with three months of hardware support, and on-campus students can use centre workstations during class hours.
 
 Q: Will I get a certificate?
-A: Yes. Graduates receive a Tech Faculty certificate that anyone can confirm on our public verification portal.
+A: Yes. Every Web Development graduate who completes the projects and the capstone receives a Tech Faculty NG certificate. Each certificate carries its own ID that employers, schools and clients can check on our public verification portal, so nobody has to take a PDF on trust.
 
 ### Mobile App Development
 
@@ -82,10 +79,10 @@ Who it is for: Web developers adding mobile to their stack; Founders who want to
 Career outcomes (Nigerian salary bands): Junior Mobile Developer ₦300,000 – ₦500,000 / month; Senior Mobile Engineer ₦700,000 – ₦1,500,000 / month; Freelance App Builder ₦400,000 – ₦2,000,000 per project.
 
 Q: Can I build iPhone apps without a Mac?
-A: Yes for learning and testing. We use Expo's cloud build service so Windows users can produce iOS builds; a Mac is only needed for advanced native work.
+A: Yes, for learning and testing. We use Expo's cloud build service, so students on Windows laptops can produce iOS builds without owning a Mac. A Mac only becomes necessary for advanced native Swift work, which comes late in the 14 to 18 week Mobile App Development programme.
 
 Q: Do you help with publishing to the stores?
-A: Yes. Store listing, screenshots, review guidelines and the submission itself are part of the final module.
+A: Yes. Publishing is part of the final module. We cover the store listing, screenshots, the Apple and Google review guidelines and the submission itself, so your capstone app goes through the real Google Play and App Store submission process instead of staying on your laptop.
 
 ### Data Science & Analytics
 
@@ -103,10 +100,10 @@ Who it is for: Graduates switching from non-tech backgrounds; Accountants, audit
 Career outcomes (Nigerian salary bands): Junior Data Analyst ₦250,000 – ₦450,000 / month; Business Intelligence Analyst ₦500,000 – ₦900,000 / month; Data Scientist ₦800,000 – ₦2,000,000 / month.
 
 Q: Do I need to be good at mathematics?
-A: Secondary-school mathematics is enough to start. We teach the statistics you need module by module, applied to real datasets rather than as theory.
+A: No. Secondary-school mathematics is enough to start the Data Science & Analytics programme. We teach the statistics you need module by module over 12 to 16 weeks, applied to real Nigerian datasets rather than as theory, so you learn each method by answering a business question with it.
 
 Q: Is Power BI or Tableau better for jobs in Nigeria?
-A: Power BI appears in far more Nigerian job adverts because of Microsoft 365 adoption. We teach it first, then Tableau and Looker Studio for coverage.
+A: Power BI, for most job seekers in Nigeria. It appears in far more Nigerian job adverts because so many companies already run Microsoft 365. We teach Power BI first, then Tableau and Looker Studio, so you can work in whichever tool an employer uses and show a dashboard built in each.
 
 ### Cybersecurity
 
@@ -124,10 +121,10 @@ Who it is for: IT support staff moving into security; Computer science and engin
 Career outcomes (Nigerian salary bands): SOC Analyst (Tier 1) ₦350,000 – ₦600,000 / month; Penetration Tester ₦700,000 – ₦1,500,000 / month; Security / GRC Consultant ₦900,000 – ₦2,500,000 / month.
 
 Q: Do I need a computer science degree?
-A: No. Most of our security graduates come from other disciplines. What matters is completing the labs and being able to explain your findings clearly.
+A: No. Most of our cybersecurity graduates come from other disciplines. What matters is completing the hands-on labs in the 16 to 20 week programme and explaining your findings clearly in writing. Employers hiring for security operations roles care more about what you can do and document than about your degree.
 
 Q: Are certification exam fees included?
-A: Training and exam preparation are included; the vendor exam fee is paid directly to CompTIA or EC-Council when you sit for it.
+A: No. Training and exam preparation for CompTIA Security+ and CEH are included in your programme fee. The vendor exam fee itself is paid directly to CompTIA or EC-Council when you book and sit the exam, so you only pay it once you are ready to pass.
 
 ### AI & Machine Learning
 
@@ -145,10 +142,10 @@ Who it is for: Developers adding AI to their skill set; Data analysts moving int
 Career outcomes (Nigerian salary bands): Machine Learning Engineer ₦700,000 – ₦1,800,000 / month; AI Application Developer ₦500,000 – ₦1,200,000 / month; Remote AI Trainer / Evaluator $15 – $60 / hour.
 
 Q: Do I need a powerful computer or GPU?
-A: No. We work in Google Colab and other cloud notebooks for heavy training, so any laptop with a stable browser and internet connection is enough.
+A: No. We run heavy model training in Google Colab and other cloud notebooks, so any laptop with a stable browser and internet connection is enough for the AI & Machine Learning programme. An older laptop or a power cut will not stop your training jobs, because they run in the cloud.
 
 Q: Can this lead to remote AI work?
-A: Yes. Many graduates start on AI training and evaluation platforms while building projects. Live roles are listed on our jobs board.
+A: Yes. Many AI & Machine Learning graduates start on AI training and evaluation platforms while they build their own projects, then move into engineering roles. Live remote and Nigerian AI roles are listed on our jobs board, and graduates can join the Tech Faculty talent pool that employers hire from.
 
 ### Basic Internet & AI Studies
 
@@ -164,10 +161,7 @@ Who it is for: Adults new to computers; Traders and small business owners; Teach
 Career outcomes (Nigerian salary bands): Confident everyday computer user Foundation for any tech track; AI-assisted admin & office support ₦120,000 – ₦300,000 / month; Small business owner using AI daily Direct time and cost savings.
 
 Q: I have never used a computer. Can I still join?
-A: Yes — that is exactly who this programme is designed for. We start from switching the machine on.
-
-Q: How long is the programme?
-A: Four to six weeks, with short sessions you can attend at any of our centres or online.
+A: Yes. Basic Internet & AI Studies is built for people who have never used a computer. We start from switching the machine on, then move through the internet, email, documents and everyday AI tools like ChatGPT. Classes are short, run online or at any of our centres, and the programme is free.
 
 ### Social Media & Digital Marketing
 
@@ -185,10 +179,10 @@ Who it is for: Business owners marketing their own brand; Aspiring social media 
 Career outcomes (Nigerian salary bands): Social Media Manager ₦200,000 – ₦450,000 / month; Performance Marketer ₦400,000 – ₦900,000 / month; Freelance Marketing Consultant ₦150,000 – ₦600,000 per client.
 
 Q: Do I need an ad budget to learn paid advertising?
-A: A small test budget helps, and we run shared classroom campaigns so you can work with live data before spending your own money.
+A: No, you can start without one. We run shared classroom campaigns on Meta Ads Manager and Google Ads, so you practise on live data before spending your own money. A small personal test budget helps once you run your own ads, and you learn to keep that spending small and measurable.
 
 Q: Is this useful for my existing business?
-A: Very. Many participants join specifically to market their own shop, school or service and recover the fee within the programme.
+A: Yes. Many participants join the Social Media & Digital Marketing programme specifically to market their own shop, school or service, and recover the fee from new customers within the 10 to 14 weeks. The campaigns, content and analytics you build in class are ones you can keep running afterwards.
 
 ### Design
 
@@ -206,10 +200,10 @@ Who it is for: Creatives turning talent into a career; Developers who want to de
 Career outcomes (Nigerian salary bands): Junior Graphic Designer ₦180,000 – ₦400,000 / month; Product / UI Designer ₦450,000 – ₦1,100,000 / month; Freelance Designer ₦100,000 – ₦800,000 per project.
 
 Q: Do I need to be good at drawing?
-A: No. Digital design is about hierarchy, spacing and clarity. Drawing is a bonus, not a requirement.
+A: No. Digital design is about hierarchy, spacing, colour and clarity, and those are skills you learn by practice rather than talent for drawing. Drawing is a bonus in the Design department, not a requirement. Most of the work happens in Figma and Adobe tools, where layout matters far more than illustration.
 
 Q: Which software will I use?
-A: Figma for interfaces, Adobe Photoshop and Illustrator for visual and print work, plus Canva for fast turnaround.
+A: Figma for app and website interfaces, Adobe Photoshop and Illustrator for visual and print work, and Canva for fast turnaround on social media graphics. You also meet Framer and Notion, and you finish the 12 to 16 week Design programme with portfolio projects made in these tools.
 
 ### Cloud Computing
 
@@ -227,10 +221,10 @@ Who it is for: Developers moving into platform engineering; System and network a
 Career outcomes (Nigerian salary bands): Cloud Support Engineer ₦400,000 – ₦700,000 / month; DevOps Engineer ₦800,000 – ₦2,000,000 / month; Cloud Architect ₦1,500,000+ / month.
 
 Q: Are cloud lab costs expensive?
-A: No. We work inside free tiers and teach budget alerts, so most learners spend little or nothing on infrastructure during the programme.
+A: No. We work inside the free tiers of AWS, Azure and Google Cloud and teach budget alerts, so most learners spend little or nothing on infrastructure during the 14 to 18 week Cloud Computing programme. You learn to set a spending limit on every account before you launch anything on it.
 
 Q: Which cloud should I specialise in?
-A: Start with AWS for the largest job market, then add Azure — many Nigerian enterprises are Microsoft-first.
+A: Start with AWS, which has the largest cloud job market, then add Azure, because many Nigerian enterprises are Microsoft-first. The Cloud Computing programme covers AWS, Azure and Google Cloud plus Docker, Kubernetes, Terraform and CI/CD pipelines, so you can move between providers once you know one well.
 
 ### Robotics & IoT
 
@@ -246,10 +240,10 @@ Who it is for: Engineering students and technicians; Secondary-school science en
 Career outcomes (Nigerian salary bands): IoT / Embedded Developer ₦400,000 – ₦900,000 / month; Automation Technician ₦250,000 – ₦600,000 / month; Hardware Product Builder Project and contract based.
 
 Q: Do I need to buy my own components?
-A: Starter kits are available at member pricing, and our centres provide shared lab components for classwork.
+A: No. Our centres provide shared lab components for classwork, so you can complete the Robotics & IoT programme without buying anything. If you want to keep building at home, starter kits are available at member pricing in the Tech Faculty tech store, which also supplies robotics kits to schools in bulk.
 
 Q: Is programming experience required?
-A: No. We teach the C and Python you need for microcontrollers as part of the programme.
+A: No. We teach the C, C++ and Python you need for Arduino, ESP32 and Raspberry Pi boards as part of the 16 to 20 week Robotics & IoT programme. You write code for the circuits and sensors you build in class, so programming is learned alongside the hardware rather than before it.
 
 ## Virtual SIWES
 
@@ -258,40 +252,40 @@ Placement: ₦45,000, paid before onboarding. Includes: Official acceptance and 
 Logbook service: ₦15,000. Includes: We arrange courier pickup of your logbook and ITF forms from your city; Line-by-line review of your weekly entries against the work you actually did; Filling in of missing weeks, supervisor comments and the summary sections; Official signing and company stamping by your assigned supervisor; SPE-1, ITF Form 8 and place-of-attachment forms completed where applicable; Return delivery back to you — both legs of the waybill are inside the price. Turnaround: 5–7 working days from the day your logbook reaches our headquarters.
 
 Q: Can I do my SIWES or IT online in Nigeria?
-A: Yes — many institutions now accept a remote or hybrid industrial training placement, especially for Computer Science, IT, Software Engineering, Data Science and related courses. What your school checks is that the host organisation is real, registered, relevant to your course and willing to supervise, sign and stamp your logbook. Tech Faculty NG is licensed by the Federal Ministry of Science, Technology and Innovation via the National Board for Technology Incubation, and our headquarters sits inside the Technology Incubation Centre, Nnewi. Confirm with your department coordinator first, then apply.
+A: Yes. Many institutions accept a remote or hybrid placement for Computer Science, IT, Software Engineering, Data Science and related courses, provided the host is real, registered, relevant and willing to supervise and stamp your logbook. Tech Faculty NG is licensed by the Federal Ministry of Science, Technology and Innovation through NBTI. Virtual SIWES costs ₦45,000.
 
 Q: How much does Virtual SIWES cost?
-A: The virtual IT placement is ₦45,000 for the full duration of your training, paid before onboarding. The logbook review, signing, stamping and two-way delivery service is a separate ₦15,000. Nothing is charged automatically online — we send payment details after you submit the form.
+A: The virtual IT placement costs ₦45,000 for the full duration of your training, whether that is three or six months, paid before onboarding. The logbook review, signing, stamping and two-way delivery service is a separate ₦15,000. Nothing is charged automatically online; we send payment details after you submit the form.
 
 Q: Who signs and stamps my SIWES logbook?
-A: Your assigned Tech Faculty supervisor signs your logbook and it is stamped with our official company stamp, exactly as it would be if you sat in our Nnewi office every day. Attendance and supervision records are kept throughout your placement, so the signature reflects real supervised work.
+A: Your assigned Tech Faculty supervisor signs your logbook, and it is stamped with our official company stamp, exactly as it would be if you sat in our Nnewi office every day. Attendance and supervision records are kept for your school and the ITF throughout your placement, so the signature reflects real supervised work.
 
 Q: How do I send my logbook for review and signing?
-A: You do not have to travel. Book the logbook service and our courier partner collects the logbook and any ITF forms from your address in any Nigerian city. We review, complete, sign and stamp, then waybill the documents back to you. Both the pickup and the return delivery are included in the ₦15,000.
+A: You do not have to travel. Book the ₦15,000 logbook service and our courier partner collects your logbook and ITF forms from your address in any Nigerian city. We review, complete, sign and stamp them, then waybill everything back to you. Both the pickup and the return delivery are included in that price.
 
 Q: How long does the logbook turnaround take?
-A: Plan for 5–7 working days from the day your logbook reaches our headquarters, plus courier time each way. If your submission deadline is tight, tell us the date on the form and we prioritise it.
+A: Plan for 5–7 working days from the day your logbook reaches our headquarters, plus courier time each way. If your school's submission deadline is tight, write the date on the form and we prioritise your logbook. Booking the pickup a few weeks before the end of your IT leaves room for corrections before the deadline.
 
 Q: What if my school insists on a physical placement?
-A: Then use one of our 21 physical centres instead — Nnewi, Onitsha, Owerri, Aba, Enugu, Abakaliki, Abuja and more — and keep the same tracks and mentors. Some students also do a hybrid: online weekly work with a few on-site weeks. We write your letter to match whatever your school approved.
+A: Then use one of our 22 physical centres instead, including Nnewi, Onitsha, Owerri, Aba, Enugu, Abakaliki and Abuja, with the same tracks and mentors. Some students also do a hybrid: weekly online work with a few on-site weeks. We write your placement letter to match whatever arrangement your school approved.
 
 Q: Which tracks can I do virtually?
-A: Both. Learn & Pay is for students who want structured, mentored experience across web development, data analytics, AI, cybersecurity, design or digital marketing. Tutor & Earn is for students already skilled enough to teach — you tutor other learners online, gain teaching experience and earn while completing your IT.
+A: Both. Learn & Pay is for students who want structured, mentored experience across web development, data analytics, AI, cybersecurity, design or digital marketing. Tutor & Earn is for students already skilled enough to teach: you tutor other learners online, gain teaching experience and earn money while completing your industrial training.
 
 Q: Do I still get a placement letter and completion certificate?
-A: Yes. You receive an official acceptance and placement letter addressed to your institution before you resume, and a completion certificate plus recommendation letter at the end. Virtual interns are documented exactly like on-site interns.
+A: Yes. You receive an official acceptance and placement letter addressed to your institution within 48 hours of payment, before you resume. At the end you receive a completion certificate, a recommendation letter and a project portfolio link. Virtual interns are documented exactly like on-site interns, so your school sees the same paperwork.
 
 Q: Will my ITF allowance be affected?
-A: Your ITF SIWES allowance depends on your school and the ITF processing your SPE-1 and Form 8 correctly and on time — not on whether your placement is remote. We complete our sections of those forms as part of the logbook service so nothing stalls on our side.
+A: No. Your ITF SIWES allowance depends on your school and the ITF processing your SPE-1 and Form 8 correctly and on time, not on whether your placement is remote. We complete our company sections of those ITF forms as part of the logbook service, so nothing stalls on our side.
 
 Q: Can final-year and part-time students use this?
-A: Yes. Virtual IT is built for students who cannot relocate: those studying far from our centres, those already working, part-time and sandwich students, and anyone whose approved host fell through late in the session.
+A: Yes. Virtual IT is built for students who cannot relocate: those studying far from our centres, those already working, part-time and sandwich students, and anyone whose approved host fell through late in the session. The same placement letter, weekly mentoring and logbook service apply to every one of them.
 
 Q: What do I need before I start?
-A: A laptop where possible, a working internet connection, your school's IT duration and start date, and your logbook and ITF forms once your department issues them. If your laptop is the blocker, ask us — our store and payment-plan options exist for exactly that reason.
+A: A laptop where possible, a working internet connection, your school's IT duration and start date, and your logbook and ITF forms once your department issues them. If a laptop is the blocker, ask us: our tech store sells tested student laptops with pay on delivery and part-payment options for exactly this reason.
 
 Q: Is Tech Faculty NG a registered organisation my school can verify?
-A: Yes. We are a licensed technology training institute operating from the Technology Incubation Centre, Nnewi, with centres in 21 Nigerian cities. Your coordinator can verify our licence and address, and our certificates are verifiable on our own verification portal.
+A: Yes. Tech Faculty NG is a licensed technology training institute, licensed by the Federal Ministry of Science, Technology and Innovation through NBTI and headquartered at the Technology Incubation Centre, Nnewi, with centres in 22 Nigerian cities. Your coordinator can verify our licence and address, and our certificates are verifiable online.
 
 ## SIWES Success Kit
 
@@ -299,19 +293,19 @@ Page: https://techfaculty.ng/siwes-success-kit
 Everything a Nigerian student needs to land, survive and convert a SIWES placement. Price: ₦4,500.
 
 Q: What exactly do I receive after paying?
-A: A downloadable pack of editable documents and templates, plus access to the Tech Faculty student support channel on WhatsApp for questions during your placement.
+A: For ₦4,500 you receive a downloadable pack of editable documents and templates for finding, starting and finishing your SIWES placement, plus access to the Tech Faculty student support channel on WhatsApp, where you can ask questions at any point during your industrial training.
 
 Q: Is the free checklist really free?
-A: Yes. Enter your email or WhatsApp number and we send the 7-step placement checklist immediately, with no obligation to buy the kit.
+A: Yes. Enter your email or WhatsApp number and we send the 7-step placement checklist immediately, with no obligation to buy the kit. It covers the same steps our placed students follow, from confirming your course is on the ITF-approved SIWES list to collecting your SPE-1 and ITF Form 8 early.
 
 Q: Does the kit guarantee a placement?
-A: No honest guide can promise a placement. The kit gives you the documents, templates and outreach system that our placed students used — you still have to send the emails.
+A: No. No honest guide can promise a SIWES placement. The kit gives you the documents, templates and outreach system that our placed students used, but you still have to send the emails and attend the interviews. What it removes is the guesswork about what to send and when.
 
 Q: How do I pay?
-A: Reserve your kit here and our team confirms your order on WhatsApp or email with current payment details. Card checkout is being finalised.
+A: Reserve your kit on this page and our team confirms your order on WhatsApp or email with current payment details for the ₦4,500 price. Card checkout is being finalised, so nothing is charged automatically. Your kit is sent as soon as your payment is confirmed.
 
 Q: Can I use it if I'm not a Tech Faculty student?
-A: Yes. The kit is written for any Nigerian student on SIWES or industrial training, in any institution.
+A: Yes. The SIWES Success Kit is written for any Nigerian student on SIWES or industrial training, from any university, polytechnic or college of education. You do not need a Faculty ID or a Tech Faculty placement to use the templates, the checklist or the WhatsApp support channel.
 
 ## Campuses
 
@@ -474,16 +468,16 @@ Akure's engineering culture shows in what students ask for: robotics, embedded s
 Answers below are for Nnewi; each campus page gives the same answers for its own city and address.
 
 Q: Where exactly is Tech Faculty in Nnewi?
-A: We operate from Technology Incubation Center, Onitsha-Okigwe Expressway, by Area Command, Umudim, Nnewi, Anambra State. Tech Faculty runs inside the Technology Incubation Centre network of the National Board for Technology Incubation, an agency of the Federal Ministry of Science, Technology and Innovation, so the venue is a federally-run facility rather than a private shopfront.
+A: Tech Faculty Nnewi operates from Technology Incubation Center, Onitsha-Okigwe Expressway, by Area Command, Umudim, Nnewi, Anambra State, inside the Technology Incubation Centre network of the National Board for Technology Incubation, an agency of the Federal Ministry of Science, Technology and Innovation. You train in a federally-run facility rather than a private shopfront, with labs and mentors on site.
 
 Q: Can I study online instead of attending the Nnewi centre?
-A: Yes. Every department is available online, hybrid, or fully in person. Many Nnewi students take lectures online and use the centre for labs, mentoring and project reviews.
+A: Yes. Every Tech Faculty department can be studied online, hybrid or fully in person. Online study is included in the course fee, hybrid study with monthly meetups adds ₦12,000, and weekly on-site classes add ₦22,500. Many Nnewi students take lectures online and use the centre for labs and project reviews.
 
 Q: Do you accept SIWES and industrial training students in Nnewi?
-A: Yes. We take SIWES and IT students each session from institutions such as Nnamdi Azikiwe University, Chukwuemeka Odumegwu Ojukwu University, Federal Polytechnic Oko, on our Learn & Pay and Tutor & Earn tracks, with supervised project work and logbook support. Places are limited, so apply early.
+A: Yes. We take SIWES and IT students each session from institutions such as Nnamdi Azikiwe University, Chukwuemeka Odumegwu Ojukwu University, on our Learn & Pay and Tutor & Earn tracks. Virtual SIWES costs ₦45,000, and our ₦15,000 logbook service completes the company sections of your ITF SPE-1 and Form 8 if you cannot attend in person.
 
 Q: Are there holiday tech programmes for children and teenagers in Nnewi?
-A: Yes. During school holidays we run teen tracks in Digital Creation, Coding, Artificial Intelligence and Cybersecurity for JSS and SSS students in Nnewi, project-based and supervised, ending with each student presenting what they built.
+A: Yes. During school holidays we run teen tracks in Digital Creation, Coding, Artificial Intelligence and Cybersecurity for JSS and SSS students in Nnewi. Classes are project-based and supervised, each student ends by presenting what they built, and fees start from ₦45,000 for a 4-week track.
 
 ## Other pages
 

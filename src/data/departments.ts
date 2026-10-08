@@ -1,3 +1,8 @@
+import { HYBRID_FEE, PHYSICAL_FEE, naira, planMinimum } from "@/lib/fees";
+
+/** When the department pages were last reviewed. Bump it when you edit their copy. */
+export const DEPARTMENTS_UPDATED = "2026-10-08";
+
 export interface DepartmentFaq {
   q: string;
   a: string;
@@ -6,6 +11,10 @@ export interface DepartmentFaq {
 export interface Department {
   /** URL slug used at /departments/:slug */
   slug: string;
+  /** Pricing plan id in supabase/functions/_shared/pricing.ts, when the department has one */
+  planId?: string;
+  /** ISO date this department's copy last changed, if later than DEPARTMENTS_UPDATED */
+  updated?: string;
   /** Legacy id used by the homepage accordion */
   id: string;
   /** Display name */
@@ -44,6 +53,7 @@ export interface Department {
 export const departments: Department[] = [
   {
     slug: "web-development",
+    planId: "developer-pro",
     id: "web-dev",
     title: "Web Development",
     icon: "Code",
@@ -89,15 +99,11 @@ export const departments: Department[] = [
     faqs: [
       {
         q: "Do I need a laptop to join the Web Development department?",
-        a: "Yes. A laptop with at least 8GB RAM is recommended. Our tech store offers member pricing, and on-campus students can use centre workstations during class hours.",
-      },
-      {
-        q: "How long does the web development programme take?",
-        a: "12 to 16 weeks depending on your pace. Part-time weekend and evening cohorts run alongside the weekday track.",
+        a: "Yes. A laptop with at least 8GB RAM is recommended, because you will run a code editor, a browser and a local server together. Our tech store sells tested student laptops with three months of hardware support, and on-campus students can use centre workstations during class hours.",
       },
       {
         q: "Will I get a certificate?",
-        a: "Yes. Graduates receive a Tech Faculty certificate that anyone can confirm on our public verification portal.",
+        a: "Yes. Every Web Development graduate who completes the projects and the capstone receives a Tech Faculty NG certificate. Each certificate carries its own ID that employers, schools and clients can check on our public verification portal, so nobody has to take a PDF on trust.",
       },
     ],
     enrollment: "2,400+",
@@ -107,6 +113,7 @@ export const departments: Department[] = [
   },
   {
     slug: "mobile-app-development",
+    planId: "mobile-app-developer",
     id: "mobile-dev",
     title: "Mobile App Development",
     icon: "Smartphone",
@@ -152,11 +159,11 @@ export const departments: Department[] = [
     faqs: [
       {
         q: "Can I build iPhone apps without a Mac?",
-        a: "Yes for learning and testing. We use Expo's cloud build service so Windows users can produce iOS builds; a Mac is only needed for advanced native work.",
+        a: "Yes, for learning and testing. We use Expo's cloud build service, so students on Windows laptops can produce iOS builds without owning a Mac. A Mac only becomes necessary for advanced native Swift work, which comes late in the 14 to 18 week Mobile App Development programme.",
       },
       {
         q: "Do you help with publishing to the stores?",
-        a: "Yes. Store listing, screenshots, review guidelines and the submission itself are part of the final module.",
+        a: "Yes. Publishing is part of the final module. We cover the store listing, screenshots, the Apple and Google review guidelines and the submission itself, so your capstone app goes through the real Google Play and App Store submission process instead of staying on your laptop.",
       },
     ],
     enrollment: "1,800+",
@@ -166,6 +173,7 @@ export const departments: Department[] = [
   },
   {
     slug: "data-science-analytics",
+    planId: "data-wizard",
     id: "data-science",
     title: "Data Science & Analytics",
     icon: "Database",
@@ -212,11 +220,11 @@ export const departments: Department[] = [
     faqs: [
       {
         q: "Do I need to be good at mathematics?",
-        a: "Secondary-school mathematics is enough to start. We teach the statistics you need module by module, applied to real datasets rather than as theory.",
+        a: "No. Secondary-school mathematics is enough to start the Data Science & Analytics programme. We teach the statistics you need module by module over 12 to 16 weeks, applied to real Nigerian datasets rather than as theory, so you learn each method by answering a business question with it.",
       },
       {
         q: "Is Power BI or Tableau better for jobs in Nigeria?",
-        a: "Power BI appears in far more Nigerian job adverts because of Microsoft 365 adoption. We teach it first, then Tableau and Looker Studio for coverage.",
+        a: "Power BI, for most job seekers in Nigeria. It appears in far more Nigerian job adverts because so many companies already run Microsoft 365. We teach Power BI first, then Tableau and Looker Studio, so you can work in whichever tool an employer uses and show a dashboard built in each.",
       },
     ],
     enrollment: "3,200+",
@@ -226,6 +234,7 @@ export const departments: Department[] = [
   },
   {
     slug: "cybersecurity",
+    planId: "security-shield",
     id: "cybersecurity",
     title: "Cybersecurity",
     icon: "Shield",
@@ -271,11 +280,11 @@ export const departments: Department[] = [
     faqs: [
       {
         q: "Do I need a computer science degree?",
-        a: "No. Most of our security graduates come from other disciplines. What matters is completing the labs and being able to explain your findings clearly.",
+        a: "No. Most of our cybersecurity graduates come from other disciplines. What matters is completing the hands-on labs in the 16 to 20 week programme and explaining your findings clearly in writing. Employers hiring for security operations roles care more about what you can do and document than about your degree.",
       },
       {
         q: "Are certification exam fees included?",
-        a: "Training and exam preparation are included; the vendor exam fee is paid directly to CompTIA or EC-Council when you sit for it.",
+        a: "No. Training and exam preparation for CompTIA Security+ and CEH are included in your programme fee. The vendor exam fee itself is paid directly to CompTIA or EC-Council when you book and sit the exam, so you only pay it once you are ready to pass.",
       },
     ],
     enrollment: "1,500+",
@@ -285,6 +294,7 @@ export const departments: Department[] = [
   },
   {
     slug: "ai-machine-learning",
+    planId: "ai-innovator",
     id: "ai-ml",
     title: "AI & Machine Learning",
     icon: "Brain",
@@ -331,11 +341,11 @@ export const departments: Department[] = [
     faqs: [
       {
         q: "Do I need a powerful computer or GPU?",
-        a: "No. We work in Google Colab and other cloud notebooks for heavy training, so any laptop with a stable browser and internet connection is enough.",
+        a: "No. We run heavy model training in Google Colab and other cloud notebooks, so any laptop with a stable browser and internet connection is enough for the AI & Machine Learning programme. An older laptop or a power cut will not stop your training jobs, because they run in the cloud.",
       },
       {
         q: "Can this lead to remote AI work?",
-        a: "Yes. Many graduates start on AI training and evaluation platforms while building projects. Live roles are listed on our jobs board.",
+        a: "Yes. Many AI & Machine Learning graduates start on AI training and evaluation platforms while they build their own projects, then move into engineering roles. Live remote and Nigerian AI roles are listed on our jobs board, and graduates can join the Tech Faculty talent pool that employers hire from.",
       },
     ],
     enrollment: "2,100+",
@@ -345,6 +355,7 @@ export const departments: Department[] = [
   },
   {
     slug: "basic-internet-ai-studies",
+    planId: "bootcamp-starter",
     id: "basic-internet-ai",
     title: "Basic Internet & AI Studies",
     icon: "Globe",
@@ -389,11 +400,7 @@ export const departments: Department[] = [
     faqs: [
       {
         q: "I have never used a computer. Can I still join?",
-        a: "Yes — that is exactly who this programme is designed for. We start from switching the machine on.",
-      },
-      {
-        q: "How long is the programme?",
-        a: "Four to six weeks, with short sessions you can attend at any of our centres or online.",
+        a: "Yes. Basic Internet & AI Studies is built for people who have never used a computer. We start from switching the machine on, then move through the internet, email, documents and everyday AI tools like ChatGPT. Classes are short, run online or at any of our centres, and the programme is free.",
       },
     ],
     enrollment: "4,500+",
@@ -403,6 +410,7 @@ export const departments: Department[] = [
   },
   {
     slug: "digital-marketing",
+    planId: "digital-marketing-pro",
     id: "social-media",
     title: "Social Media & Digital Marketing",
     icon: "Share2",
@@ -449,11 +457,11 @@ export const departments: Department[] = [
     faqs: [
       {
         q: "Do I need an ad budget to learn paid advertising?",
-        a: "A small test budget helps, and we run shared classroom campaigns so you can work with live data before spending your own money.",
+        a: "No, you can start without one. We run shared classroom campaigns on Meta Ads Manager and Google Ads, so you practise on live data before spending your own money. A small personal test budget helps once you run your own ads, and you learn to keep that spending small and measurable.",
       },
       {
         q: "Is this useful for my existing business?",
-        a: "Very. Many participants join specifically to market their own shop, school or service and recover the fee within the programme.",
+        a: "Yes. Many participants join the Social Media & Digital Marketing programme specifically to market their own shop, school or service, and recover the fee from new customers within the 10 to 14 weeks. The campaigns, content and analytics you build in class are ones you can keep running afterwards.",
       },
     ],
     enrollment: "3,800+",
@@ -463,6 +471,7 @@ export const departments: Department[] = [
   },
   {
     slug: "design",
+    planId: "design-master",
     id: "design",
     title: "Design",
     icon: "Video",
@@ -508,11 +517,11 @@ export const departments: Department[] = [
     faqs: [
       {
         q: "Do I need to be good at drawing?",
-        a: "No. Digital design is about hierarchy, spacing and clarity. Drawing is a bonus, not a requirement.",
+        a: "No. Digital design is about hierarchy, spacing, colour and clarity, and those are skills you learn by practice rather than talent for drawing. Drawing is a bonus in the Design department, not a requirement. Most of the work happens in Figma and Adobe tools, where layout matters far more than illustration.",
       },
       {
         q: "Which software will I use?",
-        a: "Figma for interfaces, Adobe Photoshop and Illustrator for visual and print work, plus Canva for fast turnaround.",
+        a: "Figma for app and website interfaces, Adobe Photoshop and Illustrator for visual and print work, and Canva for fast turnaround on social media graphics. You also meet Framer and Notion, and you finish the 12 to 16 week Design programme with portfolio projects made in these tools.",
       },
     ],
     enrollment: "2,600+",
@@ -522,6 +531,7 @@ export const departments: Department[] = [
   },
   {
     slug: "cloud-computing",
+    planId: "cloud-architect",
     id: "cloud",
     title: "Cloud Computing",
     icon: "Cloud",
@@ -567,11 +577,11 @@ export const departments: Department[] = [
     faqs: [
       {
         q: "Are cloud lab costs expensive?",
-        a: "No. We work inside free tiers and teach budget alerts, so most learners spend little or nothing on infrastructure during the programme.",
+        a: "No. We work inside the free tiers of AWS, Azure and Google Cloud and teach budget alerts, so most learners spend little or nothing on infrastructure during the 14 to 18 week Cloud Computing programme. You learn to set a spending limit on every account before you launch anything on it.",
       },
       {
         q: "Which cloud should I specialise in?",
-        a: "Start with AWS for the largest job market, then add Azure — many Nigerian enterprises are Microsoft-first.",
+        a: "Start with AWS, which has the largest cloud job market, then add Azure, because many Nigerian enterprises are Microsoft-first. The Cloud Computing programme covers AWS, Azure and Google Cloud plus Docker, Kubernetes, Terraform and CI/CD pipelines, so you can move between providers once you know one well.",
       },
     ],
     enrollment: "1,900+",
@@ -626,11 +636,11 @@ export const departments: Department[] = [
     faqs: [
       {
         q: "Do I need to buy my own components?",
-        a: "Starter kits are available at member pricing, and our centres provide shared lab components for classwork.",
+        a: "No. Our centres provide shared lab components for classwork, so you can complete the Robotics & IoT programme without buying anything. If you want to keep building at home, starter kits are available at member pricing in the Tech Faculty tech store, which also supplies robotics kits to schools in bulk.",
       },
       {
         q: "Is programming experience required?",
-        a: "No. We teach the C and Python you need for microcontrollers as part of the programme.",
+        a: "No. We teach the C, C++ and Python you need for Arduino, ESP32 and Raspberry Pi boards as part of the 16 to 20 week Robotics & IoT programme. You write code for the circuits and sensors you build in class, so programming is learned alongside the hardware rather than before it.",
       },
     ],
     enrollment: "1,200+",
@@ -639,6 +649,38 @@ export const departments: Department[] = [
     trending: false,
   },
 ];
+
+/** "12-16 weeks" -> "12 to 16 weeks" */
+const spokenDuration = (d: string) => d.replace(/^(\d+)-(\d+)/, "$1 to $2");
+
+/** The cost-and-duration answer every department page leads its FAQ with. */
+function feeFaq(d: Department): DepartmentFaq {
+  const q = `How much does the ${d.title} programme cost and how long does it take?`;
+  const weeks = spokenDuration(d.duration);
+  const min = d.planId ? planMinimum(d.planId) : undefined;
+  if (min === 0) {
+    return {
+      q,
+      a: `${d.title} is free. The programme takes ${weeks} of short sessions, online or at any Tech Faculty centre, and there is no fee for the classes, the community or the completion certificate. Most of our students begin here before choosing a paid department such as web development, data analytics or AI.`,
+    };
+  }
+  if (min === undefined) {
+    return {
+      q,
+      a: `The ${d.title} programme takes ${weeks}. Fees depend on the modules and study mode you choose, so message us on WhatsApp with the modules you want and we confirm the exact amount in naira before you pay. Shared lab components are provided at our centres, and graduates receive a verifiable Tech Faculty certificate.`,
+    };
+  }
+  return {
+    q,
+    a: `The ${d.title} programme takes ${weeks} and costs from ${naira(min)} for online study. Hybrid study with monthly meetups adds ${naira(HYBRID_FEE)}, and weekly on-site classes add ${naira(PHYSICAL_FEE)}. You pick the modules you need when you enrol, and graduates receive a Tech Faculty certificate that employers can verify online.`,
+  };
+}
+
+/** A department's FAQ as shown on its page and in its FAQPage markup. */
+export const departmentFaqs = (d: Department): DepartmentFaq[] => [feeFaq(d), ...d.faqs];
+
+/** ISO date the department page last changed. */
+export const departmentUpdated = (d: Department) => d.updated ?? DEPARTMENTS_UPDATED;
 
 export const getDepartmentBySlug = (slug: string): Department | undefined =>
   departments.find((d) => d.slug === slug);

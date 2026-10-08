@@ -5,7 +5,7 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/login")({
   head: () =>
     pageHead({
-      title: "Sign In | Tech Faculty NG",
+      title: "Sign In",
       description:
         "Sign in to your Tech Faculty account to access your dashboard, courses and certificates.",
       path: "/login",

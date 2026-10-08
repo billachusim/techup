@@ -5,7 +5,7 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/talent/pool/")({
   head: () =>
     pageHead({
-      title: "Hire Vetted African Tech Talent | Tech Faculty",
+      title: "Hire Vetted African Tech Talent",
       description:
         "Browse the Tech Faculty talent pool: developers, designers, analysts, marketers and project managers across Nigeria and Africa, ready for remote and on-site work.",
       path: "/talent/pool",

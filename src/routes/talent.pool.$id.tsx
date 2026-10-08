@@ -12,7 +12,7 @@ export const Route = createFileRoute("/talent/pool/$id")({
       const person = data?.[0];
       if (!person) return null;
       return {
-        title: `${person.full_name} — ${person.headline ?? "Tech talent"}`.slice(0, 60),
+        title: `${person.full_name}, ${person.headline ?? "Tech Talent"}`,
         description:
           person.headline ??
           "Vetted tech talent on the Tech Faculty talent pool, available for remote and on-site work.",
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/talent/pool/$id")({
   },
   head: ({ loaderData, params }) =>
     pageHead({
-      title: loaderData?.title ?? "Talent Profile | Tech Faculty",
+      title: loaderData?.title ?? "Talent Profile",
       description:
         loaderData?.description ??
         "View this talent profile on the Tech Faculty talent pool.",

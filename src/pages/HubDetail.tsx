@@ -308,7 +308,7 @@ const HubDetail = () => {
                 <p>
                   <span className="text-foreground font-semibold">Structured teaching.</span>{" "}
                   Licensed by the Federal Ministry of Science, Technology and Innovation via the
-                  National Board for Technology Incubation, with over 6,000 students trained and
+                  National Board for Technology Incubation, with <Link to="/outcomes" className="text-primary hover:underline">over 6,000 students trained</Link> and
                   4+ years of training experience.
                 </p>
                 <p>

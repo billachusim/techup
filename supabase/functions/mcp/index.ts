@@ -3687,7 +3687,7 @@ Graduates of a well-run data analytics and visualization bootcamp move into role
 - **Junior Data Scientist** \u2014 after adding Python and statistics
 - **Remote freelance analyst** \u2014 Upwork, Toptal, and direct contracts; $25\u2013$60/hour
 
-87% of Tech Faculty graduates are employed within six months of finishing the program.
+75% of Tech Faculty graduates are employed within six months of finishing the program.
 
 ## How to choose a data analytics and visualization bootcamp in Nigeria
 

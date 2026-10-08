@@ -481,7 +481,7 @@ A: Yes. During school holidays we run teen tracks in Digital Creation, Coding, A
 
 ## Other pages
 
-- Home (https://techfaculty.ng/): FMSTI-licensed bootcamps in software engineering, data science, AI and cybersecurity. 6,000+ students trained, 87% employed. Learn in person or online.
+- Home (https://techfaculty.ng/): FMSTI-licensed bootcamps in software engineering, data science, AI and cybersecurity. 6,000+ students trained, 75% employed. Learn in person or online.
 - About Us: Our Mission & Story (https://techfaculty.ng/about): Tech Faculty NG — licensed by FMSTI via NBTI. We train, certify, and place the next generation of Nigerian tech professionals from Nnewi, Anambra State.
 - Blog: Tech Career Tips & Guides (https://techfaculty.ng/blog): Tech career guides, course deep-dives, SIWES tips, and AI insights from Tech Faculty NG. Practical advice for starting and growing your tech career in Nigeria.
 - Business Partnerships (https://techfaculty.ng/business-partnerships): Partner with Tech Faculty NG for corporate training, AI workshops, business digitization, and tech talent pipelines. FMSTI-licensed, based in Nnewi, Nigeria.

@@ -21,7 +21,7 @@ const courses = [
   {
     position: 1,
     name: "Data Analytics & Data Science",
-    description: "12-week intensive bootcamp covering Python, SQL, Power BI, and machine learning fundamentals. 87% graduate employment rate.",
+    description: "12-week intensive bootcamp covering Python, SQL, Power BI, and machine learning fundamentals. 75% graduate employment rate.",
     prerequisites: "Basic computer literacy",
     duration: "P12W",
     occupation: "Data Analyst",

@@ -19,7 +19,6 @@ const Founder = () => {
       description:
         "Founder and lead technical developer of Tech Faculty NG, a licensed tech school in Nnewi, Anambra State, Nigeria.",
       knowsAbout: ["Software engineering", "Software architecture", "Tech education", "AI automation"],
-      alumniOf: { "@type": "CollegeOrUniversity", name: "University of Lagos" },
       homeLocation: { "@type": "Place", name: "Nnewi, Anambra State, Nigeria" },
     },
   };
@@ -45,9 +44,9 @@ const Founder = () => {
             <div className="space-y-4 text-muted-foreground leading-relaxed">
               <p>
                 {BLOG_AUTHOR.fullName} is a software architect and programmer who founded Tech Faculty NG in 2022 at the
-                Digital Village in Nnewi, Anambra State. He studied at the University of Lagos and is still the school's
-                lead technical developer: he builds the platforms our students learn on and the Talent Pool that matches
-                graduates to paid work.
+                Digital Village in Nnewi, Anambra State. He holds a master's degree in Systems Engineering from the
+                University of Lagos and is still the school's lead technical developer: he builds the platforms our
+                students learn on and the Talent Pool that matches graduates to paid work.
               </p>
               <p>
                 He started Tech Faculty NG so that young people in South-East Nigeria could learn job-ready tech skills
@@ -56,7 +55,7 @@ const Founder = () => {
                 NBTI.
               </p>
               <p>
-                He is also the person behind the Nnewi Tech Meetup, and writes on this site about tech careers, AI
+                He is also the founder of the Nnewi Tech Meetup, and writes on this site about tech careers, AI
                 automation and hiring in Nigeria.
               </p>
             </div>

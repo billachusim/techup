@@ -21,7 +21,7 @@ export const Route = createFileRoute("/team/bill-achusim")({
     pageHead({
       title: "Bill Achusim - Founder of Tech Faculty NG",
       description:
-        "Nnamdi Bill Achusim is the founder and lead developer of Tech Faculty NG, the tech school in Nnewi, Anambra State. His background, links and articles.",
+        "Nnamdi Bill Achusim founded Tech Faculty NG in Nnewi, Anambra State, and the Nnewi Tech Meetup. He holds an MSc in Systems Engineering from the University of Lagos. His background, links and articles.",
       path: "/team/bill-achusim",
       type: "profile",
     }),

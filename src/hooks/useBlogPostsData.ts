@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/integrations/supabase/lazy";
 import type { BlogPost } from "@/types/blog";
 import blogPosts from "@/data/blogPosts";
 
@@ -37,6 +37,7 @@ function toBlogPost(row: DbPost): BlogPost {
 }
 
 async function fetchDbPosts(): Promise<BlogPost[]> {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from("blog_posts")
     .select("slug, title, description, content, category, tags, author, read_time, published_at")

@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/integrations/supabase/lazy";
 
 export type Job = {
   id: string;
@@ -35,6 +35,7 @@ export function africaFirst(a: Job, b: Job) {
 }
 
 export async function fetchJobs(limit = 300): Promise<Job[]> {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from("jobs")
     .select("*")
@@ -46,6 +47,7 @@ export async function fetchJobs(limit = 300): Promise<Job[]> {
 }
 
 export async function fetchJobBySlug(slug: string): Promise<Job | null> {
+  const supabase = await getSupabase();
   const { data, error } = await supabase.from("jobs").select("*").eq("slug", slug).maybeSingle();
   if (error) throw error;
   return (data as Job) ?? null;

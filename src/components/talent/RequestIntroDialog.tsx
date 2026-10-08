@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/integrations/supabase/lazy";
 import { introRequestUrl } from "@/lib/talent";
 import { notifyIntroRequest } from "@/lib/public-requests.functions";
 
@@ -39,6 +39,7 @@ const RequestIntroDialog = ({ talentId, talentName, skills, source = "talent_poo
       return;
     }
     setSending(true);
+    const supabase = await getSupabase();
     const { error } = await supabase.rpc("request_talent_intro", {
       _profile_id: talentId,
       _requester_name: form.name.trim().slice(0, 120),

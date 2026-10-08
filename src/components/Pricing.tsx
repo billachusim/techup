@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase, mightHaveSession } from "@/integrations/supabase/lazy";
 import { useToast } from "@/hooks/use-toast";
 import { SignupForm } from "./Auth/SignupForm";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -387,6 +387,9 @@ const Pricing = () => {
   // Check if user has paid plan and fetch enrollment data
   useEffect(() => {
     const checkUserPlan = async () => {
+      // Signed-out visitors have no plan to check, so skip loading the client.
+      if (!mightHaveSession()) return;
+      const supabase = await getSupabase();
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data: profile } = await supabase
@@ -575,6 +578,7 @@ const Pricing = () => {
     setSelectedPlanId(planId);
 
     // If user is logged in, skip the faculty ID dialog
+    const supabase = await getSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
       const { data: profile } = await supabase
@@ -604,6 +608,7 @@ const Pricing = () => {
       return;
     }
 
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from("profiles")
       .select("faculty_id")
@@ -639,6 +644,7 @@ const Pricing = () => {
       const total = totalPrices[selectedPlanId];
 
       // Get current user profile
+      const supabase = await getSupabase();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         throw new Error('User not authenticated');

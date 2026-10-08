@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/integrations/supabase/lazy";
 import type { Database } from "@/integrations/supabase/types";
 
 export type TalentRole = Database["public"]["Tables"]["talent_roles"]["Row"];
@@ -90,6 +90,7 @@ export const roleLocationLabel = (role: Pick<TalentRole, "city" | "country" | "i
 };
 
 export async function fetchPublishedRoles(kind?: string): Promise<TalentRole[]> {
+  const supabase = await getSupabase();
   let query = supabase
     .from("talent_roles")
     .select("*")
@@ -103,6 +104,7 @@ export async function fetchPublishedRoles(kind?: string): Promise<TalentRole[]> 
 }
 
 export async function fetchRoleBySlug(slug: string): Promise<TalentRole | null> {
+  const supabase = await getSupabase();
   const { data, error } = await supabase.from("talent_roles").select("*").eq("slug", slug).maybeSingle();
   if (error) throw error;
   return data;
@@ -185,18 +187,21 @@ export type PublicTalentSummary = Database["public"]["Functions"]["list_public_t
 export type PublicTalentDetail = Database["public"]["Functions"]["get_public_talent"]["Returns"][number];
 
 export async function fetchPublicTalent(): Promise<PublicTalentSummary[]> {
+  const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("list_public_talent");
   if (error) throw error;
   return data ?? [];
 }
 
 export async function fetchPublicTalentById(id: string): Promise<PublicTalentDetail | null> {
+  const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("get_public_talent", { profile_id: id });
   if (error) throw error;
   return data?.[0] ?? null;
 }
 
 export async function fetchProjectGroupUrl(roleId: string): Promise<string | null> {
+  const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("get_project_group_url", { _role_id: roleId });
   if (error) return null;
   return data ?? null;
@@ -213,6 +218,7 @@ export const DELIVERABLE_STATUS_LABEL: Record<string, string> = {
 
 /** Project links are only readable by matched talent and staff (database gated). */
 export async function fetchProjectWorkspace(roleId: string): Promise<ProjectWorkspace | null> {
+  const supabase = await getSupabase();
   const { data, error } = await supabase.rpc("get_project_workspace", { _role_id: roleId });
   if (error) return null;
   return data?.[0] ?? null;

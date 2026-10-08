@@ -1,5 +1,5 @@
 import { Link } from "@/lib/router-compat";
-import { ArrowRight, MessageCircle, Calendar } from "lucide-react";
+import { ArrowRight, MessageCircle, Calendar, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import JoinWhatsAppButton from "@/components/JoinWhatsAppButton";
@@ -7,6 +7,7 @@ import { AI_FELLOWSHIP_WHATSAPP_URL } from "@/lib/whatsapp";
 import aiForEverything from "@/assets/ai-for-everything.jpg";
 import nnewiTechMeetup from "@/assets/nnewi-tech-meetup.jpg";
 import siwesCover from "@/assets/siwes-featured.jpg";
+import talentMarketplace from "@/assets/talent-marketplace.jpg";
 
 type Program = {
   title: string;
@@ -54,6 +55,17 @@ const programs: Program[] = [
     cta: "See Event Details",
     href: "/events#nnewi-tech-meetup",
     icon: Calendar,
+  },
+  {
+    title: "Talent & Jobs Marketplace",
+    badge: "Now hiring",
+    description:
+      "Create your talent profile, apply to open roles with one click, and get matched to real projects with Nigerian and African businesses.",
+    image: talentMarketplace,
+    alt: "Tech Faculty Talent and Jobs Marketplace",
+    cta: "Browse Open Roles",
+    href: "/careers",
+    icon: Briefcase,
   },
 ];
 

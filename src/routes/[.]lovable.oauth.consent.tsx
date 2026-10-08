@@ -5,7 +5,7 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/.lovable/oauth/consent")({
   head: () =>
     pageHead({
-      title: "Authorize Access | Tech Faculty",
+      title: "Authorize Access",
       description: "Authorize an application to access your Tech Faculty account.",
       path: "/.lovable/oauth/consent",
       noindex: true,

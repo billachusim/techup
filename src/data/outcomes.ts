@@ -1,8 +1,7 @@
 // The numbers we quote about students and graduates, and how each one is counted.
 // Every page that repeats a number links to /outcomes, so change it here and on
 // that page together. Update `asOf` whenever the figures are recounted.
-//
-// TODO(Bill): confirm whether graduates we could not reach count as not employed.
+// Bill confirmed these methods and the 75% figure in October 2026.
 
 export const OUTCOMES_PATH = "/outcomes";
 

@@ -14,7 +14,7 @@ export const Route = createFileRoute("/blog/category/$slug")({
   },
   head: ({ loaderData, params }) =>
     pageHead({
-      title: loaderData?.title ?? "Blog Category | Tech Faculty NG",
+      title: loaderData?.title ?? "Blog Category",
       description:
         loaderData?.description ??
         "Browse articles in this category on the Tech Faculty NG blog.",

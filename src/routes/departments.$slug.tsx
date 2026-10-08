@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import DepartmentDetail from "@/pages/DepartmentDetail";
-import { pageHead } from "@/lib/seo";
+import { ogImage, pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/departments/$slug")({
   // Looked up in the loader so the departments data loads with this route,
@@ -14,11 +14,12 @@ export const Route = createFileRoute("/departments/$slug")({
   },
   head: ({ loaderData, params }) =>
     pageHead({
-      title: loaderData?.title ?? "Department not found | Tech Faculty",
+      title: loaderData?.title ?? "Department Not Found",
       description:
         loaderData?.description ??
         "This Tech Faculty department page is not available.",
       path: `/departments/${params.slug}`,
+      image: loaderData ? ogImage(`departments/${params.slug}.jpg`) : undefined,
       noindex: !loaderData,
     }),
   component: DepartmentDetail,

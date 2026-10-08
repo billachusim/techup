@@ -22,7 +22,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { HUBS_DISCLAIMER, getHub, hubWhatsAppUrl, hubsInCity } from "@/data/techHubs";
+import {
+  COURSE_AREA_DEPARTMENT,
+  HUB_CITY_CONTEXT,
+  HUBS_DISCLAIMER,
+  getHub,
+  hubWhatsAppUrl,
+  hubsInCity,
+} from "@/data/techHubs";
+import { campuses, getCampusBySlug } from "@/data/campuses";
+import { getCityGuideForCity } from "@/data/internalLinks";
 
 const HubDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -35,6 +44,12 @@ const HubDetail = () => {
   const title = `${hub.name} — Courses in ${hub.city}`;
   const description = `${hub.name} in ${hub.city}, ${hub.country}: course areas, learning formats and how Tech Faculty helps you choose a track, enrol and get certified — online, hybrid or in person.`;
   const related = hubsInCity(hub.city, hub.slug);
+  const cityGuide = hub.country === "Nigeria" ? getCityGuideForCity(hub.city) : undefined;
+  const campus =
+    (hub.campusSlug && getCampusBySlug(hub.campusSlug)) ||
+    (hub.country === "Nigeria" ? campuses.find((c) => c.city === hub.city) : undefined) ||
+    (cityGuide?.nearestCampusSlug ? getCampusBySlug(cityGuide.nearestCampusSlug) : undefined);
+  const cityContext = HUB_CITY_CONTEXT[hub.city];
 
   const faqs = [
     {
@@ -124,6 +139,59 @@ const HubDetail = () => {
           </div>
         </section>
 
+        {/* City context and links to the city guide and nearest campus */}
+        {(cityGuide || cityContext || campus) && (
+          <section className="container mx-auto px-4 mt-8">
+            <div className="max-w-3xl space-y-3 text-sm md:text-base text-muted-foreground leading-relaxed">
+              <h2 className="text-xl font-bold text-foreground">Learning tech in {hub.city}</h2>
+              {cityGuide && (
+                <>
+                  <p>Local demand in {hub.city} comes mostly from:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {cityGuide.sectors.map((s) => (
+                      <Badge key={s} variant="secondary" className="text-xs">{s}</Badge>
+                    ))}
+                  </div>
+                  <p>
+                    Our{" "}
+                    <Link to={`/blog/${cityGuide.slug}`} className="text-primary hover:underline">
+                      guide to the {hub.city} tech scene
+                    </Link>{" "}
+                    covers the courses and first projects that fit those sectors.
+                  </p>
+                </>
+              )}
+              {cityContext && (
+                <>
+                  <p>{cityContext}</p>
+                  <p>
+                    Every Tech Faculty department also runs online, so you can{" "}
+                    <Link to="/departments" className="text-primary hover:underline">
+                      study a Tech Faculty course from {hub.city}
+                    </Link>
+                    . For more options across the continent, see{" "}
+                    <Link to="/blog/top-tech-hubs-in-africa-where-to-learn-tech-2026" className="text-primary hover:underline">
+                      our guide to Africa&apos;s top tech hubs
+                    </Link>
+                    .
+                  </p>
+                </>
+              )}
+              {campus && !hub.isTechFaculty && (
+                <p>
+                  {campus.city === hub.city
+                    ? "Tech Faculty also has its own campus here: "
+                    : `There is no Tech Faculty campus in ${hub.city}; the nearest is `}
+                  <Link to={`/locations/${campus.slug}`} className="text-primary hover:underline">
+                    the Tech Faculty campus in {campus.city}
+                  </Link>
+                  .
+                </p>
+              )}
+            </div>
+          </section>
+        )}
+
         {/* Apply CTA with preloaded payload */}
         <section className="container mx-auto px-4 mt-8">
           <Card className="border-primary/40 bg-gradient-to-br from-primary/5 to-transparent">
@@ -173,7 +241,9 @@ const HubDetail = () => {
                 {hub.courseAreas.map((c) => (
                   <li key={c} className="flex items-start gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                    <span>{c}</span>
+                    <Link to={`/departments/${COURSE_AREA_DEPARTMENT[c]}`} className="hover:text-primary hover:underline">
+                      {c}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -205,7 +275,7 @@ const HubDetail = () => {
                 {hub.isTechFaculty && hub.campusSlug && (
                   <Button asChild size="sm" variant="outline">
                     <Link to={`/locations/${hub.campusSlug}`}>
-                      <Building2 className="w-3.5 h-3.5" /> Campus details
+                      <Building2 className="w-3.5 h-3.5" /> {hub.city} campus details
                     </Link>
                   </Button>
                 )}

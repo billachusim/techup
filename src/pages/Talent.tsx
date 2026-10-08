@@ -47,7 +47,7 @@ const Talent = () => {
           url: "https://techfaculty.ng/talent",
           description:
             "A vetted pool of Nigerian and African tech talent matched to paid remote and on-site work for local and international businesses.",
-          provider: { "@type": "Organization", name: "Tech Faculty", url: "https://techfaculty.ng" },
+          provider: { "@type": "Organization", name: "Tech Faculty NG", url: "https://techfaculty.ng" },
         })}</script>
       </>
       <Header />

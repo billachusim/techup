@@ -1,5 +1,5 @@
-import batteryBankBox from "@/assets/products/battery-bank-box.png";
-import batteryBankDetails from "@/assets/products/battery-bank-details.png";
+import batteryBankBox from "@/assets/products/battery-bank-box.jpg";
+import batteryBankDetails from "@/assets/products/battery-bank-details.jpg";
 import laptop1 from "@/assets/products/laptop-1.jpg";
 import laptop2 from "@/assets/products/laptop-2.jpg";
 import backpack1 from "@/assets/products/backpack-1.jpg";

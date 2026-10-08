@@ -17,10 +17,18 @@ import HomeWhatsAppPrompts from "@/components/HomeWhatsAppPrompts";
 
 const provider = { "@type": "Organization", "name": "Tech Faculty", "url": "https://techfaculty.ng" };
 
+// Blended and onsite course instances must name where the in-person sessions happen.
+const courseLocation = {
+  "@type": "Place",
+  "name": "Tech Faculty NG, Nnewi",
+  "address": { "@type": "PostalAddress", "addressLocality": "Nnewi", "addressRegion": "Anambra State", "addressCountry": "NG" },
+};
+
 const courses = [
   {
     position: 1,
     name: "Data Analytics & Data Science",
+    slug: "data-science-analytics",
     description: "12-week intensive bootcamp covering Python, SQL, Power BI, and machine learning fundamentals. 87% graduate employment rate.",
     prerequisites: "Basic computer literacy",
     duration: "P12W",
@@ -30,6 +38,7 @@ const courses = [
   {
     position: 2,
     name: "Web Development",
+    slug: "web-development",
     description: "Full-stack web development bootcamp covering HTML, CSS, JavaScript, React, and Node.js with real-world projects.",
     prerequisites: "Basic computer literacy",
     duration: "P12W",
@@ -39,6 +48,7 @@ const courses = [
   {
     position: 3,
     name: "Cybersecurity",
+    slug: "cybersecurity",
     description: "Hands-on cybersecurity training covering network security, ethical hacking, and compliance frameworks.",
     prerequisites: "Basic networking knowledge",
     duration: "P12W",
@@ -48,6 +58,7 @@ const courses = [
   {
     position: 4,
     name: "Artificial Intelligence & Machine Learning",
+    slug: "ai-machine-learning",
     description: "Advanced AI/ML bootcamp with TensorFlow, PyTorch, and real-world deployment projects.",
     prerequisites: "Basic Python programming",
     duration: "P16W",
@@ -57,6 +68,7 @@ const courses = [
   {
     position: 5,
     name: "Digital Marketing",
+    slug: "digital-marketing",
     description: "Comprehensive digital marketing course covering SEO, social media, Google Ads, and analytics.",
     prerequisites: "None",
     duration: "P8W",
@@ -77,6 +89,7 @@ const courseSchema = {
       "@type": "Course",
       "name": c.name,
       "description": c.description,
+      "url": `https://techfaculty.ng/departments/${c.slug}`,
       "provider": provider,
       "coursePrerequisites": c.prerequisites,
       "timeRequired": c.duration,
@@ -87,12 +100,14 @@ const courseSchema = {
         "price": c.price,
         "priceCurrency": "NGN",
         "availability": "https://schema.org/InStock",
+        "category": "Paid",
         "url": "https://techfaculty.ng/#pricing"
       },
       "hasCourseInstance": {
         "@type": "CourseInstance",
-        "courseMode": "blended",
-        "courseWorkload": c.duration
+        "courseMode": "Blended",
+        "courseWorkload": c.duration,
+        "location": courseLocation
       }
     }
   }))

@@ -16,6 +16,9 @@ const DepartmentDetail = () => {
   if (!dept) return <Navigate to="/departments" replace />;
 
   const url = `https://techfaculty.ng/departments/${dept.slug}`;
+  // Structured data needs an ISO 8601 duration; "12-16 weeks" becomes P16W (the longest pace).
+  const weeks = dept.duration.match(/\d+/g);
+  const courseWorkload = weeks ? `P${weeks[weeks.length - 1]}W` : undefined;
 
   const courseSchema = {
     "@context": "https://schema.org",
@@ -32,11 +35,13 @@ const DepartmentDetail = () => {
       url: "https://techfaculty.ng/",
       areaServed: "NG",
     },
+    offers: { "@type": "Offer", category: "Paid", url },
     hasCourseInstance: [
+      { "@type": "CourseInstance", courseMode: "Online", courseWorkload },
       {
         "@type": "CourseInstance",
-        courseMode: ["Online", "Onsite"],
-        courseWorkload: dept.duration,
+        courseMode: "Onsite",
+        courseWorkload,
         location: {
           "@type": "Place",
           name: "Technology Incubation Centre, Nnewi",

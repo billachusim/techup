@@ -131,7 +131,7 @@ export function eventUrl(event: TechEvent) {
   return `https://techfaculty.ng/events/${event.slug}`;
 }
 
-/** Try to recover an ISO start date from free-text date labels like "12 September 2026". */
+/** Try to recover an ISO start date (YYYY-MM-DD) from free-text date labels like "12 September 2026". */
 export function resolveStartDate(event: TechEvent): string | null {
   if (event.starts_at) return event.starts_at;
   const text = (event.date_text ?? "").trim();
@@ -139,7 +139,9 @@ export function resolveStartDate(event: TechEvent): string | null {
   const cleaned = text.replace(/\b(\d{1,2})(st|nd|rd|th)\b/gi, "$1").split(/\s*(?:–|—|-\s|to\s)/)[0];
   const parsed = new Date(cleaned);
   if (Number.isNaN(parsed.getTime())) return null;
-  return parsed.toISOString();
+  // The label has no time of day, so emit a plain date rather than an invented midnight.
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${parsed.getFullYear()}-${pad(parsed.getMonth() + 1)}-${pad(parsed.getDate())}`;
 }
 
 function organizerUrl(event: TechEvent) {
@@ -155,7 +157,6 @@ function organizerUrl(event: TechEvent) {
 export function eventSchema(event: TechEvent) {
   const start = resolveStartDate(event);
   if (!start) return null;
-  const end = event.ends_at ?? new Date(new Date(start).getTime() + 3 * 60 * 60 * 1000).toISOString();
   const virtual = event.format === "VIRTUAL";
   const hybrid = event.format === "HYBRID";
 
@@ -165,7 +166,7 @@ export function eventSchema(event: TechEvent) {
     address: {
       "@type": "PostalAddress",
       streetAddress: event.address ?? undefined,
-      addressLocality: event.city ?? "Lagos",
+      addressLocality: event.city ?? undefined,
       addressRegion: event.state ?? undefined,
       addressCountry: event.country ?? "NG",
     },
@@ -191,10 +192,9 @@ export function eventSchema(event: TechEvent) {
         : "https://schema.org/OfflineEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
     startDate: start,
-    endDate: end,
+    endDate: event.ends_at ?? undefined,
     location: virtual ? online : hybrid ? [place, online] : place,
     organizer: { "@type": "Organization", name: event.organizer, url: organizerUrl(event) },
-    performer: { "@type": "PerformingGroup", name: event.organizer },
     image: event.image_url ? [event.image_url] : undefined,
     url: eventUrl(event),
     isAccessibleForFree: event.is_free,
@@ -203,7 +203,6 @@ export function eventSchema(event: TechEvent) {
       url: event.source_url,
       price: priceNumber ?? undefined,
       priceCurrency: event.is_free ? "NGN" : event.currency ?? (priceNumber ? "NGN" : undefined),
-      validFrom: new Date(event.last_seen_at).toISOString(),
       availability: "https://schema.org/InStock",
       category: event.is_free ? "Free" : "Paid",
     },

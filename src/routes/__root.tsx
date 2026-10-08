@@ -114,11 +114,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: SITE_TITLE },
       { name: "author", content: "Tech Faculty NG" },
       {
-        name: "keywords",
-        content:
-          "tech training Nigeria, AI training Nnewi, data science bootcamp, web development course, cybersecurity training, SIWES placement, industrial training Nigeria, tech faculty, FMSTI, NBTI, Anambra State tech, South East Nigeria tech",
-      },
-      {
         name: "robots",
         content:
           "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",

@@ -3,15 +3,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://techfaculty.ng/</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/about</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/blog</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/blog/tech-scene-hubs-and-training-in-nnewi-2026</loc>
@@ -68,6 +68,26 @@
   <url>
     <loc>https://techfaculty.ng/blog/tech-scene-hubs-and-training-in-ota-2026</loc>
     <lastmod>2026-09-13</lastmod>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/tech-course-fees-nigeria-2026</loc>
+    <lastmod>2026-10-08</lastmod>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/best-tech-bootcamps-anambra-south-east-nigeria-2026</loc>
+    <lastmod>2026-10-08</lastmod>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/siwes-computer-science-ict-students-nigeria-2026</loc>
+    <lastmod>2026-10-08</lastmod>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/online-vs-physical-tech-bootcamp-nigeria-2026</loc>
+    <lastmod>2026-10-08</lastmod>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/how-to-verify-tech-certificate-nigeria</loc>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/blog/ai-automation-for-nigerian-businesses-2026</loc>
@@ -375,11 +395,11 @@
   </url>
   <url>
     <loc>https://techfaculty.ng/blog/category/tech-careers</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/blog/category/siwes-internships</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/blog/category/startups-business</loc>
@@ -391,11 +411,11 @@
   </url>
   <url>
     <loc>https://techfaculty.ng/business-partnerships</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/careers</loc>
-    <lastmod>2026-09-27</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/careers/jobs/micro1-ai-mechatronics-engineer-u8o21f</loc>
@@ -435,19 +455,19 @@
   </url>
   <url>
     <loc>https://techfaculty.ng/careers/platforms/micro1</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/careers/platforms/ask-ethos</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/careers/platforms/atlas-capture</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/departments</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/departments/web-development</loc>
@@ -491,74 +511,10 @@
   </url>
   <url>
     <loc>https://techfaculty.ng/events</loc>
-    <lastmod>2026-09-13</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/fundamentos-y-arquitectura-de-mcp-3krizq</loc>
-    <lastmod>2026-10-05</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/let-s-learn-github-copilot-sdk-43hlf2</loc>
-    <lastmod>2026-10-05</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/model-mondays-spotlight-on-fine-tuned-models-m7rxmv</loc>
-    <lastmod>2026-10-05</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/get-into-gear-deploy-and-test-olhqtj</loc>
-    <lastmod>2026-10-05</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/get-into-gear-meet-your-first-agent-kd1v4j</loc>
-    <lastmod>2026-10-05</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/aws-community-day-west-africa-2026-cmafkr</loc>
-    <lastmod>2026-10-05</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/beyond-chatbots-build-your-first-production-agent-with-microsoft-found-lbu3gt</loc>
-    <lastmod>2026-10-05</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/introducci-n-a-alm-para-power-platform-con-azure-devops-j8l1a1</loc>
-    <lastmod>2026-10-05</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/aws-community-day-west-africa-2026-yzg99p</loc>
-    <lastmod>2026-09-21</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/odoo-business-show-lagos-iqtskd</loc>
-    <lastmod>2026-09-21</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/techfeast-2026-pupplb</loc>
-    <lastmod>2026-09-14</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/aws-community-day-west-africa-2026-i1cvu7</loc>
-    <lastmod>2026-09-14</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/african-creators-conference-2-0-9c4ibg</loc>
-    <lastmod>2026-09-14</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/odoo-business-show-lagos-phg276</loc>
-    <lastmod>2026-08-31</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/aws-community-day-west-africa-2026-s8tzmw</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/events/nnewi-tech-meetup</loc>
-    <lastmod>2026-08-14</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/holiday-tech-bootcamp-for-teenagers</loc>
     <lastmod>2026-08-14</lastmod>
   </url>
   <url>
@@ -566,39 +522,7 @@
     <lastmod>2026-08-14</lastmod>
   </url>
   <url>
-    <loc>https://techfaculty.ng/events/aws-innovate-online-conference-vi6efl</loc>
-    <lastmod>2026-08-14</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/awsome-day-online-conference-m8lns</loc>
-    <lastmod>2026-08-14</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/lagos-tech-mixer-and-social-tech-ai-data-it-3hzwif</loc>
-    <lastmod>2026-08-14</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/going-global-start-move-or-scale-your-startup-in-the-uk-pc4wfi</loc>
-    <lastmod>2026-08-14</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/move-settle-in-the-uk-as-a-talent-masterclass-m1s0yg</loc>
-    <lastmod>2026-08-14</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/aws-imagine-for-education-state-and-local-government-21ogs2</loc>
-    <lastmod>2026-08-14</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/young-innovators-forum-1mvpwp</loc>
-    <lastmod>2026-08-14</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/future-ready-executive-masterclass-ai-automation-7el0d0</loc>
-    <lastmod>2026-08-14</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/events/privacy-conference-privcon-2026-34lhn7</loc>
+    <loc>https://techfaculty.ng/events/holiday-tech-bootcamp-for-teenagers</loc>
     <lastmod>2026-08-14</lastmod>
   </url>
   <url>
@@ -607,7 +531,7 @@
   </url>
   <url>
     <loc>https://techfaculty.ng/hubs</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/hubs/tech-faculty-nnewi</loc>
@@ -687,7 +611,7 @@
   </url>
   <url>
     <loc>https://techfaculty.ng/locations</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/locations/nnewi</loc>
@@ -779,31 +703,35 @@
   </url>
   <url>
     <loc>https://techfaculty.ng/lovable</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/outcomes</loc>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/products</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/school-collaborations</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/siwes</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/siwes-success-kit</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/talent</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/talent/pool</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/talent/roles/marketing-sales-representative</loc>
@@ -854,12 +782,16 @@
     <lastmod>2026-09-13</lastmod>
   </url>
   <url>
+    <loc>https://techfaculty.ng/team/bill-achusim</loc>
+    <lastmod>2026-10-08</lastmod>
+  </url>
+  <url>
     <loc>https://techfaculty.ng/tech-store</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/tinypeople</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/verify/</loc>
@@ -867,6 +799,6 @@
   </url>
   <url>
     <loc>https://techfaculty.ng/virtual-siwes</loc>
-    <lastmod>2026-09-13</lastmod>
+    <lastmod>2026-10-08</lastmod>
   </url>
 </urlset>

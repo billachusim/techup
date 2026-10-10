@@ -93,15 +93,32 @@ function hash(input: string): string {
 }
 
 const TECH_HINTS = [
-  "engineer", "developer", "data", "ai", "machine learning", "ml", "software", "cyber",
-  "security", "analyst", "designer", "product", "devops", "cloud", "qa", "python",
-  "frontend", "backend", "full stack", "fullstack", "annotat", "tutor", "expert",
-  "prompt", "researcher", "trainer", "writer", "reviewer", "linguist", "mobile", "it ",
+  "engineer", "developer", "software", "programmer", "coder", "coding", "data scien",
+  "data engineer", "data analyst", "machine learning", "ml ", "ai ", "llm", "devops",
+  "cloud", "sre", "qa", "test automation", "python", "javascript", "typescript", "java",
+  "golang", "rust", "c++", "react", "node", "frontend", "front-end", "backend", "back-end",
+  "full stack", "fullstack", "full-stack", "mobile", "android", "ios", "cyber", "security",
+  "infrastructure", "architect", "sql",
+];
+const EXCLUDE_HINTS = [
+  "sales", "marketing", "account executive", "recruit", "customer success", "customer support",
+  "copywriter", "content writer", "translator", "linguist", "legal", "lawyer", "medical",
+  "doctor", "nurse", "finance", "accountant", "biology", "chemistry", "physics",
 ];
 
 function isRelevant(title: string): boolean {
-  const t = title.toLowerCase();
+  const t = ` ${title.toLowerCase()} `;
+  if (EXCLUDE_HINTS.some((h) => t.includes(h))) return false;
   return TECH_HINTS.some((h) => t.includes(h));
+}
+
+const AFRICA_RX = /nigeria|\bng\b|nga|africa|ghana|kenya|south africa|egypt|rwanda|uganda|ethiopia|tanzania|morocco|senegal|cameroon|worldwide|global|anywhere|international/i;
+
+/** Keeps roles open to Africans: worldwide/Africa/African country, or unstated and fully remote. */
+function isOpenToAfrica(regions: string[], isRemote: boolean): boolean {
+  const clean = regions.map((r) => String(r).trim()).filter(Boolean);
+  if (!clean.length) return isRemote;
+  return clean.some((r) => AFRICA_RX.test(r));
 }
 
 async function scrapeSource(source: Source, apiKey: string) {

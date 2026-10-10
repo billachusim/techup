@@ -12,25 +12,30 @@ type Source = { platform: string; url: string };
 
 // Listing pages for the AI / remote tech work platforms that reliably return
 // Nigeria- and Africa-friendly roles. Kept deliberately short to limit spend.
+// Mercor is read from its free public listings feed (no scraping cost), see fetchMercor().
 const SOURCES: Source[] = [
-  { platform: "Mercor", url: "https://work.mercor.com/jobs" },
   { platform: "Micro1", url: "https://www.micro1.ai/jobs" },
+  { platform: "Outlier", url: "https://app.outlier.ai/opportunities" },
+  { platform: "Handshake AI", url: "https://joinhandshake.com/move-program/" },
+  { platform: "Toloka", url: "https://toloka.ai/experts" },
+  { platform: "Alignerr", url: "https://www.alignerr.com/jobs" },
   { platform: "Turing", url: "https://www.turing.com/jobs" },
   { platform: "Mindrift", url: "https://www.mindrift.ai/opportunities" },
-  { platform: "Outlier", url: "https://outlier.ai/expert-jobs" },
-  { platform: "Alignerr", url: "https://www.alignerr.com/" },
   { platform: "Remote OK", url: "https://remoteok.com/remote-dev-jobs" },
   { platform: "Jobberman Nigeria", url: "https://www.jobberman.com/jobs/software-data" },
 ];
 
+const MERCOR_FEED = "https://aws.api.mercor.com/work/listings-explore-page";
+const MAX_MERCOR = 20;
+
 /** Cost controls — one weekly run must stay small and predictable. */
-const MAX_PER_PLATFORM = 6;
+const MAX_PER_PLATFORM = 8;
 /** Once we have this many fresh jobs, remaining sources are skipped this week. */
-const TARGET_TOTAL = 60;
+const TARGET_TOTAL = 80;
 /** Sources scraped concurrently per wave (lets us stop early). */
 const WAVE_SIZE = 4;
-/** Only listings published within this window are imported. */
-const MAX_AGE_DAYS = 14;
+/** Ms to let job boards finish loading their listings before reading them. */
+const WAIT_FOR_MS = 6000;
 
 const jobsSchema = {
   type: "object",
@@ -105,8 +110,8 @@ async function scrapeSource(source: Source, apiKey: string) {
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       url: source.url,
-      onlyMainContent: true,
-      waitFor: 1200,
+      onlyMainContent: false,
+      waitFor: WAIT_FOR_MS,
       formats: [{ type: "json", schema: jobsSchema, prompt: EXTRACT_PROMPT }],
     }),
   });
@@ -124,6 +129,47 @@ async function scrapeSource(source: Source, apiKey: string) {
 
 const ALLOWED_TYPES = ["FULL_TIME", "PART_TIME", "CONTRACTOR", "INTERN", "TEMPORARY"];
 
+const MERCOR_SOURCE: Source = { platform: "Mercor", url: "https://work.mercor.com/explore" };
+
+/** Reads Mercor's public listings feed (free) and maps it to scraper-shaped rows. */
+async function fetchMercor() {
+  const res = await fetch(MERCOR_FEED, { headers: { Accept: "application/json" } });
+  if (!res.ok) throw new Error(`[${res.status}] ${(await res.text()).slice(0, 300)}`);
+  const data = await res.json();
+  // deno-lint-ignore no-explicit-any
+  const listings: any[] = Array.isArray(data?.listings) ? data.listings : [];
+  // deno-lint-ignore no-explicit-any
+  const open = listings.filter((l: any) =>
+    l?.status === "active" && !l?.deletedAt && !l?.isPrivate && !l?.disableApplications && l?.title && l?.listingId
+  );
+  // Prefer roles open to Nigeria/Africa or with no country restriction, then newest.
+  // deno-lint-ignore no-explicit-any
+  const score = (l: any) => {
+    const elig: string[] = [...(l.eligibleLocation ?? []), ...(l.eligibleResidenceLocation ?? [])].map((s) => String(s).toLowerCase());
+    if (!elig.length) return 2;
+    return elig.some((s) => /nigeria|nga|africa|global|worldwide/.test(s)) ? 3 : 0;
+  };
+  open.sort((a, b) => score(b) - score(a) || String(b.postedAt ?? b.createdAt).localeCompare(String(a.postedAt ?? a.createdAt)));
+  const unit = (f: string) => (f === "hourly" ? "HOUR" : f === "monthly" ? "MONTH" : f === "yearly" ? "YEAR" : null);
+  // deno-lint-ignore no-explicit-any
+  return open.map((l: any) => ({
+    title: l.title,
+    company: l.companyBrandVisible && l.companyName ? l.companyName : "Mercor",
+    url: `https://work.mercor.com/jobs/${l.listingId}`,
+    description: String(l.description ?? "").replace(/[#*_>]/g, "").replace(/\s+/g, " ").trim(),
+    employment_type: l.commitment === "full-time" ? "FULL_TIME" : "CONTRACTOR",
+    is_remote: l.workArrangement !== "onsite",
+    location: l.location ?? null,
+    salary_min: typeof l.rateMin === "number" ? l.rateMin : undefined,
+    salary_max: typeof l.rateMax === "number" ? l.rateMax : undefined,
+    salary_currency: typeof l.rateMin === "number" ? "USD" : undefined,
+    salary_unit: unit(String(l.payRateFrequency ?? "")) ?? undefined,
+    posted_date: l.postedAt ?? l.createdAt,
+    tags: l.listingDomain ? [String(l.listingDomain)] : [],
+    _domain: String(l.listingDomain ?? ""),
+  }));
+}
+
 /** Parses a scraped posted date. Returns null when unreadable. */
 function parsePostedAt(value: unknown): string | null {
   if (!value) return null;
@@ -138,7 +184,8 @@ function parsePostedAt(value: unknown): string | null {
 function normalize(raw: any, source: Source) {
   const title = String(raw?.title ?? "").trim();
   if (!title || title.length > 160) return null;
-  if (!isRelevant(title)) return null;
+  // Mercor listings are all AI-training/expert work, so keep every domain.
+  if (source.platform !== "Mercor" && !isRelevant(title)) return null;
 
   const description = String(raw?.description ?? "").trim();
   if (description.length < 40) return null;
@@ -150,12 +197,9 @@ function normalize(raw: any, source: Source) {
   const type = String(raw?.employment_type ?? "").toUpperCase().replace(/[\s-]/g, "_");
   const employment_type = ALLOWED_TYPES.includes(type) ? type : "FULL_TIME";
 
-  // Recency gate: drop anything published more than MAX_AGE_DAYS ago.
+  // No age cutoff: a listing stays live while the platform still shows it
+  // (archive_stale_listings expires jobs we stop seeing).
   const postedAt = parsePostedAt(raw?.posted_date);
-  if (postedAt) {
-    const age = Date.now() - new Date(postedAt).getTime();
-    if (age > MAX_AGE_DAYS * 864e5) return null;
-  }
 
   const slug = `${slugify(`${company}-${title}`)}-${hash(`${source.platform}|${sourceUrl}|${title}`)}`;
 
@@ -200,6 +244,25 @@ Deno.serve(async (req) => {
 
     // Dedupe by source_url — the table has a unique constraint on it.
     const byUrl: Record<string, NonNullable<ReturnType<typeof normalize>>> = {};
+
+    // Mercor: free public feed. Anything no longer in the feed is closed, so expire it now.
+    const mercorSeen: string[] = [];
+    try {
+      const raws = await fetchMercor();
+      let kept = 0;
+      for (const raw of raws) {
+        if (kept >= MAX_MERCOR) break;
+        const row = normalize(raw, MERCOR_SOURCE);
+        if (!row || byUrl[row.source_url]) continue;
+        byUrl[row.source_url] = row;
+        mercorSeen.push(row.source_url);
+        kept++;
+      }
+      report.Mercor = `${kept} jobs (of ${raws.length} open)`;
+    } catch (e) {
+      report.Mercor = `failed: ${String(e).slice(0, 200)}`;
+      console.error("scrape-jobs: Mercor feed failed", e);
+    }
 
     // Scrape in small waves so we can stop as soon as we have enough fresh jobs.
     for (let start = 0; start < SOURCES.length; start += WAVE_SIZE) {
@@ -247,6 +310,15 @@ Deno.serve(async (req) => {
 
     // Archive stale jobs / finished events and purge very old rows.
     await supabase.rpc("archive_stale_listings");
+
+    if (mercorSeen.length) {
+      await supabase
+        .from("jobs")
+        .update({ is_expired: true })
+        .eq("source_platform", "Mercor")
+        .eq("is_expired", false)
+        .not("source_url", "in", `(${mercorSeen.map((u) => `"${u}"`).join(",")})`);
+    }
 
     return new Response(
       JSON.stringify({ success: true, upserted: inserted, ms: Date.now() - started, report }),

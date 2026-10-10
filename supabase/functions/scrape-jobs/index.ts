@@ -26,12 +26,12 @@ const SOURCES: Source[] = [
 ];
 
 const MERCOR_FEED = "https://aws.api.mercor.com/work/listings-explore-page";
-const MAX_MERCOR = 20;
+const MAX_MERCOR = 12;
 
-/** Cost controls — one weekly run must stay small and predictable. */
-const MAX_PER_PLATFORM = 8;
-/** Once we have this many fresh jobs, remaining sources are skipped this week. */
-const TARGET_TOTAL = 80;
+/** Cost controls — one twice-monthly run must stay small and predictable. */
+const MAX_PER_PLATFORM = 6;
+/** Once we have this many fresh jobs, remaining sources are skipped this run. */
+const TARGET_TOTAL = 50;
 /** Sources scraped concurrently per wave (lets us stop early). */
 const WAVE_SIZE = 4;
 /** Ms to let job boards finish loading their listings before reading them. */
@@ -59,6 +59,7 @@ const jobsSchema = {
           salary_unit: { type: "string" },
           posted_date: { type: "string" },
           tags: { type: "array", items: { type: "string" } },
+          eligible_regions: { type: "array", items: { type: "string" } },
         },
         required: ["title", "company", "description"],
       },
@@ -69,11 +70,13 @@ const jobsSchema = {
 
 const EXTRACT_PROMPT =
   `Extract at most ${MAX_PER_PLATFORM} of the newest technology, AI, data, engineering or design ` +
-  "job listings on this page. For each: title, hiring company (use the platform name if the listing " +
+  "job listings on this page (software engineering, data, AI/ML, DevOps, cloud, QA, security, mobile only). " +
+  "For each: title, hiring company (use the platform name if the listing " +
   "is the platform itself), the absolute apply URL, a factual 2-4 sentence description from the page " +
   "content, employment_type (FULL_TIME PART_TIME CONTRACTOR INTERN TEMPORARY), is_remote, location, " +
   "ISO country code, pay range with currency and unit (HOUR, MONTH, YEAR) only when published, " +
-  "posted_date as an ISO date when the page shows when it was posted, and up to 4 skill tags. " +
+  "posted_date as an ISO date when the page shows when it was posted, up to 4 skill tags, and " +
+  "eligible_regions: countries/regions applicants must live in exactly as stated (e.g. Worldwide, US only, Africa), empty if not stated. " +
   "Never invent pay, dates, locations or companies — omit unknown fields.";
 
 function slugify(input: string): string {
@@ -184,6 +187,7 @@ async function fetchMercor() {
     posted_date: l.postedAt ?? l.createdAt,
     tags: l.listingDomain ? [String(l.listingDomain)] : [],
     _domain: String(l.listingDomain ?? ""),
+    eligible_regions: [...(l.eligibleLocation ?? []), ...(l.eligibleResidenceLocation ?? [])].map(String),
   }));
 }
 
@@ -201,8 +205,11 @@ function parsePostedAt(value: unknown): string | null {
 function normalize(raw: any, source: Source) {
   const title = String(raw?.title ?? "").trim();
   if (!title || title.length > 160) return null;
-  // Mercor listings are all AI-training/expert work, so keep every domain.
-  if (source.platform !== "Mercor" && !isRelevant(title)) return null;
+  // Software/tech roles only (Mercor coding/engineering domains count too).
+  const domain = String(raw?._domain ?? "").toLowerCase();
+  if (!isRelevant(title) && !/software|engineer|coding|code|data|machine learning/.test(domain)) return null;
+  const regions = Array.isArray(raw?.eligible_regions) ? raw.eligible_regions : [];
+  if (!isOpenToAfrica(regions, raw?.is_remote !== false)) return null;
 
   const description = String(raw?.description ?? "").trim();
   if (description.length < 40) return null;

@@ -129,6 +129,47 @@ async function scrapeSource(source: Source, apiKey: string) {
 
 const ALLOWED_TYPES = ["FULL_TIME", "PART_TIME", "CONTRACTOR", "INTERN", "TEMPORARY"];
 
+const MERCOR_SOURCE: Source = { platform: "Mercor", url: "https://work.mercor.com/explore" };
+
+/** Reads Mercor's public listings feed (free) and maps it to scraper-shaped rows. */
+async function fetchMercor() {
+  const res = await fetch(MERCOR_FEED, { headers: { Accept: "application/json" } });
+  if (!res.ok) throw new Error(`[${res.status}] ${(await res.text()).slice(0, 300)}`);
+  const data = await res.json();
+  // deno-lint-ignore no-explicit-any
+  const listings: any[] = Array.isArray(data?.listings) ? data.listings : [];
+  // deno-lint-ignore no-explicit-any
+  const open = listings.filter((l: any) =>
+    l?.status === "active" && !l?.deletedAt && !l?.isPrivate && !l?.disableApplications && l?.title && l?.listingId
+  );
+  // Prefer roles open to Nigeria/Africa or with no country restriction, then newest.
+  // deno-lint-ignore no-explicit-any
+  const score = (l: any) => {
+    const elig: string[] = [...(l.eligibleLocation ?? []), ...(l.eligibleResidenceLocation ?? [])].map((s) => String(s).toLowerCase());
+    if (!elig.length) return 2;
+    return elig.some((s) => /nigeria|nga|africa|global|worldwide/.test(s)) ? 3 : 0;
+  };
+  open.sort((a, b) => score(b) - score(a) || String(b.postedAt ?? b.createdAt).localeCompare(String(a.postedAt ?? a.createdAt)));
+  const unit = (f: string) => (f === "hourly" ? "HOUR" : f === "monthly" ? "MONTH" : f === "yearly" ? "YEAR" : null);
+  // deno-lint-ignore no-explicit-any
+  return open.map((l: any) => ({
+    title: l.title,
+    company: l.companyBrandVisible && l.companyName ? l.companyName : "Mercor",
+    url: `https://work.mercor.com/jobs/${l.listingId}`,
+    description: String(l.description ?? "").replace(/[#*_>]/g, "").replace(/\s+/g, " ").trim(),
+    employment_type: l.commitment === "full-time" ? "FULL_TIME" : "CONTRACTOR",
+    is_remote: l.workArrangement !== "onsite",
+    location: l.location ?? null,
+    salary_min: typeof l.rateMin === "number" ? l.rateMin : undefined,
+    salary_max: typeof l.rateMax === "number" ? l.rateMax : undefined,
+    salary_currency: typeof l.rateMin === "number" ? "USD" : undefined,
+    salary_unit: unit(String(l.payRateFrequency ?? "")) ?? undefined,
+    posted_date: l.postedAt ?? l.createdAt,
+    tags: l.listingDomain ? [String(l.listingDomain)] : [],
+    _domain: String(l.listingDomain ?? ""),
+  }));
+}
+
 /** Parses a scraped posted date. Returns null when unreadable. */
 function parsePostedAt(value: unknown): string | null {
   if (!value) return null;
@@ -155,12 +196,9 @@ function normalize(raw: any, source: Source) {
   const type = String(raw?.employment_type ?? "").toUpperCase().replace(/[\s-]/g, "_");
   const employment_type = ALLOWED_TYPES.includes(type) ? type : "FULL_TIME";
 
-  // Recency gate: drop anything published more than MAX_AGE_DAYS ago.
+  // No age cutoff: a listing stays live while the platform still shows it
+  // (archive_stale_listings expires jobs we stop seeing).
   const postedAt = parsePostedAt(raw?.posted_date);
-  if (postedAt) {
-    const age = Date.now() - new Date(postedAt).getTime();
-    if (age > MAX_AGE_DAYS * 864e5) return null;
-  }
 
   const slug = `${slugify(`${company}-${title}`)}-${hash(`${source.platform}|${sourceUrl}|${title}`)}`;
 

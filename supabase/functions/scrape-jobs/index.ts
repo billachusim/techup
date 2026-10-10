@@ -96,22 +96,14 @@ function hash(input: string): string {
 }
 
 const TECH_HINTS = [
-  "engineer", "developer", "software", "programmer", "coder", "coding", "data scien",
-  "data engineer", "data analyst", "machine learning", "ml ", "ai ", "llm", "devops",
-  "cloud", "sre", "qa", "test automation", "python", "javascript", "typescript", "java",
-  "golang", "rust", "c++", "react", "node", "frontend", "front-end", "backend", "back-end",
-  "full stack", "fullstack", "full-stack", "mobile", "android", "ios", "cyber", "security",
-  "infrastructure", "architect", "sql",
-];
-const EXCLUDE_HINTS = [
-  "sales", "marketing", "account executive", "recruit", "customer success", "customer support",
-  "copywriter", "content writer", "translator", "linguist", "legal", "lawyer", "medical",
-  "doctor", "nurse", "finance", "accountant", "biology", "chemistry", "physics",
+  "engineer", "developer", "data", "ai", "machine learning", "ml", "software", "cyber",
+  "security", "analyst", "designer", "product", "devops", "cloud", "qa", "python",
+  "frontend", "backend", "full stack", "fullstack", "annotat", "tutor", "expert",
+  "prompt", "researcher", "trainer", "writer", "reviewer", "linguist", "mobile", "it ",
 ];
 
 function isRelevant(title: string): boolean {
-  const t = ` ${title.toLowerCase()} `;
-  if (EXCLUDE_HINTS.some((h) => t.includes(h))) return false;
+  const t = title.toLowerCase();
   return TECH_HINTS.some((h) => t.includes(h));
 }
 

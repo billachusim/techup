@@ -12,25 +12,30 @@ type Source = { platform: string; url: string };
 
 // Listing pages for the AI / remote tech work platforms that reliably return
 // Nigeria- and Africa-friendly roles. Kept deliberately short to limit spend.
+// Mercor is read from its free public listings feed (no scraping cost), see fetchMercor().
 const SOURCES: Source[] = [
-  { platform: "Mercor", url: "https://work.mercor.com/jobs" },
   { platform: "Micro1", url: "https://www.micro1.ai/jobs" },
+  { platform: "Outlier", url: "https://app.outlier.ai/opportunities" },
+  { platform: "Handshake AI", url: "https://joinhandshake.com/move-program/" },
+  { platform: "Toloka", url: "https://toloka.ai/experts" },
+  { platform: "Alignerr", url: "https://www.alignerr.com/jobs" },
   { platform: "Turing", url: "https://www.turing.com/jobs" },
   { platform: "Mindrift", url: "https://www.mindrift.ai/opportunities" },
-  { platform: "Outlier", url: "https://outlier.ai/expert-jobs" },
-  { platform: "Alignerr", url: "https://www.alignerr.com/" },
   { platform: "Remote OK", url: "https://remoteok.com/remote-dev-jobs" },
   { platform: "Jobberman Nigeria", url: "https://www.jobberman.com/jobs/software-data" },
 ];
 
+const MERCOR_FEED = "https://aws.api.mercor.com/work/listings-explore-page";
+const MAX_MERCOR = 20;
+
 /** Cost controls — one weekly run must stay small and predictable. */
-const MAX_PER_PLATFORM = 6;
+const MAX_PER_PLATFORM = 8;
 /** Once we have this many fresh jobs, remaining sources are skipped this week. */
-const TARGET_TOTAL = 60;
+const TARGET_TOTAL = 80;
 /** Sources scraped concurrently per wave (lets us stop early). */
 const WAVE_SIZE = 4;
-/** Only listings published within this window are imported. */
-const MAX_AGE_DAYS = 14;
+/** Ms to let job boards finish loading their listings before reading them. */
+const WAIT_FOR_MS = 6000;
 
 const jobsSchema = {
   type: "object",
@@ -105,8 +110,8 @@ async function scrapeSource(source: Source, apiKey: string) {
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       url: source.url,
-      onlyMainContent: true,
-      waitFor: 1200,
+      onlyMainContent: false,
+      waitFor: WAIT_FOR_MS,
       formats: [{ type: "json", schema: jobsSchema, prompt: EXTRACT_PROMPT }],
     }),
   });

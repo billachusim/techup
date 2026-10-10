@@ -8,10 +8,10 @@ export const Route = createFileRoute("/careers/platforms/$platformSlug")({
     const platform = platformBySlug(params.platformSlug);
     return pageHead({
       title: platform
-        ? `${platform.name} Jobs for African Talent`
+        ? `${platform.keyword} for Nigerians & Africans (Remote)`
         : "Platform Not Found",
       description: platform
-        ? `Browse independent ${platform.name} opportunities and create your platform account through Tech Faculty.`
+        ? `Latest ${platform.keyword.toLowerCase()} open to Nigerian and African talent: ${platform.blurb} Pay, eligibility and how to apply.`
         : "This job platform page is not available.",
       path: `/careers/platforms/${params.platformSlug}`,
       noindex: !platform,

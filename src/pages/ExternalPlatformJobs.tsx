@@ -47,11 +47,15 @@ const ExternalPlatformJobs = () => {
     );
   }
 
-  const title = `${platform.name} Jobs for African Talent`;
-  const description = `Browse independent ${platform.name} opportunities and create your platform account through Tech Faculty.`;
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: platform.faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  };
 
   return (
     <div className="min-h-screen bg-background">
+      <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       <Header />
       <main className="px-4 pb-20 pt-24">
         <div className="container mx-auto max-w-6xl">
@@ -61,9 +65,9 @@ const ExternalPlatformJobs = () => {
 
           <section className="mb-12 max-w-3xl space-y-5">
             <p className="text-sm font-semibold text-primary">Independent work platform</p>
-            <h1 className="text-3xl font-bold md:text-5xl">{platform.name} jobs</h1>
+            <h1 className="text-3xl font-bold md:text-5xl">{platform.keyword} for African Talent</h1>
             <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
-              {platform.blurb} These listings are hosted and managed by {platform.name}, not Tech Faculty.
+              {platform.about} These listings are hosted and managed by {platform.name}, not Tech Faculty.
             </p>
             <a href={platform.signupUrl} target="_blank" rel="noopener noreferrer nofollow" className="inline-block">
               <Button size="lg"><UserPlus className="mr-2" size={18} /> Create a {platform.name} account <ExternalLink className="ml-2" size={16} /></Button>
@@ -92,9 +96,21 @@ const ExternalPlatformJobs = () => {
               </div>
             ) : (
               <div className="rounded-lg border border-border bg-card p-10 text-center text-muted-foreground">
-                {search ? "No listings match your search." : `No current ${platform.name} listings are available. You can still create an account for future opportunities.`}
+                {search ? "No listings match your search." : `No ${platform.name} listings are open right now. New roles are added every week, and you can create your account now so you're ready.`}
               </div>
             )}
+          </section>
+
+          <section aria-labelledby="platform-faq-heading" className="mt-16 max-w-3xl">
+            <h2 id="platform-faq-heading" className="mb-6 text-2xl font-bold">{platform.name} FAQ</h2>
+            <div className="space-y-5">
+              {platform.faqs.map((f) => (
+                <div key={f.q}>
+                  <h3 className="font-semibold">{f.q}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{f.a}</p>
+                </div>
+              ))}
+            </div>
           </section>
         </div>
       </main>

@@ -70,7 +70,7 @@ const jobsSchema = {
 
 const EXTRACT_PROMPT =
   `Extract at most ${MAX_PER_PLATFORM} of the newest technology, AI, data, engineering or design ` +
-  "job listings on this page (software engineering, data, AI/ML, DevOps, cloud, QA, security, mobile only). " +
+  "job listings on this page. " +
   "For each: title, hiring company (use the platform name if the listing " +
   "is the platform itself), the absolute apply URL, a factual 2-4 sentence description from the page " +
   "content, employment_type (FULL_TIME PART_TIME CONTRACTOR INTERN TEMPORARY), is_remote, location, " +
@@ -96,22 +96,14 @@ function hash(input: string): string {
 }
 
 const TECH_HINTS = [
-  "engineer", "developer", "software", "programmer", "coder", "coding", "data scien",
-  "data engineer", "data analyst", "machine learning", "ml ", "ai ", "llm", "devops",
-  "cloud", "sre", "qa", "test automation", "python", "javascript", "typescript", "java",
-  "golang", "rust", "c++", "react", "node", "frontend", "front-end", "backend", "back-end",
-  "full stack", "fullstack", "full-stack", "mobile", "android", "ios", "cyber", "security",
-  "infrastructure", "architect", "sql",
-];
-const EXCLUDE_HINTS = [
-  "sales", "marketing", "account executive", "recruit", "customer success", "customer support",
-  "copywriter", "content writer", "translator", "linguist", "legal", "lawyer", "medical",
-  "doctor", "nurse", "finance", "accountant", "biology", "chemistry", "physics",
+  "engineer", "developer", "data", "ai", "machine learning", "ml", "software", "cyber",
+  "security", "analyst", "designer", "product", "devops", "cloud", "qa", "python",
+  "frontend", "backend", "full stack", "fullstack", "annotat", "tutor", "expert",
+  "prompt", "researcher", "trainer", "writer", "reviewer", "linguist", "mobile", "it ",
 ];
 
 function isRelevant(title: string): boolean {
-  const t = ` ${title.toLowerCase()} `;
-  if (EXCLUDE_HINTS.some((h) => t.includes(h))) return false;
+  const t = title.toLowerCase();
   return TECH_HINTS.some((h) => t.includes(h));
 }
 
@@ -205,9 +197,8 @@ function parsePostedAt(value: unknown): string | null {
 function normalize(raw: any, source: Source) {
   const title = String(raw?.title ?? "").trim();
   if (!title || title.length > 160) return null;
-  // Software/tech roles only (Mercor coding/engineering domains count too).
-  const domain = String(raw?._domain ?? "").toLowerCase();
-  if (!isRelevant(title) && !/software|engineer|coding|code|data|machine learning/.test(domain)) return null;
+  // Mercor listings are all AI-training/expert work, so keep every domain.
+  if (source.platform !== "Mercor" && !isRelevant(title)) return null;
   const regions = Array.isArray(raw?.eligible_regions) ? raw.eligible_regions : [];
   if (!isOpenToAfrica(regions, raw?.is_remote !== false)) return null;
 

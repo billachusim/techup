@@ -184,7 +184,8 @@ function parsePostedAt(value: unknown): string | null {
 function normalize(raw: any, source: Source) {
   const title = String(raw?.title ?? "").trim();
   if (!title || title.length > 160) return null;
-  if (!isRelevant(title)) return null;
+  // Mercor listings are all AI-training/expert work, so keep every domain.
+  if (source.platform !== "Mercor" && !isRelevant(title)) return null;
 
   const description = String(raw?.description ?? "").trim();
   if (description.length < 40) return null;
@@ -244,6 +245,25 @@ Deno.serve(async (req) => {
     // Dedupe by source_url — the table has a unique constraint on it.
     const byUrl: Record<string, NonNullable<ReturnType<typeof normalize>>> = {};
 
+    // Mercor: free public feed. Anything no longer in the feed is closed, so expire it now.
+    const mercorSeen: string[] = [];
+    try {
+      const raws = await fetchMercor();
+      let kept = 0;
+      for (const raw of raws) {
+        if (kept >= MAX_MERCOR) break;
+        const row = normalize(raw, MERCOR_SOURCE);
+        if (!row || byUrl[row.source_url]) continue;
+        byUrl[row.source_url] = row;
+        mercorSeen.push(row.source_url);
+        kept++;
+      }
+      report.Mercor = `${kept} jobs (of ${raws.length} open)`;
+    } catch (e) {
+      report.Mercor = `failed: ${String(e).slice(0, 200)}`;
+      console.error("scrape-jobs: Mercor feed failed", e);
+    }
+
     // Scrape in small waves so we can stop as soon as we have enough fresh jobs.
     for (let start = 0; start < SOURCES.length; start += WAVE_SIZE) {
       if (Object.keys(byUrl).length >= TARGET_TOTAL) {
@@ -290,6 +310,15 @@ Deno.serve(async (req) => {
 
     // Archive stale jobs / finished events and purge very old rows.
     await supabase.rpc("archive_stale_listings");
+
+    if (mercorSeen.length) {
+      await supabase
+        .from("jobs")
+        .update({ is_expired: true })
+        .eq("source_platform", "Mercor")
+        .eq("is_expired", false)
+        .not("source_url", "in", `(${mercorSeen.map((u) => `"${u}"`).join(",")})`);
+    }
 
     return new Response(
       JSON.stringify({ success: true, upserted: inserted, ms: Date.now() - started, report }),

@@ -70,7 +70,7 @@ const jobsSchema = {
 
 const EXTRACT_PROMPT =
   `Extract at most ${MAX_PER_PLATFORM} of the newest technology, AI, data, engineering or design ` +
-  "job listings on this page (software engineering, data, AI/ML, DevOps, cloud, QA, security, mobile only). " +
+  "job listings on this page. " +
   "For each: title, hiring company (use the platform name if the listing " +
   "is the platform itself), the absolute apply URL, a factual 2-4 sentence description from the page " +
   "content, employment_type (FULL_TIME PART_TIME CONTRACTOR INTERN TEMPORARY), is_remote, location, " +
@@ -197,9 +197,8 @@ function parsePostedAt(value: unknown): string | null {
 function normalize(raw: any, source: Source) {
   const title = String(raw?.title ?? "").trim();
   if (!title || title.length > 160) return null;
-  // Software/tech roles only (Mercor coding/engineering domains count too).
-  const domain = String(raw?._domain ?? "").toLowerCase();
-  if (!isRelevant(title) && !/software|engineer|coding|code|data|machine learning/.test(domain)) return null;
+  // Mercor listings are all AI-training/expert work, so keep every domain.
+  if (source.platform !== "Mercor" && !isRelevant(title)) return null;
   const regions = Array.isArray(raw?.eligible_regions) ? raw.eligible_regions : [];
   if (!isOpenToAfrica(regions, raw?.is_remote !== false)) return null;
 

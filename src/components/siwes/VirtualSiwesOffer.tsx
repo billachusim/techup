@@ -1,6 +1,7 @@
 import { Link } from "@/lib/router-compat";
 import { ArrowRight, Check, Laptop, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import LeadCaptureForm from "@/components/leads/LeadCaptureForm";
 import { VIRTUAL_SIWES, formatNaira } from "@/data/virtualSiwes";
 
 type Props = {
@@ -13,14 +14,13 @@ type Props = {
   variant?: "inline" | "full";
 };
 
-const SIGNUP_PATH = "/virtual-siwes#reserve-virtual-it";
-
-const whatsappHref = (source: string) => {
-  const message = `Hello Tech Faculty NG, I read your article (${source}) and I want to do Virtual SIWES (online IT). Please send me the details for the ${formatNaira(
+const whatsappMessage = (source: string) =>
+  `Hello Tech Faculty NG, I read your article (${source}) and I want to do Virtual SIWES (online IT). Please send me the details for the ${formatNaira(
     VIRTUAL_SIWES.placementPriceNGN,
   )} placement.`;
-  return `https://wa.me/${VIRTUAL_SIWES.whatsappNumber}?text=${encodeURIComponent(message)}`;
-};
+
+const whatsappHref = (source: string) =>
+  `https://wa.me/${VIRTUAL_SIWES.whatsappNumber}?text=${encodeURIComponent(whatsappMessage(source))}`;
 
 const OFFER_POINTS = [
   "Official placement letter addressed to your school within 48 hours of payment",
@@ -126,10 +126,37 @@ const VirtualSiwesOffer = ({ source, variant = "full" }: Props) => {
           </a>
         </Button>
         <Button size="lg" variant="outline" asChild>
-          <Link to={SIGNUP_PATH}>
-            Reserve your slot <ArrowRight size={18} className="ml-2" />
+          <Link to="/virtual-siwes">
+            How Virtual SIWES works <ArrowRight size={18} className="ml-2" />
           </Link>
         </Button>
+      </div>
+
+      <div className="mt-6 pt-6 border-t border-border">
+        <p className="font-semibold mb-1">Or reserve your slot here</p>
+        <p className="text-sm text-muted-foreground mb-4">
+          Leave your details and a coordinator replies with payment details and
+          your start date. Nothing is charged automatically.
+        </p>
+        <LeadCaptureForm
+          interest="virtual_siwes"
+          source={`blog:${source}`}
+          submitLabel="Reserve my virtual IT slot"
+          whatsappMessage={whatsappMessage(source)}
+          extraFields={[
+            {
+              id: "department",
+              label: "Course / department",
+              placeholder: "e.g. Computer Science",
+            },
+            {
+              id: "duration",
+              label: "IT duration",
+              placeholder: "e.g. 6 months",
+              required: true,
+            },
+          ]}
+        />
       </div>
     </section>
   );

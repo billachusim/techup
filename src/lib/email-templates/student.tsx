@@ -60,6 +60,16 @@ const StudentWorkReviewed = ({ name, title, status, note, score }: { name?: stri
   </Layout>
 )
 
+// 4. Graduate: ask for a Google review once their certificate is issued
+const GraduateReviewRequest = ({ name, courseName, reviewUrl }: { name?: string; courseName?: string; reviewUrl?: string }) => (
+  <Layout preview="Congratulations on your certificate" title="Congratulations, graduate!" cta="Leave a Google review" href={reviewUrl}>
+    <Text style={text}>{hi(name)}</Text>
+    <Text style={text}>Your certificate{courseName ? <> for <b>{courseName}</b></> : null} has been issued. Well done, you earned it.</Text>
+    <Text style={text}>Would you take a minute to tell others about your time at Tech Faculty NG? A short Google review helps the next student find us and decide with confidence.</Text>
+    <Text style={muted}>Thank you for learning with us. We are proud of you and glad to stay in touch.</Text>
+  </Layout>
+)
+
 export const studentWelcome = {
   component: StudentWelcome,
   subject: (d) => `Welcome to ${d.programme ?? 'Tech Faculty'} — your Faculty ID and class group`,
@@ -81,7 +91,14 @@ export const studentWorkReviewed = {
   previewData: { name: 'Ada Obi', title: 'Week 3 project', status: 'reviewed', note: 'Clean work — add tests next time.', score: 82 },
 } satisfies TemplateEntry
 
-// 4. Student: card checkout started but never paid
+export const graduateReviewRequest = {
+  component: GraduateReviewRequest,
+  subject: 'Congratulations! Would you review Tech Faculty NG?',
+  displayName: 'Graduate Google review request',
+  previewData: { name: 'Ada Obi', courseName: 'Fullstack Web Development', reviewUrl: 'https://search.google.com/local/writereview?placeid=ChIJ5ZxSzmi9QxAR23OzR7YbAkM' },
+} satisfies TemplateEntry
+
+// 5. Student: card checkout started but never paid
 const CheckoutReminder = ({ name, plan, amount }: { name?: string; plan?: string; amount?: string }) => (
   <Layout preview="Your Tech Faculty enrolment is waiting for payment" title="Finish your enrolment" cta="Finish enrolling" href={`${SITE}/#pricing`}>
     <Text style={text}>{hi(name)}</Text>
@@ -92,7 +109,7 @@ const CheckoutReminder = ({ name, plan, amount }: { name?: string; plan?: string
   </Layout>
 )
 
-// 5. Student: card payment confirmed by the scheduled re-check
+// 6. Student: card payment confirmed by the scheduled re-check
 const PaymentConfirmed = ({ name, plan, facultyId }: { name?: string; plan?: string; facultyId?: string }) => (
   <Layout preview="Your payment is confirmed" title="Your payment is confirmed" cta="Open your student dashboard" href={`${SITE}/dashboard`}>
     <Text style={text}>{hi(name)}</Text>

@@ -1,6 +1,6 @@
-import type { BlogPost } from "@/types/blog";
-import { campuses } from "@/data/campuses";
-import { COURSE_AREA_DEPARTMENT, type CourseArea } from "@/data/techHubs";
+import type { BlogPost } from "../types/blog";
+import { campuses } from "./campuses";
+import { COURSE_AREA_DEPARTMENT, type CourseArea } from "./techHubs";
 
 type CityGuide = {
   city: string;

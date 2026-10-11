@@ -59,6 +59,16 @@ const StudentWorkReviewed = ({ name, title, status, note, score }: { name?: stri
   </Layout>
 )
 
+// 4. Graduate: ask for a Google review once their certificate is issued
+const GraduateReviewRequest = ({ name, courseName, reviewUrl }: { name?: string; courseName?: string; reviewUrl?: string }) => (
+  <Layout preview="Congratulations on your certificate" title="Congratulations, graduate!" cta="Leave a Google review" href={reviewUrl}>
+    <Text style={text}>{hi(name)}</Text>
+    <Text style={text}>Your certificate{courseName ? <> for <b>{courseName}</b></> : null} has been issued. Well done, you earned it.</Text>
+    <Text style={text}>Would you take a minute to tell others about your time at Tech Faculty NG? A short Google review helps the next student find us and decide with confidence.</Text>
+    <Text style={muted}>Thank you for learning with us. We are proud of you and glad to stay in touch.</Text>
+  </Layout>
+)
+
 export const studentWelcome = {
   component: StudentWelcome,
   subject: (d) => `Welcome to ${d.programme ?? 'Tech Faculty'} — your Faculty ID and class group`,
@@ -78,6 +88,13 @@ export const studentWorkReviewed = {
   subject: (d) => (d.status === 'needs_changes' ? 'Changes requested on your assignment' : 'Your assignment was reviewed'),
   displayName: 'Student assignment reviewed',
   previewData: { name: 'Ada Obi', title: 'Week 3 project', status: 'reviewed', note: 'Clean work — add tests next time.', score: 82 },
+} satisfies TemplateEntry
+
+export const graduateReviewRequest = {
+  component: GraduateReviewRequest,
+  subject: 'Congratulations! Would you review Tech Faculty NG?',
+  displayName: 'Graduate Google review request',
+  previewData: { name: 'Ada Obi', courseName: 'Fullstack Web Development', reviewUrl: 'https://search.google.com/local/writereview?placeid=ChIJ5ZxSzmi9QxAR23OzR7YbAkM' },
 } satisfies TemplateEntry
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, Helvetica, sans-serif' }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import AdminNav from "@/components/admin/AdminNav";
 import { Award, Loader2, ShieldCheck } from "lucide-react";
 import Header from "@/components/Header";
@@ -10,11 +11,24 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useIsStaff } from "@/hooks/useIsStaff";
 import { getSupabase } from "@/integrations/supabase/lazy";
+import { requestGraduateReview, type GraduateReviewResult } from "@/lib/graduate-review.functions";
+
+function reviewNote(r: GraduateReviewResult | null): string {
+  if (!r) return "The Google review email could not be sent.";
+  switch (r.status) {
+    case "sent": return `Google review request emailed to ${r.email}.`;
+    case "already_sent": return `${r.email} was already asked for a review, so no new email went out.`;
+    case "no_email": return "No graduate email found, so no review request was sent.";
+    case "suppressed": return `${r.email} has unsubscribed or bounced, so no review request was sent.`;
+    case "failed": return `The Google review email failed: ${r.error}`;
+  }
+}
 
 const AdminCertificates = () => {
   const { toast } = useToast();
   // Enforced again by the admin-add-certificate function, which checks the admin role
   const { loading, isAdmin } = useIsStaff();
+  const askForReview = useServerFn(requestGraduateReview);
 
   const [form, setForm] = useState({
     certificateNumber: "",
@@ -24,6 +38,7 @@ const AdminCertificates = () => {
     issuedBy: "Tech Faculty NG",
     dateIssued: "",
     facultyId: "",
+    graduateEmail: "",
   });
   const [submitting, setSubmitting] = useState(false);
 
@@ -38,10 +53,10 @@ const AdminCertificates = () => {
     const { data, error } = await supabase.functions.invoke("admin-add-certificate", {
       body: form,
     });
-    setSubmitting(false);
 
     const fnError = (data as { error?: string } | null)?.error;
     if (error || fnError) {
+      setSubmitting(false);
       toast({
         title: "Failed to add certificate",
         description: fnError || error?.message || "Unknown error",
@@ -50,9 +65,15 @@ const AdminCertificates = () => {
       return;
     }
 
+    // Ask the graduate for a Google review (once per graduate email).
+    const review = await askForReview({
+      data: { certificateNumber: form.certificateNumber.trim(), email: form.graduateEmail.trim() || undefined },
+    }).catch((e: Error) => ({ status: "failed" as const, error: e.message }));
+    setSubmitting(false);
+
     toast({
       title: "Certificate added",
-      description: `${form.certificateNumber.toUpperCase()} is now verifiable at /verify`,
+      description: `${form.certificateNumber.toUpperCase()} is now verifiable at /verify. ${reviewNote(review)}`,
     });
     setForm({
       certificateNumber: "",
@@ -62,6 +83,7 @@ const AdminCertificates = () => {
       issuedBy: "Tech Faculty NG",
       dateIssued: "",
       facultyId: "",
+      graduateEmail: "",
     });
   };
 
@@ -124,6 +146,11 @@ const AdminCertificates = () => {
                     <div className="space-y-2">
                       <Label htmlFor="facultyId">Faculty ID (optional)</Label>
                       <Input id="facultyId" placeholder="auto-generated if blank" value={form.facultyId} onChange={(e) => setForm({ ...form, facultyId: e.target.value })} />
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <Label htmlFor="graduateEmail">Graduate Email (optional)</Label>
+                      <Input id="graduateEmail" type="email" placeholder="uses the student's profile email if blank" value={form.graduateEmail} onChange={(e) => setForm({ ...form, graduateEmail: e.target.value })} />
+                      <p className="text-xs text-muted-foreground">We email each graduate once, asking for a Google review.</p>
                     </div>
                   </div>
                   <Button type="submit" disabled={submitting} className="w-full">

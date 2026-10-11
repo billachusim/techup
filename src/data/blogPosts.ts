@@ -1200,7 +1200,8 @@ Our **Data Analytics Bootcamp** covers exactly this stack — Excel → SQL → 
   {
     slug: "cybersecurity-salary-nigeria-2026",
     title: "Cybersecurity Salary Nigeria: 2026 Entry to Senior Guide",
-    description: "2026 salary guide: exact naira pay bands for SOC analysts, pentesters and GRC officers in Nigeria, entry-level to senior, plus remote USD rates.",
+    seoTitle: "Cybersecurity Salary Nigeria 2026: ₦350k–₦8M | Tech Faculty NG",
+    description: "Junior SOC analysts earn ₦350k–₦700k a month; senior GRC heads reach ₦8M. See 2026 pay for SOC, pentest, GRC and cloud security, plus remote USD rates.",
     content: `# Cybersecurity Salary in Nigeria 2026: SOC, Pentest & GRC Pay Bands
 
 *By Bill Achusim · Jul 2, 2026*
@@ -3084,7 +3085,8 @@ Cyber security is one of the highest-leverage paths a Nigerian can pick in 2026 
   {
     slug: "tech-salaries-nigeria-2026-junior-mid-senior",
     title: "Tech Salaries in Nigeria 2026: Junior, Mid, and Senior Pay Benchmarks",
-    description: "Honest 2026 tech salary benchmarks for Nigeria \u2014 junior, mid, and senior pay by role, plus remote USD ranges, by city, and how to negotiate effectively.",
+    seoTitle: "Tech Salaries Nigeria 2026: Junior to Senior | Tech Faculty NG",
+    description: "Junior developers earn ₦300k–₦600k a month; senior PMs pass ₦7M. 2026 Nigerian pay for dev, data, cyber, design, PM and DevOps, plus remote USD rates.",
     content: `# Tech Salaries in Nigeria 2026: Junior, Mid, and Senior Pay Benchmarks
 
 *By Bill Achusim · Apr 8, 2026*
@@ -3668,7 +3670,8 @@ Data analytics and visualization is the most accessible high-paying tech skill i
   {
     slug: "best-ai-tools-nigerian-businesses-2026",
     title: "10 Best AI Tools Nigerian Businesses Should Use in 2026",
-    description: "A practical shortlist of the 10 best AI tools for Nigerian businesses in 2026 — with local use cases, pricing in naira context, and quick-start tips.",
+    seoTitle: "10 Best AI Tools for Nigerian Businesses 2026 | Tech Faculty NG",
+    description: "ChatGPT, Gemini, Claude, Canva, ElevenLabs and 5 more, picked for Nigerian SMEs: what each does, what it costs in naira, and which work on slow internet.",
     content: `# 10 Best AI Tools Nigerian Businesses Should Use in 2026
 
 *By Tech Faculty NG · July 11, 2026*

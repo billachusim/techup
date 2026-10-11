@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
     pageHead({
       title: "Tech Training in Anambra & Across Nigeria",
       description:
-        "FMSTI-licensed bootcamps in software engineering, data science, AI and cybersecurity. 6,000+ students trained, 75% employed. Learn in person or online.",
+        "Licensed by FMSTI through NBTI. Coding, data, AI and cybersecurity from ₦50,000; 6,000+ trained, 75% employed. 22 campuses or online, free on-site SIWES.",
       path: "/",
     }),
   component: Index,

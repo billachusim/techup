@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { NGN_TO_USD_RATE } from "@/lib/fees";
 
 interface CurrencyContextType {
   symbol: string;
@@ -18,7 +19,6 @@ const CurrencyContext = createContext<CurrencyContextType>({
   toggleCurrency: () => {},
 });
 
-const NGN_TO_USD_RATE = 1400;
 
 export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
   const [isNigeria, setIsNigeria] = useState(true);

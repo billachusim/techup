@@ -428,6 +428,39 @@ export type Database = {
           },
         ]
       }
+      event_scrape_runs: {
+        Row: {
+          duration_ms: number | null
+          error: string | null
+          id: string
+          ran_at: string
+          report: Json
+          success: boolean
+          trigger: string
+          upserted: number
+        }
+        Insert: {
+          duration_ms?: number | null
+          error?: string | null
+          id?: string
+          ran_at?: string
+          report?: Json
+          success: boolean
+          trigger?: string
+          upserted?: number
+        }
+        Update: {
+          duration_ms?: number | null
+          error?: string | null
+          id?: string
+          ran_at?: string
+          report?: Json
+          success?: boolean
+          trigger?: string
+          upserted?: number
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           address: string | null

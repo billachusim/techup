@@ -81,6 +81,7 @@ const organizationSchema = {
     "https://www.google.com/maps/place/?q=place_id:ChIJ5ZxSzmi9QxAR23OzR7YbAkM",
     "https://www.google.com/maps/place/?q=place_id:ChIJodXXtba9QxARPM6Tyyb02a0",
     "https://wa.me/2348068597140",
+    "https://www.wikidata.org/wiki/Q141702083",
   ],
   areaServed: { "@type": "Place", name: "Nigeria" },
   knowsAbout: [

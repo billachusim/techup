@@ -1,8 +1,15 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import HubDetail from "@/pages/HubDetail";
 import { pageHead } from "@/lib/seo";
+import { REMOVED_HUB_SLUGS } from "@/data/techHubs";
 
 export const Route = createFileRoute("/hubs/$slug")({
+  // Hub pages outside Nigeria were removed; send their old URLs to the directory.
+  beforeLoad: ({ params }) => {
+    if (REMOVED_HUB_SLUGS.has(params.slug)) {
+      throw redirect({ to: "/hubs", statusCode: 301 });
+    }
+  },
   // Looked up in the loader so the hubs data loads with this route,
   // not in the main bundle.
   loader: async ({ params }) => {

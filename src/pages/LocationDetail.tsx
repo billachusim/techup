@@ -245,7 +245,7 @@ const LocationDetail = () => {
                 We accept SIWES and industrial training students at {campus.shortVenue} every session, on two tracks:
                 <strong className="text-foreground"> Learn & Pay</strong>, where you train while completing your
                 attachment, and <strong className="text-foreground"> Tutor & Earn</strong>, where stronger students
-                assist in delivery and earn while they train.
+                assist in delivery and earn while they train. There is no separate placement fee on site.
               </p>
               <p>
                 Placement includes supervised project work, weekly reviews, logbook guidance and documentation your

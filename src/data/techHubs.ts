@@ -1,6 +1,6 @@
 /**
  * Editorial directory of tech hubs, innovation centres and training institutes
- * across Nigeria and Africa.
+ * across Nigeria.
  *
  * IMPORTANT: This is a curated editorial listing, not a claim of partnership.
  * Entries describe publicly known hubs and the course areas their programmes,
@@ -15,17 +15,7 @@ export const HUBS_DISCLAIMER =
 
 export const HUB_WHATSAPP_NUMBER = "2348068597140";
 
-export type HubCountry =
-  | "Nigeria"
-  | "Kenya"
-  | "Ghana"
-  | "Rwanda"
-  | "South Africa"
-  | "Egypt"
-  | "Uganda"
-  | "Tanzania"
-  | "Senegal"
-  | "Ethiopia";
+export type HubCountry = "Nigeria";
 
 export type HubType =
   | "Innovation hub"
@@ -424,254 +414,30 @@ export const techHubs: TechHub[] = [
     intro:
       "iGHub in Port Harcourt is publicly known as a coworking and innovation centre supporting young technologists and startups in Rivers State — a useful community base for students on our online or hybrid tracks.",
   },
-
-  // ---------------- Kenya ----------------
-  {
-    slug: "ihub-nairobi",
-    name: "iHub",
-    city: "Nairobi",
-    region: "Nairobi",
-    country: "Kenya",
-    type: "Innovation hub",
-    formats: ["In-person", "Hybrid"],
-    courseAreas: ["Software Engineering", "Data Analytics", "AI & Machine Learning"],
-    focus: "Nairobi's landmark innovation hub and startup community.",
-    intro:
-      "iHub in Nairobi is one of the most widely cited technology hubs in Africa, publicly associated with startup incubation, developer community and research work since 2010. It anchors Nairobi's reputation as a continental tech centre.",
-    website: "https://ihub.co.ke",
-  },
-  {
-    slug: "nailab-nairobi",
-    name: "Nailab",
-    city: "Nairobi",
-    region: "Nairobi",
-    country: "Kenya",
-    type: "Incubator",
-    formats: ["In-person"],
-    courseAreas: ["Software Engineering", "Digital Marketing", "Data Analytics"],
-    focus: "Kenyan startup incubator with entrepreneurship programmes.",
-    intro:
-      "Nailab is a Nairobi-based incubator publicly known for accelerator and entrepreneurship programmes aimed at early-stage founders. It suits Kenyan students who want business support alongside technical training.",
-  },
-
-  // ---------------- Ghana ----------------
-  {
-    slug: "mest-africa-accra",
-    name: "MEST Africa",
-    city: "Accra",
-    region: "Greater Accra",
-    country: "Ghana",
-    type: "Training institute",
-    formats: ["In-person"],
-    courseAreas: ["Software Engineering", "Product & UI/UX Design", "Digital Marketing"],
-    focus: "Accra-based training programme and incubator for African founders.",
-    intro:
-      "MEST Africa in Accra is widely known for its full-time entrepreneurial training programme and incubator for African technology founders, combining software, business and product teaching.",
-    website: "https://meltwater.org",
-  },
-  {
-    slug: "impact-hub-accra",
-    name: "Impact Hub Accra",
-    city: "Accra",
-    region: "Greater Accra",
-    country: "Ghana",
-    type: "Innovation hub",
-    formats: ["In-person", "Hybrid"],
-    courseAreas: ["Digital Marketing", "Software Engineering", "Data Analytics"],
-    focus: "Part of the global Impact Hub network, based in Accra.",
-    intro:
-      "Impact Hub Accra belongs to the global Impact Hub network and is publicly associated with coworking, entrepreneurship programmes and community events in Ghana's capital.",
-  },
-
-  // ---------------- Rwanda ----------------
-  {
-    slug: "klab-kigali",
-    name: "kLab",
-    city: "Kigali",
-    region: "Kigali",
-    country: "Rwanda",
-    type: "Innovation hub",
-    formats: ["In-person"],
-    courseAreas: ["Software Engineering", "Data Analytics", "AI & Machine Learning"],
-    focus: "Kigali's open technology innovation space for young developers.",
-    intro:
-      "kLab in Kigali is publicly known as an open technology hub where young Rwandan developers work on products with mentorship and community support. Rwanda's strong digital-government agenda makes it a notable base for African tech talent.",
-    website: "https://klab.rw",
-  },
-  {
-    slug: "norrsken-house-kigali",
-    name: "Norrsken House Kigali",
-    city: "Kigali",
-    region: "Kigali",
-    country: "Rwanda",
-    type: "Innovation hub",
-    formats: ["In-person"],
-    courseAreas: ["Software Engineering", "Product & UI/UX Design", "AI & Machine Learning"],
-    focus: "Large Kigali campus for founders, investors and tech teams.",
-    intro:
-      "Norrsken House Kigali is publicly described as one of the largest hubs for entrepreneurs on the continent, hosting founders, investors and technology teams in Rwanda's capital.",
-  },
-
-  // ---------------- South Africa ----------------
-  {
-    slug: "tshimologong-johannesburg",
-    name: "Tshimologong Precinct",
-    city: "Johannesburg",
-    region: "Gauteng",
-    country: "South Africa",
-    type: "University-based hub",
-    formats: ["In-person", "Hybrid"],
-    courseAreas: [
-      "Software Engineering",
-      "Data Analytics",
-      "Cybersecurity",
-      "AI & Machine Learning",
-    ],
-    focus: "Wits University digital innovation precinct in Braamfontein.",
-    intro:
-      "Tshimologong Precinct in Braamfontein is the University of the Witwatersrand's digital innovation precinct, publicly associated with skills development, incubation and research partnerships with industry.",
-    website: "https://tshimologong.joburg",
-  },
-  {
-    slug: "workshop17-cape-town",
-    name: "Workshop17",
-    city: "Cape Town",
-    region: "Western Cape",
-    country: "South Africa",
-    type: "Innovation hub",
-    formats: ["In-person"],
-    courseAreas: ["Software Engineering", "Product & UI/UX Design", "Digital Marketing"],
-    focus: "Cape Town workspace network at the centre of the local tech scene.",
-    intro:
-      "Workshop17 is a well-known South African workspace and community network with locations including the V&A Waterfront in Cape Town, widely used by technology teams, founders and freelancers.",
-  },
-
-  // ---------------- Egypt ----------------
-  {
-    slug: "greek-campus-cairo",
-    name: "The GrEEK Campus",
-    city: "Cairo",
-    region: "Cairo",
-    country: "Egypt",
-    type: "Innovation hub",
-    formats: ["In-person"],
-    courseAreas: ["Software Engineering", "Data Analytics", "Digital Marketing"],
-    focus: "Downtown Cairo technology and innovation park.",
-    intro:
-      "The GrEEK Campus in downtown Cairo is publicly known as a technology and innovation park hosting startups, technology companies and community events in Egypt's capital.",
-  },
-  {
-    slug: "flat6labs-cairo",
-    name: "Flat6Labs Cairo",
-    city: "Cairo",
-    region: "Cairo",
-    country: "Egypt",
-    type: "Incubator",
-    formats: ["In-person"],
-    courseAreas: ["Software Engineering", "Product & UI/UX Design", "Data Analytics"],
-    focus: "Regional seed accelerator with a long-running Cairo programme.",
-    intro:
-      "Flat6Labs runs one of the region's longest-established seed accelerator programmes, with Cairo as a founding location. It is publicly associated with early-stage funding, mentorship and founder training.",
-  },
-
-  // ---------------- Uganda / Tanzania / Senegal / Ethiopia ----------------
-  {
-    slug: "innovation-village-kampala",
-    name: "The Innovation Village",
-    city: "Kampala",
-    region: "Central",
-    country: "Uganda",
-    type: "Innovation hub",
-    formats: ["In-person", "Hybrid"],
-    courseAreas: ["Software Engineering", "Data Analytics", "Digital Marketing"],
-    focus: "Uganda's flagship innovation community and coworking campus.",
-    intro:
-      "The Innovation Village in Kampala is publicly known as one of Uganda's largest innovation communities, hosting startup programmes, coworking and sector-focused initiatives.",
-  },
-  {
-    slug: "outbox-kampala",
-    name: "Outbox Hub",
-    city: "Kampala",
-    region: "Central",
-    country: "Uganda",
-    type: "Incubator",
-    formats: ["In-person"],
-    courseAreas: ["Software Engineering", "Product & UI/UX Design"],
-    focus: "Long-running Kampala incubator and developer community.",
-    intro:
-      "Outbox in Kampala is one of Uganda's earlier technology hubs, publicly associated with incubation, developer training and community events.",
-  },
-  {
-    slug: "buni-hub-dar-es-salaam",
-    name: "Buni Innovation Hub",
-    city: "Dar es Salaam",
-    region: "Dar es Salaam",
-    country: "Tanzania",
-    type: "Innovation hub",
-    formats: ["In-person"],
-    courseAreas: ["Software Engineering", "Robotics & IoT", "Data Analytics"],
-    focus: "Tanzania's best-known innovation space for young technologists.",
-    intro:
-      "Buni Hub in Dar es Salaam is publicly known as a leading Tanzanian innovation space supporting young developers, makers and startups, hosted alongside national research institutions.",
-  },
-  {
-    slug: "ctic-dakar",
-    name: "CTIC Dakar",
-    city: "Dakar",
-    region: "Dakar",
-    country: "Senegal",
-    type: "Incubator",
-    formats: ["In-person"],
-    courseAreas: ["Software Engineering", "Digital Marketing", "Data Analytics"],
-    focus: "Francophone West Africa's pioneering ICT incubator.",
-    intro:
-      "CTIC Dakar is publicly recognised as one of the first ICT incubators in Francophone West Africa, supporting Senegalese technology entrepreneurs with mentoring and business development.",
-  },
-  {
-    slug: "iceaddis-addis-ababa",
-    name: "iceaddis",
-    city: "Addis Ababa",
-    region: "Addis Ababa",
-    country: "Ethiopia",
-    type: "Innovation hub",
-    formats: ["In-person"],
-    courseAreas: ["Software Engineering", "Product & UI/UX Design", "Data Analytics"],
-    focus: "Ethiopia's first innovation hub and startup incubator.",
-    intro:
-      "iceaddis in Addis Ababa is publicly described as Ethiopia's first innovation hub and startup incubator, working with young technologists, designers and founders.",
-  },
 ];
 
 /**
- * Short city context for hub cities outside Nigeria, where we have no city
- * guide or campus to link to. Keeps those hub pages from being template-only.
+ * Slugs of the hub pages outside Nigeria that were removed on 2026-10-08.
+ * Their URLs redirect to the directory so old links and search results land
+ * somewhere useful.
  */
-export const HUB_CITY_CONTEXT: Record<string, string> = {
-  Nairobi:
-    "Nairobi, often called the Silicon Savannah, is the centre of Kenya's mobile-money and startup scene, with dense developer meetups and regional offices of global technology firms.",
-  Accra:
-    "Accra is Ghana's technology centre, strong in fintech and agritech. It is English-speaking and shares Nigeria's time zone, which makes it a natural next step for West African builders.",
-  Kigali:
-    "Kigali has made technology a national priority, with government-backed innovation programmes and a busy calendar of pan-African tech events.",
-  Johannesburg:
-    "Johannesburg is South Africa's business capital, where banks, telecoms and enterprise software firms hire data, cloud and security talent.",
-  "Cape Town":
-    "Cape Town has one of Africa's densest startup and developer communities, with e-commerce, fintech and remote roles for international companies.",
-  Cairo:
-    "Cairo is North Africa's largest startup market, with a deep pool of engineers and a fast-growing fintech sector.",
-  Kampala:
-    "Kampala's tech scene centres on mobile money, agritech and a young developer community.",
-  "Dar es Salaam":
-    "Dar es Salaam is Tanzania's commercial centre, where mobile money, logistics and agriculture shape most local technology work.",
-  Dakar:
-    "Dakar leads Francophone West Africa's tech scene, and most local programmes there run in French.",
-  "Addis Ababa":
-    "Addis Ababa has a large, young population and a growing software and outsourcing sector.",
-};
-
-export const hubCountries = Array.from(
-  new Set(techHubs.map((h) => h.country)),
-) as HubCountry[];
+export const REMOVED_HUB_SLUGS = new Set([
+  "ihub-nairobi",
+  "nailab-nairobi",
+  "mest-africa-accra",
+  "impact-hub-accra",
+  "klab-kigali",
+  "norrsken-house-kigali",
+  "tshimologong-johannesburg",
+  "workshop17-cape-town",
+  "greek-campus-cairo",
+  "flat6labs-cairo",
+  "innovation-village-kampala",
+  "outbox-kampala",
+  "buni-hub-dar-es-salaam",
+  "ctic-dakar",
+  "iceaddis-addis-ababa",
+]);
 
 export const hubCities = Array.from(new Set(techHubs.map((h) => h.city))).sort();
 

@@ -21,7 +21,7 @@ const UpcomingEvents = () => {
           <h2 className="text-2xl md:text-3xl font-bold">Upcoming Tech Events in Nigeria &amp; Africa</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             AI and data conferences, developer meetups, hackathons, cybersecurity workshops and free online
-            webinars — plus our own Nnewi Tech Meetup and holiday bootcamps. Updated weekly.
+            webinars — plus our own Nnewi Tech Meetup and holiday bootcamps. Updated twice a month.
           </p>
         </div>
 

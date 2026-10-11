@@ -8,6 +8,7 @@ import { useIsStaff } from "@/hooks/useIsStaff";
 import AdminNav from "@/components/admin/AdminNav";
 import { AdminMetrics } from "@/components/admin/AdminMetrics";
 import { NotifySearchEngines } from "@/components/admin/NotifySearchEngines";
+import { EventsRefreshStatus } from "@/components/admin/EventsRefreshStatus";
 
 interface Section {
   to: string;
@@ -87,6 +88,7 @@ export default function AdminHome() {
             {/* Business numbers are for admins; recruiters only see the areas above. */}
             {isAdmin && <AdminMetrics />}
             {isAdmin && <NotifySearchEngines />}
+            {isAdmin && <EventsRefreshStatus />}
           </>
         )}
       </main>

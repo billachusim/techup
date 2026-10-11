@@ -718,6 +718,8 @@ export type Database = {
           notes: string | null
           school: string | null
           source: string | null
+          status: string
+          status_updated_at: string | null
         }
         Insert: {
           channel: string
@@ -729,6 +731,8 @@ export type Database = {
           notes?: string | null
           school?: string | null
           source?: string | null
+          status?: string
+          status_updated_at?: string | null
         }
         Update: {
           channel?: string
@@ -740,6 +744,8 @@ export type Database = {
           notes?: string | null
           school?: string | null
           source?: string | null
+          status?: string
+          status_updated_at?: string | null
         }
         Relationships: []
       }

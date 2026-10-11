@@ -874,6 +874,72 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_codes: {
+        Row: {
+          code: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          code: string
+          created_at: string
+          currency: string
+          discount_amount: number
+          earned_at: string | null
+          id: string
+          paid_out_at: string | null
+          paid_out_by: string | null
+          referred_user_id: string
+          referrer_user_id: string
+          reward_amount: number
+          status: string
+          tx_ref: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          currency: string
+          discount_amount: number
+          earned_at?: string | null
+          id?: string
+          paid_out_at?: string | null
+          paid_out_by?: string | null
+          referred_user_id: string
+          referrer_user_id: string
+          reward_amount: number
+          status?: string
+          tx_ref: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          currency?: string
+          discount_amount?: number
+          earned_at?: string | null
+          id?: string
+          paid_out_at?: string | null
+          paid_out_by?: string | null
+          referred_user_id?: string
+          referrer_user_id?: string
+          reward_amount?: number
+          status?: string
+          tx_ref?: string
+        }
+        Relationships: []
+      }
       role_matches: {
         Row: {
           created_at: string
@@ -1502,10 +1568,36 @@ export type Database = {
     }
     Functions: {
       admin_dashboard_metrics: { Args: { _days?: number }; Returns: Json }
+      admin_list_referrals: {
+        Args: never
+        Returns: {
+          code: string
+          created_at: string
+          currency: string
+          discount_amount: number
+          earned_at: string | null
+          id: string
+          paid_out_at: string | null
+          plan_name: string | null
+          referred_faculty_id: string | null
+          referred_name: string | null
+          referrer_email: string | null
+          referrer_faculty_id: string | null
+          referrer_name: string | null
+          referrer_phone: string | null
+          reward_amount: number
+          status: string
+        }[]
+      }
+      admin_mark_referral_paid: { Args: { _id: string }; Returns: undefined }
       approve_talent: { Args: { _talent_id: string }; Returns: string }
       archive_stale_listings: { Args: never; Returns: undefined }
       claim_my_talent_profile: { Args: never; Returns: string }
       claim_talent_faculty_id: { Args: never; Returns: string }
+      check_referral_code: {
+        Args: { _code: string; _user_id: string }
+        Returns: Json
+      }
       ensure_course_lectures: {
         Args: { course_uuid: string }
         Returns: undefined
@@ -1520,6 +1612,7 @@ export type Database = {
         Returns: string
       }
       get_department_code: { Args: { dept: string }; Returns: string }
+      get_my_referral: { Args: never; Returns: Json }
       get_project_group_url: { Args: { _role_id: string }; Returns: string }
       get_project_workspace: {
         Args: { _role_id: string }
@@ -1570,6 +1663,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_referral_eligible: { Args: { _user_id: string }; Returns: boolean }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
       issue_talent_faculty_id: { Args: { _talent_id: string }; Returns: string }
       list_public_talent: {
@@ -1608,6 +1702,7 @@ export type Database = {
         Args: { _department: string; _old_id: string }
         Returns: string
       }
+      referral_code_exists: { Args: { _code: string }; Returns: boolean }
       request_talent_intro: {
         Args: {
           _message?: string

@@ -8,6 +8,7 @@ const ITEMS = [
   { to: "/admin/students", label: "Students" },
   { to: "/admin/talent", label: "Talent" },
   { to: "/admin/certificates", label: "Certificates", adminOnly: true },
+  { to: "/admin/referrals", label: "Referrals", adminOnly: true },
 ];
 
 /** Shared admin navigation, so every admin page is one tap from the dashboard and the others. */

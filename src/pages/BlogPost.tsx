@@ -5,15 +5,53 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Clock, Calendar } from "lucide-react";
 import { getCategoryByName } from "@/data/blogCategories";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { BLOG_AUTHOR, authorSchema } from "@/data/author";
 import { Linkedin, Twitter } from "lucide-react";
 import BlogActions from "@/components/BlogActions";
 import SuccessKitCTA from "@/components/siwes/SuccessKitCTA";
+import VirtualSiwesOffer from "@/components/siwes/VirtualSiwesOffer";
 import PostInternalLinks from "@/components/blog/PostInternalLinks";
 import { useAllBlogPosts } from "@/hooks/useBlogPostsData";
 import { formatDate } from "@/components/LastUpdated";
+
+const markdownComponents: Components = {
+  table: ({ node, ...props }) => (
+    <div className="not-prose my-8 w-full overflow-x-auto rounded-md border border-border">
+      <table className="w-full min-w-[480px] border-collapse text-sm" {...props} />
+    </div>
+  ),
+  th: ({ node, ...props }) => (
+    <th className="border-b border-border bg-muted px-3 py-2 text-left font-semibold text-foreground" {...props} />
+  ),
+  td: ({ node, ...props }) => (
+    <td className="border-b border-border px-3 py-2 align-top text-muted-foreground" {...props} />
+  ),
+};
+
+/**
+ * Splits markdown just before the "## " heading nearest its middle, so an
+ * offer can sit between sections. Returns [content, ""] when there is no
+ * heading past the first one, or it is inside a code fence.
+ */
+const splitAtMiddleHeading = (content: string): [string, string] => {
+  const starts: number[] = [];
+  let inFence = false;
+  let offset = 0;
+  for (const line of content.split("\n")) {
+    if (line.startsWith("```")) inFence = !inFence;
+    else if (!inFence && /^## /.test(line)) starts.push(offset);
+    offset += line.length + 1;
+  }
+  const candidates = starts.slice(1);
+  if (candidates.length === 0) return [content, ""];
+  const middle = content.length / 2;
+  const at = candidates.reduce((best, s) =>
+    Math.abs(s - middle) < Math.abs(best - middle) ? s : best,
+  );
+  return [content.slice(0, at), content.slice(at)];
+};
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -50,6 +88,24 @@ const BlogPost = () => {
   // SIWES/internship articles get the Success Kit funnel; other posts are untouched.
   const isSiwesPost = /siwes|internship|industrial training|\bIT placement\b/i.test(
     `${post.slug} ${post.title} ${post.tags.join(" ")}`,
+  );
+  // SIWES proper (not general internships) also gets the Virtual SIWES offer.
+  const isVirtualSiwesPost = /siwes|industrial training|\bIT placement\b/i.test(
+    `${post.slug} ${post.title} ${post.tags.join(" ")}`,
+  );
+
+  const body = post.content.replace(/^\s*\*By [^*\n]+\*[ \t]*\n?/m, "");
+  const [firstHalf, secondHalf] = isVirtualSiwesPost
+    ? splitAtMiddleHeading(body)
+    : [body, ""];
+  const proseClass =
+    "prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-muted-foreground prose-p:mb-6 prose-p:leading-relaxed prose-li:text-muted-foreground prose-li:leading-relaxed prose-ul:mb-6 prose-ol:mb-6 prose-strong:text-foreground prose-a:text-primary hover:prose-a:underline prose-hr:my-8";
+  const renderMarkdown = (markdown: string) => (
+    <div className={proseClass}>
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+        {markdown}
+      </ReactMarkdown>
+    </div>
   );
 
   return (
@@ -133,26 +189,13 @@ const BlogPost = () => {
             {isSiwesPost && <SuccessKitCTA source={post.slug} variant="inline" />}
 
             {/* Content */}
-            <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-muted-foreground prose-p:mb-6 prose-p:leading-relaxed prose-li:text-muted-foreground prose-li:leading-relaxed prose-ul:mb-6 prose-ol:mb-6 prose-strong:text-foreground prose-a:text-primary hover:prose-a:underline prose-hr:my-8">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  table: ({ node, ...props }) => (
-                    <div className="not-prose my-8 w-full overflow-x-auto rounded-md border border-border">
-                      <table className="w-full min-w-[480px] border-collapse text-sm" {...props} />
-                    </div>
-                  ),
-                  th: ({ node, ...props }) => (
-                    <th className="border-b border-border bg-muted px-3 py-2 text-left font-semibold text-foreground" {...props} />
-                  ),
-                  td: ({ node, ...props }) => (
-                    <td className="border-b border-border px-3 py-2 align-top text-muted-foreground" {...props} />
-                  ),
-                }}
-              >
-                {post.content.replace(/^\s*\*By [^*\n]+\*[ \t]*\n?/m, "")}
-              </ReactMarkdown>
-            </div>
+            {renderMarkdown(firstHalf)}
+            {secondHalf && (
+              <>
+                <VirtualSiwesOffer source={post.slug} variant="inline" />
+                {renderMarkdown(secondHalf)}
+              </>
+            )}
 
             <PostInternalLinks post={post} />
 
@@ -165,6 +208,8 @@ const BlogPost = () => {
                 <a href={BLOG_AUTHOR.x} target="_blank" rel="author noopener" aria-label="Bill Achusim on X" className="hover:text-foreground"><Twitter size={15} /></a>
               </div>
             </div>
+
+            {isVirtualSiwesPost && <VirtualSiwesOffer source={post.slug} variant="full" />}
 
             {isSiwesPost && <SuccessKitCTA source={post.slug} variant="capture" />}
 

@@ -14,8 +14,8 @@ interface ScrapeRun {
   error: string | null;
 }
 
-/** A run older than this means the Monday/Thursday schedule has stopped. */
-const STALE_AFTER_DAYS = 5;
+/** No good run for longer than this means the 1st/15th schedule has stopped. */
+const STALE_AFTER_DAYS = 17;
 
 /**
  * Shows when the /events directory was last refreshed from Meetup, Eventbrite and Luma,
@@ -72,7 +72,7 @@ export function EventsRefreshStatus() {
             Events directory
           </p>
           <p className="text-sm text-muted-foreground">
-            Refreshes automatically every Monday and Thursday morning.{" "}
+            Refreshes automatically on the 1st and 15th of each month.{" "}
             {isLoading
               ? ""
               : lastOk

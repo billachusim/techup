@@ -40,7 +40,7 @@ WHERE is_featured = false
 
 -- 3. Housekeeping, run at the end of every scrape. Adds two rules to the old version:
 --    undated third-party rows (stored before dates were required) are archived, and so is
---    any third-party listing the scraper has not seen for 4 weeks.
+--    any third-party listing the scraper has not seen for 5 weeks (two missed runs).
 CREATE OR REPLACE FUNCTION public.archive_stale_listings()
 RETURNS void
 LANGUAGE plpgsql
@@ -64,7 +64,7 @@ BEGIN
     AND (
       COALESCE(ends_at, starts_at) < now()
       OR (starts_at IS NULL AND ends_at IS NULL)
-      OR last_seen_at < now() - interval '28 days'
+      OR last_seen_at < now() - interval '35 days'
     );
 
   DELETE FROM public.events
@@ -82,7 +82,7 @@ GRANT EXECUTE ON FUNCTION public.archive_stale_listings() TO service_role;
 
 SELECT public.archive_stale_listings();
 
--- 4. Re-assert the schedule: every Monday and Thursday at 05:30 UTC (06:30 WAT).
+-- 4. Re-assert the schedule: on the 1st and 15th of each month at 05:30 UTC (06:30 WAT).
 CREATE EXTENSION IF NOT EXISTS pg_cron WITH SCHEMA extensions;
 CREATE EXTENSION IF NOT EXISTS pg_net WITH SCHEMA extensions;
 
@@ -91,7 +91,7 @@ SELECT cron.unschedule('scrape-events') WHERE EXISTS (SELECT 1 FROM cron.job WHE
 
 SELECT cron.schedule(
   'scrape-events',
-  '30 5 * * 1,4',
+  '30 5 1,15 * *',
   $$
   SELECT net.http_post(
     url := 'https://flxwtwzjslufglpwfjdx.supabase.co/functions/v1/scrape-events',

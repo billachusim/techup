@@ -29,6 +29,9 @@ jobs:
       - name: Typecheck
         run: npx tsc --noEmit
 
+      - name: Payment and enrolment tests
+        run: npm test
+
       - name: Build
         run: npm run build
 

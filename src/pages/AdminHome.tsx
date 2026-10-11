@@ -3,11 +3,12 @@ import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/router-compat";
-import { Award, BriefcaseBusiness, GraduationCap, Loader2, type LucideIcon } from "lucide-react";
+import { Award, BriefcaseBusiness, GraduationCap, Inbox, Loader2, type LucideIcon } from "lucide-react";
 import { useIsStaff } from "@/hooks/useIsStaff";
 import AdminNav from "@/components/admin/AdminNav";
 import { AdminMetrics } from "@/components/admin/AdminMetrics";
 import { NotifySearchEngines } from "@/components/admin/NotifySearchEngines";
+import { EventsRefreshStatus } from "@/components/admin/EventsRefreshStatus";
 
 interface Section {
   to: string;
@@ -18,6 +19,13 @@ interface Section {
 }
 
 const SECTIONS: Section[] = [
+  {
+    to: "/admin/leads",
+    title: "Leads",
+    description: "Every enquiry from the site's forms, with WhatsApp follow-up and status.",
+    icon: Inbox,
+    adminOnly: true,
+  },
   {
     to: "/admin/students",
     title: "Students",
@@ -80,6 +88,7 @@ export default function AdminHome() {
             {/* Business numbers are for admins; recruiters only see the areas above. */}
             {isAdmin && <AdminMetrics />}
             {isAdmin && <NotifySearchEngines />}
+            {isAdmin && <EventsRefreshStatus />}
           </>
         )}
       </main>

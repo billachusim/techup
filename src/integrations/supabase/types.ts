@@ -437,6 +437,39 @@ export type Database = {
           },
         ]
       }
+      event_scrape_runs: {
+        Row: {
+          duration_ms: number | null
+          error: string | null
+          id: string
+          ran_at: string
+          report: Json
+          success: boolean
+          trigger: string
+          upserted: number
+        }
+        Insert: {
+          duration_ms?: number | null
+          error?: string | null
+          id?: string
+          ran_at?: string
+          report?: Json
+          success: boolean
+          trigger?: string
+          upserted?: number
+        }
+        Update: {
+          duration_ms?: number | null
+          error?: string | null
+          id?: string
+          ran_at?: string
+          report?: Json
+          success?: boolean
+          trigger?: string
+          upserted?: number
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           address: string | null
@@ -727,6 +760,8 @@ export type Database = {
           notes: string | null
           school: string | null
           source: string | null
+          status: string
+          status_updated_at: string | null
         }
         Insert: {
           channel: string
@@ -738,6 +773,8 @@ export type Database = {
           notes?: string | null
           school?: string | null
           source?: string | null
+          status?: string
+          status_updated_at?: string | null
         }
         Update: {
           channel?: string
@@ -749,6 +786,8 @@ export type Database = {
           notes?: string | null
           school?: string | null
           source?: string | null
+          status?: string
+          status_updated_at?: string | null
         }
         Relationships: []
       }

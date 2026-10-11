@@ -70,17 +70,36 @@ export function locationLabel(event: TechEvent) {
   return event.venue_name ?? "Venue announced by organiser";
 }
 
+/**
+ * The start time to show. Our own recurring events keep their seeded date after it passes,
+ * so a past date on one of them means "next date not set yet" and its date_text is shown instead.
+ */
+export function upcomingStart(event: TechEvent): string | null {
+  if (!event.starts_at) return null;
+  if (event.is_featured && new Date(event.ends_at ?? event.starts_at).getTime() < Date.now()) return null;
+  return event.starts_at;
+}
+
+/** Third-party listings need a date that has not passed; the nightly archive may lag behind. */
+function isCurrent(event: TechEvent) {
+  if (event.is_featured) return true;
+  const end = event.ends_at ?? event.starts_at;
+  return end !== null && new Date(end).getTime() >= Date.now();
+}
+
 export function dateLabel(event: TechEvent) {
-  if (event.starts_at) {
-    const start = new Date(event.starts_at);
+  const startsAt = upcomingStart(event);
+  if (startsAt) {
+    const start = new Date(startsAt);
     const opts: Intl.DateTimeFormatOptions = {
       weekday: "short",
       day: "numeric",
       month: "short",
       year: "numeric",
+      timeZone: "Africa/Lagos",
     };
     const base = start.toLocaleDateString("en-NG", opts);
-    const time = start.toLocaleTimeString("en-NG", { hour: "numeric", minute: "2-digit" });
+    const time = start.toLocaleTimeString("en-NG", { hour: "numeric", minute: "2-digit", timeZone: "Africa/Lagos" });
     return `${base} · ${time} WAT`;
   }
   return event.date_text ?? "Date announced by organiser";
@@ -93,18 +112,23 @@ export function priceLabel(event: TechEvent) {
 
 /** Nigeria/Africa and online events first, then soonest start date. */
 const LOCAL_HINTS = ["nigeria", "ng", "africa", "ghana", "kenya", "rwanda", "za"];
+/** Cities near our campuses, ranked ahead of the rest of Nigeria. */
+const SOUTH_EAST_CITIES = ["nnewi", "awka", "onitsha", "uli", "enugu", "nsukka", "owerri", "aba", "umuahia", "asaba"];
 
 export function localFirst(a: TechEvent, b: TechEvent) {
   const score = (e: TechEvent) => {
-    if (e.is_featured) return -1;
+    if (e.is_featured) return -2;
+    if (SOUTH_EAST_CITIES.includes((e.city ?? "").trim().toLowerCase())) return -1;
     const hay = `${e.country ?? ""} ${e.city ?? ""}`.toLowerCase();
     if (LOCAL_HINTS.some((h) => hay.includes(h))) return 0;
     return e.format === "VIRTUAL" ? 1 : 2;
   };
   const diff = score(a) - score(b);
   if (diff !== 0) return diff;
-  const at = a.starts_at ? new Date(a.starts_at).getTime() : Number.MAX_SAFE_INTEGER;
-  const bt = b.starts_at ? new Date(b.starts_at).getTime() : Number.MAX_SAFE_INTEGER;
+  const as = upcomingStart(a);
+  const bs = upcomingStart(b);
+  const at = as ? new Date(as).getTime() : Number.MAX_SAFE_INTEGER;
+  const bt = bs ? new Date(bs).getTime() : Number.MAX_SAFE_INTEGER;
   if (at !== bt) return at - bt;
   return new Date(b.last_seen_at).getTime() - new Date(a.last_seen_at).getTime();
 }
@@ -117,7 +141,7 @@ export async function fetchEvents(limit = 300): Promise<TechEvent[]> {
     .eq("is_expired", false)
     .limit(limit);
   if (error) throw error;
-  return ((data ?? []) as unknown as TechEvent[]).sort(localFirst);
+  return ((data ?? []) as unknown as TechEvent[]).filter(isCurrent).sort(localFirst);
 }
 
 export async function fetchEventBySlug(slug: string): Promise<TechEvent | null> {
@@ -133,7 +157,9 @@ export function eventUrl(event: TechEvent) {
 
 /** Try to recover an ISO start date (YYYY-MM-DD) from free-text date labels like "12 September 2026". */
 export function resolveStartDate(event: TechEvent): string | null {
-  if (event.starts_at) return event.starts_at;
+  const startsAt = upcomingStart(event);
+  if (startsAt) return startsAt;
+  if (event.is_featured && event.starts_at) return null;
   const text = (event.date_text ?? "").trim();
   if (!text) return null;
   const cleaned = text.replace(/\b(\d{1,2})(st|nd|rd|th)\b/gi, "$1").split(/\s*(?:–|—|-\s|to\s)/)[0];

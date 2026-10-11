@@ -62,7 +62,8 @@ const About = () => {
             "accreditation": "Licensed by the Federal Ministry of Science, Technology and Innovation (FMSTI) via the National Board for Technology Incubation (NBTI)",
             "sameAs": [
               "https://twitter.com/TechFacultyNG",
-              "https://www.linkedin.com/company/techfaculty"
+              "https://www.linkedin.com/company/techfaculty",
+              "https://www.wikidata.org/wiki/Q141702083"
             ]
           },
           "url": "https://techfaculty.ng/about"

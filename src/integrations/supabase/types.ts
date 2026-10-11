@@ -572,27 +572,6 @@ export type Database = {
         }
         Relationships: []
       }
-      graduate_review_requests: {
-        Row: {
-          certificate_number: string | null
-          created_at: string
-          email: string
-          id: string
-        }
-        Insert: {
-          certificate_number?: string | null
-          created_at?: string
-          email: string
-          id?: string
-        }
-        Update: {
-          certificate_number?: string | null
-          created_at?: string
-          email?: string
-          id?: string
-        }
-        Relationships: []
-      }
       job_applications: {
         Row: {
           applied_at: string | null
@@ -718,8 +697,6 @@ export type Database = {
           notes: string | null
           school: string | null
           source: string | null
-          status: string
-          status_updated_at: string | null
         }
         Insert: {
           channel: string
@@ -731,8 +708,6 @@ export type Database = {
           notes?: string | null
           school?: string | null
           source?: string | null
-          status?: string
-          status_updated_at?: string | null
         }
         Update: {
           channel?: string
@@ -744,8 +719,6 @@ export type Database = {
           notes?: string | null
           school?: string | null
           source?: string | null
-          status?: string
-          status_updated_at?: string | null
         }
         Relationships: []
       }

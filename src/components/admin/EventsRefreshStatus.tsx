@@ -30,7 +30,8 @@ export function EventsRefreshStatus() {
     queryKey: ["event-scrape-runs"],
     queryFn: async () => {
       const supabase = await getSupabase();
-      const { data, error } = await supabase
+      // Table comes from a pending migration not yet in generated types.
+      const { data, error } = await (supabase as unknown as { from: (t: string) => any })
         .from("event_scrape_runs")
         .select("ran_at, trigger, success, upserted, error")
         .order("ran_at", { ascending: false })

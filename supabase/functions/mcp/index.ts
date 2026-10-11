@@ -2183,7 +2183,8 @@ Our **Data Analytics Bootcamp** covers exactly this stack \u2014 Excel \u2192 SQ
   {
     slug: "cybersecurity-salary-nigeria-2026",
     title: "Cybersecurity Salary Nigeria: 2026 Entry to Senior Guide",
-    description: "2026 salary guide: exact naira pay bands for SOC analysts, pentesters and GRC officers in Nigeria, entry-level to senior, plus remote USD rates.",
+    seoTitle: "Cybersecurity Salary Nigeria 2026: \u20A6350k\u2013\u20A68M | Tech Faculty NG",
+    description: "Junior SOC analysts earn \u20A6350k\u2013\u20A6700k a month; senior GRC heads reach \u20A68M. See 2026 pay for SOC, pentest, GRC and cloud security, plus remote USD rates.",
     content: `# Cybersecurity Salary in Nigeria 2026: SOC, Pentest & GRC Pay Bands
 
 *By Bill Achusim \xB7 Jul 2, 2026*
@@ -4067,7 +4068,8 @@ Cyber security is one of the highest-leverage paths a Nigerian can pick in 2026 
   {
     slug: "tech-salaries-nigeria-2026-junior-mid-senior",
     title: "Tech Salaries in Nigeria 2026: Junior, Mid, and Senior Pay Benchmarks",
-    description: "Honest 2026 tech salary benchmarks for Nigeria \u2014 junior, mid, and senior pay by role, plus remote USD ranges, by city, and how to negotiate effectively.",
+    seoTitle: "Tech Salaries Nigeria 2026: Junior to Senior | Tech Faculty NG",
+    description: "Junior developers earn \u20A6300k\u2013\u20A6600k a month; senior PMs pass \u20A67M. 2026 Nigerian pay for dev, data, cyber, design, PM and DevOps, plus remote USD rates.",
     content: `# Tech Salaries in Nigeria 2026: Junior, Mid, and Senior Pay Benchmarks
 
 *By Bill Achusim \xB7 Apr 8, 2026*
@@ -4651,7 +4653,8 @@ Data analytics and visualization is the most accessible high-paying tech skill i
   {
     slug: "best-ai-tools-nigerian-businesses-2026",
     title: "10 Best AI Tools Nigerian Businesses Should Use in 2026",
-    description: "A practical shortlist of the 10 best AI tools for Nigerian businesses in 2026 \u2014 with local use cases, pricing in naira context, and quick-start tips.",
+    seoTitle: "10 Best AI Tools for Nigerian Businesses 2026 | Tech Faculty NG",
+    description: "ChatGPT, Gemini, Claude, Canva, ElevenLabs and 5 more, picked for Nigerian SMEs: what each does, what it costs in naira, and which work on slow internet.",
     content: `# 10 Best AI Tools Nigerian Businesses Should Use in 2026
 
 *By Tech Faculty NG \xB7 July 11, 2026*
@@ -5693,6 +5696,8 @@ Cairo combines a very large graduate pipeline with an established accelerator ec
 
 You do not need to be in one of these cities, and you do not need to be in Nigeria.
 
+Our campuses are all in Nigeria, but every department except Robotics & IoT runs fully online. Prices, the certificate and how to pay from outside Nigeria are on our [study online from anywhere in Africa](/study-online-africa) page.
+
 - Our **online tracks** run for students across Africa, in English, with cohort schedules that account for different time zones.
 - **Certificates are publicly verifiable** at [techfaculty.ng/verify](/verify), which matters when you apply across borders.
 - Our **[remote jobs board](/careers)** aggregates AI and tech roles that hire pan-African talent weekly.
@@ -5705,7 +5710,7 @@ You do not need to be in one of these cities, and you do not need to be in Niger
 There is no single answer, and that is the point. Lagos has the deepest hiring market, Nairobi the strongest community history, Kigali the most deliberate policy support, Johannesburg the most enterprise demand, Cairo the biggest graduate pipeline. The best city for you is usually the one you already live in, paired with a structured online track.
 
 ### Can I join Tech Faculty from outside Nigeria?
-Yes. Our online tracks are open across Africa and internationally, billed in USD for international students and naira for Nigeria.
+Yes. Our online tracks are open across Africa and internationally, billed in USD for international students and naira for Nigeria. See [studying online from outside Nigeria](/study-online-africa) for prices and how to pay.
 
 ### Do African employers respect online certificates?
 They respect verifiable ones attached to visible work. Any certificate you cannot check on a public page is weak evidence; a portfolio plus a verifiable certificate is strong.

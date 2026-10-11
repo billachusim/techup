@@ -3,6 +3,7 @@ import { Body, Button, Container, Head, Heading, Hr, Html, Preview, Text } from 
 import type { TemplateEntry } from './registry'
 
 const SITE = 'https://techfaculty.ng'
+const WHATSAPP = 'https://wa.me/2348068597140'
 
 const Layout = ({ preview, title, children, cta, href }: { preview: string; title: string; children: React.ReactNode; cta?: string; href?: string }) => (
   <Html lang="en" dir="ltr">
@@ -78,6 +79,41 @@ export const studentWorkReviewed = {
   subject: (d) => (d.status === 'needs_changes' ? 'Changes requested on your assignment' : 'Your assignment was reviewed'),
   displayName: 'Student assignment reviewed',
   previewData: { name: 'Ada Obi', title: 'Week 3 project', status: 'reviewed', note: 'Clean work — add tests next time.', score: 82 },
+} satisfies TemplateEntry
+
+// 4. Student: card checkout started but never paid
+const CheckoutReminder = ({ name, plan, amount }: { name?: string; plan?: string; amount?: string }) => (
+  <Layout preview="Your Tech Faculty enrolment is waiting for payment" title="Finish your enrolment" cta="Finish enrolling" href={`${SITE}/#pricing`}>
+    <Text style={text}>{hi(name)}</Text>
+    <Text style={text}>You started enrolling in the <b>{plan ?? 'Tech Faculty'}</b> plan{amount ? ` (${amount})` : ''}, but the card payment was not completed, so your place is not confirmed yet.</Text>
+    <Text style={text}>Choose your plan again and pay to unlock your classes and class group.</Text>
+    <Text style={muted}>Already paid? You don&apos;t need to do anything. We check card payments with Flutterwave automatically and will email you once yours is confirmed.</Text>
+    <Text style={muted}>Card declined, or prefer to pay by bank transfer? <a href={WHATSAPP} style={link}>Message us on WhatsApp</a> and we will help you finish.</Text>
+  </Layout>
+)
+
+// 5. Student: card payment confirmed by the scheduled re-check
+const PaymentConfirmed = ({ name, plan, facultyId }: { name?: string; plan?: string; facultyId?: string }) => (
+  <Layout preview="Your payment is confirmed" title="Your payment is confirmed" cta="Open your student dashboard" href={`${SITE}/dashboard`}>
+    <Text style={text}>{hi(name)}</Text>
+    <Text style={text}>Flutterwave has confirmed your payment for the <b>{plan ?? 'Tech Faculty'}</b> plan, so your enrolment is now active.</Text>
+    {facultyId && <Text style={text}>Your Faculty ID is <b>{facultyId}</b>.</Text>}
+    <Text style={text}>Open your dashboard to see your classes. Your class group opens the first time you visit it.</Text>
+  </Layout>
+)
+
+export const checkoutReminder = {
+  component: CheckoutReminder,
+  subject: 'Finish your Tech Faculty enrolment',
+  displayName: 'Unfinished checkout reminder',
+  previewData: { name: 'Ada Obi', plan: 'Developer Pro', amount: '₦100,000' },
+} satisfies TemplateEntry
+
+export const paymentConfirmed = {
+  component: PaymentConfirmed,
+  subject: (d) => `Payment confirmed: you're enrolled in ${d.plan ?? 'Tech Faculty'}`,
+  displayName: 'Card payment confirmed later',
+  previewData: { name: 'Ada Obi', plan: 'Developer Pro', facultyId: 'TF-WEBDEV-ONL-0926-0001' },
 } satisfies TemplateEntry
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, Helvetica, sans-serif' }

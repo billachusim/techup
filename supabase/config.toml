@@ -28,3 +28,7 @@ verify_jwt = false
 # Flutterwave calls this without a Supabase JWT; it checks verif-hash instead.
 [functions.flutterwave-webhook]
 verify_jwt = false
+
+# Called by pg_cron every 30 minutes; it only re-checks payments with Flutterwave.
+[functions.recover-checkouts]
+verify_jwt = false

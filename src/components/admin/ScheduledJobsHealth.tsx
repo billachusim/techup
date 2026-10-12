@@ -48,8 +48,8 @@ type KnownFn = (typeof KNOWN)[number]["fn"];
 const GRACE_MS = 6 * 3600e3;
 
 // Tables and function below come from pending migrations not yet in generated types.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Untyped = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   from: (t: string) => any;
   rpc: (fn: string) => Promise<{ data: unknown; error: { message: string } | null }>;
 };

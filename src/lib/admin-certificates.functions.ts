@@ -3,6 +3,7 @@ import { z } from "zod";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Database } from "@/integrations/supabase/types";
+import { recordAdminAction } from "@/lib/admin-audit";
 
 export type AdminCertificate = {
   id: string;
@@ -80,6 +81,14 @@ export const updateCertificate = createServerFn({ method: "POST" })
       .select(COLUMNS)
       .single();
     if (error) throw new Error(error.message);
+    await recordAdminAction(admin, context.userId, {
+      action: "certificate.edited",
+      target_table: "certificates",
+      target_id: row.id,
+      faculty_id: row.faculty_id,
+      subject: row.student_name,
+      details: { certificate_number: row.certificate_number, course: row.course_name },
+    });
     return row as AdminCertificate;
   });
 
@@ -108,5 +117,13 @@ export const setCertificateRevoked = createServerFn({ method: "POST" })
       .select(COLUMNS)
       .single();
     if (error) throw new Error(error.message);
+    await recordAdminAction(admin, context.userId, {
+      action: data.revoke ? "certificate.revoked" : "certificate.reinstated",
+      target_table: "certificates",
+      target_id: row.id,
+      faculty_id: row.faculty_id,
+      subject: row.student_name,
+      details: { certificate_number: row.certificate_number, course: row.course_name, reason: data.reason ?? null },
+    });
     return row as AdminCertificate;
   });

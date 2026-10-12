@@ -20,6 +20,9 @@ const ACTION_LABEL: Record<string, string> = {
   "enrollment.cancelled": "Cancelled enrolment",
   "enrollment.status_changed": "Changed enrolment status",
   "certificate.issued": "Issued certificate",
+  "certificate.edited": "Edited certificate",
+  "certificate.revoked": "Revoked certificate",
+  "certificate.reinstated": "Reinstated certificate",
   "certificate.deleted": "Deleted certificate",
   "lead.status_changed": "Changed lead status",
   "referral.reward_paid": "Paid referral reward",
@@ -62,6 +65,7 @@ function describe(entry: Entry): string {
     parts.push(`${typeof d.currency === "string" ? `${d.currency} ` : ""}${Number(d.amount).toLocaleString("en-NG")}`);
   }
   if (typeof d.code === "string") parts.push(`code ${d.code}`);
+  if (typeof d.reason === "string") parts.push(`reason: ${d.reason}`);
   return parts.join(" · ");
 }
 

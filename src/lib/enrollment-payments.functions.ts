@@ -3,6 +3,7 @@ import { z } from "zod";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Database } from "@/integrations/supabase/types";
+import { recordAdminAction } from "@/lib/admin-audit";
 
 async function assertAdmin(supabase: SupabaseClient<Database>, userId: string) {
   const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
@@ -75,27 +76,15 @@ export const decidePendingEnrollment = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     if (!row) throw new Error("This enrolment is no longer pending");
 
-    // The service key has no auth.uid(), so the audit triggers can't see who did this; record it here.
-    const [{ data: profile }, { data: actor }] = await Promise.all([
-      supabaseAdmin.from("profiles").select("name").eq("faculty_id", row.faculty_id).limit(1).maybeSingle(),
-      supabaseAdmin.auth.admin.getUserById(context.userId),
-    ]);
-    const { error: auditError } = await supabaseAdmin.from("admin_audit_log").insert({
-      actor_id: context.userId,
-      actor_email: actor?.user?.email ?? null,
+    const { data: profile } = await supabaseAdmin
+      .from("profiles").select("name").eq("faculty_id", row.faculty_id).limit(1).maybeSingle();
+    await recordAdminAction(supabaseAdmin, context.userId, {
       action: data.decision === "paid" ? "payment.marked_paid" : "enrollment.cancelled",
       target_table: "enrollments",
       target_id: row.id,
       faculty_id: row.faculty_id,
       subject: profile?.name ?? null,
-      details: {
-        from: "pending",
-        to: update.status,
-        plan: row.plan_name,
-        amount: row.amount_due,
-        currency: row.currency,
-      },
+      details: { from: "pending", to: update.status, plan: row.plan_name, amount: row.amount_due, currency: row.currency },
     });
-    if (auditError) console.error("Couldn't write admin audit log", auditError.message);
     return { ok: true as const };
   });

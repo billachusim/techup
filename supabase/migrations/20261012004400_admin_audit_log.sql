@@ -4,9 +4,9 @@
 -- Actions an admin makes with their own session (lead status, referral
 -- payouts) are caught by triggers below. Actions that go through the service
 -- key (marking payments paid or cancelling them in decidePendingEnrollment,
--- issuing certificates in the admin-add-certificate function) have no
--- auth.uid() inside Postgres, so that code writes its own row with the
--- acting admin's id. Automatic changes (Flutterwave confirming a payment, a
+-- issuing certificates in the admin-add-certificate function, editing and
+-- revoking them in admin-certificates.functions) have no auth.uid() inside
+-- Postgres, so that code writes its own row with the acting admin's id. Automatic changes (Flutterwave confirming a payment, a
 -- student's own actions) are not admin actions and are not logged.
 
 CREATE TABLE IF NOT EXISTS public.admin_audit_log (

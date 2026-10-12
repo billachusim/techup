@@ -65,4 +65,4 @@
 - [x] Admin review page at /admin/students (score, feedback, email + Slack notice, running average)
 - [x] Once-per-class Slack briefing + "next class ready" email from the dashboard
 
-- [ ] Slow recover-checkouts payment re-check to once a day (user request)
+- [x] Slow recover-checkouts payment re-check to once a day (user request)

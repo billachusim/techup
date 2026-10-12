@@ -29,7 +29,7 @@ WITH CHECK (
   )
 );
 
--- Re-check pending card payments with Flutterwave every 30 minutes.
+-- Re-check pending card payments with Flutterwave once a day (05:30 UTC).
 CREATE EXTENSION IF NOT EXISTS pg_cron WITH SCHEMA extensions;
 CREATE EXTENSION IF NOT EXISTS pg_net WITH SCHEMA extensions;
 
@@ -37,7 +37,7 @@ SELECT cron.unschedule('recover-checkouts') WHERE EXISTS (SELECT 1 FROM cron.job
 
 SELECT cron.schedule(
   'recover-checkouts',
-  '*/30 * * * *',
+  '30 5 * * *',
   $$
   SELECT net.http_post(
     url := 'https://flxwtwzjslufglpwfjdx.supabase.co/functions/v1/recover-checkouts',

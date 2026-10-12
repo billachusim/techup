@@ -65,6 +65,7 @@ function describe(entry: Entry): string {
     parts.push(`${typeof d.currency === "string" ? `${d.currency} ` : ""}${Number(d.amount).toLocaleString("en-NG")}`);
   }
   if (typeof d.code === "string") parts.push(`code ${d.code}`);
+  if (typeof d.method === "string") parts.push(`by ${pretty(d.method)}`);
   if (typeof d.reason === "string") parts.push(`reason: ${d.reason}`);
   return parts.join(" · ");
 }

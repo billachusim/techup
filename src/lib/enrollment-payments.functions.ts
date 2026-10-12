@@ -84,7 +84,10 @@ export const decidePendingEnrollment = createServerFn({ method: "POST" })
       target_id: row.id,
       faculty_id: row.faculty_id,
       subject: profile?.name ?? null,
-      details: { from: "pending", to: update.status, plan: row.plan_name, amount: row.amount_due, currency: row.currency },
+      details:
+        data.decision === "paid"
+          ? { from: "pending", to: update.status, plan: row.plan_name, amount: data.amount, currency: data.currency, method: data.method }
+          : { from: "pending", to: update.status, plan: row.plan_name, amount: row.amount_due, currency: row.currency },
     });
     return { ok: true as const };
   });

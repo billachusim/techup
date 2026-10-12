@@ -1,4 +1,5 @@
--- Real schedules for Tech Faculty's own events (from Bill, 2026-10-12):
+-- Real schedules for Tech Faculty's own events (from Bill, 2026-10-12).
+-- Safe to run again: every statement is idempotent.
 -- the Nnewi Tech Meetup is on the last Saturday of every month, the AI for Everything
 -- Fellowship meets every Monday and Saturday from 11am to 2pm, and the holiday bootcamp
 -- runs every school holiday. The meetup and fellowship dates now roll forward on their own.
@@ -20,8 +21,8 @@ AS $$
   LIMIT 1;
 $$;
 
--- Moves each recurring event to its next session that has not finished yet.
--- Meetup: keeps its time of day (default 17:00 WAT) and length.
+-- Moves each recurring event to its next session.
+-- Meetup: last Saturday of the month, 11:00 to 16:00 WAT (Bill, 2026-10-12).
 CREATE OR REPLACE FUNCTION public.roll_recurring_events()
 RETURNS void
 LANGUAGE plpgsql
@@ -34,13 +35,12 @@ DECLARE
   fellowship_start timestamptz;
 BEGIN
   UPDATE public.events
-  SET starts_at = (next_day + COALESCE((starts_at AT TIME ZONE 'Africa/Lagos')::time, time '17:00')) AT TIME ZONE 'Africa/Lagos',
-      ends_at = (next_day + COALESCE((starts_at AT TIME ZONE 'Africa/Lagos')::time, time '17:00')) AT TIME ZONE 'Africa/Lagos'
-                + COALESCE(ends_at - starts_at, interval '2 hours'),
-      date_text = 'Last Saturday of every month',
+  SET starts_at = (next_day + time '11:00') AT TIME ZONE 'Africa/Lagos',
+      ends_at = (next_day + time '16:00') AT TIME ZONE 'Africa/Lagos',
+      date_text = 'Last Saturday of every month, 11am to 4pm',
       is_expired = false
   WHERE slug = 'nnewi-tech-meetup'
-    AND (starts_at IS NULL OR (starts_at AT TIME ZONE 'Africa/Lagos')::date <> next_day);
+    AND starts_at IS DISTINCT FROM (next_day + time '11:00') AT TIME ZONE 'Africa/Lagos';
 
   -- Fellowship: next Monday or Saturday, 11:00 to 14:00 WAT, that has not ended yet.
   SELECT (day + time '11:00') AT TIME ZONE 'Africa/Lagos'

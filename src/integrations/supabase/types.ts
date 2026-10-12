@@ -1000,6 +1000,42 @@ export type Database = {
           },
         ]
       }
+      scheduled_job_runs: {
+        Row: {
+          duration_ms: number | null
+          error: string | null
+          id: string
+          items: number
+          job: string
+          ran_at: string
+          report: Json
+          success: boolean
+          trigger: string
+        }
+        Insert: {
+          duration_ms?: number | null
+          error?: string | null
+          id?: string
+          items?: number
+          job: string
+          ran_at?: string
+          report?: Json
+          success: boolean
+          trigger?: string
+        }
+        Update: {
+          duration_ms?: number | null
+          error?: string | null
+          id?: string
+          items?: number
+          job?: string
+          ran_at?: string
+          report?: Json
+          success?: boolean
+          trigger?: string
+        }
+        Relationships: []
+      }
       student_class_briefings: {
         Row: {
           class_key: string
@@ -1571,6 +1607,18 @@ export type Database = {
     }
     Functions: {
       admin_dashboard_metrics: { Args: { _days?: number }; Returns: Json }
+      admin_scheduled_jobs: {
+        Args: never
+        Returns: {
+          active: boolean
+          edge_function: string
+          jobname: string
+          last_message: string
+          last_started_at: string
+          last_status: string
+          schedule: string
+        }[]
+      }
       approve_talent: { Args: { _talent_id: string }; Returns: string }
       archive_stale_listings: { Args: never; Returns: undefined }
       claim_my_talent_profile: { Args: never; Returns: string }

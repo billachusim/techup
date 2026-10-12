@@ -43,6 +43,13 @@
       "when": 1791788738901,
       "tag": "0005_events_refresh",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791788758642,
+      "tag": "0006_scheduled_jobs_health",
+      "breakpoints": true
     }
   ]
 }

@@ -386,7 +386,10 @@ export type Database = {
           paid_at: string | null
           payment_method: string | null
           payment_reference: string | null
+          payment_reminder_sent_at: string | null
           plan_name: string
+          recovered_at: string | null
+          recovered_email_sent_at: string | null
           status: string
           tx_ref: string | null
         }
@@ -403,7 +406,10 @@ export type Database = {
           paid_at?: string | null
           payment_method?: string | null
           payment_reference?: string | null
+          payment_reminder_sent_at?: string | null
           plan_name: string
+          recovered_at?: string | null
+          recovered_email_sent_at?: string | null
           status?: string
           tx_ref?: string | null
         }
@@ -420,7 +426,10 @@ export type Database = {
           paid_at?: string | null
           payment_method?: string | null
           payment_reference?: string | null
+          payment_reminder_sent_at?: string | null
           plan_name?: string
+          recovered_at?: string | null
+          recovered_email_sent_at?: string | null
           status?: string
           tx_ref?: string | null
         }

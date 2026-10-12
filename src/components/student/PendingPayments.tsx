@@ -101,7 +101,7 @@ export function PendingPayments() {
       <div>
         <h2 className="text-xl font-bold">Payments to confirm</h2>
         <p className="text-sm text-muted-foreground">
-          Paid plans only open once payment is confirmed. Card payments confirm automatically; mark WhatsApp, email and bank payments here once the money arrives.
+          Paid plans only open once payment is confirmed. Card payments confirm automatically, even when the student closes the payment page, and unpaid card checkouts get one reminder email. Mark WhatsApp, email and bank payments here once the money arrives.
         </p>
       </div>
       {busy ? <Loader2 className="h-5 w-5 animate-spin" /> : rows.length === 0 ? (
@@ -117,6 +117,7 @@ export function PendingPayments() {
               <p className="text-xs text-muted-foreground">
                 {r.tx_ref ? `Card checkout started (${r.currency} ${r.amount_due}) — not confirmed by Flutterwave` : "WhatsApp / email request"}
                 {r.coupon_code ? ` · code ${r.coupon_code}` : ""}
+                {r.payment_reminder_sent_at ? ` · reminder emailed ${new Date(r.payment_reminder_sent_at).toLocaleDateString()}` : ""}
               </p>
             </div>
             <div className="flex gap-2">

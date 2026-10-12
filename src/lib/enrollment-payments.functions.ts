@@ -17,7 +17,7 @@ export const listPendingEnrollments = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: rows, error } = await supabaseAdmin
       .from("enrollments")
-      .select("id, faculty_id, plan_name, learning_mode, coupon_code, tx_ref, amount_due, currency, created_at")
+      .select("id, faculty_id, plan_name, learning_mode, coupon_code, tx_ref, amount_due, currency, created_at, payment_reminder_sent_at")
       .eq("status", "pending")
       .order("created_at", { ascending: false })
       .limit(200);

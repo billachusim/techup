@@ -1,5 +1,5 @@
 // Confirms a Flutterwave card payment and activates the enrolment it pays for.
-// Used by the flutterwave-webhook and verify-payment functions. A payment only
+// Used by the flutterwave-webhook, verify-payment and recover-checkouts functions. A payment only
 // counts after Flutterwave's own verify API says it succeeded for the amount
 // and currency create-checkout recorded on the enrolment.
 import type { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -26,10 +26,12 @@ async function fetchTransaction(secretKey: string, txRef: string): Promise<Flutt
   return body.data as FlutterwaveTransaction;
 }
 
+/** `extra` is saved with the activation, only when this call is the one that activates it. */
 export async function confirmPayment(
   admin: SupabaseClient,
   secretKey: string,
   txRef: string,
+  extra: Record<string, unknown> = {},
 ): Promise<ConfirmResult> {
   const { data: enrollment, error } = await admin
     .from("enrollments")
@@ -56,7 +58,7 @@ export async function confirmPayment(
 
   const { error: updateErr } = await admin
     .from("enrollments")
-    .update({ status: "active", paid_at: new Date().toISOString(), payment_reference: String(tx.id) })
+    .update({ ...extra, status: "active", paid_at: new Date().toISOString(), payment_reference: String(tx.id) })
     .eq("id", enrollment.id)
     .eq("status", "pending");
   if (updateErr) throw updateErr;

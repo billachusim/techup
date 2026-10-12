@@ -41,7 +41,7 @@ const FAQS = [
   },
   {
     q: "Does Tech Faculty host its own tech events?",
-    a: `Yes. Tech Faculty NG runs the monthly Nnewi Tech Meetup at the Technology Incubation Centre in Nnewi, practical AI workshops for business owners, and holiday tech bootcamps for children and teenagers in Nnewi, Onitsha, Enugu, Owerri, Aba and other cities. Teen holiday tracks start from ${naira(TEEN_HOLIDAY_FROM.amount)}.`,
+    a: `Yes. Tech Faculty NG runs the Nnewi Tech Meetup at the Technology Incubation Centre in Nnewi on the last Saturday of every month, the AI for Everything Fellowship every Monday and Saturday from 11am to 2pm, practical AI workshops for business owners, and holiday tech bootcamps every school holiday for children and teenagers in Nnewi, Onitsha, Enugu, Owerri, Aba and other cities. Teen holiday tracks start from ${naira(TEEN_HOLIDAY_FROM.amount)}.`,
   },
   {
     q: "Can I list or co-host an event with Tech Faculty?",

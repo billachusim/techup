@@ -208,7 +208,11 @@ export type Database = {
           id: string
           issued_at: string | null
           issued_by: string
+          revoked_at: string | null
+          revoked_by: string | null
+          revoked_reason: string | null
           student_name: string | null
+          updated_at: string | null
         }
         Insert: {
           certificate_number: string
@@ -221,7 +225,11 @@ export type Database = {
           id?: string
           issued_at?: string | null
           issued_by?: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          revoked_reason?: string | null
           student_name?: string | null
+          updated_at?: string | null
         }
         Update: {
           certificate_number?: string
@@ -234,7 +242,11 @@ export type Database = {
           id?: string
           issued_at?: string | null
           issued_by?: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          revoked_reason?: string | null
           student_name?: string | null
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -1665,6 +1677,7 @@ export type Database = {
           date_issued: string
           issued_at: string
           issued_by: string
+          revoked: boolean
           student_name: string
         }[]
       }

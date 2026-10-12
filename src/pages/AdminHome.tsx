@@ -8,6 +8,7 @@ import { useIsStaff } from "@/hooks/useIsStaff";
 import AdminNav from "@/components/admin/AdminNav";
 import { AdminMetrics } from "@/components/admin/AdminMetrics";
 import { NotifySearchEngines } from "@/components/admin/NotifySearchEngines";
+import { NeedsYouToday } from "@/components/admin/NeedsYouToday";
 import { ScheduledJobsHealth } from "@/components/admin/ScheduledJobsHealth";
 
 interface Section {
@@ -93,6 +94,7 @@ export default function AdminHome() {
           </div>
         ) : (
           <>
+            {isAdmin && <NeedsYouToday />}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {sections.map(({ to, title, description, icon: Icon }) => (
                 <Link key={to} to={to} className="group">

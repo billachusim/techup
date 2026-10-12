@@ -14,6 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_digest_sends: {
+        Row: {
+          counts: Json
+          sent_at: string
+          sent_on: string
+        }
+        Insert: {
+          counts?: Json
+          sent_at?: string
+          sent_on: string
+        }
+        Update: {
+          counts?: Json
+          sent_at?: string
+          sent_on?: string
+        }
+        Relationships: []
+      }
       admin_audit_log: {
         Row: {
           action: string
@@ -1662,6 +1680,7 @@ export type Database = {
     Functions: {
       admin_conversion_funnel: { Args: { _days?: number }; Returns: Json }
       admin_dashboard_metrics: { Args: { _days?: number }; Returns: Json }
+      admin_needs_you_today: { Args: never; Returns: Json }
       admin_list_referrals: {
         Args: never
         Returns: {
@@ -1783,6 +1802,7 @@ export type Database = {
           years_experience: number
         }[]
       }
+      needs_you_today_counts: { Args: never; Returns: Json }
       next_faculty_id: {
         Args: {
           cohort_mo: number

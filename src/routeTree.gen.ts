@@ -38,6 +38,7 @@ import { Route as AdminLookupRouteImport } from './routes/admin.lookup'
 import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
 import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminTalentRouteImport } from './routes/admin.talent'
+import { Route as ApiAdminDigestRouteImport } from './routes/api.admin-digest'
 import { Route as ApiPaymentFollowupsRouteImport } from './routes/api.payment-followups'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -212,6 +213,11 @@ const AdminStudentsRoute = AdminStudentsRouteImport.update({
 const AdminTalentRoute = AdminTalentRouteImport.update({
   id: '/admin/talent',
   path: '/admin/talent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminDigestRoute = ApiAdminDigestRouteImport.update({
+  id: '/api/admin-digest',
+  path: '/api/admin-digest',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPaymentFollowupsRoute = ApiPaymentFollowupsRouteImport.update({
@@ -391,6 +397,7 @@ export interface FileRoutesByFullPath {
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
+  '/api/admin-digest': typeof ApiAdminDigestRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
@@ -451,6 +458,7 @@ export interface FileRoutesByTo {
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
+  '/api/admin-digest': typeof ApiAdminDigestRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
@@ -512,6 +520,7 @@ export interface FileRoutesById {
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
+  '/api/admin-digest': typeof ApiAdminDigestRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
@@ -574,6 +583,7 @@ export interface FileRouteTypes {
     | '/admin/referrals'
     | '/admin/students'
     | '/admin/talent'
+    | '/api/admin-digest'
     | '/api/payment-followups'
     | '/blog/$slug'
     | '/category/$'
@@ -634,6 +644,7 @@ export interface FileRouteTypes {
     | '/admin/referrals'
     | '/admin/students'
     | '/admin/talent'
+    | '/api/admin-digest'
     | '/api/payment-followups'
     | '/blog/$slug'
     | '/category/$'
@@ -694,6 +705,7 @@ export interface FileRouteTypes {
     | '/admin/referrals'
     | '/admin/students'
     | '/admin/talent'
+    | '/api/admin-digest'
     | '/api/payment-followups'
     | '/blog/$slug'
     | '/category/$'
@@ -755,6 +767,7 @@ export interface RootRouteChildren {
   AdminReferralsRoute: typeof AdminReferralsRoute
   AdminStudentsRoute: typeof AdminStudentsRoute
   AdminTalentRoute: typeof AdminTalentRoute
+  ApiAdminDigestRoute: typeof ApiAdminDigestRoute
   ApiPaymentFollowupsRoute: typeof ApiPaymentFollowupsRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CategorySplatRoute: typeof CategorySplatRoute
@@ -987,6 +1000,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/talent'
       fullPath: '/admin/talent'
       preLoaderRoute: typeof AdminTalentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin-digest': {
+      id: '/api/admin-digest'
+      path: '/api/admin-digest'
+      fullPath: '/api/admin-digest'
+      preLoaderRoute: typeof ApiAdminDigestRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/payment-followups': {
@@ -1240,6 +1260,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminReferralsRoute: AdminReferralsRoute,
   AdminStudentsRoute: AdminStudentsRoute,
   AdminTalentRoute: AdminTalentRoute,
+  ApiAdminDigestRoute: ApiAdminDigestRoute,
   ApiPaymentFollowupsRoute: ApiPaymentFollowupsRoute,
   BlogSlugRoute: BlogSlugRoute,
   CategorySplatRoute: CategorySplatRoute,

@@ -12,6 +12,7 @@ import {
   hiringRequestReceived,
   hiringRequestAdmin,
 } from './marketplace'
+import { adminMorningDigest } from './admin'
 import { studentWelcome, classUnlocked, studentWorkReviewed, graduateReviewRequest, checkoutReminder, paymentConfirmed } from './student'
 
 export interface TemplateEntry {
@@ -49,6 +50,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'class-unlocked': classUnlocked,
   'student-work-reviewed': studentWorkReviewed,
   'graduate-review-request': graduateReviewRequest,
+  'admin-morning-digest': adminMorningDigest,
   'checkout-reminder': checkoutReminder,
   'payment-confirmed': paymentConfirmed,
   // Add templates here as they are created, e.g.:

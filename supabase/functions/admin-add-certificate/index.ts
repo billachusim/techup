@@ -93,6 +93,19 @@ serve(async (req) => {
       });
     }
 
+    // The service key has no auth.uid(), so the audit triggers can't see who did this; record it here.
+    const { error: auditError } = await supabase.from("admin_audit_log").insert({
+      actor_id: auth.user.id,
+      actor_email: auth.user.email ?? null,
+      action: "certificate.issued",
+      target_table: "certificates",
+      target_id: data.id,
+      faculty_id: data.faculty_id,
+      subject: data.student_name,
+      details: { certificate_number: data.certificate_number, course: data.course_name },
+    });
+    if (auditError) console.error("Couldn't write admin audit log", auditError.message);
+
     return new Response(JSON.stringify({ certificate: data }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

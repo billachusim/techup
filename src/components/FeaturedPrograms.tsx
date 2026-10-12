@@ -47,9 +47,9 @@ const programs: Program[] = [
   },
   {
     title: "Nnewi Tech Meetup",
-    badge: "Monthly",
+    badge: "Last Saturday monthly",
     description:
-      "The monthly gathering of the Nnewi tech community — product demos, lightning talks, networking, and collaboration at Tech Faculty HQ.",
+      "The monthly gathering of the Nnewi tech community, on the last Saturday of every month — product demos, lightning talks, networking, and collaboration at Tech Faculty HQ.",
     image: nnewiTechMeetup,
     alt: "Nnewi Tech Meetup community event poster",
     cta: "See Event Details",

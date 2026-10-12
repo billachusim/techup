@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Inbox, Loader2, Mail, MessageCircle, RefreshCw, Search } from "lucide-react";
+import { Download, Inbox, Loader2, Mail, MessageCircle, RefreshCw, Search } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AdminNav from "@/components/admin/AdminNav";
@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useIsStaff } from "@/hooks/useIsStaff";
 import { getSupabase } from "@/integrations/supabase/lazy";
 import { Link } from "@/lib/router-compat";
+import { csvFilename, downloadCsv, toCsv } from "@/lib/csv";
 import { cn } from "@/lib/utils";
 
 const STATUSES = ["new", "contacted", "enrolled", "not_interested"] as const;
@@ -130,6 +131,24 @@ export default function AdminLeads() {
     );
   }, [inbox, filter, interest, query]);
 
+  /** Downloads the leads currently shown, so the status, interest and search filters apply. */
+  const exportCsv = () => {
+    const csv = toCsv(visible, [
+      { header: "Received", value: (l) => formatDate(l.created_at) },
+      { header: "Name", value: (l) => l.name },
+      { header: "Contact", value: (l) => l.contact },
+      { header: "Channel", value: (l) => l.channel },
+      { header: "School", value: (l) => l.school },
+      { header: "Interest", value: (l) => interestLabel(l.interest) },
+      { header: "Status", value: (l) => STATUS_LABEL[l.status as LeadStatus] ?? l.status },
+      { header: "Opened WhatsApp", value: (l) => (openedWhatsApp.has(l.contact.toLowerCase()) ? "Yes" : "") },
+      { header: "Source", value: (l) => l.source },
+      { header: "Notes", value: (l) => l.notes },
+    ]);
+    const parts = [filter !== "all" && filter, interest !== "all" && interest].filter(Boolean);
+    downloadCsv(csvFilename(["leads", ...parts].join("-")), csv);
+  };
+
   const setStatus = async (lead: Lead, status: LeadStatus) => {
     if (lead.status === status) return;
     setSaving(lead.id);
@@ -158,9 +177,14 @@ export default function AdminLeads() {
             <p className="text-sm text-muted-foreground">Every enquiry from the site's forms. Follow up, then update its status.</p>
           </div>
           {isAdmin && (
-            <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading}>
-              <RefreshCw className={cn("h-4 w-4 mr-1.5", loading && "animate-spin")} /> Refresh
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={exportCsv} disabled={!visible.length}>
+                <Download className="h-4 w-4 mr-1.5" /> Download CSV ({visible.length})
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading}>
+                <RefreshCw className={cn("h-4 w-4 mr-1.5", loading && "animate-spin")} /> Refresh
+              </Button>
+            </div>
           )}
         </div>
 

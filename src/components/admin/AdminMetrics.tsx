@@ -27,6 +27,7 @@ export interface DashboardMetrics {
     online: number;
     manual: number;
     without_amount: number;
+    by_method?: { method: string; count: number }[];
     pending: number;
     cancelled: number;
     pending_value: Money[];
@@ -63,6 +64,8 @@ export interface DashboardMetrics {
 }
 
 const PERIODS = [7, 30, 90, 365];
+
+const METHOD_LABELS: Record<string, string> = { bank: "bank", whatsapp: "WhatsApp", cash: "cash", card: "card", other: "other" };
 
 const num = (n: number) => n.toLocaleString();
 
@@ -244,7 +247,7 @@ export function AdminMetrics() {
             <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
               <Stat label={`Revenue, ${period}`} value={money(data.revenue.in_period)} />
               <Stat label="Revenue, all time" value={money(data.revenue.total)} hint={data.payments.without_amount ? `${num(data.payments.without_amount)} paid plans have no amount recorded` : undefined} />
-              <Stat label={`Payments confirmed, ${period}`} value={num(data.payments.confirmed_in_period)} hint={`${num(data.payments.online)} online · ${num(data.payments.manual)} marked by admin · ${num(data.payments.confirmed)} total`} />
+              <Stat label={`Payments confirmed, ${period}`} value={num(data.payments.confirmed_in_period)} hint={[`${num(data.payments.online)} online · ${num(data.payments.manual)} marked by admin · ${num(data.payments.confirmed)} total`, ...(data.payments.by_method ?? []).map((m) => `${num(m.count)} ${METHOD_LABELS[m.method] ?? m.method}`)].join(" · ")} />
               <Stat label="Waiting on payment" value={num(data.payments.pending)} hint={data.payments.pending_value.length ? `Worth ${money(data.payments.pending_value)}` : `${num(data.payments.cancelled)} cancelled`} to="/admin/students" />
             </div>
           </div>

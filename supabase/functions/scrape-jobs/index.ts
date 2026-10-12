@@ -1,8 +1,9 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { requireCronOrAdmin } from "../_shared/scheduled-auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-cron-secret",
   "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
 };
 
@@ -245,6 +246,14 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const supabase = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  );
+  // Each run spends Firecrawl credits: only the schedule or a signed-in admin may start one.
+  const denied = await requireCronOrAdmin(req, supabase, "scrape-jobs", corsHeaders);
+  if (denied) return denied;
+
   const started = Date.now();
   const report: Record<string, string> = {};
   let inserted = 0;
@@ -254,10 +263,6 @@ Deno.serve(async (req) => {
   } catch {
     // no body
   }
-  const supabase = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-  );
   // Every run is logged so a silent failure (expired key, used-up credits) shows on /admin.
   const logRun = (success: boolean, error: string | null) =>
     supabase.from("scheduled_job_runs").insert({

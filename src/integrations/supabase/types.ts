@@ -14,24 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      admin_digest_sends: {
-        Row: {
-          counts: Json
-          sent_at: string
-          sent_on: string
-        }
-        Insert: {
-          counts?: Json
-          sent_at?: string
-          sent_on: string
-        }
-        Update: {
-          counts?: Json
-          sent_at?: string
-          sent_on?: string
-        }
-        Relationships: []
-      }
       admin_audit_log: {
         Row: {
           action: string
@@ -68,6 +50,24 @@ export type Database = {
           subject?: string | null
           target_id?: string | null
           target_table?: string
+        }
+        Relationships: []
+      }
+      admin_digest_sends: {
+        Row: {
+          counts: Json
+          sent_at: string
+          sent_on: string
+        }
+        Insert: {
+          counts?: Json
+          sent_at?: string
+          sent_on: string
+        }
+        Update: {
+          counts?: Json
+          sent_at?: string
+          sent_on?: string
         }
         Relationships: []
       }
@@ -441,6 +441,24 @@ export type Database = {
         }
         Relationships: []
       }
+      cron_secrets: {
+        Row: {
+          created_at: string
+          job: string
+          secret: string
+        }
+        Insert: {
+          created_at?: string
+          job: string
+          secret: string
+        }
+        Update: {
+          created_at?: string
+          job?: string
+          secret?: string
+        }
+        Relationships: []
+      }
       enrollments: {
         Row: {
           amount_due: number | null
@@ -511,6 +529,39 @@ export type Database = {
             referencedColumns: ["faculty_id"]
           },
         ]
+      }
+      event_scrape_runs: {
+        Row: {
+          duration_ms: number | null
+          error: string | null
+          id: string
+          ran_at: string
+          report: Json
+          success: boolean
+          trigger: string
+          upserted: number
+        }
+        Insert: {
+          duration_ms?: number | null
+          error?: string | null
+          id?: string
+          ran_at?: string
+          report?: Json
+          success: boolean
+          trigger?: string
+          upserted?: number
+        }
+        Update: {
+          duration_ms?: number | null
+          error?: string | null
+          id?: string
+          ran_at?: string
+          report?: Json
+          success?: boolean
+          trigger?: string
+          upserted?: number
+        }
+        Relationships: []
       }
       events: {
         Row: {
@@ -1001,7 +1052,15 @@ export type Database = {
           created_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "referral_codes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       referrals: {
         Row: {
@@ -1049,7 +1108,36 @@ export type Database = {
           status?: string
           tx_ref?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "referrals_code_fkey"
+            columns: ["code"]
+            isOneToOne: false
+            referencedRelation: "referral_codes"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "referrals_referred_user_id_fkey"
+            columns: ["referred_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_referrer_user_id_fkey"
+            columns: ["referrer_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_tx_ref_fkey"
+            columns: ["tx_ref"]
+            isOneToOne: true
+            referencedRelation: "enrollments"
+            referencedColumns: ["tx_ref"]
+          },
+        ]
       }
       role_matches: {
         Row: {
@@ -1107,6 +1195,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      scheduled_job_runs: {
+        Row: {
+          duration_ms: number | null
+          error: string | null
+          id: string
+          items: number
+          job: string
+          ran_at: string
+          report: Json
+          success: boolean
+          trigger: string
+        }
+        Insert: {
+          duration_ms?: number | null
+          error?: string | null
+          id?: string
+          items?: number
+          job: string
+          ran_at?: string
+          report?: Json
+          success: boolean
+          trigger?: string
+        }
+        Update: {
+          duration_ms?: number | null
+          error?: string | null
+          id?: string
+          items?: number
+          job?: string
+          ran_at?: string
+          report?: Json
+          success?: boolean
+          trigger?: string
+        }
+        Relationships: []
       }
       student_class_briefings: {
         Row: {
@@ -1680,7 +1804,6 @@ export type Database = {
     Functions: {
       admin_conversion_funnel: { Args: { _days?: number }; Returns: Json }
       admin_dashboard_metrics: { Args: { _days?: number }; Returns: Json }
-      admin_needs_you_today: { Args: never; Returns: Json }
       admin_list_referrals: {
         Args: never
         Returns: {
@@ -1688,29 +1811,42 @@ export type Database = {
           created_at: string
           currency: string
           discount_amount: number
-          earned_at: string | null
+          earned_at: string
           id: string
-          paid_out_at: string | null
-          plan_name: string | null
-          referred_faculty_id: string | null
-          referred_name: string | null
-          referrer_email: string | null
-          referrer_faculty_id: string | null
-          referrer_name: string | null
-          referrer_phone: string | null
+          paid_out_at: string
+          plan_name: string
+          referred_faculty_id: string
+          referred_name: string
+          referrer_email: string
+          referrer_faculty_id: string
+          referrer_name: string
+          referrer_phone: string
           reward_amount: number
           status: string
         }[]
       }
       admin_mark_referral_paid: { Args: { _id: string }; Returns: undefined }
+      admin_needs_you_today: { Args: never; Returns: Json }
+      admin_scheduled_jobs: {
+        Args: never
+        Returns: {
+          active: boolean
+          edge_function: string
+          jobname: string
+          last_message: string
+          last_started_at: string
+          last_status: string
+          schedule: string
+        }[]
+      }
       approve_talent: { Args: { _talent_id: string }; Returns: string }
       archive_stale_listings: { Args: never; Returns: undefined }
-      claim_my_talent_profile: { Args: never; Returns: string }
-      claim_talent_faculty_id: { Args: never; Returns: string }
       check_referral_code: {
         Args: { _code: string; _user_id: string }
         Returns: Json
       }
+      claim_my_talent_profile: { Args: never; Returns: string }
+      claim_talent_faculty_id: { Args: never; Returns: string }
       ensure_course_lectures: {
         Args: { course_uuid: string }
         Returns: undefined
@@ -1801,6 +1937,17 @@ export type Database = {
           work_mode: string
           years_experience: number
         }[]
+      }
+      log_admin_action: {
+        Args: {
+          _action: string
+          _details: Json
+          _faculty_id: string
+          _subject: string
+          _target_id: string
+          _target_table: string
+        }
+        Returns: undefined
       }
       needs_you_today_counts: { Args: never; Returns: Json }
       next_faculty_id: {

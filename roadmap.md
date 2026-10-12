@@ -64,3 +64,5 @@
 - [x] Slack one-click invite link wired into welcome email and dashboard
 - [x] Admin review page at /admin/students (score, feedback, email + Slack notice, running average)
 - [x] Once-per-class Slack briefing + "next class ready" email from the dashboard
+
+- [x] Slow recover-checkouts payment re-check to once a day (user request)

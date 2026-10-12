@@ -3,11 +3,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://techfaculty.ng/</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-10-11</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/about</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-10-11</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/blog</loc>
@@ -306,11 +306,19 @@
     <lastmod>2026-09-13</lastmod>
   </url>
   <url>
-    <loc>https://techfaculty.ng/blog/generative-ai-tools-for-nigerian-businesses-2026</loc>
-    <lastmod>2026-10-05</lastmod>
+    <loc>https://techfaculty.ng/blog/cybersecurity-career-path-nigeria-2026-protecting-businesses-online</loc>
+    <lastmod>2026-10-12</lastmod>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/data-analytics-science-careers-nigeria-2026-tools-salaries</loc>
+    <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/blog/junior-web-mobile-developer-roadmap-nigeria-2026</loc>
+    <lastmod>2026-10-05</lastmod>
+  </url>
+  <url>
+    <loc>https://techfaculty.ng/blog/generative-ai-tools-for-nigerian-businesses-2026</loc>
     <lastmod>2026-10-05</lastmod>
   </url>
   <url>
@@ -346,11 +354,11 @@
     <lastmod>2026-09-07</lastmod>
   </url>
   <url>
-    <loc>https://techfaculty.ng/blog/tech-training-for-teens-nigeria-2026-coding-ai-cybersecurity-skills</loc>
+    <loc>https://techfaculty.ng/blog/funding-tech-startups-nigeria-2026-guide</loc>
     <lastmod>2026-08-31</lastmod>
   </url>
   <url>
-    <loc>https://techfaculty.ng/blog/funding-tech-startups-nigeria-2026-guide</loc>
+    <loc>https://techfaculty.ng/blog/tech-training-for-teens-nigeria-2026-coding-ai-cybersecurity-skills</loc>
     <lastmod>2026-08-31</lastmod>
   </url>
   <url>
@@ -362,11 +370,11 @@
     <lastmod>2026-08-24</lastmod>
   </url>
   <url>
-    <loc>https://techfaculty.ng/blog/data-analyst-scientist-careers-nigeria-2026-tools-salary</loc>
+    <loc>https://techfaculty.ng/blog/cybersecurity-careers-nigeria-2026-protecting-businesses-online</loc>
     <lastmod>2026-08-17</lastmod>
   </url>
   <url>
-    <loc>https://techfaculty.ng/blog/cybersecurity-careers-nigeria-2026-protecting-businesses-online</loc>
+    <loc>https://techfaculty.ng/blog/data-analyst-scientist-careers-nigeria-2026-tools-salary</loc>
     <lastmod>2026-08-17</lastmod>
   </url>
   <url>
@@ -734,22 +742,6 @@
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
-    <loc>https://techfaculty.ng/careers/jobs/micro1-ai-ai-facial-data-collection-contributor-588rfd</loc>
-    <lastmod>2026-09-21</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/careers/jobs/micro1-ai-data-entry-keyer-4su91r</loc>
-    <lastmod>2026-09-21</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/careers/jobs/micro1-ai-backend-security-engineer-r1kfvr</loc>
-    <lastmod>2026-09-21</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/careers/jobs/micro1-ai-senior-software-engineer-drh0hj</loc>
-    <lastmod>2026-09-21</lastmod>
-  </url>
-  <url>
     <loc>https://techfaculty.ng/careers/platforms/micro1</loc>
     <lastmod>2026-10-10</lastmod>
   </url>
@@ -831,7 +823,7 @@
   </url>
   <url>
     <loc>https://techfaculty.ng/events</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-10-11</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/events/nnewi-tech-meetup</loc>
@@ -931,7 +923,7 @@
   </url>
   <url>
     <loc>https://techfaculty.ng/locations</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-10-11</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/locations/nnewi</loc>
@@ -1046,6 +1038,10 @@
     <lastmod>2026-10-08</lastmod>
   </url>
   <url>
+    <loc>https://techfaculty.ng/study-online-africa</loc>
+    <lastmod>2026-10-08</lastmod>
+  </url>
+  <url>
     <loc>https://techfaculty.ng/talent</loc>
     <lastmod>2026-10-08</lastmod>
   </url>
@@ -1115,14 +1111,10 @@
   </url>
   <url>
     <loc>https://techfaculty.ng/verify/</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://techfaculty.ng/virtual-siwes</loc>
-    <lastmod>2026-10-08</lastmod>
-  </url>
-  <url>
-    <loc>https://techfaculty.ng/study-online-africa</loc>
     <lastmod>2026-10-08</lastmod>
   </url>
 </urlset>

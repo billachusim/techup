@@ -1,4 +1,4 @@
-// Runs every 30 minutes from pg_cron. Card payments are normally confirmed by
+// Runs once a day (05:30 UTC) from pg_cron. Card payments are normally confirmed by
 // verify-payment when Flutterwave sends the student back to the site, so a
 // student who closes the tab stays pending. This re-checks recent pending card
 // checkouts with Flutterwave's verify API and activates the paid ones, then

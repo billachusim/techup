@@ -14,6 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_digest_sends: {
+        Row: {
+          counts: Json
+          sent_at: string
+          sent_on: string
+        }
+        Insert: {
+          counts?: Json
+          sent_at?: string
+          sent_on: string
+        }
+        Update: {
+          counts?: Json
+          sent_at?: string
+          sent_on?: string
+        }
+        Relationships: []
+      }
       ai_class_content: {
         Row: {
           class_number: number
@@ -1529,6 +1547,7 @@ export type Database = {
     }
     Functions: {
       admin_dashboard_metrics: { Args: { _days?: number }; Returns: Json }
+      admin_needs_you_today: { Args: never; Returns: Json }
       approve_talent: { Args: { _talent_id: string }; Returns: string }
       archive_stale_listings: { Args: never; Returns: undefined }
       claim_my_talent_profile: { Args: never; Returns: string }
@@ -1622,6 +1641,7 @@ export type Database = {
           years_experience: number
         }[]
       }
+      needs_you_today_counts: { Args: never; Returns: Json }
       next_faculty_id: {
         Args: {
           cohort_mo: number

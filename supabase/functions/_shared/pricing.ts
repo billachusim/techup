@@ -780,3 +780,17 @@ export function priceSelection(
     return { ok: false, error: "Selection is below the plan minimum" };
   return { ok: true, courses, benefits, learningMode, total };
 }
+
+// Alumni referrals. A new student who pays with a graduate's referral code
+// saves REFERRAL_DISCOUNT_PERCENT of their plan total; once that payment is
+// confirmed the graduate earns REFERRER_REWARD_PERCENT of what the student
+// paid, for an admin to pay out from /admin/referrals. Change either number
+// here: create-checkout charges from it and the pricing page shows it.
+export const REFERRAL_DISCOUNT_PERCENT = 10;
+export const REFERRER_REWARD_PERCENT = 10;
+
+/** The fixed promo codes and the share of the total each one takes off. */
+export const PROMO_CODES: Record<string, number> = {
+  TECHUP50: 50,
+  TECHUP25: 25,
+};

@@ -1,6 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { PLAN_NAMES, priceSelection } from "../_shared/pricing.ts";
+import {
+  PLAN_NAMES,
+  PROMO_CODES,
+  REFERRAL_DISCOUNT_PERCENT,
+  REFERRER_REWARD_PERCENT,
+  priceSelection,
+} from "../_shared/pricing.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -74,18 +80,36 @@ serve(async (req) => {
       return jsonResponse({ error: 'No items selected for checkout' }, 400);
     }
 
-    if (discountCode) {
-      const code = discountCode.toUpperCase();
-      if (code === 'TECHUP50') {
-        totalAmount = Math.round(totalAmount * 0.5);
-      } else if (code === 'TECHUP25') {
-        totalAmount = Math.round(totalAmount * 0.75);
+    // Discounts are worked out here too, never taken from the request.
+    const code = discountCode ? String(discountCode).trim().toUpperCase() : '';
+    let referral: { code: string; referrerUserId: string; discount: number; reward: number } | null = null;
+    if (code && PROMO_CODES[code]) {
+      totalAmount = Math.round(totalAmount * (100 - PROMO_CODES[code]) / 100);
+    } else if (code) {
+      // Anything else must be a graduate's referral code this student may use.
+      const { data: check, error: checkErr } = await admin.rpc('check_referral_code', { _code: code, _user_id: user.id });
+      if (checkErr) {
+        console.error('Referral check failed:', checkErr);
+        return jsonResponse({ error: 'Could not check your discount code. Please try again.' }, 500);
       }
+      const result = check as { ok: boolean; error?: string; code?: string; referrer_user_id?: string };
+      if (!result?.ok || !result.code || !result.referrer_user_id) {
+        return jsonResponse({ error: result?.error || 'That discount code isn\'t valid.' }, 400);
+      }
+      const discount = Math.round(totalAmount * REFERRAL_DISCOUNT_PERCENT / 100);
+      totalAmount -= discount;
+      referral = {
+        code: result.code,
+        referrerUserId: result.referrer_user_id,
+        discount,
+        reward: Math.round(totalAmount * REFERRER_REWARD_PERCENT / 100),
+      };
     }
 
-    const amount = currencyCode === 'USD'
-      ? Math.round(totalAmount / 1400 * 100) / 100
-      : totalAmount;
+    const toChargeCurrency = (ngn: number) => currencyCode === 'USD'
+      ? Math.round(ngn / 1400 * 100) / 100
+      : ngn;
+    const amount = toChargeCurrency(totalAmount);
 
     const itemNames: string[] = [];
     courses.forEach((c) => itemNames.push(c.name));
@@ -102,7 +126,7 @@ serve(async (req) => {
       plan_name: planNameForEnrollment,
       status: 'pending',
       learning_mode: learningMode?.name ?? 'online-only',
-      coupon_code: discountCode ? String(discountCode).toUpperCase() : null,
+      coupon_code: code || null,
       tx_ref: txRef,
       amount_due: amount,
       currency,
@@ -110,6 +134,27 @@ serve(async (req) => {
     if (enrollErr) {
       console.error('Failed to save pending enrolment:', enrollErr);
       return jsonResponse({ error: 'Could not start your enrolment. Please try again.' }, 500);
+    }
+
+    const dropPending = () => admin.from('enrollments').delete().eq('tx_ref', txRef).eq('status', 'pending');
+
+    // Recorded against this checkout; it counts once Flutterwave confirms the
+    // payment, and is removed with the checkout if it never gets that far.
+    if (referral) {
+      const { error: referralErr } = await admin.from('referrals').insert({
+        code: referral.code,
+        referrer_user_id: referral.referrerUserId,
+        referred_user_id: user.id,
+        tx_ref: txRef,
+        currency,
+        discount_amount: toChargeCurrency(referral.discount),
+        reward_amount: toChargeCurrency(referral.reward),
+      });
+      if (referralErr) {
+        console.error('Failed to save referral:', referralErr);
+        await dropPending();
+        return jsonResponse({ error: 'Could not start your enrolment. Please try again.' }, 500);
+      }
     }
 
     const flutterwavePayload = {
@@ -120,7 +165,7 @@ serve(async (req) => {
       meta: {
         faculty_id: facultyId,
         plan_name: planName,
-        discount_code: discountCode || '',
+        discount_code: code,
       },
       customer: {
         email: `${facultyId}@techfaculty.ng`,
@@ -143,7 +188,6 @@ serve(async (req) => {
     });
 
     const rawResponse = await flwResponse.text();
-    const dropPending = () => admin.from('enrollments').delete().eq('tx_ref', txRef).eq('status', 'pending');
     let flwData: { status?: string; message?: string; data?: { link?: string } } | null = null;
 
     try {

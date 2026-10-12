@@ -31,11 +31,15 @@ import { Route as TinypeopleRouteImport } from './routes/tinypeople'
 import { Route as VirtualSiwesRouteImport } from './routes/virtual-siwes'
 import { Route as Why90OfTechLearnersQuitButYouDontHaveToRouteImport } from './routes/why-90-of-tech-learners-quit-but-you-dont-have-to'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 import { Route as AdminCertificatesRouteImport } from './routes/admin.certificates'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
+import { Route as AdminLookupRouteImport } from './routes/admin.lookup'
+import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
 import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminTalentRouteImport } from './routes/admin.talent'
 import { Route as ApiAdminDigestRouteImport } from './routes/api.admin-digest'
+import { Route as ApiPaymentFollowupsRouteImport } from './routes/api.payment-followups'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CareersIndexRouteImport } from './routes/careers.index'
@@ -176,6 +180,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminActivityRoute = AdminActivityRouteImport.update({
+  id: '/admin/activity',
+  path: '/admin/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminCertificatesRoute = AdminCertificatesRouteImport.update({
   id: '/admin/certificates',
   path: '/admin/certificates',
@@ -184,6 +193,16 @@ const AdminCertificatesRoute = AdminCertificatesRouteImport.update({
 const AdminLeadsRoute = AdminLeadsRouteImport.update({
   id: '/admin/leads',
   path: '/admin/leads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLookupRoute = AdminLookupRouteImport.update({
+  id: '/admin/lookup',
+  path: '/admin/lookup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminReferralsRoute = AdminReferralsRouteImport.update({
+  id: '/admin/referrals',
+  path: '/admin/referrals',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminStudentsRoute = AdminStudentsRouteImport.update({
@@ -199,6 +218,11 @@ const AdminTalentRoute = AdminTalentRouteImport.update({
 const ApiAdminDigestRoute = ApiAdminDigestRouteImport.update({
   id: '/api/admin-digest',
   path: '/api/admin-digest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPaymentFollowupsRoute = ApiPaymentFollowupsRouteImport.update({
+  id: '/api/payment-followups',
+  path: '/api/payment-followups',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -366,11 +390,15 @@ export interface FileRoutesByFullPath {
   '/tinypeople': typeof TinypeopleRoute
   '/virtual-siwes': typeof VirtualSiwesRoute
   '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
+  '/admin/activity': typeof AdminActivityRoute
   '/admin/certificates': typeof AdminCertificatesRoute
   '/admin/leads': typeof AdminLeadsRoute
+  '/admin/lookup': typeof AdminLookupRoute
+  '/admin/referrals': typeof AdminReferralsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
+  '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
@@ -423,11 +451,15 @@ export interface FileRoutesByTo {
   '/tinypeople': typeof TinypeopleRoute
   '/virtual-siwes': typeof VirtualSiwesRoute
   '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
+  '/admin/activity': typeof AdminActivityRoute
   '/admin/certificates': typeof AdminCertificatesRoute
   '/admin/leads': typeof AdminLeadsRoute
+  '/admin/lookup': typeof AdminLookupRoute
+  '/admin/referrals': typeof AdminReferralsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
+  '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
@@ -481,11 +513,15 @@ export interface FileRoutesById {
   '/tinypeople': typeof TinypeopleRoute
   '/virtual-siwes': typeof VirtualSiwesRoute
   '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
+  '/admin/activity': typeof AdminActivityRoute
   '/admin/certificates': typeof AdminCertificatesRoute
   '/admin/leads': typeof AdminLeadsRoute
+  '/admin/lookup': typeof AdminLookupRoute
+  '/admin/referrals': typeof AdminReferralsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
+  '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
@@ -540,11 +576,15 @@ export interface FileRouteTypes {
     | '/tinypeople'
     | '/virtual-siwes'
     | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
+    | '/admin/activity'
     | '/admin/certificates'
     | '/admin/leads'
+    | '/admin/lookup'
+    | '/admin/referrals'
     | '/admin/students'
     | '/admin/talent'
     | '/api/admin-digest'
+    | '/api/payment-followups'
     | '/blog/$slug'
     | '/category/$'
     | '/departments/$slug'
@@ -597,11 +637,15 @@ export interface FileRouteTypes {
     | '/tinypeople'
     | '/virtual-siwes'
     | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
+    | '/admin/activity'
     | '/admin/certificates'
     | '/admin/leads'
+    | '/admin/lookup'
+    | '/admin/referrals'
     | '/admin/students'
     | '/admin/talent'
     | '/api/admin-digest'
+    | '/api/payment-followups'
     | '/blog/$slug'
     | '/category/$'
     | '/departments/$slug'
@@ -654,11 +698,15 @@ export interface FileRouteTypes {
     | '/tinypeople'
     | '/virtual-siwes'
     | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
+    | '/admin/activity'
     | '/admin/certificates'
     | '/admin/leads'
+    | '/admin/lookup'
+    | '/admin/referrals'
     | '/admin/students'
     | '/admin/talent'
     | '/api/admin-digest'
+    | '/api/payment-followups'
     | '/blog/$slug'
     | '/category/$'
     | '/departments/$slug'
@@ -712,11 +760,15 @@ export interface RootRouteChildren {
   TinypeopleRoute: typeof TinypeopleRoute
   VirtualSiwesRoute: typeof VirtualSiwesRoute
   Why90OfTechLearnersQuitButYouDontHaveToRoute: typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
+  AdminActivityRoute: typeof AdminActivityRoute
   AdminCertificatesRoute: typeof AdminCertificatesRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
+  AdminLookupRoute: typeof AdminLookupRoute
+  AdminReferralsRoute: typeof AdminReferralsRoute
   AdminStudentsRoute: typeof AdminStudentsRoute
   AdminTalentRoute: typeof AdminTalentRoute
   ApiAdminDigestRoute: typeof ApiAdminDigestRoute
+  ApiPaymentFollowupsRoute: typeof ApiPaymentFollowupsRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CategorySplatRoute: typeof CategorySplatRoute
   DepartmentsSlugRoute: typeof DepartmentsSlugRoute
@@ -901,6 +953,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/activity': {
+      id: '/admin/activity'
+      path: '/admin/activity'
+      fullPath: '/admin/activity'
+      preLoaderRoute: typeof AdminActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/certificates': {
       id: '/admin/certificates'
       path: '/admin/certificates'
@@ -913,6 +972,20 @@ declare module '@tanstack/react-router' {
       path: '/admin/leads'
       fullPath: '/admin/leads'
       preLoaderRoute: typeof AdminLeadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/lookup': {
+      id: '/admin/lookup'
+      path: '/admin/lookup'
+      fullPath: '/admin/lookup'
+      preLoaderRoute: typeof AdminLookupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/referrals': {
+      id: '/admin/referrals'
+      path: '/admin/referrals'
+      fullPath: '/admin/referrals'
+      preLoaderRoute: typeof AdminReferralsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/students': {
@@ -934,6 +1007,13 @@ declare module '@tanstack/react-router' {
       path: '/api/admin-digest'
       fullPath: '/api/admin-digest'
       preLoaderRoute: typeof ApiAdminDigestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/payment-followups': {
+      id: '/api/payment-followups'
+      path: '/api/payment-followups'
+      fullPath: '/api/payment-followups'
+      preLoaderRoute: typeof ApiPaymentFollowupsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -1173,11 +1253,15 @@ const rootRouteChildren: RootRouteChildren = {
   VirtualSiwesRoute: VirtualSiwesRoute,
   Why90OfTechLearnersQuitButYouDontHaveToRoute:
     Why90OfTechLearnersQuitButYouDontHaveToRoute,
+  AdminActivityRoute: AdminActivityRoute,
   AdminCertificatesRoute: AdminCertificatesRoute,
   AdminLeadsRoute: AdminLeadsRoute,
+  AdminLookupRoute: AdminLookupRoute,
+  AdminReferralsRoute: AdminReferralsRoute,
   AdminStudentsRoute: AdminStudentsRoute,
   AdminTalentRoute: AdminTalentRoute,
   ApiAdminDigestRoute: ApiAdminDigestRoute,
+  ApiPaymentFollowupsRoute: ApiPaymentFollowupsRoute,
   BlogSlugRoute: BlogSlugRoute,
   CategorySplatRoute: CategorySplatRoute,
   DepartmentsSlugRoute: DepartmentsSlugRoute,

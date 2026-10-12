@@ -3,13 +3,13 @@ import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/router-compat";
-import { Award, BriefcaseBusiness, GraduationCap, Inbox, Loader2, type LucideIcon } from "lucide-react";
+import { Award, BriefcaseBusiness, Gift, GraduationCap, History, Inbox, Loader2, Search, type LucideIcon } from "lucide-react";
 import { useIsStaff } from "@/hooks/useIsStaff";
 import AdminNav from "@/components/admin/AdminNav";
 import { AdminMetrics } from "@/components/admin/AdminMetrics";
 import { NotifySearchEngines } from "@/components/admin/NotifySearchEngines";
-import { EventsRefreshStatus } from "@/components/admin/EventsRefreshStatus";
 import { NeedsYouToday } from "@/components/admin/NeedsYouToday";
+import { ScheduledJobsHealth } from "@/components/admin/ScheduledJobsHealth";
 
 interface Section {
   to: string;
@@ -34,6 +34,13 @@ const SECTIONS: Section[] = [
     icon: GraduationCap,
   },
   {
+    to: "/admin/lookup",
+    title: "Student lookup",
+    description: "Find a student by name, phone or Faculty ID and see their enrolments, payments, work and certificates.",
+    icon: Search,
+    adminOnly: true,
+  },
+  {
     to: "/admin/talent",
     title: "Talent",
     description: "Roles, applications, matches, engagements and hiring requests.",
@@ -44,6 +51,20 @@ const SECTIONS: Section[] = [
     title: "Certificates",
     description: "Issue certificates to students who finish a programme.",
     icon: Award,
+    adminOnly: true,
+  },
+  {
+    to: "/admin/referrals",
+    title: "Referrals",
+    description: "See who referred whom and pay graduates their referral rewards.",
+    icon: Gift,
+    adminOnly: true,
+  },
+  {
+    to: "/admin/activity",
+    title: "Activity log",
+    description: "Who marked payments paid, cancelled enrolments, issued certificates and more.",
+    icon: History,
     adminOnly: true,
   },
 ];
@@ -90,7 +111,7 @@ export default function AdminHome() {
             {/* Business numbers are for admins; recruiters only see the areas above. */}
             {isAdmin && <AdminMetrics />}
             {isAdmin && <NotifySearchEngines />}
-            {isAdmin && <EventsRefreshStatus />}
+            {isAdmin && <ScheduledJobsHealth />}
           </>
         )}
       </main>

@@ -13,6 +13,7 @@ import { useUser } from "@/contexts/UserContext";
 import { HandoutModal } from "@/components/HandoutModal";
 import { CertificateCard } from "@/components/CertificateCard";
 import { StudentClassroom } from "@/components/student/StudentClassroom";
+import { ReferralCard } from "@/components/student/ReferralCard";
 import { isFreePlan } from "../../supabase/functions/_shared/enrollment-access.ts";
 
 import { useServerFn } from "@tanstack/react-start";
@@ -630,6 +631,8 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             )}
+
+            <ReferralCard />
 
             {/* Quick Actions */}
             <Card>

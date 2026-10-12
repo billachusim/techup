@@ -1,6 +1,6 @@
 // Stand-in for supabase-js: an in-memory database with just the query
 // builder calls the payment functions use (select/insert/update/delete,
-// eq filters, maybeSingle) and auth.getUser.
+// eq/not-null/date-range filters, order/limit, maybeSingle) and auth.getUser.
 type Row = Record<string, unknown>;
 
 export interface FakeDb {
@@ -9,6 +9,8 @@ export interface FakeDb {
   users: Record<string, string>;
   /** Tables whose inserts fail, to test error paths. */
   failInsert?: Set<string>;
+  /** Database functions callable through rpc(), by name. */
+  rpc?: Record<string, (args: Record<string, unknown>) => unknown>;
 }
 
 let db: FakeDb = { tables: {}, users: {} };
@@ -19,7 +21,8 @@ export function useFakeDb(next: FakeDb) {
 
 class Query implements PromiseLike<{ data: unknown; error: unknown }> {
   private op: "select" | "insert" | "update" | "delete" = "select";
-  private filters: [string, unknown][] = [];
+  private filters: ((row: Row) => boolean)[] = [];
+  private max = Infinity;
   private payload: Row | null = null;
 
   constructor(private table: string) {}
@@ -28,7 +31,7 @@ class Query implements PromiseLike<{ data: unknown; error: unknown }> {
     return (db.tables[this.table] ??= []);
   }
   private matches(row: Row) {
-    return this.filters.every(([col, val]) => row[col] === val);
+    return this.filters.every((keep) => keep(row));
   }
 
   select() {
@@ -49,7 +52,28 @@ class Query implements PromiseLike<{ data: unknown; error: unknown }> {
     return this;
   }
   eq(col: string, val: unknown) {
-    this.filters.push([col, val]);
+    this.filters.push((r) => r[col] === val);
+    return this;
+  }
+  /** Only `.not(col, "is", null)` is used. */
+  not(col: string) {
+    this.filters.push((r) => r[col] != null);
+    return this;
+  }
+  lte(col: string, val: string) {
+    this.filters.push((r) => String(r[col]) <= val);
+    return this;
+  }
+  gte(col: string, val: string) {
+    this.filters.push((r) => String(r[col]) >= val);
+    return this;
+  }
+  /** Rows keep insertion order; tests add them in the order they expect. */
+  order() {
+    return this;
+  }
+  limit(n: number) {
+    this.max = n;
     return this;
   }
   maybeSingle() {
@@ -72,7 +96,7 @@ class Query implements PromiseLike<{ data: unknown; error: unknown }> {
       db.tables[this.table] = rows.filter((r) => !this.matches(r));
       return { data: null, error: null };
     }
-    return { data: rows.filter((r) => this.matches(r)), error: null };
+    return { data: rows.filter((r) => this.matches(r)).slice(0, this.max), error: null };
   }
 
   then<A, B>(
@@ -86,6 +110,10 @@ class Query implements PromiseLike<{ data: unknown; error: unknown }> {
 export function createClient() {
   return {
     from: (table: string) => new Query(table),
+    rpc: async (name: string, args: Record<string, unknown>) => {
+      const fn = db.rpc?.[name];
+      return fn ? { data: fn(args), error: null } : { data: null, error: { message: `no function ${name}` } };
+    },
     auth: {
       getUser: async (token: string) => {
         const id = db.users[token];

@@ -1,8 +1,9 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { requireCronOrAdmin } from "../_shared/scheduled-auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-cron-secret",
   "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
 };
 
@@ -245,17 +246,32 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const supabase = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  );
+  // Each run spends Firecrawl credits: only the schedule or a signed-in admin may start one.
+  const denied = await requireCronOrAdmin(req, supabase, "scrape-jobs", corsHeaders);
+  if (denied) return denied;
+
   const started = Date.now();
   const report: Record<string, string> = {};
+  let inserted = 0;
+  let trigger = "manual";
+  try {
+    trigger = String((await req.json())?.trigger ?? "manual").slice(0, 20);
+  } catch {
+    // no body
+  }
+  // Every run is logged so a silent failure (expired key, used-up credits) shows on /admin.
+  const logRun = (success: boolean, error: string | null) =>
+    supabase.from("scheduled_job_runs").insert({
+      job: "scrape-jobs", trigger, success, items: inserted, report, error, duration_ms: Date.now() - started,
+    }).then(({ error: logError }) => logError && console.error("scrape-jobs: run log failed", logError));
 
   try {
     const apiKey = Deno.env.get("FIRECRAWL_API_KEY");
     if (!apiKey) throw new Error("FIRECRAWL_API_KEY is not configured");
-
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
 
     // Dedupe by source_url — the table has a unique constraint on it.
     const byUrl: Record<string, NonNullable<ReturnType<typeof normalize>>> = {};
@@ -314,7 +330,6 @@ Deno.serve(async (req) => {
 
     const upserts = Object.values(byUrl);
 
-    let inserted = 0;
     if (upserts.length) {
       const { error } = await supabase
         .from("jobs")
@@ -335,12 +350,18 @@ Deno.serve(async (req) => {
         .not("source_url", "in", `(${mercorSeen.map((u) => `"${u}"`).join(",")})`);
     }
 
+    const failed = Object.values(report).filter((r) => r.startsWith("failed")).length;
+    const tried = Object.values(report).filter((r) => !r.startsWith("skipped")).length;
+    await logRun(failed < tried, failed ? `${failed} of ${tried} sources failed` : null);
+    await supabase.from("scheduled_job_runs").delete().lt("ran_at", new Date(Date.now() - 180 * 864e5).toISOString());
+
     return new Response(
       JSON.stringify({ success: true, upserted: inserted, ms: Date.now() - started, report }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (error) {
     console.error("scrape-jobs error", error);
+    await logRun(false, String(error).slice(0, 500));
     // Graceful degradation: never fail the schedule, report what happened.
     return new Response(
       JSON.stringify({ success: false, error: String(error), report }),

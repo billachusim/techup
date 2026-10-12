@@ -8,6 +8,7 @@ interface CertificateCardProps {
     course_name: string;
     certificate_number: string;
     issued_at: string | null;
+    revoked_at?: string | null;
   };
   studentName: string;
 }
@@ -109,6 +110,11 @@ export const CertificateCard = ({ certificate, studentName }: CertificateCardPro
               <p className="text-xs text-muted-foreground mt-1">
                 Certificate No: {certificate.certificate_number}
               </p>
+              {certificate.revoked_at ? (
+                <p className="text-xs font-medium text-destructive mt-1">
+                  This certificate has been revoked. Contact Tech Faculty NG if you think this is a mistake.
+                </p>
+              ) : null}
             </div>
           </div>
           <div className="flex gap-2">
@@ -124,6 +130,7 @@ export const CertificateCard = ({ certificate, studentName }: CertificateCardPro
             <Button
               size="sm"
               onClick={handleDownload}
+              disabled={!!certificate.revoked_at}
               className="gap-2"
             >
               <Download className="w-4 h-4" />

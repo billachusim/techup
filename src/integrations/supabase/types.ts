@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_audit_log: {
+        Row: {
+          action: string
+          actor_email: string | null
+          actor_id: string | null
+          created_at: string
+          details: Json
+          faculty_id: string | null
+          id: string
+          subject: string | null
+          target_id: string | null
+          target_table: string
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          faculty_id?: string | null
+          id?: string
+          subject?: string | null
+          target_id?: string | null
+          target_table: string
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          faculty_id?: string | null
+          id?: string
+          subject?: string | null
+          target_id?: string | null
+          target_table?: string
+        }
+        Relationships: []
+      }
       ai_class_content: {
         Row: {
           class_number: number
@@ -208,7 +247,11 @@ export type Database = {
           id: string
           issued_at: string | null
           issued_by: string
+          revoked_at: string | null
+          revoked_by: string | null
+          revoked_reason: string | null
           student_name: string | null
+          updated_at: string | null
         }
         Insert: {
           certificate_number: string
@@ -221,7 +264,11 @@ export type Database = {
           id?: string
           issued_at?: string | null
           issued_by?: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          revoked_reason?: string | null
           student_name?: string | null
+          updated_at?: string | null
         }
         Update: {
           certificate_number?: string
@@ -234,7 +281,11 @@ export type Database = {
           id?: string
           issued_at?: string | null
           issued_by?: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          revoked_reason?: string | null
           student_name?: string | null
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -1712,6 +1763,17 @@ export type Database = {
           years_experience: number
         }[]
       }
+      log_admin_action: {
+        Args: {
+          _action: string
+          _details: Json
+          _faculty_id: string
+          _subject: string
+          _target_id: string
+          _target_table: string
+        }
+        Returns: undefined
+      }
       next_faculty_id: {
         Args: {
           cohort_mo: number
@@ -1746,6 +1808,7 @@ export type Database = {
           date_issued: string
           issued_at: string
           issued_by: string
+          revoked: boolean
           student_name: string
         }[]
       }

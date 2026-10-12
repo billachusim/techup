@@ -50,6 +50,13 @@
       "when": 1791788758642,
       "tag": "0006_scheduled_jobs_health",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1791788788812,
+      "tag": "0007_admin_audit_log",
+      "breakpoints": true
     }
   ]
 }

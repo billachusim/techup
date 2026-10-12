@@ -31,6 +31,7 @@ import { Route as TinypeopleRouteImport } from './routes/tinypeople'
 import { Route as VirtualSiwesRouteImport } from './routes/virtual-siwes'
 import { Route as Why90OfTechLearnersQuitButYouDontHaveToRouteImport } from './routes/why-90-of-tech-learners-quit-but-you-dont-have-to'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 import { Route as AdminCertificatesRouteImport } from './routes/admin.certificates'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
 import { Route as AdminLookupRouteImport } from './routes/admin.lookup'
@@ -175,6 +176,11 @@ const Why90OfTechLearnersQuitButYouDontHaveToRoute =
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminActivityRoute = AdminActivityRouteImport.update({
+  id: '/admin/activity',
+  path: '/admin/activity',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminCertificatesRoute = AdminCertificatesRouteImport.update({
@@ -372,6 +378,7 @@ export interface FileRoutesByFullPath {
   '/tinypeople': typeof TinypeopleRoute
   '/virtual-siwes': typeof VirtualSiwesRoute
   '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
+  '/admin/activity': typeof AdminActivityRoute
   '/admin/certificates': typeof AdminCertificatesRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lookup': typeof AdminLookupRoute
@@ -430,6 +437,7 @@ export interface FileRoutesByTo {
   '/tinypeople': typeof TinypeopleRoute
   '/virtual-siwes': typeof VirtualSiwesRoute
   '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
+  '/admin/activity': typeof AdminActivityRoute
   '/admin/certificates': typeof AdminCertificatesRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lookup': typeof AdminLookupRoute
@@ -489,6 +497,7 @@ export interface FileRoutesById {
   '/tinypeople': typeof TinypeopleRoute
   '/virtual-siwes': typeof VirtualSiwesRoute
   '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
+  '/admin/activity': typeof AdminActivityRoute
   '/admin/certificates': typeof AdminCertificatesRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lookup': typeof AdminLookupRoute
@@ -549,6 +558,7 @@ export interface FileRouteTypes {
     | '/tinypeople'
     | '/virtual-siwes'
     | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
+    | '/admin/activity'
     | '/admin/certificates'
     | '/admin/leads'
     | '/admin/lookup'
@@ -607,6 +617,7 @@ export interface FileRouteTypes {
     | '/tinypeople'
     | '/virtual-siwes'
     | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
+    | '/admin/activity'
     | '/admin/certificates'
     | '/admin/leads'
     | '/admin/lookup'
@@ -665,6 +676,7 @@ export interface FileRouteTypes {
     | '/tinypeople'
     | '/virtual-siwes'
     | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
+    | '/admin/activity'
     | '/admin/certificates'
     | '/admin/leads'
     | '/admin/lookup'
@@ -724,6 +736,7 @@ export interface RootRouteChildren {
   TinypeopleRoute: typeof TinypeopleRoute
   VirtualSiwesRoute: typeof VirtualSiwesRoute
   Why90OfTechLearnersQuitButYouDontHaveToRoute: typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
+  AdminActivityRoute: typeof AdminActivityRoute
   AdminCertificatesRoute: typeof AdminCertificatesRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
   AdminLookupRoute: typeof AdminLookupRoute
@@ -912,6 +925,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/activity': {
+      id: '/admin/activity'
+      path: '/admin/activity'
+      fullPath: '/admin/activity'
+      preLoaderRoute: typeof AdminActivityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/certificates': {
@@ -1193,6 +1213,7 @@ const rootRouteChildren: RootRouteChildren = {
   VirtualSiwesRoute: VirtualSiwesRoute,
   Why90OfTechLearnersQuitButYouDontHaveToRoute:
     Why90OfTechLearnersQuitButYouDontHaveToRoute,
+  AdminActivityRoute: AdminActivityRoute,
   AdminCertificatesRoute: AdminCertificatesRoute,
   AdminLeadsRoute: AdminLeadsRoute,
   AdminLookupRoute: AdminLookupRoute,

@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_audit_log: {
+        Row: {
+          action: string
+          actor_email: string | null
+          actor_id: string | null
+          created_at: string
+          details: Json
+          faculty_id: string | null
+          id: string
+          subject: string | null
+          target_id: string | null
+          target_table: string
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          faculty_id?: string | null
+          id?: string
+          subject?: string | null
+          target_id?: string | null
+          target_table: string
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          faculty_id?: string | null
+          id?: string
+          subject?: string | null
+          target_id?: string | null
+          target_table?: string
+        }
+        Relationships: []
+      }
       ai_class_content: {
         Row: {
           class_number: number

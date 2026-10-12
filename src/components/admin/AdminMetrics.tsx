@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/router-compat";
 import { Loader2, RefreshCw } from "lucide-react";
 import { getSupabase } from "@/integrations/supabase/lazy";
+import { ConversionFunnel } from "./ConversionFunnel";
 
 interface Money { currency: string; amount: number }
 interface Labelled { label: string; count: number }
@@ -296,6 +297,8 @@ export function AdminMetrics() {
               <Breakdown title={`Lead interests, ${period}`} rows={data.leads.by_interest} />
             </div>
           </div>
+
+          <ConversionFunnel days={days} />
 
           <p className="text-xs text-muted-foreground">
             Updated {new Date(data.generated_at).toLocaleString()}. Revenue counts confirmed paid plans with a recorded amount.

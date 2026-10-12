@@ -1528,6 +1528,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_conversion_funnel: { Args: { _days?: number }; Returns: Json }
       admin_dashboard_metrics: { Args: { _days?: number }; Returns: Json }
       approve_talent: { Args: { _talent_id: string }; Returns: string }
       archive_stale_listings: { Args: never; Returns: undefined }

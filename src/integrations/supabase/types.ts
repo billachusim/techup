@@ -423,6 +423,24 @@ export type Database = {
         }
         Relationships: []
       }
+      cron_secrets: {
+        Row: {
+          created_at: string
+          job: string
+          secret: string
+        }
+        Insert: {
+          created_at?: string
+          job: string
+          secret: string
+        }
+        Update: {
+          created_at?: string
+          job?: string
+          secret?: string
+        }
+        Relationships: []
+      }
       enrollments: {
         Row: {
           amount_due: number | null
@@ -1657,6 +1675,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_conversion_funnel: { Args: { _days?: number }; Returns: Json }
       admin_dashboard_metrics: { Args: { _days?: number }; Returns: Json }
       admin_scheduled_jobs: {
         Args: never

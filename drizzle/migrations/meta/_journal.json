@@ -57,6 +57,13 @@
       "when": 1791788788812,
       "tag": "0007_admin_audit_log",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1791788822762,
+      "tag": "0008_lock_scrapers_and_conversion_funnel",
+      "breakpoints": true
     }
   ]
 }

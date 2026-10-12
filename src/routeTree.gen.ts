@@ -33,6 +33,7 @@ import { Route as Why90OfTechLearnersQuitButYouDontHaveToRouteImport } from './r
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCertificatesRouteImport } from './routes/admin.certificates'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
+import { Route as AdminLookupRouteImport } from './routes/admin.lookup'
 import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminTalentRouteImport } from './routes/admin.talent'
 import { Route as ApiPaymentFollowupsRouteImport } from './routes/api.payment-followups'
@@ -184,6 +185,11 @@ const AdminCertificatesRoute = AdminCertificatesRouteImport.update({
 const AdminLeadsRoute = AdminLeadsRouteImport.update({
   id: '/admin/leads',
   path: '/admin/leads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLookupRoute = AdminLookupRouteImport.update({
+  id: '/admin/lookup',
+  path: '/admin/lookup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminStudentsRoute = AdminStudentsRouteImport.update({
@@ -368,6 +374,7 @@ export interface FileRoutesByFullPath {
   '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
   '/admin/certificates': typeof AdminCertificatesRoute
   '/admin/leads': typeof AdminLeadsRoute
+  '/admin/lookup': typeof AdminLookupRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
@@ -425,6 +432,7 @@ export interface FileRoutesByTo {
   '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
   '/admin/certificates': typeof AdminCertificatesRoute
   '/admin/leads': typeof AdminLeadsRoute
+  '/admin/lookup': typeof AdminLookupRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
@@ -483,6 +491,7 @@ export interface FileRoutesById {
   '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
   '/admin/certificates': typeof AdminCertificatesRoute
   '/admin/leads': typeof AdminLeadsRoute
+  '/admin/lookup': typeof AdminLookupRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
@@ -542,6 +551,7 @@ export interface FileRouteTypes {
     | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
     | '/admin/certificates'
     | '/admin/leads'
+    | '/admin/lookup'
     | '/admin/students'
     | '/admin/talent'
     | '/api/payment-followups'
@@ -599,6 +609,7 @@ export interface FileRouteTypes {
     | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
     | '/admin/certificates'
     | '/admin/leads'
+    | '/admin/lookup'
     | '/admin/students'
     | '/admin/talent'
     | '/api/payment-followups'
@@ -656,6 +667,7 @@ export interface FileRouteTypes {
     | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
     | '/admin/certificates'
     | '/admin/leads'
+    | '/admin/lookup'
     | '/admin/students'
     | '/admin/talent'
     | '/api/payment-followups'
@@ -714,6 +726,7 @@ export interface RootRouteChildren {
   Why90OfTechLearnersQuitButYouDontHaveToRoute: typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
   AdminCertificatesRoute: typeof AdminCertificatesRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
+  AdminLookupRoute: typeof AdminLookupRoute
   AdminStudentsRoute: typeof AdminStudentsRoute
   AdminTalentRoute: typeof AdminTalentRoute
   ApiPaymentFollowupsRoute: typeof ApiPaymentFollowupsRoute
@@ -913,6 +926,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/leads'
       fullPath: '/admin/leads'
       preLoaderRoute: typeof AdminLeadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/lookup': {
+      id: '/admin/lookup'
+      path: '/admin/lookup'
+      fullPath: '/admin/lookup'
+      preLoaderRoute: typeof AdminLookupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/students': {
@@ -1175,6 +1195,7 @@ const rootRouteChildren: RootRouteChildren = {
     Why90OfTechLearnersQuitButYouDontHaveToRoute,
   AdminCertificatesRoute: AdminCertificatesRoute,
   AdminLeadsRoute: AdminLeadsRoute,
+  AdminLookupRoute: AdminLookupRoute,
   AdminStudentsRoute: AdminStudentsRoute,
   AdminTalentRoute: AdminTalentRoute,
   ApiPaymentFollowupsRoute: ApiPaymentFollowupsRoute,

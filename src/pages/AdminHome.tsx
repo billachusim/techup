@@ -3,11 +3,12 @@ import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/router-compat";
-import { Award, BriefcaseBusiness, Gift, GraduationCap, Loader2, type LucideIcon } from "lucide-react";
+import { Award, BriefcaseBusiness, Gift, GraduationCap, History, Inbox, Loader2, Search, type LucideIcon } from "lucide-react";
 import { useIsStaff } from "@/hooks/useIsStaff";
 import AdminNav from "@/components/admin/AdminNav";
 import { AdminMetrics } from "@/components/admin/AdminMetrics";
 import { NotifySearchEngines } from "@/components/admin/NotifySearchEngines";
+import { ScheduledJobsHealth } from "@/components/admin/ScheduledJobsHealth";
 
 interface Section {
   to: string;
@@ -19,10 +20,24 @@ interface Section {
 
 const SECTIONS: Section[] = [
   {
+    to: "/admin/leads",
+    title: "Leads",
+    description: "Every enquiry from the site's forms, with WhatsApp follow-up and status.",
+    icon: Inbox,
+    adminOnly: true,
+  },
+  {
     to: "/admin/students",
     title: "Students",
     description: "Confirm WhatsApp, email and bank payments, and review weekly student work.",
     icon: GraduationCap,
+  },
+  {
+    to: "/admin/lookup",
+    title: "Student lookup",
+    description: "Find a student by name, phone or Faculty ID and see their enrolments, payments, work and certificates.",
+    icon: Search,
+    adminOnly: true,
   },
   {
     to: "/admin/talent",
@@ -42,6 +57,13 @@ const SECTIONS: Section[] = [
     title: "Referrals",
     description: "See who referred whom and pay graduates their referral rewards.",
     icon: Gift,
+    adminOnly: true,
+  },
+  {
+    to: "/admin/activity",
+    title: "Activity log",
+    description: "Who marked payments paid, cancelled enrolments, issued certificates and more.",
+    icon: History,
     adminOnly: true,
   },
 ];
@@ -87,6 +109,7 @@ export default function AdminHome() {
             {/* Business numbers are for admins; recruiters only see the areas above. */}
             {isAdmin && <AdminMetrics />}
             {isAdmin && <NotifySearchEngines />}
+            {isAdmin && <ScheduledJobsHealth />}
           </>
         )}
       </main>

@@ -24,12 +24,12 @@ import { TEEN_HOLIDAY_FROM, naira } from "@/lib/fees";
 
 const PAGE_TITLE = "Tech Events in Nigeria 2026 — AI, Data & Developer Conferences";
 const PAGE_DESCRIPTION =
-  "Find upcoming tech events in Nigeria and Africa: AI and data conferences, developer meetups, hackathons, cybersecurity workshops, remote work summits and free online webinars, updated weekly.";
+  "Find upcoming tech events in Nigeria and Africa: AI and data conferences, developer meetups, hackathons, cybersecurity workshops, remote work summits and free online webinars, updated twice a month.";
 
 const FAQS = [
   {
     q: "What tech events are happening in Nigeria in 2026?",
-    a: "This page lists upcoming AI and data conferences, developer meetups, hackathons, cybersecurity workshops, design sessions, remote work summits and free webinars across Nigeria and Africa. Listings refresh every week from public event platforms, and Tech Faculty NG's own meetups, workshops and holiday bootcamps appear alongside them.",
+    a: "This page lists upcoming AI and data conferences, developer meetups, hackathons, cybersecurity workshops, design sessions, remote work summits and free webinars across Nigeria and Africa. Listings refresh twice a month from public event platforms, and Tech Faculty NG's own meetups, workshops and holiday bootcamps appear alongside them.",
   },
   {
     q: "Are there free tech events and webinars I can attend?",
@@ -83,6 +83,10 @@ const Events = () => {
   }, [events, search, category, format, city, price]);
 
   const featured = events.filter((e) => e.is_featured);
+  const lastRefreshed = useMemo(() => {
+    const seen = events.filter((e) => !e.is_featured).map((e) => e.last_seen_at).sort();
+    return seen.length ? seen[seen.length - 1] : null;
+  }, [events]);
 
   const PAGE_SIZE = 12;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
@@ -181,7 +185,7 @@ const Events = () => {
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
               AI and data conferences, developer meetups, hackathons, cybersecurity workshops, remote work
-              summits and free online webinars — refreshed every week, with registration links straight to
+              summits and free online webinars — refreshed twice a month, with registration links straight to
               each organiser.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -223,8 +227,17 @@ const Events = () => {
           <div className="container mx-auto max-w-6xl">
             <h2 className="text-2xl md:text-3xl font-bold mb-2">Upcoming tech events</h2>
             <p className="text-muted-foreground mb-8 max-w-2xl">
-              Aggregated weekly from public event platforms including Eventbrite, Meetup, Luma, Google
-              Developer Groups and African tech media. Filter by city, format, category or price.
+              Gathered twice a month from Meetup, Eventbrite, Luma and Microsoft Reactor, with events in the
+              South-East and online first. Filter by city, format, category or price.
+              {lastRefreshed && (
+                <span className="block mt-1 text-sm">
+                  Last updated{" "}
+                  <time dateTime={lastRefreshed}>
+                    {new Date(lastRefreshed).toLocaleDateString("en-NG", { day: "numeric", month: "long", year: "numeric" })}
+                  </time>
+                  .
+                </span>
+              )}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 mb-8">

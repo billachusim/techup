@@ -279,3 +279,13 @@ END;
 $$;
 REVOKE EXECUTE ON FUNCTION public.admin_mark_referral_paid(uuid) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.admin_mark_referral_paid(uuid) TO authenticated;
+
+-- Activity log: record reward payouts, using the trigger function from
+-- 20261012004400_admin_audit_log.sql (it couldn't attach this one before the
+-- referrals table existed).
+DROP TRIGGER IF EXISTS audit_referral_status ON public.referrals;
+CREATE TRIGGER audit_referral_status
+  AFTER UPDATE OF status ON public.referrals
+  FOR EACH ROW
+  WHEN (OLD.status IS DISTINCT FROM NEW.status)
+  EXECUTE FUNCTION public.audit_referral_status();

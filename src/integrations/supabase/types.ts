@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_audit_log: {
+        Row: {
+          action: string
+          actor_email: string | null
+          actor_id: string | null
+          created_at: string
+          details: Json
+          faculty_id: string | null
+          id: string
+          subject: string | null
+          target_id: string | null
+          target_table: string
+        }
+        Insert: {
+          action: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          faculty_id?: string | null
+          id?: string
+          subject?: string | null
+          target_id?: string | null
+          target_table: string
+        }
+        Update: {
+          action?: string
+          actor_email?: string | null
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          faculty_id?: string | null
+          id?: string
+          subject?: string | null
+          target_id?: string | null
+          target_table?: string
+        }
+        Relationships: []
+      }
       ai_class_content: {
         Row: {
           class_number: number
@@ -208,7 +247,11 @@ export type Database = {
           id: string
           issued_at: string | null
           issued_by: string
+          revoked_at: string | null
+          revoked_by: string | null
+          revoked_reason: string | null
           student_name: string | null
+          updated_at: string | null
         }
         Insert: {
           certificate_number: string
@@ -221,7 +264,11 @@ export type Database = {
           id?: string
           issued_at?: string | null
           issued_by?: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          revoked_reason?: string | null
           student_name?: string | null
+          updated_at?: string | null
         }
         Update: {
           certificate_number?: string
@@ -234,7 +281,11 @@ export type Database = {
           id?: string
           issued_at?: string | null
           issued_by?: string
+          revoked_at?: string | null
+          revoked_by?: string | null
+          revoked_reason?: string | null
           student_name?: string | null
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -375,6 +426,7 @@ export type Database = {
       enrollments: {
         Row: {
           amount_due: number | null
+          amount_paid: number | null
           coupon_code: string | null
           created_at: string
           currency: string | null
@@ -383,13 +435,18 @@ export type Database = {
           id: string
           learning_mode: string | null
           paid_at: string | null
+          payment_method: string | null
           payment_reference: string | null
+          payment_reminder_sent_at: string | null
           plan_name: string
+          recovered_at: string | null
+          recovered_email_sent_at: string | null
           status: string
           tx_ref: string | null
         }
         Insert: {
           amount_due?: number | null
+          amount_paid?: number | null
           coupon_code?: string | null
           created_at?: string
           currency?: string | null
@@ -398,13 +455,18 @@ export type Database = {
           id?: string
           learning_mode?: string | null
           paid_at?: string | null
+          payment_method?: string | null
           payment_reference?: string | null
+          payment_reminder_sent_at?: string | null
           plan_name: string
+          recovered_at?: string | null
+          recovered_email_sent_at?: string | null
           status?: string
           tx_ref?: string | null
         }
         Update: {
           amount_due?: number | null
+          amount_paid?: number | null
           coupon_code?: string | null
           created_at?: string
           currency?: string | null
@@ -413,8 +475,12 @@ export type Database = {
           id?: string
           learning_mode?: string | null
           paid_at?: string | null
+          payment_method?: string | null
           payment_reference?: string | null
+          payment_reminder_sent_at?: string | null
           plan_name?: string
+          recovered_at?: string | null
+          recovered_email_sent_at?: string | null
           status?: string
           tx_ref?: string | null
         }
@@ -718,6 +784,8 @@ export type Database = {
           notes: string | null
           school: string | null
           source: string | null
+          status: string
+          status_updated_at: string | null
         }
         Insert: {
           channel: string
@@ -729,6 +797,8 @@ export type Database = {
           notes?: string | null
           school?: string | null
           source?: string | null
+          status?: string
+          status_updated_at?: string | null
         }
         Update: {
           channel?: string
@@ -740,6 +810,8 @@ export type Database = {
           notes?: string | null
           school?: string | null
           source?: string | null
+          status?: string
+          status_updated_at?: string | null
         }
         Relationships: []
       }
@@ -1588,6 +1660,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_conversion_funnel: { Args: { _days?: number }; Returns: Json }
       admin_dashboard_metrics: { Args: { _days?: number }; Returns: Json }
       admin_list_referrals: {
         Args: never
@@ -1745,6 +1818,7 @@ export type Database = {
           date_issued: string
           issued_at: string
           issued_by: string
+          revoked: boolean
           student_name: string
         }[]
       }

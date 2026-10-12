@@ -5,9 +5,9 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/locations/")({
   head: () =>
     pageHead({
-      title: "Tech Training Campuses Across Nigeria",
+      title: "22 Tech Training Campuses Across Nigeria",
       description:
-        "Tech Faculty operates physically inside Technology Incubation Centres nationwide via our partnership with the National Board for Technology Incubation.",
+        "Find a Tech Faculty NG campus in Lagos, Abuja, Enugu, Kano, Nnewi and 17 more cities. In-person tech courses and SIWES, most at Technology Incubation Centres.",
       path: "/locations",
     }),
   component: Locations,

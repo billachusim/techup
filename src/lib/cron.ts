@@ -73,6 +73,8 @@ export function describeCron(schedule: string): string {
   const raw = `on the schedule "${schedule.trim()}" (UTC)`;
   if (fields.length !== 5) return raw;
   const [m, h, dom, mon, dow] = fields;
+  const every = m.match(/^\*\/(\d+)$/);
+  if (every && h === "*" && dom === "*" && mon === "*" && dow === "*") return `every ${every[1]} minutes`;
   if (!/^\d+$/.test(m) || !/^\d+$/.test(h) || mon !== "*") return raw;
   const wat = (Number(h) + 1) % 24;
   const time = `${String(wat).padStart(2, "0")}:${m.padStart(2, "0")} WAT`;

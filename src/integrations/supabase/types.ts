@@ -387,6 +387,7 @@ export type Database = {
       enrollments: {
         Row: {
           amount_due: number | null
+          amount_paid: number | null
           coupon_code: string | null
           created_at: string
           currency: string | null
@@ -395,6 +396,7 @@ export type Database = {
           id: string
           learning_mode: string | null
           paid_at: string | null
+          payment_method: string | null
           payment_reference: string | null
           payment_reminder_sent_at: string | null
           plan_name: string
@@ -405,6 +407,7 @@ export type Database = {
         }
         Insert: {
           amount_due?: number | null
+          amount_paid?: number | null
           coupon_code?: string | null
           created_at?: string
           currency?: string | null
@@ -413,6 +416,7 @@ export type Database = {
           id?: string
           learning_mode?: string | null
           paid_at?: string | null
+          payment_method?: string | null
           payment_reference?: string | null
           payment_reminder_sent_at?: string | null
           plan_name: string
@@ -423,6 +427,7 @@ export type Database = {
         }
         Update: {
           amount_due?: number | null
+          amount_paid?: number | null
           coupon_code?: string | null
           created_at?: string
           currency?: string | null
@@ -431,6 +436,7 @@ export type Database = {
           id?: string
           learning_mode?: string | null
           paid_at?: string | null
+          payment_method?: string | null
           payment_reference?: string | null
           payment_reminder_sent_at?: string | null
           plan_name?: string
@@ -1549,6 +1555,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_conversion_funnel: { Args: { _days?: number }; Returns: Json }
       admin_dashboard_metrics: { Args: { _days?: number }; Returns: Json }
       approve_talent: { Args: { _talent_id: string }; Returns: string }
       archive_stale_listings: { Args: never; Returns: undefined }

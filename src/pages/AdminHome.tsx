@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/router-compat";
-import { Award, BriefcaseBusiness, GraduationCap, Inbox, Loader2, type LucideIcon } from "lucide-react";
+import { Award, BriefcaseBusiness, GraduationCap, Inbox, Loader2, Search, type LucideIcon } from "lucide-react";
 import { useIsStaff } from "@/hooks/useIsStaff";
 import AdminNav from "@/components/admin/AdminNav";
 import { AdminMetrics } from "@/components/admin/AdminMetrics";
@@ -31,6 +31,13 @@ const SECTIONS: Section[] = [
     title: "Students",
     description: "Confirm WhatsApp, email and bank payments, and review weekly student work.",
     icon: GraduationCap,
+  },
+  {
+    to: "/admin/lookup",
+    title: "Student lookup",
+    description: "Find a student by name, phone or Faculty ID and see their enrolments, payments, work and certificates.",
+    icon: Search,
+    adminOnly: true,
   },
   {
     to: "/admin/talent",

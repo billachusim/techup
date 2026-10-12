@@ -71,6 +71,13 @@
       "when": 1791788859429,
       "tag": "0009_manual_payment_amount",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1791788983829,
+      "tag": "0010_alumni_referrals_and_needs_you_today",
+      "breakpoints": true
     }
   ]
 }

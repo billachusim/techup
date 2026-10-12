@@ -46,6 +46,12 @@ const Verify = () => {
       setMessage(`Certificate ID "${normalizedId}" was not found in the Tech Faculty NG database.`);
       return;
     }
+    if (data.revoked) {
+      setStatus("error");
+      setResult(null);
+      setMessage(`Certificate ID "${normalizedId}" has been revoked by Tech Faculty NG and is no longer valid.`);
+      return;
+    }
 
     const fallbackDate = data.issued_at
       ? new Date(data.issued_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "2-digit" })

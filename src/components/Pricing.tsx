@@ -24,6 +24,8 @@ import {
   ALL_COURSES as allAvailableCourses,
   LEARNING_MODES,
   PLAN_PRICING,
+  PROMO_CODES,
+  REFERRAL_DISCOUNT_PERCENT,
   type Benefit,
   type Course,
   type LearningMode,
@@ -149,6 +151,8 @@ const departmentPlans: DepartmentPlan[] = [
   },
 ];
 
+const REFERRAL_STORAGE_KEY = "tf_referral_code";
+
 const Pricing = () => {
   const [activeCategory, setActiveCategory] = useState<PlanCategory>("beginner");
   const [facultyIdDialogOpen, setFacultyIdDialogOpen] = useState(false);
@@ -159,6 +163,8 @@ const Pricing = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
   const [requestDiscount, setRequestDiscount] = useState(false);
+  // Whether the typed code is a graduate's referral code (null: not checked).
+  const [referralValid, setReferralValid] = useState<boolean | null>(null);
   const [customCourseSearch, setCustomCourseSearch] = useState("");
   const [userHasPaidPlan, setUserHasPaidPlan] = useState(false);
   const [enrollmentData, setEnrollmentData] = useState<Tables<"enrollments"> | null>(null);
@@ -203,6 +209,38 @@ const Pricing = () => {
     };
     checkUserPlan();
   }, []);
+
+  // A graduate's share link (?ref=CODE) fills in their code, and it is kept
+  // for later visits in case the student signs up first.
+  useEffect(() => {
+    try {
+      const fromLink = new URLSearchParams(window.location.search).get("ref")?.trim().toUpperCase();
+      if (fromLink) localStorage.setItem(REFERRAL_STORAGE_KEY, fromLink);
+      const code = fromLink || localStorage.getItem(REFERRAL_STORAGE_KEY);
+      if (code) setDiscountCode((current) => current || code);
+    } catch {
+      // Storage can be blocked; the code can still be typed in.
+    }
+  }, []);
+
+  const typedCode = discountCode.trim().toUpperCase();
+  useEffect(() => {
+    if (!typedCode || PROMO_CODES[typedCode]) {
+      setReferralValid(null);
+      return;
+    }
+    setReferralValid(null);
+    let active = true;
+    const timer = setTimeout(async () => {
+      const supabase = await getSupabase();
+      const { data } = await supabase.rpc("referral_code_exists", { _code: typedCode });
+      if (active) setReferralValid(data === true);
+    }, 400);
+    return () => { active = false; clearTimeout(timer); };
+  }, [typedCode]);
+
+  // What the pricing page shows; create-checkout re-checks the code and charges.
+  const discountPercent = PROMO_CODES[typedCode] ?? (referralValid ? REFERRAL_DISCOUNT_PERCENT : 0);
 
   useEffect(() => {
     const initialSelections: Record<string, Selection> = {};
@@ -251,17 +289,13 @@ const Pricing = () => {
         if (benefit) total += benefit.price;
       });
 
-      if (discountCode.toUpperCase() === "TECHUP50") {
-        total = total * 0.5;
-      } else if (discountCode.toUpperCase() === "TECHUP25") {
-        total = total * 0.75;
-      }
+      total = total * (100 - discountPercent) / 100;
 
       newTotalPrices[planId] = Math.round(total);
     });
 
     setTotalPrices(newTotalPrices);
-  }, [selections, discountCode]);
+  }, [selections, discountPercent]);
 
   const handleToggleCourse = (planId: string, courseId: string) => {
     const plan = departmentPlans.find(p => p.id === planId);
@@ -574,6 +608,12 @@ const Pricing = () => {
           throw new Error('Invalid checkout link received. Please try again.');
         }
 
+        try {
+          // The code has been used; don't prefill it on this student's next plan.
+          localStorage.removeItem(REFERRAL_STORAGE_KEY);
+        } catch {
+          // Storage can be blocked.
+        }
         setIsSubmitting(false);
         setCheckoutDialogOpen(false);
         window.location.assign(checkoutUrl);
@@ -920,10 +960,15 @@ Please share the payment details so I can complete my enrollment. Thank you!`;
               value={discountCode}
               onChange={(e) => setDiscountCode(e.target.value)}
             />
-            {discountCode && (
-              <Badge variant="secondary">
-                {discountCode.toUpperCase() === "TECHUP50" ? "50% OFF" : 
-                 discountCode.toUpperCase() === "TECHUP25" ? "25% OFF" : "Invalid"}
+            {typedCode && (
+              <Badge variant="secondary" className="whitespace-nowrap">
+                {PROMO_CODES[typedCode]
+                  ? `${PROMO_CODES[typedCode]}% OFF`
+                  : referralValid === null
+                    ? "Checking…"
+                    : referralValid
+                      ? `${REFERRAL_DISCOUNT_PERCENT}% OFF · Referral`
+                      : "Invalid"}
               </Badge>
             )}
           </div>

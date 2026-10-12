@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/router-compat";
-import { Award, BriefcaseBusiness, GraduationCap, History, Inbox, Loader2, Search, type LucideIcon } from "lucide-react";
+import { Award, BriefcaseBusiness, Gift, GraduationCap, History, Inbox, Loader2, Search, type LucideIcon } from "lucide-react";
 import { useIsStaff } from "@/hooks/useIsStaff";
 import AdminNav from "@/components/admin/AdminNav";
 import { AdminMetrics } from "@/components/admin/AdminMetrics";
@@ -50,6 +50,13 @@ const SECTIONS: Section[] = [
     title: "Certificates",
     description: "Issue certificates to students who finish a programme.",
     icon: Award,
+    adminOnly: true,
+  },
+  {
+    to: "/admin/referrals",
+    title: "Referrals",
+    description: "See who referred whom and pay graduates their referral rewards.",
+    icon: Gift,
     adminOnly: true,
   },
   {

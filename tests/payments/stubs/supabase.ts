@@ -9,6 +9,8 @@ export interface FakeDb {
   users: Record<string, string>;
   /** Tables whose inserts fail, to test error paths. */
   failInsert?: Set<string>;
+  /** Database functions callable through rpc(), by name. */
+  rpc?: Record<string, (args: Record<string, unknown>) => unknown>;
 }
 
 let db: FakeDb = { tables: {}, users: {} };
@@ -108,6 +110,10 @@ class Query implements PromiseLike<{ data: unknown; error: unknown }> {
 export function createClient() {
   return {
     from: (table: string) => new Query(table),
+    rpc: async (name: string, args: Record<string, unknown>) => {
+      const fn = db.rpc?.[name];
+      return fn ? { data: fn(args), error: null } : { data: null, error: { message: `no function ${name}` } };
+    },
     auth: {
       getUser: async (token: string) => {
         const id = db.users[token];

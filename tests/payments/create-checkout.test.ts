@@ -3,7 +3,11 @@ import { setEnv } from "./stubs/deno-env.ts";
 import { servedHandler } from "./stubs/deno-serve.ts";
 import { useFakeDb, type FakeDb } from "./stubs/supabase.ts";
 import "../../supabase/functions/create-checkout/index.ts";
-import { PLAN_PRICING } from "../../supabase/functions/_shared/pricing.ts";
+import {
+  PLAN_PRICING,
+  REFERRAL_DISCOUNT_PERCENT,
+  REFERRER_REWARD_PERCENT,
+} from "../../supabase/functions/_shared/pricing.ts";
 import { NGN_TO_USD_RATE } from "../../src/lib/fees.ts";
 
 const devProCourses = PLAN_PRICING["developer-pro"].courses;
@@ -95,10 +99,65 @@ describe("create-checkout", () => {
     expect(enrollments()[0].plan_name).toBe("Developer Pro");
   });
 
-  it("does not let a made-up discount code lower the price", async () => {
-    await checkout({ discountCode: "FREEFORME" });
-    expect(sentToFlutterwave().amount).toBe(devProCourseTotal);
-    expect(enrollments()[0].amount_due).toBe(devProCourseTotal);
+  it("refuses a made-up discount code rather than charging anything for it", async () => {
+    db.rpc = { check_referral_code: () => ({ ok: false, error: "That discount code isn't valid." }) };
+    const res = await checkout({ discountCode: "FREEFORME" });
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: "That discount code isn't valid." });
+    expect(flutterwave).not.toHaveBeenCalled();
+    expect(enrollments()).toHaveLength(0);
+  });
+
+  it("takes the referral discount off and records the graduate's reward", async () => {
+    const checked: Record<string, unknown>[] = [];
+    db.rpc = {
+      check_referral_code: (args) => {
+        checked.push(args);
+        return { ok: true, code: "CHIDI-7K3Q", referrer_user_id: "user-2" };
+      },
+    };
+    const res = await checkout({ discountCode: " chidi-7k3q " });
+    expect(res.status).toBe(200);
+    expect(checked).toEqual([{ _code: "CHIDI-7K3Q", _user_id: "user-1" }]);
+
+    const discount = Math.round((devProCourseTotal * REFERRAL_DISCOUNT_PERCENT) / 100);
+    const paid = devProCourseTotal - discount;
+    expect(sentToFlutterwave().amount).toBe(paid);
+    expect(enrollments()[0]).toMatchObject({ amount_due: paid, coupon_code: "CHIDI-7K3Q" });
+    expect(db.tables.referrals).toEqual([
+      expect.objectContaining({
+        code: "CHIDI-7K3Q",
+        referrer_user_id: "user-2",
+        referred_user_id: "user-1",
+        tx_ref: enrollments()[0].tx_ref,
+        currency: "NGN",
+        discount_amount: discount,
+        reward_amount: Math.round((paid * REFERRER_REWARD_PERCENT) / 100),
+      }),
+    ]);
+  });
+
+  it("refuses a referral code the database turns down, with its reason", async () => {
+    db.rpc = { check_referral_code: () => ({ ok: false, error: "You can't use your own referral code." }) };
+    const res = await checkout({ discountCode: "MINE-AAAA" });
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: "You can't use your own referral code." });
+    expect(enrollments()).toHaveLength(0);
+  });
+
+  it("drops the pending enrolment when the referral can't be saved", async () => {
+    db.rpc = { check_referral_code: () => ({ ok: true, code: "CHIDI-7K3Q", referrer_user_id: "user-2" }) };
+    db.failInsert = new Set(["referrals"]);
+    const res = await checkout({ discountCode: "CHIDI-7K3Q" });
+    expect(res.status).toBe(500);
+    expect(flutterwave).not.toHaveBeenCalled();
+    expect(enrollments()).toHaveLength(0);
+  });
+
+  it("still applies the fixed promo codes without a referral check", async () => {
+    await checkout({ discountCode: "techup25" });
+    expect(sentToFlutterwave().amount).toBe(Math.round(devProCourseTotal * 0.75));
+    expect(db.tables.referrals ?? []).toHaveLength(0);
   });
 
   it("converts to dollars at the site's rate for USD payments", async () => {

@@ -35,6 +35,7 @@ import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 import { Route as AdminCertificatesRouteImport } from './routes/admin.certificates'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
 import { Route as AdminLookupRouteImport } from './routes/admin.lookup'
+import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
 import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminTalentRouteImport } from './routes/admin.talent'
 import { Route as ApiPaymentFollowupsRouteImport } from './routes/api.payment-followups'
@@ -196,6 +197,11 @@ const AdminLeadsRoute = AdminLeadsRouteImport.update({
 const AdminLookupRoute = AdminLookupRouteImport.update({
   id: '/admin/lookup',
   path: '/admin/lookup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminReferralsRoute = AdminReferralsRouteImport.update({
+  id: '/admin/referrals',
+  path: '/admin/referrals',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminStudentsRoute = AdminStudentsRouteImport.update({
@@ -382,6 +388,7 @@ export interface FileRoutesByFullPath {
   '/admin/certificates': typeof AdminCertificatesRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lookup': typeof AdminLookupRoute
+  '/admin/referrals': typeof AdminReferralsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
@@ -441,6 +448,7 @@ export interface FileRoutesByTo {
   '/admin/certificates': typeof AdminCertificatesRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lookup': typeof AdminLookupRoute
+  '/admin/referrals': typeof AdminReferralsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
@@ -501,6 +509,7 @@ export interface FileRoutesById {
   '/admin/certificates': typeof AdminCertificatesRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lookup': typeof AdminLookupRoute
+  '/admin/referrals': typeof AdminReferralsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
@@ -562,6 +571,7 @@ export interface FileRouteTypes {
     | '/admin/certificates'
     | '/admin/leads'
     | '/admin/lookup'
+    | '/admin/referrals'
     | '/admin/students'
     | '/admin/talent'
     | '/api/payment-followups'
@@ -621,6 +631,7 @@ export interface FileRouteTypes {
     | '/admin/certificates'
     | '/admin/leads'
     | '/admin/lookup'
+    | '/admin/referrals'
     | '/admin/students'
     | '/admin/talent'
     | '/api/payment-followups'
@@ -680,6 +691,7 @@ export interface FileRouteTypes {
     | '/admin/certificates'
     | '/admin/leads'
     | '/admin/lookup'
+    | '/admin/referrals'
     | '/admin/students'
     | '/admin/talent'
     | '/api/payment-followups'
@@ -740,6 +752,7 @@ export interface RootRouteChildren {
   AdminCertificatesRoute: typeof AdminCertificatesRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
   AdminLookupRoute: typeof AdminLookupRoute
+  AdminReferralsRoute: typeof AdminReferralsRoute
   AdminStudentsRoute: typeof AdminStudentsRoute
   AdminTalentRoute: typeof AdminTalentRoute
   ApiPaymentFollowupsRoute: typeof ApiPaymentFollowupsRoute
@@ -953,6 +966,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/lookup'
       fullPath: '/admin/lookup'
       preLoaderRoute: typeof AdminLookupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/referrals': {
+      id: '/admin/referrals'
+      path: '/admin/referrals'
+      fullPath: '/admin/referrals'
+      preLoaderRoute: typeof AdminReferralsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/students': {
@@ -1217,6 +1237,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCertificatesRoute: AdminCertificatesRoute,
   AdminLeadsRoute: AdminLeadsRoute,
   AdminLookupRoute: AdminLookupRoute,
+  AdminReferralsRoute: AdminReferralsRoute,
   AdminStudentsRoute: AdminStudentsRoute,
   AdminTalentRoute: AdminTalentRoute,
   ApiPaymentFollowupsRoute: ApiPaymentFollowupsRoute,

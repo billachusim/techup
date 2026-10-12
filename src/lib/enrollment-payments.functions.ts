@@ -35,9 +35,20 @@ export const listPendingEnrollments = createServerFn({ method: "POST" })
     }));
   });
 
-const DecideInput = z.object({ id: z.string().uuid(), decision: z.enum(["paid", "cancel"]) });
+const PAYMENT_METHODS = ["bank", "whatsapp", "cash", "card", "other"] as const;
 
-/** Admin: mark a WhatsApp/email/bank payment as received, or cancel the request. */
+const DecideInput = z.discriminatedUnion("decision", [
+  z.object({
+    id: z.string().uuid(),
+    decision: z.literal("paid"),
+    amount: z.number().positive().max(100_000_000),
+    currency: z.enum(["NGN", "USD"]),
+    method: z.enum(PAYMENT_METHODS),
+  }),
+  z.object({ id: z.string().uuid(), decision: z.literal("cancel") }),
+]);
+
+/** Admin: mark a WhatsApp/bank/cash payment as received (with what came in), or cancel the request. */
 export const decidePendingEnrollment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => DecideInput.parse(d))
@@ -45,7 +56,14 @@ export const decidePendingEnrollment = createServerFn({ method: "POST" })
     await assertAdmin(context.supabase, context.userId);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const update = data.decision === "paid"
-      ? { status: "active", paid_at: new Date().toISOString(), payment_reference: `manual:${context.userId}` }
+      ? {
+          status: "active",
+          paid_at: new Date().toISOString(),
+          payment_reference: `manual:${context.userId}`,
+          amount_paid: data.amount,
+          currency: data.currency,
+          payment_method: data.method,
+        }
       : { status: "cancelled" };
     const { data: row, error } = await supabaseAdmin
       .from("enrollments")

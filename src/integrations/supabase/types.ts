@@ -375,6 +375,7 @@ export type Database = {
       enrollments: {
         Row: {
           amount_due: number | null
+          amount_paid: number | null
           coupon_code: string | null
           created_at: string
           currency: string | null
@@ -383,6 +384,7 @@ export type Database = {
           id: string
           learning_mode: string | null
           paid_at: string | null
+          payment_method: string | null
           payment_reference: string | null
           plan_name: string
           status: string
@@ -390,6 +392,7 @@ export type Database = {
         }
         Insert: {
           amount_due?: number | null
+          amount_paid?: number | null
           coupon_code?: string | null
           created_at?: string
           currency?: string | null
@@ -398,6 +401,7 @@ export type Database = {
           id?: string
           learning_mode?: string | null
           paid_at?: string | null
+          payment_method?: string | null
           payment_reference?: string | null
           plan_name: string
           status?: string
@@ -405,6 +409,7 @@ export type Database = {
         }
         Update: {
           amount_due?: number | null
+          amount_paid?: number | null
           coupon_code?: string | null
           created_at?: string
           currency?: string | null
@@ -413,6 +418,7 @@ export type Database = {
           id?: string
           learning_mode?: string | null
           paid_at?: string | null
+          payment_method?: string | null
           payment_reference?: string | null
           plan_name?: string
           status?: string

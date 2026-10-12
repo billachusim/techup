@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import AdminNav from "@/components/admin/AdminNav";
+import CertificateManager from "@/components/admin/CertificateManager";
 import { Award, Loader2, ShieldCheck } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -41,6 +42,7 @@ const AdminCertificates = () => {
     graduateEmail: "",
   });
   const [submitting, setSubmitting] = useState(false);
+  const [addedCount, setAddedCount] = useState(0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,6 +72,7 @@ const AdminCertificates = () => {
       data: { certificateNumber: form.certificateNumber.trim(), email: form.graduateEmail.trim() || undefined },
     }).catch((e: Error) => ({ status: "failed" as const, error: e.message }));
     setSubmitting(false);
+    setAddedCount((n) => n + 1);
 
     toast({
       title: "Certificate added",
@@ -91,7 +94,7 @@ const AdminCertificates = () => {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main className="container mx-auto px-4 pt-32 pb-16">
-        <section className="mx-auto max-w-2xl space-y-6">
+        <section className="mx-auto max-w-3xl space-y-6">
           <AdminNav />
           <div className="text-center space-y-2">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
@@ -99,7 +102,7 @@ const AdminCertificates = () => {
             </div>
             <h1 className="text-3xl font-bold">Certificate Admin</h1>
             <p className="text-muted-foreground text-sm">
-              Add new certificates so they become verifiable on the public /verify page.
+              Add certificates so they become verifiable on the public /verify page, and find, correct or revoke existing ones.
             </p>
           </div>
 
@@ -108,10 +111,11 @@ const AdminCertificates = () => {
           ) : !isAdmin ? (
             <Card>
               <CardContent className="pt-6 text-center text-sm text-muted-foreground">
-                This page is for Tech Faculty admins. Sign in with an admin account to add certificates.
+                This page is for Tech Faculty admins. Sign in with an admin account to manage certificates.
               </CardContent>
             </Card>
           ) : (
+            <>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="flex items-center gap-2"><Award className="h-5 w-5 text-primary" /> Add new certificate</CardTitle>
@@ -159,6 +163,8 @@ const AdminCertificates = () => {
                 </form>
               </CardContent>
             </Card>
+            <CertificateManager refreshKey={addedCount} />
+            </>
           )}
         </section>
       </main>

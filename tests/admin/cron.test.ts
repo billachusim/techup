@@ -29,6 +29,7 @@ describe("describeCron", () => {
     expect(describeCron("0 5 1,15 * *")).toBe("on the 1st and 15th of each month at 06:00 WAT");
     expect(describeCron("30 5 * * 1")).toBe("every Monday at 06:30 WAT");
     expect(describeCron("0 23 * * *")).toBe("daily at 00:00 WAT");
-    expect(describeCron("*/5 * * * *")).toBe('on the schedule "*/5 * * * *" (UTC)');
+    expect(describeCron("*/30 * * * *")).toBe("every 30 minutes");
+    expect(describeCron("0 */2 * * *")).toBe('on the schedule "0 */2 * * *" (UTC)');
   });
 });

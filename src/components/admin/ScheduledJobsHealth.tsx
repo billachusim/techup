@@ -76,10 +76,10 @@ async function loadRuns(fn: KnownFn): Promise<Run[]> {
 const when = (iso: string) =>
   new Date(iso).toLocaleString("en-NG", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Lagos" });
 
-/** True when the schedule's most recent due time passed without a good run after it. */
+/** True when a run was due at least GRACE_MS ago and no good run has happened since. */
 function isStuck(schedule: string, lastOkAt: string | null | undefined): boolean {
-  const due = previousCronRun(schedule);
-  if (!due || Date.now() - due.getTime() < GRACE_MS) return false;
+  const due = previousCronRun(schedule, new Date(Date.now() - GRACE_MS));
+  if (!due) return false;
   return !lastOkAt || new Date(lastOkAt).getTime() < due.getTime() - 60e3;
 }
 

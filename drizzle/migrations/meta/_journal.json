@@ -64,6 +64,13 @@
       "when": 1791788822762,
       "tag": "0008_lock_scrapers_and_conversion_funnel",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1791788859429,
+      "tag": "0009_manual_payment_amount",
+      "breakpoints": true
     }
   ]
 }

@@ -91,6 +91,7 @@ const WhatsAppLeadDialog = ({
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
+  const [email, setEmail] = useState("");
   const [topic, setTopic] = useState<string>(variant === "chat" ? "" : "");
   const [status, setStatus] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
@@ -103,7 +104,8 @@ const WhatsAppLeadDialog = ({
   }, []);
 
   const digits = phone.replace(/\D/g, "");
-  const valid = name.trim().length >= 2 && digits.length >= 10;
+  const emailOk = !email.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  const valid = name.trim().length >= 2 && digits.length >= 10 && emailOk;
 
   const greeting = encodeURIComponent(
     variant === "chat"
@@ -124,7 +126,9 @@ const WhatsAppLeadDialog = ({
       setError(
         name.trim().length < 2
           ? "Please enter your name."
-          : "Enter a valid WhatsApp number (at least 10 digits).",
+          : !emailOk
+            ? "That email doesn't look right — fix it or leave it blank."
+            : "Enter a valid WhatsApp number (at least 10 digits).",
       );
       return;
     }
@@ -143,7 +147,8 @@ const WhatsAppLeadDialog = ({
       name: clampLeadField(name, "name"),
       channel: "whatsapp",
       contact: clampLeadField(phone, "contact") ?? "",
-      school: clampLeadField(city, "school"),
+      email: clampLeadField(email.toLowerCase(), "email"),
+      location: clampLeadField(city, "location"),
       interest: variant === "community" ? "community_join" : "whatsapp_chat",
       source: clampLeadField(source, "source"),
       notes: clampLeadField(notes, "notes"),
@@ -172,7 +177,8 @@ const WhatsAppLeadDialog = ({
         name: clampLeadField(name, "name"),
         channel: "whatsapp",
         contact: clampLeadField(phone, "contact") ?? "",
-        school: clampLeadField(city, "school"),
+        email: clampLeadField(email.toLowerCase(), "email"),
+        location: clampLeadField(city, "location"),
         interest: variant === "community" ? "community_join" : "whatsapp_chat",
         source: clampLeadField(`${source}#said-hi`, "source"),
         notes: "Said hi on WhatsApp (direct chat opened)",
@@ -277,6 +283,20 @@ const WhatsAppLeadDialog = ({
                 inputMode="tel"
                 autoComplete="tel"
                 placeholder="0803 000 0000"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="wa-lead-email">
+                Email <span className="text-muted-foreground font-normal">(optional)</span>
+              </Label>
+              <Input
+                id="wa-lead-email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                placeholder="you@example.com"
               />
             </div>
             <div className="space-y-1.5">

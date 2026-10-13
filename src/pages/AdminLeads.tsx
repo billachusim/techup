@@ -45,6 +45,8 @@ type Lead = {
   channel: string;
   contact: string;
   school: string | null;
+  email: string | null;
+  location: string | null;
   interest: string;
   source: string | null;
   notes: string | null;
@@ -53,6 +55,12 @@ type Lead = {
 };
 
 const interestLabel = (interest: string) => INTEREST_LABEL[interest] ?? interest.replace(/_/g, " ");
+
+// Older WhatsApp-dialog leads stored the city in "school"; newer ones use "location".
+const CITY_IN_SCHOOL = new Set(["community_join", "whatsapp_chat"]);
+const leadEmail = (l: Lead) => l.email || (l.contact.includes("@") ? l.contact : null);
+const leadLocation = (l: Lead) => l.location || (CITY_IN_SCHOOL.has(l.interest) ? l.school : null);
+const leadSchool = (l: Lead) => (CITY_IN_SCHOOL.has(l.interest) ? null : l.school);
 
 const looksLikePhone = (contact: string) => !contact.includes("@") && contact.replace(/\D/g, "").length >= 10;
 
@@ -86,7 +94,7 @@ export default function AdminLeads() {
     const supabase = await getSupabase();
     const { data, error } = await supabase
       .from("leads")
-      .select("id, name, channel, contact, school, interest, source, notes, status, created_at")
+      .select("id, name, channel, contact, email, location, school, interest, source, notes, status, created_at")
       .order("created_at", { ascending: false })
       .limit(1000);
     setLoading(false);
@@ -127,7 +135,7 @@ export default function AdminLeads() {
       (l) =>
         (filter === "all" || l.status === filter) &&
         (interest === "all" || l.interest === interest) &&
-        (!q || [l.name, l.contact, l.school, l.notes].some((v) => v?.toLowerCase().includes(q))),
+        (!q || [l.name, l.contact, l.email, l.location, l.school, l.notes].some((v) => v?.toLowerCase().includes(q))),
     );
   }, [inbox, filter, interest, query]);
 
@@ -138,7 +146,9 @@ export default function AdminLeads() {
       { header: "Name", value: (l) => l.name },
       { header: "Contact", value: (l) => l.contact },
       { header: "Channel", value: (l) => l.channel },
-      { header: "School", value: (l) => l.school },
+      { header: "Email", value: (l) => leadEmail(l) },
+      { header: "Location", value: (l) => leadLocation(l) },
+      { header: "School", value: (l) => leadSchool(l) },
       { header: "Interest", value: (l) => interestLabel(l.interest) },
       { header: "Status", value: (l) => STATUS_LABEL[l.status as LeadStatus] ?? l.status },
       { header: "Opened WhatsApp", value: (l) => (openedWhatsApp.has(l.contact.toLowerCase()) ? "Yes" : "") },
@@ -225,7 +235,7 @@ export default function AdminLeads() {
                 <Input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search name, phone, email, school or notes"
+                  placeholder="Search name, phone, email, location, school or notes"
                   className="pl-9"
                   aria-label="Search leads"
                 />
@@ -309,12 +319,26 @@ export default function AdminLeads() {
                               </Select>
                             </div>
                           </div>
-                          {(lead.school || lead.notes || lead.source) && (
+                          {(leadEmail(lead) || leadLocation(lead) || leadSchool(lead) || lead.notes || lead.source) && (
                             <dl className="grid gap-1 text-sm text-muted-foreground sm:grid-cols-[auto_1fr] sm:gap-x-3">
-                              {lead.school && (
+                              {leadEmail(lead) && (
+                                <>
+                                  <dt className="font-medium text-foreground">Email</dt>
+                                  <dd className="break-all">
+                                    <a className="underline underline-offset-2" href={`mailto:${leadEmail(lead)}`}>{leadEmail(lead)}</a>
+                                  </dd>
+                                </>
+                              )}
+                              {leadLocation(lead) && (
+                                <>
+                                  <dt className="font-medium text-foreground">Location</dt>
+                                  <dd>{leadLocation(lead)}</dd>
+                                </>
+                              )}
+                              {leadSchool(lead) && (
                                 <>
                                   <dt className="font-medium text-foreground">School</dt>
-                                  <dd>{lead.school}</dd>
+                                  <dd>{leadSchool(lead)}</dd>
                                 </>
                               )}
                               {lead.notes && (

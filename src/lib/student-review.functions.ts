@@ -28,7 +28,7 @@ export const listStudentWork = createServerFn({ method: "POST" })
     const ids = [...new Set((rows ?? []).map((r) => r.user_id))];
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: profiles } = ids.length
-      ? await supabaseAdmin.from("profiles").select("id, name, email").in("id", ids)
+      ? await supabaseAdmin.from("profiles").select("id, name, email, location").in("id", ids)
       : { data: [] };
     const byId = new Map((profiles ?? []).map((p) => [p.id, p]));
     // Running average per student across reviewed work.
@@ -46,6 +46,7 @@ export const listStudentWork = createServerFn({ method: "POST" })
         ...r,
         student_name: byId.get(r.user_id)?.name || "Student",
         student_email: byId.get(r.user_id)?.email || null,
+        student_location: byId.get(r.user_id)?.location || null,
         average_score: a ? Math.round(a.sum / a.n) : null,
         reviewed_count: a?.n ?? 0,
       };

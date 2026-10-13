@@ -11,7 +11,7 @@ interface SignupFormProps {
 }
 
 export const SignupForm = ({ onSuccess }: SignupFormProps) => {
-  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", password: "", location: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const { toast } = useToast();
@@ -43,7 +43,7 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
         password: formData.password,
         options: {
           emailRedirectTo: window.location.origin,
-          data: { full_name: formData.name.trim() },
+          data: { full_name: formData.name.trim(), ...(formData.location.trim() ? { location: formData.location.trim().slice(0, 160) } : {}) },
         },
       });
 

@@ -995,6 +995,7 @@ export type Database = {
           faculty_id: string | null
           id: string
           learning_mode: string | null
+          location: string | null
           name: string
           onboarding_email_sent_at: string | null
           phone: string | null
@@ -1013,6 +1014,7 @@ export type Database = {
           faculty_id?: string | null
           id: string
           learning_mode?: string | null
+          location?: string | null
           name?: string
           onboarding_email_sent_at?: string | null
           phone?: string | null
@@ -1031,6 +1033,7 @@ export type Database = {
           faculty_id?: string | null
           id?: string
           learning_mode?: string | null
+          location?: string | null
           name?: string
           onboarding_email_sent_at?: string | null
           phone?: string | null

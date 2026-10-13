@@ -847,8 +847,10 @@ export type Database = {
           channel: string
           contact: string
           created_at: string
+          email: string | null
           id: string
           interest: string
+          location: string | null
           name: string | null
           notes: string | null
           school: string | null
@@ -860,8 +862,10 @@ export type Database = {
           channel: string
           contact: string
           created_at?: string
+          email?: string | null
           id?: string
           interest: string
+          location?: string | null
           name?: string | null
           notes?: string | null
           school?: string | null
@@ -873,8 +877,10 @@ export type Database = {
           channel?: string
           contact?: string
           created_at?: string
+          email?: string | null
           id?: string
           interest?: string
+          location?: string | null
           name?: string | null
           notes?: string | null
           school?: string | null

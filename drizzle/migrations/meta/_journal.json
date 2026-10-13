@@ -43,6 +43,13 @@
       "when": 1791880989479,
       "tag": "0005_profile_location",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791882077691,
+      "tag": "0006_reschedule_digest_and_recover",
+      "breakpoints": true
     }
   ]
 }

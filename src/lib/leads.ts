@@ -10,6 +10,8 @@ export const LEAD_LIMITS = {
   school: 160,
   notes: 1000,
   source: 200,
+  email: 254,
+  location: 160,
 } as const;
 
 export const clampLeadField = (

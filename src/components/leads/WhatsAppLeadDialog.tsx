@@ -91,6 +91,7 @@ const WhatsAppLeadDialog = ({
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [city, setCity] = useState("");
+  const [email, setEmail] = useState("");
   const [topic, setTopic] = useState<string>(variant === "chat" ? "" : "");
   const [status, setStatus] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState<string | null>(null);

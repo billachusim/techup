@@ -159,7 +159,9 @@ export function ScheduledJobsHealth() {
             const lastOk = list?.find((r) => r.success);
             const missing = cron.isSuccess && !job;
             const paused = job && !job.active;
-            const stuck = !runs.isLoading && list != null && !missing && !paused && isStuck(schedule, lastOk?.ran_at);
+            // Run logging started after the last scheduled date, so an empty history is "not run yet", not stuck.
+            const stuck =
+              !runs.isLoading && list != null && list.length > 0 && !missing && !paused && isStuck(schedule, lastOk?.ran_at);
             return (
               <li key={k.fn} className="py-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="space-y-1">

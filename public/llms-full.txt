@@ -482,16 +482,16 @@ A: Yes. During school holidays we run teen tracks in Digital Creation, Coding, A
 
 ## Other pages
 
-- Home (https://techfaculty.ng/): FMSTI-licensed bootcamps in software engineering, data science, AI and cybersecurity. 6,000+ students trained, 75% employed. Learn in person or online.
+- Home (https://techfaculty.ng/): Licensed by FMSTI through NBTI. Coding, data, AI and cybersecurity from ₦50,000; 6,000+ trained, 75% employed. 22 campuses or online, free on-site SIWES.
 - About Us: Our Mission & Story (https://techfaculty.ng/about): Tech Faculty NG — licensed by FMSTI via NBTI. We train, certify, and place the next generation of Nigerian tech professionals from Nnewi, Anambra State.
 - Blog: Tech Career Tips & Guides (https://techfaculty.ng/blog): Tech career guides, course deep-dives, SIWES tips, and AI insights from Tech Faculty NG. Practical advice for starting and growing your tech career in Nigeria.
 - Business Partnerships (https://techfaculty.ng/business-partnerships): Partner with Tech Faculty NG for corporate training, AI workshops, business digitization, and tech talent pipelines. FMSTI-licensed, based in Nnewi, Nigeria.
 - Tech Jobs & Talent Marketplace (https://techfaculty.ng/careers): Build one talent profile and get matched to verified tech roles and business projects across Nigeria and Africa, or hire skilled African talent.
 - Tech Departments & Bootcamps in Nigeria (https://techfaculty.ng/departments): Explore Tech Faculty departments: web development, data science, AI, cybersecurity, UI/UX design, digital marketing and more — in person nationwide or online.
-- Tech Events in Nigeria 2026: AI & Data (https://techfaculty.ng/events): Find upcoming tech events in Nigeria and Africa: AI and data conferences, developer meetups, hackathons, cybersecurity workshops, remote work summits and free online webinars, updated weekly.
+- Tech Events in Nigeria 2026: AI & Data (https://techfaculty.ng/events): Find upcoming tech events in Nigeria and Africa: AI and data conferences, developer meetups, hackathons, cybersecurity workshops, remote work summits and free online webinars, updated twice a month.
 - Hire Vetted Tech Talent in Nigeria (https://techfaculty.ng/hire): Tell us what your business needs and we match you with vetted Nigerian tech talent — developers, data analysts, designers, marketers and support — remote or on-site.
 - Tech Hubs in Nigeria by City (https://techfaculty.ng/hubs): Find tech hubs, innovation centres and training institutes across Nigeria by city and course area. Tell us what you want to study and we help you enrol.
-- Tech Training Campuses Across Nigeria (https://techfaculty.ng/locations): Tech Faculty operates physically inside Technology Incubation Centres nationwide via our partnership with the National Board for Technology Incubation.
+- 22 Tech Training Campuses Across Nigeria (https://techfaculty.ng/locations): Find a Tech Faculty NG campus in Lagos, Abuja, Enugu, Kano, Nnewi and 17 more cities. In-person tech courses and SIWES, most at Technology Incubation Centres.
 - Build Apps with Lovable (https://techfaculty.ng/lovable): Tech Faculty recommends Lovable — the AI platform we use to build production web apps. Describe what you want, ship in minutes.
 - Student Outcomes (https://techfaculty.ng/outcomes): How Tech Faculty NG counts its 6,000+ students trained and 75% employed within six months, with live Talent Pool numbers, Google reviews and certificate checks.
 - Software Products (https://techfaculty.ng/products): Explore the mobile apps built by Tech Faculty and Social Faculty — Dear Claire, Alter Ego, Eavesdrop and AI Clopedia, live on the App Store and Google Play.

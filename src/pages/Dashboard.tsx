@@ -14,6 +14,7 @@ import { HandoutModal } from "@/components/HandoutModal";
 import { CertificateCard } from "@/components/CertificateCard";
 import { StudentClassroom } from "@/components/student/StudentClassroom";
 import { ReferralCard } from "@/components/student/ReferralCard";
+import { LocationPrompt } from "@/components/student/LocationPrompt";
 import { isFreePlan } from "../../supabase/functions/_shared/enrollment-access.ts";
 
 import { useServerFn } from "@tanstack/react-start";
@@ -398,6 +399,7 @@ const Dashboard = () => {
                 Sign Out
               </Button>
             </div>
+            <LocationPrompt />
 
             <div className="grid md:grid-cols-2 gap-6">
               {/* Profile Certificate Card */}

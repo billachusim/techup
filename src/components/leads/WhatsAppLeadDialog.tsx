@@ -126,7 +126,9 @@ const WhatsAppLeadDialog = ({
       setError(
         name.trim().length < 2
           ? "Please enter your name."
-          : "Enter a valid WhatsApp number (at least 10 digits).",
+          : !emailOk
+            ? "That email doesn't look right — fix it or leave it blank."
+            : "Enter a valid WhatsApp number (at least 10 digits).",
       );
       return;
     }
@@ -145,7 +147,8 @@ const WhatsAppLeadDialog = ({
       name: clampLeadField(name, "name"),
       channel: "whatsapp",
       contact: clampLeadField(phone, "contact") ?? "",
-      school: clampLeadField(city, "school"),
+      email: clampLeadField(email.toLowerCase(), "email"),
+      location: clampLeadField(city, "location"),
       interest: variant === "community" ? "community_join" : "whatsapp_chat",
       source: clampLeadField(source, "source"),
       notes: clampLeadField(notes, "notes"),
@@ -174,7 +177,8 @@ const WhatsAppLeadDialog = ({
         name: clampLeadField(name, "name"),
         channel: "whatsapp",
         contact: clampLeadField(phone, "contact") ?? "",
-        school: clampLeadField(city, "school"),
+        email: clampLeadField(email.toLowerCase(), "email"),
+        location: clampLeadField(city, "location"),
         interest: variant === "community" ? "community_join" : "whatsapp_chat",
         source: clampLeadField(`${source}#said-hi`, "source"),
         notes: "Said hi on WhatsApp (direct chat opened)",

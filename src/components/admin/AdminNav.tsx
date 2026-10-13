@@ -8,7 +8,7 @@ const ITEMS = [
   { to: "/admin/leads", label: "Leads", adminOnly: true },
   { to: "/admin/students", label: "Students" },
   { to: "/admin/lookup", label: "Lookup", adminOnly: true },
-  { to: "/admin/talent", label: "Talent" },
+  { to: "/admin/talent", label: "Jobs" },
   { to: "/admin/certificates", label: "Certificates", adminOnly: true },
   { to: "/admin/referrals", label: "Referrals", adminOnly: true },
   { to: "/admin/activity", label: "Activity", adminOnly: true },

@@ -286,6 +286,20 @@ const WhatsAppLeadDialog = ({
               />
             </div>
             <div className="space-y-1.5">
+              <Label htmlFor="wa-lead-email">
+                Email <span className="text-muted-foreground font-normal">(optional)</span>
+              </Label>
+              <Input
+                id="wa-lead-email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+              />
+            </div>
+            <div className="space-y-1.5">
               <Label htmlFor="wa-lead-city">City / State</Label>
               <Select value={city} onValueChange={setCity}>
                 <SelectTrigger id="wa-lead-city">

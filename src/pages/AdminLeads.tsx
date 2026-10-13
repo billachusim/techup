@@ -235,7 +235,7 @@ export default function AdminLeads() {
                 <Input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search name, phone, email, school or notes"
+                  placeholder="Search name, phone, email, location, school or notes"
                   className="pl-9"
                   aria-label="Search leads"
                 />

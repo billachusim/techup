@@ -106,7 +106,7 @@ export default function AdminStudents() {
                     <div className="min-w-0">
                       <p className="font-semibold">{r.class_number ? `Class ${r.class_number}: ` : ""}{r.title}</p>
                       <p className="text-xs text-muted-foreground">
-                        {r.student_name} · {r.faculty_id} · {r.course_name ?? "Programme"} · {new Date(r.created_at).toLocaleDateString()}
+                        {r.student_name}{r.student_email ? ` · ${r.student_email}` : ""} · {r.faculty_id} · {r.course_name ?? "Programme"} · {new Date(r.created_at).toLocaleDateString()}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         Running score: {r.average_score != null ? `${r.average_score}% over ${r.reviewed_count} reviewed` : "not scored yet"}

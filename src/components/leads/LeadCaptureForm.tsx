@@ -79,6 +79,7 @@ const LeadCaptureForm = ({
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [school, setSchool] = useState("");
+  const [location, setLocation] = useState("");
   const [extras, setExtras] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
@@ -126,6 +127,8 @@ const LeadCaptureForm = ({
       channel,
       contact: clampLeadField(contact, "contact") ?? "",
       school: clampLeadField(school, "school"),
+      location: clampLeadField(location, "location"),
+      email: channel === "email" ? clampLeadField(contact.toLowerCase(), "email") : null,
       interest,
       source: clampLeadField(source, "source"),
       notes: clampLeadField(notes, "notes"),
@@ -154,6 +157,8 @@ const LeadCaptureForm = ({
         channel,
         contact: clampLeadField(contact, "contact") ?? "",
         school: clampLeadField(school, "school"),
+        location: clampLeadField(location, "location"),
+        email: channel === "email" ? clampLeadField(contact.toLowerCase(), "email") : null,
         interest,
         source: clampLeadField(`${source}#whatsapp-unlock`, "source"),
         notes: clampLeadField(
@@ -326,7 +331,19 @@ const LeadCaptureForm = ({
             required
           />
         </div>
-        <div className={`space-y-1.5 ${compact ? "" : "sm:col-span-2"}`}>
+        <div className="space-y-1.5">
+          <Label htmlFor={`lead-location-${interest}`}>
+            City / State <span className="text-muted-foreground font-normal">(optional)</span>
+          </Label>
+          <Input
+            id={`lead-location-${interest}`}
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="e.g. Awka, Anambra"
+            autoComplete="address-level2"
+          />
+        </div>
+        <div className="space-y-1.5">
           <Label htmlFor={`lead-school-${interest}`}>
             School or institution <span className="text-muted-foreground font-normal">(optional)</span>
           </Label>

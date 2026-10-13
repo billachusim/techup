@@ -288,15 +288,16 @@ export default function AdminLeads() {
                               </div>
                             </div>
                             <div className="flex items-center gap-2">
-                              {phone ? (
+                              {phone && (
                                 <Button asChild size="sm" className="bg-[#25D366] text-white hover:bg-[#1ebe5b]">
                                   <a href={whatsappUrl(lead)} target="_blank" rel="noopener noreferrer">
                                     <MessageCircle className="h-4 w-4 mr-1.5" /> WhatsApp
                                   </a>
                                 </Button>
-                              ) : (
+                              )}
+                              {leadEmail(lead) && (
                                 <Button asChild size="sm" variant="outline">
-                                  <a href={`mailto:${lead.contact}`}>
+                                  <a href={`mailto:${leadEmail(lead)}`}>
                                     <Mail className="h-4 w-4 mr-1.5" /> Email
                                   </a>
                                 </Button>

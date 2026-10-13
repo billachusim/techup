@@ -103,6 +103,20 @@ export const SignupForm = ({ onSuccess }: SignupFormProps) => {
         </div>
 
         <div>
+          <Label htmlFor="signup-location">City / State <span className="text-muted-foreground">(optional)</span></Label>
+          <Input
+            id="signup-location"
+            value={formData.location}
+            onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+            placeholder="e.g. Nnewi, Anambra"
+            maxLength={160}
+            autoComplete="address-level2"
+          />
+        </div>
+
+
+
+        <div>
           <Label htmlFor="signup-email">Email</Label>
           <Input
             id="signup-email"

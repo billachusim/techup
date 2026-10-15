@@ -124,14 +124,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "UTF-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1.0" },
-      { title: SITE_TITLE },
       { name: "author", content: "Tech Faculty NG" },
       {
         name: "robots",
         content:
           "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
       },
-      { name: "description", content: SITE_DESCRIPTION },
       {
         name: "google-site-verification",
         content: "E02mOgO2uC7YKjc1KT8VMhZlxiDK3Tn-8-Q-w6DVOG8",
@@ -139,14 +137,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Tech Faculty NG" },
       { property: "og:locale", content: "en_NG" },
-      { property: "og:title", content: SITE_TITLE },
-      { property: "og:description", content: SITE_DESCRIPTION },
-      { property: "og:url", content: "https://techfaculty.ng/" },
-      { property: "og:image", content: OG_IMAGE },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

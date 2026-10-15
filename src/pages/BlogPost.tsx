@@ -119,6 +119,7 @@ const BlogPost = () => {
             description: post.description,
             datePublished: post.date,
             dateModified: modified,
+            image: ["https://techfaculty.ng/og/default.jpg"],
             author: authorSchema,
             publisher: {
               "@type": "Organization",

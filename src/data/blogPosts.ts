@@ -1200,8 +1200,8 @@ Our **Data Analytics Bootcamp** covers exactly this stack — Excel → SQL → 
   {
     slug: "cybersecurity-salary-nigeria-2026",
     title: "Cybersecurity Salary Nigeria: 2026 Entry to Senior Guide",
-    seoTitle: "Cybersecurity Salary Nigeria 2026: ₦350k–₦8M | Tech Faculty NG",
-    description: "Junior SOC analysts earn ₦350k–₦700k a month; senior GRC heads reach ₦8M. See 2026 pay for SOC, pentest, GRC and cloud security, plus remote USD rates.",
+    seoTitle: "Cyber Security Salary Nigeria 2026 by Role",
+    description: "Cyber security salary in Nigeria for 2026: junior SOC analysts earn ₦350k–₦700k a month, senior GRC heads up to ₦8M. Pay by role, plus remote USD rates.",
     content: `# Cybersecurity Salary in Nigeria 2026: SOC, Pentest & GRC Pay Bands
 
 *By Bill Achusim · Jul 2, 2026*

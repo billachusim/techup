@@ -11,6 +11,10 @@ export type JobPlatform = {
   signupUrl: string;
   /** One-line description of the work offered */
   blurb: string;
+  /** Optional Google title (before the brand suffix, max ~42 chars) */
+  seoTitle?: string;
+  /** Optional Google description (150-160 chars) */
+  seoDescription?: string;
   /** Longer explanation: work, pay, who it suits */
   about: string;
   faqs: { q: string; a: string }[];
@@ -24,6 +28,8 @@ const nigeriaFaq = (name: string) => ({
 export const jobPlatforms: JobPlatform[] = [
   {
     slug: "micro1",
+    seoTitle: "Micro1 Jobs 2026: Remote Roles Paid in USD",
+    seoDescription: "See open Micro1 jobs Nigerians and Africans can apply for: remote engineering and AI expert roles paid hourly in USD. How the AI interview works and how to get hired.",
     name: "Micro1",
     keyword: "Micro1 Jobs",
     match: ["Micro1"],
@@ -79,6 +85,8 @@ export const jobPlatforms: JobPlatform[] = [
   },
   {
     slug: "outlier",
+    seoTitle: "Outlier AI Jobs 2026: Paid Remote AI Tasks",
+    seoDescription: "Open Outlier AI jobs for Nigerians: get paid hourly to train AI as a writer, coder or biology, maths or chemistry expert. See current roles, pay and how to join.",
     name: "Outlier",
     keyword: "Outlier AI Jobs",
     match: ["Outlier", "Outlier AI"],
@@ -94,6 +102,8 @@ export const jobPlatforms: JobPlatform[] = [
   },
   {
     slug: "handshake-ai",
+    seoTitle: "Handshake AI Jobs: Paid Remote Fellowships",
+    seoDescription: "Handshake AI jobs open to Nigerian students, graduates and PhD experts: remote AI training fellowships paid hourly in USD. See open roles and how to apply today.",
     name: "Handshake AI",
     keyword: "Handshake AI Jobs",
     match: ["Handshake AI", "Handshake"],

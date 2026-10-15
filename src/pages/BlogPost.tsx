@@ -16,7 +16,35 @@ import PostInternalLinks from "@/components/blog/PostInternalLinks";
 import { useAllBlogPosts } from "@/hooks/useBlogPostsData";
 import { formatDate } from "@/components/LastUpdated";
 
+const headingText = (children: unknown): string =>
+  Array.isArray(children)
+    ? children.map(headingText).join("")
+    : typeof children === "string" || typeof children === "number"
+      ? String(children)
+      : children && typeof children === "object" && "props" in children
+        ? headingText((children as { props: { children?: unknown } }).props.children)
+        : "";
+
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/[*_`[\]()]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+/** "## " headings in the post, for the table of contents. */
+const tocItems = (markdown: string) =>
+  [...markdown.matchAll(/^##\s+(.+)$/gm)].map((m) => {
+    const text = m[1].replace(/[*_`]/g, "").replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").trim();
+    return { text, id: slugify(text) };
+  });
+
 const markdownComponents: Components = {
+  h2: ({ node, children, ...props }) => (
+    <h2 id={slugify(headingText(children))} className="scroll-mt-24" {...props}>
+      {children}
+    </h2>
+  ),
   table: ({ node, ...props }) => (
     <div className="not-prose my-8 w-full overflow-x-auto rounded-md border border-border">
       <table className="w-full min-w-[480px] border-collapse text-sm" {...props} />
@@ -188,6 +216,21 @@ const BlogPost = () => {
             />
 
             {isSiwesPost && <SuccessKitCTA source={post.slug} variant="inline" />}
+
+            {tocItems(body).length >= 3 && (
+              <nav aria-label="Table of contents" className="my-8 rounded-lg border border-border bg-muted/40 p-5">
+                <p className="mb-3 font-semibold text-foreground">In this guide</p>
+                <ol className="list-decimal space-y-1.5 pl-5 text-sm">
+                  {tocItems(body).map((item) => (
+                    <li key={item.id}>
+                      <a href={`#${item.id}`} className="text-muted-foreground hover:text-primary hover:underline">
+                        {item.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
 
             {/* Content */}
             {renderMarkdown(firstHalf)}

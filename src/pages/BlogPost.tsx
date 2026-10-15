@@ -217,6 +217,21 @@ const BlogPost = () => {
 
             {isSiwesPost && <SuccessKitCTA source={post.slug} variant="inline" />}
 
+            {tocItems(body).length >= 3 && (
+              <nav aria-label="Table of contents" className="my-8 rounded-lg border border-border bg-muted/40 p-5">
+                <p className="mb-3 font-semibold text-foreground">In this guide</p>
+                <ol className="list-decimal space-y-1.5 pl-5 text-sm">
+                  {tocItems(body).map((item) => (
+                    <li key={item.id}>
+                      <a href={`#${item.id}`} className="text-muted-foreground hover:text-primary hover:underline">
+                        {item.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
+
             {/* Content */}
             {renderMarkdown(firstHalf)}
             {secondHalf && (

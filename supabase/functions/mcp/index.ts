@@ -2183,8 +2183,8 @@ Our **Data Analytics Bootcamp** covers exactly this stack \u2014 Excel \u2192 SQ
   {
     slug: "cybersecurity-salary-nigeria-2026",
     title: "Cybersecurity Salary Nigeria: 2026 Entry to Senior Guide",
-    seoTitle: "Cybersecurity Salary Nigeria 2026: \u20A6350k\u2013\u20A68M | Tech Faculty NG",
-    description: "Junior SOC analysts earn \u20A6350k\u2013\u20A6700k a month; senior GRC heads reach \u20A68M. See 2026 pay for SOC, pentest, GRC and cloud security, plus remote USD rates.",
+    seoTitle: "Cyber Security Salary Nigeria 2026 by Role",
+    description: "Cyber security salary in Nigeria for 2026: junior SOC analysts earn \u20A6350k\u2013\u20A6700k a month, senior GRC heads up to \u20A68M. Pay by role, plus remote USD rates.",
     content: `# Cybersecurity Salary in Nigeria 2026: SOC, Pentest & GRC Pay Bands
 
 *By Bill Achusim \xB7 Jul 2, 2026*

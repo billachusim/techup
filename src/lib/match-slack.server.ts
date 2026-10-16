@@ -92,14 +92,17 @@ export async function sendMatchEmail(matchId: string): Promise<void> {
   const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
   const { data: m } = await supabaseAdmin
     .from("role_matches")
-    .select("id, status, talent_profiles(full_name, email), talent_roles(title, company, assessment_url, interview_url, interview_channel)")
+    .select("id, status, talent_profiles(full_name, email, slack_user_id), talent_roles(title, company, assessment_url, interview_url, interview_channel)")
     .eq("id", matchId)
     .maybeSingle();
   if (!m || !MATCH_EMAIL_STATUSES.includes(m.status) || !m.talent_profiles?.email) return;
   const r = m.talent_roles;
+  const { SLACK_JOIN_URL } = await import("@/data/coursePrograms");
+  // Talent not yet in the workspace can't be added to the pool, so the email carries the join link.
+  const slackUrl = m.talent_profiles.slack_user_id ? null : SLACK_JOIN_URL;
   try {
     await sendTemplateEmail("match-update", m.talent_profiles.email, {
-      templateData: { name: m.talent_profiles.full_name, roleTitle: r?.title, company: r?.company, status: m.status, assessmentUrl: r?.assessment_url, interviewUrl: r?.interview_url, interviewChannel: r?.interview_channel },
+      templateData: { name: m.talent_profiles.full_name, roleTitle: r?.title, company: r?.company, status: m.status, assessmentUrl: r?.assessment_url, interviewUrl: r?.interview_url, interviewChannel: r?.interview_channel, slackUrl },
       idempotencyKey: `match-update-${m.id}-${m.status}`,
     });
   } catch (e) {
@@ -115,4 +118,35 @@ export async function afterMatchStageChange(matchId: string): Promise<void> {
   } catch (e) {
     console.error("match slack failed", (e as Error).message);
   }
+}
+
+/**
+ * Retries the talent-pool invite for matched talent who had no Slack account when they were matched.
+ * Runs with each auto-match rescan, so joining the workspace later is enough.
+ */
+export async function retryPendingSlackPool(): Promise<{ checked: number; added: number }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin
+    .from("role_matches")
+    .select("id, talent_profile_id, talent_profiles!inner(slack_general_joined_at)")
+    .in("status", ["approved", "accepted", "assessment", "interview", "hired", "onboarded"])
+    .is("talent_profiles.slack_general_joined_at", null)
+    .limit(200);
+  const seen = new Set<string>();
+  let added = 0;
+  for (const row of data ?? []) {
+    if (seen.has(row.talent_profile_id)) continue;
+    seen.add(row.talent_profile_id);
+    try {
+      const res = await syncMatchSlack(row.id);
+      if (res.notes.includes("Added to the general talent channel.")) added++;
+      // Joined before this column existed: stamp it so we stop rechecking them.
+      if (res.notes.includes("Already in the general talent channel.")) {
+        await supabaseAdmin.from("talent_profiles").update({ slack_general_joined_at: new Date().toISOString() }).eq("id", row.talent_profile_id);
+      }
+    } catch (e) {
+      console.error("slack pool retry failed", (e as Error).message);
+    }
+  }
+  return { checked: seen.size, added };
 }

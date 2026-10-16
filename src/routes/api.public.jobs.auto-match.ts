@@ -14,7 +14,8 @@ export const Route = createFileRoute("/api/public/jobs/auto-match")({
         const started = Date.now();
         const { runAutoMatch } = await import("@/lib/matching.server");
         try {
-          const res = await runAutoMatch();
+          const { retryPendingSlackPool } = await import("@/lib/match-slack.server");
+          const res = { ...(await runAutoMatch()), slackPool: await retryPendingSlackPool() };
           await supabaseAdmin.from("scheduled_job_runs").insert({
             job: "auto-match", trigger: "cron", success: true, items: res.created,
             report: res, duration_ms: Date.now() - started,

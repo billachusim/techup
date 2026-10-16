@@ -22,6 +22,7 @@ import {
   projectManagerUrl,
   roleBadges,
   roleLocationLabel,
+  hiringStepsText,
 } from "@/lib/talent";
 
 const TalentRoleDetail = () => {

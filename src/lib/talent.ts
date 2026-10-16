@@ -160,6 +160,27 @@ export const slugify = (value: string) =>
     .replace(/^-+|-+$/g, "")
     .slice(0, 80);
 
+export const SELECTION_PROCESS_LABEL: Record<string, string> = {
+  direct: "No assessment or interview",
+  assessment: "Assessment",
+  interview: "Interview",
+  assessment_interview: "Assessment and interview",
+};
+
+export const INTERVIEW_CHANNEL_LABEL: Record<string, string> = {
+  whatsapp: "WhatsApp call",
+  google_meet: "Google Meet",
+};
+
+export const hiringStepsText = (role: { selection_process?: string | null; interview_channel?: string | null }) => {
+  const p = role.selection_process ?? "direct";
+  const via = INTERVIEW_CHANNEL_LABEL[role.interview_channel ?? "whatsapp"] ?? "WhatsApp call";
+  if (p === "assessment") return "Shortlisted talent will be emailed a short assessment link. Selected talent are then added to the project Slack.";
+  if (p === "interview") return `Shortlisted talent will be emailed a link to book an interview (${via}). Selected talent are then added to the project Slack.`;
+  if (p === "assessment_interview") return `Shortlisted talent will be emailed an assessment link, then a link to book an interview (${via}). Selected talent are then added to the project Slack.`;
+  return "No assessment or interview. Selected talent are added straight to the project Slack.";
+};
+
 export const MATCH_STATUS_LABEL: Record<string, string> = {
   suggested: "Awaiting review",
   approved: "Shared with talent",

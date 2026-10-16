@@ -11,6 +11,7 @@ import {
   introApproved,
   hiringRequestReceived,
   hiringRequestAdmin,
+  hrMessage,
 } from './marketplace'
 import { adminMorningDigest } from './admin'
 import { studentWelcome, classUnlocked, studentWorkReviewed, graduateReviewRequest, checkoutReminder, paymentConfirmed } from './student'
@@ -46,6 +47,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'intro-approved': introApproved,
   'hiring-request-received': hiringRequestReceived,
   'hiring-request-admin': hiringRequestAdmin,
+  'hr-message': hrMessage,
   'student-welcome': studentWelcome,
   'class-unlocked': classUnlocked,
   'student-work-reviewed': studentWorkReviewed,

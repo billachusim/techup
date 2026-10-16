@@ -57,6 +57,13 @@
       "when": 1792151495046,
       "tag": "0007_auto_matching_hr_api",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792152971596,
+      "tag": "0008_role_pay_text",
+      "breakpoints": true
     }
   ]
 }

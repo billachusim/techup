@@ -75,7 +75,7 @@ const emptyRole = {
   title: "", role_kind: "internal", company: "Tech Faculty", city: "", country: "Nigeria",
   is_remote: "true", employment_type: "full_time", summary: "", description: "",
   responsibilities: "", required_skills: "", nice_to_have: "", seniority: "mid",
-  budget_min: "", budget_max: "", budget_currency: "NGN", budget_unit: "MONTH", openings: "1",
+  budget_min: "", budget_max: "", pay_text: "", budget_currency: "NGN", budget_unit: "MONTH", openings: "1",
 };
 
 const AdminTalent = () => {
@@ -195,6 +195,7 @@ const AdminTalent = () => {
         budget_max: newRole.budget_max ? Number(newRole.budget_max) : null,
         budget_currency: newRole.budget_currency,
         budget_unit: newRole.budget_unit,
+        pay_text: newRole.pay_text.trim() || null,
         openings: Number(newRole.openings) || 1,
         status: "draft",
         created_by: auth.user?.id ?? null,
@@ -569,6 +570,10 @@ const AdminTalent = () => {
                     <div>
                       <Label>Pay to</Label>
                       <Input type="number" value={newRole.budget_max} onChange={(e) => setNewRole({ ...newRole, budget_max: e.target.value })} />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <Label>Pay wording (optional, shown instead of the range)</Label>
+                      <Input value={newRole.pay_text} placeholder="e.g. Monthly, to be agreed" onChange={(e) => setNewRole({ ...newRole, pay_text: e.target.value })} />
                     </div>
                     <div>
                       <Label>Currency</Label>

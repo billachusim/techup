@@ -23,13 +23,13 @@ export const ROLE_KIND_LABEL: Record<string, string> = {
  * anything a candidate needs to notice at a glance.
  */
 export const roleBadges = (
-  role: Pick<TalentRole, "category" | "is_paid_training" | "employment_type" | "openings" | "created_at" | "is_remote">,
+  role: Pick<TalentRole, "category" | "is_paid_training" | "employment_type" | "openings" | "created_at" | "is_remote"> & { city?: string | null },
 ): string[] => {
   const badges: string[] = [];
   if (role.category) badges.push(role.category);
   if (role.is_paid_training) badges.push("Paid training");
   badges.push(EMPLOYMENT_LABEL[role.employment_type] ?? role.employment_type);
-  if (role.is_remote) badges.push("Remote");
+  if (role.is_remote) badges.push(role.city ? "Hybrid" : "Remote");
   const days = (Date.now() - new Date(role.created_at).getTime()) / 86_400_000;
   if (days <= 14) badges.push("New");
   return badges;
@@ -73,7 +73,10 @@ const currencySymbol = (code: string) => (code === "USD" ? "$" : code === "NGN" 
 export const formatMoney = (amount: number, currency: string) =>
   `${currencySymbol(currency)}${Math.round(amount).toLocaleString("en-NG")}`;
 
-export const formatBudget = (role: Pick<TalentRole, "budget_min" | "budget_max" | "budget_currency" | "budget_unit">) => {
+export const formatBudget = (
+  role: Pick<TalentRole, "budget_min" | "budget_max" | "budget_currency" | "budget_unit"> & { pay_text?: string | null },
+) => {
+  if (role.pay_text?.trim()) return role.pay_text.trim();
   const unit = UNIT_LABEL[role.budget_unit] ?? role.budget_unit.toLowerCase();
   if (role.budget_min && role.budget_max) {
     return `${formatMoney(role.budget_min, role.budget_currency)} – ${formatMoney(role.budget_max, role.budget_currency)} / ${unit}`;

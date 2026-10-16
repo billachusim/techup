@@ -1,0 +1,1 @@
+ALTER TABLE public.talent_roles ADD COLUMN IF NOT EXISTS pay_text text;

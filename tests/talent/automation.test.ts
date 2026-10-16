@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { autoMatchBlocker, pickAutoMatches, type MatchRole } from "@/lib/matching";
-import { isHrStatus, sameKey, toMatchStatus, fillTemplate } from "@/lib/hr-api-rules";
+import { autoMatchBlocker, pickAutoMatches, type MatchRole } from "../../src/lib/matching";
+import { isHrStatus, sameKey, toMatchStatus, fillTemplate } from "../../src/lib/hr-api-rules";
 
 const role: MatchRole = {
   id: "r1", status: "published", applications_closed: false, openings: 2,

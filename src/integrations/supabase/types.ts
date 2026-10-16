@@ -1814,6 +1814,7 @@ export type Database = {
           manager_user_id: string | null
           nice_to_have: string[]
           openings: number
+          pay_text: string | null
           project_brief: string | null
           required_skills: string[]
           responsibilities: string[]
@@ -1854,6 +1855,7 @@ export type Database = {
           manager_user_id?: string | null
           nice_to_have?: string[]
           openings?: number
+          pay_text?: string | null
           project_brief?: string | null
           required_skills?: string[]
           responsibilities?: string[]
@@ -1894,6 +1896,7 @@ export type Database = {
           manager_user_id?: string | null
           nice_to_have?: string[]
           openings?: number
+          pay_text?: string | null
           project_brief?: string | null
           required_skills?: string[]
           responsibilities?: string[]

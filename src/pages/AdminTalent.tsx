@@ -25,7 +25,7 @@ import {
   APPLICATION_STATUS_LABEL,
   ENGAGEMENT_STATUS_LABEL,
   DELIVERABLE_STATUS_LABEL,
-  ROLE_KIND_LABEL,
+  ROLE_KIND_LABEL, SELECTION_PROCESS_LABEL,
   formatMoney,
   parseList,
   slugify,
@@ -76,6 +76,7 @@ const emptyRole = {
   is_remote: "true", employment_type: "full_time", summary: "", description: "",
   responsibilities: "", required_skills: "", nice_to_have: "", seniority: "mid",
   budget_min: "", budget_max: "", pay_text: "", budget_currency: "NGN", budget_unit: "MONTH", openings: "1",
+  selection_process: "direct", assessment_url: "", interview_url: "", interview_channel: "whatsapp",
 };
 
 const AdminTalent = () => {
@@ -197,6 +198,10 @@ const AdminTalent = () => {
         budget_unit: newRole.budget_unit,
         pay_text: newRole.pay_text.trim() || null,
         openings: Number(newRole.openings) || 1,
+        selection_process: newRole.selection_process,
+        assessment_url: newRole.assessment_url.trim() || null,
+        interview_url: newRole.interview_url.trim() || null,
+        interview_channel: newRole.interview_channel,
         status: "draft",
         created_by: auth.user?.id ?? null,
       });
@@ -208,6 +213,22 @@ const AdminTalent = () => {
       toast({ title: "Could not create the role", description: err instanceof Error ? err.message : "", variant: "destructive" });
     } finally {
       setCreating(false);
+    }
+  };
+
+  const updateHiring = async (id: string, patch: { selection_process?: string; assessment_url?: string | null; interview_url?: string | null; interview_channel?: string }) => {
+    const { error } = await supabase.from("talent_roles").update(patch).eq("id", id);
+    if (error) { toast({ title: "Could not save hiring steps", description: error.message, variant: "destructive" }); return; }
+    toast({ title: "Hiring steps saved" });
+    load();
+  };
+
+  const emailSlackLink = async (matchId: string) => {
+    try {
+      const res = (await notifyMarketplaceEvent({ data: { event: "slack_link", id: matchId } })) as { ok: boolean; reason?: string };
+      toast(res.ok ? { title: "Slack link emailed" } : { title: "Could not email the Slack link", description: res.reason, variant: "destructive" });
+    } catch (err) {
+      toast({ title: "Could not email the Slack link", description: err instanceof Error ? err.message : undefined, variant: "destructive" });
     }
   };
 
@@ -575,6 +596,42 @@ const AdminTalent = () => {
                       <Label>Pay wording (optional, shown instead of the range)</Label>
                       <Input value={newRole.pay_text} placeholder="e.g. Monthly, to be agreed" onChange={(e) => setNewRole({ ...newRole, pay_text: e.target.value })} />
                     </div>
+                    <div className="sm:col-span-2">
+                      <Label>Hiring steps</Label>
+                      <Select value={newRole.selection_process} onValueChange={(v) => setNewRole({ ...newRole, selection_process: v })}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="direct">No assessment or interview</SelectItem>
+                          <SelectItem value="assessment">Assessment</SelectItem>
+                          <SelectItem value="interview">Interview</SelectItem>
+                          <SelectItem value="assessment_interview">Assessment and interview</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    {newRole.selection_process.includes("assessment") && (
+                      <div className="sm:col-span-2">
+                        <Label>Assessment link (emailed at the assessment stage)</Label>
+                        <Input value={newRole.assessment_url} placeholder="https://forms.gle/…" onChange={(e) => setNewRole({ ...newRole, assessment_url: e.target.value })} />
+                      </div>
+                    )}
+                    {newRole.selection_process.includes("interview") && (
+                      <>
+                        <div>
+                          <Label>Interview booking link</Label>
+                          <Input value={newRole.interview_url} placeholder="https://calendar.app.google/…" onChange={(e) => setNewRole({ ...newRole, interview_url: e.target.value })} />
+                        </div>
+                        <div>
+                          <Label>Interview on</Label>
+                          <Select value={newRole.interview_channel} onValueChange={(v) => setNewRole({ ...newRole, interview_channel: v })}>
+                            <SelectTrigger><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="whatsapp">WhatsApp call</SelectItem>
+                              <SelectItem value="google_meet">Google Meet</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </>
+                    )}
                     <div>
                       <Label>Currency</Label>
                       <Select value={newRole.budget_currency} onValueChange={(v) => setNewRole({ ...newRole, budget_currency: v })}>
@@ -678,6 +735,46 @@ const AdminTalent = () => {
                             />
                             %
                           </label>
+                        </div>
+                        <div className="grid gap-3 rounded-md bg-muted/40 p-2 sm:grid-cols-4">
+                          <div>
+                            <Label className="text-xs">Hiring steps</Label>
+                            <Select value={role.selection_process} onValueChange={(v) => updateHiring(role.id, { selection_process: v })}>
+                              <SelectTrigger className="mt-1 h-8"><SelectValue /></SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="direct">No assessment or interview</SelectItem>
+                                <SelectItem value="assessment">Assessment</SelectItem>
+                                <SelectItem value="interview">Interview</SelectItem>
+                                <SelectItem value="assessment_interview">Assessment and interview</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          {role.selection_process.includes("assessment") && (
+                            <div>
+                              <Label className="text-xs">Assessment link</Label>
+                              <Input className="mt-1 h-8" key={`a-${role.assessment_url}`} defaultValue={role.assessment_url ?? ""} placeholder="https://…"
+                                onBlur={(e) => { const v = e.target.value.trim() || null; if (v !== role.assessment_url) void updateHiring(role.id, { assessment_url: v }); }} />
+                            </div>
+                          )}
+                          {role.selection_process.includes("interview") && (
+                            <>
+                              <div>
+                                <Label className="text-xs">Interview booking link</Label>
+                                <Input className="mt-1 h-8" key={`i-${role.interview_url}`} defaultValue={role.interview_url ?? ""} placeholder="https://calendar.app.google/…"
+                                  onBlur={(e) => { const v = e.target.value.trim() || null; if (v !== role.interview_url) void updateHiring(role.id, { interview_url: v }); }} />
+                              </div>
+                              <div>
+                                <Label className="text-xs">Interview on</Label>
+                                <Select value={role.interview_channel} onValueChange={(v) => updateHiring(role.id, { interview_channel: v })}>
+                                  <SelectTrigger className="mt-1 h-8"><SelectValue /></SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="whatsapp">WhatsApp call</SelectItem>
+                                    <SelectItem value="google_meet">Google Meet</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            </>
+                          )}
                         </div>
                         <div className="flex flex-wrap items-end gap-2">
                           <div className="min-w-[16rem] flex-1">
@@ -909,6 +1006,9 @@ const AdminTalent = () => {
                             {slackBusyMatch === m.id ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : null}
                             Slack access
                           </Button>
+                          <Button size="sm" variant="ghost" onClick={() => emailSlackLink(m.id)}>
+                            Email Slack link
+                          </Button>
                         </div>
                       </div>
                     ))}
@@ -963,7 +1063,7 @@ const AdminTalent = () => {
                         </p>
                         <p className="mt-2 text-sm text-muted-foreground">{b.description}</p>
                         <p className="mt-2 text-xs text-muted-foreground">
-                          {b.skills_needed.join(", ")}{b.budget_text ? ` · budget ${b.budget_text}` : ""}{b.timeline ? ` · ${b.timeline}` : ""}
+                          {b.skills_needed.join(", ")}{b.budget_text ? ` · budget ${b.budget_text}` : ""}{b.timeline ? ` · ${b.timeline}` : ""} · {SELECTION_PROCESS_LABEL[b.selection_process] ?? b.selection_process}
                         </p>
                       </div>
                       <Select value={b.status} onValueChange={(v) => setBriefStatus(b.id, v)}>

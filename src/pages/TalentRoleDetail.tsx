@@ -22,6 +22,7 @@ import {
   projectManagerUrl,
   roleBadges,
   roleLocationLabel,
+  hiringStepsText,
 } from "@/lib/talent";
 
 const TalentRoleDetail = () => {
@@ -251,6 +252,11 @@ const TalentRoleDetail = () => {
               </div>
             )}
 
+            <div>
+              <h2 className="mb-2 text-xl font-semibold">Hiring steps</h2>
+              <p className="text-muted-foreground">{hiringStepsText(role)}</p>
+            </div>
+
             {role.nice_to_have.length > 0 && (
               <div>
                 <h2 className="mb-2 text-xl font-semibold">Nice to have</h2>
@@ -265,7 +271,7 @@ const TalentRoleDetail = () => {
             <section className="mt-10 rounded-lg border border-primary/40 bg-primary/5 p-6">
               <h2 className="text-lg font-semibold">You have been matched to this role</h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                The next step is a short assessment or interview over WhatsApp. If you do not hear back within two days,
+                {role.selection_process === "direct" ? "Next you will be added to the project Slack." : "Watch your email for the assessment or interview link."} If you do not hear back within two days,
                 message the project manager yourself.
               </p>
               <div className="mt-4 flex flex-wrap gap-3">

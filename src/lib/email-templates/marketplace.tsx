@@ -46,14 +46,28 @@ const STATUS_COPY: Record<string, { title: string; body: string }> = {
   assessment: { title: 'Next step: assessment', body: 'You have moved to the assessment stage. Our team will share the assessment on WhatsApp shortly.' },
   interview: { title: 'Next step: interview', body: 'You have moved to the interview stage. Our team will reach out on WhatsApp to schedule it.' },
   hired: { title: "Congratulations, you're hired", body: 'You are now working on this project. Log your weekly work from your dashboard so it counts toward your pay.' },
+  slack_link: { title: 'Join your project Slack', body: 'You have been selected for this project. Join the project Slack channel with the button below to meet the team and get your first tasks.' },
 }
-const MatchUpdate = ({ name, roleTitle, company, status }: { name?: string; roleTitle?: string; company?: string; status?: string }) => {
+const MatchUpdate = ({ name, roleTitle, company, status, assessmentUrl, interviewUrl, interviewChannel, slackUrl }: { name?: string; roleTitle?: string; company?: string; status?: string; assessmentUrl?: string | null; interviewUrl?: string | null; interviewChannel?: string | null; slackUrl?: string | null }) => {
   const c = STATUS_COPY[status ?? 'approved'] ?? STATUS_COPY.approved
+  const via = interviewChannel === 'google_meet' ? 'Google Meet' : 'WhatsApp call'
+  let body = c.body
+  let cta = 'Open your dashboard'
+  let href = `${SITE}/talent/dashboard`
+  if (status === 'assessment' && assessmentUrl) {
+    body = 'You have moved to the assessment stage. Open the assessment with the button below and complete it as soon as you can.'
+    cta = 'Start the assessment'; href = assessmentUrl
+  } else if (status === 'interview' && interviewUrl) {
+    body = `You have moved to the interview stage. Pick a time that suits you with the button below. The interview is a ${via}.`
+    cta = 'Book your interview'; href = interviewUrl
+  } else if (status === 'slack_link' && slackUrl) {
+    cta = 'Join the project Slack'; href = slackUrl
+  }
   return (
-    <Layout preview={c.title} title={c.title} cta="Open your dashboard" href={`${SITE}/talent/dashboard`}>
+    <Layout preview={c.title} title={c.title} cta={cta} href={href}>
       <Text style={text}>{hi(name)}</Text>
       <Text style={text}>Project: <b>{roleTitle ?? 'Project'}</b>{company ? ` · ${company}` : ''}</Text>
-      <Text style={text}>{c.body}</Text>
+      <Text style={text}>{body}</Text>
       <Text style={muted}>No update after two days? Message your project manager from your dashboard.</Text>
     </Layout>
   )

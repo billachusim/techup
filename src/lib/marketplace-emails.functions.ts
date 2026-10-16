@@ -10,6 +10,7 @@ const Input = z.object({
     "talent_approved",
     "profile_submitted",
     "intro_approved",
+    "slack_link",
   ]),
   id: z.string().uuid(),
 });
@@ -84,15 +85,28 @@ export const notifyMarketplaceEvent = createServerFn({ method: "POST" })
       return { ok: true };
     }
 
+    if (data.event === "slack_link") {
+      if (!staff) return { ok: false };
+      const { data: m } = await supabaseAdmin
+        .from("role_matches")
+        .select("id, talent_profiles(full_name, email), talent_roles(title, company, slack_channel_url)")
+        .eq("id", data.id)
+        .maybeSingle();
+      const p = m?.talent_profiles, r = m?.talent_roles;
+      if (!m || !r?.slack_channel_url || !p?.email) return { ok: false, reason: !r?.slack_channel_url ? "No project Slack link is saved for this role." : "This talent has no email." };
+      await send("match-update", p.email, { name: p.full_name, roleTitle: r.title, company: r.company, status: "slack_link", slackUrl: r.slack_channel_url }, `${m.id}-slack-${Date.now()}`);
+      return { ok: true };
+    }
+
     if (data.event === "match_updated") {
       const { data: m } = await supabaseAdmin
         .from("role_matches")
-        .select("id, status, talent_profiles(full_name, email), talent_roles(title, company)")
+        .select("id, status, talent_profiles(full_name, email), talent_roles(title, company, assessment_url, interview_url, interview_channel)")
         .eq("id", data.id)
         .maybeSingle();
       if (!m || !MATCH_EMAIL_STATUSES.includes(m.status)) return { ok: false };
       const p = m.talent_profiles, r = m.talent_roles;
-      await send("match-update", p?.email, { name: p?.full_name, roleTitle: r?.title, company: r?.company, status: m.status }, `${m.id}-${m.status}`);
+      await send("match-update", p?.email, { name: p?.full_name, roleTitle: r?.title, company: r?.company, status: m.status, assessmentUrl: r?.assessment_url, interviewUrl: r?.interview_url, interviewChannel: r?.interview_channel }, `${m.id}-${m.status}`);
       return { ok: true };
     }
 

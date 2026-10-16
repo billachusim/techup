@@ -210,6 +210,7 @@ export type Database = {
           id: string
           phone: string
           project_title: string
+          selection_process: string
           skills_needed: string[]
           status: string
           timeline: string | null
@@ -228,6 +229,7 @@ export type Database = {
           id?: string
           phone: string
           project_title: string
+          selection_process?: string
           skills_needed?: string[]
           status?: string
           timeline?: string | null
@@ -246,6 +248,7 @@ export type Database = {
           id?: string
           phone?: string
           project_title?: string
+          selection_process?: string
           skills_needed?: string[]
           status?: string
           timeline?: string | null
@@ -1792,6 +1795,7 @@ export type Database = {
         Row: {
           applications_closed: boolean
           apply_deadline: string | null
+          assessment_url: string | null
           auto_match_enabled: boolean
           auto_match_threshold: number
           budget_currency: string
@@ -1808,6 +1812,8 @@ export type Database = {
           drive_url: string | null
           employment_type: string
           id: string
+          interview_channel: string
+          interview_url: string | null
           is_featured: boolean
           is_paid_training: boolean
           is_remote: boolean
@@ -1819,6 +1825,7 @@ export type Database = {
           required_skills: string[]
           responsibilities: string[]
           role_kind: string
+          selection_process: string
           seniority: string
           slack_channel_id: string | null
           slack_channel_url: string | null
@@ -1833,6 +1840,7 @@ export type Database = {
         Insert: {
           applications_closed?: boolean
           apply_deadline?: string | null
+          assessment_url?: string | null
           auto_match_enabled?: boolean
           auto_match_threshold?: number
           budget_currency?: string
@@ -1849,6 +1857,8 @@ export type Database = {
           drive_url?: string | null
           employment_type?: string
           id?: string
+          interview_channel?: string
+          interview_url?: string | null
           is_featured?: boolean
           is_paid_training?: boolean
           is_remote?: boolean
@@ -1860,6 +1870,7 @@ export type Database = {
           required_skills?: string[]
           responsibilities?: string[]
           role_kind?: string
+          selection_process?: string
           seniority?: string
           slack_channel_id?: string | null
           slack_channel_url?: string | null
@@ -1874,6 +1885,7 @@ export type Database = {
         Update: {
           applications_closed?: boolean
           apply_deadline?: string | null
+          assessment_url?: string | null
           auto_match_enabled?: boolean
           auto_match_threshold?: number
           budget_currency?: string
@@ -1890,6 +1902,8 @@ export type Database = {
           drive_url?: string | null
           employment_type?: string
           id?: string
+          interview_channel?: string
+          interview_url?: string | null
           is_featured?: boolean
           is_paid_training?: boolean
           is_remote?: boolean
@@ -1901,6 +1915,7 @@ export type Database = {
           required_skills?: string[]
           responsibilities?: string[]
           role_kind?: string
+          selection_process?: string
           seniority?: string
           slack_channel_id?: string | null
           slack_channel_url?: string | null

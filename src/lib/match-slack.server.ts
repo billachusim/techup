@@ -92,13 +92,14 @@ export async function sendMatchEmail(matchId: string): Promise<void> {
   const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
   const { data: m } = await supabaseAdmin
     .from("role_matches")
-    .select("id, status, talent_profiles(full_name, email), talent_roles(title, company)")
+    .select("id, status, talent_profiles(full_name, email), talent_roles(title, company, assessment_url, interview_url, interview_channel)")
     .eq("id", matchId)
     .maybeSingle();
   if (!m || !MATCH_EMAIL_STATUSES.includes(m.status) || !m.talent_profiles?.email) return;
+  const r = m.talent_roles;
   try {
     await sendTemplateEmail("match-update", m.talent_profiles.email, {
-      templateData: { name: m.talent_profiles.full_name, roleTitle: m.talent_roles?.title, company: m.talent_roles?.company, status: m.status },
+      templateData: { name: m.talent_profiles.full_name, roleTitle: r?.title, company: r?.company, status: m.status, assessmentUrl: r?.assessment_url, interviewUrl: r?.interview_url, interviewChannel: r?.interview_channel },
       idempotencyKey: `match-update-${m.id}-${m.status}`,
     });
   } catch (e) {

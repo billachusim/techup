@@ -1,7 +1,7 @@
 # Two new social media roles on /careers
 
 ## Roles to publish
-Both roles: client "Confidential client" (shown as a client project managed by Tech Faculty), category "Social media", Remote (Nigeria), auto-match on at 75%. Each description is used word for word: About the work, What you'll do, You'll do well if you, How to apply.
+Both roles: client "Confidential client" (shown as a client project managed by Tech Faculty), category "Social media", **Hybrid: two days a week at Tech Faculty HQ in Nnewi, other days remote**, auto-match on at 75%. Each description is used word for word (About the work, What you'll do, You'll do well if you, How to apply), plus one added line under About the work: "This is a hybrid role: two days a week at Tech Faculty HQ in Nnewi, the other days remote." Location shows as "Nnewi, Nigeria · Remote friendly" and the cards show a "Hybrid" badge instead of "Remote".
 
 1. **Social Media Platform Intern** — `/careers` link: `https://techfaculty.ng/talent/roles/social-media-platform-intern`
    - Internship, 20 openings, entry level

@@ -68,6 +68,11 @@ const MatchUpdate = ({ name, roleTitle, company, status, assessmentUrl, intervie
       <Text style={text}>{hi(name)}</Text>
       <Text style={text}>Project: <b>{roleTitle ?? 'Project'}</b>{company ? ` · ${company}` : ''}</Text>
       <Text style={text}>{body}</Text>
+      {slackUrl && status !== 'slack_link' && (
+        <Text style={text}>
+          <a href={slackUrl} style={{ color: '#000000' }}>Join the Tech Faculty Slack</a> with this same email address. We add you to the talent pool automatically once you're in.
+        </Text>
+      )}
       <Text style={muted}>No update after two days? Message your project manager from your dashboard.</Text>
     </Layout>
   )

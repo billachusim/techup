@@ -26,7 +26,7 @@ const Hire = () => {
   const [done, setDone] = useState(false);
   const [form, setForm] = useState({
     company: "", contact_name: "", email: "", phone: "", city: "", country: "Nigeria",
-    project_title: "", description: "", skills_needed: "", budget_text: "", timeline: "", engagement: "project",
+    project_title: "", description: "", skills_needed: "", budget_text: "", timeline: "", engagement: "project", selection_process: "direct",
   });
 
   const set = (key: keyof typeof form, value: string) => setForm((f) => ({ ...f, [key]: value }));
@@ -57,6 +57,7 @@ const Hire = () => {
           budget_text: form.budget_text.trim().slice(0, 160) || null,
           timeline: form.timeline.trim().slice(0, 160) || null,
           engagement: form.engagement,
+          selection_process: form.selection_process,
         });
       if (error) throw error;
       setDone(true);
@@ -201,6 +202,18 @@ const Hire = () => {
                           <SelectItem value="ongoing">Ongoing support</SelectItem>
                           <SelectItem value="hire">Full-time hire</SelectItem>
                           <SelectItem value="intern">Intern or trainee</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="sm:col-span-2">
+                      <Label>Do you want to test or interview talent first?</Label>
+                      <Select value={form.selection_process} onValueChange={(v) => set("selection_process", v)}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="direct">No, start straight away</SelectItem>
+                          <SelectItem value="assessment">Yes, a short assessment</SelectItem>
+                          <SelectItem value="interview">Yes, an interview</SelectItem>
+                          <SelectItem value="assessment_interview">Both an assessment and an interview</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

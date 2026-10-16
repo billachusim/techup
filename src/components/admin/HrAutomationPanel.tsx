@@ -122,9 +122,9 @@ export function HrAutomationPanel() {
             <div key={a.id} className="flex flex-wrap items-start justify-between gap-2 p-3 text-sm">
               <div>
                 <p className="font-mono text-xs">{a.method} {a.endpoint}</p>
-                {a.changes && Object.keys(a.changes as object).length > 0 && (
+                {a.changes != null && Object.keys(a.changes as object).length > 0 ? (
                   <p className="mt-1 break-all font-mono text-xs text-muted-foreground">{JSON.stringify(a.changes)}</p>
-                )}
+                ) : null}
               </div>
               <div className="flex items-center gap-2">
                 <Badge variant={a.status < 400 ? "outline" : "destructive"}>{a.status}</Badge>

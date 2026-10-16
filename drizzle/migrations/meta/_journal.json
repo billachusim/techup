@@ -50,6 +50,13 @@
       "when": 1791882077691,
       "tag": "0006_reschedule_digest_and_recover",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792151495046,
+      "tag": "0007_auto_matching_hr_api",
+      "breakpoints": true
     }
   ]
 }

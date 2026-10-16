@@ -163,7 +163,12 @@ export const MATCH_STATUS_LABEL: Record<string, string> = {
   accepted: "Talent accepted",
   assessment: "In assessment",
   interview: "In interview",
+  shortlisted: "Shortlisted",
+  interviewed: "Interviewed",
+  offer_sent: "Offer sent",
   hired: "Hired",
+  onboarded: "Onboarded",
+  unresponsive: "Unresponsive",
   declined: "Declined",
 };
 
@@ -172,7 +177,12 @@ export const APPLICATION_STATUS_LABEL: Record<string, string> = {
   shortlisted: "Shortlisted",
   assessment: "Assessment",
   interviewing: "Interviewing",
+  interviewed: "Interviewed",
+  selected: "Selected",
+  offer_sent: "Offer sent",
   hired: "Hired",
+  onboarded: "Onboarded",
+  unresponsive: "Unresponsive",
   rejected: "Not selected",
 };
 

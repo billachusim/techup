@@ -163,3 +163,14 @@ const quote = { fontSize: '14px', lineHeight: '22px', color: '#333333', borderLe
 const button = { backgroundColor: '#000000', color: '#ffffff', padding: '12px 20px', borderRadius: '6px', fontSize: '14px', fontWeight: 600, textDecoration: 'none', display: 'inline-block', margin: '8px 0' }
 const hr = { borderColor: '#eeeeee', margin: '28px 0 12px' }
 const footer = { fontSize: '12px', color: '#999999', margin: 0 }
+
+// HR automation messages (interview, assessment, offer, decline, reminder).
+// Subject and body come from the editable templates in /admin/talent.
+const HrMessage = ({ title, body }: { title?: string; body?: string }) => (
+  <Layout preview={title ?? 'Update from Tech Faculty'} title={title ?? 'Update from Tech Faculty'}>
+    {(body ?? '').split(/\n{2,}/).map((para, i) => (
+      <Text key={i} style={{ ...text, whiteSpace: 'pre-line' }}>{para}</Text>
+    ))}
+  </Layout>
+)
+export const hrMessage = { component: HrMessage, subject: (d) => String(d.subject ?? 'Update from Tech Faculty'), displayName: 'HR automation message', previewData: { subject: 'Interview invite: Frontend Developer', title: 'Interview invite: Frontend Developer', body: 'Hi Ada,\n\nPlease book a time here: https://cal.com/techfaculty' } } satisfies TemplateEntry

@@ -728,6 +728,57 @@ export type Database = {
         }
         Relationships: []
       }
+      hr_api_audit: {
+        Row: {
+          changes: Json
+          created_at: string
+          endpoint: string
+          id: string
+          method: string
+          status: number
+        }
+        Insert: {
+          changes?: Json
+          created_at?: string
+          endpoint: string
+          id?: string
+          method: string
+          status: number
+        }
+        Update: {
+          changes?: Json
+          created_at?: string
+          endpoint?: string
+          id?: string
+          method?: string
+          status?: number
+        }
+        Relationships: []
+      }
+      hr_email_templates: {
+        Row: {
+          body: string
+          key: string
+          subject: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          body: string
+          key: string
+          subject: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          body?: string
+          key?: string
+          subject?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       job_applications: {
         Row: {
           applied_at: string | null
@@ -933,6 +984,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      marketplace_settings: {
+        Row: {
+          auto_match_paused: boolean
+          id: boolean
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          auto_match_paused?: boolean
+          id?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          auto_match_paused?: boolean
+          id?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
       }
       partner_listings: {
         Row: {
@@ -1536,6 +1608,51 @@ export type Database = {
           },
         ]
       }
+      talent_notes: {
+        Row: {
+          body: string
+          created_at: string
+          created_by: string | null
+          id: string
+          role_id: string | null
+          source: string
+          talent_profile_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          role_id?: string | null
+          source?: string
+          talent_profile_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          role_id?: string | null
+          source?: string
+          talent_profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "talent_notes_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "talent_roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "talent_notes_talent_profile_id_fkey"
+            columns: ["talent_profile_id"]
+            isOneToOne: false
+            referencedRelation: "talent_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       talent_profiles: {
         Row: {
           admin_notes: string | null
@@ -1675,6 +1792,8 @@ export type Database = {
         Row: {
           applications_closed: boolean
           apply_deadline: string | null
+          auto_match_enabled: boolean
+          auto_match_threshold: number
           budget_currency: string
           budget_max: number | null
           budget_min: number | null
@@ -1692,6 +1811,7 @@ export type Database = {
           is_featured: boolean
           is_paid_training: boolean
           is_remote: boolean
+          manager_user_id: string | null
           nice_to_have: string[]
           openings: number
           project_brief: string | null
@@ -1712,6 +1832,8 @@ export type Database = {
         Insert: {
           applications_closed?: boolean
           apply_deadline?: string | null
+          auto_match_enabled?: boolean
+          auto_match_threshold?: number
           budget_currency?: string
           budget_max?: number | null
           budget_min?: number | null
@@ -1729,6 +1851,7 @@ export type Database = {
           is_featured?: boolean
           is_paid_training?: boolean
           is_remote?: boolean
+          manager_user_id?: string | null
           nice_to_have?: string[]
           openings?: number
           project_brief?: string | null
@@ -1749,6 +1872,8 @@ export type Database = {
         Update: {
           applications_closed?: boolean
           apply_deadline?: string | null
+          auto_match_enabled?: boolean
+          auto_match_threshold?: number
           budget_currency?: string
           budget_max?: number | null
           budget_min?: number | null
@@ -1766,6 +1891,7 @@ export type Database = {
           is_featured?: boolean
           is_paid_training?: boolean
           is_remote?: boolean
+          manager_user_id?: string | null
           nice_to_have?: string[]
           openings?: number
           project_brief?: string | null

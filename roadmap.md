@@ -64,3 +64,10 @@
 - [x] Slack one-click invite link wired into welcome email and dashboard
 - [x] Admin review page at /admin/students (score, feedback, email + Slack notice, running average)
 - [x] Once-per-class Slack briefing + "next class ready" email from the dashboard
+
+## Automated hiring
+- [x] Auto-matching on role publish / profile save, per-role threshold + switch, global pause, Auto label
+- [x] Twice-weekly rescan (Mon & Thu 02:00 Lagos)
+- [x] HR API for automation agent (/api/public/hr-api) with key, audit log, 60/min limit
+- [x] Editable HR emails, screening notes, HR API log in admin
+- [ ] HR_API_KEY entered by owner (secure form)

@@ -23,6 +23,7 @@ import {
   roleBadges,
   roleLocationLabel,
   hiringStepsText,
+  hiringStepsText,
 } from "@/lib/talent";
 
 const TalentRoleDetail = () => {

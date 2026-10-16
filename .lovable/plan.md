@@ -15,7 +15,7 @@ Nothing changes in what talent or clients see. All new controls live in /admin/t
    - Skips roles that are closed, have applications closed, or whose openings are all filled (hired count >= openings).
    - Skips everything while the global or role switch is paused.
 4. **"Auto" label** on auto-created matches in the admin list (manual ones show "Manual").
-5. **Nightly rescan** at 02:00 Lagos time of all open roles against all open profiles, with results shown in the existing Scheduled Jobs health panel. AI scoring only runs on the top shortlist per role to keep cost low.
+5. **Twice weekly rescan** at 02:00 Lagos time of all open roles against all open profiles, with results shown in the existing Scheduled Jobs health panel. AI scoring only runs on the top shortlist per role to keep cost low.
 
 ## Part 2 — HR API for your automation agent
 

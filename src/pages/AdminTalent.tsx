@@ -1,4 +1,7 @@
 import { notifyMarketplaceEvent } from "@/lib/marketplace-emails.functions";
+import { triggerAutoMatch } from "@/lib/automatch.functions";
+import { AutoMatchPauseSwitch, HrAutomationPanel } from "@/components/admin/HrAutomationPanel";
+import { Switch } from "@/components/ui/switch";
 import { listSlackChannels, syncSlackForMatch } from "@/lib/slack.functions";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "@/lib/router-compat";
@@ -209,6 +212,19 @@ const AdminTalent = () => {
 
   const setRoleStatus = async (id: string, status: string) => {
     const { error } = await supabase.from("talent_roles").update({ status }).eq("id", id);
+    if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
+    load();
+    if (status === "published") {
+      triggerAutoMatch({ data: { roleId: id } })
+        .then((r) => {
+          if (r.created) { toast({ title: `${r.created} talent auto-matched`, description: "They've been emailed and invited to Slack." }); load(); }
+        })
+        .catch(() => {});
+    }
+  };
+
+  const updateAutoMatch = async (id: string, patch: { auto_match_enabled?: boolean; auto_match_threshold?: number }) => {
+    const { error } = await supabase.from("talent_roles").update(patch).eq("id", id);
     if (error) { toast({ title: "Update failed", description: error.message, variant: "destructive" }); return; }
     load();
   };
@@ -476,6 +492,7 @@ const AdminTalent = () => {
                 <TabsTrigger value="interest">Interest ({interests.filter((i) => i.status === "new").length})</TabsTrigger>
                 <TabsTrigger value="pay">Work &amp; pay ({engagements.filter((e) => e.status === "active").length})</TabsTrigger>
                 <TabsTrigger value="logs">Work logs ({deliverables.filter((d) => d.status === "submitted").length})</TabsTrigger>
+                <TabsTrigger value="hr">HR automation</TabsTrigger>
               </TabsList>
 
               {/* ROLES */}
@@ -632,6 +649,31 @@ const AdminTalent = () => {
                             )}
                           </div>
                         </div>
+                        <div className="flex flex-wrap items-center gap-4 rounded-md bg-muted/40 p-2 text-xs">
+                          <label className="flex items-center gap-2">
+                            <Switch
+                              checked={role.auto_match_enabled}
+                              onCheckedChange={(v) => updateAutoMatch(role.id, { auto_match_enabled: v })}
+                              aria-label="Auto-match this role"
+                            />
+                            Auto-match {role.auto_match_enabled ? "on" : "paused"}
+                          </label>
+                          <label className="flex items-center gap-2">
+                            Threshold
+                            <Input
+                              type="number"
+                              min={0}
+                              max={100}
+                              className="h-8 w-20"
+                              defaultValue={role.auto_match_threshold}
+                              onBlur={(e) => {
+                                const v = Math.max(0, Math.min(100, Math.round(Number(e.target.value) || 0)));
+                                if (v !== role.auto_match_threshold) void updateAutoMatch(role.id, { auto_match_threshold: v });
+                              }}
+                            />
+                            %
+                          </label>
+                        </div>
                         <div className="flex flex-wrap items-end gap-2">
                           <div className="min-w-[16rem] flex-1">
                             <Label className="text-xs">Project WhatsApp group link (matched talent only)</Label>
@@ -769,6 +811,7 @@ const AdminTalent = () => {
 
               {/* MATCHES */}
               <TabsContent value="matches" className="space-y-6 pt-6">
+                <AutoMatchPauseSwitch />
                 <section className="rounded-lg border border-border bg-card p-5">
                   <h2 className="mb-3 text-lg font-semibold">Match someone manually</h2>
                   <div className="grid gap-3 sm:grid-cols-3">
@@ -827,8 +870,9 @@ const AdminTalent = () => {
                   <div className="divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
                     {decided.map((m) => (
                       <div key={m.id} className="flex flex-wrap items-center justify-between gap-2 p-3 text-sm">
-                        <span>{m.talent_profiles?.full_name} → {m.talent_roles?.title}</span>
+                        <span>{m.talent_profiles?.full_name} → {m.talent_roles?.title} <span className="text-xs text-muted-foreground">· {m.score}%</span></span>
                         <div className="flex flex-wrap items-center gap-2">
+                          <Badge variant={m.source === "auto" ? "default" : "secondary"}>{m.source === "auto" ? "Auto" : "Manual"}</Badge>
                           <Badge variant="outline">{MATCH_STATUS_LABEL[m.status] ?? m.status}</Badge>
                           {m.talent_profiles?.phone && (
                             <a href={contactUrl(m.talent_profiles.phone, m.talent_profiles.full_name)} target="_blank" rel="noopener noreferrer">
@@ -842,7 +886,12 @@ const AdminTalent = () => {
                               <SelectItem value="accepted">Talent accepted</SelectItem>
                               <SelectItem value="assessment">In assessment</SelectItem>
                               <SelectItem value="interview">In interview</SelectItem>
+                              <SelectItem value="shortlisted">Shortlisted</SelectItem>
+                              <SelectItem value="interviewed">Interviewed</SelectItem>
+                              <SelectItem value="offer_sent">Offer sent</SelectItem>
                               <SelectItem value="hired">Hired</SelectItem>
+                              <SelectItem value="onboarded">Onboarded</SelectItem>
+                              <SelectItem value="unresponsive">Unresponsive</SelectItem>
                               <SelectItem value="declined">Declined</SelectItem>
                             </SelectContent>
                           </Select>
@@ -1080,6 +1129,11 @@ const AdminTalent = () => {
                     </div>
                   </div>
                 ))}
+              </TabsContent>
+
+              {/* HR AUTOMATION */}
+              <TabsContent value="hr" className="pt-6">
+                <HrAutomationPanel />
               </TabsContent>
             </Tabs>
           )}

@@ -17,6 +17,7 @@ import { SKILL_SUGGESTIONS, parseList, profileStrength } from "@/lib/talent";
 import { asCertifications, asEducation, asExperiences, type Certification, type Education, type Experience } from "@/lib/cv";
 import { parseCv } from "@/lib/cv.functions";
 import { notifyMarketplaceEvent } from "@/lib/marketplace-emails.functions";
+import { triggerAutoMatch } from "@/lib/automatch.functions";
 
 type FormState = {
   full_name: string;
@@ -292,6 +293,7 @@ const TalentProfile = () => {
 
       if (savedId) {
         notifyMarketplaceEvent({ data: { event: "profile_submitted", id: savedId } }).catch(() => {});
+        triggerAutoMatch({ data: { talentId: savedId } }).catch(() => {});
       }
       navigate(nextPath && nextPath.startsWith("/") ? nextPath : "/talent/dashboard");
     } catch (err) {

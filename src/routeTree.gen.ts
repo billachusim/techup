@@ -65,6 +65,7 @@ import { Route as CareersPlatformsPlatformSlugRouteImport } from './routes/caree
 import { Route as TalentPoolIndexRouteImport } from './routes/talent.pool.index'
 import { Route as TalentPoolIdRouteImport } from './routes/talent.pool.$id'
 import { Route as TalentRolesSlugRouteImport } from './routes/talent.roles.$slug'
+import { Route as ApiPublicHrApiSplatRouteImport } from './routes/api.public.hr-api.$'
 import { Route as ApiPublicJobsAutoMatchRouteImport } from './routes/api.public.jobs.auto-match'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
@@ -352,6 +353,11 @@ const TalentRolesSlugRoute = TalentRolesSlugRouteImport.update({
   path: '/talent/roles/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHrApiSplatRoute = ApiPublicHrApiSplatRouteImport.update({
+  id: '/api/public/hr-api/$',
+  path: '/api/public/hr-api/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicJobsAutoMatchRoute = ApiPublicJobsAutoMatchRouteImport.update({
   id: '/api/public/jobs/auto-match',
   path: '/api/public/jobs/auto-match',
@@ -431,6 +437,7 @@ export interface FileRoutesByFullPath {
   '/talent/pool/$id': typeof TalentPoolIdRoute
   '/talent/roles/$slug': typeof TalentRolesSlugRoute
   '/talent/pool/': typeof TalentPoolIndexRoute
+  '/api/public/hr-api/$': typeof ApiPublicHrApiSplatRoute
   '/api/public/jobs/auto-match': typeof ApiPublicJobsAutoMatchRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -493,6 +500,7 @@ export interface FileRoutesByTo {
   '/talent/pool/$id': typeof TalentPoolIdRoute
   '/talent/roles/$slug': typeof TalentRolesSlugRoute
   '/talent/pool': typeof TalentPoolIndexRoute
+  '/api/public/hr-api/$': typeof ApiPublicHrApiSplatRoute
   '/api/public/jobs/auto-match': typeof ApiPublicJobsAutoMatchRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -556,6 +564,7 @@ export interface FileRoutesById {
   '/talent/pool/$id': typeof TalentPoolIdRoute
   '/talent/roles/$slug': typeof TalentRolesSlugRoute
   '/talent/pool/': typeof TalentPoolIndexRoute
+  '/api/public/hr-api/$': typeof ApiPublicHrApiSplatRoute
   '/api/public/jobs/auto-match': typeof ApiPublicJobsAutoMatchRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -620,6 +629,7 @@ export interface FileRouteTypes {
     | '/talent/pool/$id'
     | '/talent/roles/$slug'
     | '/talent/pool/'
+    | '/api/public/hr-api/$'
     | '/api/public/jobs/auto-match'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -682,6 +692,7 @@ export interface FileRouteTypes {
     | '/talent/pool/$id'
     | '/talent/roles/$slug'
     | '/talent/pool'
+    | '/api/public/hr-api/$'
     | '/api/public/jobs/auto-match'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -744,6 +755,7 @@ export interface FileRouteTypes {
     | '/talent/pool/$id'
     | '/talent/roles/$slug'
     | '/talent/pool/'
+    | '/api/public/hr-api/$'
     | '/api/public/jobs/auto-match'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -807,6 +819,7 @@ export interface RootRouteChildren {
   TalentPoolIdRoute: typeof TalentPoolIdRoute
   TalentRolesSlugRoute: typeof TalentRolesSlugRoute
   TalentPoolIndexRoute: typeof TalentPoolIndexRoute
+  ApiPublicHrApiSplatRoute: typeof ApiPublicHrApiSplatRoute
   ApiPublicJobsAutoMatchRoute: typeof ApiPublicJobsAutoMatchRoute
 }
 
@@ -1204,6 +1217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TalentRolesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hr-api/$': {
+      id: '/api/public/hr-api/$'
+      path: '/api/public/hr-api/$'
+      fullPath: '/api/public/hr-api/$'
+      preLoaderRoute: typeof ApiPublicHrApiSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/jobs/auto-match': {
       id: '/api/public/jobs/auto-match'
       path: '/api/public/jobs/auto-match'
@@ -1308,6 +1328,7 @@ const rootRouteChildren: RootRouteChildren = {
   TalentPoolIdRoute: TalentPoolIdRoute,
   TalentRolesSlugRoute: TalentRolesSlugRoute,
   TalentPoolIndexRoute: TalentPoolIndexRoute,
+  ApiPublicHrApiSplatRoute: ApiPublicHrApiSplatRoute,
   ApiPublicJobsAutoMatchRoute: ApiPublicJobsAutoMatchRoute,
 }
 export const routeTree = rootRouteImport

@@ -70,4 +70,4 @@
 - [x] Twice-weekly rescan (Mon & Thu 02:00 Lagos)
 - [x] HR API for automation agent (/api/public/hr-api) with key, audit log, 60/min limit
 - [x] Editable HR emails, screening notes, HR API log in admin
-- [ ] HR_API_KEY entered by owner (secure form)
+- [x] HR_API_KEY entered by owner (secure form)

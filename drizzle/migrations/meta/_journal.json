@@ -64,6 +64,13 @@
       "when": 1792152971596,
       "tag": "0008_role_pay_text",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792154996274,
+      "tag": "0009_role_selection_process",
+      "breakpoints": true
     }
   ]
 }

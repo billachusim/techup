@@ -27,5 +27,6 @@ For the intern role I'll also save ₦20,000/week as the number behind the scene
 ## Technical details
 - Migration: `talent_roles.pay_text text` (nullable).
 - `formatBudget` returns `pay_text` when set; the admin create form gets a "Pay wording (optional)" input.
-- Insert both rows via data tool: role_kind `client`, company "Confidential client", country Nigeria, city null, is_remote true, employment_type `internship` / `contract`, seniority `entry` / `mid`, status `published`, auto_match_threshold 75, summary one line each, responsibilities = the "What you'll do" bullets, nice_to_have includes "Nigerian Pidgin" for the intern; intern budget_min = budget_max = 20000 NGN WEEK.
+- `roleBadges` shows "Hybrid" instead of "Remote" when a role has a city and is remote-friendly.
+- Insert both rows via data tool: role_kind `client`, company "Confidential client", country Nigeria, city Nnewi, is_remote true (hybrid), employment_type `internship` / `contract`, seniority `entry` / `mid`, status `published`, auto_match_threshold 75, summary one line each mentioning "Hybrid, 2 days at HQ", responsibilities = the "What you'll do" bullets, nice_to_have includes "Nigerian Pidgin" for the intern; intern budget_min = budget_max = 20000 NGN WEEK.
 - Then call `runAutoMatch` for both role ids.

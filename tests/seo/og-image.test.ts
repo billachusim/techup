@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { articleOgImage, OG_CACHE_CONTROL, parseOgInput } from "../../src/lib/og-image";
-import { renderOgSvg } from "../../src/lib/og-svg";
 import { pageHead, ogImage } from "../../src/lib/seo";
 
 describe("Automated social previews", () => {

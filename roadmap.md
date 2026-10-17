@@ -1,9 +1,9 @@
 # Roadmap
 
 ## Automated social images
-- [ ] Public cached Style 1 image endpoint with validated inputs
-- [ ] Article-specific blog metadata and structured data images
-- [ ] Preserve static previews; verify images, tests and preview
+- [x] Public cached Style 1 image endpoint with validated inputs
+- [x] Article-specific blog metadata and structured data images
+- [x] Preserve static previews; verify images, tests and preview
 
 ## Hub of hubs (complete)
 - [x] `src/data/techHubs.ts` — editorial hubs directory data

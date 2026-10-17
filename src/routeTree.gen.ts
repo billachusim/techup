@@ -59,6 +59,7 @@ import { Route as TalentProfileRouteImport } from './routes/talent.profile'
 import { Route as TeamBillAchusimRouteImport } from './routes/team.bill-achusim'
 import { Route as VerifySplatRouteImport } from './routes/verify.$'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
+import { Route as ApiPublicOgRouteImport } from './routes/api/public/og'
 import { Route as BlogCategorySlugRouteImport } from './routes/blog.category.$slug'
 import { Route as CareersJobsSlugRouteImport } from './routes/careers.jobs.$slug'
 import { Route as CareersPlatformsPlatformSlugRouteImport } from './routes/careers.platforms.$platformSlug'
@@ -322,6 +323,11 @@ const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicOgRoute = ApiPublicOgRouteImport.update({
+  id: '/api/public/og',
+  path: '/api/public/og',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogCategorySlugRoute = BlogCategorySlugRouteImport.update({
   id: '/blog/category/$slug',
   path: '/blog/category/$slug',
@@ -431,6 +437,7 @@ export interface FileRoutesByFullPath {
   '/locations/': typeof LocationsIndexRoute
   '/talent/': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/api/public/og': typeof ApiPublicOgRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/careers/jobs/$slug': typeof CareersJobsSlugRoute
   '/careers/platforms/$platformSlug': typeof CareersPlatformsPlatformSlugRoute
@@ -494,6 +501,7 @@ export interface FileRoutesByTo {
   '/locations': typeof LocationsIndexRoute
   '/talent': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/api/public/og': typeof ApiPublicOgRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/careers/jobs/$slug': typeof CareersJobsSlugRoute
   '/careers/platforms/$platformSlug': typeof CareersPlatformsPlatformSlugRoute
@@ -558,6 +566,7 @@ export interface FileRoutesById {
   '/locations/': typeof LocationsIndexRoute
   '/talent/': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/api/public/og': typeof ApiPublicOgRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/careers/jobs/$slug': typeof CareersJobsSlugRoute
   '/careers/platforms/$platformSlug': typeof CareersPlatformsPlatformSlugRoute
@@ -623,6 +632,7 @@ export interface FileRouteTypes {
     | '/locations/'
     | '/talent/'
     | '/.lovable/oauth/consent'
+    | '/api/public/og'
     | '/blog/category/$slug'
     | '/careers/jobs/$slug'
     | '/careers/platforms/$platformSlug'
@@ -686,6 +696,7 @@ export interface FileRouteTypes {
     | '/locations'
     | '/talent'
     | '/.lovable/oauth/consent'
+    | '/api/public/og'
     | '/blog/category/$slug'
     | '/careers/jobs/$slug'
     | '/careers/platforms/$platformSlug'
@@ -749,6 +760,7 @@ export interface FileRouteTypes {
     | '/locations/'
     | '/talent/'
     | '/.lovable/oauth/consent'
+    | '/api/public/og'
     | '/blog/category/$slug'
     | '/careers/jobs/$slug'
     | '/careers/platforms/$platformSlug'
@@ -813,6 +825,7 @@ export interface RootRouteChildren {
   LocationsIndexRoute: typeof LocationsIndexRoute
   TalentIndexRoute: typeof TalentIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
+  ApiPublicOgRoute: typeof ApiPublicOgRoute
   BlogCategorySlugRoute: typeof BlogCategorySlugRoute
   CareersJobsSlugRoute: typeof CareersJobsSlugRoute
   CareersPlatformsPlatformSlugRoute: typeof CareersPlatformsPlatformSlugRoute
@@ -1175,6 +1188,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/og': {
+      id: '/api/public/og'
+      path: '/api/public/og'
+      fullPath: '/api/public/og'
+      preLoaderRoute: typeof ApiPublicOgRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/category/$slug': {
       id: '/blog/category/$slug'
       path: '/blog/category/$slug'
@@ -1322,6 +1342,7 @@ const rootRouteChildren: RootRouteChildren = {
   LocationsIndexRoute: LocationsIndexRoute,
   TalentIndexRoute: TalentIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
+  ApiPublicOgRoute: ApiPublicOgRoute,
   BlogCategorySlugRoute: BlogCategorySlugRoute,
   CareersJobsSlugRoute: CareersJobsSlugRoute,
   CareersPlatformsPlatformSlugRoute: CareersPlatformsPlatformSlugRoute,

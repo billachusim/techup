@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import BlogPost from "@/pages/BlogPost";
 import { pageHead } from "@/lib/seo";
+import { articleOgImage } from "@/lib/og-image";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
@@ -13,14 +14,16 @@ export const Route = createFileRoute("/blog/$slug")({
         description: local.description,
         published: local.date,
         modified: local.updated ?? local.date,
+        image: articleOgImage(local),
       };
     }
     try {
       const { supabase } = await import("@/integrations/supabase/client");
       const { data } = await supabase
         .from("blog_posts")
-        .select("title, description, published_at, updated_at")
+        .select("title, description, category, tags, published_at, updated_at")
         .eq("slug", params.slug)
+        .eq("is_published", true)
         .maybeSingle();
       if (data) {
         return {
@@ -28,6 +31,7 @@ export const Route = createFileRoute("/blog/$slug")({
           description: data.description,
           published: data.published_at,
           modified: data.updated_at ?? data.published_at,
+          image: articleOgImage({ title: data.title, description: data.description, tags: [data.category || data.tags?.[0] || "Career guide"] }),
         };
       }
     } catch {
@@ -43,6 +47,7 @@ export const Route = createFileRoute("/blog/$slug")({
         "Tech career guides, course deep-dives, SIWES tips, and AI insights from Tech Faculty NG.",
       path: `/blog/${params.slug}`,
       type: "article",
+      image: loaderData?.image,
       publishedTime: loaderData?.published,
       modifiedTime: loaderData?.modified,
     }),

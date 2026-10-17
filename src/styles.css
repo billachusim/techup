@@ -90,6 +90,13 @@
 }
 
 :root {
+  /* Style 1 automated social preview palette; separate from page theme. */
+  --og-background: #0B1220;
+  --og-grid: #1B2939;
+  --og-accent: #10B981;
+  --og-foreground: #F8FAFC;
+  --og-muted: #B8C7D8;
+  --og-surface: #122F30;
   --background: 0 0% 100%;
   --foreground: 0 0% 10%;
 

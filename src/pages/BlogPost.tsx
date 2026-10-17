@@ -15,6 +15,7 @@ import VirtualSiwesOffer from "@/components/siwes/VirtualSiwesOffer";
 import PostInternalLinks from "@/components/blog/PostInternalLinks";
 import { useAllBlogPosts } from "@/hooks/useBlogPostsData";
 import { formatDate } from "@/components/LastUpdated";
+import { articleOgImage } from "@/lib/og-image";
 
 const headingText = (children: unknown): string =>
   Array.isArray(children)
@@ -147,7 +148,7 @@ const BlogPost = () => {
             description: post.description,
             datePublished: post.date,
             dateModified: modified,
-            image: ["https://techfaculty.ng/og/default.jpg"],
+            image: [articleOgImage(post)],
             author: authorSchema,
             publisher: {
               "@type": "Organization",

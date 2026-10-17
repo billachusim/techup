@@ -57,6 +57,7 @@ export function renderOgSvg(input: OgInput, palette: OgPalette, logoData: string
     <rect x="12" y="558" width="1188" height="72" fill="${p.background}"/>
     <path d="M72 558H1128" stroke="${p.grid}"/>
     <text x="72" y="603" fill="${p.accent}" font-size="25">techfaculty.ng</text>
+    <text x="600" y="603" text-anchor="middle" fill="${p.muted}" font-size="21">Train, certify and employ</text>
     <rect x="1080" y="586" width="48" height="6" fill="${p.accent}"/>
     </g></svg>`;
 }

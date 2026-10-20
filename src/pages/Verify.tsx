@@ -92,10 +92,10 @@ const Verify = () => {
 
           <Card className="border-border bg-card/90 shadow-xs">
             <CardHeader>
-              <CardTitle as="h2" className="flex items-center gap-2 text-xl">
+              <h2 className="text-2xl font-semibold leading-none tracking-tight flex items-center gap-2 text-xl">
                 <Search className="h-5 w-5 text-primary" />
                 Verify a certificate
-              </CardTitle>
+              </h2>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex flex-col gap-3 md:flex-row">
@@ -134,10 +134,10 @@ const Verify = () => {
 
           <Card className="border-border bg-card/90 shadow-xs">
             <CardHeader>
-              <CardTitle as="h2" className="flex items-center gap-2 text-xl">
+              <h2 className="text-2xl font-semibold leading-none tracking-tight flex items-center gap-2 text-xl">
                 <BadgeCheck className="h-5 w-5 text-primary" />
                 Verified record
-              </CardTitle>
+              </h2>
             </CardHeader>
             <CardContent>
               {result ? (

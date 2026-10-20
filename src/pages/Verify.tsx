@@ -3,7 +3,7 @@ import { Award, BadgeCheck, Search, ShieldCheck } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -92,10 +92,10 @@ const Verify = () => {
 
           <Card className="border-border bg-card/90 shadow-xs">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl">
+              <h2 className="text-2xl font-semibold leading-none tracking-tight flex items-center gap-2 text-xl">
                 <Search className="h-5 w-5 text-primary" />
                 Verify a certificate
-              </CardTitle>
+              </h2>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex flex-col gap-3 md:flex-row">
@@ -134,10 +134,10 @@ const Verify = () => {
 
           <Card className="border-border bg-card/90 shadow-xs">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl">
+              <h2 className="text-2xl font-semibold leading-none tracking-tight flex items-center gap-2 text-xl">
                 <BadgeCheck className="h-5 w-5 text-primary" />
                 Verified record
-              </CardTitle>
+              </h2>
             </CardHeader>
             <CardContent>
               {result ? (

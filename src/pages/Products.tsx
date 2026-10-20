@@ -205,7 +205,8 @@ const Products = () => {
         </section>
 
         {/* Product Grid */}
-        <section className="container mx-auto px-4 max-w-6xl">
+        <section className="container mx-auto px-4 max-w-6xl" aria-labelledby="our-apps">
+          <h2 id="our-apps" className="text-2xl md:text-3xl font-bold mb-6">Apps built by Tech Faculty</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {products.map((product) => (
               <ProductCard key={product.name} product={product} />
@@ -244,7 +245,7 @@ const Products = () => {
                 </p>
                 <Button asChild size="sm" className="gap-1.5">
                   <Link to="/tinypeople">
-                    Learn more <ExternalLink size={14} />
+                    Learn more about Tiny People AI <ExternalLink size={14} />
                   </Link>
                 </Button>
               </CardContent>
@@ -264,7 +265,7 @@ const Products = () => {
                 </p>
                 <Button asChild size="sm" className="gap-1.5">
                   <Link to="/lovable">
-                    Learn more <ExternalLink size={14} />
+                    Learn more about Lovable <ExternalLink size={14} />
                   </Link>
                 </Button>
               </CardContent>

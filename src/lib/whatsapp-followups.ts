@@ -78,3 +78,7 @@ export function whatsAppFollowupDueAt(sentAt: Date): Date {
 export function whatsAppInterestCopy(interest: string): string {
   return INTEREST_COPY[interest] ?? "your enquiry";
 }
+
+export function canScheduleWhatsAppFollowupsForInterest(interest: string): boolean {
+  return ADMISSIONS_INTERESTS.has(interest);
+}

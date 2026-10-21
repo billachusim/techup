@@ -126,7 +126,7 @@ export async function processEvent(db: SupabaseClient, row: { delivery_id: strin
         status: "received", provider_timestamp: tsOf(m.timestamp),
       }, { onConflict: "wa_message_id", ignoreDuplicates: true });
       if (error) throw new Error(error.message);
-      const inboundText = m.text?.body ?? m.button?.text ?? m.interactive?.button_reply?.title ?? m.interactive?.list_reply?.title ?? "";
+      const inboundText = m.text?.body ?? m.button?.text ?? m.interactive?.button_reply?.title ?? m.interactive?.list_reply?.title ?? m[m.type]?.caption ?? (m.type === "text" ? "" : `[${m.type}]`);
       if (m.from && inboundText) {
         const { processInboundLeadWhatsApp } = await import("@/lib/whatsapp-followups.server");
         await processInboundLeadWhatsApp(db, { from: m.from, text: inboundText, timestamp: m.timestamp });

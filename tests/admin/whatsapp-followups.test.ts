@@ -3,6 +3,7 @@ import {
   isApprovedUtilityTemplate,
   hasRepliedSince,
   isEligibleForWhatsAppFollowup,
+  canScheduleWhatsAppFollowupsForInterest,
   isWhatsAppOptOutMessage,
   WHATSAPP_ADMISSIONS_TEMPLATES,
   WHATSAPP_FOLLOWUP_DELAY_HOURS,
@@ -33,6 +34,13 @@ describe("WhatsApp admissions follow-up safeguards", () => {
   it("does not include non-admissions requests in this workflow", () => {
     expect(isEligibleForWhatsAppFollowup({ ...eligible, interest: "success_kit" })).toBe(false);
     expect(isEligibleForWhatsAppFollowup({ ...eligible, interest: "partner_enquiry" })).toBe(false);
+  });
+
+  it("limits automated follow-ups to the defined admissions request types", () => {
+    expect(canScheduleWhatsAppFollowupsForInterest("community_join")).toBe(true);
+    expect(canScheduleWhatsAppFollowupsForInterest("virtual_siwes")).toBe(true);
+    expect(canScheduleWhatsAppFollowupsForInterest("success_kit")).toBe(false);
+    expect(canScheduleWhatsAppFollowupsForInterest("partner_enquiry")).toBe(false);
   });
 
   it("requires the exact approved utility template and language", () => {

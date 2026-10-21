@@ -107,13 +107,8 @@ async function resolve(db: SupabaseClient, id: string, status: "pending" | "fail
 }
 
 async function markSent(db: SupabaseClient, row: FollowupRow, messageId: string) {
-  const { data, error } = await db.rpc("complete_whatsapp_lead_followup", {
-    p_id: row.id,
-    p_provider_message_id: messageId,
-    p_sent_at: new Date().toISOString(),
-  });
-  if (error || data !== true) throw new Error(`WhatsApp accepted a message but its result could not be saved: ${error?.message ?? "row not claimed"}`);
-  const { error: savedMessageError } = await db.from("whatsapp_messages").insert({
+  const sentAt = new Date().toISOString();
+  const { error: savedMessageError } = await db.from("whatsapp_messages").upsert({
     direction: "outbound",
     contact_phone: row.recipient_phone,
     type: "template",
@@ -121,8 +116,14 @@ async function markSent(db: SupabaseClient, row: FollowupRow, messageId: string)
     body: `[Template] ${row.template_name}: ${followupParam(row).join(" | ")}`,
     wa_message_id: messageId,
     status: "accepted",
+  }, { onConflict: "wa_message_id", ignoreDuplicates: true });
+  if (savedMessageError) throw new Error(`WhatsApp accepted a message but its inbox record could not be saved: ${savedMessageError.message}`);
+  const { data, error } = await db.rpc("complete_whatsapp_lead_followup", {
+    p_id: row.id,
+    p_provider_message_id: messageId,
+    p_sent_at: sentAt,
   });
-  if (savedMessageError) console.error("WhatsApp accepted follow-up; inbox record save failed", savedMessageError.message);
+  if (error || data !== true) throw new Error(`WhatsApp accepted a message but its result could not be saved: ${error?.message ?? "row not claimed"}`);
 }
 
 async function processClaim(db: SupabaseClient, row: FollowupRow, approvedTemplates: ProviderStatusResponse["data"]) {
@@ -138,6 +139,14 @@ async function processClaim(db: SupabaseClient, row: FollowupRow, approvedTempla
     return "cancelled";
   }
 
+  const { data: accountState, error: accountStateError } = await db.from("whatsapp_account_state")
+    .select("sending_paused,last_event").eq("id", 1).maybeSingle();
+  if (accountStateError) throw new Error(`Could not verify WhatsApp sending state: ${accountStateError.message}`);
+  if (accountState?.sending_paused) {
+    await resolve(db, row.id, "pending", `WhatsApp sending is paused (${accountState.last_event ?? "account update"})`, 3600);
+    return "paused";
+  }
+
   const params = await templateParameter(row, db);
   if (!params) {
     await resolve(db, row.id, "cancelled", "Lead replied after the previous message");
@@ -145,7 +154,8 @@ async function processClaim(db: SupabaseClient, row: FollowupRow, approvedTempla
   }
 
   try {
-    if (!isApprovedUtilityTemplate(approvedTemplates ?? [], row.template_name, row.template_language)) {
+    const latestTemplates = await getApprovedTemplates();
+    if (!isApprovedUtilityTemplate(latestTemplates ?? [], row.template_name, row.template_language)) {
       await resolve(db, row.id, "pending", "The exact template is not currently approved", 3600);
       return "waiting_for_approval";
     }
@@ -187,7 +197,7 @@ export async function runWhatsAppLeadFollowups(db: SupabaseClient) {
   });
   if (error) throw new Error(`Could not claim WhatsApp follow-ups: ${error.message}`);
 
-  const result = { claimed: rows?.length ?? 0, sent: 0, waitingForApproval: 0, unresolved: 0, failed: 0, cancelled: 0, staleResolved: Number(staleCount ?? 0), blocked: false };
+  const result = { claimed: rows?.length ?? 0, sent: 0, waitingForApproval: 0, unresolved: 0, failed: 0, cancelled: 0, paused: 0, staleResolved: Number(staleCount ?? 0), blocked: false };
   for (const row of (rows ?? []) as FollowupRow[]) {
     try {
       const outcome = await processClaim(db, row, templates);
@@ -196,6 +206,7 @@ export async function runWhatsAppLeadFollowups(db: SupabaseClient) {
       else if (outcome === "unresolved") result.unresolved += 1;
       else if (outcome === "failed") result.failed += 1;
       else if (outcome === "cancelled") result.cancelled += 1;
+      else if (outcome === "paused") result.paused += 1;
     } catch (error) {
       console.error("WhatsApp follow-up processing failed", row.id, (error as Error).message);
       try {

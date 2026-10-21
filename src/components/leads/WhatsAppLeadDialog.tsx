@@ -4,6 +4,7 @@ import { clampLeadField } from "@/lib/leads";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -93,6 +94,7 @@ const WhatsAppLeadDialog = ({
   const [city, setCity] = useState("");
   const [email, setEmail] = useState("");
   const [topic, setTopic] = useState<string>(variant === "chat" ? "" : "");
+  const [whatsappOptIn, setWhatsappOptIn] = useState(false);
   const [status, setStatus] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -106,6 +108,7 @@ const WhatsAppLeadDialog = ({
   const digits = phone.replace(/\D/g, "");
   const emailOk = !email.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const valid = name.trim().length >= 2 && digits.length >= 10 && emailOk;
+  const supportsFollowup = variant === "community" || topic === "Courses & bootcamps" || topic === "SIWES / Industrial Training";
 
   const greeting = encodeURIComponent(
     variant === "chat"
@@ -152,6 +155,7 @@ const WhatsAppLeadDialog = ({
       interest: variant === "community" ? "community_join" : "whatsapp_chat",
       source: clampLeadField(source, "source"),
       notes: clampLeadField(notes, "notes"),
+      whatsapp_opt_in: supportsFollowup && whatsappOptIn,
     });
 
     if (insertError) {
@@ -335,6 +339,20 @@ const WhatsAppLeadDialog = ({
                 ))}
               </div>
             </div>
+
+            {supportsFollowup && (
+              <div className="flex items-start gap-2 text-sm">
+                <Checkbox
+                  id="wa-lead-opt-in"
+                  checked={whatsappOptIn}
+                  onCheckedChange={(checked) => setWhatsappOptIn(checked === true)}
+                  aria-label="Agree to WhatsApp updates and follow-ups"
+                />
+                <Label htmlFor="wa-lead-opt-in" className="font-normal leading-relaxed">
+                  I agree to receive WhatsApp updates and follow-ups from Tech Faculty about this request. Reply STOP anytime to opt out.
+                </Label>
+              </div>
+            )}
 
             {error && (
               <p className="text-sm text-destructive" role="alert">

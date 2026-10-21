@@ -80,4 +80,4 @@
 ## WhatsApp Business
 - [x] Link WhatsApp, secure webhook inbox, delivery tracking
 - [x] Staff inbox at /admin/whatsapp: chats, replies, media, templates
-- [ ] Approved templates then wire automatic class/payment/match messages (waits on WhatsApp template approval)
+- [ ] Wire admissions confirmation, follow-up and handoff templates into a consent-gated workflow; send only when Meta approves them

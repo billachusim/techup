@@ -4,6 +4,7 @@ import { clampLeadField } from "@/lib/leads";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Mail, MessageCircle, CheckCircle2, Loader2, FileDown } from "lucide-react";
 import { SUCCESS_KIT } from "@/data/successKit";
 
@@ -80,6 +81,7 @@ const LeadCaptureForm = ({
   const [contact, setContact] = useState("");
   const [school, setSchool] = useState("");
   const [location, setLocation] = useState("");
+  const [whatsappOptIn, setWhatsappOptIn] = useState(false);
   const [extras, setExtras] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
@@ -132,6 +134,7 @@ const LeadCaptureForm = ({
       interest,
       source: clampLeadField(source, "source"),
       notes: clampLeadField(notes, "notes"),
+      whatsapp_opt_in: channel === "whatsapp" && whatsappOptIn,
     });
 
     if (insertError) {
@@ -378,13 +381,29 @@ const LeadCaptureForm = ({
         </p>
       )}
 
+      {channel === "whatsapp" && ["siwes_placement", "virtual_siwes"].includes(interest) && (
+        <div className="flex items-start gap-2 text-sm">
+          <Checkbox
+            id={`lead-whatsapp-opt-in-${interest}`}
+            checked={whatsappOptIn}
+            onCheckedChange={(checked) => setWhatsappOptIn(checked === true)}
+            aria-label="Agree to WhatsApp updates and follow-ups"
+          />
+          <Label htmlFor={`lead-whatsapp-opt-in-${interest}`} className="font-normal leading-relaxed">
+            I agree to receive WhatsApp updates and follow-ups from Tech Faculty about this request. Reply STOP anytime to opt out.
+          </Label>
+        </div>
+      )}
+
       <Button type="submit" className="w-full sm:w-auto" disabled={status === "saving"}>
         {status === "saving" && <Loader2 size={16} className="mr-2 animate-spin" />}
         {submitLabel}
       </Button>
 
       <p className="text-xs text-muted-foreground">
-        We use your details only to send what you asked for and occasional SIWES openings. No spam, unsubscribe anytime.
+        {channel === "whatsapp"
+          ? "We use your details to respond to this request. Automated WhatsApp follow-ups are sent only if you check the consent box above."
+          : "We use your details only to send what you asked for. No spam."}
       </p>
     </form>
   );

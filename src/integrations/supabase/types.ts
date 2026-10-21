@@ -911,6 +911,11 @@ export type Database = {
           source: string | null
           status: string
           status_updated_at: string | null
+          whatsapp_last_inbound_at: string | null
+          whatsapp_opt_in: boolean
+          whatsapp_opt_in_at: string | null
+          whatsapp_opt_in_version: string | null
+          whatsapp_opt_out_at: string | null
         }
         Insert: {
           channel: string
@@ -926,6 +931,11 @@ export type Database = {
           source?: string | null
           status?: string
           status_updated_at?: string | null
+          whatsapp_last_inbound_at?: string | null
+          whatsapp_opt_in?: boolean
+          whatsapp_opt_in_at?: string | null
+          whatsapp_opt_in_version?: string | null
+          whatsapp_opt_out_at?: string | null
         }
         Update: {
           channel?: string
@@ -941,6 +951,11 @@ export type Database = {
           source?: string | null
           status?: string
           status_updated_at?: string | null
+          whatsapp_last_inbound_at?: string | null
+          whatsapp_opt_in?: boolean
+          whatsapp_opt_in_at?: string | null
+          whatsapp_opt_in_version?: string | null
+          whatsapp_opt_out_at?: string | null
         }
         Relationships: []
       }
@@ -1971,6 +1986,74 @@ export type Database = {
         }
         Relationships: []
       }
+      whatsapp_lead_followups: {
+        Row: {
+          attempt_count: number
+          claimed_at: string | null
+          created_at: string
+          due_at: string
+          expires_at: string
+          id: string
+          last_error: string | null
+          lead_id: string
+          next_attempt_at: string
+          provider_message_id: string | null
+          recipient_phone: string
+          sent_at: string | null
+          stage: string
+          status: string
+          template_language: string
+          template_name: string
+          updated_at: string
+        }
+        Insert: {
+          attempt_count?: number
+          claimed_at?: string | null
+          created_at?: string
+          due_at?: string
+          expires_at: string
+          id?: string
+          last_error?: string | null
+          lead_id: string
+          next_attempt_at?: string
+          provider_message_id?: string | null
+          recipient_phone: string
+          sent_at?: string | null
+          stage: string
+          status?: string
+          template_language?: string
+          template_name: string
+          updated_at?: string
+        }
+        Update: {
+          attempt_count?: number
+          claimed_at?: string | null
+          created_at?: string
+          due_at?: string
+          expires_at?: string
+          id?: string
+          last_error?: string | null
+          lead_id?: string
+          next_attempt_at?: string
+          provider_message_id?: string | null
+          recipient_phone?: string
+          sent_at?: string | null
+          stage?: string
+          status?: string
+          template_language?: string
+          template_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_lead_followups_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       whatsapp_messages: {
         Row: {
           body: string | null
@@ -2153,6 +2236,29 @@ export type Database = {
       }
       claim_my_talent_profile: { Args: never; Returns: string }
       claim_talent_faculty_id: { Args: never; Returns: string }
+      claim_whatsapp_lead_followups: {
+        Args: { p_approved_template_names: string[]; p_limit: number }
+        Returns: {
+          attempt_count: number
+          id: string
+          lead_created_at: string
+          lead_id: string
+          lead_interest: string
+          lead_name: string
+          recipient_phone: string
+          stage: string
+          template_language: string
+          template_name: string
+        }[]
+      }
+      complete_whatsapp_lead_followup: {
+        Args: {
+          p_id: string
+          p_provider_message_id: string
+          p_sent_at?: string
+        }
+        Returns: boolean
+      }
       ensure_course_lectures: {
         Args: { course_uuid: string }
         Returns: undefined
@@ -2255,6 +2361,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      mark_stale_whatsapp_lead_followups_unresolved: {
+        Args: never
+        Returns: number
+      }
       needs_you_today_counts: { Args: never; Returns: Json }
       next_faculty_id: {
         Args: {
@@ -2264,6 +2374,18 @@ export type Database = {
           learn_mode: string
         }
         Returns: string
+      }
+      normalize_whatsapp_lead_phone: {
+        Args: { raw_phone: string }
+        Returns: string
+      }
+      process_whatsapp_lead_inbound: {
+        Args: {
+          inbound_message: string
+          inbound_phone: string
+          provider_received_at?: string
+        }
+        Returns: number
       }
       record_my_faculty_id: {
         Args: { _department: string; _old_id: string }
@@ -2280,6 +2402,15 @@ export type Database = {
           _source?: string
         }
         Returns: undefined
+      }
+      resolve_whatsapp_lead_followup: {
+        Args: {
+          p_error?: string
+          p_id: string
+          p_retry_after_seconds?: number
+          p_status: string
+        }
+        Returns: boolean
       }
       seed_all_course_lectures: { Args: never; Returns: undefined }
       verify_certificate: {

@@ -51,8 +51,12 @@ type Lead = {
   source: string | null;
   notes: string | null;
   status: string;
+  whatsapp_opt_in: boolean;
+  whatsapp_opt_in_at: string | null;
   created_at: string;
 };
+
+type Followup = { lead_id: string; stage: string; status: string; sent_at: string | null };
 
 const interestLabel = (interest: string) => INTEREST_LABEL[interest] ?? interest.replace(/_/g, " ");
 
@@ -84,6 +88,7 @@ export default function AdminLeads() {
   const { loading: roleLoading, isAdmin } = useIsStaff();
   const [loading, setLoading] = useState(true);
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [whatsappFollowups, setWhatsappFollowups] = useState<Record<string, Followup[]>>({});
   const [filter, setFilter] = useState<LeadStatus | "all">("new");
   const [interest, setInterest] = useState("all");
   const [query, setQuery] = useState("");
@@ -94,7 +99,7 @@ export default function AdminLeads() {
     const supabase = await getSupabase();
     const { data, error } = await supabase
       .from("leads")
-      .select("id, name, channel, contact, email, location, school, interest, source, notes, status, created_at")
+      .select("id, name, channel, contact, email, location, school, interest, source, notes, status, whatsapp_opt_in, whatsapp_opt_in_at, created_at")
       .order("created_at", { ascending: false })
       .limit(1000);
     setLoading(false);
@@ -102,7 +107,25 @@ export default function AdminLeads() {
       toast({ title: "Couldn't load leads", description: error.message, variant: "destructive" });
       return;
     }
-    setLeads(data ?? []);
+    const rows = (data ?? []) as Lead[];
+    setLeads(rows);
+    const leadIds = rows.filter((lead) => lead.channel === "whatsapp").map((lead) => lead.id);
+    if (leadIds.length) {
+      const { data: queue, error: queueError } = await supabase
+        .from("whatsapp_lead_followups")
+        .select("lead_id, stage, status, sent_at")
+        .in("lead_id", leadIds);
+      if (queueError) {
+        toast({ title: "WhatsApp follow-up status unavailable", description: queueError.message, variant: "destructive" });
+        setWhatsappFollowups({});
+      } else {
+        const byLead: Record<string, Followup[]> = {};
+        for (const item of (queue ?? []) as Followup[]) (byLead[item.lead_id] ??= []).push(item);
+        setWhatsappFollowups(byLead);
+      }
+    } else {
+      setWhatsappFollowups({});
+    }
   }, [toast]);
 
   useEffect(() => {
@@ -284,6 +307,8 @@ export default function AdminLeads() {
                                 {openedWhatsApp.has(lead.contact.toLowerCase()) && (
                                   <Badge variant="outline">Opened WhatsApp</Badge>
                                 )}
+                                {lead.channel === "whatsapp" && lead.whatsapp_opt_in && <Badge variant="outline">WhatsApp updates: opted in</Badge>}
+                                {lead.channel === "whatsapp" && !lead.whatsapp_opt_in && <Badge variant="outline">WhatsApp updates: not opted in</Badge>}
                                 <span className="text-xs text-muted-foreground">{formatDate(lead.created_at)}</span>
                               </div>
                             </div>
@@ -320,6 +345,13 @@ export default function AdminLeads() {
                               </Select>
                             </div>
                           </div>
+                          {lead.channel === "whatsapp" && whatsappFollowups[lead.id]?.length ? (
+                            <div className="text-xs text-muted-foreground">
+                              Automated WhatsApp: {whatsappFollowups[lead.id].map((f) =>
+                                `${f.stage === "confirmation" ? "confirmation" : "48-hour follow-up"} — ${f.status.replace(/_/g, " ")}`,
+                              ).join(" · ")}
+                            </div>
+                          ) : null}
                           {(leadEmail(lead) || leadLocation(lead) || leadSchool(lead) || lead.notes || lead.source) && (
                             <dl className="grid gap-1 text-sm text-muted-foreground sm:grid-cols-[auto_1fr] sm:gap-x-3">
                               {leadEmail(lead) && (

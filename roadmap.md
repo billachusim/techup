@@ -80,4 +80,7 @@
 ## WhatsApp Business
 - [x] Link WhatsApp, secure webhook inbox, delivery tracking
 - [x] Staff inbox at /admin/whatsapp: chats, replies, media, templates
-- [ ] Wire admissions confirmation, follow-up and handoff templates into a consent-gated workflow; send only when Meta approves them
+- [ ] Wire admissions confirmation and follow-up templates into a consent-gated workflow; send only when Meta approves them
+- [x] Add explicit opt-in capture and durable follow-up queue with reply/opt-out cancellation
+- [ ] Add scheduled sender with server-side Meta approval checks, admin visibility and verified tests
+- [ ] Add STOP / unsubscribe inbox handling and confirm the current template approvals

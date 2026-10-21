@@ -78,6 +78,34 @@
       "when": 1792567724456,
       "tag": "0010_whatsapp_messaging",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1792574148245,
+      "tag": "0011_consent_gated_whatsapp_lead_followups",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1792574600441,
+      "tag": "0012_fix_whatsapp_lead_phone_and_optout_normalization",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1792574897821,
+      "tag": "0013_claim_and_cancel_eligible_whatsapp_followups",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1792575018440,
+      "tag": "0014_finalize_whatsapp_followup_send_safely",
+      "breakpoints": true
     }
   ]
 }

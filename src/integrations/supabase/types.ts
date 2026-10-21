@@ -2236,6 +2236,21 @@ export type Database = {
       }
       claim_my_talent_profile: { Args: never; Returns: string }
       claim_talent_faculty_id: { Args: never; Returns: string }
+      claim_whatsapp_lead_followups: {
+        Args: { p_approved_template_names: string[]; p_limit: number }
+        Returns: {
+          attempt_count: number
+          id: string
+          lead_created_at: string
+          lead_id: string
+          lead_interest: string
+          lead_name: string
+          recipient_phone: string
+          stage: string
+          template_language: string
+          template_name: string
+        }[]
+      }
       ensure_course_lectures: {
         Args: { course_uuid: string }
         Returns: undefined

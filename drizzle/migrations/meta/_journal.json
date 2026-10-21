@@ -92,6 +92,13 @@
       "when": 1792574600441,
       "tag": "0012_fix_whatsapp_lead_phone_and_optout_normalization",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1792574897821,
+      "tag": "0013_claim_and_cancel_eligible_whatsapp_followups",
+      "breakpoints": true
     }
   ]
 }

@@ -108,7 +108,7 @@ const WhatsAppLeadDialog = ({
   const digits = phone.replace(/\D/g, "");
   const emailOk = !email.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const valid = name.trim().length >= 2 && digits.length >= 10 && emailOk;
-  const supportsFollowup = variant === "community" || topic === "Courses & bootcamps" || topic === "SIWES / Industrial Training";
+  const supportsFollowup = topic === "Courses & bootcamps" || topic === "SIWES / Industrial Training";
 
   const greeting = encodeURIComponent(
     variant === "chat"

@@ -23,6 +23,7 @@ const INTEREST_COPY: Record<string, string> = {
 };
 
 export type WhatsAppLead = {
+  created_at: string;
   channel: string;
   interest: string;
   status: string;
@@ -43,8 +44,14 @@ export function isEligibleForWhatsAppFollowup(lead: WhatsAppLead): boolean {
     && lead.status === "new"
     && lead.whatsapp_opt_in
     && !lead.whatsapp_opt_out_at
-    && !lead.whatsapp_last_inbound_at
+    && !(lead.whatsapp_last_inbound_at && new Date(lead.whatsapp_last_inbound_at).getTime() >= new Date(lead.created_at).getTime())
     && ADMISSIONS_INTERESTS.has(lead.interest);
+}
+
+export function hasRepliedSince(lead: Pick<WhatsAppLead, "whatsapp_last_inbound_at">, sentAt: string | null): boolean {
+  return !!lead.whatsapp_last_inbound_at
+    && !!sentAt
+    && new Date(lead.whatsapp_last_inbound_at).getTime() >= new Date(sentAt).getTime();
 }
 
 export function isApprovedUtilityTemplate(

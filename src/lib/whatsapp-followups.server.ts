@@ -154,7 +154,13 @@ async function processClaim(db: SupabaseClient, row: FollowupRow, approvedTempla
   }
 
   try {
-    const latestTemplates = await getApprovedTemplates();
+    let latestTemplates: ProviderStatusResponse["data"];
+    try {
+      latestTemplates = await getApprovedTemplates();
+    } catch (error) {
+      await resolve(db, row.id, "pending", `Template approval could not be verified: ${(error as Error).message}`, 3600);
+      return "waiting_for_approval";
+    }
     if (!isApprovedUtilityTemplate(latestTemplates ?? [], row.template_name, row.template_language)) {
       await resolve(db, row.id, "pending", "The exact template is not currently approved", 3600);
       return "waiting_for_approval";

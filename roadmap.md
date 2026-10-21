@@ -76,3 +76,8 @@
 - [x] HR API for automation agent (/api/public/hr-api) with key, audit log, 60/min limit
 - [x] Editable HR emails, screening notes, HR API log in admin
 - [x] HR_API_KEY entered by owner (secure form)
+
+## WhatsApp Business
+- [x] Link WhatsApp, secure webhook inbox, delivery tracking
+- [x] Staff inbox at /admin/whatsapp: chats, replies, media, templates
+- [ ] Approved templates then wire automatic class/payment/match messages (waits on WhatsApp template approval)

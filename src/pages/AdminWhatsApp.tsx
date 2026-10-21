@@ -15,6 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useIsStaff } from "@/hooks/useIsStaff";
 import { getSupabase } from "@/integrations/supabase/lazy";
 import { cn } from "@/lib/utils";
+import { HANDOFF_LABEL, handoffMessage, type HandoffKind } from "@/lib/whatsapp-handoff";
 import {
   createWhatsAppTemplate, deleteWhatsAppTemplate, getWhatsAppMedia, listWhatsAppTemplates, sendWhatsAppMessage,
 } from "@/lib/whatsapp.functions";
@@ -192,6 +193,13 @@ export default function AdminWhatsApp() {
                         </div>
                       ))}
                     </div>
+                    {windowOpen && (
+                      <div className="flex flex-wrap gap-2" aria-label="Handoff shortcuts">
+                        {(Object.keys(HANDOFF_LABEL) as HandoffKind[]).map((k) => (
+                          <Button key={k} type="button" size="sm" variant="outline" onClick={() => setDraft(handoffMessage(k))}>{HANDOFF_LABEL[k]}</Button>
+                        ))}
+                      </div>
+                    )}
                     {windowOpen ? (
                       <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); if (draft.trim()) doSend(active, { text: draft.trim() }); }}>
                         <Textarea rows={2} value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Type a reply" aria-label="Reply message" />

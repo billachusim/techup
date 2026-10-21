@@ -78,6 +78,13 @@
       "when": 1792567724456,
       "tag": "0010_whatsapp_messaging",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1792574148245,
+      "tag": "0011_consent_gated_whatsapp_lead_followups",
+      "breakpoints": true
     }
   ]
 }

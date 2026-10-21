@@ -71,6 +71,13 @@
       "when": 1792154996274,
       "tag": "0009_role_selection_process",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792567724456,
+      "tag": "0010_whatsapp_messaging",
+      "breakpoints": true
     }
   ]
 }

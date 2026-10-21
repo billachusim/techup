@@ -38,6 +38,7 @@ import { Route as AdminLookupRouteImport } from './routes/admin.lookup'
 import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
 import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminTalentRouteImport } from './routes/admin.talent'
+import { Route as AdminWhatsappRouteImport } from './routes/admin.whatsapp'
 import { Route as ApiAdminDigestRouteImport } from './routes/api.admin-digest'
 import { Route as ApiPaymentFollowupsRouteImport } from './routes/api.payment-followups'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -68,6 +69,7 @@ import { Route as TalentPoolIdRouteImport } from './routes/talent.pool.$id'
 import { Route as TalentRolesSlugRouteImport } from './routes/talent.roles.$slug'
 import { Route as ApiPublicHrApiSplatRouteImport } from './routes/api.public.hr-api.$'
 import { Route as ApiPublicJobsAutoMatchRouteImport } from './routes/api.public.jobs.auto-match'
+import { Route as ApiPublicWhatsappWebhookRouteImport } from './routes/api/public/whatsapp/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -216,6 +218,11 @@ const AdminStudentsRoute = AdminStudentsRouteImport.update({
 const AdminTalentRoute = AdminTalentRouteImport.update({
   id: '/admin/talent',
   path: '/admin/talent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWhatsappRoute = AdminWhatsappRouteImport.update({
+  id: '/admin/whatsapp',
+  path: '/admin/whatsapp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAdminDigestRoute = ApiAdminDigestRouteImport.update({
@@ -369,6 +376,12 @@ const ApiPublicJobsAutoMatchRoute = ApiPublicJobsAutoMatchRouteImport.update({
   path: '/api/public/jobs/auto-match',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicWhatsappWebhookRoute =
+  ApiPublicWhatsappWebhookRouteImport.update({
+    id: '/api/public/whatsapp/webhook',
+    path: '/api/public/whatsapp/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   id: '/email/auth/preview',
   path: '/email/auth/preview',
@@ -415,6 +428,7 @@ export interface FileRoutesByFullPath {
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
+  '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -446,6 +460,7 @@ export interface FileRoutesByFullPath {
   '/talent/pool/': typeof TalentPoolIndexRoute
   '/api/public/hr-api/$': typeof ApiPublicHrApiSplatRoute
   '/api/public/jobs/auto-match': typeof ApiPublicJobsAutoMatchRoute
+  '/api/public/whatsapp/webhook': typeof ApiPublicWhatsappWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -479,6 +494,7 @@ export interface FileRoutesByTo {
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
+  '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -510,6 +526,7 @@ export interface FileRoutesByTo {
   '/talent/pool': typeof TalentPoolIndexRoute
   '/api/public/hr-api/$': typeof ApiPublicHrApiSplatRoute
   '/api/public/jobs/auto-match': typeof ApiPublicJobsAutoMatchRoute
+  '/api/public/whatsapp/webhook': typeof ApiPublicWhatsappWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -544,6 +561,7 @@ export interface FileRoutesById {
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
+  '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -575,6 +593,7 @@ export interface FileRoutesById {
   '/talent/pool/': typeof TalentPoolIndexRoute
   '/api/public/hr-api/$': typeof ApiPublicHrApiSplatRoute
   '/api/public/jobs/auto-match': typeof ApiPublicJobsAutoMatchRoute
+  '/api/public/whatsapp/webhook': typeof ApiPublicWhatsappWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
@@ -610,6 +629,7 @@ export interface FileRouteTypes {
     | '/admin/referrals'
     | '/admin/students'
     | '/admin/talent'
+    | '/admin/whatsapp'
     | '/api/admin-digest'
     | '/api/payment-followups'
     | '/blog/$slug'
@@ -641,6 +661,7 @@ export interface FileRouteTypes {
     | '/talent/pool/'
     | '/api/public/hr-api/$'
     | '/api/public/jobs/auto-match'
+    | '/api/public/whatsapp/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -674,6 +695,7 @@ export interface FileRouteTypes {
     | '/admin/referrals'
     | '/admin/students'
     | '/admin/talent'
+    | '/admin/whatsapp'
     | '/api/admin-digest'
     | '/api/payment-followups'
     | '/blog/$slug'
@@ -705,6 +727,7 @@ export interface FileRouteTypes {
     | '/talent/pool'
     | '/api/public/hr-api/$'
     | '/api/public/jobs/auto-match'
+    | '/api/public/whatsapp/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -738,6 +761,7 @@ export interface FileRouteTypes {
     | '/admin/referrals'
     | '/admin/students'
     | '/admin/talent'
+    | '/admin/whatsapp'
     | '/api/admin-digest'
     | '/api/payment-followups'
     | '/blog/$slug'
@@ -769,6 +793,7 @@ export interface FileRouteTypes {
     | '/talent/pool/'
     | '/api/public/hr-api/$'
     | '/api/public/jobs/auto-match'
+    | '/api/public/whatsapp/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/transactional/preview'
@@ -803,6 +828,7 @@ export interface RootRouteChildren {
   AdminReferralsRoute: typeof AdminReferralsRoute
   AdminStudentsRoute: typeof AdminStudentsRoute
   AdminTalentRoute: typeof AdminTalentRoute
+  AdminWhatsappRoute: typeof AdminWhatsappRoute
   ApiAdminDigestRoute: typeof ApiAdminDigestRoute
   ApiPaymentFollowupsRoute: typeof ApiPaymentFollowupsRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -834,6 +860,7 @@ export interface RootRouteChildren {
   TalentPoolIndexRoute: typeof TalentPoolIndexRoute
   ApiPublicHrApiSplatRoute: typeof ApiPublicHrApiSplatRoute
   ApiPublicJobsAutoMatchRoute: typeof ApiPublicJobsAutoMatchRoute
+  ApiPublicWhatsappWebhookRoute: typeof ApiPublicWhatsappWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1039,6 +1066,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/talent'
       fullPath: '/admin/talent'
       preLoaderRoute: typeof AdminTalentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/whatsapp': {
+      id: '/admin/whatsapp'
+      path: '/admin/whatsapp'
+      fullPath: '/admin/whatsapp'
+      preLoaderRoute: typeof AdminWhatsappRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/admin-digest': {
@@ -1251,6 +1285,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicJobsAutoMatchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/whatsapp/webhook': {
+      id: '/api/public/whatsapp/webhook'
+      path: '/api/public/whatsapp/webhook'
+      fullPath: '/api/public/whatsapp/webhook'
+      preLoaderRoute: typeof ApiPublicWhatsappWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/auth/preview': {
       id: '/lovable/email/auth/preview'
       path: '/email/auth/preview'
@@ -1320,6 +1361,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminReferralsRoute: AdminReferralsRoute,
   AdminStudentsRoute: AdminStudentsRoute,
   AdminTalentRoute: AdminTalentRoute,
+  AdminWhatsappRoute: AdminWhatsappRoute,
   ApiAdminDigestRoute: ApiAdminDigestRoute,
   ApiPaymentFollowupsRoute: ApiPaymentFollowupsRoute,
   BlogSlugRoute: BlogSlugRoute,
@@ -1351,6 +1393,7 @@ const rootRouteChildren: RootRouteChildren = {
   TalentPoolIndexRoute: TalentPoolIndexRoute,
   ApiPublicHrApiSplatRoute: ApiPublicHrApiSplatRoute,
   ApiPublicJobsAutoMatchRoute: ApiPublicJobsAutoMatchRoute,
+  ApiPublicWhatsappWebhookRoute: ApiPublicWhatsappWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -38,6 +38,7 @@ import { Route as AdminLookupRouteImport } from './routes/admin.lookup'
 import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
 import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminTalentRouteImport } from './routes/admin.talent'
+import { Route as AdminWhatsappRouteImport } from './routes/admin.whatsapp'
 import { Route as ApiAdminDigestRouteImport } from './routes/api.admin-digest'
 import { Route as ApiPaymentFollowupsRouteImport } from './routes/api.payment-followups'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -217,6 +218,11 @@ const AdminStudentsRoute = AdminStudentsRouteImport.update({
 const AdminTalentRoute = AdminTalentRouteImport.update({
   id: '/admin/talent',
   path: '/admin/talent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWhatsappRoute = AdminWhatsappRouteImport.update({
+  id: '/admin/whatsapp',
+  path: '/admin/whatsapp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAdminDigestRoute = ApiAdminDigestRouteImport.update({
@@ -422,6 +428,7 @@ export interface FileRoutesByFullPath {
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
+  '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -487,6 +494,7 @@ export interface FileRoutesByTo {
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
+  '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -553,6 +561,7 @@ export interface FileRoutesById {
   '/admin/referrals': typeof AdminReferralsRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
+  '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -620,6 +629,7 @@ export interface FileRouteTypes {
     | '/admin/referrals'
     | '/admin/students'
     | '/admin/talent'
+    | '/admin/whatsapp'
     | '/api/admin-digest'
     | '/api/payment-followups'
     | '/blog/$slug'
@@ -685,6 +695,7 @@ export interface FileRouteTypes {
     | '/admin/referrals'
     | '/admin/students'
     | '/admin/talent'
+    | '/admin/whatsapp'
     | '/api/admin-digest'
     | '/api/payment-followups'
     | '/blog/$slug'
@@ -750,6 +761,7 @@ export interface FileRouteTypes {
     | '/admin/referrals'
     | '/admin/students'
     | '/admin/talent'
+    | '/admin/whatsapp'
     | '/api/admin-digest'
     | '/api/payment-followups'
     | '/blog/$slug'
@@ -816,6 +828,7 @@ export interface RootRouteChildren {
   AdminReferralsRoute: typeof AdminReferralsRoute
   AdminStudentsRoute: typeof AdminStudentsRoute
   AdminTalentRoute: typeof AdminTalentRoute
+  AdminWhatsappRoute: typeof AdminWhatsappRoute
   ApiAdminDigestRoute: typeof ApiAdminDigestRoute
   ApiPaymentFollowupsRoute: typeof ApiPaymentFollowupsRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -1053,6 +1066,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/talent'
       fullPath: '/admin/talent'
       preLoaderRoute: typeof AdminTalentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/whatsapp': {
+      id: '/admin/whatsapp'
+      path: '/admin/whatsapp'
+      fullPath: '/admin/whatsapp'
+      preLoaderRoute: typeof AdminWhatsappRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/admin-digest': {
@@ -1341,6 +1361,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminReferralsRoute: AdminReferralsRoute,
   AdminStudentsRoute: AdminStudentsRoute,
   AdminTalentRoute: AdminTalentRoute,
+  AdminWhatsappRoute: AdminWhatsappRoute,
   ApiAdminDigestRoute: ApiAdminDigestRoute,
   ApiPaymentFollowupsRoute: ApiPaymentFollowupsRoute,
   BlogSlugRoute: BlogSlugRoute,

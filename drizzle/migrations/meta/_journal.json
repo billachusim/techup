@@ -85,6 +85,13 @@
       "when": 1792574148245,
       "tag": "0011_consent_gated_whatsapp_lead_followups",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1792574600441,
+      "tag": "0012_fix_whatsapp_lead_phone_and_optout_normalization",
+      "breakpoints": true
     }
   ]
 }

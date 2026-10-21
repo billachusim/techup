@@ -125,7 +125,7 @@ async function markSent(db: SupabaseClient, row: FollowupRow, messageId: string)
   if (savedMessageError) console.error("WhatsApp accepted follow-up; inbox record save failed", savedMessageError.message);
 }
 
-async function processClaim(db: SupabaseClient, row: FollowupRow) {
+async function processClaim(db: SupabaseClient, row: FollowupRow, approvedTemplates: ProviderStatusResponse["data"]) {
   const { data: lead, error: leadError } = await db.from("leads")
     .select("id, channel, interest, status, whatsapp_opt_in, whatsapp_opt_out_at, whatsapp_last_inbound_at, created_at")
     .eq("id", row.lead_id).single();
@@ -144,19 +144,17 @@ async function processClaim(db: SupabaseClient, row: FollowupRow) {
     return "cancelled";
   }
 
-  const { data: approved } = await getApprovedTemplates().then((result) => ({ data: result }));
-  if (!isApprovedUtilityTemplate(approved ?? [], row.template_name, row.template_language)) {
-    await resolve(db, row.id, "pending", "The exact template is not currently approved", 3600);
-    return "waiting_for_approval";
-  }
-
   try {
+    if (!isApprovedUtilityTemplate(approvedTemplates ?? [], row.template_name, row.template_language)) {
+      await resolve(db, row.id, "pending", "The exact template is not currently approved", 3600);
+      return "waiting_for_approval";
+    }
     const messageId = await sendTemplate(row, params);
     await markSent(db, row, messageId);
     return "sent";
   } catch (error) {
     const reason = (error as Error).message;
-    if (/message id|accepted the request|network|fetch failed|timed out/i.test(reason)) {
+    if (/message id|accepted the request|network|fetch failed|timed out|\[5\d\d\]/i.test(reason)) {
       await resolve(db, row.id, "unresolved", reason);
       return "unresolved";
     }
@@ -192,7 +190,7 @@ export async function runWhatsAppLeadFollowups(db: SupabaseClient) {
   const result = { claimed: rows?.length ?? 0, sent: 0, waitingForApproval: 0, unresolved: 0, failed: 0, cancelled: 0, staleResolved: Number(staleCount ?? 0), blocked: false };
   for (const row of (rows ?? []) as FollowupRow[]) {
     try {
-      const outcome = await processClaim(db, row);
+      const outcome = await processClaim(db, row, templates);
       if (outcome === "sent") result.sent += 1;
       else if (outcome === "waiting_for_approval") result.waitingForApproval += 1;
       else if (outcome === "unresolved") result.unresolved += 1;

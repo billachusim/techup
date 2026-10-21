@@ -9,8 +9,8 @@ export const Route = createFileRoute("/api/public/whatsapp/webhook")({
         if (!secret) return new Response("Not configured", { status: 500 });
         let payload: unknown;
         try {
-          const verified: any = await verifyWebhookRequest(request, { secret, maxBodyBytes: 4 * 1024 * 1024 } as any);
-          payload = verified?.payload ?? verified?.body ?? verified;
+          const verified = await verifyWebhookRequest({ req: request, secret, maxBodyBytes: 4 * 1024 * 1024 });
+          payload = verified.payload;
         } catch {
           return new Response("Unauthorized", { status: 401 });
         }

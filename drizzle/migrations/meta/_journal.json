@@ -99,6 +99,13 @@
       "when": 1792574897821,
       "tag": "0013_claim_and_cancel_eligible_whatsapp_followups",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1792575018440,
+      "tag": "0014_finalize_whatsapp_followup_send_safely",
+      "breakpoints": true
     }
   ]
 }

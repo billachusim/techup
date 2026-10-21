@@ -2251,6 +2251,14 @@ export type Database = {
           template_name: string
         }[]
       }
+      complete_whatsapp_lead_followup: {
+        Args: {
+          p_id: string
+          p_provider_message_id: string
+          p_sent_at?: string
+        }
+        Returns: boolean
+      }
       ensure_course_lectures: {
         Args: { course_uuid: string }
         Returns: undefined
@@ -2353,6 +2361,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      mark_stale_whatsapp_lead_followups_unresolved: {
+        Args: never
+        Returns: number
+      }
       needs_you_today_counts: { Args: never; Returns: Json }
       next_faculty_id: {
         Args: {
@@ -2390,6 +2402,15 @@ export type Database = {
           _source?: string
         }
         Returns: undefined
+      }
+      resolve_whatsapp_lead_followup: {
+        Args: {
+          p_error?: string
+          p_id: string
+          p_retry_after_seconds?: number
+          p_status: string
+        }
+        Returns: boolean
       }
       seed_all_course_lectures: { Args: never; Returns: undefined }
       verify_certificate: {

@@ -381,7 +381,7 @@ const LeadCaptureForm = ({
         </p>
       )}
 
-      {channel === "whatsapp" && ["siwes_placement", "virtual_siwes"].includes(interest) && (
+      {channel === "whatsapp" && ["free_checklist", "siwes_placement", "virtual_siwes"].includes(interest) && (
         <div className="flex items-start gap-2 text-sm">
           <Checkbox
             id={`lead-whatsapp-opt-in-${interest}`}

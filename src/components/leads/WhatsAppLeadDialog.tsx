@@ -221,7 +221,7 @@ const WhatsAppLeadDialog = ({
             {status === "done"
               ? "Save our number so our replies reach you, and send us a quick hello."
               : variant === "community"
-                ? "Takes 20 seconds. We'll send you SIWES openings, class dates and free AI sessions on WhatsApp."
+                ? "Takes 20 seconds. Choose whether you'd also like WhatsApp updates about SIWES openings, class dates and free AI sessions."
                 : "Tell us who we're speaking with and we'll reply on WhatsApp — usually within an hour."}
           </DialogDescription>
         </DialogHeader>

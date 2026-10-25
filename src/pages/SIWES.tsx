@@ -20,9 +20,10 @@ import {
 import LastUpdated from "@/components/LastUpdated";
 import { VIRTUAL_SIWES, formatNaira } from "@/data/virtualSiwes";
 import { LOWEST_PAID_PLAN, SIWES_MAX_DISCOUNT_PCT } from "@/lib/fees";
+import { siwesCourses } from "@/data/siwesCourses";
 
 /** When this page's copy last changed. Bump it when you edit the page. */
-const SIWES_UPDATED = "2026-10-08";
+const SIWES_UPDATED = "2026-10-25";
 
 const tracks = [
   {
@@ -214,6 +215,33 @@ const SIWES = () => {
                   </div>
                 );
               })}
+            </div>
+          </div>
+        </section>
+
+        {/* By course */}
+        <section className="py-16 px-4">
+          <div className="container mx-auto max-w-4xl">
+            <h2 className="text-3xl font-bold text-center mb-4">Not studying computer science?</h2>
+            <p className="text-center text-muted-foreground text-sm md:text-base max-w-2xl mx-auto mb-8">
+              Engineering, media, statistics, business and OTM students do relevant industrial training here too. See the real
+              work, logbook examples and what to confirm with your coordinator for your course.
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {siwesCourses.map((c) => (
+                <Link
+                  key={c.slug}
+                  to={`/siwes/courses/${c.slug}`}
+                  className="flex items-center justify-between rounded-lg border border-border px-4 py-3 text-sm font-medium hover:border-primary/50 hover:text-primary"
+                >
+                  SIWES for {c.name} <ArrowRight size={16} className="shrink-0 ml-2" />
+                </Link>
+              ))}
+            </div>
+            <div className="text-center mt-6">
+              <Link to="/siwes/courses" className="text-sm text-primary font-semibold hover:underline">
+                All courses, including computer science
+              </Link>
             </div>
           </div>
         </section>

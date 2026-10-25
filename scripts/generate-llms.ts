@@ -15,6 +15,7 @@ import { campusFaqs } from "../src/data/campusContent";
 import { departments, type Department } from "../src/data/departments";
 import { GOOGLE_RATING, GOOGLE_REVIEWS_URL } from "../src/data/googleReviews";
 import { SUCCESS_KIT, kitFaqs } from "../src/data/successKit";
+import { siwesCourses } from "../src/data/siwesCourses";
 import { techHubs } from "../src/data/techHubs";
 import {
   VIRTUAL_SIWES,
@@ -48,7 +49,7 @@ const DEPARTMENT_PLAN: Record<string, string> = {
 };
 
 // Pages covered by their own sections below, so "Pages" doesn't repeat them.
-const SECTION_PAGES = new Set(["/departments", "/locations", "/hubs", "/blog", "/virtual-siwes", "/siwes-success-kit"]);
+const SECTION_PAGES = new Set(["/departments", "/locations", "/hubs", "/blog", "/virtual-siwes", "/siwes-success-kit", "/siwes/courses"]);
 
 const url = (path: string) => BASE_URL + path;
 const naira = (n: number) => `₦${n.toLocaleString("en-NG")}`;
@@ -169,6 +170,8 @@ const llms = [
   `- [SIWES and IT placement](${url("/siwes")}): On site at our campuses with no separate placement fee: Learn & Pay (regular course fee, up to ${SIWES_MAX_DISCOUNT_PCT}% off for SIWES students) or Tutor & Earn (paid).`,
   `- [Virtual SIWES](${url("/virtual-siwes")}): Online IT placement for ${naira(VIRTUAL_SIWES.placementPriceNGN)}, plus logbook review, signing, stamping and two-way delivery for ${naira(VIRTUAL_SIWES.logbookPriceNGN)}.`,
   `- [${SUCCESS_KIT.name}](${url("/siwes-success-kit")}): ${SUCCESS_KIT.tagline} ${naira(SUCCESS_KIT.priceNGN)}, with a free placement checklist.`,
+  `- [SIWES by course of study](${url("/siwes/courses")}): What a tech SIWES placement involves for students outside computer science, with projects, logbook examples and what to confirm with the SIWES coordinator.`,
+  ...siwesCourses.map((c) => `- [${c.h1}](${url(`/siwes/courses/${c.slug}`)}): ${c.metaDescription}`),
   "",
   "## Campuses",
   "",

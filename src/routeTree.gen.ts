@@ -22,7 +22,6 @@ import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as SchoolCollaborationsRouteImport } from './routes/school-collaborations'
-import { Route as SiwesRouteImport } from './routes/siwes'
 import { Route as SiwesSuccessKitRouteImport } from './routes/siwes-success-kit'
 import { Route as StudyOnlineAfricaRouteImport } from './routes/study-online-africa'
 import { Route as TechRouteImport } from './routes/tech'
@@ -55,6 +54,7 @@ import { Route as HubsIndexRouteImport } from './routes/hubs.index'
 import { Route as HubsSlugRouteImport } from './routes/hubs.$slug'
 import { Route as LocationsIndexRouteImport } from './routes/locations.index'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
+import { Route as SiwesIndexRouteImport } from './routes/siwes.index'
 import { Route as TagSplatRouteImport } from './routes/tag.$'
 import { Route as TalentIndexRouteImport } from './routes/talent.index'
 import { Route as TalentDashboardRouteImport } from './routes/talent.dashboard'
@@ -66,6 +66,8 @@ import { Route as ApiPublicOgRouteImport } from './routes/api/public/og'
 import { Route as BlogCategorySlugRouteImport } from './routes/blog.category.$slug'
 import { Route as CareersJobsSlugRouteImport } from './routes/careers.jobs.$slug'
 import { Route as CareersPlatformsPlatformSlugRouteImport } from './routes/careers.platforms.$platformSlug'
+import { Route as SiwesCoursesIndexRouteImport } from './routes/siwes.courses.index'
+import { Route as SiwesCoursesSlugRouteImport } from './routes/siwes.courses.$slug'
 import { Route as TalentPoolIndexRouteImport } from './routes/talent.pool.index'
 import { Route as TalentPoolIdRouteImport } from './routes/talent.pool.$id'
 import { Route as TalentRolesSlugRouteImport } from './routes/talent.roles.$slug'
@@ -140,11 +142,6 @@ const RssDotxmlRoute = RssDotxmlRouteImport.update({
 const SchoolCollaborationsRoute = SchoolCollaborationsRouteImport.update({
   id: '/school-collaborations',
   path: '/school-collaborations',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SiwesRoute = SiwesRouteImport.update({
-  id: '/siwes',
-  path: '/siwes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SiwesSuccessKitRoute = SiwesSuccessKitRouteImport.update({
@@ -308,6 +305,11 @@ const LocationsSlugRoute = LocationsSlugRouteImport.update({
   path: '/locations/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SiwesIndexRoute = SiwesIndexRouteImport.update({
+  id: '/siwes/',
+  path: '/siwes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TagSplatRoute = TagSplatRouteImport.update({
   id: '/tag/$',
   path: '/tag/$',
@@ -364,6 +366,16 @@ const CareersPlatformsPlatformSlugRoute =
     path: '/careers/platforms/$platformSlug',
     getParentRoute: () => rootRouteImport,
   } as any)
+const SiwesCoursesIndexRoute = SiwesCoursesIndexRouteImport.update({
+  id: '/siwes/courses/',
+  path: '/siwes/courses/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SiwesCoursesSlugRoute = SiwesCoursesSlugRouteImport.update({
+  id: '/siwes/courses/$slug',
+  path: '/siwes/courses/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TalentPoolIndexRoute = TalentPoolIndexRouteImport.update({
   id: '/talent/pool/',
   path: '/talent/pool/',
@@ -432,7 +444,6 @@ export interface FileRoutesByFullPath {
   '/products': typeof ProductsRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
-  '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
   '/study-online-africa': typeof StudyOnlineAfricaRoute
   '/tech': typeof TechRoute
@@ -470,14 +481,17 @@ export interface FileRoutesByFullPath {
   '/events/': typeof EventsIndexRoute
   '/hubs/': typeof HubsIndexRoute
   '/locations/': typeof LocationsIndexRoute
+  '/siwes/': typeof SiwesIndexRoute
   '/talent/': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/og': typeof ApiPublicOgRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/careers/jobs/$slug': typeof CareersJobsSlugRoute
   '/careers/platforms/$platformSlug': typeof CareersPlatformsPlatformSlugRoute
+  '/siwes/courses/$slug': typeof SiwesCoursesSlugRoute
   '/talent/pool/$id': typeof TalentPoolIdRoute
   '/talent/roles/$slug': typeof TalentRolesSlugRoute
+  '/siwes/courses/': typeof SiwesCoursesIndexRoute
   '/talent/pool/': typeof TalentPoolIndexRoute
   '/api/public/hr-api/$': typeof ApiPublicHrApiSplatRoute
   '/api/public/jobs/auto-match': typeof ApiPublicJobsAutoMatchRoute
@@ -501,7 +515,6 @@ export interface FileRoutesByTo {
   '/products': typeof ProductsRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
-  '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
   '/study-online-africa': typeof StudyOnlineAfricaRoute
   '/tech': typeof TechRoute
@@ -539,14 +552,17 @@ export interface FileRoutesByTo {
   '/events': typeof EventsIndexRoute
   '/hubs': typeof HubsIndexRoute
   '/locations': typeof LocationsIndexRoute
+  '/siwes': typeof SiwesIndexRoute
   '/talent': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/og': typeof ApiPublicOgRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/careers/jobs/$slug': typeof CareersJobsSlugRoute
   '/careers/platforms/$platformSlug': typeof CareersPlatformsPlatformSlugRoute
+  '/siwes/courses/$slug': typeof SiwesCoursesSlugRoute
   '/talent/pool/$id': typeof TalentPoolIdRoute
   '/talent/roles/$slug': typeof TalentRolesSlugRoute
+  '/siwes/courses': typeof SiwesCoursesIndexRoute
   '/talent/pool': typeof TalentPoolIndexRoute
   '/api/public/hr-api/$': typeof ApiPublicHrApiSplatRoute
   '/api/public/jobs/auto-match': typeof ApiPublicJobsAutoMatchRoute
@@ -571,7 +587,6 @@ export interface FileRoutesById {
   '/products': typeof ProductsRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
-  '/siwes': typeof SiwesRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
   '/study-online-africa': typeof StudyOnlineAfricaRoute
   '/tech': typeof TechRoute
@@ -609,14 +624,17 @@ export interface FileRoutesById {
   '/events/': typeof EventsIndexRoute
   '/hubs/': typeof HubsIndexRoute
   '/locations/': typeof LocationsIndexRoute
+  '/siwes/': typeof SiwesIndexRoute
   '/talent/': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/og': typeof ApiPublicOgRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/careers/jobs/$slug': typeof CareersJobsSlugRoute
   '/careers/platforms/$platformSlug': typeof CareersPlatformsPlatformSlugRoute
+  '/siwes/courses/$slug': typeof SiwesCoursesSlugRoute
   '/talent/pool/$id': typeof TalentPoolIdRoute
   '/talent/roles/$slug': typeof TalentRolesSlugRoute
+  '/siwes/courses/': typeof SiwesCoursesIndexRoute
   '/talent/pool/': typeof TalentPoolIndexRoute
   '/api/public/hr-api/$': typeof ApiPublicHrApiSplatRoute
   '/api/public/jobs/auto-match': typeof ApiPublicJobsAutoMatchRoute
@@ -642,7 +660,6 @@ export interface FileRouteTypes {
     | '/products'
     | '/rss.xml'
     | '/school-collaborations'
-    | '/siwes'
     | '/siwes-success-kit'
     | '/study-online-africa'
     | '/tech'
@@ -680,14 +697,17 @@ export interface FileRouteTypes {
     | '/events/'
     | '/hubs/'
     | '/locations/'
+    | '/siwes/'
     | '/talent/'
     | '/.lovable/oauth/consent'
     | '/api/public/og'
     | '/blog/category/$slug'
     | '/careers/jobs/$slug'
     | '/careers/platforms/$platformSlug'
+    | '/siwes/courses/$slug'
     | '/talent/pool/$id'
     | '/talent/roles/$slug'
+    | '/siwes/courses/'
     | '/talent/pool/'
     | '/api/public/hr-api/$'
     | '/api/public/jobs/auto-match'
@@ -711,7 +731,6 @@ export interface FileRouteTypes {
     | '/products'
     | '/rss.xml'
     | '/school-collaborations'
-    | '/siwes'
     | '/siwes-success-kit'
     | '/study-online-africa'
     | '/tech'
@@ -749,14 +768,17 @@ export interface FileRouteTypes {
     | '/events'
     | '/hubs'
     | '/locations'
+    | '/siwes'
     | '/talent'
     | '/.lovable/oauth/consent'
     | '/api/public/og'
     | '/blog/category/$slug'
     | '/careers/jobs/$slug'
     | '/careers/platforms/$platformSlug'
+    | '/siwes/courses/$slug'
     | '/talent/pool/$id'
     | '/talent/roles/$slug'
+    | '/siwes/courses'
     | '/talent/pool'
     | '/api/public/hr-api/$'
     | '/api/public/jobs/auto-match'
@@ -780,7 +802,6 @@ export interface FileRouteTypes {
     | '/products'
     | '/rss.xml'
     | '/school-collaborations'
-    | '/siwes'
     | '/siwes-success-kit'
     | '/study-online-africa'
     | '/tech'
@@ -818,14 +839,17 @@ export interface FileRouteTypes {
     | '/events/'
     | '/hubs/'
     | '/locations/'
+    | '/siwes/'
     | '/talent/'
     | '/.lovable/oauth/consent'
     | '/api/public/og'
     | '/blog/category/$slug'
     | '/careers/jobs/$slug'
     | '/careers/platforms/$platformSlug'
+    | '/siwes/courses/$slug'
     | '/talent/pool/$id'
     | '/talent/roles/$slug'
+    | '/siwes/courses/'
     | '/talent/pool/'
     | '/api/public/hr-api/$'
     | '/api/public/jobs/auto-match'
@@ -850,7 +874,6 @@ export interface RootRouteChildren {
   ProductsRoute: typeof ProductsRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
   SchoolCollaborationsRoute: typeof SchoolCollaborationsRoute
-  SiwesRoute: typeof SiwesRoute
   SiwesSuccessKitRoute: typeof SiwesSuccessKitRoute
   StudyOnlineAfricaRoute: typeof StudyOnlineAfricaRoute
   TechRoute: typeof TechRoute
@@ -888,14 +911,17 @@ export interface RootRouteChildren {
   EventsIndexRoute: typeof EventsIndexRoute
   HubsIndexRoute: typeof HubsIndexRoute
   LocationsIndexRoute: typeof LocationsIndexRoute
+  SiwesIndexRoute: typeof SiwesIndexRoute
   TalentIndexRoute: typeof TalentIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   ApiPublicOgRoute: typeof ApiPublicOgRoute
   BlogCategorySlugRoute: typeof BlogCategorySlugRoute
   CareersJobsSlugRoute: typeof CareersJobsSlugRoute
   CareersPlatformsPlatformSlugRoute: typeof CareersPlatformsPlatformSlugRoute
+  SiwesCoursesSlugRoute: typeof SiwesCoursesSlugRoute
   TalentPoolIdRoute: typeof TalentPoolIdRoute
   TalentRolesSlugRoute: typeof TalentRolesSlugRoute
+  SiwesCoursesIndexRoute: typeof SiwesCoursesIndexRoute
   TalentPoolIndexRoute: typeof TalentPoolIndexRoute
   ApiPublicHrApiSplatRoute: typeof ApiPublicHrApiSplatRoute
   ApiPublicJobsAutoMatchRoute: typeof ApiPublicJobsAutoMatchRoute
@@ -994,13 +1020,6 @@ declare module '@tanstack/react-router' {
       path: '/school-collaborations'
       fullPath: '/school-collaborations'
       preLoaderRoute: typeof SchoolCollaborationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/siwes': {
-      id: '/siwes'
-      path: '/siwes'
-      fullPath: '/siwes'
-      preLoaderRoute: typeof SiwesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/siwes-success-kit': {
@@ -1227,6 +1246,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/siwes/': {
+      id: '/siwes/'
+      path: '/siwes'
+      fullPath: '/siwes/'
+      preLoaderRoute: typeof SiwesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tag/$': {
       id: '/tag/$'
       path: '/tag/$'
@@ -1302,6 +1328,20 @@ declare module '@tanstack/react-router' {
       path: '/careers/platforms/$platformSlug'
       fullPath: '/careers/platforms/$platformSlug'
       preLoaderRoute: typeof CareersPlatformsPlatformSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/siwes/courses/': {
+      id: '/siwes/courses/'
+      path: '/siwes/courses'
+      fullPath: '/siwes/courses/'
+      preLoaderRoute: typeof SiwesCoursesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/siwes/courses/$slug': {
+      id: '/siwes/courses/$slug'
+      path: '/siwes/courses/$slug'
+      fullPath: '/siwes/courses/$slug'
+      preLoaderRoute: typeof SiwesCoursesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/talent/pool/': {
@@ -1406,7 +1446,6 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsRoute: ProductsRoute,
   RssDotxmlRoute: RssDotxmlRoute,
   SchoolCollaborationsRoute: SchoolCollaborationsRoute,
-  SiwesRoute: SiwesRoute,
   SiwesSuccessKitRoute: SiwesSuccessKitRoute,
   StudyOnlineAfricaRoute: StudyOnlineAfricaRoute,
   TechRoute: TechRoute,
@@ -1445,14 +1484,17 @@ const rootRouteChildren: RootRouteChildren = {
   EventsIndexRoute: EventsIndexRoute,
   HubsIndexRoute: HubsIndexRoute,
   LocationsIndexRoute: LocationsIndexRoute,
+  SiwesIndexRoute: SiwesIndexRoute,
   TalentIndexRoute: TalentIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   ApiPublicOgRoute: ApiPublicOgRoute,
   BlogCategorySlugRoute: BlogCategorySlugRoute,
   CareersJobsSlugRoute: CareersJobsSlugRoute,
   CareersPlatformsPlatformSlugRoute: CareersPlatformsPlatformSlugRoute,
+  SiwesCoursesSlugRoute: SiwesCoursesSlugRoute,
   TalentPoolIdRoute: TalentPoolIdRoute,
   TalentRolesSlugRoute: TalentRolesSlugRoute,
+  SiwesCoursesIndexRoute: SiwesCoursesIndexRoute,
   TalentPoolIndexRoute: TalentPoolIndexRoute,
   ApiPublicHrApiSplatRoute: ApiPublicHrApiSplatRoute,
   ApiPublicJobsAutoMatchRoute: ApiPublicJobsAutoMatchRoute,

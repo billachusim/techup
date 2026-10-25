@@ -2,6 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 
 import blogPosts from "@/data/blogPosts";
 import type { BlogPost } from "@/types/blog";
+import { isRetiredBlogSlug } from "../../supabase/functions/_shared/blog-redirects.ts";
 
 const SITE = "https://techfaculty.ng";
 const FEED_TITLE = "Tech Faculty NG Blog";
@@ -55,7 +56,7 @@ async function fetchDbPosts(): Promise<BlogPost[]> {
       .limit(MAX_ITEMS);
     if (error) throw error;
 
-    return ((data ?? []) as DbPost[]).map((row) => ({
+    return ((data ?? []) as DbPost[]).filter((row) => !isRetiredBlogSlug(row.slug)).map((row) => ({
       slug: row.slug,
       title: row.title,
       description: row.description,

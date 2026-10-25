@@ -57,7 +57,7 @@ export const DEPARTMENT_GUIDES: Record<string, Array<{ slug: string; label: stri
   ],
   "cloud-computing": [
     { slug: "full-stack-web-development-nigeria-roadmap-2026", label: "Full-stack web development roadmap for Nigeria" },
-    { slug: "remote-tech-jobs-nigeria-2026-complete-guide", label: "Where to find remote tech jobs from Nigeria" },
+    { slug: "how-to-get-remote-tech-job-from-nigeria-2026", label: "How to get a remote tech job from Nigeria" },
     { slug: "tech-salaries-nigeria-2026-junior-mid-senior", label: "Nigerian tech salaries from junior to senior" },
   ],
   "robotics-iot": [
@@ -102,9 +102,6 @@ const POST_OVERRIDES: Record<string, PostLinkOverride> = {
   "how-to-get-remote-tech-job-from-nigeria-2026": {
     departments: ["web-development", "data-science-analytics"],
   },
-  "remote-tech-jobs-nigeria-2026-complete-guide": {
-    departments: ["web-development", "ai-machine-learning"],
-  },
   "tech-salaries-nigeria-2026-junior-mid-senior": {
     departments: ["web-development", "data-science-analytics"],
   },
@@ -141,9 +138,7 @@ const POST_OVERRIDES: Record<string, PostLinkOverride> = {
     departments: ["basic-internet-ai-studies", "digital-marketing"],
   },
   "how-to-hire-developers-in-nigeria-2026": { departments: ["web-development", "mobile-app-development"] },
-  "how-to-hire-developers-nigerian-startups-2026": { departments: ["web-development", "mobile-app-development"] },
   "building-future-tech-faculty-yabatech-partnership-2026": { campuses: ["lagos"] },
-  "tut-5-in-design-tech-bootcamps-yabatech-2026": { campuses: ["lagos"] },
 };
 
 export interface PostLinks {

@@ -5,6 +5,8 @@ import {
   PROMO_CODES,
   REFERRAL_DISCOUNT_PERCENT,
   REFERRER_REWARD_PERCENT,
+  INSTALMENTS,
+  instalmentSplit,
   priceSelection,
 } from "../_shared/pricing.ts";
 
@@ -18,6 +20,63 @@ const jsonResponse = (body: Record<string, unknown>, status = 200) =>
     status,
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
+
+const toCharge = (currency: string, ngn: number) =>
+  currency === 'USD' ? Math.round(ngn / 1400 * 100) / 100 : ngn;
+
+const isoDateInDays = (days: number) =>
+  new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
+/** Asks Flutterwave for a payment link; `onFail` undoes what was saved for it. */
+async function paymentLink(
+  flutterwaveKey: string,
+  payload: Record<string, unknown>,
+  onFail: () => PromiseLike<unknown>,
+): Promise<Response> {
+  const flwResponse = await fetch('https://api.flutterwave.com/v3/payments', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${flutterwaveKey}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const rawResponse = await flwResponse.text();
+  let flwData: { status?: string; message?: string; data?: { link?: string } } | null = null;
+
+  try {
+    flwData = rawResponse ? JSON.parse(rawResponse) : null;
+  } catch {
+    console.error('Flutterwave returned non-JSON response', {
+      status: flwResponse.status,
+      contentType: flwResponse.headers.get('content-type'),
+      bodyPreview: rawResponse.slice(0, 300),
+    });
+    await onFail();
+
+    return jsonResponse(
+      { error: 'Payment provider returned an unexpected response. Please try again or use WhatsApp or Email enrollment.' },
+      502,
+    );
+  }
+
+  if (!flwResponse.ok || flwData?.status !== 'success' || !flwData?.data?.link) {
+    console.error('Flutterwave error:', {
+      status: flwResponse.status,
+      data: flwData,
+    });
+    await onFail();
+
+    return jsonResponse(
+      { error: flwData?.message || 'Failed to create payment link' },
+      flwResponse.ok ? 500 : 502,
+    );
+  }
+
+  return jsonResponse({ url: flwData.data.link });
+}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -39,6 +98,7 @@ serve(async (req) => {
       return jsonResponse({ error: 'Please sign in to pay' }, 401);
     }
 
+    const body = await req.json();
     const {
       planId,
       planName,
@@ -49,12 +109,56 @@ serve(async (req) => {
       currencyCode: rawCurrencyCode,
       discountCode,
       successUrl,
-    } = await req.json();
+      payInInstalments,
+    } = body;
 
     const currencyCode = (rawCurrencyCode || 'NGN').toUpperCase();
 
     // The enrolment is created for the signed-in student only.
     const { data: profile } = await admin.from('profiles').select('faculty_id').eq('id', user.id).maybeSingle();
+
+    // Paying the rest of an instalment plan the student already started.
+    if (body.balanceForEnrollmentId) {
+      const { data: enrollment } = await admin
+        .from('enrollments')
+        .select('id, faculty_id, plan_name, status, balance_due, currency')
+        .eq('id', String(body.balanceForEnrollmentId))
+        .eq('faculty_id', profile?.faculty_id ?? '')
+        .maybeSingle();
+      if (!enrollment) {
+        return jsonResponse({ error: 'This enrolment is not yours' }, 403);
+      }
+      if (!['active', 'confirmed'].includes(enrollment.status) || !(Number(enrollment.balance_due) > 0)) {
+        return jsonResponse({ error: 'Nothing is left to pay on this plan' }, 400);
+      }
+      const balanceTxRef = `TFB-${enrollment.faculty_id}-${crypto.randomUUID()}`;
+      const balanceCurrency = enrollment.currency === 'USD' ? 'USD' : 'NGN';
+      const { error: paymentErr } = await admin.from('enrollment_payments').insert({
+        enrollment_id: enrollment.id,
+        tx_ref: balanceTxRef,
+        amount: Number(enrollment.balance_due),
+        currency: balanceCurrency,
+        status: 'pending',
+      });
+      if (paymentErr) {
+        console.error('Failed to save balance payment:', paymentErr);
+        return jsonResponse({ error: 'Could not start your payment. Please try again.' }, 500);
+      }
+      return await paymentLink(flutterwaveKey, {
+        tx_ref: balanceTxRef,
+        amount: Number(enrollment.balance_due),
+        currency: balanceCurrency,
+        redirect_url: `${successUrl}?tx_ref=${encodeURIComponent(balanceTxRef)}&faculty_id=${encodeURIComponent(enrollment.faculty_id)}&plan=${encodeURIComponent(enrollment.plan_name)}`,
+        meta: { faculty_id: enrollment.faculty_id, plan_name: enrollment.plan_name, balance_for: enrollment.id },
+        customer: { email: `${enrollment.faculty_id}@techfaculty.ng` },
+        customizations: {
+          title: 'Tech Faculty',
+          description: `${enrollment.plan_name} — balance`,
+          logo: 'https://techfaculty.ng/favicon.png',
+        },
+      }, () => admin.from('enrollment_payments').delete().eq('tx_ref', balanceTxRef).eq('status', 'pending'));
+    }
+
     if (!profile?.faculty_id || profile.faculty_id !== facultyId) {
       return jsonResponse({ error: 'This Faculty ID is not yours' }, 403);
     }
@@ -106,10 +210,22 @@ serve(async (req) => {
       };
     }
 
-    const toChargeCurrency = (ngn: number) => currencyCode === 'USD'
-      ? Math.round(ngn / 1400 * 100) / 100
-      : ngn;
-    const amount = toChargeCurrency(totalAmount);
+    const toChargeCurrency = (ngn: number) => toCharge(currencyCode, ngn);
+
+    // Paying in instalments charges the deposit now and records the rest as
+    // the balance, which the student pays later from their dashboard.
+    const split = payInInstalments ? instalmentSplit(totalAmount) : null;
+    if (payInInstalments && !split) {
+      return jsonResponse({ error: 'This plan can\'t be paid in instalments. Please pay in full.' }, 400);
+    }
+    const amount = toChargeCurrency(split ? split.deposit : totalAmount);
+    const instalment = split
+      ? {
+          instalment_total: toChargeCurrency(totalAmount),
+          balance_due: Math.round((toChargeCurrency(totalAmount) - amount) * 100) / 100,
+          balance_due_by: isoDateInDays(INSTALMENTS.balanceDueDays),
+        }
+      : {};
 
     const itemNames: string[] = [];
     courses.forEach((c) => itemNames.push(c.name));
@@ -130,6 +246,7 @@ serve(async (req) => {
       tx_ref: txRef,
       amount_due: amount,
       currency,
+      ...instalment,
     });
     if (enrollErr) {
       console.error('Failed to save pending enrolment:', enrollErr);
@@ -157,7 +274,7 @@ serve(async (req) => {
       }
     }
 
-    const flutterwavePayload = {
+    return await paymentLink(flutterwaveKey, {
       tx_ref: txRef,
       amount,
       currency,
@@ -172,54 +289,10 @@ serve(async (req) => {
       },
       customizations: {
         title: 'Tech Faculty',
-        description: `${planName} Plan — ${itemNames.join(', ')}`,
+        description: `${planName} Plan${split ? ' (deposit)' : ''} — ${itemNames.join(', ')}`,
         logo: 'https://techfaculty.ng/favicon.png',
       },
-    };
-
-    const flwResponse = await fetch('https://api.flutterwave.com/v3/payments', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${flutterwaveKey}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify(flutterwavePayload),
-    });
-
-    const rawResponse = await flwResponse.text();
-    let flwData: { status?: string; message?: string; data?: { link?: string } } | null = null;
-
-    try {
-      flwData = rawResponse ? JSON.parse(rawResponse) : null;
-    } catch {
-      console.error('Flutterwave returned non-JSON response', {
-        status: flwResponse.status,
-        contentType: flwResponse.headers.get('content-type'),
-        bodyPreview: rawResponse.slice(0, 300),
-      });
-      await dropPending();
-
-      return jsonResponse(
-        { error: 'Payment provider returned an unexpected response. Please try again or use WhatsApp or Email enrollment.' },
-        502,
-      );
-    }
-
-    if (!flwResponse.ok || flwData?.status !== 'success' || !flwData?.data?.link) {
-      console.error('Flutterwave error:', {
-        status: flwResponse.status,
-        data: flwData,
-      });
-      await dropPending();
-
-      return jsonResponse(
-        { error: flwData?.message || 'Failed to create payment link' },
-        flwResponse.ok ? 500 : 502,
-      );
-    }
-
-    return jsonResponse({ url: flwData.data.link });
+    }, dropPending);
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed to create checkout session';
     console.error('Flutterwave checkout error:', error);

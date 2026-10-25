@@ -91,3 +91,64 @@ export const decidePendingEnrollment = createServerFn({ method: "POST" })
     });
     return { ok: true as const };
   });
+
+/** Admin: instalment plans with a balance still to pay, soonest due first. */
+export const listOutstandingBalances = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: rows, error } = await supabaseAdmin
+      .from("enrollments")
+      .select("id, faculty_id, plan_name, amount_due, instalment_total, balance_due, balance_due_by, currency, paid_at")
+      .in("status", ["active", "confirmed"])
+      .gt("balance_due", 0)
+      .order("balance_due_by", { ascending: true })
+      .limit(200);
+    if (error) throw new Error(error.message);
+    const ids = [...new Set((rows ?? []).map((r) => r.faculty_id))];
+    const { data: profiles } = ids.length
+      ? await supabaseAdmin.from("profiles").select("faculty_id, name, email, phone").in("faculty_id", ids)
+      : { data: [] };
+    const byId = new Map((profiles ?? []).map((p) => [p.faculty_id, p]));
+    return (rows ?? []).map((r) => ({
+      ...r,
+      student_name: byId.get(r.faculty_id)?.name || "Student",
+      student_email: byId.get(r.faculty_id)?.email || null,
+      student_phone: byId.get(r.faculty_id)?.phone || null,
+    }));
+  });
+
+/** Admin: the balance of an instalment plan came in by bank transfer, cash or WhatsApp. */
+export const markBalancePaid = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ id: z.string().uuid(), method: z.enum(PAYMENT_METHODS) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: plan, error: readErr } = await supabaseAdmin
+      .from("enrollments")
+      .select("id, faculty_id, plan_name, instalment_total, balance_due, currency")
+      .eq("id", data.id)
+      .gt("balance_due", 0)
+      .maybeSingle();
+    if (readErr) throw new Error(readErr.message);
+    if (!plan) throw new Error("This plan has no balance left to pay");
+    const { error } = await supabaseAdmin
+      .from("enrollments")
+      .update({ balance_due: 0, balance_paid_at: new Date().toISOString(), amount_paid: plan.instalment_total })
+      .eq("id", plan.id);
+    if (error) throw new Error(error.message);
+
+    const { data: profile } = await supabaseAdmin
+      .from("profiles").select("name").eq("faculty_id", plan.faculty_id).limit(1).maybeSingle();
+    await recordAdminAction(supabaseAdmin, context.userId, {
+      action: "payment.balance_marked_paid",
+      target_table: "enrollments",
+      target_id: plan.id,
+      faculty_id: plan.faculty_id,
+      subject: profile?.name ?? null,
+      details: { plan: plan.plan_name, amount: plan.balance_due, currency: plan.currency, method: data.method },
+    });
+    return { ok: true as const };
+  });

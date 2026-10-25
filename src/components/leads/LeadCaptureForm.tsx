@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getSupabase } from "@/integrations/supabase/lazy";
 import { clampLeadField } from "@/lib/leads";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,8 @@ export type LeadExtraField = {
   label: string;
   placeholder?: string;
   required?: boolean;
+  /** Renders a dropdown with these choices instead of a text input. */
+  options?: readonly string[];
 };
 
 type Props = {
@@ -35,6 +37,11 @@ type Props = {
   compact?: boolean;
   /** Additional questions saved into the lead's notes field. */
   extraFields?: LeadExtraField[];
+  /** Pre-selects extra field values, e.g. the package a visitor clicked. Applied whenever it changes. */
+  initialExtras?: Record<string, string>;
+  /** Relabels the optional school field, e.g. "Company or organisation" for business enquiries. */
+  schoolLabel?: string;
+  schoolPlaceholder?: string;
 };
 const UNLOCK_KEY = "tf_checklist_unlocked";
 
@@ -51,7 +58,7 @@ const successCopy: Record<LeadInterest, { title: string; body: string }> = {
   },
   partner_enquiry: {
     title: "Enquiry received",
-    body: "Our partnerships team reviews listing requests within two working days and replies with placement options and rates.",
+    body: "Our partnerships team reviews every business enquiry within two working days and replies with a proposal and quote for your team.",
   },
   siwes_placement: {
     title: "Placement request received",
@@ -75,6 +82,9 @@ const LeadCaptureForm = ({
   whatsappMessage,
   compact = false,
   extraFields = [],
+  initialExtras,
+  schoolLabel = "School or institution",
+  schoolPlaceholder = "e.g. Nnamdi Azikiwe University",
 }: Props) => {
   const [channel, setChannel] = useState<"email" | "whatsapp">("email");
   const [name, setName] = useState("");
@@ -82,7 +92,10 @@ const LeadCaptureForm = ({
   const [school, setSchool] = useState("");
   const [location, setLocation] = useState("");
   const [whatsappOptIn, setWhatsappOptIn] = useState(false);
-  const [extras, setExtras] = useState<Record<string, string>>({});
+  const [extras, setExtras] = useState<Record<string, string>>(initialExtras ?? {});
+  useEffect(() => {
+    if (initialExtras) setExtras((prev) => ({ ...prev, ...initialExtras }));
+  }, [initialExtras]);
   const [status, setStatus] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
   
@@ -348,13 +361,13 @@ const LeadCaptureForm = ({
         </div>
         <div className="space-y-1.5">
           <Label htmlFor={`lead-school-${interest}`}>
-            School or institution <span className="text-muted-foreground font-normal">(optional)</span>
+            {schoolLabel} <span className="text-muted-foreground font-normal">(optional)</span>
           </Label>
           <Input
             id={`lead-school-${interest}`}
             value={school}
             onChange={(e) => setSchool(e.target.value)}
-            placeholder="e.g. Nnamdi Azikiwe University"
+            placeholder={schoolPlaceholder}
           />
         </div>
         {extraFields.map((f) => (
@@ -365,12 +378,28 @@ const LeadCaptureForm = ({
                 <span className="text-muted-foreground font-normal"> (optional)</span>
               )}
             </Label>
-            <Input
-              id={`lead-${interest}-${f.id}`}
-              value={extras[f.id] ?? ""}
-              onChange={(e) => setExtras((prev) => ({ ...prev, [f.id]: e.target.value }))}
-              placeholder={f.placeholder}
-            />
+            {f.options ? (
+              <select
+                id={`lead-${interest}-${f.id}`}
+                value={extras[f.id] ?? ""}
+                onChange={(e) => setExtras((prev) => ({ ...prev, [f.id]: e.target.value }))}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:text-sm"
+              >
+                <option value="">{f.placeholder ?? "Choose one"}</option>
+                {f.options.map((o) => (
+                  <option key={o} value={o}>
+                    {o}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <Input
+                id={`lead-${interest}-${f.id}`}
+                value={extras[f.id] ?? ""}
+                onChange={(e) => setExtras((prev) => ({ ...prev, [f.id]: e.target.value }))}
+                placeholder={f.placeholder}
+              />
+            )}
           </div>
         ))}
       </div>

@@ -9,17 +9,22 @@ import { useCurrency } from "@/contexts/CurrencyContext";
 interface CheckoutDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (method: 'email' | 'whatsapp' | 'card') => void;
+  onSubmit: (method: 'email' | 'whatsapp' | 'card', payInInstalments: boolean) => void;
   totalAmount: number;
+  /** The deposit and balance when this total can be paid in instalments, else null. */
+  instalment?: { deposit: number; balance: number } | null;
+  balanceDueDays?: number;
   isLoading?: boolean;
 }
 
-export const CheckoutDialog = ({ open, onOpenChange, onSubmit, totalAmount, isLoading }: CheckoutDialogProps) => {
+export const CheckoutDialog = ({ open, onOpenChange, onSubmit, totalAmount, instalment, balanceDueDays, isLoading }: CheckoutDialogProps) => {
   const [deliveryMethod, setDeliveryMethod] = useState<'card' | 'whatsapp' | 'email'>('card');
+  const [payInInstalments, setPayInInstalments] = useState(false);
   const { formatPrice } = useCurrency();
+  const splitting = deliveryMethod === 'card' && payInInstalments && !!instalment;
 
   const handleSubmit = () => {
-    onSubmit(deliveryMethod);
+    onSubmit(deliveryMethod, splitting);
   };
 
   return (
@@ -36,7 +41,29 @@ export const CheckoutDialog = ({ open, onOpenChange, onSubmit, totalAmount, isLo
           <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
             <p className="text-sm text-muted-foreground">Total Amount</p>
             <p className="text-2xl font-bold text-primary">{formatPrice(totalAmount)}</p>
+            {splitting && instalment && (
+              <p className="text-sm text-muted-foreground mt-1">
+                Pay {formatPrice(instalment.deposit)} now to start, and {formatPrice(instalment.balance)} within {balanceDueDays} days from your dashboard.
+              </p>
+            )}
           </div>
+
+          {instalment && deliveryMethod === 'card' && (
+            <RadioGroup
+              value={payInInstalments ? 'instalments' : 'full'}
+              onValueChange={(value) => setPayInInstalments(value === 'instalments')}
+              className="grid grid-cols-2 gap-2"
+            >
+              <Label htmlFor="pay-full" className="flex items-center gap-2 p-3 border border-border rounded-lg cursor-pointer">
+                <RadioGroupItem value="full" id="pay-full" />
+                <span className="text-sm">Pay in full</span>
+              </Label>
+              <Label htmlFor="pay-instalments" className="flex items-center gap-2 p-3 border border-border rounded-lg cursor-pointer">
+                <RadioGroupItem value="instalments" id="pay-instalments" />
+                <span className="text-sm">Pay in 2 instalments</span>
+              </Label>
+            </RadioGroup>
+          )}
 
           <RadioGroup value={deliveryMethod} onValueChange={(value) => setDeliveryMethod(value as 'card' | 'whatsapp' | 'email')}>
             <div className="flex items-center space-x-3 p-3 border border-border rounded-lg hover:border-primary/50 transition-colors cursor-pointer">
@@ -79,7 +106,7 @@ export const CheckoutDialog = ({ open, onOpenChange, onSubmit, totalAmount, isLo
             Cancel
           </Button>
           <Button onClick={handleSubmit} className="flex-1" disabled={isLoading}>
-            {isLoading ? 'Processing...' : deliveryMethod === 'card' ? 'Pay Now' : 'Submit Request'}
+            {isLoading ? 'Processing...' : splitting && instalment ? `Pay ${formatPrice(instalment.deposit)} now` : deliveryMethod === 'card' ? 'Pay Now' : 'Submit Request'}
           </Button>
         </div>
       </DialogContent>

@@ -794,3 +794,22 @@ export const PROMO_CODES: Record<string, number> = {
   TECHUP50: 50,
   TECHUP25: 25,
 };
+
+// Paying in instalments. The student pays depositPercent of their plan total
+// at checkout, which starts the plan, and the rest within balanceDueDays from
+// their dashboard (or by bank transfer, marked on /admin/students). Off until
+// the terms are confirmed: set enabled to true to offer it at checkout.
+export const INSTALMENTS = {
+  enabled: false,
+  depositPercent: 50,
+  balanceDueDays: 30,
+  /** Plans totalling less than this (after any discount) are paid in full. */
+  minimumTotal: 50000,
+};
+
+/** The deposit and balance for a total in naira, or null when it can't be split. */
+export function instalmentSplit(total: number): { deposit: number; balance: number } | null {
+  if (!INSTALMENTS.enabled || total < INSTALMENTS.minimumTotal) return null;
+  const deposit = Math.round(total * INSTALMENTS.depositPercent / 100);
+  return { deposit, balance: total - deposit };
+}

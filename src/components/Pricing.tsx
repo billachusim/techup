@@ -26,6 +26,8 @@ import {
   PLAN_PRICING,
   PROMO_CODES,
   REFERRAL_DISCOUNT_PERCENT,
+  INSTALMENTS,
+  instalmentSplit,
   type Benefit,
   type Course,
   type LearningMode,
@@ -450,7 +452,7 @@ const Pricing = () => {
     setCheckoutDialogOpen(true);
   };
 
-  const handleCheckoutSubmit = async (method: 'email' | 'whatsapp' | 'card') => {
+  const handleCheckoutSubmit = async (method: 'email' | 'whatsapp' | 'card', payInInstalments = false) => {
     setIsSubmitting(true);
     
     try {
@@ -593,6 +595,7 @@ const Pricing = () => {
             learningModeId: selection.learningMode || null,
             currencyCode: isNigeria ? 'NGN' : 'USD',
             discountCode: discountCode || '',
+            payInInstalments: payInInstalments || undefined,
             successUrl: `${window.location.origin}/payment-success`,
             cancelUrl: `${window.location.origin}/#pricing`,
           },
@@ -1064,6 +1067,8 @@ Please share the payment details so I can complete my enrollment. Thank you!`;
         onOpenChange={setCheckoutDialogOpen}
         onSubmit={handleCheckoutSubmit}
         totalAmount={totalPrices[selectedPlanId] || 0}
+        instalment={instalmentSplit(totalPrices[selectedPlanId] || 0)}
+        balanceDueDays={INSTALMENTS.balanceDueDays}
         isLoading={isSubmitting}
       />
     </section>

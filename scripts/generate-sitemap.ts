@@ -16,6 +16,7 @@ import { blogCategories, getCategorySlugForPost } from "../src/data/blogCategori
 import { campuses } from "../src/data/campuses";
 import { departments } from "../src/data/departments";
 import { jobPlatforms } from "../src/data/jobPlatforms";
+import { siwesCourses } from "../src/data/siwesCourses";
 import { techHubs } from "../src/data/techHubs";
 
 const BASE_URL = "https://techfaculty.ng";
@@ -136,6 +137,10 @@ const DYNAMIC: Record<string, Resolver | null> = {
   "/hubs/$slug": (file) => {
     const lastmod = gitDate(pageFiles(file));
     return techHubs.map((h) => ({ path: `/hubs/${h.slug}`, lastmod }));
+  },
+  "/siwes/courses/$slug": (file) => {
+    const lastmod = gitDate(pageFiles(file));
+    return siwesCourses.map((c) => ({ path: `/siwes/courses/${c.slug}`, lastmod }));
   },
   "/careers/platforms/$platformSlug": (file) => {
     const lastmod = gitDate(pageFiles(file));

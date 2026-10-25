@@ -1075,6 +1075,83 @@ export type Database = {
         }
         Relationships: []
       }
+      product_orders: {
+        Row: {
+          admin_email_sent_at: string | null
+          amount_due: number
+          buyer_email_sent_at: string | null
+          created_at: string
+          currency: string
+          email: string
+          fulfilled_at: string | null
+          fulfilled_by: string | null
+          id: string
+          items: string[]
+          lead_id: string | null
+          name: string | null
+          notes: string | null
+          paid_at: string | null
+          payment_reference: string | null
+          phone: string | null
+          recovered_at: string | null
+          school: string | null
+          status: string
+          tx_ref: string
+        }
+        Insert: {
+          admin_email_sent_at?: string | null
+          amount_due: number
+          buyer_email_sent_at?: string | null
+          created_at?: string
+          currency?: string
+          email: string
+          fulfilled_at?: string | null
+          fulfilled_by?: string | null
+          id?: string
+          items: string[]
+          lead_id?: string | null
+          name?: string | null
+          notes?: string | null
+          paid_at?: string | null
+          payment_reference?: string | null
+          phone?: string | null
+          recovered_at?: string | null
+          school?: string | null
+          status?: string
+          tx_ref: string
+        }
+        Update: {
+          admin_email_sent_at?: string | null
+          amount_due?: number
+          buyer_email_sent_at?: string | null
+          created_at?: string
+          currency?: string
+          email?: string
+          fulfilled_at?: string | null
+          fulfilled_by?: string | null
+          id?: string
+          items?: string[]
+          lead_id?: string | null
+          name?: string | null
+          notes?: string | null
+          paid_at?: string | null
+          payment_reference?: string | null
+          phone?: string | null
+          recovered_at?: string | null
+          school?: string | null
+          status?: string
+          tx_ref?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_orders_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           cohort_month: number | null

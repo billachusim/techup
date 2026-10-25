@@ -5418,7 +5418,7 @@ Both delivery legs are inside the fee, so you never travel to Nnewi. Turnaround 
 - **Virtual IT placement \u2014 \u20A645,000** for the full duration of your training. Includes the acceptance and placement letter addressed to your school, weekly live sessions, a mentor in your department, real project work, attendance and supervision records, a completion certificate and a recommendation letter. Both tracks are available online: **Learn & Pay** and **Tutor & Earn** (tutor other learners and earn while completing your IT).
 - **Logbook &amp; documents service \u2014 \u20A615,000** per logbook, covering courier pickup, review, supervisor comments, official signing and stamping, ITF form sections, and the return delivery.
 
-Both fees are paid before work starts. You submit the form, we send payment details on WhatsApp or email, and nothing is charged automatically. See the full breakdown on the [Virtual SIWES page](/virtual-siwes).
+Both fees are paid before work starts. You can pay online by card, bank transfer or USSD, or submit the form and we send bank details on WhatsApp or email. See the full breakdown on the [Virtual SIWES page](/virtual-siwes).
 
 ## Virtual, on-site or hybrid \u2014 which should you pick?
 

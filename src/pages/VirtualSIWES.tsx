@@ -2,7 +2,8 @@ import { Link } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CredibilityBanner from "@/components/CredibilityBanner";
-import LeadCaptureForm from "@/components/leads/LeadCaptureForm";
+import PayOrReserve from "@/components/checkout/OrderPayForm";
+import type { LeadExtraField } from "@/components/leads/LeadCaptureForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -36,6 +37,19 @@ const TITLE = "Virtual SIWES Nigeria — Online IT, Logbook Signed";
 const DESCRIPTION =
   "Do your SIWES or IT online from any Nigerian city with a licensed host. We review, fill, sign and stamp your logbook, then waybill it back to you — ₦45,000 + ₦15,000.";
 const URL = "https://techfaculty.ng/virtual-siwes";
+
+const VIRTUAL_IT_FIELDS: LeadExtraField[] = [
+  { id: "department", label: "Course / department", placeholder: "e.g. Computer Science" },
+  { id: "duration", label: "IT duration", placeholder: "e.g. 6 months", required: true },
+  { id: "start", label: "Preferred start date", placeholder: "e.g. September 2026" },
+  { id: "track", label: "Preferred track", placeholder: "Learn & Pay or Tutor & Earn", required: true },
+];
+
+const LOGBOOK_FIELDS: LeadExtraField[] = [
+  { id: "pickup", label: "Pickup city and address", placeholder: "e.g. Owerri — 12 Wetheral Road", required: true },
+  { id: "documents", label: "Logbook / forms to be signed", placeholder: "e.g. ITF logbook + SPE-1 + Form 8" },
+  { id: "deadline", label: "Your school submission deadline", placeholder: "e.g. 30 October 2026", required: true },
+];
 
 const VirtualSIWES = () => {
   const placementWhatsApp = `Hello Tech Faculty, I want to do Virtual SIWES (online IT). Please send the payment details for the ${formatNaira(
@@ -138,7 +152,7 @@ const VirtualSIWES = () => {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button size="lg" asChild>
                 <a href="#reserve-virtual-it">
-                  Reserve a virtual IT slot <ArrowRight className="ml-2" size={18} />
+                  Pay for a virtual IT slot <ArrowRight className="ml-2" size={18} />
                 </a>
               </Button>
               <Button size="lg" variant="outline" asChild>
@@ -203,8 +217,8 @@ const VirtualSIWES = () => {
             </h2>
             <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-10 text-sm md:text-base">
               Both fees are paid before we start — the placement fee before onboarding, the logbook
-              fee before pickup. You submit the form, we send payment details on WhatsApp or email,
-              and nothing is ever charged automatically.
+              fee before pickup. Pay online below by card, bank transfer or USSD, or reserve and we
+              send bank details on WhatsApp or email.
             </p>
 
             <div className="grid gap-6 md:grid-cols-2">
@@ -237,7 +251,7 @@ const VirtualSIWES = () => {
                     ))}
                   </ul>
                   <Button className="w-full" asChild>
-                    <a href="#reserve-virtual-it">Reserve my slot</a>
+                    <a href="#reserve-virtual-it">Pay for my slot</a>
                   </Button>
                 </CardContent>
               </Card>
@@ -368,29 +382,26 @@ const VirtualSIWES = () => {
         <section className="py-16 px-4">
           <div className="container mx-auto max-w-5xl grid gap-8 lg:grid-cols-2">
             <div id="reserve-virtual-it" className="scroll-mt-24 space-y-4">
-              <h2 className="text-2xl font-bold">Reserve your virtual IT slot</h2>
+              <h2 className="text-2xl font-bold">Secure your virtual IT slot</h2>
               <p className="text-sm text-muted-foreground">
-                Cohorts are capped so every intern gets mentor time. Submit this and we reply with
-                payment details for the {formatNaira(VIRTUAL_SIWES.placementPriceNGN)} placement fee.
+                Cohorts are capped so every intern gets mentor time. Pay the{" "}
+                {formatNaira(VIRTUAL_SIWES.placementPriceNGN)} placement fee here and your slot is
+                held straight away; your acceptance letter follows within 48 hours.
               </p>
               <div className="rounded-lg border border-border bg-card p-5">
-                <LeadCaptureForm
-                  interest="virtual_siwes"
-                  source="/virtual-siwes#reserve"
-                  submitLabel="Reserve my virtual IT slot"
-                  compact
-                  whatsappMessage={placementWhatsApp}
-                  extraFields={[
-                    { id: "department", label: "Course / department", placeholder: "e.g. Computer Science" },
-                    { id: "duration", label: "IT duration", placeholder: "e.g. 6 months", required: true },
-                    { id: "start", label: "Preferred start date", placeholder: "e.g. September 2026" },
-                    {
-                      id: "track",
-                      label: "Preferred track",
-                      placeholder: "Learn & Pay or Tutor & Earn",
-                      required: true,
-                    },
-                  ]}
+                <PayOrReserve
+                  product="virtual_siwes"
+                  addOn="logbook_service"
+                  source="/virtual-siwes#pay"
+                  extraFields={VIRTUAL_IT_FIELDS}
+                  reserve={{
+                    interest: "virtual_siwes",
+                    source: "/virtual-siwes#reserve",
+                    submitLabel: "Reserve my virtual IT slot",
+                    compact: true,
+                    whatsappMessage: placementWhatsApp,
+                    extraFields: VIRTUAL_IT_FIELDS,
+                  }}
                 />
               </div>
             </div>
@@ -400,34 +411,21 @@ const VirtualSIWES = () => {
               <p className="text-sm text-muted-foreground">
                 For virtual interns and anyone who completed IT with us and needs their logbook
                 reviewed, signed and stamped. {formatNaira(VIRTUAL_SIWES.logbookPriceNGN)},
-                pickup and return delivery included.
+                pickup and return delivery included. Pay here and we arrange the pickup on WhatsApp.
               </p>
               <div className="rounded-lg border border-border bg-card p-5">
-                <LeadCaptureForm
-                  interest="logbook_service"
-                  source="/virtual-siwes#logbook"
-                  submitLabel="Book my logbook pickup"
-                  compact
-                  whatsappMessage={logbookWhatsApp}
-                  extraFields={[
-                    {
-                      id: "pickup",
-                      label: "Pickup city and address",
-                      placeholder: "e.g. Owerri — 12 Wetheral Road",
-                      required: true,
-                    },
-                    {
-                      id: "documents",
-                      label: "Logbook / forms to be signed",
-                      placeholder: "e.g. ITF logbook + SPE-1 + Form 8",
-                    },
-                    {
-                      id: "deadline",
-                      label: "Your school submission deadline",
-                      placeholder: "e.g. 30 October 2026",
-                      required: true,
-                    },
-                  ]}
+                <PayOrReserve
+                  product="logbook_service"
+                  source="/virtual-siwes#logbook-pay"
+                  extraFields={LOGBOOK_FIELDS}
+                  reserve={{
+                    interest: "logbook_service",
+                    source: "/virtual-siwes#logbook",
+                    submitLabel: "Book my logbook pickup",
+                    compact: true,
+                    whatsappMessage: logbookWhatsApp,
+                    extraFields: LOGBOOK_FIELDS,
+                  }}
                 />
               </div>
             </div>

@@ -27,6 +27,7 @@ const EXCLUDE = new Set([
   "/login",
   "/dashboard",
   "/payment-success",
+  "/order-complete",
   "/talent/dashboard",
   "/talent/profile",
   "/.lovable/oauth/consent",

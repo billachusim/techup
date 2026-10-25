@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/accordion";
 import { CheckCircle2, FileText, ShieldCheck, ArrowRight, MessageCircle } from "lucide-react";
 import LeadCaptureForm from "@/components/leads/LeadCaptureForm";
+import PayOrReserve from "@/components/checkout/OrderPayForm";
 import {
   SUCCESS_KIT,
   formatNaira,
@@ -198,17 +199,21 @@ const SuccessKit = () => (
                 </div>
 
                 <div className="pt-4 border-t border-border">
-                  <p className="font-semibold text-sm mb-1">Reserve your kit</p>
+                  <p className="font-semibold text-sm mb-1">Get your kit now</p>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Leave your details and we confirm your order with payment details. Nothing is
-                    charged here.
+                    Pay online and your download opens straight away, with the link sent to your
+                    email too.
                   </p>
-                  <LeadCaptureForm
-                    interest="success_kit"
-                    source="page:siwes-success-kit-offer"
-                    submitLabel="Reserve my kit"
-                    compact
-                    whatsappMessage={`Hello Tech Faculty, I want to order the ${SUCCESS_KIT.name} (${formatNaira(SUCCESS_KIT.priceNGN)}).`}
+                  <PayOrReserve
+                    product="success_kit"
+                    source="page:siwes-success-kit-offer#pay"
+                    reserve={{
+                      interest: "success_kit",
+                      source: "page:siwes-success-kit-offer",
+                      submitLabel: "Reserve my kit",
+                      compact: true,
+                      whatsappMessage: `Hello Tech Faculty, I want to order the ${SUCCESS_KIT.name} (${formatNaira(SUCCESS_KIT.priceNGN)}).`,
+                    }}
                   />
                 </div>
 

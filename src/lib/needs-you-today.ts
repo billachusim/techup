@@ -8,6 +8,8 @@ export interface NeedsYouTodayCounts {
   talent_requests: number;
   /** null until the referral programme's table exists. */
   referral_rewards: number | null;
+  /** Paid online orders (Virtual SIWES, logbook, kit) not yet marked sent; missing until that migration runs. */
+  orders_to_fulfil?: number | null;
 }
 
 export interface NeedsYouTodayItem {
@@ -17,6 +19,7 @@ export interface NeedsYouTodayItem {
 }
 
 export const NEEDS_YOU_TODAY: NeedsYouTodayItem[] = [
+  { key: "orders_to_fulfil", label: "Paid orders to fulfil", path: "/admin/leads" },
   { key: "new_leads", label: "New leads", path: "/admin/leads" },
   { key: "payments_to_confirm", label: "Payments to confirm", path: "/admin/students" },
   { key: "work_to_review", label: "Work awaiting review", path: "/admin/students" },

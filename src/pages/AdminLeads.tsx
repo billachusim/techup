@@ -3,6 +3,7 @@ import { Download, Inbox, Loader2, Mail, MessageCircle, RefreshCw, Search } from
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AdminNav from "@/components/admin/AdminNav";
+import PaidOrders from "@/components/admin/PaidOrders";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -232,6 +233,7 @@ export default function AdminLeads() {
           </div>
         ) : (
           <>
+            <PaidOrders />
             <div className="flex flex-wrap gap-2" role="tablist" aria-label="Filter by status">
               {([...STATUSES, "all"] as const).map((s) => (
                 <button

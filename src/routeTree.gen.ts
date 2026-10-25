@@ -17,6 +17,7 @@ import { Route as FeedDotxmlRouteImport } from './routes/feed[.]xml'
 import { Route as HireRouteImport } from './routes/hire'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LovableRouteImport } from './routes/lovable'
+import { Route as OrderCompleteRouteImport } from './routes/order-complete'
 import { Route as OutcomesRouteImport } from './routes/outcomes'
 import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
 import { Route as ProductsRouteImport } from './routes/products'
@@ -113,6 +114,11 @@ const LoginRoute = LoginRouteImport.update({
 const LovableRoute = LovableRouteImport.update({
   id: '/lovable',
   path: '/lovable',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrderCompleteRoute = OrderCompleteRouteImport.update({
+  id: '/order-complete',
+  path: '/order-complete',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OutcomesRoute = OutcomesRouteImport.update({
@@ -415,6 +421,7 @@ export interface FileRoutesByFullPath {
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
   '/lovable': typeof LovableRouteWithChildren
+  '/order-complete': typeof OrderCompleteRoute
   '/outcomes': typeof OutcomesRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
@@ -482,6 +489,7 @@ export interface FileRoutesByTo {
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
   '/lovable': typeof LovableRouteWithChildren
+  '/order-complete': typeof OrderCompleteRoute
   '/outcomes': typeof OutcomesRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
@@ -550,6 +558,7 @@ export interface FileRoutesById {
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
   '/lovable': typeof LovableRouteWithChildren
+  '/order-complete': typeof OrderCompleteRoute
   '/outcomes': typeof OutcomesRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
@@ -619,6 +628,7 @@ export interface FileRouteTypes {
     | '/hire'
     | '/login'
     | '/lovable'
+    | '/order-complete'
     | '/outcomes'
     | '/payment-success'
     | '/products'
@@ -686,6 +696,7 @@ export interface FileRouteTypes {
     | '/hire'
     | '/login'
     | '/lovable'
+    | '/order-complete'
     | '/outcomes'
     | '/payment-success'
     | '/products'
@@ -753,6 +764,7 @@ export interface FileRouteTypes {
     | '/hire'
     | '/login'
     | '/lovable'
+    | '/order-complete'
     | '/outcomes'
     | '/payment-success'
     | '/products'
@@ -821,6 +833,7 @@ export interface RootRouteChildren {
   HireRoute: typeof HireRoute
   LoginRoute: typeof LoginRoute
   LovableRoute: typeof LovableRouteWithChildren
+  OrderCompleteRoute: typeof OrderCompleteRoute
   OutcomesRoute: typeof OutcomesRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
   ProductsRoute: typeof ProductsRoute
@@ -933,6 +946,13 @@ declare module '@tanstack/react-router' {
       path: '/lovable'
       fullPath: '/lovable'
       preLoaderRoute: typeof LovableRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order-complete': {
+      id: '/order-complete'
+      path: '/order-complete'
+      fullPath: '/order-complete'
+      preLoaderRoute: typeof OrderCompleteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/outcomes': {
@@ -1361,6 +1381,7 @@ const rootRouteChildren: RootRouteChildren = {
   HireRoute: HireRoute,
   LoginRoute: LoginRoute,
   LovableRoute: LovableRouteWithChildren,
+  OrderCompleteRoute: OrderCompleteRoute,
   OutcomesRoute: OutcomesRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
   ProductsRoute: ProductsRoute,

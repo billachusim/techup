@@ -51,6 +51,35 @@ export const adminMorningDigest = {
   },
 } satisfies TemplateEntry
 
+// Staff: an online order (Virtual SIWES, logbook service, kit) has been paid
+const OrderPaidAdmin = ({ name, email, phone, school, items, amount, notes, reference }: Record<string, string | undefined>) => (
+  <Html lang="en" dir="ltr">
+    <Head />
+    <Preview>{`Paid online: ${items ?? 'an order'}`}</Preview>
+    <Body style={main}>
+      <Container style={container}>
+        <Text style={brand}>TECH FACULTY</Text>
+        <Heading style={h1}>New paid order</Heading>
+        <Text style={text}><b>{items}</b> · {amount}</Text>
+        <Text style={text}>{name} · {email} · WhatsApp {phone}{school ? ` · ${school}` : ''}</Text>
+        {notes && <Text style={text}>{notes}</Text>}
+        <Text style={text}>Flutterwave reference: {reference}</Text>
+        <Button style={button} href={`${SITE}/admin/leads`}>Open paid orders</Button>
+        <Hr style={hr} />
+        <Text style={footer}>Mark it fulfilled on /admin/leads once the letter, pickup or kit is sorted.</Text>
+      </Container>
+    </Body>
+  </Html>
+)
+
+export const orderPaidAdmin = {
+  component: OrderPaidAdmin,
+  subject: (d) => `Paid online: ${d.items ?? 'order'} (${d.amount ?? ''})`,
+  displayName: 'Online order paid (staff)',
+  to: 'nachusim@gmail.com',
+  previewData: { name: 'Ada Obi', email: 'ada@example.com', phone: '08030000000', items: 'Virtual SIWES placement', amount: '₦45,000', reference: '1234567' },
+} satisfies TemplateEntry
+
 const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, Helvetica, sans-serif' }
 const container = { padding: '28px 24px', maxWidth: '560px' }
 const brand = { fontSize: '12px', letterSpacing: '2px', fontWeight: 700, color: '#000000', margin: '0 0 16px' }

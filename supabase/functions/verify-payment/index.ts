@@ -1,9 +1,12 @@
 // The payment-success page calls this with the tx_ref Flutterwave sent back.
 // It confirms the payment server-side (same check as the webhook) and tells
-// the page whether the enrolment is active yet.
+// the page whether the enrolment is active yet. The order-complete page uses
+// it the same way for online orders (TFO- references), which need no sign-in:
+// the reference is a random UUID only the buyer was sent back with.
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { confirmPayment } from "../_shared/flutterwave.ts";
+import { confirmOrderPayment, confirmPayment } from "../_shared/flutterwave.ts";
+import { isOrderRef } from "../_shared/products.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -23,12 +26,18 @@ serve(async (req) => {
     const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
       auth: { persistSession: false },
     });
+    const { txRef } = await req.json().catch(() => ({}));
+    if (!txRef || typeof txRef !== "string") return json({ error: "txRef is required" }, 400);
+
+    if (isOrderRef(txRef)) {
+      const result = await confirmOrderPayment(admin, secretKey, txRef);
+      if (result.status === "not_found") return json({ status: "not_found" }, 404);
+      return json(result.status === "paid" ? { status: "paid", items: result.items } : { status: result.status });
+    }
+
     const token = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
     const { data: { user } } = await admin.auth.getUser(token);
     if (!user) return json({ error: "Please sign in" }, 401);
-
-    const { txRef } = await req.json().catch(() => ({}));
-    if (!txRef || typeof txRef !== "string") return json({ error: "txRef is required" }, 400);
 
     // Students can only check their own payments.
     const { data: profile } = await admin.from("profiles").select("faculty_id").eq("id", user.id).maybeSingle();

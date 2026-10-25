@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CreditCard, Loader2, Lock } from "lucide-react";
 import { getSupabase } from "@/integrations/supabase/lazy";
+import { rememberCheckout, trackEvent } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -68,6 +69,9 @@ export function OrderPayForm({ product, addOn, source, extraFields = [] }: Props
       setError(message);
       return;
     }
+    const plan = items.map((id) => PRODUCTS[id].name).join(" + ");
+    trackEvent("begin_checkout", { value: total, currency: "NGN", items: items.map((id) => ({ item_id: id, item_name: PRODUCTS[id].name })) });
+    rememberCheckout({ plan, value: total, currency: "NGN" });
     window.location.href = data.url;
   };
 

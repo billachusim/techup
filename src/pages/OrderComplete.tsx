@@ -6,6 +6,7 @@ import { CheckCircle, Clock, FileDown, Loader2, MessageCircle, XCircle } from "l
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getSupabase } from "@/integrations/supabase/lazy";
+import { trackPurchase } from "@/lib/analytics";
 import { VIRTUAL_SIWES } from "@/data/virtualSiwes";
 import { SUCCESS_KIT } from "@/data/successKit";
 import { PRODUCTS, type ProductId } from "../../supabase/functions/_shared/products.ts";
@@ -36,8 +37,10 @@ const OrderComplete = () => {
         if (status === "paid") {
           // Sends the receipt now rather than at the next 30-minute re-check. Safe to repeat.
           void fetch("/api/payment-followups", { method: "POST" }).catch(() => undefined);
+          const bought = ((data.items ?? []) as string[]).filter((id): id is ProductId => id in PRODUCTS);
+          trackPurchase(txRef, bought.map((id) => PRODUCTS[id].name).join(" + "));
           if (!cancelled) {
-            setItems(((data.items ?? []) as string[]).filter((id): id is ProductId => id in PRODUCTS));
+            setItems(bought);
             setState("paid");
           }
           return;

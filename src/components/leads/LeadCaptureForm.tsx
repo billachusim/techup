@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getSupabase } from "@/integrations/supabase/lazy";
 import { clampLeadField } from "@/lib/leads";
+import { trackLead } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -155,6 +156,7 @@ const LeadCaptureForm = ({
       setError("We couldn't save that. Please try again, or reach us on WhatsApp.");
       return;
     }
+    trackLead("lead_capture", { interest, lead_source: source, channel });
     setNotesValue(notes || null);
     setStatus("done");
   };

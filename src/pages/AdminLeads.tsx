@@ -13,6 +13,7 @@ import { useIsStaff } from "@/hooks/useIsStaff";
 import { getSupabase } from "@/integrations/supabase/lazy";
 import { Link } from "@/lib/router-compat";
 import { csvFilename, downloadCsv, toCsv } from "@/lib/csv";
+import { FOLLOWUP_DAYS } from "@/lib/lead-followups";
 import { cn } from "@/lib/utils";
 
 const STATUSES = ["new", "contacted", "enrolled", "not_interested"] as const;
@@ -57,6 +58,21 @@ type Lead = {
 };
 
 type Followup = { lead_id: string; stage: string; status: string; sent_at: string | null };
+type EmailFollowup = { lead_id: string; steps_sent: number; stop_reason: string | null };
+
+const STOP_LABEL: Record<string, string> = {
+  lead_closed: "stopped",
+  enrolled: "stopped, enrolled",
+  suppressed: "stopped, address bounced",
+  unsubscribed: "unsubscribed",
+};
+
+/** Where a lead's follow-up email sequence is up to, for its badge. */
+const emailFollowupLabel = (f: EmailFollowup) => {
+  const sent = `${f.steps_sent} of ${FOLLOWUP_DAYS.length} sent`;
+  const stopped = f.stop_reason && STOP_LABEL[f.stop_reason];
+  return `Follow-up emails: ${stopped ? `${sent}, ${stopped}` : sent}`;
+};
 
 const interestLabel = (interest: string) => INTEREST_LABEL[interest] ?? interest.replace(/_/g, " ");
 
@@ -89,6 +105,7 @@ export default function AdminLeads() {
   const [loading, setLoading] = useState(true);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [whatsappFollowups, setWhatsappFollowups] = useState<Record<string, Followup[]>>({});
+  const [emailFollowups, setEmailFollowups] = useState<Record<string, EmailFollowup>>({});
   const [filter, setFilter] = useState<LeadStatus | "all">("new");
   const [interest, setInterest] = useState("all");
   const [query, setQuery] = useState("");
@@ -126,6 +143,14 @@ export default function AdminLeads() {
     } else {
       setWhatsappFollowups({});
     }
+    // From a newer migration than the generated types; missing until it is run.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: emails } = await (supabase as unknown as { from: (t: string) => any })
+      .from("lead_email_followups")
+      .select("lead_id, steps_sent, stop_reason")
+      .order("created_at", { ascending: false })
+      .limit(1000);
+    setEmailFollowups(Object.fromEntries(((emails ?? []) as EmailFollowup[]).map((f) => [f.lead_id, f])));
   }, [toast]);
 
   useEffect(() => {
@@ -309,6 +334,7 @@ export default function AdminLeads() {
                                 )}
                                 {lead.channel === "whatsapp" && lead.whatsapp_opt_in && <Badge variant="outline">WhatsApp updates: opted in</Badge>}
                                 {lead.channel === "whatsapp" && !lead.whatsapp_opt_in && <Badge variant="outline">WhatsApp updates: not opted in</Badge>}
+                                {emailFollowups[lead.id] && <Badge variant="outline">{emailFollowupLabel(emailFollowups[lead.id])}</Badge>}
                                 <span className="text-xs text-muted-foreground">{formatDate(lead.created_at)}</span>
                               </div>
                             </div>

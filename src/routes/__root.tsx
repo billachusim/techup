@@ -13,6 +13,7 @@ import { Suspense, lazy, useEffect, useState, type ReactNode } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { UserProvider } from "@/contexts/UserContext";
+import { installWhatsAppClickTracking } from "@/lib/analytics";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
 import { DEFAULT_OG_IMAGE, LOGO_URL } from "@/lib/seo";
 import NotFound from "@/pages/NotFound";
@@ -191,6 +192,9 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useEffect(() => {
+    installWhatsAppClickTracking();
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>

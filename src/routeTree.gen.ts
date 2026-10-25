@@ -55,6 +55,7 @@ import { Route as HubsIndexRouteImport } from './routes/hubs.index'
 import { Route as HubsSlugRouteImport } from './routes/hubs.$slug'
 import { Route as LocationsIndexRouteImport } from './routes/locations.index'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
+import { Route as ReportsNigeriaTechSalariesRouteImport } from './routes/reports.nigeria-tech-salaries'
 import { Route as SiwesIndexRouteImport } from './routes/siwes.index'
 import { Route as TagSplatRouteImport } from './routes/tag.$'
 import { Route as TalentIndexRouteImport } from './routes/talent.index'
@@ -311,6 +312,12 @@ const LocationsSlugRoute = LocationsSlugRouteImport.update({
   path: '/locations/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportsNigeriaTechSalariesRoute =
+  ReportsNigeriaTechSalariesRouteImport.update({
+    id: '/reports/nigeria-tech-salaries',
+    path: '/reports/nigeria-tech-salaries',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const SiwesIndexRoute = SiwesIndexRouteImport.update({
   id: '/siwes/',
   path: '/siwes/',
@@ -476,6 +483,7 @@ export interface FileRoutesByFullPath {
   '/events/$slug': typeof EventsSlugRoute
   '/hubs/$slug': typeof HubsSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/reports/nigeria-tech-salaries': typeof ReportsNigeriaTechSalariesRoute
   '/tag/$': typeof TagSplatRoute
   '/talent/dashboard': typeof TalentDashboardRoute
   '/talent/profile': typeof TalentProfileRoute
@@ -548,6 +556,7 @@ export interface FileRoutesByTo {
   '/events/$slug': typeof EventsSlugRoute
   '/hubs/$slug': typeof HubsSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/reports/nigeria-tech-salaries': typeof ReportsNigeriaTechSalariesRoute
   '/tag/$': typeof TagSplatRoute
   '/talent/dashboard': typeof TalentDashboardRoute
   '/talent/profile': typeof TalentProfileRoute
@@ -621,6 +630,7 @@ export interface FileRoutesById {
   '/events/$slug': typeof EventsSlugRoute
   '/hubs/$slug': typeof HubsSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/reports/nigeria-tech-salaries': typeof ReportsNigeriaTechSalariesRoute
   '/tag/$': typeof TagSplatRoute
   '/talent/dashboard': typeof TalentDashboardRoute
   '/talent/profile': typeof TalentProfileRoute
@@ -695,6 +705,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/hubs/$slug'
     | '/locations/$slug'
+    | '/reports/nigeria-tech-salaries'
     | '/tag/$'
     | '/talent/dashboard'
     | '/talent/profile'
@@ -767,6 +778,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/hubs/$slug'
     | '/locations/$slug'
+    | '/reports/nigeria-tech-salaries'
     | '/tag/$'
     | '/talent/dashboard'
     | '/talent/profile'
@@ -839,6 +851,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/hubs/$slug'
     | '/locations/$slug'
+    | '/reports/nigeria-tech-salaries'
     | '/tag/$'
     | '/talent/dashboard'
     | '/talent/profile'
@@ -912,6 +925,7 @@ export interface RootRouteChildren {
   EventsSlugRoute: typeof EventsSlugRoute
   HubsSlugRoute: typeof HubsSlugRoute
   LocationsSlugRoute: typeof LocationsSlugRoute
+  ReportsNigeriaTechSalariesRoute: typeof ReportsNigeriaTechSalariesRoute
   TagSplatRoute: typeof TagSplatRoute
   TalentDashboardRoute: typeof TalentDashboardRoute
   TalentProfileRoute: typeof TalentProfileRoute
@@ -1266,6 +1280,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reports/nigeria-tech-salaries': {
+      id: '/reports/nigeria-tech-salaries'
+      path: '/reports/nigeria-tech-salaries'
+      fullPath: '/reports/nigeria-tech-salaries'
+      preLoaderRoute: typeof ReportsNigeriaTechSalariesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/siwes/': {
       id: '/siwes/'
       path: '/siwes'
@@ -1493,6 +1514,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsSlugRoute: EventsSlugRoute,
   HubsSlugRoute: HubsSlugRoute,
   LocationsSlugRoute: LocationsSlugRoute,
+  ReportsNigeriaTechSalariesRoute: ReportsNigeriaTechSalariesRoute,
   TagSplatRoute: TagSplatRoute,
   TalentDashboardRoute: TalentDashboardRoute,
   TalentProfileRoute: TalentProfileRoute,

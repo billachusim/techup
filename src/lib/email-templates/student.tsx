@@ -1,6 +1,7 @@
 import React from 'react'
 import { Body, Button, Container, Head, Heading, Hr, Html, Preview, Text } from '@react-email/components'
 import type { TemplateEntry } from './registry'
+import { followupEmail } from '@/lib/lead-followups'
 
 const SITE = 'https://techfaculty.ng'
 const WHATSAPP = 'https://wa.me/2348068597140'
@@ -70,6 +71,23 @@ const GraduateReviewRequest = ({ name, courseName, reviewUrl }: { name?: string;
   </Layout>
 )
 
+// 7. Lead: follow-up sequence after an enquiry (copy in src/lib/lead-followups.ts)
+const LeadFollowUp = ({ name, interest, step, unsubscribeUrl }: { name?: string; interest?: string; step?: number; unsubscribeUrl?: string }) => {
+  const email = followupEmail(interest ?? 'general', step ?? 0) ?? followupEmail('general', 0)!
+  return (
+    <Layout preview={email.preview} title={email.title} cta={email.cta} href={email.href}>
+      <Text style={text}>{hi(name)}</Text>
+      {email.paragraphs.map((p) => (
+        <Text key={p} style={text}>{p}</Text>
+      ))}
+      <Text style={muted}>Questions? Reply to this email or <a href={WHATSAPP} style={link}>message us on WhatsApp</a>.</Text>
+      {unsubscribeUrl && (
+        <Text style={muted}>You are getting this because you contacted Tech Faculty NG. <a href={unsubscribeUrl} style={link}>Stop these emails</a>.</Text>
+      )}
+    </Layout>
+  )
+}
+
 export const studentWelcome = {
   component: StudentWelcome,
   subject: (d) => `Welcome to ${d.programme ?? 'Tech Faculty'} — your Faculty ID and class group`,
@@ -131,6 +149,13 @@ export const paymentConfirmed = {
   subject: (d) => `Payment confirmed: you're enrolled in ${d.plan ?? 'Tech Faculty'}`,
   displayName: 'Card payment confirmed later',
   previewData: { name: 'Ada Obi', plan: 'Developer Pro', facultyId: 'TF-WEBDEV-ONL-0926-0001' },
+} satisfies TemplateEntry
+
+export const leadFollowUp = {
+  component: LeadFollowUp,
+  subject: (d) => (followupEmail(String(d.interest ?? 'general'), Number(d.step ?? 0)) ?? followupEmail('general', 0)!).subject,
+  displayName: 'Lead follow-up (1, 3 and 7 days after an enquiry)',
+  previewData: { name: 'Ada Obi', interest: 'virtual_siwes', step: 0, unsubscribeUrl: 'https://techfaculty.ng/api/lead-unsubscribe?t=00000000-0000-0000-0000-000000000000' },
 } satisfies TemplateEntry
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, Helvetica, sans-serif' }

@@ -40,6 +40,8 @@ import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminTalentRouteImport } from './routes/admin.talent'
 import { Route as AdminWhatsappRouteImport } from './routes/admin.whatsapp'
 import { Route as ApiAdminDigestRouteImport } from './routes/api.admin-digest'
+import { Route as ApiLeadFollowupsRouteImport } from './routes/api.lead-followups'
+import { Route as ApiLeadUnsubscribeRouteImport } from './routes/api.lead-unsubscribe'
 import { Route as ApiPaymentFollowupsRouteImport } from './routes/api.payment-followups'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -229,6 +231,16 @@ const AdminWhatsappRoute = AdminWhatsappRouteImport.update({
 const ApiAdminDigestRoute = ApiAdminDigestRouteImport.update({
   id: '/api/admin-digest',
   path: '/api/admin-digest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLeadFollowupsRoute = ApiLeadFollowupsRouteImport.update({
+  id: '/api/lead-followups',
+  path: '/api/lead-followups',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLeadUnsubscribeRoute = ApiLeadUnsubscribeRouteImport.update({
+  id: '/api/lead-unsubscribe',
+  path: '/api/lead-unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPaymentFollowupsRoute = ApiPaymentFollowupsRouteImport.update({
@@ -437,6 +449,8 @@ export interface FileRoutesByFullPath {
   '/admin/talent': typeof AdminTalentRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
+  '/api/lead-followups': typeof ApiLeadFollowupsRoute
+  '/api/lead-unsubscribe': typeof ApiLeadUnsubscribeRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
@@ -504,6 +518,8 @@ export interface FileRoutesByTo {
   '/admin/talent': typeof AdminTalentRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
+  '/api/lead-followups': typeof ApiLeadFollowupsRoute
+  '/api/lead-unsubscribe': typeof ApiLeadUnsubscribeRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
@@ -572,6 +588,8 @@ export interface FileRoutesById {
   '/admin/talent': typeof AdminTalentRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
+  '/api/lead-followups': typeof ApiLeadFollowupsRoute
+  '/api/lead-unsubscribe': typeof ApiLeadUnsubscribeRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
@@ -641,6 +659,8 @@ export interface FileRouteTypes {
     | '/admin/talent'
     | '/admin/whatsapp'
     | '/api/admin-digest'
+    | '/api/lead-followups'
+    | '/api/lead-unsubscribe'
     | '/api/payment-followups'
     | '/blog/$slug'
     | '/category/$'
@@ -708,6 +728,8 @@ export interface FileRouteTypes {
     | '/admin/talent'
     | '/admin/whatsapp'
     | '/api/admin-digest'
+    | '/api/lead-followups'
+    | '/api/lead-unsubscribe'
     | '/api/payment-followups'
     | '/blog/$slug'
     | '/category/$'
@@ -775,6 +797,8 @@ export interface FileRouteTypes {
     | '/admin/talent'
     | '/admin/whatsapp'
     | '/api/admin-digest'
+    | '/api/lead-followups'
+    | '/api/lead-unsubscribe'
     | '/api/payment-followups'
     | '/blog/$slug'
     | '/category/$'
@@ -843,6 +867,8 @@ export interface RootRouteChildren {
   AdminTalentRoute: typeof AdminTalentRoute
   AdminWhatsappRoute: typeof AdminWhatsappRoute
   ApiAdminDigestRoute: typeof ApiAdminDigestRoute
+  ApiLeadFollowupsRoute: typeof ApiLeadFollowupsRoute
+  ApiLeadUnsubscribeRoute: typeof ApiLeadUnsubscribeRoute
   ApiPaymentFollowupsRoute: typeof ApiPaymentFollowupsRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CategorySplatRoute: typeof CategorySplatRoute
@@ -1094,6 +1120,20 @@ declare module '@tanstack/react-router' {
       path: '/api/admin-digest'
       fullPath: '/api/admin-digest'
       preLoaderRoute: typeof ApiAdminDigestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/lead-followups': {
+      id: '/api/lead-followups'
+      path: '/api/lead-followups'
+      fullPath: '/api/lead-followups'
+      preLoaderRoute: typeof ApiLeadFollowupsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/lead-unsubscribe': {
+      id: '/api/lead-unsubscribe'
+      path: '/api/lead-unsubscribe'
+      fullPath: '/api/lead-unsubscribe'
+      preLoaderRoute: typeof ApiLeadUnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/payment-followups': {
@@ -1384,6 +1424,8 @@ const rootRouteChildren: RootRouteChildren = {
   AdminTalentRoute: AdminTalentRoute,
   AdminWhatsappRoute: AdminWhatsappRoute,
   ApiAdminDigestRoute: ApiAdminDigestRoute,
+  ApiLeadFollowupsRoute: ApiLeadFollowupsRoute,
+  ApiLeadUnsubscribeRoute: ApiLeadUnsubscribeRoute,
   ApiPaymentFollowupsRoute: ApiPaymentFollowupsRoute,
   BlogSlugRoute: BlogSlugRoute,
   CategorySplatRoute: CategorySplatRoute,

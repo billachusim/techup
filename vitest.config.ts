@@ -11,6 +11,7 @@ export default defineConfig({
     alias: [
       { find: "https://deno.land/std@0.168.0/http/server.ts", replacement: stub("deno-serve.ts") },
       { find: "https://esm.sh/@supabase/supabase-js@2", replacement: stub("supabase.ts") },
+      { find: /^@\//, replacement: `${path.resolve(__dirname, "src")}/` },
     ],
   },
   test: {

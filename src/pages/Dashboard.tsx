@@ -14,6 +14,7 @@ import { HandoutModal } from "@/components/HandoutModal";
 import { CertificateCard } from "@/components/CertificateCard";
 import { StudentClassroom } from "@/components/student/StudentClassroom";
 import { ReferralCard } from "@/components/student/ReferralCard";
+import { BalanceDue } from "@/components/student/BalanceDue";
 import { LocationPrompt } from "@/components/student/LocationPrompt";
 import { isFreePlan } from "../../supabase/functions/_shared/enrollment-access.ts";
 
@@ -456,6 +457,8 @@ const Dashboard = () => {
                   </div>
                 </CardContent>
               </Card>
+
+              {enrollmentData && <BalanceDue enrollment={enrollmentData} />}
 
               {/* Next Lecture Card */}
               <Card>

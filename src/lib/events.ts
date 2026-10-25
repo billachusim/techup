@@ -1,4 +1,5 @@
 import { getSupabase } from "@/integrations/supabase/lazy";
+import { servesOurAudience } from "../../supabase/functions/_shared/event-audience.ts";
 
 export type TechEvent = {
   id: string;
@@ -141,7 +142,8 @@ export async function fetchEvents(limit = 300): Promise<TechEvent[]> {
     .eq("is_expired", false)
     .limit(limit);
   if (error) throw error;
-  return ((data ?? []) as unknown as TechEvent[]).filter(isCurrent).sort(localFirst);
+  // Rows scraped before the audience rule existed may be for US or UK attendees only.
+  return ((data ?? []) as unknown as TechEvent[]).filter((e) => isCurrent(e) && servesOurAudience(e)).sort(localFirst);
 }
 
 export async function fetchEventBySlug(slug: string): Promise<TechEvent | null> {

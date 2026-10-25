@@ -16,6 +16,7 @@ import PostInternalLinks from "@/components/blog/PostInternalLinks";
 import { useAllBlogPosts } from "@/hooks/useBlogPostsData";
 import { formatDate } from "@/components/LastUpdated";
 import { articleOgImage } from "@/lib/og-image";
+import { extractFaq } from "@/lib/blog-faq";
 
 const headingText = (children: unknown): string =>
   Array.isArray(children)
@@ -124,6 +125,7 @@ const BlogPost = () => {
   );
 
   const body = post.content.replace(/^\s*\*By [^*\n]+\*[ \t]*\n?/m, "");
+  const faq = extractFaq(body);
   const [firstHalf, secondHalf] = isVirtualSiwesPost
     ? splitAtMiddleHeading(body)
     : [body, ""];
@@ -163,6 +165,19 @@ const BlogPost = () => {
             },
           })}
         </script>
+        {faq.length > 0 && (
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: faq.map((item) => ({
+                "@type": "Question",
+                name: item.question,
+                acceptedAnswer: { "@type": "Answer", text: item.answer },
+              })),
+            })}
+          </script>
+        )}
       </>
       <Header />
       <main className="pt-20">

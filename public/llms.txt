@@ -39,6 +39,12 @@
 - [SIWES and IT placement](https://techfaculty.ng/siwes): On site at our campuses with no separate placement fee: Learn & Pay (regular course fee, up to 50% off for SIWES students) or Tutor & Earn (paid).
 - [Virtual SIWES](https://techfaculty.ng/virtual-siwes): Online IT placement for ₦45,000, plus logbook review, signing, stamping and two-way delivery for ₦15,000.
 - [SIWES Success Kit](https://techfaculty.ng/siwes-success-kit): Everything a Nigerian student needs to land, survive and convert a SIWES placement. ₦4,500, with a free placement checklist.
+- [SIWES by course of study](https://techfaculty.ng/siwes/courses): What a tech SIWES placement involves for students outside computer science, with projects, logbook examples and what to confirm with the SIWES coordinator.
+- [SIWES for Electrical, Electronic & Computer Engineering Students](https://techfaculty.ng/siwes/courses/electrical-electronic-computer-engineering): SIWES for electrical, electronic and computer engineering students in Nigeria: embedded systems, IoT and automation projects, logbook examples and costs.
+- [SIWES for Mass Communication & Journalism Students](https://techfaculty.ng/siwes/courses/mass-communication): SIWES for mass communication students in Nigeria: social media, content, design and digital PR work for real clients, logbook examples and what it costs.
+- [SIWES for Statistics & Mathematics Students](https://techfaculty.ng/siwes/courses/statistics-mathematics): SIWES for statistics and mathematics students in Nigeria: data cleaning, SQL, Excel, Python and dashboard projects, logbook examples, and what each option costs.
+- [SIWES for Accounting, Banking, Economics & Business Students](https://techfaculty.ng/siwes/courses/accounting-business-economics): SIWES for accounting, banking, economics and business students in Nigeria: Excel, financial dashboards, digital sales and AI tools for real businesses.
+- [SIWES for Office Technology & Management (OTM) Students](https://techfaculty.ng/siwes/courses/office-technology-management): SIWES for OTM, secretarial and library science students in Nigeria: digital records, Google Workspace, Microsoft Office and AI tools in a working office.
 
 ## Campuses
 
@@ -70,7 +76,7 @@
 
 - [Home](https://techfaculty.ng/): Licensed by FMSTI through NBTI. Coding, data, AI and cybersecurity from ₦50,000; 6,000+ trained, 75% employed. 22 campuses or online, free on-site SIWES.
 - [About Us: Our Mission & Story](https://techfaculty.ng/about): Tech Faculty NG — licensed by FMSTI via NBTI. We train, certify, and place the next generation of Nigerian tech professionals from Nnewi, Anambra State.
-- [Business Partnerships](https://techfaculty.ng/business-partnerships): Partner with Tech Faculty NG for corporate training, AI workshops, business digitization, and tech talent pipelines. FMSTI-licensed, based in Nnewi, Nigeria.
+- [Staff Training Packages for Businesses](https://techfaculty.ng/business-partnerships): Staff training packages for Nigerian businesses: AI for teams, digital skills, data and reporting, cybersecurity awareness. Request a quote from Tech Faculty NG, licensed by FMSTI through NBTI.
 - [Tech Jobs & Talent Marketplace](https://techfaculty.ng/careers): Build one talent profile and get matched to verified tech roles and business projects across Nigeria and Africa, or hire skilled African talent.
 - [Tech Events in Nigeria 2026: AI & Data](https://techfaculty.ng/events): Find upcoming tech events in Nigeria and Africa: AI and data conferences, developer meetups, hackathons, cybersecurity workshops, remote work summits and free online webinars, updated twice a month.
 - [Hire Vetted Tech Talent in Nigeria](https://techfaculty.ng/hire): Tell us what your business needs and we match you with vetted Nigerian tech talent — developers, data analysts, designers, marketers and support — remote or on-site.

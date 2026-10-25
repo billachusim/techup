@@ -48,6 +48,26 @@ serve(async () => {
       }
     }
 
+    // Balances of instalment plans, checked the same way.
+    const { data: balances, error: balanceErr } = await admin
+      .from("enrollment_payments")
+      .select("tx_ref")
+      .eq("status", "pending")
+      .lte("created_at", new Date(now - CHECK_AFTER).toISOString())
+      .gte("created_at", new Date(now - CHECK_FOR).toISOString())
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (balanceErr) console.error("recover-checkouts: could not list balance payments", balanceErr);
+    let balancesPaid = 0;
+    for (const { tx_ref } of balances ?? []) {
+      try {
+        const result = await confirmPayment(admin, secretKey, tx_ref);
+        if (result.status === "active") balancesPaid++;
+      } catch (e) {
+        console.error("recover-checkouts: could not check balance", tx_ref, e);
+      }
+    }
+
     // The site sends the emails, since that is where the email templates live.
     const siteUrl = Deno.env.get("SITE_URL") ?? "https://techfaculty.ng";
     let followups: unknown = null;
@@ -58,8 +78,8 @@ serve(async () => {
       console.error("recover-checkouts: follow-up emails failed", e);
     }
 
-    console.log("recover-checkouts", { checked: pending?.length ?? 0, confirmed, followups });
-    return json({ checked: pending?.length ?? 0, confirmed, followups });
+    console.log("recover-checkouts", { checked: pending?.length ?? 0, confirmed, balancesPaid, followups });
+    return json({ checked: pending?.length ?? 0, confirmed, balancesPaid, followups });
   } catch (e) {
     console.error("recover-checkouts error:", e);
     return json({ error: "Could not re-check pending payments" }, 500);

@@ -32,7 +32,7 @@ export const placementIncludes: string[] = [
 export const logbookIncludes: string[] = [
   "We arrange courier pickup of your logbook and ITF forms from your city",
   "Line-by-line review of your weekly entries against the work you actually did",
-  "Filling in of missing weeks, supervisor comments and the summary sections",
+  "Guidance on documenting your supervised work: we flag thin or unclear entries for you to correct in your own words",
   "Official signing and company stamping by your assigned supervisor",
   "SPE-1, ITF Form 8 and place-of-attachment forms completed where applicable",
   "Return delivery back to you — both legs of the waybill are inside the price",
@@ -86,7 +86,7 @@ export const virtualFaqs: { q: string; a: string }[] = [
   },
   {
     q: "How do I send my logbook for review and signing?",
-    a: `You do not have to travel. Book the ${formatNaira(VIRTUAL_SIWES.logbookPriceNGN)} logbook service and our courier partner collects your logbook and ITF forms from your address in any Nigerian city. We review, complete, sign and stamp them, then waybill everything back to you. Both the pickup and the return delivery are included in that price.`,
+    a: `You do not have to travel. Book the ${formatNaira(VIRTUAL_SIWES.logbookPriceNGN)} logbook service and our courier partner collects your logbook and ITF forms from your address in any Nigerian city. We check your entries against your supervision records, complete our company sections of the ITF forms, sign and stamp them, then waybill everything back to you. Both the pickup and the return delivery are included in that price.`,
   },
   {
     q: "How long does the logbook turnaround take?",

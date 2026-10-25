@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { requireCronOrAdmin } from "../_shared/scheduled-auth.ts";
+import { pingIndexNow } from "../_shared/indexnow.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -331,11 +332,23 @@ Deno.serve(async (req) => {
     const upserts = Object.values(byUrl);
 
     if (upserts.length) {
-      const { error } = await supabase
+      const { data: saved, error } = await supabase
         .from("jobs")
-        .upsert(upserts, { onConflict: "source_url", ignoreDuplicates: false });
+        .upsert(upserts, { onConflict: "source_url", ignoreDuplicates: false })
+        .select("slug, created_at");
       if (error) throw new Error(`upsert failed: ${error.message}`);
       inserted = upserts.length;
+
+      // Tell Bing and other IndexNow engines about job pages that are new this run.
+      // Rows that already existed keep their old created_at, so they are skipped
+      // (the minute of slack covers clock drift between this function and the DB).
+      const fresh = (saved ?? [])
+        .filter((j) => new Date(j.created_at).getTime() >= started - 60_000)
+        .map((j) => `/careers/jobs/${j.slug}`);
+      if (fresh.length) {
+        const ping = await pingIndexNow([...fresh, "/careers"]);
+        report.indexnow = ping.ok ? `pinged ${ping.sent} URLs (${ping.status})` : `ping failed: ${ping.error ?? ping.status}`;
+      }
     }
 
     // Archive stale jobs / finished events and purge very old rows.

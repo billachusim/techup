@@ -5,9 +5,9 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/business-partnerships")({
   head: () =>
     pageHead({
-      title: "Business Partnerships",
+      title: "Staff Training Packages for Businesses",
       description:
-        "Partner with Tech Faculty NG for corporate training, AI workshops, business digitization, and tech talent pipelines. FMSTI-licensed, based in Nnewi, Nigeria.",
+        "Staff training packages for Nigerian businesses: AI for teams, digital skills, data and reporting, cybersecurity awareness. Request a quote from Tech Faculty NG, licensed by FMSTI through NBTI.",
       path: "/business-partnerships",
     }),
   component: BusinessPartnerships,

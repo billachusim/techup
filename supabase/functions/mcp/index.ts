@@ -5343,7 +5343,7 @@ Every session, the same thing happens. A student in Yola, Ekiti or Gombe is told
 
 That is the real pain point of SIWES in Nigeria. Not the training. The **placement letter, the logbook and the stamp.**
 
-This guide explains how virtual industrial training works in 2026, what your school actually checks, how to write logbook entries that survive scrutiny, and how to get your logbook reviewed, filled, signed and stamped without travelling \u2014 including our own two-way delivery service.
+This guide explains how virtual industrial training works in 2026, what your school actually checks, how to write logbook entries that survive scrutiny, and how to get your logbook reviewed, signed and stamped without travelling \u2014 including our own two-way delivery service.
 
 ## Can you do SIWES online in Nigeria?
 
@@ -5407,7 +5407,7 @@ Students then travel across the country holding a logbook, or send it by bus wit
 
 1. You book the logbook service and tell us your city and your submission deadline.
 2. Our courier partner **collects** your logbook and ITF forms from your address.
-3. We **review** every week against your recorded work, and fill in gaps, supervisor comments and the summary sections.
+3. We **review** every week against your recorded work, flag any entries you need to correct or expand yourself, and add supervisor comments. We never write or backfill entries for weeks you did not work.
 4. Your supervisor **signs**, and the documents are **stamped** officially.
 5. We **waybill it back** to you, in time for your deadline.
 
@@ -5416,7 +5416,7 @@ Both delivery legs are inside the fee, so you never travel to Nnewi. Turnaround 
 ## What it costs
 
 - **Virtual IT placement \u2014 \u20A645,000** for the full duration of your training. Includes the acceptance and placement letter addressed to your school, weekly live sessions, a mentor in your department, real project work, attendance and supervision records, a completion certificate and a recommendation letter. Both tracks are available online: **Learn & Pay** and **Tutor & Earn** (tutor other learners and earn while completing your IT).
-- **Logbook &amp; documents service \u2014 \u20A615,000** per logbook, covering courier pickup, review, filling, official signing and stamping, ITF form sections, and the return delivery.
+- **Logbook &amp; documents service \u2014 \u20A615,000** per logbook, covering courier pickup, review, supervisor comments, official signing and stamping, ITF form sections, and the return delivery.
 
 Both fees are paid before work starts. You submit the form, we send payment details on WhatsApp or email, and nothing is charged automatically. See the full breakdown on the [Virtual SIWES page](/virtual-siwes).
 

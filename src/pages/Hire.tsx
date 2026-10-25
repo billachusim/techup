@@ -13,6 +13,7 @@ import { toast } from "@/hooks/use-toast";
 import { getSupabase } from "@/integrations/supabase/lazy";
 import { parseList, talentWhatsAppUrl } from "@/lib/talent";
 import { notifyHiringRequest } from "@/lib/public-requests.functions";
+import { trackLead } from "@/lib/analytics";
 
 const benefits = [
   "Vetted Nigerian and African talent, matched to your brief in 48 hours",
@@ -60,6 +61,7 @@ const Hire = () => {
           selection_process: form.selection_process,
         });
       if (error) throw error;
+      trackLead("hiring_request");
       setDone(true);
       const data = { id: briefId };
       if (data.id) {

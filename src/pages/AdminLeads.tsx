@@ -28,7 +28,7 @@ const STATUS_LABEL: Record<LeadStatus, string> = {
 const INTEREST_LABEL: Record<string, string> = {
   free_checklist: "Free SIWES checklist",
   success_kit: "SIWES Success Kit",
-  partner_enquiry: "Partner enquiry",
+  partner_enquiry: "Business / partner enquiry",
   siwes_placement: "SIWES placement",
   virtual_siwes: "Virtual SIWES",
   logbook_service: "Logbook service",

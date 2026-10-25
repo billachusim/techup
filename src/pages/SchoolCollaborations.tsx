@@ -37,7 +37,7 @@ const programs = [
   {
     icon: Award,
     title: "Student Certification Program",
-    description: "Students earn industry-recognized certificates upon completing our programs, boosting their employability post-graduation.",
+    description: "Students earn verifiable Tech Faculty NG certificates upon completing our programs, boosting their employability post-graduation.",
     duration: "Per program",
   },
 ];
@@ -52,7 +52,7 @@ const howItWorks = [
 const benefits = [
   "Licensed by FMSTI/NBTI — meets regulatory standards",
   "Practical, hands-on training — not just theory",
-  "Industry-recognized certificates for students",
+  "Verifiable certificates for students",
   "Flexible scheduling around academic calendar",
   "Experienced instructors with industry background",
   "Internship pipeline for top-performing students",

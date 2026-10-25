@@ -1,23 +1,24 @@
 import { Link } from "@/lib/router-compat";
 import { GraduationCap, Award, Briefcase, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { departments } from "@/data/departments";
 
 const HowItWorks = () => {
   const features = [
     {
       icon: GraduationCap,
       title: "Get Trained",
-      description: "Learn from industry experts with hands-on projects and real-world experience across 8+ tech disciplines.",
+      description: `Learn from industry experts with hands-on projects and real-world experience across ${departments.length} tech departments.`,
     },
     {
       icon: Award,
       title: "Get Certified",
-      description: "Earn globally recognized certifications that prove your skills to employers worldwide.",
+      description: "Earn a Tech Faculty NG certificate from an FMSTI-licensed institute (through NBTI), with an online verification link any employer can check.",
     },
     {
       icon: Briefcase,
       title: "Get Employed",
-      description: "Access our network of 100+ partner companies ready to hire. Our top students start earning through internships as early as month 3.",
+      description: "Get help with your CV, portfolio and job applications, plus introductions to employers we work with. Our top students start earning through internships as early as month 3.",
     },
   ];
 
@@ -39,10 +40,9 @@ const HowItWorks = () => {
             <span className="text-primary">3</span> Months.
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Tech Faculty has trained <Link to="/outcomes" className="underline hover:text-primary">over 6,000 students</Link> across physical and virtual campuses worldwide.
-            Our structured program takes you from beginner to employed professional with a 100% Return 
-            on Tuition guarantee. Through our Work & Earn internship program, our top students start 
-            earning back their tuition as early as month 3.
+            Tech Faculty has trained <Link to="/outcomes" className="underline hover:text-primary">over 6,000 students</Link> across our campuses in Nigeria and online.
+            Our structured program takes you from complete beginner to job-ready professional. Through paid
+            internships and our Tutor & Earn track, our top students start earning as early as month 3.
           </p>
         </div>
 

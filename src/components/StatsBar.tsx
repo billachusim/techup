@@ -1,10 +1,11 @@
 import { GraduationCap, TrendingUp, BookOpen, Award } from "lucide-react";
 import { Link } from "@/lib/router-compat";
+import { departments } from "@/data/departments";
 
 const stats = [
   { icon: GraduationCap, value: "6,000+", label: "Students Trained" },
   { icon: TrendingUp, value: "75%", label: "Employed Within 6 Months" },
-  { icon: BookOpen, value: "12", label: "Industry-Recognized Courses" },
+  { icon: BookOpen, value: String(departments.length), label: "Training Departments" },
   { icon: Award, value: "4+", label: "Years Training Excellence" },
 ];
 
@@ -34,7 +35,7 @@ const StatsBar = () => {
           >
             World Economic Forum Future of Jobs Report (2025)
           </a>
-          , AI and data skills are among the fastest-growing globally, with demand projected to rise 25% annually.
+          , AI and big data are the fastest-growing skills employers are asking for, and AI and machine learning specialists are among the fastest-growing jobs.
         </p>
       </div>
     </section>

@@ -90,7 +90,7 @@ export async function confirmOrderPayment(
 ): Promise<OrderConfirmResult> {
   const { data: order, error } = await admin
     .from("product_orders")
-    .select("id, items, status, amount_due, currency")
+    .select("id, items, status, amount_due, currency, lead_id")
     .eq("tx_ref", txRef)
     .maybeSingle();
   if (error) throw error;
@@ -109,5 +109,15 @@ export async function confirmOrderPayment(
     .eq("id", order.id)
     .eq("status", "pending");
   if (updateErr) throw updateErr;
+
+  // A paying buyer is no longer a lead to chase: this closes the lead in the
+  // inbox and keeps the lead follow-up emails from starting for them.
+  if (order.lead_id) {
+    const { error: leadErr } = await admin
+      .from("leads")
+      .update({ status: "enrolled", status_updated_at: new Date().toISOString() })
+      .eq("id", order.lead_id);
+    if (leadErr) console.error("Could not close the lead for a paid order", { txRef, leadErr });
+  }
   return done;
 }

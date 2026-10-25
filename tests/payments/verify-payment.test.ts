@@ -176,8 +176,9 @@ describe("verify-payment for online orders", () => {
 
   beforeEach(() => {
     db.tables.product_orders = [
-      { id: "ord-1", tx_ref: ORDER_TX, items: ["virtual_siwes", "logbook_service"], status: "pending", amount_due: 60000, currency: "NGN" },
+      { id: "ord-1", tx_ref: ORDER_TX, items: ["virtual_siwes", "logbook_service"], status: "pending", amount_due: 60000, currency: "NGN", lead_id: "lead-1" },
     ];
+    db.tables.leads = [{ id: "lead-1", status: "new" }];
     flutterwaveSays(paid({ tx_ref: ORDER_TX, amount: 60000 }));
   });
 
@@ -187,6 +188,8 @@ describe("verify-payment for online orders", () => {
     expect(await res.json()).toEqual({ status: "paid", items: ["virtual_siwes", "logbook_service"] });
     expect(order()).toMatchObject({ status: "paid", payment_reference: "987654" });
     expect(typeof order().paid_at).toBe("string");
+    // Closed, so the lead follow-up emails never chase a buyer who has paid.
+    expect(db.tables.leads[0].status).toBe("enrolled");
   });
 
   it("does not mark an underpaid or wrong-currency order paid", async () => {
@@ -195,6 +198,7 @@ describe("verify-payment for online orders", () => {
     flutterwaveSays(paid({ tx_ref: ORDER_TX, amount: 60000, currency: "USD" }));
     expect(await (await verify({ txRef: ORDER_TX })).json()).toEqual({ status: "failed" });
     expect(order().status).toBe("pending");
+    expect(db.tables.leads[0].status).toBe("new");
   });
 
   it("keeps waiting while the payment is pending", async () => {

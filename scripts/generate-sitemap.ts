@@ -12,6 +12,7 @@ import { execFileSync } from "child_process";
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "fs";
 import { join, relative, resolve } from "path";
 import blogPosts from "../src/data/blogPosts";
+import { isRetiredBlogSlug } from "../supabase/functions/_shared/blog-redirects";
 import { blogCategories, getCategorySlugForPost } from "../src/data/blogCategories";
 import { campuses } from "../src/data/campuses";
 import { departments } from "../src/data/departments";
@@ -118,7 +119,9 @@ const DYNAMIC: Record<string, Resolver | null> = {
         "blog_posts",
         "select=slug,published_at,updated_at&is_published=eq.true&order=published_at.desc&limit=500",
       )
-    ).map((p) => ({ path: `/blog/${p.slug}`, lastmod: day(p.updated_at ?? p.published_at) })),
+    )
+      .filter((p) => !isRetiredBlogSlug(p.slug))
+      .map((p) => ({ path: `/blog/${p.slug}`, lastmod: day(p.updated_at ?? p.published_at) })),
   ],
   "/blog/category/$slug": () =>
     blogCategories.map((c) => ({

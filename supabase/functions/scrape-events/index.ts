@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { requireCronOrAdmin } from "../_shared/scheduled-auth.ts";
+import { countryCode, servesOurAudience } from "../_shared/event-audience.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -121,13 +122,6 @@ const TRUSTED_COMMUNITIES = [
   "cncf", "kubernetes", "owasp", "hackathon", "she code africa", "andela", "techcabal",
 ];
 
-/** Events we surface must plausibly serve an African / Nigerian or online audience. */
-const AUDIENCE_HINTS = [
-  "nigeria", "lagos", "abuja", "nnewi", "onitsha", "enugu", "owerri", "aba", "ibadan", "kano", "port harcourt",
-  "africa", "ghana", "accra", "kenya", "nairobi", "rwanda", "kigali", "south africa", "cape town",
-  "online", "virtual", "remote", "worldwide", "global",
-];
-
 /** URL shapes that are articles or news rather than an event registration page. */
 const NON_EVENT_URL = /\/(brandpress|news|blog|press-release|articles?)\//i;
 
@@ -189,13 +183,6 @@ function canonicalUrl(raw: string): string | null {
   } catch {
     return null;
   }
-}
-
-function servesOurAudience(row: { format: string; city?: string | null; country?: string | null; address?: string | null; venue_name?: string | null }): boolean {
-  if (row.format === "VIRTUAL") return true;
-  const hay = `${row.city ?? ""} ${row.country ?? ""} ${row.address ?? ""} ${row.venue_name ?? ""}`.toLowerCase();
-  if (!hay.trim()) return true; // unknown venue, keep — the listing page decides
-  return AUDIENCE_HINTS.some((h) => hay.includes(h));
 }
 
 function toIso(value: unknown): string | null {
@@ -285,7 +272,7 @@ function normalize(raw: any, source: Source) {
     address: raw?.address ? String(raw.address).slice(0, 300) : null,
     city: raw?.city ? String(raw.city).slice(0, 100) : null,
     state: raw?.state ? String(raw.state).slice(0, 100) : null,
-    country: raw?.country ? String(raw.country).toUpperCase().slice(0, 3) : null,
+    country: countryCode(raw?.country),
     starts_at: startsAt,
     ends_at: endsAt,
     date_text: raw?.date_text ? String(raw.date_text).slice(0, 120) : null,

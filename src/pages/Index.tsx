@@ -7,6 +7,7 @@ import Departments from "@/components/DepartmentsSection";
 import LatestJobs from "@/components/LatestJobs";
 import UpcomingEvents from "@/components/UpcomingEvents";
 import Testimonials from "@/components/Testimonials";
+import GraduateStories from "@/components/GraduateStories";
 import Clarity from "@/components/Clarity";
 import FacultyDiscount from "@/components/FacultyDiscount";
 import ServicesSection from "@/components/ServicesSection";
@@ -131,6 +132,7 @@ const Index = () => {
         <Departments />
         <LatestJobs />
         <UpcomingEvents />
+        <GraduateStories limit={3} />
         <Testimonials />
         <ServicesSection />
         <Pricing />

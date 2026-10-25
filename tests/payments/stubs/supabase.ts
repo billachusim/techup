@@ -1,6 +1,6 @@
 // Stand-in for supabase-js: an in-memory database with just the query
 // builder calls the payment functions use (select/insert/update/delete,
-// eq/not-null/date-range filters, order/limit, maybeSingle) and auth.getUser.
+// eq/in/is-null/not-null/date-range filters, order/limit, maybeSingle) and auth.getUser.
 type Row = Record<string, unknown>;
 
 export interface FakeDb {
@@ -55,6 +55,15 @@ class Query implements PromiseLike<{ data: unknown; error: unknown }> {
     this.filters.push((r) => r[col] === val);
     return this;
   }
+  in(col: string, vals: unknown[]) {
+    this.filters.push((r) => vals.includes(r[col]));
+    return this;
+  }
+  /** Only `.is(col, null)` is used. */
+  is(col: string) {
+    this.filters.push((r) => r[col] == null);
+    return this;
+  }
   /** Only `.not(col, "is", null)` is used. */
   not(col: string) {
     this.filters.push((r) => r[col] != null);
@@ -77,8 +86,8 @@ class Query implements PromiseLike<{ data: unknown; error: unknown }> {
     return this;
   }
   maybeSingle() {
-    const found = this.rows().filter((r) => this.matches(r));
-    return Promise.resolve({ data: found[0] ?? null, error: null });
+    const { data, error } = this.run();
+    return Promise.resolve({ data: Array.isArray(data) ? (data[0] ?? null) : data, error });
   }
 
   private run() {
@@ -89,8 +98,9 @@ class Query implements PromiseLike<{ data: unknown; error: unknown }> {
       return { data: null, error: null };
     }
     if (this.op === "update") {
-      rows.filter((r) => this.matches(r)).forEach((r) => Object.assign(r, this.payload));
-      return { data: null, error: null };
+      const matched = rows.filter((r) => this.matches(r));
+      matched.forEach((r) => Object.assign(r, this.payload));
+      return { data: matched, error: null };
     }
     if (this.op === "delete") {
       db.tables[this.table] = rows.filter((r) => !this.matches(r));

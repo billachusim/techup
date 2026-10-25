@@ -13,6 +13,7 @@ import { useIsStaff } from "@/hooks/useIsStaff";
 import { listStudentWork, reviewStudentWork } from "@/lib/student-review.functions";
 import AdminNav from "@/components/admin/AdminNav";
 import { PendingPayments } from "@/components/student/PendingPayments";
+import { OutstandingBalances } from "@/components/student/OutstandingBalances";
 import { AdminExports } from "@/components/admin/AdminExports";
 
 type Status = "submitted" | "reviewed" | "needs_changes" | "all";
@@ -90,6 +91,7 @@ export default function AdminStudents() {
         ) : (
           <>
             {isAdmin && <PendingPayments />}
+            {isAdmin && <OutstandingBalances />}
             {isAdmin && <AdminExports />}
             <h2 className="text-xl font-bold pt-2">Submissions</h2>
             <div className="flex flex-wrap gap-2">

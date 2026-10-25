@@ -23,6 +23,7 @@ import { Check, Contact, Copy, Loader2, MessageCircle, Users } from "lucide-reac
 import { campuses } from "@/data/campuses";
 import { SUCCESS_KIT } from "@/data/successKit";
 import { isMobileDevice } from "@/lib/whatsapp";
+import { trackLead } from "@/lib/analytics";
 
 export const LEAD_CAPTURED_KEY = "tf_wa_lead_captured";
 
@@ -163,6 +164,10 @@ const WhatsAppLeadDialog = ({
       setError("We couldn't save that. Please try again, or message us on WhatsApp.");
       return;
     }
+    trackLead(variant === "community" ? "community_join" : "whatsapp_chat", {
+      lead_source: source,
+      channel: "whatsapp",
+    });
     rememberLead();
     setStatus("done");
     if (variant === "community") {

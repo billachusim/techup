@@ -55,7 +55,7 @@ const VirtualSIWES = () => {
             name: "Virtual SIWES and IT Logbook Signing Service",
             serviceType: "Online industrial training placement (SIWES/IT)",
             description:
-              "Fully online SIWES/IT placement for Nigerian students, with logbook review, filling, signing and stamping handled by two-way courier delivery to our Nnewi headquarters.",
+              "Fully online SIWES/IT placement for Nigerian students, with logbook review, signing and stamping handled by two-way courier delivery to our Nnewi headquarters.",
             url: URL,
             areaServed: { "@type": "Country", name: "Nigeria" },
             audience: { "@type": "EducationalAudience", educationalRole: "student" },
@@ -251,7 +251,7 @@ const VirtualSIWES = () => {
                     <div>
                       <h3 className="font-semibold text-lg">Logbook &amp; documents service</h3>
                       <p className="text-sm text-muted-foreground">
-                        Reviewed, filled, signed, stamped and delivered back
+                        Reviewed, signed, stamped and delivered back
                       </p>
                     </div>
                   </div>
@@ -399,7 +399,7 @@ const VirtualSIWES = () => {
               <h2 className="text-2xl font-bold">Book logbook review &amp; signing</h2>
               <p className="text-sm text-muted-foreground">
                 For virtual interns and anyone who completed IT with us and needs their logbook
-                reviewed, filled, signed and stamped. {formatNaira(VIRTUAL_SIWES.logbookPriceNGN)},
+                reviewed, signed and stamped. {formatNaira(VIRTUAL_SIWES.logbookPriceNGN)},
                 pickup and return delivery included.
               </p>
               <div className="rounded-lg border border-border bg-card p-5">

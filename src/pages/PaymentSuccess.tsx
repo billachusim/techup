@@ -6,6 +6,7 @@ import { CheckCircle, LayoutDashboard, ArrowRight, Loader2, Clock, XCircle } fro
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getSupabase } from "@/integrations/supabase/lazy";
+import { trackPurchase } from "@/lib/analytics";
 
 type PaymentState = "checking" | "active" | "pending" | "failed";
 
@@ -42,6 +43,10 @@ const PaymentSuccess = () => {
     })();
     return () => { cancelled = true; };
   }, [state, txRef]);
+
+  useEffect(() => {
+    if (state === "active" && txRef) trackPurchase(txRef, plan);
+  }, [state, txRef, plan]);
 
   const heading = {
     checking: "Confirming your payment…",

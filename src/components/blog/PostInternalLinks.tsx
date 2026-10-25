@@ -108,7 +108,11 @@ const PostInternalLinks = ({ post }: { post: BlogPost }) => {
             <Link to="/virtual-siwes" className={linkClass}>
               Virtual SIWES with logbook signing
             </Link>{" "}
-            if they cannot attend in person.
+            if they cannot attend in person. See{" "}
+            <Link to="/siwes/courses" className={linkClass}>
+              SIWES placements by course of study
+            </Link>{" "}
+            for what the work looks like for your course.
           </p>
         )}
       </div>

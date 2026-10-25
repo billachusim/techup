@@ -9,6 +9,7 @@ import { toast } from "@/hooks/use-toast";
 import { getSupabase } from "@/integrations/supabase/lazy";
 import { parseList, talentWhatsAppUrl } from "@/lib/talent";
 import { notifyHiringRequest } from "@/lib/public-requests.functions";
+import { trackLead } from "@/lib/analytics";
 
 /** Compact hiring request form for clients browsing the roles marketplace. */
 const HiringRequestForm = () => {
@@ -53,6 +54,7 @@ const HiringRequestForm = () => {
           engagement: form.engagement,
         });
       if (error) throw error;
+      trackLead("hiring_request");
       setDone(true);
       const data = { id: briefId };
       if (data.id) {

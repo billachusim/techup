@@ -2103,84 +2103,6 @@ Our **Web Development Bootcamp** goes from HTML to production-ready React + Type
     readTime: 7
   },
   {
-    slug: "power-bi-vs-tableau-nigeria-2026",
-    title: "Power BI vs Tableau in Nigeria 2026: Which Gets You Hired?",
-    description: "Power BI vs Tableau for the Nigerian job market in 2026 \u2014 job demand, salary impact, licensing cost in naira, and which tool to learn first.",
-    content: `# Power BI vs Tableau in Nigeria 2026: Which One Gets You Hired Faster?
-
-*By Bill Achusim \xB7 Jul 6, 2026*
-
-If you're picking between Power BI and Tableau as your first BI tool in Nigeria, this is the honest, hire-rate-based answer \u2014 not vendor marketing.
-
-**Short verdict:** Learn **Power BI first**. Add Tableau later if you target a specific employer that requires it. Here's why, with 2026 Nigerian data.
-
-## Job demand in Nigeria (2026)
-
-Scraping Jobberman, LinkedIn Nigeria, MyJobMag, and internal Tech Faculty placement data for the first half of 2026:
-
-| Tool | Nigerian job listings (Jan\u2013Jun 2026) | Share |
-|---|---|---|
-| Power BI | 1,847 | 68% |
-| Tableau | 512 | 19% |
-| Looker | 187 | 7% |
-| Qlik | 154 | 6% |
-
-Power BI dominates because most Nigerian mid-to-large companies already pay for Microsoft 365 \u2014 Power BI comes bundled or nearly free. Tableau, by contrast, requires a separate Salesforce contract.
-
-## Cost in naira
-
-- **Power BI Pro:** ~$14/user/month (~\u20A622,000). Free desktop version is fully usable for learning.
-- **Tableau Creator:** ~$75/user/month (~\u20A6118,000). Tableau Public is free but limited.
-
-For a Nigerian SME making a purchasing decision, this is not close.
-
-## Which industries use which
-
-- **Power BI:** banks (Access, GTCO, Zenith), telcos (MTN, Airtel), FMCG (Nestl\xE9, Unilever), oil majors, most federal MDAs.
-- **Tableau:** consulting firms (Deloitte, KPMG, PwC \u2014 sometimes), some fintechs, Nigerian offices of US-headquartered firms.
-
-If your dream job is at a Nigerian bank or telco, Power BI is not optional.
-
-## Learning curve
-
-Both take ~6\u20138 weeks to reach "hireable junior" if you're consistent. Power BI's DAX language is quirkier than Tableau's calculated fields, but its integration with Excel means Nigerian analysts already halfway know it.
-
-## Salary impact
-
-In our 2026 Nigerian placement data, tool choice barely moved starting salary \u2014 SQL skill did.
-
-- Data analyst (Power BI + SQL): \u20A6400k\u2013\u20A6900k/month
-- Data analyst (Tableau + SQL): \u20A6450k\u2013\u20A6950k/month
-- Data analyst (no SQL, either tool): \u20A6180k\u2013\u20A6350k/month
-
-Read that again. **SQL matters more than the BI tool.**
-
-## The right learning order for a Nigerian analyst
-
-1. Excel to an advanced level (pivot tables, Power Query, XLOOKUP)
-2. SQL \u2014 4 weeks minimum, joins and window functions
-3. Power BI \u2014 build 3 dashboards on Nigerian datasets (NBS, CBN, NCC)
-4. Python for pandas and light modelling
-5. Tableau \u2014 only if a specific role demands it (1 week is enough as a Power BI user)
-
-## Portfolio projects that get Nigerian analysts hired
-
-- Nigerian inflation dashboard (NBS CPI data, 2015\u20132026)
-- Lagos traffic-accident analysis from FRSC open data
-- CBN FX reserves + naira volatility explorer
-- A profitability dashboard for a real Nigerian SME (offer it free \u2014 they'll say yes)
-
-## Bottom line
-
-In Nigeria in 2026: **Power BI + SQL + one strong portfolio project = interviews**. Add Tableau only when a job posting demands it.
-
-Our **Data Analytics Bootcamp** covers exactly this stack \u2014 Excel \u2192 SQL \u2192 Power BI \u2192 Python \u2014 with Nigerian datasets throughout. [See the program](https://techfaculty.ng/).`,
-    date: "2026-07-04",
-    author: "Bill Achusim",
-    tags: ["Data & Analytics", "Power BI vs Tableau Nigeria", "Power BI Nigeria", "Tableau Nigeria", "data analyst Nigeria"],
-    readTime: 6
-  },
-  {
     slug: "cybersecurity-salary-nigeria-2026",
     title: "Cybersecurity Salary Nigeria: 2026 Entry to Senior Guide",
     seoTitle: "Cyber Security Salary Nigeria 2026 by Role",
@@ -2469,11 +2391,20 @@ A 4-stage funnel that keeps false positives out:
 
 Skip LeetCode gauntlets for anything below staff level. They filter for the wrong signal in Nigerian context.
 
+## How to avoid ghost hires
+
+A ghost hire accepts the offer, misses standups and delivers nothing. Three habits cut the risk:
+
+- **A one-month probation** with a clear 30-day deliverable.
+- **Daily commits to your own Git repo**, so progress is visible from day one.
+- **Video onboarding with the whole team**, which also proves the person is who the CV says.
+
 ## Contract structures (Nigerian legal reality)
 
 - **Full-time employee** \u2014 you owe PAYE, pension (RSA), NHF, NSITF, ITF. Budget +18\u201322% on top of gross.
 - **Consultant / independent contractor** \u2014 cleaner, but be careful: the FIRS looks at working patterns, not just contract wording. If your "consultant" works only for you 40 hrs/week, tax authorities may reclassify.
 - **Foreign entity hiring from Nigeria:** use Deel, Remote.com, or Rippling. Do not try to pay via Western Union \u2014 it burns candidates.
+- **Whatever the structure, put IP assignment in writing.** Without it, you do not own the code your developer writes. A Nigerian tech lawyer can draft a reusable template once.
 
 ## Retention: why Nigerian developers actually leave
 
@@ -2728,7 +2659,7 @@ Self-learning from YouTube tutorials is possible, but structured bootcamps drama
 - **Community** \u2013 Peers who keep you accountable
 - **Job placement support** \u2013 Help landing your first role
 
-Tech Faculty offers 16-week bootcamps across all major tech tracks with exactly these features.
+Tech Faculty offers bootcamps across the major tech tracks with these features. Compare what training costs in [tech course fees in Nigeria](/blog/tech-course-fees-nigeria-2026), and whether to learn [online or in person](/blog/online-vs-physical-tech-bootcamp-nigeria-2026).
 
 ## Step 3: Build Your Portfolio
 
@@ -2741,7 +2672,7 @@ Employers want to see what you can build. Start with:
 
 ## Step 4: Network Actively
 
-Join tech communities in Lagos, Abuja, and online:
+Join tech communities in your city and online. Our [city-by-city guide to tech hubs](/blog/best-tech-hubs-and-training-institutes-in-nigeria-by-city-2026) lists them:
 
 - Attend meetups and hackathons
 - Join WhatsApp and Telegram tech groups
@@ -2750,7 +2681,7 @@ Join tech communities in Lagos, Abuja, and online:
 
 ## Step 5: Apply Strategically
 
-Don't just spray and pray. Target companies that hire junior developers and tailor your applications. Tech Faculty's job placement program connects graduates directly with hiring partners like Google, Microsoft, and Amazon.
+Don't just spray and pray. Target companies that hire junior developers and tailor each application to the role. If remote work is the goal, follow our [remote tech job playbook](/blog/how-to-get-remote-tech-job-from-nigeria-2026). For realistic pay at each level, see [tech salaries in Nigeria](/blog/tech-salaries-nigeria-2026-junior-mid-senior).
 
 ## The Bottom Line
 
@@ -2758,305 +2689,10 @@ Starting a tech career in Nigeria requires commitment, but the rewards are worth
 
 *Ready to start? Explore Tech Faculty's bootcamp programs and take the first step today.*`,
     date: "2026-03-10",
+    updated: "2026-10-25",
     author: "Tech Faculty",
     tags: ["Tech Careers", "tech career Nigeria", "start coding Nigeria", "software developer Nigeria", "tech bootcamp Nigeria"],
     readTime: 8
-  },
-  {
-    slug: "tut-5-in-design-tech-bootcamps-yabatech-2026",
-    title: "Top 5 Design Tech Bootcamps in YabaTech for 2026",
-    description: "We rank the top 5 tech bootcamps in YabaTech based on community, curriculum, and student outcomes.",
-    content: `# Top 5 Design Tech Bootcamps in YabaTech for 2026
-
-*By Tech Faculty \xB7 Mar 5, 2026*
-
-YabaTech has become a hub for tech education in Lagos. Here are the top 5 bootcamps operating in and around the institution.
-
-## 1. Tech Faculty NG
-
-Tech Faculty leads with its comprehensive 16-week programs covering Data Analytics, Web Development, Cyber Security, and AI/ML. What sets them apart:
-
-- Industry-standard curriculum updated quarterly
-- 1:1 mentorship from working professionals
-- WhatsApp-based community support
-- Job placement assistance post-graduation
-
-## 2. Andela Learning Community
-
-Andela's learning community provides free resources and peer-learning opportunities, though it's more self-directed than structured bootcamps.
-
-## 3. Decagon Institute
-
-Decagon offers intensive software engineering programs with a pay-after-employment model, making it accessible to students without upfront funds.
-
-## 4. AltSchool Africa
-
-AltSchool provides semester-based tech education with diploma certification, blending traditional education structure with modern tech curriculum.
-
-## 5. HNG Internship
-
-HNG runs periodic internship programs that test and develop skills through real project challenges, though it's more competitive than educational.
-
-## How to Choose
-
-Consider these factors:
-- **Budget** \u2013 Free vs. paid programs
-- **Time commitment** \u2013 Part-time vs. full-time
-- **Support level** \u2013 Self-paced vs. mentored
-- **Outcomes** \u2013 Job placement rates and alumni success
-
-*Looking for a structured, mentored experience? Tech Faculty's 16-week bootcamps offer the best balance of rigor and support.*`,
-    date: "2026-03-05",
-    author: "Tech Faculty",
-    tags: ["Tech Careers", "tech bootcamps YabaTech", "in-design bootcamps YabaTech", "curriculum support YabaTech"],
-    readTime: 6
-  },
-  {
-    slug: "what-is-sves-nigeria-business-elite-explained",
-    title: "What is SVES? Nigeria Business Elite Explained",
-    description: "The Nigerian business elite have spent decades building their wealth. Learn about the SVES framework and how tech is reshaping Nigeria's business landscape.",
-    content: `# What is SVES? Nigeria Business Elite Explained
-
-*By Tech Faculty \xB7 Feb 20, 2026*
-
-Nigeria's business landscape is evolving rapidly. The SVES (Scale, Vision, Execution, Sustainability) framework is how the country's most successful entrepreneurs think about growth.
-
-## Understanding SVES
-
-- **Scale** \u2013 Think beyond local markets from day one
-- **Vision** \u2013 Set audacious goals rooted in real problems
-- **Execution** \u2013 Move fast, iterate, and deliver results
-- **Sustainability** \u2013 Build businesses that outlast trends
-
-## How Tech is Reshaping Nigerian Business
-
-The most influential business leaders in Nigeria are now investing heavily in technology:
-
-1. **Digital payments** have exploded with Paystack, Flutterwave, and Moniepoint
-2. **E-commerce** continues to grow despite logistics challenges
-3. **EdTech** is democratizing access to quality education
-4. **FinTech** is banking the unbanked
-
-## What This Means for You
-
-Whether you're an aspiring entrepreneur or an established business owner, tech skills are no longer optional. Understanding data analytics, digital marketing, and AI gives you a competitive edge.
-
-*Tech Faculty's bootcamps are designed to give entrepreneurs the tech skills they need to compete in 2026 and beyond.*`,
-    date: "2026-02-20",
-    author: "Tech Faculty",
-    tags: ["Startups & Business", "business elite Nigeria", "SVES Nigeria", "entrepreneur elite Nigeria", "influential Nigeria tech"],
-    readTime: 7
-  },
-  {
-    slug: "why-tech-faculty-ng-helps-entrepreneurs",
-    title: "Why Tech Faculty NG Helps Entrepreneurs",
-    description: "Tech Faculty's holistic approach helps entrepreneurs break into tech with design thinking workshops, mentorship, and hands-on training.",
-    content: `# Why Tech Faculty NG Helps Entrepreneurs
-
-*By Tech Faculty \xB7 Feb 10, 2026*
-
-Tech Faculty NG is not just for students\u2014it's a launchpad for entrepreneurs. Here's how we transform small and medium-sized enterprises across Nigeria.
-
-## Our Entrepreneur Support System
-
-### Design Thinking Workshops
-We teach entrepreneurs to think like product designers\u2014starting with the user's problem and working backwards to a solution.
-
-### Legal & Incorporation Guidance
-Starting a business in Nigeria involves navigating CAC registration, tax compliance, and regulatory requirements. We provide guidance through our partner network.
-
-### Technical Training
-Our 16-week bootcamps give entrepreneurs hands-on skills in:
-- **Data Analytics** \u2013 Make data-driven decisions
-- **Web Development** \u2013 Build your own website or app
-- **Digital Marketing** \u2013 Grow your customer base online
-- **AI/ML** \u2013 Automate repetitive tasks
-
-### Mentorship Network
-Connect with experienced founders and tech leaders who've built successful businesses in Nigeria.
-
-## Success Stories
-
-Our alumni include entrepreneurs who have:
-- Built e-commerce platforms serving thousands of customers
-- Automated inventory management saving 20+ hours per week
-- Created data dashboards that improved decision-making by 40%
-
-*Ready to level up your business? Join Tech Faculty's next cohort and gain the tech skills every modern entrepreneur needs.*`,
-    date: "2026-02-10",
-    author: "Tech Faculty",
-    tags: ["Startups & Business", "entrepreneur tech Nigeria", "SMEs Nigeria", "transformative tech Nigeria", "business support Nigeria"],
-    readTime: 6
-  },
-  {
-    slug: "tech-faculty-ng-elite-entrepreneurs",
-    title: "Tech Faculty NG Elite Entrepreneurs",
-    description: "From startup founders to tech leads, meet the people behind Tech Faculty's incubation services.",
-    content: `# Tech Faculty NG Elite Entrepreneurs
-
-*By Tech Faculty \xB7 Nov 15, 2025*
-
-From startup founders to tech leads at big tech companies, Tech Faculty's alumni network is growing. Here's a look at the entrepreneurs shaping Nigeria's tech future.
-
-## The Incubation Advantage
-
-Tech Faculty's incubation services provide:
-
-- **Workspace** \u2013 Access to co-working spaces in Lagos
-- **Funding Guidance** \u2013 Connecting founders with angel investors and VCs
-- **Technical Support** \u2013 CTO-as-a-service for non-technical founders
-- **Market Access** \u2013 Introductions to potential customers and partners
-
-## What Makes Our Entrepreneurs Different
-
-Our graduates don't just learn to code\u2014they learn to build businesses. The combination of technical skills and business acumen creates founders who can:
-
-1. Build their own MVPs without outsourcing
-2. Understand technical feasibility before committing resources
-3. Hire and manage technical teams effectively
-4. Make data-driven decisions from day one
-
-## Join the Community
-
-Whether you're pre-idea or post-revenue, Tech Faculty's entrepreneurship track can accelerate your journey.
-
-*Apply for our next incubation cohort and join Nigeria's most ambitious tech entrepreneurs.*`,
-    date: "2025-11-15",
-    author: "Tech Faculty",
-    tags: ["Startups & Business", "Tech Faculty", "Nigerian founders", "elite Nigeria tech", "incubation Nigeria"],
-    readTime: 7
-  },
-  {
-    slug: "skills-gap-nigerian-businesses-tech-training",
-    title: "The Skills Gap: Nigerian Businesses Need More Tech Training",
-    description: "Nigerian businesses are investing heavily in employee tech training. Here's why the skills gap persists and how to close it.",
-    content: `# The Skills Gap: Nigerian Businesses Need More Tech Training
-
-*By Tech Faculty \xB7 Nov 1, 2025*
-
-Nigerian businesses are spending 30-40% more on employee tech training each year, yet the skills gap persists. Why?
-
-## The Problem
-
-Most corporate training programs fail because they:
-- Use generic, one-size-fits-all curricula
-- Focus on theory over practical application
-- Lack follow-up and accountability
-- Don't align with actual business needs
-
-## The Solution
-
-Effective tech training requires:
-
-### 1. Customized Curricula
-Training should address your specific business challenges, not generic textbook problems.
-
-### 2. Hands-On Projects
-Employees learn best by building solutions to real problems they face at work.
-
-### 3. Ongoing Support
-A 2-day workshop isn't enough. Sustained learning over 8-16 weeks produces lasting skill development.
-
-### 4. Measurable Outcomes
-Track ROI through productivity improvements, error reduction, and innovation metrics.
-
-## Tech Faculty's Corporate Training
-
-We offer customized training programs for businesses of all sizes:
-
-- **Data Analytics for Teams** \u2013 Empower your team to make data-driven decisions
-- **Digital Transformation** \u2013 Modernize legacy processes
-- **Cyber Security Awareness** \u2013 Protect your business from threats
-- **AI Integration** \u2013 Identify automation opportunities
-
-*Contact us to design a training program tailored to your business needs.*`,
-    date: "2025-11-01",
-    author: "Tech Faculty",
-    tags: ["Startups & Business", "skills gap Nigeria", "business tech training Nigeria", "employer training Nigeria", "tech productivity Nigeria"],
-    readTime: 7
-  },
-  {
-    slug: "why-nigerian-business-need-ai-innovation-2026",
-    title: "Why Nigerian Businesses Need AI Innovation in 2026",
-    description: "AI isn't just for big corporations. Nigerian businesses of all sizes are using AI for transformation. Learn how.",
-    content: `# Why Nigerian Businesses Need AI Innovation in 2026
-
-*By Tech Faculty \xB7 Jan 15, 2026*
-
-AI isn't just for Silicon Valley giants. Nigerian businesses of all sizes are discovering how artificial intelligence can drive growth and efficiency.
-
-## Where AI Fits in Nigerian Business
-
-### Customer Service
-AI chatbots can handle 70% of customer inquiries automatically, reducing response times from hours to seconds.
-
-### Financial Analysis
-Machine learning models can predict cash flow, detect fraud, and optimize pricing strategies.
-
-### Supply Chain
-AI-powered demand forecasting helps businesses stock the right products at the right time.
-
-### Marketing
-Personalized recommendations and targeted advertising powered by AI can increase conversion rates by 20-30%.
-
-## Getting Started
-
-You don't need a massive budget to start with AI:
-
-1. **Identify pain points** \u2013 Where does your team spend the most time on repetitive tasks?
-2. **Start small** \u2013 Pick one process to automate
-3. **Measure results** \u2013 Track time saved and revenue impact
-4. **Scale what works** \u2013 Expand AI to other areas of the business
-
-## Learn AI with Tech Faculty
-
-Our **Machine Learning & AI Bootcamp** teaches you to build practical AI solutions using Python, TensorFlow, and real Nigerian business datasets.
-
-*Don't get left behind. The AI revolution is happening now\u2014and Tech Faculty can help you lead it.*`,
-    date: "2026-01-15",
-    author: "Tech Faculty",
-    tags: ["Artificial Intelligence", "AI Nigeria", "business innovation Nigeria", "transformation Nigeria", "growth Nigeria"],
-    readTime: 6
-  },
-  {
-    slug: "why-nigerian-entrepreneurs-need-ai-implementation-2026",
-    title: "Why Nigerian Entrepreneurs Need AI Implementation in 2026",
-    description: "AI isn't just for big corporations. Nigerian entrepreneurs need to learn about AI to improve their businesses.",
-    content: `# Why Nigerian Entrepreneurs Need AI Implementation in 2026
-
-*By Tech Faculty \xB7 Oct 15, 2025*
-
-The global AI market is projected to reach $1.8 trillion by 2030. Nigerian entrepreneurs who adopt AI now will be positioned to capture a share of that growth.
-
-## Practical AI for Entrepreneurs
-
-### Automate Admin Tasks
-From invoicing to scheduling, AI tools can free up 10-15 hours per week for strategic work.
-
-### Enhance Decision-Making
-AI analytics dashboards turn raw business data into clear, actionable insights.
-
-### Improve Customer Experience
-Personalized recommendations and instant support build customer loyalty.
-
-### Reduce Costs
-AI-powered process optimization can cut operational costs by 15-25%.
-
-## Common Misconceptions
-
-- **"AI is too expensive"** \u2013 Many AI tools offer free tiers perfect for small businesses
-- **"I need a CS degree"** \u2013 No-code AI tools and practical bootcamps make it accessible
-- **"AI will replace my employees"** \u2013 AI augments human work, it doesn't replace it
-
-## Get Started Today
-
-Tech Faculty's AI bootcamp teaches practical implementation\u2014not just theory. You'll build real AI solutions for Nigerian business contexts.
-
-*Join our next cohort and start building AI-powered solutions for your business.*`,
-    date: "2025-10-15",
-    author: "Tech Faculty",
-    tags: ["Artificial Intelligence", "AI Nigeria", "business strategy Nigeria", "entrepreneur AI Nigeria", "future AI Nigeria"],
-    readTime: 6
   },
   {
     slug: "everything-you-need-to-know-about-siwes-nigeria",
@@ -3180,72 +2816,6 @@ If you're going into a tech company, make sure you're comfortable with:
     author: "Tech Faculty",
     tags: ["SIWES & Internships", "IT placement tips", "SIWES tips", "industrial training advice", "career preparation Nigeria"],
     readTime: 5
-  },
-  {
-    slug: "data-analytics-bootcamp-what-youll-learn-16-weeks",
-    title: "Data Analytics Bootcamp: What You'll Learn in 16 Weeks",
-    description: "Thinking about enrolling in a data analytics bootcamp? Here's a week-by-week breakdown of what Tech Faculty's program covers.",
-    content: `# Data Analytics Bootcamp: What You'll Learn in 16 Weeks
-
-*By Tech Faculty \xB7 Mar 1, 2026*
-
-Data Analytics is one of the most in-demand skills globally, and Nigeria is no exception. Here's exactly what you'll learn in Tech Faculty's 16-week Data Analytics Bootcamp.
-
-## Weeks 1-4: Foundations
-
-### Excel Mastery
-- Advanced formulas (VLOOKUP, INDEX-MATCH, SUMIFS)
-- Pivot tables and charts
-- Data cleaning and validation
-- Dashboard creation
-
-### Statistics Fundamentals
-- Descriptive statistics
-- Probability distributions
-- Hypothesis testing
-- Correlation and regression basics
-
-## Weeks 5-8: SQL & Databases
-
-- Writing SQL queries (SELECT, JOIN, GROUP BY)
-- Database design fundamentals
-- Working with PostgreSQL
-- Real-world data extraction projects
-
-## Weeks 9-12: Python for Data Analysis
-
-- Python basics and data types
-- Pandas for data manipulation
-- NumPy for numerical computing
-- Matplotlib and Seaborn for visualization
-- Working with APIs and web scraping
-
-## Weeks 13-16: Business Intelligence & Capstone
-
-### Power BI / Tableau
-- Building interactive dashboards
-- Data modeling and DAX formulas
-- Connecting to multiple data sources
-- Publishing and sharing reports
-
-### Capstone Project
-- Analyze a real Nigerian business dataset
-- Present findings to a panel of industry professionals
-- Build a portfolio-ready case study
-
-## Career Outcomes
-
-Our Data Analytics graduates have gone on to:
-- Junior Data Analyst roles at banks and fintechs
-- Business Intelligence positions at FMCG companies
-- Freelance data consulting
-- Starting their own analytics firms
-
-*Ready to become a data analyst? Enroll in Tech Faculty's next cohort today.*`,
-    date: "2026-03-01",
-    author: "Tech Faculty",
-    tags: ["Data & Analytics", "data analytics bootcamp", "learn data analytics Nigeria", "data science training", "Excel Power BI Python"],
-    readTime: 7
   },
   {
     slug: "web-development-vs-mobile-development-which-path",
@@ -4986,81 +4556,6 @@ Nigerian cybersecurity has a talent shortage that will not close for years. Get 
     readTime: 8
   },
   {
-    slug: "remote-tech-jobs-nigeria-2026-complete-guide",
-    title: "Remote Tech Jobs in Nigeria 2026: Where to Find Them & How to Get Paid",
-    description: "The 2026 guide to remote tech jobs from Nigeria \u2014 best job boards, USD-paying companies, tax basics, payment platforms, and CV tactics that actually work.",
-    content: `# Remote Tech Jobs in Nigeria 2026: Where to Find Them & How to Get Paid
-
-*By Tech Faculty NG \xB7 July 11, 2026*
-
-Remote work is the biggest income unlock available to a Nigerian tech worker in 2026. A junior developer in Enugu can earn more than a mid-level manager in Lagos \u2014 legally, from home, in dollars.
-
-But the market has matured. Random cold applications no longer work. Here is the current playbook.
-
----
-
-## The best remote job boards (ranked)
-
-1. **[Turing](https://www.turing.com)** \u2014 deep vetting, but real long-term US contracts.
-2. **[Andela Talent Cloud](https://andela.com)** \u2014 Africa-first, high trust with US employers.
-3. **[Remote OK](https://remoteok.com)** \u2014 huge volume, filter for "worldwide".
-4. **[We Work Remotely](https://weworkremotely.com)** \u2014 good for senior roles.
-5. **[Toptal](https://toptal.com)** \u2014 top 3% vetting; premium pay if you get in.
-6. **[Wellfound (AngelList)](https://wellfound.com)** \u2014 early-stage startups; equity + cash.
-7. **[Himalayas](https://himalayas.app)** \u2014 clean UX, growing fast.
-8. **[LinkedIn "Remote" filter](https://linkedin.com/jobs)** \u2014 still the largest single pool.
-
----
-
-## Companies known to hire Nigerians directly
-
-- **Stripe, GitLab, Automattic, Vercel, HashiCorp** \u2014 global-first culture.
-- **Andela, Flutterwave, Moniepoint** \u2014 Nigerian roots, USD or hybrid pay.
-- **Deel, Remote.com, Oyster** \u2014 EORs that let almost any global company hire you legally.
-
----
-
-## Getting paid (2026 reality)
-
-- **Payoneer** \u2014 still the workhorse for freelance and Turing/Andela payouts.
-- **Wise** \u2014 great rates, but Nigerian personal accounts remain restricted; use USD virtual cards from Grey/Geegpay to receive.
-- **Grey, Geegpay, Eversend** \u2014 Nigerian-first apps that convert USD to naira with low fees.
-- **Deel / Remote.com** \u2014 if you are a full-time contractor, they handle payroll to your local bank.
-
-**Tax note:** Nigerian remote workers are legally required to pay personal income tax under the Finance Act. A one-hour session with a Nigerian tax consultant is worth every naira.
-
----
-
-## What actually gets you hired
-
-1. **A specialist CV, not a generalist one.** "React + Node engineer" beats "full-stack developer" every time.
-2. **Public work.** GitHub with 3 polished repos, or a portfolio site with case studies.
-3. **A LinkedIn headline that ranks.** Example: *"Senior React Engineer \xB7 SaaS \xB7 Fintech \xB7 Open to remote (GMT+1)"*.
-4. **Async communication.** Record Loom videos in your applications. It shocks recruiters in a good way.
-5. **Nigerian-strong English is fine.** American accent is not required. Clear writing is.
-
----
-
-## Realistic timelines
-
-- **0\u20131 year experience:** expect 3\u20136 months of consistent applying to land the first remote role.
-- **2+ years experience with a portfolio:** 4\u20138 weeks is normal.
-- **Toptal / Turing top-tier:** budget 1\u20133 attempts at the vetting.
-
----
-
-## Level up with Tech Faculty
-
-We run a **Remote-Ready Career Track** as part of every bootcamp \u2014 CV, LinkedIn, portfolio, and mock interviews with our hiring partners. See [our tech careers pricing](https://techfaculty.ng/#pricing).
-
-Remote work is not luck. It is a system. Build the system, and the offers come.
-`,
-    date: "2026-07-11",
-    author: "Tech Faculty NG",
-    tags: ["Tech Careers", "remote tech jobs Nigeria", "tech career Nigeria", "tech salary Nigeria", "remote work Nigeria"],
-    readTime: 8
-  },
-  {
     slug: "how-to-find-siwes-placement-tech-nigeria-2026",
     title: "How to Find a Tech SIWES Placement in Nigeria (2026 Student Guide)",
     description: "A step-by-step 2026 guide for Nigerian students on finding a tech SIWES placement \u2014 where to apply, what to say, ITF rules, and how to convert IT to a job.",
@@ -5144,103 +4639,6 @@ SIWES is the single biggest career launchpad most Nigerian undergraduates ever g
     date: "2026-07-11",
     author: "Tech Faculty NG",
     tags: ["SIWES & Internships", "SIWES placement Nigeria", "tech internship Nigeria", "ITF Nigeria", "industrial training Nigeria"],
-    readTime: 8
-  },
-  {
-    slug: "how-to-hire-developers-nigerian-startups-2026",
-    title: "How to Hire Developers for a Nigerian Startup in 2026 (Founder's Playbook)",
-    description: "A founder-focused 2026 playbook for hiring developers in Nigeria \u2014 salary ranges, contracts, technical tests that work, and how to avoid ghost hires.",
-    content: `# How to Hire Developers for a Nigerian Startup in 2026 (Founder's Playbook)
-
-*By Tech Faculty NG \xB7 July 11, 2026*
-
-Hiring your first developers is the highest-leverage \u2014 and highest-risk \u2014 decision a Nigerian founder makes. Overpay and you burn runway. Underpay and you ship nothing.
-
-This is a practical playbook for founders (technical or not) hiring in Nigeria in 2026.
-
----
-
-## Step 1 \u2014 Decide what you actually need
-
-Before writing a job ad, answer three questions:
-
-1. **What will they build in the first 90 days?** Write it as user stories.
-2. **Full-time, contract, or agency?** Contract is faster; full-time is cheaper long-term.
-3. **Onsite, hybrid, or remote?** Lagos/Abuja onsite doubles cost; remote unlocks Enugu, Nnewi, Aba talent at 30\u201350% less.
-
----
-
-## Step 2 \u2014 Nigerian salary benchmarks (2026)
-
-| Role | Junior | Mid | Senior |
-|---|---|---|---|
-| Frontend (React) | \u20A6300k \u2013 \u20A6600k | \u20A6800k \u2013 \u20A61.4M | \u20A61.8M \u2013 \u20A63M+ |
-| Backend (Node/Python) | \u20A6350k \u2013 \u20A6700k | \u20A6900k \u2013 \u20A61.6M | \u20A62M \u2013 \u20A63.5M+ |
-| Mobile (Flutter/RN) | \u20A6350k \u2013 \u20A6700k | \u20A6900k \u2013 \u20A61.6M | \u20A62M \u2013 \u20A63.5M+ |
-| DevOps / SRE | \u20A6500k \u2013 \u20A6900k | \u20A61.2M \u2013 \u20A62M | \u20A62.5M \u2013 \u20A64M+ |
-| Product Designer | \u20A6300k \u2013 \u20A6600k | \u20A6800k \u2013 \u20A61.5M | \u20A61.8M \u2013 \u20A63M+ |
-
-Pay in naira, benchmark against USD. If you can pay a slice in USD (via Deel, Grey), you will beat most Nigerian offers.
-
----
-
-## Step 3 \u2014 Where to source
-
-- **LinkedIn (with a real budget).** Boost your job post \u2014 \u20A6150k over two weeks beats waiting.
-- **Nigerian tech communities.** Slack: NaijaHacks, Devcareers. Twitter/X: #NigerianDeveloper.
-- **Referrals from other founders.** Highest signal-to-noise ratio.
-- **Bootcamp hiring partners.** Talk to [Tech Faculty](https://techfaculty.ng/business-partnerships) for pre-vetted juniors.
-
----
-
-## Step 4 \u2014 A technical test that works
-
-Skip whiteboard puzzles. Give a **paid 4-hour take-home** based on your real problem. Pay \u20A620k \u2013 \u20A650k for their time.
-
-You are looking for:
-
-- Does it work?
-- Is the code readable?
-- Did they explain their trade-offs?
-- Did they ask clarifying questions before starting?
-
----
-
-## Step 5 \u2014 Contracts and IP
-
-Every hire \u2014 even a two-week contractor \u2014 needs a written contract that includes:
-
-- Scope and deliverables.
-- Payment terms and currency.
-- **IP assignment** (very important; without it, you do not own the code).
-- Confidentiality clause.
-- Notice period.
-
-A Nigerian tech lawyer will draft this template for \u20A6150k \u2013 \u20A6400k. Do it once, reuse forever.
-
----
-
-## Step 6 \u2014 Avoid ghost hires
-
-A "ghost hire" is a Nigerian developer who accepts the offer, ghosts standups, and delivers nothing. Reduce risk by:
-
-- Doing a 1-month probation at reduced pay.
-- Requiring daily commits to your Git repo.
-- Video onboarding with the whole team (proves the person is real).
-
----
-
-## Grow from here
-
-If your team is 3+ developers, invest in **process** \u2014 code review, sprint planning, Notion documentation. Great Nigerian engineers stay where they can grow, not just where they get paid.
-
-Need to train a whole engineering team? Talk to us about [corporate training](https://techfaculty.ng/business-partnerships).
-
-Hire slowly, fire quickly, pay fairly. Nigerian startups that get this right build 10x faster than their peers.
-`,
-    date: "2026-07-11",
-    author: "Tech Faculty NG",
-    tags: ["Startups & Business", "hire developers Nigeria", "Nigerian startup", "founder Nigeria", "tech hiring Nigeria"],
     readTime: 8
   },
   {
@@ -5343,7 +4741,7 @@ Every session, the same thing happens. A student in Yola, Ekiti or Gombe is told
 
 That is the real pain point of SIWES in Nigeria. Not the training. The **placement letter, the logbook and the stamp.**
 
-This guide explains how virtual industrial training works in 2026, what your school actually checks, how to write logbook entries that survive scrutiny, and how to get your logbook reviewed, filled, signed and stamped without travelling \u2014 including our own two-way delivery service.
+This guide explains how virtual industrial training works in 2026, what your school actually checks, how to write logbook entries that survive scrutiny, and how to get your logbook reviewed, signed and stamped without travelling \u2014 including our own two-way delivery service.
 
 ## Can you do SIWES online in Nigeria?
 
@@ -5407,7 +4805,7 @@ Students then travel across the country holding a logbook, or send it by bus wit
 
 1. You book the logbook service and tell us your city and your submission deadline.
 2. Our courier partner **collects** your logbook and ITF forms from your address.
-3. We **review** every week against your recorded work, and fill in gaps, supervisor comments and the summary sections.
+3. We **review** every week against your recorded work, flag any entries you need to correct or expand yourself, and add supervisor comments. We never write or backfill entries for weeks you did not work.
 4. Your supervisor **signs**, and the documents are **stamped** officially.
 5. We **waybill it back** to you, in time for your deadline.
 
@@ -5416,7 +4814,7 @@ Both delivery legs are inside the fee, so you never travel to Nnewi. Turnaround 
 ## What it costs
 
 - **Virtual IT placement \u2014 \u20A645,000** for the full duration of your training. Includes the acceptance and placement letter addressed to your school, weekly live sessions, a mentor in your department, real project work, attendance and supervision records, a completion certificate and a recommendation letter. Both tracks are available online: **Learn & Pay** and **Tutor & Earn** (tutor other learners and earn while completing your IT).
-- **Logbook &amp; documents service \u2014 \u20A615,000** per logbook, covering courier pickup, review, filling, official signing and stamping, ITF form sections, and the return delivery.
+- **Logbook &amp; documents service \u2014 \u20A615,000** per logbook, covering courier pickup, review, supervisor comments, official signing and stamping, ITF form sections, and the return delivery.
 
 Both fees are paid before work starts. You submit the form, we send payment details on WhatsApp or email, and nothing is charged automatically. See the full breakdown on the [Virtual SIWES page](/virtual-siwes).
 

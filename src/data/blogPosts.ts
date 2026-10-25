@@ -3133,9 +3133,26 @@ Cyber security is one of the highest-leverage paths a Nigerian can pick in 2026 
 
 *By Bill Achusim · Apr 8, 2026*
 
-How much should a tech professional actually earn in Nigeria in 2026? There's a lot of guesswork on social media — usually inflated for clout or deflated for clickbait. Here are the realistic bands we see in actual hiring data and offers across web development, data, cyber security, product, and design.
+How much should a tech professional actually earn in Nigeria in 2026? There's a lot of guesswork on social media — usually inflated for clout or deflated for clickbait. Below are the bands we see in offers at well-funded companies, mostly in Lagos, across web development, data, cyber security, product, and design. They are our editorial estimates, not a survey, and they sit at the top of the market.
 
 All figures are gross monthly, in naira, for Nigeria-based roles unless noted. Remote USD-paid roles are listed separately.
+
+## What the survey data says
+
+Self-reported pay across the whole market is lower than the bands below. In [our Nigerian tech salary report](/reports/nigeria-tech-salaries), which cites Paylab's Nigeria survey (retrieved October 2026), the middle 80% of earners (10th to 90th percentile) take home roughly:
+
+| Role | Monthly pay (₦) |
+|---|---|
+| Frontend developer | 204,000 – 677,000 |
+| Backend developer | 202,000 – 915,000 |
+| Software engineer | 523,000 – 3,097,000 |
+| Data scientist | 184,000 – 771,000 |
+| IT security specialist | 223,000 – 1,119,000 |
+| DevOps engineer | 214,000 – 1,077,000 |
+| UX expert | 203,000 – 677,000 |
+| IT product manager | 223,000 – 1,177,000 |
+
+Treat the bands in the rest of this article as what strong candidates can reach at the best-paying employers, and the survey figures as what is typical.
 
 ## How to read these numbers
 
@@ -3238,6 +3255,7 @@ Tech pay in Nigeria is rising, but unevenly. The biggest premium in 2026 goes to
 
 *Looking to hit the next salary band? Browse our **bootcamps and career tracks** built around the roles in this article.*`,
     date: "2026-04-08",
+    updated: "2026-10-25",
     author: "Bill Achusim",
     tags: ["Tech Careers","tech salary Nigeria","developer salary Nigeria","remote tech jobs","Lagos tech salary","negotiation tech"],
     readTime: 11

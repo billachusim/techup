@@ -2069,11 +2069,11 @@ Async communication, clean PRs, self-driven task breakdown. Nigerian developers 
 
 ## Location inside Nigeria
 
-Lagos still pays 20\u201330% more than Abuja for local roles, and 40\u201360% more than Port Harcourt, Enugu, or Nnewi. But if you land remote work, location stops mattering \u2014 which is why 70% of our senior alumni relocated back to their home states after going remote.
+Lagos still pays 20\u201330% more than Abuja for local roles, and 40\u201360% more than Port Harcourt, Enugu, or Nnewi. But if you land remote work, location stops mattering \u2014 which is why many senior developers move back to their home states after going remote.
 
 ## What moves you from junior to mid faster
 
-In our data, the developers who broke \u20A61M/month within 18 months of graduating all did three things:
+The developers we see break \u20A61M/month soonest after graduating tend to do three things:
 1. Shipped a real production app used by at least 500 people (not a portfolio site).
 2. Contributed to an open-source repo with 1k+ stars.
 3. Wrote publicly \u2014 even 6 short technical posts on Dev.to or Hashnode.
@@ -2184,69 +2184,94 @@ Our **Data Analytics Bootcamp** covers exactly this stack \u2014 Excel \u2192 SQ
     slug: "cybersecurity-salary-nigeria-2026",
     title: "Cybersecurity Salary Nigeria: 2026 Entry to Senior Guide",
     seoTitle: "Cyber Security Salary Nigeria 2026 by Role",
-    description: "2026 cyber security salary data for Nigeria: SOC analysts earn \u20A6350k\u2013\u20A6700k monthly, senior GRC heads up to \u20A68M. See pay by role and remote USD rates.",
-    content: `# Cybersecurity Salary in Nigeria 2026: SOC, Pentest & GRC Pay Bands
+    description: "Cybersecurity salaries in Nigeria in 2026: mid-level analysts earn about \u20A6450k\u2013\u20A6900k a month and seniors \u20A61.5M\u2013\u20A62M. Pay by role, sources, and what employers screen for.",
+    content: `# Cybersecurity Salary in Nigeria 2026: SOC, Pentest & GRC Pay by Level
 
-*By Bill Achusim \xB7 Jul 2, 2026*
+*By Bill Achusim \xB7 Published Jul 2, 2026 \xB7 Last updated Oct 25, 2026*
 
-Cybersecurity pays well in Nigeria \u2014 but "cybersecurity" is not one job. It's at least six different careers with very different pay. Here are the real 2026 bands from Nigerian banks, fintechs, telcos, and consultancies, cross-checked with our Tech Faculty alumni placements.
+**Short answer:** A mid-level cybersecurity analyst in Nigeria typically earns about **\u20A6450,000 to \u20A6900,000 a month**, and a senior analyst about **\u20A61.5 million to \u20A62 million a month**, according to TechCabal's most recent (2025) salary reporting. Entry-level SOC roles pay less, and specialist or leadership roles (penetration testing leads, heads of compliance, cloud security) can pay well above these figures, especially at banks, fintechs and companies hiring remotely in dollars.
 
-## The three roles that hire most in Nigeria
+"Cybersecurity" is not one job. It covers at least six careers with very different pay. Below is what each pays, where the figures come from, and what employers screen for.
 
-### 1. SOC Analyst (Security Operations Centre)
-You watch alerts, triage incidents, escalate real threats. Every Nigerian bank and fintech runs a SOC \u2014 often 24/7.
+## How much do cybersecurity jobs pay in Nigeria?
 
-- Junior SOC (Tier 1): \u20A6350k\u2013\u20A6700k/month
-- Mid SOC (Tier 2): \u20A6900k\u2013\u20A61.6M/month
-- SOC Lead / Tier 3: \u20A62M\u2013\u20A63.5M/month
-- Remote SOC (US/EU MSSPs hiring Nigerians): $2,500\u2013$6,000/month
+The one independent benchmark we rely on is TechCabal's 2025 report on the highest-paying tech jobs in Nigeria, based on interviews with practitioners: ([TechCabal](https://techcabal.com/?p=167925))
 
-**Tools:** Splunk, Microsoft Sentinel, CrowdStrike, Elastic Security. Splunk is the highest-paying skill in Nigerian SOCs.
+| Level | Monthly pay (\u20A6) | Source |
+|---|---|---|
+| Mid-level cybersecurity analyst | 450,000 \u2013 900,000 | TechCabal, 2025 |
+| Senior cybersecurity analyst | 1,500,000 \u2013 2,000,000 | TechCabal, 2025 |
 
-### 2. Penetration Tester / Offensive Security
-You break into systems (legally) and write reports. Rare and highly paid in Nigeria.
+The ranges in the role sections below are **our own estimates** from Nigerian job adverts and conversations with employers in 2026. They are not survey data. Pay depends heavily on the employer: a Tier-1 bank, a funded fintech and a small IT services firm can offer very different amounts for the same title. Use them as a starting point for negotiation, not a promise.
 
-- Junior pentester: \u20A6600k\u2013\u20A61.2M/month (uncommon \u2014 most start as SOC and pivot)
-- Mid pentester: \u20A61.5M\u2013\u20A62.8M/month
-- Senior / red team: \u20A63M\u2013\u20A66M/month
-- Freelance / bug bounty: highly variable \u2014 top Nigerians make $80k\u2013$200k/yr on HackerOne
+## Pay by role
 
-**Certs that move the needle in Nigeria:** OSCP (biggest single salary bump), CRTP, Burp Suite Certified Practitioner. CEH is required for government/NITDA contracts but respected less by fintechs.
+### SOC analyst (Security Operations Centre)
+You watch alerts, triage incidents and escalate real threats. Banks, payment companies and managed security providers run SOCs, often around the clock. This is the most common entry point.
 
-### 3. GRC / Compliance Officer
-You handle NDPR, ISO 27001, PCI-DSS, CBN cybersecurity framework. Boring to some, gold to others.
+- Tier 1 (entry): roughly \u20A6250,000 \u2013 \u20A6600,000 a month
+- Tier 2 (mid): roughly \u20A6600,000 \u2013 \u20A61.2 million a month
+- SOC lead / Tier 3: roughly \u20A61.5 million and above
 
-- Junior GRC: \u20A6500k\u2013\u20A6900k/month
-- Mid GRC (NDPR-fluent): \u20A61.2M\u2013\u20A62.5M/month
-- Senior / Head of Compliance: \u20A63M\u2013\u20A68M/month + bonus
+**Tools employers ask for:** Splunk, Microsoft Sentinel, Microsoft Defender, CrowdStrike and Elastic Security.
 
-GRC salaries jumped hard in Nigeria after NDPR enforcement intensified in 2024\u20132025. Every fintech with more than 50 staff now needs at least one.
+### Penetration tester (offensive security)
+You test systems for weaknesses, with permission, and write the report. There are fewer of these roles in Nigeria, and most people move into them from SOC or IT work rather than starting there.
 
-## Other paths worth naming
+- Mid-level: roughly \u20A61 million \u2013 \u20A62 million a month
+- Senior / red team: often above \u20A62 million, with the highest pay in remote and consulting roles
+- Bug bounty income is real for a few people but highly irregular, so do not plan your finances around it
 
-- **Application security engineer** \u2014 \u20A61.5M\u2013\u20A64M/month. Rare in Nigeria; usually remote.
-- **Cloud security (AWS/Azure):** \u20A61.8M\u2013\u20A64.5M/month. Fastest-growing niche in 2026.
-- **Identity & access (IAM):** \u20A61M\u2013\u20A62.5M/month. Undervalued, easy to enter.
+**Certifications that carry weight:** OSCP is the best-known hands-on offensive certification; Burp Suite Certified Practitioner and CEH are also widely listed in adverts.
 
-## What actually gets you hired
+### GRC and compliance officer
+You handle data protection, ISO 27001, PCI DSS and banking cybersecurity rules. Two regulations drive demand in Nigeria:
 
-Nigerian cybersecurity hiring managers we placed talent with in 2026 asked for, in order:
-1. A home lab / TryHackMe or HackTheBox profile with real progress
-2. Working knowledge of Linux command line
-3. Basic scripting (Python or PowerShell)
-4. One recognized certification (Security+, or the role-specific one above)
-5. Ability to write a clean incident report or pentest report
+- The **Nigeria Data Protection Act 2023**, enforced by the **Nigeria Data Protection Commission (NDPC)**, which replaced the older NDPR regime under NITDA.
+- The **CBN Risk-Based Cybersecurity Framework and Guidelines** for deposit money banks and payment service banks, issued in May 2024 and in force from 1 July 2024. ([CBN framework, 2024](https://cbn.gov.ng/Out/2024/BSD/CBN%20Risk-Based%20Cybersecurity%20Framework%20for%20DMBs%20and%20PSBs_2024.pdf))
 
-Notice what's missing: a Computer Science degree. We've placed graduates from mass comm, accounting, and even law into SOC roles inside 8 months.
+Pay ranges from roughly \u20A6500,000 a month for junior analysts to several million naira for heads of compliance at large financial institutions.
 
-## Nigerian-specific advantage
+## Other paths worth knowing
 
-NDPR (Nigeria Data Protection Regulation) + the new CBN cybersecurity framework mean local compliance knowledge is a moat. A GRC officer who genuinely understands NITDA and CBN rules cannot be replaced by an offshore hire \u2014 that's why GRC pay is spiking.
+- **Cloud security (AWS, Azure):** one of the fastest-growing niches, and often paid at or above senior analyst levels.
+- **Application security:** few local roles; many are remote.
+- **Identity and access management (IAM):** less crowded and a realistic entry route for IT support staff.
+
+## What gets you hired
+
+Nigerian cybersecurity job adverts and hiring managers commonly ask for:
+
+1. Hands-on practice you can show, such as a home lab or a TryHackMe or Hack The Box profile
+2. Comfort with the Linux command line and networking basics
+3. Basic scripting in Python or PowerShell
+4. One recognised certification, such as CompTIA Security+, or the role-specific one above
+5. The ability to write a clear incident report or test report
+
+A computer science degree helps but is rarely the deciding factor. Demonstrable skill is.
+
+## Frequently asked questions
+
+### How much does a cybersecurity analyst earn in Nigeria?
+A mid-level analyst typically earns \u20A6450,000 to \u20A6900,000 a month and a senior analyst \u20A61.5 million to \u20A62 million a month, according to TechCabal's 2025 salary reporting. Entry-level pay is lower and specialist roles can pay more.
+
+### Which cybersecurity job pays the most in Nigeria?
+Leadership and specialist roles pay the most: heads of security or compliance at large banks, senior penetration testers and cloud security engineers, particularly in remote roles paid in dollars.
+
+### Can I get a cybersecurity job in Nigeria without a degree in computer science?
+Yes. Employers screen mostly for hands-on skill, a recognised certification and the ability to write clear reports. A degree in any field plus a lab portfolio is a common route into SOC work.
+
+### Which certification should I start with?
+CompTIA Security+ is the usual first certification for SOC and general security roles. Move to role-specific certifications, such as OSCP for penetration testing, once you know your path.
+
+### Is NDPR still the data protection law in Nigeria?
+The Nigeria Data Protection Act 2023 is now the main law, and the Nigeria Data Protection Commission enforces it. Many job adverts still say "NDPR", so knowing both names helps.
 
 ## How to start
 
-Our **Cybersecurity Bootcamp** takes complete beginners to SOC-ready in 20 weeks with a real Splunk lab, TryHackMe pathway, and NDPR module. [See the program](https://techfaculty.ng/) or read [why businesses need AI integration in Nigeria](https://techfaculty.ng/blog/why-businesses-need-ai-integration-nigeria) for adjacent skills.`,
+Our [Cybersecurity department](/departments/cybersecurity) takes beginners through networking, threat detection, ethical hacking, incident response and NDPR and ISO 27001 compliance in 16 to 20 weeks, with Security+ and CEH preparation and labs in tools such as Splunk, Wireshark and Burp Suite. For the step-by-step route into a first role, read [how to become a SOC analyst in Nigeria](/blog/become-soc-analyst-nigeria-2026-roadmap), and compare pay across the industry in our [tech salaries guide](/blog/tech-salaries-nigeria-2026-junior-mid-senior).`,
     date: "2026-06-30",
+    updated: "2026-10-25",
     author: "Bill Achusim",
     tags: ["Cybersecurity", "cybersecurity salary Nigeria", "SOC analyst Nigeria", "pentester Nigeria", "NDPR compliance"],
     readTime: 7
@@ -2345,82 +2370,99 @@ Our **Web Development** and **Data Analytics** bootcamps both include a dedicate
   },
   {
     slug: "siwes-allowance-nigeria-2026-itf-rates",
-    title: "SIWES Allowance in Nigeria 2026: ITF Rates & Timeline",
-    description: "How much SIWES students earn in Nigeria in 2026 \u2014 ITF allowance amount, payment timeline, top-ups from IT hosts, and how to actually get paid on time.",
-    content: `# SIWES Allowance in Nigeria 2026: ITF Rates, Payment Timeline & Top-Ups
+    title: "SIWES Allowance in Nigeria 2026: What ITF Pays & When",
+    description: "ITF pays SIWES students \u20A62,500 per month of training, about \u20A615,000 for six months, after the placement ends. Official sources, payment timeline and how to avoid delays.",
+    content: `# SIWES Allowance in Nigeria 2026: What ITF Pays, When, and How to Claim It
 
-*By Bill Achusim \xB7 Jun 25, 2026*
+*By Bill Achusim \xB7 Published Jun 25, 2026 \xB7 Last updated Oct 25, 2026*
 
-Every SIWES intake, the same question floods our DMs: "How much will ITF pay me, and when?" Here's the clean 2026 answer, plus what Tech Faculty and other tech-forward IT hosts actually top up.
+**Short answer:** The Industrial Training Fund (ITF) pays SIWES students a small allowance of **\u20A62,500 per month of training**, which comes to about **\u20A615,000 for a six-month placement** and about **\u20A610,000 for four months**. It is paid once, into your bank account, after your training ends and your school has submitted your logbook and ITF Form 8. There is no fixed payment date, and delays of many months are common. Any extra pay from your host company is a separate, voluntary arrangement.
 
-## What ITF pays SIWES students in 2026
+Every SIWES intake, the same question floods our DMs: "How much will ITF pay me, and when?" This page gives the official figures with sources, explains why payments are late, and lists the steps that stop your own payment from stalling.
 
-The Industrial Training Fund (ITF) pays the official SIWES allowance directly to students. As of the 2026 review:
+## How much is the SIWES allowance in 2026?
 
-- **Polytechnic / College of Education students:** \u20A625,000/month
-- **University students:** \u20A630,000/month
-- **Duration:** typically 4 or 6 months, depending on your school's SIWES calendar
+ITF's SIWES guidelines set the student allowance at **\u20A62,500 per student per month**, paid by e-payment directly into the student's account. The same document sets a supervisory allowance of \u20A6250 per student per month for institutions. ([ITF SIWES guidelines](https://itf.gov.ng/pdf/SIWES%20Work.pdf))
 
-ITF has hinted at another review before end of 2026 \u2014 check your Institution-Based Supervisor (IBS) for updates.
+What that means in practice:
 
-## When does the money actually land?
+| Placement length | Typical for | ITF allowance (total) |
+|---|---|---|
+| 6 months | Most university programmes | About \u20A615,000 |
+| 4 months | Many polytechnic and college of education programmes | About \u20A610,000 |
+| 3 months | Some short attachments | About \u20A67,500 |
 
-Realistic 2026 timeline based on students we've hosted:
+ITF's own 2023 payment figures match this: \u20A6733 million to 48,869 university students (\u20A615,000 each), about \u20A6233 million to 23,297 polytechnic students (\u20A610,000 each) and \u20A672.4 million to 7,238 college of education students (\u20A610,000 each). ([Peoples Gazette, April 2024](https://gazettengr.com/itf-paid-n1-1-billion-as-siwes-allowances-in-2023-official/))
 
-1. Month 1\u20132 of IT: Nothing lands. Don't panic.
-2. Month 3\u20134: First tranche often arrives \u2014 sometimes covering 2\u20133 months at once.
-3. Post-IT (up to 6 months after): Backlog payments continue trickling in.
+We found no sign of a change in 2026. At a 2026 SIWES orientation, a university vice-chancellor publicly urged the Federal Government to review "the N15,000 allowance paid to students". ([The Tide, September 2026](https://www.thetidenewsonline.com/2026/09/vc-urges-fg-to-review-siwes-students-allowances/))
 
-If nothing has come by month 4, chase it in this order: your Industry-Based Supervisor (IBS) \u2192 SIWES Unit at your school \u2192 nearest ITF Area Office. Bring your SPE-1, ITF Form 8, and logbook.
+**A correction.** An earlier version of this article said ITF pays \u20A625,000 to \u20A630,000 a month. We could not find any official source for that, so we have removed it. If ITF announces a review, we will update this page.
 
-## What blocks your ITF payment (most common causes)
+## When is the SIWES allowance paid?
 
-1. **Wrong bank details** on your SPE-1 form \u2014 the #1 cause. Double-check BVN, account number, and name spelling *before* submission.
-2. **Missing ITF Form 8** from your employer at the end of IT.
-3. **Logbook not signed** by your industry supervisor weekly.
-4. **Placement not registered** with your school's SIWES coordinator *before* you resumed.
-5. **Course not on the ITF-approved SIWES list** \u2014 verify with your department.
+ITF pays after your training, not during it. The usual order is:
 
-## Top-ups: what IT hosts actually pay in tech (2026)
+1. You finish your placement and your host completes its section of **ITF Form 8**, the end-of-programme report.
+2. You submit your signed logbook, Form 8 and technical report to your school's SIWES unit.
+3. Your institution forwards the documents to its ITF Area Office.
+4. The Area Office vets the logbooks and compiles the list of students to be paid (the Students' Institutional Payment list).
+5. ITF pays eligible students by e-payment into the bank account on their records.
 
-ITF's \u20A630k does not survive 2026 Lagos or Abuja living costs. Good tech hosts top up. Real ranges from Nigerian tech firms we track:
+Steps 3 to 5 are outside your control and can take many months. ITF's former Director-General has called stipend payment the "greatest challenge" of the scheme and tied delays to underfunding, saying some students graduate before they are paid. ([ICIR](https://www.icirnigeria.org/non-payment-of-stipends-mars-siwes-training-in-nigerian-schools/)) Plan your placement budget as if the allowance will not arrive while you are training.
 
-| Host type | Monthly top-up (\u20A6) |
-|---|---|
-| Small Nigerian startup | 20,000 \u2013 50,000 |
-| Mid-size fintech / SaaS | 60,000 \u2013 150,000 |
-| Bank tech unit / telco | 80,000 \u2013 200,000 |
-| Foreign-funded / YC-backed | 150,000 \u2013 400,000 |
-| Tech Faculty (our SIWES track) | 40,000 \u2013 120,000 + free bootcamp seat |
+## Why SIWES allowances get delayed
 
-Some hosts also cover transport, lunch, or provide a laptop for the placement. Ask before you resume \u2014 most students are too shy and lose out.
+Some delays are funding problems at ITF. Many are paperwork problems you can prevent:
 
-## Choosing a SIWES placement that actually pays (and teaches)
+1. **Bank details that don't match.** The name, account number and BVN on your forms must match your bank records exactly.
+2. **Missing or late Form 8.** Rivers State University's SIWES unit notes that payments go only to students who submit complete logbooks, Forms 8 and technical reports on time. ([RSU SIWES unit](https://www.rsu.edu.ng/students-industrial-work-experience-scheme-unit/))
+3. **An incomplete logbook.** Weekly entries need your industry-based supervisor's signature every week.
+4. **Placement forms not filed at the start.** Your host completes the placement form at the beginning of your attachment. Most universities call it **SPE-1** (Students' Placement with Employer); ITF's guidelines call it **SCAF** (Students' Commencement of Attachment Form). It goes to the nearest ITF Area Office.
+5. **Missing e-payment form.** Some schools require a Direct E-Payment Form so ITF can pay you. Ask your SIWES unit if yours does.
 
-In 2026, the best-paying SIWES placements in Nigerian tech share three traits:
-1. They put interns on real production work, not "shadowing."
-2. They have a written IT handbook / onboarding.
-3. They convert 20%+ of interns to graduate roles.
+## Do companies pay SIWES students extra?
 
-Red flags: no laptop provided, no dedicated supervisor, "help around the office" style work, unpaid overtime.
+Some do, but it is not required by ITF and there is no standard rate. Whether a host pays a monthly stipend, transport or lunch depends entirely on the company. Ask before you accept a placement, and get the answer in writing.
 
-## How to get paid on time (checklist)
+At Tech Faculty NG, on-site SIWES has no placement fee. On our Tutor & Earn track, students who already have a tech skill teach other learners and get paid while they complete their IT. See the [SIWES programme](/siwes) for how both tracks work.
 
-- [ ] Register placement with your school SIWES unit *before* Day 1
-- [ ] Submit SPE-1 with correct BVN-matched account details
-- [ ] Keep weekly logbook signed
-- [ ] Get ITF Form 8 signed on your last day
-- [ ] Submit all forms to your school within 2 weeks of finishing
+## Checklist: how to make sure you get paid
 
-Follow this and 80% of the delay problems disappear.
+- [ ] Confirm your placement with your school's SIWES coordinator before Day 1
+- [ ] Have your host complete SPE-1 (or SCAF) at the start, with bank details that match your BVN
+- [ ] Get your logbook signed every week
+- [ ] Get ITF Form 8 completed and signed on your last day
+- [ ] Submit logbook, Form 8 and technical report to your SIWES unit by its deadline
+- [ ] Keep photocopies or photos of every form
+
+## Frequently asked questions
+
+### How much does ITF pay SIWES students per month?
+ITF's guidelines set the SIWES student allowance at \u20A62,500 per month of training. It is not paid monthly; it is paid as one total after the placement, about \u20A615,000 for six months or \u20A610,000 for four months.
+
+### Is the SIWES allowance \u20A630,000 in 2026?
+No. We found no official source for a \u20A630,000 SIWES allowance. ITF's published rate is \u20A62,500 per month, and a September 2026 report still describes the allowance as \u20A615,000.
+
+### When will I receive my SIWES allowance?
+After your training ends and your school sends your logbook and ITF Form 8 to ITF. There is no fixed date. Some students are paid within months, and others wait much longer because of ITF funding delays.
+
+### What forms do I need to get paid?
+The placement form at the start (SPE-1, or SCAF in ITF's guidelines), a logbook signed weekly, ITF Form 8 at the end, your technical report, and any e-payment form your school requires.
+
+### Who do I contact if my allowance has not been paid?
+Start with your school's SIWES unit, which tracks what it submitted. If it confirms everything was sent, it can follow up with the ITF Area Office that covers your institution.
+
+### Does a virtual or remote SIWES placement affect the allowance?
+The allowance depends on your school accepting the placement and the forms being filed correctly and on time. Confirm with your SIWES coordinator that your school accepts the host before you start. Our [Virtual SIWES guide](/blog/virtual-siwes-nigeria-2026-online-it-logbook-signing) explains how remote placements work.
 
 ## Learn more
 
-Read our full [What is SIWES \u2014 complete Nigerian guide](https://techfaculty.ng/blog/what-is-siwes-nigeria-complete-guide), or explore our [SIWES program](https://techfaculty.ng/siwes) \u2014 we host students across our Nnewi, Onitsha/Awada, Enugu, Aba, and Owerri centres with real project work plus top-ups.`,
+Read [everything you need to know about SIWES](/blog/everything-you-need-to-know-about-siwes-nigeria), see the [logbook mistakes that delay students](/blog/siwes-logbook-mistakes-nigeria-fix), or explore our [SIWES programme](/siwes), which places students at campuses across Nigeria.`,
     date: "2026-06-25",
+    updated: "2026-10-25",
     author: "Bill Achusim",
     tags: ["SIWES & Internships", "SIWES allowance 2026", "ITF SIWES payment", "SIWES Nigeria", "tech internship Nigeria"],
-    readTime: 6
+    readTime: 7
   },
   {
     slug: "how-to-hire-developers-in-nigeria-2026",
@@ -2430,7 +2472,7 @@ Read our full [What is SIWES \u2014 complete Nigerian guide](https://techfaculty
 
 *By Bill Achusim \xB7 Jun 22, 2026*
 
-If you're a founder \u2014 Nigerian or foreign \u2014 trying to hire developers in Nigeria in 2026, this is the practical, no-nonsense playbook. Nigerian developer talent is world-class, but the hiring pitfalls are specific. Here's what we've learned running Tech Faculty and placing 300+ engineers into Nigerian and remote roles.
+If you're a founder \u2014 Nigerian or foreign \u2014 trying to hire developers in Nigeria in 2026, this is the practical, no-nonsense playbook. Nigerian developer talent is world-class, but the hiring pitfalls are specific. Here's what we've learned running Tech Faculty and helping our graduates into Nigerian and remote roles.
 
 ## What Nigerian developers actually cost in 2026
 
@@ -2477,12 +2519,12 @@ Skip LeetCode gauntlets for anything below staff level. They filter for the wron
 
 ## Retention: why Nigerian developers actually leave
 
-In our exit-interview data across 2024\u20132026:
-1. **Career growth stalled** (46%) \u2014 no clear promotion path
-2. **Learning stagnation** (22%) \u2014 legacy stack, no new challenges
-3. **Pay fell behind USD-denominated peers** (18%)
-4. **Bad manager** (10%)
-5. **Relocation / study abroad** (4%)
+The reasons we hear most often from developers who change jobs, roughly in this order:
+1. **Career growth stalled** \u2014 no clear promotion path
+2. **Learning stagnation** \u2014 legacy stack, no new challenges
+3. **Pay fell behind USD-denominated peers**
+4. **Bad manager**
+5. **Relocation / study abroad**
 
 Salary is rarely #1. It's growth. Fix that and you'll keep senior Nigerian devs for 4+ years.
 
@@ -3702,7 +3744,7 @@ Prompt-writing is a real skill now. The Nigerian SMEs winning with AI are traini
 
 ## Where Tech Faculty NG fits
 
-We train Nigerian professionals and SMEs on practical AI \u2014 the prompts, the workflows, the security guardrails \u2014 through our **AI & Productivity** and **AI Engineering** bootcamps. Our cohorts have included staff from over 5,000+ students and graduates across the country.
+We train Nigerian professionals and SMEs on practical AI \u2014 the prompts, the workflows, the security guardrails \u2014 through our **AI & Productivity** and **AI Engineering** bootcamps. Over 6,000 students have trained with us across the country.
 
 ## The bottom line
 
@@ -3801,7 +3843,7 @@ Most juniors fail at the *job-search* stage, not the *skills* stage. What works:
 
 ## Where Tech Faculty NG fits
 
-Our **Web Development Bootcamp** is a 16-week, project-first program that follows exactly this roadmap. Cohorts are 100% hands-on, with code reviews, real-team workflows, and SIWES/job placement support. We have helped 5,000+ students and graduates start their tech journey.
+Our **Web Development Bootcamp** is a 16-week, project-first program that follows exactly this roadmap. Cohorts are 100% hands-on, with code reviews, real-team workflows, and SIWES/job placement support. We have helped 6,000+ students start their tech journey.
 
 ## The bottom line
 
@@ -3910,7 +3952,7 @@ Remote roles paid in USD or pegged to USD typically pay 2\u20134\xD7 the equival
 
 ## Where Tech Faculty NG fits
 
-Our **Data Analytics Bootcamp** runs for 16 weeks and covers Excel, SQL, Python, and Power BI in the exact order Nigerian employers expect. Over 5,000+ students and graduates have used our programs to start tech careers.
+Our **Data Analytics Bootcamp** runs for 16 weeks and covers Excel, SQL, Python, and Power BI in the exact order Nigerian employers expect. Over 6,000 students have used our programs to start tech careers.
 
 ## The bottom line
 
@@ -4053,7 +4095,7 @@ Ask these questions before paying anyone:
 
 ## Where Tech Faculty NG fits
 
-Our **Cyber Security Bootcamp** is a 16-week, project-first program built around exactly this curriculum, taught by practitioners working in Nigerian banks, fintechs, and consultancies. We've helped 5,000+ students and graduates start their tech careers.
+Our **Cyber Security Bootcamp** is a 16-week, project-first program built around exactly this curriculum, taught by practitioners working in Nigerian banks, fintechs, and consultancies. We've helped 6,000+ students start their tech careers.
 
 ## The bottom line
 
@@ -4074,9 +4116,26 @@ Cyber security is one of the highest-leverage paths a Nigerian can pick in 2026 
 
 *By Bill Achusim \xB7 Apr 8, 2026*
 
-How much should a tech professional actually earn in Nigeria in 2026? There's a lot of guesswork on social media \u2014 usually inflated for clout or deflated for clickbait. Here are the realistic bands we see in actual hiring data and offers across web development, data, cyber security, product, and design.
+How much should a tech professional actually earn in Nigeria in 2026? There's a lot of guesswork on social media \u2014 usually inflated for clout or deflated for clickbait. Below are the bands we see in offers at well-funded companies, mostly in Lagos, across web development, data, cyber security, product, and design. They are our editorial estimates, not a survey, and they sit at the top of the market.
 
 All figures are gross monthly, in naira, for Nigeria-based roles unless noted. Remote USD-paid roles are listed separately.
+
+## What the survey data says
+
+Self-reported pay across the whole market is lower than the bands below. In [our Nigerian tech salary report](/reports/nigeria-tech-salaries), which cites Paylab's Nigeria survey (retrieved October 2026), the middle 80% of earners (10th to 90th percentile) take home roughly:
+
+| Role | Monthly pay (\u20A6) |
+|---|---|
+| Frontend developer | 204,000 \u2013 677,000 |
+| Backend developer | 202,000 \u2013 915,000 |
+| Software engineer | 523,000 \u2013 3,097,000 |
+| Data scientist | 184,000 \u2013 771,000 |
+| IT security specialist | 223,000 \u2013 1,119,000 |
+| DevOps engineer | 214,000 \u2013 1,077,000 |
+| UX expert | 203,000 \u2013 677,000 |
+| IT product manager | 223,000 \u2013 1,177,000 |
+
+Treat the bands in the rest of this article as what strong candidates can reach at the best-paying employers, and the survey figures as what is typical.
 
 ## How to read these numbers
 
@@ -4171,7 +4230,7 @@ A few rules that work in Nigerian tech hiring:
 
 ## Where Tech Faculty NG fits
 
-Whether you're aiming for a junior role in Lagos or a remote senior role paid in USD, the bands above show why deep, employer-aligned skills matter. Our bootcamps in Web Development, Data Analytics, Cyber Security, and AI are designed around exactly the hiring requirements behind these numbers \u2014 and we've helped 5,000+ students and graduates make the jump.
+Whether you're aiming for a junior role in Lagos or a remote senior role paid in USD, the bands above show why deep, employer-aligned skills matter. Our bootcamps in Web Development, Data Analytics, Cyber Security, and AI are designed around exactly the hiring requirements behind these numbers \u2014 and we've helped 6,000+ students make the jump.
 
 ## The bottom line
 
@@ -4179,6 +4238,7 @@ Tech pay in Nigeria is rising, but unevenly. The biggest premium in 2026 goes to
 
 *Looking to hit the next salary band? Browse our **bootcamps and career tracks** built around the roles in this article.*`,
     date: "2026-04-08",
+    updated: "2026-10-25",
     author: "Bill Achusim",
     tags: ["Tech Careers", "tech salary Nigeria", "developer salary Nigeria", "remote tech jobs", "Lagos tech salary", "negotiation tech"],
     readTime: 11
@@ -4288,7 +4348,7 @@ Stick to this and you cover everything ITF and your school actually grade on.
 
 ## Where Tech Faculty NG fits
 
-We support SIWES students every year \u2014 placement, training, and mentorship \u2014 across our partner network. Over 5,000+ students and graduates have gone through our programs. Our students are coached on logbook quality from week one, not week 23.
+We support SIWES students every year \u2014 placement, training, and mentorship \u2014 across our partner network. Over 6,000 students have gone through our programs. Our students are coached on logbook quality from week one, not week 23.
 
 ## The bottom line
 
@@ -4407,7 +4467,7 @@ Skipping process never works long-term, and is a fast path to legal trouble.
 
 ## Where Tech Faculty NG fits
 
-We work with Nigerian businesses on the talent side of this \u2014 building internal teams, training existing staff, and supporting tech delivery for enterprise engagements. Over 5,000+ students and graduates have come through our programs, many of them now staffing the projects this article describes.
+We work with Nigerian businesses on the talent side of this \u2014 building internal teams, training existing staff, and supporting tech delivery for enterprise engagements. Over 6,000 students have come through our programs, many of them now staffing the projects this article describes.
 
 ## The bottom line
 
@@ -5063,85 +5123,95 @@ Remote work is not luck. It is a system. Build the system, and the offers come.
   {
     slug: "how-to-find-siwes-placement-tech-nigeria-2026",
     title: "How to Find a Tech SIWES Placement in Nigeria (2026 Student Guide)",
-    description: "A step-by-step 2026 guide for Nigerian students on finding a tech SIWES placement \u2014 where to apply, what to say, ITF rules, and how to convert IT to a job.",
+    description: "How to find a tech SIWES placement in Nigeria in 2026: when to start, where to apply, the forms you need (SPE-1, logbook, ITF Form 8) and how to turn IT into a job.",
     content: `# How to Find a Tech SIWES Placement in Nigeria (2026 Student Guide)
 
-*By Tech Faculty NG \xB7 July 11, 2026*
+*By Tech Faculty NG \xB7 Published Jul 11, 2026 \xB7 Last updated Oct 25, 2026*
 
-Finding a good tech SIWES placement in Nigeria is harder than passing your courses \u2014 and matters more for your career. Most students settle for whatever cyber caf\xE9 or "computer school" accepts them. This guide will help you do better.
+**Short answer:** Start looking two to three months before your SIWES begins. Get an introduction letter from your school's SIWES unit, make a one-page CV, and send short, specific applications to fintechs, bank IT departments, software firms, startups and tech training companies near you, following up after a week. Before you accept, confirm your school will approve the host and that the company will give you real work, a named supervisor, weekly logbook signatures and the ITF forms at the start and end.
 
----
+Finding a good tech SIWES placement is often harder than passing your courses, and it matters more for your career. This guide covers where to look, how to apply, what paperwork you need, and how to turn the placement into a job offer.
 
-## First, understand what SIWES really is
+## What SIWES is, in one paragraph
 
-SIWES (Student Industrial Work Experience Scheme) is a 4\u20136 month mandatory industrial training programme funded by the **Industrial Training Fund (ITF)**. In tech, it is your first real chance to:
+SIWES (the Students Industrial Work Experience Scheme) is the compulsory industrial training that most Nigerian university, polytechnic and college of education students take in a work setting, usually for four to six months depending on the programme. The Industrial Training Fund (ITF) manages it with your school and your host employer. In tech, it is your first real chance to work inside a team, ship something real and earn a professional reference before you graduate. For the full background, read [everything you need to know about SIWES](/blog/everything-you-need-to-know-about-siwes-nigeria).
 
-- Sit inside a working company.
-- Ship something on a real codebase or data pipeline.
-- Build a professional reference before you graduate.
+## When should you start looking?
 
-Get it right and you can walk into a full-time job offer after NYSC. Get it wrong and you waste six months photocopying documents.
+Two to three months before your start date. Most students start in the last few weeks and end up with whoever says yes first. Companies with structured internship intakes fill places early, and you need time to get your school's approval once a host accepts you.
 
----
+## Where to look for a tech SIWES placement
 
-## Where to actually look (2026)
+- **Fintechs and payment companies.** Many run engineering, data, product and support teams that can take interns. Check their careers pages and LinkedIn.
+- **Bank IT and digital banking departments.** Large banks take industrial training students; competition is high, so apply early and through official channels.
+- **Software houses, IT services firms and system integrators.** Often more willing than big brands to take SIWES students and give them real tasks.
+- **Startups.** Smaller teams usually mean more responsibility, and a good intern can grow into a full-time hire.
+- **Government agencies and technology incubation centres.** Public bodies with IT departments and the Technology Incubation Centres in many state capitals host students.
+- **Tech training companies.** Providers like Tech Faculty NG host SIWES students on supervised projects. See our [SIWES programme](/siwes).
 
-### Tier 1 \u2014 Serious tech companies
+Avoid placements where you would only type documents, run a business centre or "help around the office". Your logbook should describe real technical work.
 
-- **Fintechs:** Flutterwave, Moniepoint, Paystack, Kuda, Opay, PalmPay.
-- **Big tech (Nigeria offices):** Google, Microsoft, Meta, Amazon.
-- **Banks (tech departments):** GTCO, Access, Zenith, UBA.
-- **Enterprise SIs:** CWG, Interswitch, MainOne (Equinix), Layer3, Digital Encode.
+## How to apply
 
-### Tier 2 \u2014 Startups and studios
+1. **Get your introduction letter** from your department or SIWES unit. Many companies ask for it before they reply.
+2. **Make a one-page CV.** List school projects, a GitHub or portfolio link, and any courses you have completed.
+3. **Write a short, specific message.** For example: *"I am a 300-level Computer Science student at Nnamdi Azikiwe University looking for a SIWES placement from February to July 2027. I have built a student records app in Python and I am learning React. May I send my CV?"*
+4. **Apply widely but carefully.** Twenty to thirty well-targeted applications beat hundreds of copies of the same email.
+5. **Follow up after a week**, by email or a polite LinkedIn message to the engineering manager or HR lead.
 
-Nigerian startups (Bumpa, Renmoney, ThriveAgric, ProjectPhoenix, etc.) often love SIWES students because you cost less and can grow into a full-time role.
+## What paperwork you need
 
-### Tier 3 \u2014 Training providers (do this if Tier 1 & 2 fail)
+- **Introduction letter** from your school, before you apply or on acceptance.
+- **Acceptance letter** from the company, which your school's SIWES unit usually needs.
+- **Placement form at the start of training.** Most universities call it SPE-1 (Students' Placement with Employer); ITF's guidelines call it SCAF (Students' Commencement of Attachment Form). The host completes it and it goes to the ITF Area Office.
+- **SIWES logbook**, filled daily or weekly and signed by your industry-based supervisor every week.
+- **ITF Form 8**, the end-of-programme report, completed at the end of your training. ([ITF SIWES guidelines](https://itf.gov.ng/pdf/SIWES%20Work.pdf))
 
-Places like **Tech Faculty** run an [industrial training programme](https://techfaculty.ng/siwes) with our *Learn & Pay* and *Tutor & Earn* tracks \u2014 you actually build software or teach juniors, not push paper.
+Missing or late forms are a common reason ITF allowances are delayed. Our [SIWES allowance guide](/blog/siwes-allowance-nigeria-2026-itf-rates) explains what ITF pays and how to avoid delays.
 
----
+## Questions to ask before you accept
 
-## The application system that works
+- Will my school accept this company? (Check with your SIWES coordinator.)
+- Will I work on a real project or team?
+- Who will supervise me and sign my logbook each week?
+- Will you complete the placement form now and ITF Form 8 at the end?
+- Is there a stipend, transport or lunch support? (ITF does not require one, so ask.)
+- Will I get a letter of completion or recommendation?
 
-1. **Build a 1-page CV.** Even with no experience \u2014 list your school projects, GitHub, and any online course completions.
-2. **Write a short, specific email.**  
-   *"I am a 300-level Computer Science student at UNIZIK looking for a SIWES placement between August 2026 and January 2027. I have built X and I am strong in Y. Can I attach my CV?"*
-3. **Send 30 emails in one week.** Not 3. Not 300. 30 well-researched ones.
-4. **Follow up on LinkedIn.** Find the CTO, engineering manager, or people ops lead. Send a polite DM referencing your email.
-5. **Have an ITF Form 8 ready.** Companies will not process you without it.
+If a company cannot answer these, keep looking.
 
----
+## How to turn SIWES into a job offer
 
-## What to ask before accepting
+- **Ship one thing you can demo**: a feature, a dashboard or an internal tool.
+- **Write clear weekly logbook entries.** They double as your record of achievements.
+- **Ask in your second-to-last month:** *"What would I need to show to be considered for a role after graduation or NYSC?"*
+- **Stay in touch.** Send a short update every few months after you leave.
 
-- Will I be assigned to a real project or team?
-- Who will be my supervisor?
-- Will I get a stipend? (Even \u20A620k/month matters.)
-- Can I attend team meetings and code reviews?
-- Will I get an end-of-programme letter?
+## Frequently asked questions
 
-If they cannot answer these, keep looking.
+### When should I start looking for a SIWES placement?
+Two to three months before your SIWES start date. That leaves time to apply, follow up and get your school's approval once a company accepts you.
 
----
+### What documents do I need for a SIWES placement?
+An introduction letter from your school, an acceptance letter from the company, the placement form at the start (SPE-1 or SCAF), a logbook signed weekly, and ITF Form 8 at the end of training.
 
-## Turn SIWES into a job offer
+### Is ITF Form 8 needed before a company accepts me?
+No. ITF Form 8 is the end-of-programme report completed when your training finishes. At the start, companies usually need your school's introduction letter and complete the placement form (SPE-1 or SCAF).
 
-- **Ship one thing you can demo** \u2014 a feature, a dashboard, an internal tool.
-- **Write clean weekly logbook entries** \u2014 many companies read them.
-- **Ask, in month 4:** *"What would I need to prove to be considered for a role after NYSC?"*
-- **Stay in touch after IT ends.** Send a monthly progress email.
+### Do SIWES students get paid?
+ITF pays a small allowance after training, about \u20A615,000 for six months. Some companies also pay a stipend, but it is not required, so ask before you accept.
 
----
+### Can I do SIWES remotely?
+Some schools accept remote or virtual placements and some do not, so confirm with your SIWES coordinator first. Our [Virtual SIWES guide](/blog/virtual-siwes-nigeria-2026-online-it-logbook-signing) explains how it works.
+
+### Does Tech Faculty NG accept SIWES students?
+Yes. On-site SIWES with us has no placement fee, at campuses across Nigeria. Students choose Learn & Pay, with mentorship on real projects, or Tutor & Earn, where skilled students teach and get paid. See the [SIWES programme](/siwes).
 
 ## Need a placement now?
 
-Apply to the [Tech Faculty SIWES programme](https://techfaculty.ng/siwes). We accept students year-round at our centres in Nnewi, Onitsha, Enugu, Aba, and Owerri, and remote nationwide.
-
-SIWES is the single biggest career launchpad most Nigerian undergraduates ever get. Do not sleep on it.
-`,
+Apply to the [Tech Faculty NG SIWES programme](/siwes) or [find a campus near you](/locations). SIWES is the biggest career launchpad most Nigerian undergraduates get, so start early and choose well.`,
     date: "2026-07-11",
+    updated: "2026-10-25",
     author: "Tech Faculty NG",
     tags: ["SIWES & Internships", "SIWES placement Nigeria", "tech internship Nigeria", "ITF Nigeria", "industrial training Nigeria"],
     readTime: 8

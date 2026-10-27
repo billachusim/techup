@@ -226,6 +226,10 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
+    // Each run spends AI credits: only the schedule or a signed-in admin may start one.
+    const denied = await requireCronOrAdmin(req, supabase, "generate-weekly-blog", corsHeaders);
+    if (denied) return denied;
+
     const { data: existing, error: existingError } = await supabase
       .from("blog_posts")
       .select("slug, title, category, published_at")

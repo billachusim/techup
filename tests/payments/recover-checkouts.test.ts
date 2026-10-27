@@ -27,7 +27,7 @@ const row = (id: string) => db.tables.enrollments.find((r) => r.id === id)!;
 const run = async () => (await servedHandler()(new Request("https://fn.test/recover-checkouts", { method: "POST" }))).json();
 
 beforeEach(() => {
-  db = { users: {}, tables: { enrollments: [] } };
+  db = { users: {}, tables: { enrollments: [], product_orders: [] } };
   useFakeDb(db);
   flutterwave = {};
   fetchMock = vi.fn(async (url: string) => {
@@ -82,5 +82,20 @@ describe("recover-checkouts", () => {
     const body = await run();
     expect(fetchMock).toHaveBeenLastCalledWith("https://techfaculty.ng/api/payment-followups", { method: "POST" });
     expect(body.followups).toEqual({ confirmationsSent: 1, remindersSent: 0 });
+  });
+
+  it("marks a paid online order the buyer left before the order page confirmed it", async () => {
+    const order = (id: string, createdAt: string, over: Record<string, unknown> = {}) => ({
+      id, tx_ref: `TFO-${id}`, items: ["success_kit"], status: "pending", amount_due: 4500, currency: "NGN", created_at: createdAt, ...over,
+    });
+    db.tables.product_orders.push(order("paid", ago(40 * MINUTE)), order("unpaid", ago(40 * MINUTE)), order("fresh", ago(2 * MINUTE)));
+    flutterwave["TFO-paid"] = { id: 777, tx_ref: "TFO-paid", status: "successful", amount: 4500, currency: "NGN" };
+
+    expect(await run()).toMatchObject({ ordersChecked: 2, ordersPaid: 1 });
+    const byId = (id: string) => db.tables.product_orders.find((r) => r.id === id)!;
+    expect(byId("paid")).toMatchObject({ status: "paid", payment_reference: "777" });
+    expect(typeof byId("paid").recovered_at).toBe("string");
+    expect(byId("unpaid").status).toBe("pending");
+    expect(byId("fresh").status).toBe("pending");
   });
 });

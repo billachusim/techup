@@ -17,6 +17,7 @@ import { Route as FeedDotxmlRouteImport } from './routes/feed[.]xml'
 import { Route as HireRouteImport } from './routes/hire'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LovableRouteImport } from './routes/lovable'
+import { Route as OrderCompleteRouteImport } from './routes/order-complete'
 import { Route as OutcomesRouteImport } from './routes/outcomes'
 import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
 import { Route as ProductsRouteImport } from './routes/products'
@@ -42,6 +43,7 @@ import { Route as ApiAdminDigestRouteImport } from './routes/api.admin-digest'
 import { Route as ApiLeadFollowupsRouteImport } from './routes/api.lead-followups'
 import { Route as ApiLeadUnsubscribeRouteImport } from './routes/api.lead-unsubscribe'
 import { Route as ApiPaymentFollowupsRouteImport } from './routes/api.payment-followups'
+import { Route as ApiSuccessKitRouteImport } from './routes/api.success-kit'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CareersIndexRouteImport } from './routes/careers.index'
@@ -118,6 +120,11 @@ const LoginRoute = LoginRouteImport.update({
 const LovableRoute = LovableRouteImport.update({
   id: '/lovable',
   path: '/lovable',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrderCompleteRoute = OrderCompleteRouteImport.update({
+  id: '/order-complete',
+  path: '/order-complete',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OutcomesRoute = OutcomesRouteImport.update({
@@ -244,6 +251,11 @@ const ApiLeadUnsubscribeRoute = ApiLeadUnsubscribeRouteImport.update({
 const ApiPaymentFollowupsRoute = ApiPaymentFollowupsRouteImport.update({
   id: '/api/payment-followups',
   path: '/api/payment-followups',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSuccessKitRoute = ApiSuccessKitRouteImport.update({
+  id: '/api/success-kit',
+  path: '/api/success-kit',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -446,6 +458,7 @@ export interface FileRoutesByFullPath {
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
   '/lovable': typeof LovableRouteWithChildren
+  '/order-complete': typeof OrderCompleteRoute
   '/outcomes': typeof OutcomesRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
@@ -470,6 +483,7 @@ export interface FileRoutesByFullPath {
   '/api/lead-followups': typeof ApiLeadFollowupsRoute
   '/api/lead-unsubscribe': typeof ApiLeadUnsubscribeRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
+  '/api/success-kit': typeof ApiSuccessKitRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
@@ -518,6 +532,7 @@ export interface FileRoutesByTo {
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
   '/lovable': typeof LovableRouteWithChildren
+  '/order-complete': typeof OrderCompleteRoute
   '/outcomes': typeof OutcomesRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
@@ -542,6 +557,7 @@ export interface FileRoutesByTo {
   '/api/lead-followups': typeof ApiLeadFollowupsRoute
   '/api/lead-unsubscribe': typeof ApiLeadUnsubscribeRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
+  '/api/success-kit': typeof ApiSuccessKitRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
@@ -591,6 +607,7 @@ export interface FileRoutesById {
   '/hire': typeof HireRoute
   '/login': typeof LoginRoute
   '/lovable': typeof LovableRouteWithChildren
+  '/order-complete': typeof OrderCompleteRoute
   '/outcomes': typeof OutcomesRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
@@ -615,6 +632,7 @@ export interface FileRoutesById {
   '/api/lead-followups': typeof ApiLeadFollowupsRoute
   '/api/lead-unsubscribe': typeof ApiLeadUnsubscribeRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
+  '/api/success-kit': typeof ApiSuccessKitRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
@@ -665,6 +683,7 @@ export interface FileRouteTypes {
     | '/hire'
     | '/login'
     | '/lovable'
+    | '/order-complete'
     | '/outcomes'
     | '/payment-success'
     | '/products'
@@ -689,6 +708,7 @@ export interface FileRouteTypes {
     | '/api/lead-followups'
     | '/api/lead-unsubscribe'
     | '/api/payment-followups'
+    | '/api/success-kit'
     | '/blog/$slug'
     | '/category/$'
     | '/departments/$slug'
@@ -737,6 +757,7 @@ export interface FileRouteTypes {
     | '/hire'
     | '/login'
     | '/lovable'
+    | '/order-complete'
     | '/outcomes'
     | '/payment-success'
     | '/products'
@@ -761,6 +782,7 @@ export interface FileRouteTypes {
     | '/api/lead-followups'
     | '/api/lead-unsubscribe'
     | '/api/payment-followups'
+    | '/api/success-kit'
     | '/blog/$slug'
     | '/category/$'
     | '/departments/$slug'
@@ -809,6 +831,7 @@ export interface FileRouteTypes {
     | '/hire'
     | '/login'
     | '/lovable'
+    | '/order-complete'
     | '/outcomes'
     | '/payment-success'
     | '/products'
@@ -833,6 +856,7 @@ export interface FileRouteTypes {
     | '/api/lead-followups'
     | '/api/lead-unsubscribe'
     | '/api/payment-followups'
+    | '/api/success-kit'
     | '/blog/$slug'
     | '/category/$'
     | '/departments/$slug'
@@ -882,6 +906,7 @@ export interface RootRouteChildren {
   HireRoute: typeof HireRoute
   LoginRoute: typeof LoginRoute
   LovableRoute: typeof LovableRouteWithChildren
+  OrderCompleteRoute: typeof OrderCompleteRoute
   OutcomesRoute: typeof OutcomesRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
   ProductsRoute: typeof ProductsRoute
@@ -906,6 +931,7 @@ export interface RootRouteChildren {
   ApiLeadFollowupsRoute: typeof ApiLeadFollowupsRoute
   ApiLeadUnsubscribeRoute: typeof ApiLeadUnsubscribeRoute
   ApiPaymentFollowupsRoute: typeof ApiPaymentFollowupsRoute
+  ApiSuccessKitRoute: typeof ApiSuccessKitRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CategorySplatRoute: typeof CategorySplatRoute
   DepartmentsSlugRoute: typeof DepartmentsSlugRoute
@@ -999,6 +1025,13 @@ declare module '@tanstack/react-router' {
       path: '/lovable'
       fullPath: '/lovable'
       preLoaderRoute: typeof LovableRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order-complete': {
+      id: '/order-complete'
+      path: '/order-complete'
+      fullPath: '/order-complete'
+      preLoaderRoute: typeof OrderCompleteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/outcomes': {
@@ -1174,6 +1207,13 @@ declare module '@tanstack/react-router' {
       path: '/api/payment-followups'
       fullPath: '/api/payment-followups'
       preLoaderRoute: typeof ApiPaymentFollowupsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/success-kit': {
+      id: '/api/success-kit'
+      path: '/api/success-kit'
+      fullPath: '/api/success-kit'
+      preLoaderRoute: typeof ApiSuccessKitRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -1462,6 +1502,7 @@ const rootRouteChildren: RootRouteChildren = {
   HireRoute: HireRoute,
   LoginRoute: LoginRoute,
   LovableRoute: LovableRouteWithChildren,
+  OrderCompleteRoute: OrderCompleteRoute,
   OutcomesRoute: OutcomesRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
   ProductsRoute: ProductsRoute,
@@ -1487,6 +1528,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiLeadFollowupsRoute: ApiLeadFollowupsRoute,
   ApiLeadUnsubscribeRoute: ApiLeadUnsubscribeRoute,
   ApiPaymentFollowupsRoute: ApiPaymentFollowupsRoute,
+  ApiSuccessKitRoute: ApiSuccessKitRoute,
   BlogSlugRoute: BlogSlugRoute,
   CategorySplatRoute: CategorySplatRoute,
   DepartmentsSlugRoute: DepartmentsSlugRoute,

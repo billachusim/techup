@@ -3,7 +3,7 @@ import { setEnv } from "./stubs/deno-env.ts";
 import { servedHandler } from "./stubs/deno-serve.ts";
 import { createClient, useFakeDb, type FakeDb } from "./stubs/supabase.ts";
 import "../../supabase/functions/verify-payment/index.ts";
-import { confirmPayment } from "../../supabase/functions/_shared/flutterwave.ts";
+import { confirmOrderPayment, confirmPayment } from "../../supabase/functions/_shared/flutterwave.ts";
 
 const TX = "TF-TF001-1111";
 
@@ -166,6 +166,58 @@ describe("confirmPayment", () => {
 
   it("reports an unknown reference as not found", async () => {
     expect(await confirmPayment(admin(), "key", "TF-nope")).toMatchObject({ status: "not_found" });
+    expect(flutterwave).not.toHaveBeenCalled();
+  });
+});
+
+describe("verify-payment for online orders", () => {
+  const ORDER_TX = "TFO-5555";
+  const order = () => db.tables.product_orders[0];
+
+  beforeEach(() => {
+    db.tables.product_orders = [
+      { id: "ord-1", tx_ref: ORDER_TX, items: ["virtual_siwes", "logbook_service"], status: "pending", amount_due: 60000, currency: "NGN", lead_id: "lead-1" },
+    ];
+    db.tables.leads = [{ id: "lead-1", status: "new" }];
+    flutterwaveSays(paid({ tx_ref: ORDER_TX, amount: 60000 }));
+  });
+
+  it("marks the order paid without a sign-in once Flutterwave confirms the full amount", async () => {
+    const res = await verify({ txRef: ORDER_TX }, "no-such-token");
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ status: "paid", items: ["virtual_siwes", "logbook_service"] });
+    expect(order()).toMatchObject({ status: "paid", payment_reference: "987654" });
+    expect(typeof order().paid_at).toBe("string");
+    // Closed, so the lead follow-up emails never chase a buyer who has paid.
+    expect(db.tables.leads[0].status).toBe("enrolled");
+  });
+
+  it("does not mark an underpaid or wrong-currency order paid", async () => {
+    flutterwaveSays(paid({ tx_ref: ORDER_TX, amount: 45000 }));
+    expect(await (await verify({ txRef: ORDER_TX })).json()).toEqual({ status: "failed" });
+    flutterwaveSays(paid({ tx_ref: ORDER_TX, amount: 60000, currency: "USD" }));
+    expect(await (await verify({ txRef: ORDER_TX })).json()).toEqual({ status: "failed" });
+    expect(order().status).toBe("pending");
+    expect(db.tables.leads[0].status).toBe("new");
+  });
+
+  it("keeps waiting while the payment is pending", async () => {
+    flutterwaveSays(paid({ tx_ref: ORDER_TX, amount: 60000, status: "pending" }));
+    expect(await (await verify({ txRef: ORDER_TX })).json()).toEqual({ status: "pending" });
+    expect(order().status).toBe("pending");
+  });
+
+  it("reports an unknown order reference as not found", async () => {
+    expect((await verify({ txRef: "TFO-nope" })).status).toBe(404);
+    expect(flutterwave).not.toHaveBeenCalled();
+  });
+
+  it("does not ask Flutterwave again for an order already paid, and never revives a cancelled one", async () => {
+    const admin = createClient() as never;
+    order().status = "paid";
+    expect(await confirmOrderPayment(admin, "key", ORDER_TX)).toMatchObject({ status: "paid" });
+    order().status = "cancelled";
+    expect(await confirmOrderPayment(admin, "key", ORDER_TX)).toMatchObject({ status: "failed" });
     expect(flutterwave).not.toHaveBeenCalled();
   });
 });

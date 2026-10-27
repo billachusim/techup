@@ -1,12 +1,13 @@
 // Runs every 30 minutes from pg_cron. Card payments are normally confirmed by
 // verify-payment when Flutterwave sends the student back to the site, so a
 // student who closes the tab stays pending. This re-checks recent pending card
-// checkouts with Flutterwave's verify API and activates the paid ones, then
+// checkouts with Flutterwave's verify API and activates the paid ones (and
+// does the same for online orders: Virtual SIWES, logbook service, kit), then
 // asks the site to send the follow-up emails (payment confirmed / reminder).
 // Safe to call any time: confirmPayment and the emails are idempotent.
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { confirmPayment } from "../_shared/flutterwave.ts";
+import { confirmOrderPayment, confirmPayment } from "../_shared/flutterwave.ts";
 
 const MINUTE = 60 * 1000;
 const DAY = 24 * 60 * MINUTE;
@@ -68,6 +69,27 @@ serve(async () => {
       }
     }
 
+    const { data: pendingOrders, error: ordersErr } = await admin
+      .from("product_orders")
+      .select("tx_ref")
+      .eq("status", "pending")
+      .lte("created_at", new Date(now - CHECK_AFTER).toISOString())
+      .gte("created_at", new Date(now - CHECK_FOR).toISOString())
+      .order("created_at", { ascending: false })
+      .limit(100);
+    // Until the orders migration is run the table is missing; enrolments still get checked.
+    if (ordersErr) console.error("recover-checkouts: could not list orders", ordersErr);
+
+    let ordersPaid = 0;
+    for (const { tx_ref } of pendingOrders ?? []) {
+      try {
+        const result = await confirmOrderPayment(admin, secretKey, tx_ref, { recovered_at: new Date().toISOString() });
+        if (result.status === "paid") ordersPaid++;
+      } catch (e) {
+        console.error("recover-checkouts: could not check order", tx_ref, e);
+      }
+    }
+
     // The site sends the emails, since that is where the email templates live.
     const siteUrl = Deno.env.get("SITE_URL") ?? "https://techfaculty.ng";
     let followups: unknown = null;
@@ -78,8 +100,9 @@ serve(async () => {
       console.error("recover-checkouts: follow-up emails failed", e);
     }
 
-    console.log("recover-checkouts", { checked: pending?.length ?? 0, confirmed, balancesPaid, followups });
-    return json({ checked: pending?.length ?? 0, confirmed, balancesPaid, followups });
+    const summary = { checked: pending?.length ?? 0, confirmed, balancesPaid, ordersChecked: pendingOrders?.length ?? 0, ordersPaid, followups };
+    console.log("recover-checkouts", summary);
+    return json(summary);
   } catch (e) {
     console.error("recover-checkouts error:", e);
     return json({ error: "Could not re-check pending payments" }, 500);

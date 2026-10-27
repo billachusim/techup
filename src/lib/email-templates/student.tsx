@@ -137,6 +137,17 @@ const PaymentConfirmed = ({ name, plan, facultyId }: { name?: string; plan?: str
   </Layout>
 )
 
+const OrderConfirmed = ({ name, amount, reference, steps = [], downloadUrl }: { name?: string; amount?: string; reference?: string; steps?: { item: string; next: string }[]; downloadUrl?: string }) => (
+  <Layout preview="Your payment is confirmed" title="Your payment is confirmed" cta={downloadUrl ? 'Download the SIWES Success Kit' : 'Message us on WhatsApp'} href={downloadUrl ?? WHATSAPP}>
+    <Text style={text}>{hi(name)}</Text>
+    <Text style={text}>Flutterwave has confirmed your payment{amount ? <> of <b>{amount}</b></> : null}. This email is your receipt.</Text>
+    {steps.map((s) => (
+      <Text key={s.item} style={text}><b>{s.item}.</b> {s.next}</Text>
+    ))}
+    {reference && <Text style={muted}>Payment reference: {reference}</Text>}
+  </Layout>
+)
+
 export const checkoutReminder = {
   component: CheckoutReminder,
   subject: 'Finish your Tech Faculty enrolment',
@@ -149,6 +160,18 @@ export const paymentConfirmed = {
   subject: (d) => `Payment confirmed: you're enrolled in ${d.plan ?? 'Tech Faculty'}`,
   displayName: 'Card payment confirmed later',
   previewData: { name: 'Ada Obi', plan: 'Developer Pro', facultyId: 'TF-WEBDEV-ONL-0926-0001' },
+} satisfies TemplateEntry
+
+export const orderConfirmed = {
+  component: OrderConfirmed,
+  subject: 'Payment confirmed: your Tech Faculty NG order',
+  displayName: 'Online order receipt',
+  previewData: {
+    name: 'Ada Obi',
+    amount: '₦45,000',
+    reference: 'TFO-0000',
+    steps: [{ item: 'Virtual SIWES placement', next: 'A coordinator contacts you on WhatsApp within one working day.' }],
+  },
 } satisfies TemplateEntry
 
 export const leadFollowUp = {

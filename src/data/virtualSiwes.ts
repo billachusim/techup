@@ -1,17 +1,19 @@
 /**
  * Content and pricing source of truth for Virtual SIWES (online IT placement)
  * and the logbook review + waybill (delivery) service.
- * Payment is reserve-then-confirm: no live checkout yet.
+ * Prices come from the shared product list that create-order-checkout charges,
+ * so the page and the card payment can never disagree.
  */
 
 import { campuses } from "@/data/campuses";
+import { PRODUCTS } from "../../supabase/functions/_shared/products.ts";
 
 export const CAMPUS_COUNT = campuses.length;
 export const CITY_COUNT = new Set(campuses.map((c) => c.city)).size;
 
 export const VIRTUAL_SIWES = {
-  placementPriceNGN: 45000,
-  logbookPriceNGN: 15000,
+  placementPriceNGN: PRODUCTS.virtual_siwes.priceNGN,
+  logbookPriceNGN: PRODUCTS.logbook_service.priceNGN,
   whatsappNumber: "2348068597140",
   email: "thetechfaculty@gmail.com",
   hqAddress: "Technology Incubation Centre, Nnewi, Anambra State, Nigeria",
@@ -47,7 +49,7 @@ export const virtualSteps: { title: string; detail: string }[] = [
   {
     title: "Pay to confirm your slot",
     detail:
-      "We reply on WhatsApp or email with payment details. The placement fee is paid before onboarding — cohorts are capped, so a slot is only held once payment lands.",
+      "Pay the placement fee online by card, bank transfer or USSD through Flutterwave, or ask us for bank details on WhatsApp. Cohorts are capped, so a slot is only held once payment lands.",
   },
   {
     title: "Get your placement letter and onboarding",
@@ -78,7 +80,7 @@ export const virtualFaqs: { q: string; a: string }[] = [
   },
   {
     q: "How much does Virtual SIWES cost?",
-    a: `The virtual IT placement costs ${formatNaira(VIRTUAL_SIWES.placementPriceNGN)} for the full duration of your training, whether that is three or six months, paid before onboarding. The logbook review, signing, stamping and two-way delivery service is a separate ${formatNaira(VIRTUAL_SIWES.logbookPriceNGN)}. Nothing is charged automatically online; we send payment details after you submit the form.`,
+    a: `The virtual IT placement costs ${formatNaira(VIRTUAL_SIWES.placementPriceNGN)} for the full duration of your training, whether that is three or six months, paid before onboarding. The logbook review, signing, stamping and two-way delivery service is a separate ${formatNaira(VIRTUAL_SIWES.logbookPriceNGN)}. You can pay online by card, bank transfer or USSD on this page, or reserve your slot and pay by bank transfer when a coordinator sends the details.`,
   },
   {
     q: "Who signs and stamps my SIWES logbook?",

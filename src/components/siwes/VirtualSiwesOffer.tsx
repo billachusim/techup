@@ -119,6 +119,12 @@ const VirtualSiwesOffer = ({ source, channel = "blog", variant = "full" }: Props
 
       <div className="flex flex-col sm:flex-row gap-3">
         <Button size="lg" asChild>
+          <a href="/virtual-siwes#reserve-virtual-it">
+            Pay {formatNaira(VIRTUAL_SIWES.placementPriceNGN)} online{" "}
+            <ArrowRight size={18} className="ml-2" />
+          </a>
+        </Button>
+        <Button size="lg" variant="outline" asChild>
           <a
             href={whatsappHref(source, channel)}
             target="_blank"
@@ -127,15 +133,10 @@ const VirtualSiwesOffer = ({ source, channel = "blog", variant = "full" }: Props
             <MessageCircle size={18} className="mr-2" /> Ask on WhatsApp
           </a>
         </Button>
-        <Button size="lg" variant="outline" asChild>
-          <Link to="/virtual-siwes">
-            How Virtual SIWES works <ArrowRight size={18} className="ml-2" />
-          </Link>
-        </Button>
       </div>
 
       <div className="mt-6 pt-6 border-t border-border">
-        <p className="font-semibold mb-1">Or reserve your slot here</p>
+        <p className="font-semibold mb-1">Or reserve now and pay by transfer</p>
         <p className="text-sm text-muted-foreground mb-4">
           Leave your details and a coordinator replies with payment details and
           your start date. Nothing is charged automatically.

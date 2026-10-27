@@ -3,11 +3,16 @@
 // - "payment confirmed" for payments that re-check confirmed (the student
 //   left before the payment page could tell them), and
 // - one "finish your enrolment" reminder for checkouts still unpaid.
-// Everything is driven by enrolment rows and each email is claimed on its row
-// before sending, so extra calls never send an email twice.
+// - a receipt to the buyer and a "new paid order" email to staff for each
+//   online order (Virtual SIWES, logbook service, Success Kit) once it is paid.
+// Everything is driven by enrolment and order rows and each email is claimed
+// on its row before sending, so extra calls never send an email twice.
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
 import { accessEnrollment } from "../../supabase/functions/_shared/enrollment-access.ts";
+import { PRODUCTS, successKitDownloadPath, type ProductId } from "../../supabase/functions/_shared/products.ts";
+
+const SITE = "https://techfaculty.ng";
 
 const HOUR = 60 * 60 * 1000;
 const DAY = 24 * HOUR;
@@ -128,8 +133,102 @@ async function sendReminders() {
   return sent;
 }
 
+type PaidOrder = {
+  id: string;
+  items: string[];
+  amount_due: number;
+  currency: string;
+  name: string | null;
+  email: string;
+  phone: string | null;
+  school: string | null;
+  notes: string | null;
+  payment_reference: string | null;
+  tx_ref: string;
+};
+
+const orderProducts = (order: PaidOrder) =>
+  order.items.filter((id): id is ProductId => id in PRODUCTS).map((id) => PRODUCTS[id]);
+
+/** Claims `column` on one order; true only for the call that claimed it. */
+async function claimOrder(id: string, column: "buyer_email_sent_at" | "admin_email_sent_at") {
+  const { data } = await supabaseAdmin
+    .from("product_orders")
+    .update(column === "buyer_email_sent_at" ? { buyer_email_sent_at: new Date().toISOString() } : { admin_email_sent_at: new Date().toISOString() })
+    .eq("id", id)
+    .is(column, null)
+    .select("id")
+    .maybeSingle();
+  return Boolean(data);
+}
+
+async function sendOrderEmails() {
+  const { data: rows, error } = await supabaseAdmin
+    .from("product_orders")
+    .select("id, tx_ref, items, amount_due, currency, name, email, phone, school, notes, payment_reference, buyer_email_sent_at, admin_email_sent_at")
+    .eq("status", "paid")
+    .or("buyer_email_sent_at.is.null,admin_email_sent_at.is.null")
+    .limit(100);
+  // The table only exists once the online-orders migration has been run.
+  if (error) {
+    console.error("order emails skipped", error.message);
+    return { receiptsSent: 0, staffAlertsSent: 0 };
+  }
+
+  let receiptsSent = 0;
+  let staffAlertsSent = 0;
+  for (const row of rows ?? []) {
+    const order = row as PaidOrder & { buyer_email_sent_at: string | null; admin_email_sent_at: string | null };
+    const products = orderProducts(order);
+    const amount = formatAmount(order.amount_due, order.currency);
+
+    if (!order.buyer_email_sent_at && (await claimOrder(order.id, "buyer_email_sent_at"))) {
+      try {
+        await sendTemplateEmail("order-confirmed", order.email, {
+          templateData: {
+            name: order.name,
+            amount,
+            reference: order.payment_reference,
+            steps: products.map((p) => ({ item: p.name, next: p.nextStep })),
+            downloadUrl: products.some((p) => p.id === "success_kit") ? `${SITE}${successKitDownloadPath(order.tx_ref)}` : undefined,
+          },
+          idempotencyKey: `order-confirmed-${order.id}`,
+        });
+        receiptsSent++;
+      } catch (e) {
+        console.error("order-confirmed email failed", order.id, (e as Error).message);
+        await supabaseAdmin.from("product_orders").update({ buyer_email_sent_at: null }).eq("id", order.id);
+      }
+    }
+
+    if (!order.admin_email_sent_at && (await claimOrder(order.id, "admin_email_sent_at"))) {
+      try {
+        await sendTemplateEmail("order-paid-admin", "nachusim@gmail.com", {
+          templateData: {
+            name: order.name ?? undefined,
+            email: order.email,
+            phone: order.phone ?? undefined,
+            school: order.school ?? undefined,
+            items: products.map((p) => p.name).join(" + "),
+            amount,
+            notes: order.notes ?? undefined,
+            reference: order.payment_reference ?? undefined,
+          },
+          idempotencyKey: `order-paid-admin-${order.id}`,
+        });
+        staffAlertsSent++;
+      } catch (e) {
+        console.error("order-paid-admin email failed", order.id, (e as Error).message);
+        await supabaseAdmin.from("product_orders").update({ admin_email_sent_at: null }).eq("id", order.id);
+      }
+    }
+  }
+  return { receiptsSent, staffAlertsSent };
+}
+
 export async function runPaymentFollowups() {
   const confirmationsSent = await sendConfirmations();
   const remindersSent = await sendReminders();
-  return { confirmationsSent, remindersSent };
+  const orders = await sendOrderEmails();
+  return { confirmationsSent, remindersSent, ...orders };
 }

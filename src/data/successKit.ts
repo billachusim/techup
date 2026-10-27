@@ -1,12 +1,14 @@
 /**
  * Content source of truth for the SIWES Success Kit funnel.
- * Price is a placeholder until live checkout is configured.
+ * The price comes from the shared product list that create-order-checkout charges.
  */
+
+import { PRODUCTS } from "../../supabase/functions/_shared/products.ts";
 
 export const SUCCESS_KIT = {
   name: "SIWES Success Kit",
   tagline: "Everything a Nigerian student needs to land, survive and convert a SIWES placement.",
-  priceNGN: 4500,
+  priceNGN: PRODUCTS.success_kit.priceNGN,
   compareAtNGN: 9000,
   currencyLabel: "₦",
   whatsappNumber: "2348068597140",
@@ -94,7 +96,7 @@ export const kitFaqs: { q: string; a: string }[] = [
   },
   {
     q: "How do I pay?",
-    a: `Reserve your kit on this page and our team confirms your order on WhatsApp or email with current payment details for the ${formatNaira(SUCCESS_KIT.priceNGN)} price. Card checkout is being finalised, so nothing is charged automatically. Your kit is sent as soon as your payment is confirmed.`,
+    a: `Pay ${formatNaira(SUCCESS_KIT.priceNGN)} online on this page by card, bank transfer or USSD through Flutterwave, and your download opens as soon as the payment is confirmed, with a copy of the link sent to your email. Prefer to pay by bank transfer to us directly? Reserve your kit and we send the details on WhatsApp or email.`,
   },
   {
     q: "Can I use it if I'm not a Tech Faculty student?",

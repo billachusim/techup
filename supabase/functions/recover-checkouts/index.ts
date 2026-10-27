@@ -7,6 +7,7 @@
 // Safe to call any time: confirmPayment and the emails are idempotent.
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { triggerPaymentFollowups } from "../_shared/payment-followups.ts";
 import { confirmOrderPayment, confirmPayment } from "../_shared/flutterwave.ts";
 
 const MINUTE = 60 * 1000;

@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { pingIndexNow } from "../_shared/indexnow.ts";
+import { isRetiredBlogSlug } from "../_shared/blog-redirects.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -89,6 +90,46 @@ function prettyDate(): string {
 
 let RECENT: { slug: string; title: string }[] = [];
 
+/** Words every title shares, ignored when comparing topics. */
+const STOP_WORDS = new Set([
+  "a", "an", "and", "the", "of", "in", "for", "to", "your", "how", "guide", "nigeria", "nigerian", "nigerians",
+  "2025", "2026", "2027", "with", "on", "from", "&",
+]);
+
+function topicWords(title: string): Set<string> {
+  return new Set(
+    title
+      .toLowerCase()
+      .split(/[^a-z0-9&]+/)
+      .filter((w) => w && !STOP_WORDS.has(w))
+      .map((w) => w.replace(/ies$/, "y").replace(/s$/, "")),
+  );
+}
+
+/** The existing title this one repeats, when half or more of their topic words match. */
+function repeatedTitle(title: string, existing: string[]): string | null {
+  const words = topicWords(title);
+  for (const other of existing) {
+    const otherWords = topicWords(other);
+    const shared = [...words].filter((w) => otherWords.has(w)).length;
+    const union = new Set([...words, ...otherWords]).size;
+    if (union > 0 && shared / union >= 0.5) return other;
+  }
+  return null;
+}
+
+/** Titles of the curated posts, read from the site's llms.txt; empty when the site can't be reached. */
+async function curatedTitles(): Promise<string[]> {
+  try {
+    const res = await fetch("https://techfaculty.ng/llms.txt");
+    if (!res.ok) return [];
+    const text = await res.text();
+    return [...text.matchAll(/^- \[([^\]]+)\]\(https:\/\/techfaculty\.ng\/blog\/[a-z0-9-]+\)/gm)].map((m) => m[1]);
+  } catch {
+    return [];
+  }
+}
+
 function buildPrompt(category: Category, existingTitles: string[]): string {
   return [
     `You are the senior SEO editor for Tech Faculty NG (https://techfaculty.ng), a Nigerian government-licensed tech training institute (licensed by the Federal Ministry of Science, Technology & Innovation via the National Board for Technology Incubation). Over 6,000 students trained, 4+ years of training experience, campuses inside Technology Incubation Centres across Nigeria with HQ in Nnewi, Anambra State, plus online programs.`,
@@ -115,7 +156,7 @@ function buildPrompt(category: Category, existingTitles: string[]): string {
     `Accuracy rules: never invent statistics, testimonials, accreditations, prices or partnerships. Only use the institutional facts given above. Where a figure is uncertain, describe a realistic range and say it is an estimate.`,
     ``,
     `Do NOT duplicate or closely rewrite any of these existing articles:`,
-    existingTitles.slice(0, 60).map((t) => `- ${t}`).join("\n") || "- (none yet)",
+    existingTitles.slice(0, 150).map((t) => `- ${t}`).join("\n") || "- (none yet)",
   ].join("\n");
 }
 
@@ -193,8 +234,10 @@ Deno.serve(async (req) => {
 
     const rows = existing ?? [];
     const takenSlugs = new Set(rows.map((r) => r.slug));
-    const titles = rows.map((r) => r.title);
-    RECENT = rows.map((r) => ({ slug: r.slug, title: r.title }));
+    const live = rows.filter((r) => !isRetiredBlogSlug(r.slug));
+    // Curated posts count too, so a generated post never repeats one.
+    const titles = [...live.map((r) => r.title), ...(await curatedTitles())];
+    RECENT = live.map((r) => ({ slug: r.slug, title: r.title }));
 
     // Rotation: the categories whose newest generated post is oldest go first.
     const lastPublished = new Map<string, string>();
@@ -213,6 +256,12 @@ Deno.serve(async (req) => {
       const article = await generateArticle(category, titles, apiKey);
       if (!article) {
         report[category.name] = "generation failed — skipped";
+        continue;
+      }
+
+      const repeats = repeatedTitle(String(article.title ?? ""), titles);
+      if (repeats) {
+        report[category.name] = `repeats "${repeats}" — skipped`;
         continue;
       }
 

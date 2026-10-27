@@ -34,11 +34,12 @@ const lead = (id: string, over: Record<string, unknown> = {}) => ({
   status: "new",
   created_at: at(NOON - 2 * HOUR),
   whatsapp_opt_in: false,
+  email_marketing_opt_in: true,
   ...over,
 });
 const followup = (email: string) =>
   db.tables.lead_email_followups.find((r) => r.email === email)!;
-const run = (now: number) => runLeadFollowups(createClient(), send, now);
+const run = (now: number) => runLeadFollowups(createClient(), send, now, "dedicated-marketing");
 
 beforeEach(() => {
   db = {
@@ -113,6 +114,18 @@ describe("lead follow-up copy and timing", () => {
 });
 
 describe("runLeadFollowups", () => {
+  it("never dispatches marketing through the default app-email path", async () => {
+    db.tables.leads.push(lead("a"));
+    expect(await runLeadFollowups(createClient(), send, NOON)).toMatchObject({ blocked: true, sent: 0 });
+    expect(send).not.toHaveBeenCalled();
+    expect(db.tables.lead_email_followups).toHaveLength(0);
+  });
+
+  it("requires explicit email consent independently of a supplied address", () => {
+    expect(startsSequence(lead("a", { email_marketing_opt_in: false }), NOON)).toBe(false);
+    expect(startsSequence(lead("a", { email_marketing_opt_in: undefined }), NOON)).toBe(false);
+    expect(startsSequence(lead("a"), NOON)).toBe(true);
+  });
   it("starts one sequence per email address and sends the first email a day later", async () => {
     db.tables.leads.push(
       lead("a"),

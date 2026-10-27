@@ -70,6 +70,7 @@ const Footer = () => {
             <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
               <Link to="/about" className="hover:text-primary transition-colors">About</Link>
               <Link to="/outcomes" className="hover:text-primary transition-colors">Student Outcomes</Link>
+              <Link to="/reports/nigeria-tech-salaries" className="hover:text-primary transition-colors">Tech Salary Report</Link>
               <Link to="/blog" className="hover:text-primary transition-colors">Blog</Link>
               <Link to="/careers" className="hover:text-primary transition-colors">Careers</Link>
               <Link to="/products" className="hover:text-primary transition-colors">Products</Link>

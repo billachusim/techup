@@ -108,6 +108,14 @@ async function resolve(db: SupabaseClient, id: string, status: "pending" | "fail
 
 async function markSent(db: SupabaseClient, row: FollowupRow, messageId: string) {
   const sentAt = new Date().toISOString();
+  // Persist the provider id before any secondary inbox work. An accepted send
+  // must never return to pending just because recording/reconciliation failed.
+  const { data, error } = await db.rpc("complete_whatsapp_lead_followup", {
+    p_id: row.id,
+    p_provider_message_id: messageId,
+    p_sent_at: sentAt,
+  });
+  if (error || data !== true) throw new Error(`WhatsApp accepted a message but its result could not be saved: ${error?.message ?? "row not claimed"}`);
   const { error: savedMessageError } = await db.from("whatsapp_messages").upsert({
     direction: "outbound",
     contact_phone: row.recipient_phone,
@@ -118,12 +126,8 @@ async function markSent(db: SupabaseClient, row: FollowupRow, messageId: string)
     status: "accepted",
   }, { onConflict: "wa_message_id", ignoreDuplicates: true });
   if (savedMessageError) throw new Error(`WhatsApp accepted a message but its inbox record could not be saved: ${savedMessageError.message}`);
-  const { data, error } = await db.rpc("complete_whatsapp_lead_followup", {
-    p_id: row.id,
-    p_provider_message_id: messageId,
-    p_sent_at: sentAt,
-  });
-  if (error || data !== true) throw new Error(`WhatsApp accepted a message but its result could not be saved: ${error?.message ?? "row not claimed"}`);
+  const { reconcilePendingStatuses } = await import("@/lib/whatsapp.server");
+  await reconcilePendingStatuses(db, messageId);
 }
 
 async function processClaim(db: SupabaseClient, row: FollowupRow, approvedTemplates: ProviderStatusResponse["data"]) {
@@ -153,6 +157,7 @@ async function processClaim(db: SupabaseClient, row: FollowupRow, approvedTempla
     return "cancelled";
   }
 
+  let accepted = false;
   try {
     let latestTemplates: ProviderStatusResponse["data"];
     try {
@@ -166,12 +171,16 @@ async function processClaim(db: SupabaseClient, row: FollowupRow, approvedTempla
       return "waiting_for_approval";
     }
     const messageId = await sendTemplate(row, params);
+    accepted = true;
     await markSent(db, row, messageId);
     return "sent";
   } catch (error) {
     const reason = (error as Error).message;
-    if (/message id|accepted the request|network|fetch failed|timed out|\[5\d\d\]/i.test(reason)) {
-      await resolve(db, row.id, "unresolved", reason);
+    if (accepted || /message id|accepted|network|fetch failed|timed out|\[5\d\d\]/i.test(reason)) {
+      // Completion may have succeeded while the inbox failed; retain its
+      // provider id and sent state. A failed completion stays unresolved.
+      const { data: saved } = await db.from("whatsapp_lead_followups").select("status").eq("id", row.id).single();
+      if (saved?.status !== "sent") await resolve(db, row.id, "unresolved", reason);
       return "unresolved";
     }
     const retryable = row.attempt_count < 3;

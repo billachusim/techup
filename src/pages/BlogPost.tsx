@@ -42,6 +42,11 @@ const tocItems = (markdown: string) =>
   });
 
 const markdownComponents: Components = {
+  h1: ({ node, children, ...props }) => (
+    <h2 id={slugify(headingText(children))} className="scroll-mt-24" {...props}>
+      {children}
+    </h2>
+  ),
   h2: ({ node, children, ...props }) => (
     <h2 id={slugify(headingText(children))} className="scroll-mt-24" {...props}>
       {children}

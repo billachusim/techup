@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Download, Inbox, Loader2, Mail, MessageCircle, RefreshCw, Search } from "lucide-react";
+import { Download, FileDown, Inbox, Loader2, Mail, MessageCircle, RefreshCw, Search } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AdminNav from "@/components/admin/AdminNav";
@@ -208,6 +208,23 @@ export default function AdminLeads() {
     downloadCsv(csvFilename(["leads", ...parts].join("-")), csv);
   };
 
+  /** The paid kit is not a public file; admins fetch it here to send to transfer buyers on WhatsApp. */
+  const downloadKit = async () => {
+    const supabase = await getSupabase();
+    const { data } = await supabase.auth.getSession();
+    const res = await fetch("/api/success-kit", { headers: { Authorization: `Bearer ${data.session?.access_token ?? ""}` } });
+    if (!res.ok) {
+      toast({ title: "Couldn't download the kit", description: await res.text(), variant: "destructive" });
+      return;
+    }
+    const url = URL.createObjectURL(await res.blob());
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "SIWES-Success-Kit-TechFacultyNG.zip";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const setStatus = async (lead: Lead, status: LeadStatus) => {
     if (lead.status === status) return;
     setSaving(lead.id);
@@ -239,6 +256,9 @@ export default function AdminLeads() {
             <div className="flex gap-2">
               <Button variant="outline" size="sm" onClick={exportCsv} disabled={!visible.length}>
                 <Download className="h-4 w-4 mr-1.5" /> Download CSV ({visible.length})
+              </Button>
+              <Button variant="outline" size="sm" onClick={() => void downloadKit()} title="For kit buyers who paid by bank transfer">
+                <FileDown className="h-4 w-4 mr-1.5" /> Success Kit file
               </Button>
               <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading}>
                 <RefreshCw className={cn("h-4 w-4 mr-1.5", loading && "animate-spin")} /> Refresh

@@ -84,3 +84,11 @@
 - [x] Add explicit opt-in capture and durable follow-up queue with reply/opt-out cancellation
 - [ ] Add scheduled sender with server-side Meta approval checks, admin visibility and verified tests
 - [ ] Add STOP / unsubscribe inbox handling and confirm the current template approvals
+
+## Claude merge publication safeguards
+- [ ] Verify and apply any missing order/intake/payment schema
+- [ ] Secure lead-email endpoint and stop promotional sends through app emails
+- [ ] Add explicit email consent before any future marketing sequence
+- [ ] Remove duplicate article main headings and verify rendered replacements
+- [ ] Verify WhatsApp approval/consent/reply/STOP safeguards and schedule readiness
+- [ ] Run tests and preview checks; keep publication and unconfirmed business terms on hold

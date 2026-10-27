@@ -12,10 +12,12 @@ import { execFileSync } from "child_process";
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "fs";
 import { join, relative, resolve } from "path";
 import blogPosts from "../src/data/blogPosts";
+import { isRetiredBlogSlug } from "../supabase/functions/_shared/blog-redirects";
 import { blogCategories, getCategorySlugForPost } from "../src/data/blogCategories";
 import { campuses } from "../src/data/campuses";
 import { departments } from "../src/data/departments";
 import { jobPlatforms } from "../src/data/jobPlatforms";
+import { siwesCourses } from "../src/data/siwesCourses";
 import { techHubs } from "../src/data/techHubs";
 
 const BASE_URL = "https://techfaculty.ng";
@@ -119,7 +121,9 @@ const DYNAMIC: Record<string, Resolver | null> = {
         "blog_posts",
         "select=slug,published_at,updated_at&is_published=eq.true&order=published_at.desc&limit=500",
       )
-    ).map((p) => ({ path: `/blog/${p.slug}`, lastmod: day(p.updated_at ?? p.published_at) })),
+    )
+      .filter((p) => !isRetiredBlogSlug(p.slug))
+      .map((p) => ({ path: `/blog/${p.slug}`, lastmod: day(p.updated_at ?? p.published_at) })),
   ],
   "/blog/category/$slug": () =>
     blogCategories.map((c) => ({
@@ -137,6 +141,10 @@ const DYNAMIC: Record<string, Resolver | null> = {
   "/hubs/$slug": (file) => {
     const lastmod = gitDate(pageFiles(file));
     return techHubs.map((h) => ({ path: `/hubs/${h.slug}`, lastmod }));
+  },
+  "/siwes/courses/$slug": (file) => {
+    const lastmod = gitDate(pageFiles(file));
+    return siwesCourses.map((c) => ({ path: `/siwes/courses/${c.slug}`, lastmod }));
   },
   "/careers/platforms/$platformSlug": (file) => {
     const lastmod = gitDate(pageFiles(file));

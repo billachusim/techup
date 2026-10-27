@@ -1,5 +1,6 @@
-// Confirms a Flutterwave card payment and activates the enrolment it pays for
-// (confirmPayment) or marks the online order it pays for as paid
+// Confirms a Flutterwave card payment and activates the enrolment it pays for,
+// or, for the balance of an instalment plan, clears what was left to pay
+// (confirmPayment), or marks the online order it pays for as paid
 // (confirmOrderPayment). Used by the flutterwave-webhook, verify-payment and
 // recover-checkouts functions. A payment only counts after Flutterwave's own
 // verify API says it succeeded for the amount and currency recorded when the
@@ -28,6 +29,60 @@ async function fetchTransaction(secretKey: string, txRef: string): Promise<Flutt
   return body.data as FlutterwaveTransaction;
 }
 
+/** The paid-for amount check: same currency, and at least what was due. */
+const paysEnough = (tx: FlutterwaveTransaction, due: unknown, currency: unknown) =>
+  tx.currency === currency && Number(tx.amount) + 0.005 >= Number(due);
+
+/**
+ * The balance of an instalment plan (an enrollment_payments row). Once paid,
+ * the plan has nothing left to pay and amount_paid holds its full total.
+ */
+async function confirmBalancePayment(admin: SupabaseClient, secretKey: string, txRef: string): Promise<ConfirmResult> {
+  const { data: payment, error } = await admin
+    .from("enrollment_payments")
+    .select("id, enrollment_id, status, amount, currency")
+    .eq("tx_ref", txRef)
+    .maybeSingle();
+  if (error) throw error;
+  if (!payment) return { status: "not_found", reason: "No enrolment for this payment reference" };
+  const { data: enrollment, error: enrollErr } = await admin
+    .from("enrollments")
+    .select("id, faculty_id, plan_name, instalment_total")
+    .eq("id", payment.enrollment_id)
+    .maybeSingle();
+  if (enrollErr) throw enrollErr;
+  if (!enrollment) return { status: "not_found", reason: "The enrolment for this payment is gone" };
+
+  const done = { status: "active" as const, enrollmentId: enrollment.id, planName: enrollment.plan_name, facultyId: enrollment.faculty_id };
+  if (payment.status === "paid") return done;
+  if (payment.status !== "pending") return { status: "failed", reason: `Payment is ${payment.status}` };
+
+  const tx = await fetchTransaction(secretKey, txRef);
+  if (!tx) return { status: "pending", reason: "Flutterwave has no record of this payment yet" };
+  if (tx.tx_ref !== txRef) return { status: "failed", reason: "Payment reference mismatch" };
+  if (tx.status !== "successful") {
+    return { status: tx.status === "failed" ? "failed" : "pending", reason: `Payment is ${tx.status}` };
+  }
+  if (!paysEnough(tx, payment.amount, payment.currency)) {
+    console.error("Flutterwave amount mismatch", { txRef, paid: tx.amount, currency: tx.currency, due: payment.amount, expected: payment.currency });
+    return { status: "failed", reason: "Amount paid does not match the amount due" };
+  }
+
+  const paidAt = new Date().toISOString();
+  const { error: paymentErr } = await admin
+    .from("enrollment_payments")
+    .update({ status: "paid", paid_at: paidAt, payment_reference: String(tx.id) })
+    .eq("id", payment.id)
+    .eq("status", "pending");
+  if (paymentErr) throw paymentErr;
+  const { error: updateErr } = await admin
+    .from("enrollments")
+    .update({ balance_due: 0, balance_paid_at: paidAt, amount_paid: enrollment.instalment_total })
+    .eq("id", enrollment.id);
+  if (updateErr) throw updateErr;
+  return done;
+}
+
 type CheckResult = { ok: true; tx: FlutterwaveTransaction } | { ok: false; status: "pending" | "failed"; reason: string };
 
 /** Asks Flutterwave whether txRef was paid in full, in the currency due. */
@@ -38,7 +93,7 @@ async function checkTransaction(secretKey: string, txRef: string, amountDue: num
   if (tx.status !== "successful") {
     return { ok: false, status: tx.status === "failed" ? "failed" : "pending", reason: `Payment is ${tx.status}` };
   }
-  if (tx.currency !== currency || Number(tx.amount) + 0.005 < Number(amountDue)) {
+  if (!paysEnough(tx, amountDue, currency)) {
     console.error("Flutterwave amount mismatch", { txRef, paid: tx.amount, currency: tx.currency, due: amountDue, expected: currency });
     return { ok: false, status: "failed", reason: "Amount paid does not match the amount due" };
   }
@@ -58,15 +113,22 @@ export async function confirmPayment(
     .eq("tx_ref", txRef)
     .maybeSingle();
   if (error) throw error;
-  if (!enrollment) return { status: "not_found", reason: "No enrolment for this payment reference" };
+  if (!enrollment) return confirmBalancePayment(admin, secretKey, txRef);
 
   const done = { status: "active" as const, enrollmentId: enrollment.id, planName: enrollment.plan_name, facultyId: enrollment.faculty_id };
   if (enrollment.status === "active" || enrollment.status === "confirmed") return done;
   if (enrollment.status !== "pending") return { status: "failed", reason: `Enrolment is ${enrollment.status}` };
 
-  const check = await checkTransaction(secretKey, txRef, enrollment.amount_due, enrollment.currency);
-  if (!check.ok) return { status: check.status, reason: check.reason };
-  const { tx } = check;
+  const tx = await fetchTransaction(secretKey, txRef);
+  if (!tx) return { status: "pending", reason: "Flutterwave has no record of this payment yet" };
+  if (tx.tx_ref !== txRef) return { status: "failed", reason: "Payment reference mismatch" };
+  if (tx.status !== "successful") {
+    return { status: tx.status === "failed" ? "failed" : "pending", reason: `Payment is ${tx.status}` };
+  }
+  if (!paysEnough(tx, enrollment.amount_due, enrollment.currency)) {
+    console.error("Flutterwave amount mismatch", { txRef, paid: tx.amount, currency: tx.currency, due: enrollment.amount_due, expected: enrollment.currency });
+    return { status: "failed", reason: "Amount paid does not match the amount due" };
+  }
 
   const { error: updateErr } = await admin
     .from("enrollments")

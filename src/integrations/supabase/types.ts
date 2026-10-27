@@ -462,16 +462,64 @@ export type Database = {
         }
         Relationships: []
       }
+      enrollment_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          enrollment_id: string
+          id: string
+          paid_at: string | null
+          payment_reference: string | null
+          status: string
+          tx_ref: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency: string
+          enrollment_id: string
+          id?: string
+          paid_at?: string | null
+          payment_reference?: string | null
+          status?: string
+          tx_ref: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          enrollment_id?: string
+          id?: string
+          paid_at?: string | null
+          payment_reference?: string | null
+          status?: string
+          tx_ref?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enrollment_payments_enrollment_id_fkey"
+            columns: ["enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "enrollments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       enrollments: {
         Row: {
           amount_due: number | null
           amount_paid: number | null
+          balance_due: number | null
+          balance_due_by: string | null
+          balance_paid_at: string | null
           coupon_code: string | null
           created_at: string
           currency: string | null
           enrollment_date: string
           faculty_id: string
           id: string
+          instalment_total: number | null
           learning_mode: string | null
           paid_at: string | null
           payment_method: string | null
@@ -486,12 +534,16 @@ export type Database = {
         Insert: {
           amount_due?: number | null
           amount_paid?: number | null
+          balance_due?: number | null
+          balance_due_by?: string | null
+          balance_paid_at?: string | null
           coupon_code?: string | null
           created_at?: string
           currency?: string | null
           enrollment_date?: string
           faculty_id: string
           id?: string
+          instalment_total?: number | null
           learning_mode?: string | null
           paid_at?: string | null
           payment_method?: string | null
@@ -506,12 +558,16 @@ export type Database = {
         Update: {
           amount_due?: number | null
           amount_paid?: number | null
+          balance_due?: number | null
+          balance_due_by?: string | null
+          balance_paid_at?: string | null
           coupon_code?: string | null
           created_at?: string
           currency?: string | null
           enrollment_date?: string
           faculty_id?: string
           id?: string
+          instalment_total?: number | null
           learning_mode?: string | null
           paid_at?: string | null
           payment_method?: string | null
@@ -782,6 +838,51 @@ export type Database = {
         }
         Relationships: []
       }
+      intakes: {
+        Row: {
+          campus: string | null
+          created_at: string
+          created_by: string | null
+          department_slug: string | null
+          enrol_by: string | null
+          id: string
+          learning_mode: string
+          note: string | null
+          published: boolean
+          seats: number | null
+          starts_on: string
+          updated_at: string
+        }
+        Insert: {
+          campus?: string | null
+          created_at?: string
+          created_by?: string | null
+          department_slug?: string | null
+          enrol_by?: string | null
+          id?: string
+          learning_mode?: string
+          note?: string | null
+          published?: boolean
+          seats?: number | null
+          starts_on: string
+          updated_at?: string
+        }
+        Update: {
+          campus?: string | null
+          created_at?: string
+          created_by?: string | null
+          department_slug?: string | null
+          enrol_by?: string | null
+          id?: string
+          learning_mode?: string
+          note?: string | null
+          published?: boolean
+          seats?: number | null
+          starts_on?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       job_applications: {
         Row: {
           applied_at: string | null
@@ -896,12 +997,68 @@ export type Database = {
         }
         Relationships: []
       }
+      lead_email_followups: {
+        Row: {
+          created_at: string
+          email: string
+          interest: string
+          last_sent_at: string | null
+          lead_created_at: string
+          lead_id: string
+          name: string | null
+          next_due_at: string | null
+          steps_sent: number
+          stop_reason: string | null
+          stopped_at: string | null
+          unsubscribe_token: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          interest: string
+          last_sent_at?: string | null
+          lead_created_at: string
+          lead_id: string
+          name?: string | null
+          next_due_at?: string | null
+          steps_sent?: number
+          stop_reason?: string | null
+          stopped_at?: string | null
+          unsubscribe_token?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          interest?: string
+          last_sent_at?: string | null
+          lead_created_at?: string
+          lead_id?: string
+          name?: string | null
+          next_due_at?: string | null
+          steps_sent?: number
+          stop_reason?: string | null
+          stopped_at?: string | null
+          unsubscribe_token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_email_followups_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           channel: string
           contact: string
           created_at: string
           email: string | null
+          email_marketing_opt_in: boolean
+          email_marketing_opt_in_at: string | null
+          email_marketing_opt_in_version: string | null
           id: string
           interest: string
           location: string | null
@@ -922,6 +1079,9 @@ export type Database = {
           contact: string
           created_at?: string
           email?: string | null
+          email_marketing_opt_in?: boolean
+          email_marketing_opt_in_at?: string | null
+          email_marketing_opt_in_version?: string | null
           id?: string
           interest: string
           location?: string | null
@@ -942,6 +1102,9 @@ export type Database = {
           contact?: string
           created_at?: string
           email?: string | null
+          email_marketing_opt_in?: boolean
+          email_marketing_opt_in_at?: string | null
+          email_marketing_opt_in_version?: string | null
           id?: string
           interest?: string
           location?: string | null

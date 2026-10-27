@@ -1,9 +1,17 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import BlogPost from "@/pages/BlogPost";
 import { pageHead } from "@/lib/seo";
 import { articleOgImage } from "@/lib/og-image";
+import { BLOG_REDIRECTS } from "../../supabase/functions/_shared/blog-redirects.ts";
 
 export const Route = createFileRoute("/blog/$slug")({
+  // Retired thin or duplicate posts point to the post that replaced them.
+  beforeLoad: ({ params }) => {
+    const target = BLOG_REDIRECTS[params.slug];
+    if (target) {
+      throw redirect({ to: "/blog/$slug", params: { slug: target }, statusCode: 301 });
+    }
+  },
   loader: async ({ params }) => {
     // Imported here, not at the top, so the posts table stays out of the main bundle.
     const { default: blogPosts } = await import("@/data/blogPosts");

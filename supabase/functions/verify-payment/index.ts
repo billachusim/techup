@@ -41,13 +41,25 @@ serve(async (req) => {
 
     // Students can only check their own payments.
     const { data: profile } = await admin.from("profiles").select("faculty_id").eq("id", user.id).maybeSingle();
+    const facultyId = profile?.faculty_id ?? "";
     const { data: owned } = await admin
       .from("enrollments")
       .select("id")
       .eq("tx_ref", txRef)
-      .eq("faculty_id", profile?.faculty_id ?? "")
+      .eq("faculty_id", facultyId)
       .maybeSingle();
-    if (!owned) return json({ status: "not_found" }, 404);
+    if (!owned) {
+      // Or the balance of one of their instalment plans.
+      const { data: payment } = await admin
+        .from("enrollment_payments")
+        .select("enrollment_id")
+        .eq("tx_ref", txRef)
+        .maybeSingle();
+      const { data: plan } = payment
+        ? await admin.from("enrollments").select("id").eq("id", payment.enrollment_id).eq("faculty_id", facultyId).maybeSingle()
+        : { data: null };
+      if (!plan) return json({ status: "not_found" }, 404);
+    }
 
     const result = await confirmPayment(admin, secretKey, txRef);
     return json(result.status === "active" ? { status: "active", planName: result.planName, facultyId: result.facultyId } : { status: result.status });

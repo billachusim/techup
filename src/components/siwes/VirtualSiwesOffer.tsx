@@ -7,6 +7,8 @@ import { VIRTUAL_SIWES, formatNaira } from "@/data/virtualSiwes";
 type Props = {
   /** Attribution string, usually the article slug. */
   source: string;
+  /** Where the offer sits: a blog article (default) or a SIWES course page. */
+  channel?: "blog" | "siwes-course";
   /**
    * inline — short mid-article nudge
    * full   — end-of-article offer with prices and what's included
@@ -14,13 +16,13 @@ type Props = {
   variant?: "inline" | "full";
 };
 
-const whatsappMessage = (source: string) =>
-  `Hello Tech Faculty NG, I read your article (${source}) and I want to do Virtual SIWES (online IT). Please send me the details for the ${formatNaira(
+const whatsappMessage = (source: string, channel: Props["channel"] = "blog") =>
+  `Hello Tech Faculty NG, I ${channel === "blog" ? "read your article" : "saw your SIWES page"} (${source}) and I want to do Virtual SIWES (online IT). Please send me the details for the ${formatNaira(
     VIRTUAL_SIWES.placementPriceNGN,
   )} placement.`;
 
-const whatsappHref = (source: string) =>
-  `https://wa.me/${VIRTUAL_SIWES.whatsappNumber}?text=${encodeURIComponent(whatsappMessage(source))}`;
+const whatsappHref = (source: string, channel?: Props["channel"]) =>
+  `https://wa.me/${VIRTUAL_SIWES.whatsappNumber}?text=${encodeURIComponent(whatsappMessage(source, channel))}`;
 
 const OFFER_POINTS = [
   "Official placement letter addressed to your school within 48 hours of payment",
@@ -29,7 +31,7 @@ const OFFER_POINTS = [
   "Completion certificate, recommendation letter and a project portfolio link",
 ];
 
-const VirtualSiwesOffer = ({ source, variant = "full" }: Props) => {
+const VirtualSiwesOffer = ({ source, channel = "blog", variant = "full" }: Props) => {
   if (variant === "inline") {
     return (
       <aside className="not-prose my-10 rounded-lg border border-primary/30 bg-primary/5 p-5 sm:flex sm:items-center sm:justify-between sm:gap-6">
@@ -50,7 +52,7 @@ const VirtualSiwesOffer = ({ source, variant = "full" }: Props) => {
         <div className="mt-4 sm:mt-0 shrink-0 flex gap-2">
           <Button size="sm" asChild>
             <a
-              href={whatsappHref(source)}
+              href={whatsappHref(source, channel)}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -124,7 +126,7 @@ const VirtualSiwesOffer = ({ source, variant = "full" }: Props) => {
         </Button>
         <Button size="lg" variant="outline" asChild>
           <a
-            href={whatsappHref(source)}
+            href={whatsappHref(source, channel)}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -141,9 +143,9 @@ const VirtualSiwesOffer = ({ source, variant = "full" }: Props) => {
         </p>
         <LeadCaptureForm
           interest="virtual_siwes"
-          source={`blog:${source}`}
+          source={`${channel}:${source}`}
           submitLabel="Reserve my virtual IT slot"
-          whatsappMessage={whatsappMessage(source)}
+          whatsappMessage={whatsappMessage(source, channel)}
           extraFields={[
             {
               id: "department",

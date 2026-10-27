@@ -10,7 +10,7 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
 import { accessEnrollment } from "../../supabase/functions/_shared/enrollment-access.ts";
-import { PRODUCTS, SUCCESS_KIT_DOWNLOAD_PATH, type ProductId } from "../../supabase/functions/_shared/products.ts";
+import { PRODUCTS, successKitDownloadPath, type ProductId } from "../../supabase/functions/_shared/products.ts";
 
 const SITE = "https://techfaculty.ng";
 
@@ -144,6 +144,7 @@ type PaidOrder = {
   school: string | null;
   notes: string | null;
   payment_reference: string | null;
+  tx_ref: string;
 };
 
 const orderProducts = (order: PaidOrder) =>
@@ -164,7 +165,7 @@ async function claimOrder(id: string, column: "buyer_email_sent_at" | "admin_ema
 async function sendOrderEmails() {
   const { data: rows, error } = await supabaseAdmin
     .from("product_orders")
-    .select("id, items, amount_due, currency, name, email, phone, school, notes, payment_reference, buyer_email_sent_at, admin_email_sent_at")
+    .select("id, tx_ref, items, amount_due, currency, name, email, phone, school, notes, payment_reference, buyer_email_sent_at, admin_email_sent_at")
     .eq("status", "paid")
     .or("buyer_email_sent_at.is.null,admin_email_sent_at.is.null")
     .limit(100);
@@ -189,7 +190,7 @@ async function sendOrderEmails() {
             amount,
             reference: order.payment_reference,
             steps: products.map((p) => ({ item: p.name, next: p.nextStep })),
-            downloadUrl: products.some((p) => p.id === "success_kit") ? `${SITE}${SUCCESS_KIT_DOWNLOAD_PATH}` : undefined,
+            downloadUrl: products.some((p) => p.id === "success_kit") ? `${SITE}${successKitDownloadPath(order.tx_ref)}` : undefined,
           },
           idempotencyKey: `order-confirmed-${order.id}`,
         });

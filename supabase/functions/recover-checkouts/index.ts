@@ -49,6 +49,26 @@ serve(async () => {
       }
     }
 
+    // Balances of instalment plans, checked the same way.
+    const { data: balances, error: balanceErr } = await admin
+      .from("enrollment_payments")
+      .select("tx_ref")
+      .eq("status", "pending")
+      .lte("created_at", new Date(now - CHECK_AFTER).toISOString())
+      .gte("created_at", new Date(now - CHECK_FOR).toISOString())
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (balanceErr) console.error("recover-checkouts: could not list balance payments", balanceErr);
+    let balancesPaid = 0;
+    for (const { tx_ref } of balances ?? []) {
+      try {
+        const result = await confirmPayment(admin, secretKey, tx_ref);
+        if (result.status === "active") balancesPaid++;
+      } catch (e) {
+        console.error("recover-checkouts: could not check balance", tx_ref, e);
+      }
+    }
+
     const { data: pendingOrders, error: ordersErr } = await admin
       .from("product_orders")
       .select("tx_ref")
@@ -80,7 +100,7 @@ serve(async () => {
       console.error("recover-checkouts: follow-up emails failed", e);
     }
 
-    const summary = { checked: pending?.length ?? 0, confirmed, ordersChecked: pendingOrders?.length ?? 0, ordersPaid, followups };
+    const summary = { checked: pending?.length ?? 0, confirmed, balancesPaid, ordersChecked: pendingOrders?.length ?? 0, ordersPaid, followups };
     console.log("recover-checkouts", summary);
     return json(summary);
   } catch (e) {

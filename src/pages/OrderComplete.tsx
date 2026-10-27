@@ -8,8 +8,7 @@ import Footer from "@/components/Footer";
 import { getSupabase } from "@/integrations/supabase/lazy";
 import { trackPurchase } from "@/lib/analytics";
 import { VIRTUAL_SIWES } from "@/data/virtualSiwes";
-import { SUCCESS_KIT } from "@/data/successKit";
-import { PRODUCTS, type ProductId } from "../../supabase/functions/_shared/products.ts";
+import { PRODUCTS, successKitDownloadPath, type ProductId } from "../../supabase/functions/_shared/products.ts";
 
 type OrderState = "checking" | "paid" | "pending" | "failed";
 
@@ -108,7 +107,7 @@ const OrderComplete = () => {
 
               {state === "paid" && items.includes("success_kit") && (
                 <Button asChild className="w-full">
-                  <a href={SUCCESS_KIT.downloadPath} download>
+                  <a href={successKitDownloadPath(txRef)} download>
                     <FileDown size={18} className="mr-2" /> Download the SIWES Success Kit
                   </a>
                 </Button>

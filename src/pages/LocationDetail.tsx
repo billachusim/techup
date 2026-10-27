@@ -235,7 +235,7 @@ const LocationDetail = () => {
         </section>
 
         {/* SIWES */}
-        <section className="container mx-auto px-4 mt-14">
+        <section id="siwes" className="container mx-auto px-4 mt-14 scroll-mt-24">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
             SIWES and industrial training in {campus.city}
           </h2>
@@ -253,6 +253,9 @@ const LocationDetail = () => {
               </p>
               <Link to="/siwes" className="text-primary font-semibold hover:underline inline-flex items-center gap-1">
                 Read the full SIWES programme details <ArrowRight size={14} />
+              </Link>
+              <Link to="/siwes/courses" className="text-primary font-semibold hover:underline inline-flex items-center gap-1">
+                See what you would do for your course <ArrowRight size={14} />
               </Link>
             </div>
             <Card>

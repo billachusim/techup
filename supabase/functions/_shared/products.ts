@@ -60,5 +60,5 @@ export function priceOrder(items: unknown): PricedOrder {
   return { ok: true, products, totalNGN: products.reduce((n, p) => n + p.priceNGN, 0) };
 }
 
-/** Where a paid Success Kit is downloaded from (relative to the site). */
-export const SUCCESS_KIT_DOWNLOAD_PATH = "/downloads/siwes-success-kit-TFNG-v1.zip";
+/** Where the buyer of a paid order downloads the Success Kit (relative to the site). Not a public file. */
+export const successKitDownloadPath = (txRef: string) => `/api/success-kit?ref=${encodeURIComponent(txRef)}`;

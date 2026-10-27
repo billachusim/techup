@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import SIWES from "@/pages/SIWES";
 import { ogImage, pageHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/siwes")({
+export const Route = createFileRoute("/siwes/")({
   head: () =>
     pageHead({
       title: "SIWES & IT Placement in Nigeria",

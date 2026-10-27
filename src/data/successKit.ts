@@ -3,7 +3,7 @@
  * The price comes from the shared product list that create-order-checkout charges.
  */
 
-import { PRODUCTS, SUCCESS_KIT_DOWNLOAD_PATH } from "../../supabase/functions/_shared/products.ts";
+import { PRODUCTS } from "../../supabase/functions/_shared/products.ts";
 
 export const SUCCESS_KIT = {
   name: "SIWES Success Kit",
@@ -12,8 +12,6 @@ export const SUCCESS_KIT = {
   compareAtNGN: 9000,
   currencyLabel: "₦",
   whatsappNumber: "2348068597140",
-  /** Opened on /order-complete and emailed once a kit payment is confirmed. */
-  downloadPath: SUCCESS_KIT_DOWNLOAD_PATH,
 };
 
 export const formatNaira = (amount: number) =>

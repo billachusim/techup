@@ -2585,7 +2585,7 @@ Computer Vision (CV) is among the highest-paying tech skills. It's part of the A
 Challenges include high costs for SaaS tools and a shortage of local expertise.
 
 Tech Faculty's 16-week **AI & CV Bootcamp** addresses these barriers. We enable entrepreneurs to build solutions:
-- **Cost effective** \u2013 From \u20A6100k to less than \u20A630k
+- **Clear pricing** \u2013 Programmes cost \u20A650,000 to \u20A6150,000; see [tech course fees in Nigeria](/blog/tech-course-fees-nigeria-2026)
 - **Mentorship** \u2013 From industry leaders like Data Scientists and ML Engineers
 - **Localized content** \u2013 CV for Nigerian business contexts
 - **Focus on open source** \u2013 Reduce licensing costs

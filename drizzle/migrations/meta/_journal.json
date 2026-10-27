@@ -127,6 +127,20 @@
       "when": 1793135328256,
       "tag": "0017_prevent_duplicate_pending_balance_payments",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1793135802283,
+      "tag": "0018_lead_email_followups",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1793135826737,
+      "tag": "0019_intakes_and_instalments",
+      "breakpoints": true
     }
   ]
 }

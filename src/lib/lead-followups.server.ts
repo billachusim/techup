@@ -106,8 +106,9 @@ async function stopReason(db: Db, email: string): Promise<string | null> {
   // Lead forms and sign-up both store email addresses lower-cased.
   const { data: leads } = await db
     .from("leads")
-    .select("status")
+    .select("status, email_marketing_opt_in")
     .eq("email", email);
+  if (!leads?.some((lead: { email_marketing_opt_in?: boolean }) => lead.email_marketing_opt_in === true)) return "no_email_consent";
   if (
     ((leads ?? []) as { status: string }[]).some((l) =>
       CLOSED_STATUSES.has(l.status),
@@ -231,7 +232,11 @@ export async function runLeadFollowups(
   db: Db,
   send: SendEmail,
   now = Date.now(),
+  provider: "disabled" | "dedicated-marketing" = "disabled",
 ) {
+  if (provider !== "dedicated-marketing") {
+    return { started: 0, sent: 0, stopped: 0, failed: 0, quietHours: false, blocked: true };
+  }
   const started = await startSequences(db, now);
   if (!isSendingHour(now))
     return { started, sent: 0, stopped: 0, failed: 0, quietHours: true };

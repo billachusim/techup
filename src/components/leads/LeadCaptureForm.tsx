@@ -93,6 +93,7 @@ const LeadCaptureForm = ({
   const [school, setSchool] = useState("");
   const [location, setLocation] = useState("");
   const [whatsappOptIn, setWhatsappOptIn] = useState(false);
+  const [emailOptIn, setEmailOptIn] = useState(false);
   const [extras, setExtras] = useState<Record<string, string>>(initialExtras ?? {});
   useEffect(() => {
     if (initialExtras) setExtras((prev) => ({ ...prev, ...initialExtras }));
@@ -149,6 +150,7 @@ const LeadCaptureForm = ({
       source: clampLeadField(source, "source"),
       notes: clampLeadField(notes, "notes"),
       whatsapp_opt_in: channel === "whatsapp" && whatsappOptIn,
+      email_marketing_opt_in: channel === "email" && emailOptIn,
     });
 
     if (insertError) {
@@ -422,6 +424,15 @@ const LeadCaptureForm = ({
           />
           <Label htmlFor={`lead-whatsapp-opt-in-${interest}`} className="font-normal leading-relaxed">
             I agree to receive WhatsApp updates and follow-ups from Tech Faculty about this request. Reply STOP anytime to opt out.
+          </Label>
+        </div>
+      )}
+
+      {channel === "email" && interest !== "partner_enquiry" && (
+        <div className="flex items-start gap-2 text-sm">
+          <Checkbox id={`lead-email-opt-in-${interest}`} checked={emailOptIn} onCheckedChange={(checked) => setEmailOptIn(checked === true)} />
+          <Label htmlFor={`lead-email-opt-in-${interest}`} className="font-normal leading-relaxed">
+            I agree to receive admissions follow-up emails and programme updates from Tech Faculty. I can unsubscribe anytime.
           </Label>
         </div>
       )}

@@ -1056,6 +1056,9 @@ export type Database = {
           contact: string
           created_at: string
           email: string | null
+          email_marketing_opt_in: boolean
+          email_marketing_opt_in_at: string | null
+          email_marketing_opt_in_version: string | null
           id: string
           interest: string
           location: string | null
@@ -1076,6 +1079,9 @@ export type Database = {
           contact: string
           created_at?: string
           email?: string | null
+          email_marketing_opt_in?: boolean
+          email_marketing_opt_in_at?: string | null
+          email_marketing_opt_in_version?: string | null
           id?: string
           interest: string
           location?: string | null
@@ -1096,6 +1102,9 @@ export type Database = {
           contact?: string
           created_at?: string
           email?: string | null
+          email_marketing_opt_in?: boolean
+          email_marketing_opt_in_at?: string | null
+          email_marketing_opt_in_version?: string | null
           id?: string
           interest?: string
           location?: string | null

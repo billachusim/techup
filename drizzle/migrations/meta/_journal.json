@@ -134,6 +134,13 @@
       "when": 1793135802283,
       "tag": "0018_lead_email_followups",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1793135826737,
+      "tag": "0019_intakes_and_instalments",
+      "breakpoints": true
     }
   ]
 }

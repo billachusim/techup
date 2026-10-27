@@ -49,7 +49,7 @@ const BATCH = 50;
 async function startSequences(db: Db, now: number) {
   const { data: leads, error } = await db
     .from("leads")
-    .select("id, name, email, interest, status, created_at, whatsapp_opt_in")
+    .select("id, name, email, interest, status, created_at, whatsapp_opt_in, email_marketing_opt_in")
     .not("email", "is", null)
     .gte("created_at", new Date(now - ENROL_WINDOW_MS).toISOString())
     .order("created_at", { ascending: true })
@@ -60,7 +60,8 @@ async function startSequences(db: Db, now: number) {
   const candidates = new Map<string, Lead>();
   for (const lead of (leads ?? []) as Lead[]) {
     if (!startsSequence(lead, now)) continue;
-    const email = normaliseEmail(lead.email!);
+    if (!lead.email) continue;
+    const email = normaliseEmail(lead.email);
     if (!candidates.has(email)) candidates.set(email, lead);
   }
   if (!candidates.size) return 0;

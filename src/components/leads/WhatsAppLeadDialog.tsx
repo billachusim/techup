@@ -376,12 +376,6 @@ const WhatsAppLeadDialog = ({
               </div>
             )}
 
-            {false && error && (
-              <p className="text-sm text-destructive" role="alert">
-                {error}
-              </p>
-            )}
-
             <Button type="submit" className="w-full" disabled={status === "saving"}>
               {status === "saving" && <Loader2 size={16} className="mr-2 animate-spin" />}
               {variant === "community" ? "Join the community on WhatsApp" : "Start the chat on WhatsApp"}

@@ -1086,11 +1086,11 @@ Async communication, clean PRs, self-driven task breakdown. Nigerian developers 
 
 ## Location inside Nigeria
 
-Lagos still pays 20–30% more than Abuja for local roles, and 40–60% more than Port Harcourt, Enugu, or Nnewi. But if you land remote work, location stops mattering — which is why 70% of our senior alumni relocated back to their home states after going remote.
+Lagos still pays 20–30% more than Abuja for local roles, and 40–60% more than Port Harcourt, Enugu, or Nnewi. But if you land remote work, location stops mattering — which is why many senior developers move back to their home states after going remote.
 
 ## What moves you from junior to mid faster
 
-In our data, the developers who broke ₦1M/month within 18 months of graduating all did three things:
+The developers we see break ₦1M/month soonest after graduating tend to do three things:
 1. Shipped a real production app used by at least 500 people (not a portfolio site).
 2. Contributed to an open-source repo with 1k+ stars.
 3. Wrote publicly — even 6 short technical posts on Dev.to or Hashnode.
@@ -1411,7 +1411,7 @@ Read [everything you need to know about SIWES](/blog/everything-you-need-to-know
 
 *By Bill Achusim · Jun 22, 2026*
 
-If you're a founder — Nigerian or foreign — trying to hire developers in Nigeria in 2026, this is the practical, no-nonsense playbook. Nigerian developer talent is world-class, but the hiring pitfalls are specific. Here's what we've learned running Tech Faculty and placing 300+ engineers into Nigerian and remote roles.
+If you're a founder — Nigerian or foreign — trying to hire developers in Nigeria in 2026, this is the practical, no-nonsense playbook. Nigerian developer talent is world-class, but the hiring pitfalls are specific. Here's what we've learned running Tech Faculty and helping our graduates into Nigerian and remote roles.
 
 ## What Nigerian developers actually cost in 2026
 
@@ -1467,12 +1467,12 @@ A ghost hire accepts the offer, misses standups and delivers nothing. Three habi
 
 ## Retention: why Nigerian developers actually leave
 
-In our exit-interview data across 2024–2026:
-1. **Career growth stalled** (46%) — no clear promotion path
-2. **Learning stagnation** (22%) — legacy stack, no new challenges
-3. **Pay fell behind USD-denominated peers** (18%)
-4. **Bad manager** (10%)
-5. **Relocation / study abroad** (4%)
+The reasons we hear most often from developers who change jobs, roughly in this order:
+1. **Career growth stalled** — no clear promotion path
+2. **Learning stagnation** — legacy stack, no new challenges
+3. **Pay fell behind USD-denominated peers**
+4. **Bad manager**
+5. **Relocation / study abroad**
 
 Salary is rarely #1. It's growth. Fix that and you'll keep senior Nigerian devs for 4+ years.
 
@@ -2331,7 +2331,7 @@ Prompt-writing is a real skill now. The Nigerian SMEs winning with AI are traini
 
 ## Where Tech Faculty NG fits
 
-We train Nigerian professionals and SMEs on practical AI — the prompts, the workflows, the security guardrails — through our **AI & Productivity** and **AI Engineering** bootcamps. Our cohorts have included staff from over 5,000+ students and graduates across the country.
+We train Nigerian professionals and SMEs on practical AI — the prompts, the workflows, the security guardrails — through our **AI & Productivity** and **AI Engineering** bootcamps. Over 6,000 students have trained with us across the country.
 
 ## The bottom line
 
@@ -2430,7 +2430,7 @@ Most juniors fail at the *job-search* stage, not the *skills* stage. What works:
 
 ## Where Tech Faculty NG fits
 
-Our **Web Development Bootcamp** is a 16-week, project-first program that follows exactly this roadmap. Cohorts are 100% hands-on, with code reviews, real-team workflows, and SIWES/job placement support. We have helped 5,000+ students and graduates start their tech journey.
+Our **Web Development Bootcamp** is a 16-week, project-first program that follows exactly this roadmap. Cohorts are 100% hands-on, with code reviews, real-team workflows, and SIWES/job placement support. We have helped 6,000+ students start their tech journey.
 
 ## The bottom line
 
@@ -2539,7 +2539,7 @@ Remote roles paid in USD or pegged to USD typically pay 2–4× the equivalent N
 
 ## Where Tech Faculty NG fits
 
-Our **Data Analytics Bootcamp** runs for 16 weeks and covers Excel, SQL, Python, and Power BI in the exact order Nigerian employers expect. Over 5,000+ students and graduates have used our programs to start tech careers.
+Our **Data Analytics Bootcamp** runs for 16 weeks and covers Excel, SQL, Python, and Power BI in the exact order Nigerian employers expect. Over 6,000 students have used our programs to start tech careers.
 
 ## The bottom line
 
@@ -2682,7 +2682,7 @@ Ask these questions before paying anyone:
 
 ## Where Tech Faculty NG fits
 
-Our **Cyber Security Bootcamp** is a 16-week, project-first program built around exactly this curriculum, taught by practitioners working in Nigerian banks, fintechs, and consultancies. We've helped 5,000+ students and graduates start their tech careers.
+Our **Cyber Security Bootcamp** is a 16-week, project-first program built around exactly this curriculum, taught by practitioners working in Nigerian banks, fintechs, and consultancies. We've helped 6,000+ students start their tech careers.
 
 ## The bottom line
 
@@ -2703,9 +2703,26 @@ Cyber security is one of the highest-leverage paths a Nigerian can pick in 2026 
 
 *By Bill Achusim · Apr 8, 2026*
 
-How much should a tech professional actually earn in Nigeria in 2026? There's a lot of guesswork on social media — usually inflated for clout or deflated for clickbait. Here are the realistic bands we see in actual hiring data and offers across web development, data, cyber security, product, and design.
+How much should a tech professional actually earn in Nigeria in 2026? There's a lot of guesswork on social media — usually inflated for clout or deflated for clickbait. Below are the bands we see in offers at well-funded companies, mostly in Lagos, across web development, data, cyber security, product, and design. They are our editorial estimates, not a survey, and they sit at the top of the market.
 
 All figures are gross monthly, in naira, for Nigeria-based roles unless noted. Remote USD-paid roles are listed separately.
+
+## What the survey data says
+
+Self-reported pay across the whole market is lower than the bands below. In [our Nigerian tech salary report](/reports/nigeria-tech-salaries), which cites Paylab's Nigeria survey (retrieved October 2026), the middle 80% of earners (10th to 90th percentile) take home roughly:
+
+| Role | Monthly pay (₦) |
+|---|---|
+| Frontend developer | 204,000 – 677,000 |
+| Backend developer | 202,000 – 915,000 |
+| Software engineer | 523,000 – 3,097,000 |
+| Data scientist | 184,000 – 771,000 |
+| IT security specialist | 223,000 – 1,119,000 |
+| DevOps engineer | 214,000 – 1,077,000 |
+| UX expert | 203,000 – 677,000 |
+| IT product manager | 223,000 – 1,177,000 |
+
+Treat the bands in the rest of this article as what strong candidates can reach at the best-paying employers, and the survey figures as what is typical.
 
 ## How to read these numbers
 
@@ -2800,7 +2817,7 @@ A few rules that work in Nigerian tech hiring:
 
 ## Where Tech Faculty NG fits
 
-Whether you're aiming for a junior role in Lagos or a remote senior role paid in USD, the bands above show why deep, employer-aligned skills matter. Our bootcamps in Web Development, Data Analytics, Cyber Security, and AI are designed around exactly the hiring requirements behind these numbers — and we've helped 5,000+ students and graduates make the jump.
+Whether you're aiming for a junior role in Lagos or a remote senior role paid in USD, the bands above show why deep, employer-aligned skills matter. Our bootcamps in Web Development, Data Analytics, Cyber Security, and AI are designed around exactly the hiring requirements behind these numbers — and we've helped 6,000+ students make the jump.
 
 ## The bottom line
 
@@ -2808,6 +2825,7 @@ Tech pay in Nigeria is rising, but unevenly. The biggest premium in 2026 goes to
 
 *Looking to hit the next salary band? Browse our **bootcamps and career tracks** built around the roles in this article.*`,
     date: "2026-04-08",
+    updated: "2026-10-25",
     author: "Bill Achusim",
     tags: ["Tech Careers","tech salary Nigeria","developer salary Nigeria","remote tech jobs","Lagos tech salary","negotiation tech"],
     readTime: 11
@@ -2917,7 +2935,7 @@ Stick to this and you cover everything ITF and your school actually grade on.
 
 ## Where Tech Faculty NG fits
 
-We support SIWES students every year — placement, training, and mentorship — across our partner network. Over 5,000+ students and graduates have gone through our programs. Our students are coached on logbook quality from week one, not week 23.
+We support SIWES students every year — placement, training, and mentorship — across our partner network. Over 6,000 students have gone through our programs. Our students are coached on logbook quality from week one, not week 23.
 
 ## The bottom line
 
@@ -3036,7 +3054,7 @@ Skipping process never works long-term, and is a fast path to legal trouble.
 
 ## Where Tech Faculty NG fits
 
-We work with Nigerian businesses on the talent side of this — building internal teams, training existing staff, and supporting tech delivery for enterprise engagements. Over 5,000+ students and graduates have come through our programs, many of them now staffing the projects this article describes.
+We work with Nigerian businesses on the talent side of this — building internal teams, training existing staff, and supporting tech delivery for enterprise engagements. Over 6,000 students have come through our programs, many of them now staffing the projects this article describes.
 
 ## The bottom line
 

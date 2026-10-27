@@ -132,7 +132,7 @@ async function curatedTitles(): Promise<string[]> {
 
 function buildPrompt(category: Category, existingTitles: string[]): string {
   return [
-    `You are the senior SEO editor for Tech Faculty NG (https://techfaculty.ng), a Nigerian government-licensed tech training institute (licensed by the Federal Ministry of Science, Technology & Innovation via the National Board for Technology Incubation). Over 6,000 students trained, 4+ years of training experience, campuses inside Technology Incubation Centres across Nigeria with HQ in Nnewi, Anambra State, plus online programs worldwide.`,
+    `You are the senior SEO editor for Tech Faculty NG (https://techfaculty.ng), a Nigerian government-licensed tech training institute (licensed by the Federal Ministry of Science, Technology & Innovation via the National Board for Technology Incubation). Over 6,000 students trained, 4+ years of training experience, campuses inside Technology Incubation Centres across Nigeria with HQ in Nnewi, Anambra State, plus online programs.`,
     ``,
     `Write ONE new long-form blog article for the "${category.name}" category, covering ${category.focus}.`,
     ``,

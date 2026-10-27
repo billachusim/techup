@@ -4,6 +4,8 @@ import Footer from "@/components/Footer";
 import CredibilityBanner from "@/components/CredibilityBanner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { departments } from "@/data/departments";
+import { campuses } from "@/data/campuses";
 import {
   Target,
   Heart,
@@ -17,8 +19,8 @@ import {
 
 const stats = [
   { value: "6,000+", label: "Students Trained" },
-  { value: "10+", label: "Departments" },
-  { value: "50+", label: "Partner Companies" },
+  { value: String(departments.length), label: "Departments" },
+  { value: String(campuses.length), label: "Campuses in Nigeria" },
   { value: "4+", label: "Years Running" },
 ];
 
@@ -35,8 +37,8 @@ const values = [
   },
   {
     icon: Globe,
-    title: "Global Standards, Local Impact",
-    description: "Industry-recognized certifications and curricula designed to compete on the world stage.",
+    title: "Licensed and Verifiable",
+    description: "Licensed by FMSTI through NBTI, with certificates employers can verify online.",
   },
 ];
 
@@ -112,13 +114,13 @@ const About = () => {
                 Tech Faculty NG was founded in 2022 by <Link to="/team/bill-achusim" className="underline hover:text-primary">Bill Achusim</Link> at the Digital Village in Nnewi, Anambra State. South-East Nigeria is rich in entrepreneurial energy, but many young people lack access to quality tech education. We set out to change that.
               </p>
               <p>
-                In over four years, we've trained more than 6,000 students across 12 departments — from Web Development and Data Science to AI, Cybersecurity, and Digital Marketing. 75% of our graduates secure tech roles within six months of completing their program. <Link to="/outcomes" className="underline hover:text-primary">See how we count our outcomes</Link>.
+                In over four years, we've trained more than 6,000 students across {departments.length} departments — from Web Development and Data Science to AI, Cybersecurity, and Digital Marketing. 75% of our graduates secure tech roles within six months of completing their program. <Link to="/outcomes" className="underline hover:text-primary">See how we count our outcomes</Link>.
               </p>
               <p>
-                According to the <a href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">World Economic Forum Future of Jobs Report (2025)</a>, digital skills demand in Africa is projected to rise 25% annually. We're positioning our students at the forefront of this growth.
+                According to the <a href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">World Economic Forum Future of Jobs Report (2025)</a>, AI and big data are the fastest-growing skills worldwide. We're positioning our students at the forefront of this growth.
               </p>
               <p>
-                Today, we partner with 50+ companies for job placements, collaborate with universities to bring bootcamps to campuses, and provide SIWES/IT placements for students seeking real-world experience. Our curriculum is aligned with national NBTI standards and reviewed by industry hiring managers.
+                Today, over 100 partner companies are ready to hire our graduates who perform at the required level. We also collaborate with universities to bring bootcamps to campuses, and provide SIWES/IT placements for students seeking real-world experience.
               </p>
             </div>
           </div>

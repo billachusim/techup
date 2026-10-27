@@ -54,7 +54,7 @@ const organizationSchema = {
   url: "https://techfaculty.ng",
   logo: LOGO_URL,
   description:
-    "Tech Faculty NG is a licensed Nigerian technology training institute delivering nationwide in-person bootcamps and online programs worldwide in Software Engineering, Data Science, Cybersecurity, AI, and more. We train, certify, and place graduates into tech careers.",
+    "Tech Faculty NG is a licensed Nigerian technology training institute delivering nationwide in-person bootcamps and online programs in Software Engineering, Data Science, Cybersecurity, AI, and more. We train, certify, and place graduates into tech careers.",
   foundingDate: "2022",
   // Administrative HQ and official address: the Technology Incubation Centre, Umudim.
   // The "Tech Faculty NG" Google profile at 27 G Achusim Drive (registered office) is listed in sameAs only.

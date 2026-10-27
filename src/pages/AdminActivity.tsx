@@ -18,9 +18,6 @@ import { cn } from "@/lib/utils";
 const ACTION_LABEL: Record<string, string> = {
   "payment.marked_paid": "Marked payment paid",
   "payment.balance_marked_paid": "Marked instalment balance paid",
-  "intake.insert": "Added intake date",
-  "intake.update": "Changed intake date",
-  "intake.delete": "Deleted intake date",
   "enrollment.cancelled": "Cancelled enrolment",
   "enrollment.status_changed": "Changed enrolment status",
   "certificate.issued": "Issued certificate",

@@ -9,7 +9,7 @@ import {
   listOutstandingBalances,
   markBalancePaid,
 } from "@/lib/enrollment-payments.functions";
-import { formatIntakeDate, lagosToday } from "@/lib/intakes";
+import { formatDay, lagosToday } from "@/lib/dates";
 
 const money = (currency: string | null, amount: number | null) =>
   `${currency === "USD" ? "$" : "₦"}${Number(amount ?? 0).toLocaleString()}`;
@@ -82,7 +82,7 @@ export function OutstandingBalances() {
                   {money(r.currency, r.instalment_total)} ·{" "}
                   {money(r.currency, r.balance_due)} left
                   {r.balance_due_by
-                    ? ` · due ${formatIntakeDate(r.balance_due_by)}`
+                    ? ` · due ${formatDay(r.balance_due_by)}`
                     : ""}
                 </p>
               </div>

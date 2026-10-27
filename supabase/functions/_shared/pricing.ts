@@ -797,10 +797,11 @@ export const PROMO_CODES: Record<string, number> = {
 
 // Paying in instalments. The student pays depositPercent of their plan total
 // at checkout, which starts the plan, and the rest within balanceDueDays from
-// their dashboard (or by bank transfer, marked on /admin/students). Off until
-// the terms are confirmed: set enabled to true to offer it at checkout.
+// their dashboard (or by bank transfer, marked on /admin/students). A missed
+// balance is flagged as overdue there; access is not cut off. Set enabled to
+// false to stop offering it at checkout.
 export const INSTALMENTS = {
-  enabled: false,
+  enabled: true,
   depositPercent: 50,
   balanceDueDays: 30,
   /** Plans totalling less than this (after any discount) are paid in full. */

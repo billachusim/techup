@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { OUTCOMES } from "@/data/outcomes";
 import { GOOGLE_RATING, GOOGLE_REVIEWS_URL, GOOGLE_WRITE_REVIEW_URL, googleReviews } from "@/data/googleReviews";
 import { fetchPublicTalent } from "@/lib/talent";
+import GraduateStories from "@/components/GraduateStories";
 
 const headline = [
   { icon: GraduationCap, ...OUTCOMES.studentsTrained },
@@ -22,19 +23,21 @@ const TalentPoolEvidence = () => {
     staleTime: 5 * 60 * 1000,
   });
 
+  // A zero reads as "nobody", which isn't what it means here (most graduates never publish a
+  // profile), so a count only shows once it's above zero.
   const counts = data && [
     { icon: Users, value: data.length, label: "Graduates and students with a public Talent Pool profile" },
     { icon: ShieldCheck, value: data.filter((p) => p.is_vetted).length, label: "Vetted by our instructors" },
     { icon: BriefcaseBusiness, value: data.filter((p) => p.is_matched).length, label: "Matched to a client role" },
     { icon: TrendingUp, value: data.filter((p) => p.is_working).length, label: "Working on a client engagement now" },
-  ];
+  ].filter((c) => c.value > 0);
 
   return (
     <div className="rounded-lg border border-border bg-card p-6">
-      {counts ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {counts && counts.length > 0 ? (
+        <div className="flex flex-wrap justify-center gap-6">
           {counts.map((c) => (
-            <div key={c.label} className="text-center">
+            <div key={c.label} className="text-center w-36 md:w-44">
               <c.icon className="w-6 h-6 text-primary mx-auto mb-2" aria-hidden="true" />
               <div className="text-3xl font-bold">{c.value.toLocaleString()}</div>
               <p className="text-sm text-muted-foreground mt-1">{c.label}</p>
@@ -43,7 +46,11 @@ const TalentPoolEvidence = () => {
         </div>
       ) : (
         <p className="text-sm text-muted-foreground text-center">
-          {isLoading && !isError ? "Loading live Talent Pool counts…" : "Live counts are unavailable right now. You can browse the profiles directly."}
+          {isLoading && !isError
+            ? "Loading live Talent Pool counts…"
+            : data
+              ? "Graduates are just starting to publish Talent Pool profiles. Browse the ones that are up."
+              : "Live counts are unavailable right now. You can browse the profiles directly."}
         </p>
       )}
       <p className="text-xs text-muted-foreground text-center mt-6">
@@ -98,6 +105,8 @@ const Outcomes = () => {
             <TalentPoolEvidence />
           </div>
         </section>
+
+        <GraduateStories />
 
         <section className="py-16 px-4">
           <div className="container mx-auto max-w-4xl">

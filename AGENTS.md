@@ -4,3 +4,4 @@
 - The HR automation API is a TanStack server route (`/api/public/hr-api/*`), not an edge function; it checks `x-hr-api-key` and writes every call to `hr_api_audit`, which also backs its rate limit.
 - Every `CREATE TABLE` in `public` must carry explicit GRANTs (authenticated + service_role, anon only for public reads) in the same migration; Supabase stopped auto-granting Data API access on 2026-10-30, so a table without GRANTs returns "permission denied" through the Data API.
 - WhatsApp Business messaging goes through `src/lib/whatsapp.server.ts` (gateway send + records outbound); Meta callbacks hit `/api/public/whatsapp/webhook`, are stored in `whatsapp_webhook_events` before processing, and failed rows retry with backoff on later calls.
+- Promotional lead-email sequences are disabled by default and excluded from the app-email registry; future dispatch requires explicit email consent and a dedicated marketing provider to protect app-email delivery.

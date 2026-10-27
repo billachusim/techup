@@ -52,6 +52,7 @@ const Footer = () => {
               <Link to="/school-collaborations" className="hover:text-primary transition-colors">School Collaborations</Link>
               <Link to="/events" className="hover:text-primary transition-colors">Events</Link>
               <Link to="/siwes" className="hover:text-primary transition-colors">Internships</Link>
+              <Link to="/siwes/courses" className="hover:text-primary transition-colors">SIWES by Course</Link>
               <Link to="/virtual-siwes" className="hover:text-primary transition-colors">Virtual SIWES (Online IT)</Link>
               <Link to="/siwes-success-kit" className="hover:text-primary transition-colors">SIWES Success Kit</Link>
               
@@ -69,6 +70,7 @@ const Footer = () => {
             <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
               <Link to="/about" className="hover:text-primary transition-colors">About</Link>
               <Link to="/outcomes" className="hover:text-primary transition-colors">Student Outcomes</Link>
+              <Link to="/reports/nigeria-tech-salaries" className="hover:text-primary transition-colors">Tech Salary Report</Link>
               <Link to="/blog" className="hover:text-primary transition-colors">Blog</Link>
               <Link to="/careers" className="hover:text-primary transition-colors">Careers</Link>
               <Link to="/products" className="hover:text-primary transition-colors">Products</Link>

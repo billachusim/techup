@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getSupabase } from "@/integrations/supabase/lazy";
 import type { BlogPost } from "@/types/blog";
 import blogPosts from "@/data/blogPosts";
+import { isRetiredBlogSlug } from "../../supabase/functions/_shared/blog-redirects.ts";
 
 /** Row shape of the auto-generated posts table. */
 type DbPost = {
@@ -46,7 +47,7 @@ async function fetchDbPosts(): Promise<BlogPost[]> {
     .eq("is_published", true)
     .order("published_at", { ascending: false });
   if (error) throw error;
-  return ((data ?? []) as DbPost[]).map(toBlogPost);
+  return ((data ?? []) as DbPost[]).filter((row) => !isRetiredBlogSlug(row.slug)).map(toBlogPost);
 }
 
 /**

@@ -23,6 +23,7 @@ import { Check, Contact, Copy, Loader2, MessageCircle, Users } from "lucide-reac
 import { campuses } from "@/data/campuses";
 import { SUCCESS_KIT } from "@/data/successKit";
 import { isMobileDevice } from "@/lib/whatsapp";
+import { trackLead } from "@/lib/analytics";
 
 export const LEAD_CAPTURED_KEY = "tf_wa_lead_captured";
 
@@ -95,6 +96,7 @@ const WhatsAppLeadDialog = ({
   const [email, setEmail] = useState("");
   const [topic, setTopic] = useState<string>(variant === "chat" ? "" : "");
   const [whatsappOptIn, setWhatsappOptIn] = useState(false);
+  const [emailOptIn, setEmailOptIn] = useState(false);
   const [status, setStatus] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -156,6 +158,7 @@ const WhatsAppLeadDialog = ({
       source: clampLeadField(source, "source"),
       notes: clampLeadField(notes, "notes"),
       whatsapp_opt_in: supportsFollowup && whatsappOptIn,
+      email_marketing_opt_in: !!email.trim() && emailOptIn,
     });
 
     if (insertError) {
@@ -163,6 +166,10 @@ const WhatsAppLeadDialog = ({
       setError("We couldn't save that. Please try again, or message us on WhatsApp.");
       return;
     }
+    trackLead(variant === "community" ? "community_join" : "whatsapp_chat", {
+      lead_source: source,
+      channel: "whatsapp",
+    });
     rememberLead();
     setStatus("done");
     if (variant === "community") {
@@ -358,6 +365,15 @@ const WhatsAppLeadDialog = ({
               <p className="text-sm text-destructive" role="alert">
                 {error}
               </p>
+            )}
+
+            {email.trim() && (
+              <div className="flex items-start gap-2 text-sm">
+                <Checkbox id="wa-lead-email-opt-in" checked={emailOptIn} onCheckedChange={(checked) => setEmailOptIn(checked === true)} />
+                <Label htmlFor="wa-lead-email-opt-in" className="font-normal leading-relaxed">
+                  I agree to receive admissions follow-up emails and programme updates from Tech Faculty. I can unsubscribe anytime.
+                </Label>
+              </div>
             )}
 
             <Button type="submit" className="w-full" disabled={status === "saving"}>

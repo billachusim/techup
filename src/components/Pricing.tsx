@@ -20,12 +20,15 @@ import { BenefitSelector } from "./Pricing/BenefitSelector";
 import { LearningModeSelector } from "./Pricing/LearningModeSelector";
 import { CheckoutDialog } from "./Pricing/CheckoutDialog";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { rememberCheckout, trackEvent } from "@/lib/analytics";
 import {
   ALL_COURSES as allAvailableCourses,
   LEARNING_MODES,
   PLAN_PRICING,
   PROMO_CODES,
   REFERRAL_DISCOUNT_PERCENT,
+  INSTALMENTS,
+  instalmentSplit,
   type Benefit,
   type Course,
   type LearningMode,
@@ -409,6 +412,7 @@ const Pricing = () => {
 
       if (profile?.faculty_id) {
         setFacultyId(profile.faculty_id);
+        trackBeginCheckout(planId);
         setCheckoutDialogOpen(true);
         return;
       }
@@ -447,10 +451,21 @@ const Pricing = () => {
     }
 
     setFacultyIdDialogOpen(false);
+    trackBeginCheckout(selectedPlanId);
     setCheckoutDialogOpen(true);
   };
 
-  const handleCheckoutSubmit = async (method: 'email' | 'whatsapp' | 'card') => {
+  const trackBeginCheckout = (planId: string) => {
+    const plan = departmentPlans.find((p) => p.id === planId);
+    if (!plan || plan.isFree) return;
+    trackEvent("begin_checkout", {
+      value: totalPrices[planId] || 0,
+      currency: "NGN",
+      items: [{ item_id: plan.id, item_name: plan.fancyName }],
+    });
+  };
+
+  const handleCheckoutSubmit = async (method: 'email' | 'whatsapp' | 'card', payInInstalments = false) => {
     setIsSubmitting(true);
     
     try {
@@ -580,6 +595,15 @@ const Pricing = () => {
         ? "\n*Requesting Discount Code*" 
         : (discountCode ? `\n*Discount Code Applied:* ${discountCode.toUpperCase()}` : "");
 
+      if (!plan.isFree) {
+        trackEvent("add_payment_info", {
+          value: total,
+          currency: "NGN",
+          payment_type: method,
+          items: [{ item_id: plan.id, item_name: plan.fancyName }],
+        });
+      }
+
       // Handle card payment via Flutterwave
       if (method === 'card') {
         const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
@@ -593,6 +617,7 @@ const Pricing = () => {
             learningModeId: selection.learningMode || null,
             currencyCode: isNigeria ? 'NGN' : 'USD',
             discountCode: discountCode || '',
+            payInInstalments: payInInstalments || undefined,
             successUrl: `${window.location.origin}/payment-success`,
             cancelUrl: `${window.location.origin}/#pricing`,
           },
@@ -614,6 +639,7 @@ const Pricing = () => {
         } catch {
           // Storage can be blocked.
         }
+        rememberCheckout({ plan: plan.fancyName, value: total, currency: "NGN" });
         setIsSubmitting(false);
         setCheckoutDialogOpen(false);
         window.location.assign(checkoutUrl);
@@ -1064,6 +1090,8 @@ Please share the payment details so I can complete my enrollment. Thank you!`;
         onOpenChange={setCheckoutDialogOpen}
         onSubmit={handleCheckoutSubmit}
         totalAmount={totalPrices[selectedPlanId] || 0}
+        instalment={instalmentSplit(totalPrices[selectedPlanId] || 0)}
+        balanceDueDays={INSTALMENTS.balanceDueDays}
         isLoading={isSubmitting}
       />
     </section>

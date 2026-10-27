@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link, Navigate, useParams } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -7,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import JoinWhatsAppButton from "@/components/JoinWhatsAppButton";
 import { COMMUNITY_WHATSAPP_URL } from "@/lib/whatsapp";
-import { ArrowLeft, CheckCircle2, Clock, MessageCircle, Users, TrendingUp } from "lucide-react";
+import { ArrowLeft, CalendarCheck, CheckCircle2, Clock, MessageCircle, Users, TrendingUp } from "lucide-react";
 import LastUpdated from "@/components/LastUpdated";
 import {
   departmentFaqs,
@@ -16,15 +15,12 @@ import {
   getDepartmentBySlug,
 } from "@/data/departments";
 import { DEPARTMENT_GUIDES } from "@/data/internalLinks";
-import NextIntakes from "@/components/intakes/NextIntakes";
-import type { Intake } from "@/lib/intakes";
-
-const COURSE_MODE: Record<string, string> = { "online-only": "Online", physical: "Onsite", hybrid: "Blended" };
+import { planMinimum } from "@/lib/fees";
+import { INSTALMENTS } from "../../supabase/functions/_shared/pricing.ts";
 
 const DepartmentDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const dept = slug ? getDepartmentBySlug(slug) : undefined;
-  const [intakes, setIntakes] = useState<Intake[]>([]);
 
   if (!dept) return <Navigate to="/departments" replace />;
 
@@ -33,6 +29,8 @@ const DepartmentDetail = () => {
   const weeks = dept.duration.match(/\d+/g);
   const courseWorkload = weeks ? `P${weeks[weeks.length - 1]}W` : undefined;
   const faqs = departmentFaqs(dept);
+  const fee = dept.planId ? planMinimum(dept.planId) : undefined;
+  const instalments = INSTALMENTS.enabled && fee !== undefined && fee >= INSTALMENTS.minimumTotal;
   const updated = departmentUpdated(dept);
 
   const courseSchema = {
@@ -69,14 +67,6 @@ const DepartmentDetail = () => {
           },
         },
       },
-      // The dated intakes an admin has published for this department.
-      ...intakes.map((i) => ({
-        "@type": "CourseInstance",
-        courseMode: COURSE_MODE[i.learning_mode] ?? "Online",
-        courseWorkload,
-        startDate: i.starts_on,
-        ...(i.campus ? { location: { "@type": "Place", name: `Tech Faculty NG, ${i.campus}` } } : {}),
-      })),
     ],
   };
 
@@ -154,7 +144,15 @@ const DepartmentDetail = () => {
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-4">
               {dept.intro}
             </p>
-            <NextIntakes departmentSlug={dept.slug} onLoaded={setIntakes} />
+            <div className="mb-4 rounded-lg border border-primary/30 bg-primary/5 p-4">
+              <p className="flex items-center gap-2 font-semibold">
+                <CalendarCheck className="h-4 w-4 text-primary" /> Start any time
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Registration is continuous. Enrol today and join the current {dept.title} cohort, or learn one-on-one.
+                {instalments && ` You can pay in two instalments within ${INSTALMENTS.balanceDueDays} days.`}
+              </p>
+            </div>
             <LastUpdated date={updated} className="mb-4" />
             <JoinWhatsAppButton
               url={COMMUNITY_WHATSAPP_URL}

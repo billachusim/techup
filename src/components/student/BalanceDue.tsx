@@ -5,7 +5,7 @@ import { Loader2, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
-import { formatIntakeDate } from "@/lib/intakes";
+import { formatDay, lagosToday } from "@/lib/dates";
 
 const money = (currency: string | null, amount: number) =>
   `${currency === "USD" ? "$" : "₦"}${Number(amount).toLocaleString()}`;
@@ -47,7 +47,7 @@ export function BalanceDue({
 
   const overdue =
     enrollment.balance_due_by &&
-    enrollment.balance_due_by < new Date().toISOString().slice(0, 10);
+    enrollment.balance_due_by < lagosToday();
 
   return (
     <Card className={overdue ? "border-destructive/50" : "border-primary/40"}>
@@ -61,7 +61,7 @@ export function BalanceDue({
         <p className="text-sm text-muted-foreground">
           The rest of your {enrollment.plan_name} plan
           {enrollment.balance_due_by
-            ? `, ${overdue ? "was due" : "due"} by ${formatIntakeDate(enrollment.balance_due_by)}`
+            ? `, ${overdue ? "was due" : "due"} by ${formatDay(enrollment.balance_due_by)}`
             : ""}
           .
         </p>

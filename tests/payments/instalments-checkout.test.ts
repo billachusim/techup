@@ -54,11 +54,13 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  INSTALMENTS.enabled = false;
+  INSTALMENTS.enabled = true;
 });
 
 describe("instalment terms", () => {
-  it("are off until the terms are confirmed", () => {
+  it("are two payments, the balance due within 30 days", () => {
+    expect(INSTALMENTS.enabled).toBe(true);
+    expect(INSTALMENTS.balanceDueDays).toBe(30);
     INSTALMENTS.enabled = false;
     expect(instalmentSplit(100000)).toBeNull();
   });

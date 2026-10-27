@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { canUseCourse, getCaller } from "../_shared/caller.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -12,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    const { courses, facultyId } = await req.json();
+    const body = await req.json().catch(() => ({}));
     
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
@@ -23,7 +24,22 @@ serve(async (req) => {
 
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
-    if (!courses || courses.length === 0) {
+    // Meeting links are only for students enrolled in the course (or staff).
+    const caller = await getCaller(req, admin);
+    if (!caller) {
+      return new Response(JSON.stringify({ error: "Please sign in" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const requested = Array.isArray(body?.courses) ? body.courses : [];
+    const courses = [];
+    for (const c of requested) {
+      const id = c?.courses?.id || c?.course_id;
+      if (typeof id === "string" && (await canUseCourse(admin, caller, id))) courses.push(c);
+    }
+
+    if (courses.length === 0) {
       return new Response(
         JSON.stringify({ 
           nextClass: {

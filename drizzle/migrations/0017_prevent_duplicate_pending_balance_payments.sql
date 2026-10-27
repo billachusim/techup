@@ -1,0 +1,2 @@
+CREATE UNIQUE INDEX IF NOT EXISTS enrollment_payments_one_pending_per_enrollment ON public.enrollment_payments(enrollment_id) WHERE status = 'pending';
+COMMENT ON INDEX public.enrollment_payments_one_pending_per_enrollment IS 'Prevents simultaneous outstanding balance checkout attempts for one enrolment.';

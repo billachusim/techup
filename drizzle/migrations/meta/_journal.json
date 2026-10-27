@@ -120,6 +120,13 @@
       "when": 1793135229490,
       "tag": "0016_explicit_lead_email_consent",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1793135328256,
+      "tag": "0017_prevent_duplicate_pending_balance_payments",
+      "breakpoints": true
     }
   ]
 }

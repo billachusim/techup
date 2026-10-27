@@ -181,7 +181,7 @@ const BusinessPartnerships = () => {
                             {pkg.priceNote && <span className="text-muted-foreground"> {pkg.priceNote}</span>}
                           </p>
                         ) : (
-                          <p className="font-medium">Price on request</p>
+                          <p className="font-medium">Tailored quote within two working days</p>
                         )}
                         {pkg.duration && <p className="text-muted-foreground">{pkg.duration}</p>}
                       </div>

@@ -1,8 +1,8 @@
 /**
  * Training packages for businesses on /business-partnerships.
  *
- * Prices and durations are left null until Bill confirms them. A null field is
- * hidden on the page and the card falls back to "Price on request", so nothing
+ * Bill chose quote-only pricing (2026-10-27), so prices and durations stay null. A null field is
+ * hidden on the page and the card falls back to "Tailored quote within two working days", so nothing
  * unconfirmed is ever shown to a visitor. To publish a price, set priceFrom
  * (naira, per participant unless priceNote says otherwise).
  */

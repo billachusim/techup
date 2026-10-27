@@ -13,12 +13,12 @@ const HowItWorks = () => {
     {
       icon: Award,
       title: "Get Certified",
-      description: "Earn a Tech Faculty NG certificate from an FMSTI-licensed institute (through NBTI), with an online verification link any employer can check.",
+      description: "Earn a Tech Faculty NG certificate, licensed by FMSTI through NBTI, with an online verification link any employer can check.",
     },
     {
       icon: Briefcase,
       title: "Get Employed",
-      description: "Get help with your CV, portfolio and job applications, plus introductions to employers we work with. Our top students start earning through internships as early as month 3.",
+      description: "Over 100 partner companies are ready to hire our graduates who perform at the required level. Our top students start earning through internships as early as month 3.",
     },
   ];
 
@@ -41,8 +41,9 @@ const HowItWorks = () => {
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Tech Faculty has trained <Link to="/outcomes" className="underline hover:text-primary">over 6,000 students</Link> across our campuses in Nigeria and online.
-            Our structured program takes you from complete beginner to job-ready professional. Through paid
-            internships and our Tutor & Earn track, our top students start earning as early as month 3.
+            Our structured program takes you from complete beginner to job-ready professional, and lets
+            strong students earn their tuition back: those who perform well start working as paid interns and
+            assistant tutors on our Tutor & Earn track from month 3.
           </p>
         </div>
 

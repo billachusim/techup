@@ -120,7 +120,7 @@ const About = () => {
                 According to the <a href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">World Economic Forum Future of Jobs Report (2025)</a>, AI and big data are the fastest-growing skills worldwide. We're positioning our students at the forefront of this growth.
               </p>
               <p>
-                Today, we connect graduates with employers for job placements, collaborate with universities to bring bootcamps to campuses, and provide SIWES/IT placements for students seeking real-world experience.
+                Today, over 100 partner companies are ready to hire our graduates who perform at the required level. We also collaborate with universities to bring bootcamps to campuses, and provide SIWES/IT placements for students seeking real-world experience.
               </p>
             </div>
           </div>

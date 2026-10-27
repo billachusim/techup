@@ -34,8 +34,7 @@ const OrderComplete = () => {
         const { data } = await supabase.functions.invoke("verify-payment", { body: { txRef } });
         const status = data?.status;
         if (status === "paid") {
-          // Sends the receipt now rather than at the next 30-minute re-check. Safe to repeat.
-          void fetch("/api/payment-followups", { method: "POST" }).catch(() => undefined);
+          // verify-payment has already asked the site to send the receipt.
           const bought = ((data.items ?? []) as string[]).filter((id): id is ProductId => id in PRODUCTS);
           trackPurchase(txRef, bought.map((id) => PRODUCTS[id].name).join(" + "));
           if (!cancelled) {

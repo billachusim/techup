@@ -141,6 +141,13 @@
       "when": 1793136232888,
       "tag": "0019_online_orders",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1793136574069,
+      "tag": "0020_guard_talent_profile_trust_fields",
+      "breakpoints": true
     }
   ]
 }

@@ -1,22 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { sameKey } from "@/lib/hr-api-rules";
 
-// Called by pg_cron every hour. Sends only follow-up emails that are due, each
-// once, so it needs no secret.
+// Legacy callback stays closed to public callers and never uses app emails
+// for promotional sequences. A dedicated marketing provider is required.
 export const Route = createFileRoute("/api/lead-followups")({
   server: {
     handlers: {
-      POST: async () => {
-        const [{ supabaseAdmin }, { runLeadFollowups }, { sendTemplateEmail }] =
+      POST: async ({ request }) => {
+        const expected = process.env["LEAD_EMAIL_CRON_SECRET"] ?? "";
+        if (!sameKey(request.headers.get("x-cron-secret") ?? "", expected)) {
+          return Response.json({ error: "Unauthorized" }, { status: 401 });
+        }
+        const [{ supabaseAdmin }, { runLeadFollowups }] =
           await Promise.all([
             import("@/integrations/supabase/client.server"),
             import("@/lib/lead-followups.server"),
-            import("@/lib/email-templates/send-email"),
           ]);
         const started = Date.now();
         try {
           const result = await runLeadFollowups(
             supabaseAdmin,
-            sendTemplateEmail,
+            async () => ({ sent: false }),
           );
           const { error: logError } = await supabaseAdmin
             .from("scheduled_job_runs")

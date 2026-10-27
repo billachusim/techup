@@ -245,6 +245,7 @@ export type LeadForSequence = {
   status: string;
   created_at: string;
   whatsapp_opt_in: boolean;
+  email_marketing_opt_in?: boolean;
 };
 
 /**
@@ -254,6 +255,7 @@ export type LeadForSequence = {
 export function startsSequence(lead: LeadForSequence, now: number): boolean {
   return (
     !!lead.email?.includes("@") &&
+    lead.email_marketing_opt_in === true &&
     !CLOSED_STATUSES.has(lead.status) &&
     !lead.whatsapp_opt_in &&
     followupSequence(lead.interest) != null &&

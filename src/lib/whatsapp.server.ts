@@ -100,11 +100,13 @@ async function applyStatus(db: SupabaseClient, waId: string, status: string, ts:
   return true;
 }
 
-async function reconcilePendingStatuses(db: SupabaseClient, waId: string) {
-  const { data } = await db.from("whatsapp_status_pending").select("*").eq("wa_message_id", waId);
+export async function reconcilePendingStatuses(db: SupabaseClient, waId: string) {
+  const { data, error } = await db.from("whatsapp_status_pending").select("*").eq("wa_message_id", waId);
+  if (error) throw new Error(error.message);
   for (const p of data ?? []) {
     if (await applyStatus(db, waId, p.status, p.provider_timestamp, p.errors)) {
-      await db.from("whatsapp_status_pending").delete().eq("id", p.id);
+      const { error: deleteError } = await db.from("whatsapp_status_pending").delete().eq("id", p.id);
+      if (deleteError) throw new Error(deleteError.message);
     }
   }
 }

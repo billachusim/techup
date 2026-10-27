@@ -49,7 +49,7 @@ const BATCH = 50;
 async function startSequences(db: Db, now: number) {
   const { data: leads, error } = await db
     .from("leads")
-    .select("id, name, email, interest, status, created_at, whatsapp_opt_in")
+    .select("id, name, email, interest, status, created_at, whatsapp_opt_in, email_marketing_opt_in")
     .not("email", "is", null)
     .gte("created_at", new Date(now - ENROL_WINDOW_MS).toISOString())
     .order("created_at", { ascending: true })
@@ -60,7 +60,8 @@ async function startSequences(db: Db, now: number) {
   const candidates = new Map<string, Lead>();
   for (const lead of (leads ?? []) as Lead[]) {
     if (!startsSequence(lead, now)) continue;
-    const email = normaliseEmail(lead.email!);
+    if (!lead.email) continue;
+    const email = normaliseEmail(lead.email);
     if (!candidates.has(email)) candidates.set(email, lead);
   }
   if (!candidates.size) return 0;
@@ -103,10 +104,12 @@ async function startSequences(db: Db, now: number) {
 /** Why this person should get no more emails, or null to carry on. */
 async function stopReason(db: Db, email: string): Promise<string | null> {
   // Lead forms and sign-up both store email addresses lower-cased.
-  const { data: leads } = await db
+  const { data: leads, error: leadsError } = await db
     .from("leads")
-    .select("status")
+    .select("status, email_marketing_opt_in")
     .eq("email", email);
+  if (leadsError) throw new Error(`Could not verify lead consent: ${leadsError.message}`);
+  if (!leads?.some((lead: { email_marketing_opt_in?: boolean }) => lead.email_marketing_opt_in === true)) return "no_email_consent";
   if (
     ((leads ?? []) as { status: string }[]).some((l) =>
       CLOSED_STATUSES.has(l.status),
@@ -114,16 +117,18 @@ async function stopReason(db: Db, email: string): Promise<string | null> {
   )
     return "lead_closed";
 
-  const { data: profile } = await db
+  const { data: profile, error: profileError } = await db
     .from("profiles")
     .select("faculty_id")
     .eq("email", email)
     .maybeSingle();
+  if (profileError) throw new Error(`Could not verify lead profile: ${profileError.message}`);
   if (profile?.faculty_id) {
-    const { data: enrolments } = await db
+    const { data: enrolments, error: enrollmentError } = await db
       .from("enrollments")
       .select("status, plan_name, paid_at")
       .eq("faculty_id", profile.faculty_id);
+    if (enrollmentError) throw new Error(`Could not verify enrolment: ${enrollmentError.message}`);
     if (accessEnrollment(enrolments ?? [])) return "enrolled";
   }
   return null;
@@ -230,7 +235,11 @@ export async function runLeadFollowups(
   db: Db,
   send: SendEmail,
   now = Date.now(),
+  provider: "disabled" | "dedicated-marketing" = "disabled",
 ) {
+  if (provider !== "dedicated-marketing") {
+    return { started: 0, sent: 0, stopped: 0, failed: 0, quietHours: false, blocked: true };
+  }
   const started = await startSequences(db, now);
   if (!isSendingHour(now))
     return { started, sent: 0, stopped: 0, failed: 0, quietHours: true };

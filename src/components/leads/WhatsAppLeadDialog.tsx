@@ -96,6 +96,7 @@ const WhatsAppLeadDialog = ({
   const [email, setEmail] = useState("");
   const [topic, setTopic] = useState<string>(variant === "chat" ? "" : "");
   const [whatsappOptIn, setWhatsappOptIn] = useState(false);
+  const [emailOptIn, setEmailOptIn] = useState(false);
   const [status, setStatus] = useState<"idle" | "saving" | "done">("idle");
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -157,6 +158,7 @@ const WhatsAppLeadDialog = ({
       source: clampLeadField(source, "source"),
       notes: clampLeadField(notes, "notes"),
       whatsapp_opt_in: supportsFollowup && whatsappOptIn,
+      email_marketing_opt_in: !!email.trim() && emailOptIn,
     });
 
     if (insertError) {
@@ -363,6 +365,15 @@ const WhatsAppLeadDialog = ({
               <p className="text-sm text-destructive" role="alert">
                 {error}
               </p>
+            )}
+
+            {email.trim() && (
+              <div className="flex items-start gap-2 text-sm">
+                <Checkbox id="wa-lead-email-opt-in" checked={emailOptIn} onCheckedChange={(checked) => setEmailOptIn(checked === true)} />
+                <Label htmlFor="wa-lead-email-opt-in" className="font-normal leading-relaxed">
+                  I agree to receive admissions follow-up emails and programme updates from Tech Faculty. I can unsubscribe anytime.
+                </Label>
+              </div>
             )}
 
             <Button type="submit" className="w-full" disabled={status === "saving"}>

@@ -1,4 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { canUseCourse, getCaller } from "../_shared/caller.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -50,10 +52,37 @@ serve(async (req) => {
   }
 
   try {
-    const { classTitle, courseName, classNumber, courseId, forceRefresh } = await req.json();
+    const body = await req.json().catch(() => ({}));
+    const courseId = typeof body?.courseId === "string" ? body.courseId : "";
+    const classNumber = Number.isInteger(body?.classNumber) && body.classNumber >= 1 && body.classNumber <= 52 ? body.classNumber : 0;
+
+    // The generator costs AI credits and writes shared content, so only students
+    // enrolled in the course (or staff) may call it, and only staff may regenerate.
+    const authClient = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
+      auth: { persistSession: false },
+    });
+    const caller = await getCaller(req, authClient);
+    const deny = (status: number, error: string) =>
+      new Response(JSON.stringify({ error }), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    if (!caller) return deny(401, "Please sign in");
+    if (!courseId || !classNumber) return deny(400, "courseId and classNumber are required");
+    if (!(await canUseCourse(authClient, caller, courseId))) return deny(403, "You are not enrolled in this course");
+
+    const { data: courseRow } = await authClient.from("courses").select("name").eq("id", courseId).maybeSingle();
+    if (!courseRow) return deny(404, "Course not found");
+    const courseName: string = courseRow.name;
+    const { data: lecture } = await authClient
+      .from("lectures")
+      .select("title")
+      .eq("course_id", courseId)
+      .order("scheduled_at", { ascending: true })
+      .range(classNumber - 1, classNumber - 1)
+      .maybeSingle();
+    const classTitle: string = lecture?.title ?? `${courseName} — Class ${classNumber}`;
+    const forceRefresh = body?.forceRefresh === true && caller.isStaff;
     
     // Check cache first unless forceRefresh is true
-    if (!forceRefresh && courseId && classNumber) {
+    if (!forceRefresh) {
       const supabaseUrl = Deno.env.get("SUPABASE_URL");
       const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
       

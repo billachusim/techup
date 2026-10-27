@@ -7,6 +7,7 @@
 // Safe to call any time: confirmPayment and the emails are idempotent.
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { triggerPaymentFollowups } from "../_shared/payment-followups.ts";
 import { confirmOrderPayment, confirmPayment } from "../_shared/flutterwave.ts";
 
 const MINUTE = 60 * 1000;
@@ -91,11 +92,9 @@ serve(async () => {
     }
 
     // The site sends the emails, since that is where the email templates live.
-    const siteUrl = Deno.env.get("SITE_URL") ?? "https://techfaculty.ng";
     let followups: unknown = null;
     try {
-      const res = await fetch(`${siteUrl}/api/payment-followups`, { method: "POST" });
-      followups = await res.json().catch(() => ({ status: res.status }));
+      followups = await triggerPaymentFollowups(admin);
     } catch (e) {
       console.error("recover-checkouts: follow-up emails failed", e);
     }

@@ -7,6 +7,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { confirmOrderPayment, confirmPayment } from "../_shared/flutterwave.ts";
 import { isOrderRef } from "../_shared/products.ts";
+import { triggerPaymentFollowups } from "../_shared/payment-followups.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -32,6 +33,10 @@ serve(async (req) => {
     if (isOrderRef(txRef)) {
       const result = await confirmOrderPayment(admin, secretKey, txRef);
       if (result.status === "not_found") return json({ status: "not_found" }, 404);
+      if (result.status === "paid") {
+        // Send the receipt now rather than at the next re-check. Safe to repeat.
+        await triggerPaymentFollowups(admin).catch((e) => console.error("verify-payment: follow-ups failed", e));
+      }
       return json(result.status === "paid" ? { status: "paid", items: result.items } : { status: result.status });
     }
 

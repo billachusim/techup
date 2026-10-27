@@ -1,6 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { pingIndexNow } from "../_shared/indexnow.ts";
 import { isRetiredBlogSlug } from "../_shared/blog-redirects.ts";
+import { requireCronOrAdmin } from "../_shared/scheduled-auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -225,6 +226,10 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
+
+    // Each run spends AI credits: only the schedule or a signed-in admin may start one.
+    const denied = await requireCronOrAdmin(req, supabase, "generate-weekly-blog", corsHeaders);
+    if (denied) return denied;
 
     const { data: existing, error: existingError } = await supabase
       .from("blog_posts")

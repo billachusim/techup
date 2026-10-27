@@ -27,7 +27,7 @@ const row = (id: string) => db.tables.enrollments.find((r) => r.id === id)!;
 const run = async () => (await servedHandler()(new Request("https://fn.test/recover-checkouts", { method: "POST" }))).json();
 
 beforeEach(() => {
-  db = { users: {}, tables: { enrollments: [], product_orders: [] } };
+  db = { users: {}, tables: { enrollments: [], product_orders: [], cron_secrets: [{ job: "payment-followups", secret: "s3cret" }] } };
   useFakeDb(db);
   flutterwave = {};
   fetchMock = vi.fn(async (url: string) => {
@@ -80,7 +80,7 @@ describe("recover-checkouts", () => {
 
   it("asks the site to send the follow-up emails after re-checking", async () => {
     const body = await run();
-    expect(fetchMock).toHaveBeenLastCalledWith("https://techfaculty.ng/api/payment-followups", { method: "POST" });
+    expect(fetchMock).toHaveBeenLastCalledWith("https://techfaculty.ng/api/payment-followups", { method: "POST", headers: { "x-cron-secret": "s3cret" } });
     expect(body.followups).toEqual({ confirmationsSent: 1, remindersSent: 0 });
   });
 

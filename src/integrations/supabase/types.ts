@@ -997,6 +997,59 @@ export type Database = {
         }
         Relationships: []
       }
+      lead_email_followups: {
+        Row: {
+          created_at: string
+          email: string
+          interest: string
+          last_sent_at: string | null
+          lead_created_at: string
+          lead_id: string
+          name: string | null
+          next_due_at: string | null
+          steps_sent: number
+          stop_reason: string | null
+          stopped_at: string | null
+          unsubscribe_token: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          interest: string
+          last_sent_at?: string | null
+          lead_created_at: string
+          lead_id: string
+          name?: string | null
+          next_due_at?: string | null
+          steps_sent?: number
+          stop_reason?: string | null
+          stopped_at?: string | null
+          unsubscribe_token?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          interest?: string
+          last_sent_at?: string | null
+          lead_created_at?: string
+          lead_id?: string
+          name?: string | null
+          next_due_at?: string | null
+          steps_sent?: number
+          stop_reason?: string | null
+          stopped_at?: string | null
+          unsubscribe_token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_email_followups_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           channel: string

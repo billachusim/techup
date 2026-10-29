@@ -59,6 +59,14 @@ export async function buildWeeklyReport(now = new Date()) {
     { label: "Added to the Slack talent channel", count: joinedPool, path: "/admin/talent" },
     { label: "Added to project Slack channels", count: projectInvites, path: "/admin/talent" },
   ];
+  // class_reminder_sends comes from a migration generated types may not include yet.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const untyped = supabaseAdmin as unknown as { from: (t: string) => any };
+  done.push({
+    label: "Class reminder emails sent",
+    count: await count(untyped.from("class_reminder_sends").select("lecture_id", head).gte("sent_at", since)),
+    path: "/admin/activity",
+  });
   const byAction = new Map<string, number>();
   for (const row of audit.data ?? []) byAction.set(row.action, (byAction.get(row.action) ?? 0) + 1);
   for (const [action, label] of Object.entries(ACTION_LABEL)) {

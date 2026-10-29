@@ -21,6 +21,7 @@ const ACTION_LABEL: Record<string, string> = {
   "enrollment.cancelled": "Cancelled enrolment",
   "enrollment.status_changed": "Changed enrolment status",
   "certificate.issued": "Issued certificate",
+  "certificate.auto_issued": "Issued certificate automatically",
   "certificate.edited": "Edited certificate",
   "certificate.revoked": "Revoked certificate",
   "certificate.reinstated": "Reinstated certificate",

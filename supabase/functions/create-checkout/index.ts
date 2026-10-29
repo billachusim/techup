@@ -83,7 +83,7 @@ type BalancePlan = { id: string; faculty_id: string; plan_name: string; status: 
 
 /** A Flutterwave checkout for what is left to pay on an instalment plan. */
 async function balanceCheckout(
-  admin: ReturnType<typeof createClient>,
+  admin: SupabaseClient,
   flutterwaveKey: string,
   enrollment: BalancePlan,
   successUrl: string,

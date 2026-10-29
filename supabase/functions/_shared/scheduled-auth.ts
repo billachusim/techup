@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import type { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 // Scrapers spend Firecrawl credits on every run, so only two callers may start one:
 // the pg_cron schedule, which sends the secret stored in public.cron_secrets, and a

@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import type { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 // Works out who is calling an edge function from their sign-in token, using a
 // service-role client. Never trust a faculty ID or course ID the browser sends

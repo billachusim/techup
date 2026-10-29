@@ -176,6 +176,13 @@
       "when": 1793309008506,
       "tag": "0024_certificate_check_monthly",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1793309474752,
+      "tag": "0025_ai_work_review_and_balance_reminders",
+      "breakpoints": true
     }
   ]
 }

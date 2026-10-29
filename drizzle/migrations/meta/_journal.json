@@ -197,6 +197,13 @@
       "when": 1793309735692,
       "tag": "0027_ai_work_review_weekly",
       "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1793310525165,
+      "tag": "0028_lock_ai_class_content",
+      "breakpoints": true
     }
   ]
 }

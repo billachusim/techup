@@ -71,6 +71,24 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_weekly_report_sends: {
+        Row: {
+          report: Json
+          sent_at: string
+          week_of: string
+        }
+        Insert: {
+          report?: Json
+          sent_at?: string
+          week_of: string
+        }
+        Update: {
+          report?: Json
+          sent_at?: string
+          week_of?: string
+        }
+        Relationships: []
+      }
       ai_class_content: {
         Row: {
           class_number: number

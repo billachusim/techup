@@ -26,8 +26,12 @@ const ACTION_LABEL: Record<string, string> = {
   "certificate.reinstated": "Reinstated certificate",
   "certificate.deleted": "Deleted certificate",
   "lead.status_changed": "Changed lead status",
+  "lead.auto_converted": "Marked lead enrolled (they enrolled)",
+  "lead.auto_archived": "Archived silent lead",
   "referral.reward_paid": "Paid referral reward",
   "referral.status_changed": "Changed referral status",
+  "slack.channel_created": "Created project Slack channel",
+  "talent.auto_approved": "Approved talent automatically",
 };
 
 const LIMIT = 500;
@@ -62,6 +66,7 @@ function describe(entry: Entry): string {
   if (typeof d.plan === "string") parts.push(d.plan);
   if (typeof d.course === "string") parts.push(d.course);
   if (typeof d.certificate_number === "string") parts.push(d.certificate_number);
+  if (typeof d.channel === "string") parts.push(d.channel);
   if (typeof d.amount === "number" || typeof d.amount === "string") {
     parts.push(`${typeof d.currency === "string" ? `${d.currency} ` : ""}${Number(d.amount).toLocaleString("en-NG")}`);
   }

@@ -67,3 +67,49 @@ export function pickAutoMatches(
     return true;
   });
 }
+
+/** Extra match points for Tech Faculty students and alumni on roles in the field they studied. */
+export const FACULTY_FIELD_BOOST = 10;
+
+// Words that mark a role as belonging to each department students study in.
+const FIELD_KEYWORDS: Record<string, string[]> = {
+  "web development": ["web", "frontend", "front-end", "backend", "back-end", "full-stack", "fullstack", "full stack", "react", "next.js", "javascript", "typescript", "node", "supabase", "html", "css", "wordpress"],
+  "mobile development": ["mobile", "android", "ios", "flutter", "react native", "expo", "kotlin", "swift"],
+  "data science": ["data", "analyst", "analytics", "sql", "power bi", "excel", "dashboard", "bi", "tableau"],
+  "machine learning": ["machine learning", "ml", "ai", "llm", "agent", "agents", "automation", "nlp"],
+  "cyber security": ["security", "cyber", "cybersecurity", "soc", "penetration", "pentest", "network"],
+  "cloud computing": ["cloud", "aws", "azure", "gcp", "devops", "docker", "kubernetes"],
+  "ui/ux design": ["ui", "ux", "figma", "product design", "designer", "user experience"],
+  "digital marketing": ["marketing", "seo", "social media", "content", "ads", "copywriting"],
+  "general tech": ["virtual assistant", "admin", "customer support", "productivity"],
+};
+
+const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/** The department key for a student's department, plan or course name, if known. */
+export function fieldKey(field?: string | null): string | null {
+  const f = (field ?? "").toLowerCase();
+  if (!f) return null;
+  if (FIELD_KEYWORDS[f]) return f;
+  if (/web|full.?stack/.test(f)) return "web development";
+  if (/mobile/.test(f)) return "mobile development";
+  if (/data/.test(f)) return "data science";
+  if (/machine|\bai\b|agent|innovator/.test(f)) return "machine learning";
+  if (/cyber|security/.test(f)) return "cyber security";
+  if (/cloud|devops/.test(f)) return "cloud computing";
+  if (/ui|ux|design/.test(f)) return "ui/ux design";
+  if (/marketing/.test(f)) return "digital marketing";
+  return null;
+}
+
+/** FACULTY_FIELD_BOOST when the role is in the field the student studied, else 0. */
+export function facultyFieldBoost(
+  role: { title?: string | null; required_skills?: string[] | null; nice_to_have?: string[] | null },
+  field?: string | null,
+): number {
+  const key = fieldKey(field);
+  if (!key) return 0;
+  const text = [role.title ?? "", ...(role.required_skills ?? []), ...(role.nice_to_have ?? [])].join(" ").toLowerCase();
+  const hit = FIELD_KEYWORDS[key]!.some((w) => new RegExp(`(^|[^a-z0-9])${escape(w)}([^a-z0-9]|$)`).test(text));
+  return hit ? FACULTY_FIELD_BOOST : 0;
+}

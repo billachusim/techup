@@ -17,7 +17,9 @@ import { csvFilename, downloadCsv, toCsv } from "@/lib/csv";
 import { FOLLOWUP_DAYS } from "@/lib/lead-followups";
 import { cn } from "@/lib/utils";
 
-const STATUSES = ["new", "contacted", "enrolled", "not_interested"] as const;
+// "archived" is set automatically for leads silent 30 days after their follow-ups end,
+// and "enrolled" when the person enrols (migration 20261029173000).
+const STATUSES = ["new", "contacted", "enrolled", "not_interested", "archived"] as const;
 type LeadStatus = (typeof STATUSES)[number];
 
 const STATUS_LABEL: Record<LeadStatus, string> = {
@@ -25,6 +27,7 @@ const STATUS_LABEL: Record<LeadStatus, string> = {
   contacted: "Contacted",
   enrolled: "Enrolled",
   not_interested: "Not interested",
+  archived: "Archived",
 };
 
 const INTEREST_LABEL: Record<string, string> = {

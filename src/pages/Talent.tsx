@@ -13,7 +13,7 @@ const steps = [
   {
     icon: UserCheck,
     title: "Create your profile",
-    body: "Sign up, get your Faculty ID, then add your skills, CV, LinkedIn, availability and expected rate. It takes about five minutes and you can keep improving it.",
+    body: "Sign up, then add your skills, CV, LinkedIn, availability and expected rate. It takes about five minutes and you can keep improving it.",
   },
   {
     icon: Sparkles,

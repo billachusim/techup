@@ -276,6 +276,7 @@ export type Database = {
       }
       certificates: {
         Row: {
+          auto_issued: boolean
           certificate_number: string
           certificate_type: string
           course_id: string | null
@@ -286,6 +287,7 @@ export type Database = {
           id: string
           issued_at: string | null
           issued_by: string
+          issued_email_sent_at: string | null
           revoked_at: string | null
           revoked_by: string | null
           revoked_reason: string | null
@@ -293,6 +295,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          auto_issued?: boolean
           certificate_number: string
           certificate_type?: string
           course_id?: string | null
@@ -303,6 +306,7 @@ export type Database = {
           id?: string
           issued_at?: string | null
           issued_by?: string
+          issued_email_sent_at?: string | null
           revoked_at?: string | null
           revoked_by?: string | null
           revoked_reason?: string | null
@@ -310,6 +314,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          auto_issued?: boolean
           certificate_number?: string
           certificate_type?: string
           course_id?: string | null
@@ -320,6 +325,7 @@ export type Database = {
           id?: string
           issued_at?: string | null
           issued_by?: string
+          issued_email_sent_at?: string | null
           revoked_at?: string | null
           revoked_by?: string | null
           revoked_reason?: string | null

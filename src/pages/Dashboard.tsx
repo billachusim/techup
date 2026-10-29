@@ -20,6 +20,7 @@ import { isFreePlan } from "../../supabase/functions/_shared/enrollment-access.t
 
 import { useServerFn } from "@tanstack/react-start";
 import { briefNextClass } from "@/lib/student-review.functions";
+import { claimMyCertificates } from "@/lib/certificate-auto-issue.functions";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Link, useNavigate } from "@/lib/router-compat";
@@ -269,6 +270,8 @@ const Dashboard = () => {
     navigate('/');
   };
 
+  const runClaimCertificates = useServerFn(claimMyCertificates);
+
   const handleCheckpointComplete = async (courseId: string, checkpointNumber: number) => {
     if (!userData?.faculty_id) return;
     try {
@@ -311,6 +314,20 @@ const Dashboard = () => {
           : `Progress reset to ${newClassesCompleted} of 4 classes`,
       });
       localStorage.removeItem(`aiNextClass_${userData.faculty_id}`);
+      // Last class ticked: issue the certificate now if the course is paid in full
+      // and some work has been accepted. Otherwise the hourly run issues it later.
+      if (newProgress === 100) {
+        try {
+          const result = await runClaimCertificates();
+          if (result.issued > 0) {
+            toast({ title: "Certificate issued", description: "Congratulations! We've emailed you the link to verify it." });
+          } else if (result.waitingPayment > 0) {
+            toast({ title: "Course complete", description: "Your certificate will be issued once your fees are paid in full." });
+          } else if (result.waitingWork > 0) {
+            toast({ title: "Course complete", description: "Your certificate will be issued once a tutor accepts your submitted work." });
+          }
+        } catch { /* the hourly run will try again */ }
+      }
       await fetchUserDashboardData(userData.faculty_id);
     } catch (error) {
       console.error("Error updating progress:", error);

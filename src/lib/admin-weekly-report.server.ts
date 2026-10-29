@@ -5,6 +5,7 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
 import { needsYouTodayRows, withWhatsAppWaiting, type NeedsYouTodayCounts } from "@/lib/needs-you-today";
+import { findCertificateCandidates } from "@/lib/certificate-auto-issue.server";
 
 export type ReportRow = { label: string; count: number; path: string; detail?: string };
 
@@ -18,6 +19,7 @@ const ACTION_LABEL: Record<string, string> = {
   "enrollment.status_changed": "Enrolment status changes",
   "enrollment.cancelled": "Enrolments cancelled",
   "certificate.issued": "Certificates issued",
+  "certificate.auto_issued": "Certificates issued automatically (course finished and paid in full)",
   "lead.status_changed": "Lead status updates",
   "lead.auto_converted": "Leads marked enrolled automatically (they enrolled)",
   "lead.auto_archived": "Silent leads archived automatically",
@@ -79,7 +81,7 @@ export async function buildWeeklyReport(now = new Date()) {
     done.push({ label, count: byAction.get(action) ?? 0, path: "/admin/activity" });
   }
 
-  const [needs, suggested, unvetted, noWhatsApp, noSlack, notInSlack, unchased, awaitingPayLink] = await Promise.all([
+  const [needs, suggested, unvetted, noWhatsApp, noSlack, notInSlack, certificates, unchased, awaitingPayLink] = await Promise.all([
     supabaseAdmin.rpc("needs_you_today_counts"),
     count(supabaseAdmin.from("role_matches").select("id", head).eq("status", "suggested")),
     count(supabaseAdmin.from("talent_profiles").select("id", head).eq("is_vetted", false)),
@@ -91,6 +93,7 @@ export async function buildWeeklyReport(now = new Date()) {
       .in("status", MATCHED)
       .is("talent_profiles.slack_user_id", null)
       .limit(1000),
+    findCertificateCandidates().catch(() => []),
     // WhatsApp / bank requests the pay-link chase leaves to staff, and those it is chasing.
     count(
       supabaseAdmin
@@ -125,6 +128,16 @@ export async function buildWeeklyReport(now = new Date()) {
       label: "Matched talent not in the Slack workspace yet (emailed the join link)",
       count: new Set((notInSlack.data ?? []).map((r) => r.talent_profile_id)).size,
       path: "/admin/talent",
+    },
+    {
+      label: "Students who finished a course but still owe fees, so no certificate yet",
+      count: certificates.filter((c) => c.status === "waiting_payment").length,
+      path: "/admin/students",
+    },
+    {
+      label: "Students who finished a course with no accepted work yet, so no certificate yet",
+      count: certificates.filter((c) => c.status === "waiting_work").length,
+      path: "/admin/students",
     },
     {
       label: "WhatsApp/bank requests without a pay link (discount asked, can't be priced, or made before the automation)",

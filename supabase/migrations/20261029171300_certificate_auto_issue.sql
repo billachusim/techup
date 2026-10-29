@@ -8,7 +8,7 @@ ALTER TABLE public.certificates
   ADD COLUMN IF NOT EXISTS auto_issued boolean NOT NULL DEFAULT false,
   ADD COLUMN IF NOT EXISTS issued_email_sent_at timestamptz;
 
--- 2. Every hour at :40. The student's dashboard also asks for their
+-- 2. Monthly, on the 1st at 06:40 UTC (Bill's choice, 2026-10-29). The student's dashboard also asks for their
 --    certificate the moment they tick their last class, so this run mostly
 --    catches students whose payment or balance was confirmed later.
 CREATE EXTENSION IF NOT EXISTS pg_cron WITH SCHEMA extensions;
@@ -18,7 +18,7 @@ SELECT cron.unschedule('certificate-auto-issue') WHERE EXISTS (SELECT 1 FROM cro
 
 SELECT cron.schedule(
   'certificate-auto-issue',
-  '40 * * * *',
+  '40 6 1 * *',
   $$
   SELECT net.http_post(
     url := 'https://techfaculty.ng/api/certificate-auto-issue',

@@ -1,11 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { sameKey } from "@/lib/hr-api-rules";
 
-// Called by pg_cron every Monday. It sends at most one report a day, to the
-// fixed staff address, so it needs no secret.
+// Called by pg_cron every Monday with the "admin-weekly-report" secret from
+// cron_secrets. Anyone else is refused. It sends at most one report a day.
 export const Route = createFileRoute("/api/admin-weekly-report")({
   server: {
     handlers: {
-      POST: async () => {
+      POST: async ({ request }) => {
+        const given = request.headers.get("x-cron-secret") ?? "";
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const { data } = await supabaseAdmin.from("cron_secrets").select("secret").eq("job", "admin-weekly-report").maybeSingle();
+        if (!given || !data?.secret || !sameKey(given, data.secret)) {
+          return Response.json({ error: "Not allowed" }, { status: 401 });
+        }
         const { runWeeklyReport } = await import("@/lib/admin-weekly-report.server");
         try {
           return Response.json(await runWeeklyReport());

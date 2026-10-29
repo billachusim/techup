@@ -27,6 +27,9 @@ const ACTION_LABEL: Record<string, string> = {
   "slack.channel_created": "Project Slack channels created",
   "talent.auto_approved": "Talent profiles approved automatically",
   "whatsapp.auto_answered": "WhatsApp questions answered automatically",
+  "payment.pay_link_emailed": "Pay links emailed for WhatsApp/bank requests",
+  "payment.pay_link_reminded": "Pay link reminders sent",
+  "enrollment.auto_cancelled": "Unpaid WhatsApp/bank requests cancelled after 14 days",
 };
 
 const names = (rows: { title: string }[] | null, max = 5) => {
@@ -78,7 +81,7 @@ export async function buildWeeklyReport(now = new Date()) {
     done.push({ label, count: byAction.get(action) ?? 0, path: "/admin/activity" });
   }
 
-  const [needs, suggested, unvetted, noWhatsApp, noSlack, notInSlack, certificates] = await Promise.all([
+  const [needs, suggested, unvetted, noWhatsApp, noSlack, notInSlack, certificates, unchased, awaitingPayLink] = await Promise.all([
     supabaseAdmin.rpc("needs_you_today_counts"),
     count(supabaseAdmin.from("role_matches").select("id", head).eq("status", "suggested")),
     count(supabaseAdmin.from("talent_profiles").select("id", head).eq("is_vetted", false)),
@@ -91,6 +94,16 @@ export async function buildWeeklyReport(now = new Date()) {
       .is("talent_profiles.slack_user_id", null)
       .limit(1000),
     findCertificateCandidates().catch(() => []),
+    // WhatsApp / bank requests the pay-link chase leaves to staff, and those it is chasing.
+    count(
+      supabaseAdmin
+        .from("enrollments")
+        .select("id", head)
+        .eq("status", "pending")
+        .is("tx_ref", null)
+        .lte("created_at", new Date(now.getTime() - 3600 * 1000).toISOString()),
+    ),
+    count(supabaseAdmin.from("enrollments").select("id", head).eq("status", "pending").not("pay_link_created_at", "is", null)),
   ]);
 
   const todo: ReportRow[] = [
@@ -124,6 +137,16 @@ export async function buildWeeklyReport(now = new Date()) {
     {
       label: "Students who finished a course with no accepted work yet, so no certificate yet",
       count: certificates.filter((c) => c.status === "waiting_work").length,
+      path: "/admin/students",
+    },
+    {
+      label: "WhatsApp/bank requests without a pay link (discount asked, can't be priced, or made before the automation)",
+      count: unchased,
+      path: "/admin/students",
+    },
+    {
+      label: "WhatsApp/bank requests waiting on their pay link (cancelled 14 days after the link)",
+      count: awaitingPayLink,
       path: "/admin/students",
     },
   ];

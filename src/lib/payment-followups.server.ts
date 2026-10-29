@@ -3,12 +3,14 @@
 // - "payment confirmed" for payments that re-check confirmed (the student
 //   left before the payment page could tell them), and
 // - one "finish your enrolment" reminder for checkouts still unpaid.
+// - the pay link emails for WhatsApp / bank requests (pay-link-followups.server.ts).
 // - a receipt to the buyer and a "new paid order" email to staff for each
 //   online order (Virtual SIWES, logbook service, Success Kit) once it is paid.
 // Everything is driven by enrolment and order rows and each email is claimed
 // on its row before sending, so extra calls never send an email twice.
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
+import { runPayLinkFollowups } from "@/lib/pay-link-followups.server";
 import { accessEnrollment } from "../../supabase/functions/_shared/enrollment-access.ts";
 import { PRODUCTS, successKitDownloadPath, type ProductId } from "../../supabase/functions/_shared/products.ts";
 
@@ -79,6 +81,8 @@ async function sendReminders() {
     .eq("status", "pending")
     .not("tx_ref", "is", null)
     .is("payment_reminder_sent_at", null)
+    // WhatsApp / bank requests with a pay link get their own reminder.
+    .is("pay_link_created_at", null)
     .lte("created_at", new Date(now - REMIND_AFTER).toISOString())
     .gte("created_at", new Date(now - REMIND_UNTIL).toISOString())
     .order("created_at", { ascending: false })
@@ -230,5 +234,6 @@ export async function runPaymentFollowups() {
   const confirmationsSent = await sendConfirmations();
   const remindersSent = await sendReminders();
   const orders = await sendOrderEmails();
-  return { confirmationsSent, remindersSent, ...orders };
+  const payLinks = await runPayLinkFollowups(supabaseAdmin, sendTemplateEmail);
+  return { confirmationsSent, remindersSent, ...orders, ...payLinks };
 }

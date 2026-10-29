@@ -4,11 +4,15 @@
 // checkouts with Flutterwave's verify API and activates the paid ones (and
 // does the same for online orders: Virtual SIWES, logbook service, kit), then
 // asks the site to send the follow-up emails (payment confirmed / reminder).
+// It also chases WhatsApp and email (bank transfer) requests with Flutterwave
+// pay links, and cancels them 14 days after the link if still unpaid
+// (_shared/manual-payments.ts).
 // Safe to call any time: confirmPayment and the emails are idempotent.
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { triggerPaymentFollowups } from "../_shared/payment-followups.ts";
 import { confirmOrderPayment, confirmPayment } from "../_shared/flutterwave.ts";
+import { chaseManualPayments } from "../_shared/manual-payments.ts";
 
 const MINUTE = 60 * 1000;
 const DAY = 24 * 60 * MINUTE;
@@ -91,6 +95,14 @@ serve(async () => {
       }
     }
 
+    // Until the manual-payments migration is run its columns are missing; the rest still runs.
+    let manual: unknown = null;
+    try {
+      manual = await chaseManualPayments(admin, secretKey);
+    } catch (e) {
+      console.error("recover-checkouts: chasing WhatsApp/bank requests failed", e);
+    }
+
     // The site sends the emails, since that is where the email templates live.
     let followups: unknown = null;
     try {
@@ -99,7 +111,7 @@ serve(async () => {
       console.error("recover-checkouts: follow-up emails failed", e);
     }
 
-    const summary = { checked: pending?.length ?? 0, confirmed, balancesPaid, ordersChecked: pendingOrders?.length ?? 0, ordersPaid, followups };
+    const summary = { checked: pending?.length ?? 0, confirmed, balancesPaid, ordersChecked: pendingOrders?.length ?? 0, ordersPaid, manual, followups };
     console.log("recover-checkouts", summary);
     return json(summary);
   } catch (e) {

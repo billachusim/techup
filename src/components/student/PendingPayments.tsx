@@ -55,7 +55,7 @@ export function PendingPayments() {
     setMarking(r);
     setAmount(r.amount_due != null ? String(r.amount_due) : "");
     setCurrency(r.currency?.toUpperCase() === "USD" ? "USD" : "NGN");
-    setMethod(r.tx_ref ? "card" : "");
+    setMethod(r.tx_ref && !r.pay_link_url ? "card" : "");
   };
 
   const markPaid = async () => {
@@ -101,7 +101,7 @@ export function PendingPayments() {
       <div>
         <h2 className="text-xl font-bold">Payments to confirm</h2>
         <p className="text-sm text-muted-foreground">
-          Paid plans only open once payment is confirmed. Card payments confirm automatically, even when the student closes the payment page, and unpaid card checkouts get one reminder email. Mark WhatsApp, email and bank payments here once the money arrives.
+          Paid plans only open once payment is confirmed. Card payments confirm automatically, even when the student closes the payment page, and unpaid card checkouts get one reminder email. WhatsApp and email requests are emailed a Flutterwave pay link after an hour and a reminder two days later, and are cancelled 14 days after the link if still unpaid. Mark bank and cash payments here once the money arrives; that also switches the pay link off.
         </p>
       </div>
       {busy ? <Loader2 className="h-5 w-5 animate-spin" /> : rows.length === 0 ? (
@@ -115,12 +115,22 @@ export function PendingPayments() {
                 {r.faculty_id} · {[r.student_email, r.student_phone].filter(Boolean).join(" · ")} · {new Date(r.created_at).toLocaleDateString()}
               </p>
               <p className="text-xs text-muted-foreground">
-                {r.tx_ref ? `Card checkout started (${r.currency} ${r.amount_due}) — not confirmed by Flutterwave` : "WhatsApp / email request"}
+                {r.pay_link_url
+                  ? `WhatsApp / email request · pay link (${r.currency} ${r.amount_due}) ${r.pay_link_sent_at ? `emailed ${new Date(r.pay_link_sent_at).toLocaleDateString()}` : "not emailed (no email address)"}`
+                  : r.tx_ref ? `Card checkout started (${r.currency} ${r.amount_due}) — not confirmed by Flutterwave` : "WhatsApp / email request"}
                 {r.coupon_code ? ` · code ${r.coupon_code}` : ""}
                 {r.payment_reminder_sent_at ? ` · reminder emailed ${new Date(r.payment_reminder_sent_at).toLocaleDateString()}` : ""}
+                {r.pay_link_reminder_sent_at ? ` · reminder emailed ${new Date(r.pay_link_reminder_sent_at).toLocaleDateString()}` : ""}
+                {r.pay_link_created_at ? ` · cancels ${new Date(Date.parse(r.pay_link_created_at) + 14 * 24 * 3600 * 1000).toLocaleDateString()} if unpaid` : ""}
+                {r.pay_link_skipped_reason ? ` · no pay link: ${r.pay_link_skipped_reason}` : ""}
               </p>
             </div>
             <div className="flex gap-2">
+              {r.pay_link_url && (
+                <Button size="sm" variant="outline" onClick={() => navigator.clipboard.writeText(r.pay_link_url!).then(() => toast.success("Pay link copied"))}>
+                  Copy pay link
+                </Button>
+              )}
               <Button size="sm" disabled={saving === r.id} onClick={() => openMarkPaid(r)}>Mark paid</Button>
               <Button size="sm" variant="outline" disabled={saving === r.id} onClick={() => cancel(r.id)}>
                 {saving === r.id && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Cancel

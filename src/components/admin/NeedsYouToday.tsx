@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "@/lib/router-compat";
 import { Loader2 } from "lucide-react";
 import { getSupabase } from "@/integrations/supabase/lazy";
-import { needsYouTodayRows, type NeedsYouTodayCounts } from "@/lib/needs-you-today";
+import { needsYouTodayRows, withWhatsAppWaiting, type NeedsYouTodayCounts } from "@/lib/needs-you-today";
 
 /** Admin strip at the top of /admin: what is waiting, each linking to its page. */
 export function NeedsYouToday() {
@@ -17,7 +17,10 @@ export function NeedsYouToday() {
       const { data, error } = await supabase.rpc("admin_needs_you_today");
       if (!active) return;
       if (error) setError(error.message);
-      else setRows(needsYouTodayRows(data as unknown as NeedsYouTodayCounts));
+      else {
+        const counts = await withWhatsAppWaiting(data as unknown as NeedsYouTodayCounts, () => supabase.rpc("whatsapp_chats_waiting"));
+        if (active) setRows(needsYouTodayRows(counts));
+      }
     })();
     return () => { active = false; };
   }, []);

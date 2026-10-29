@@ -11,11 +11,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { useIsStaff } from "@/hooks/useIsStaff";
 import { getSupabase } from "@/integrations/supabase/lazy";
 import { cn } from "@/lib/utils";
 import { HANDOFF_LABEL, handoffMessage, type HandoffKind } from "@/lib/whatsapp-handoff";
+import { AUTO_ANSWER_LABEL, AUTO_ANSWER_RULES } from "@/lib/whatsapp-auto-answers";
 import {
   createWhatsAppTemplate, deleteWhatsAppTemplate, getWhatsAppMedia, listWhatsAppTemplates, sendWhatsAppMessage,
 } from "@/lib/whatsapp.functions";
@@ -23,6 +25,10 @@ import {
 type Msg = {
   id: string; direction: string; contact_phone: string; contact_name: string | null; type: string; body: string | null;
   media_id: string | null; media_mime: string | null; status: string; error: any; created_at: string; provider_timestamp: string | null;
+};
+type AutoReply = {
+  contact_phone: string; intent: string; outcome: string; reason: string | null; reply_message_id: string | null;
+  resolved_at: string | null; created_at: string;
 };
 type Template = { name: string; status: string; language: string; category: string; components: any[] };
 
@@ -67,6 +73,8 @@ export default function AdminWhatsApp() {
 
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [paused, setPaused] = useState<string | null>(null);
+  const [autoOn, setAutoOn] = useState<boolean | null>(null);
+  const [autoReplies, setAutoReplies] = useState<AutoReply[]>([]);
   const [active, setActive] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
@@ -79,12 +87,17 @@ export default function AdminWhatsApp() {
 
   const load = useCallback(async () => {
     const sb = await getSupabase();
-    const [{ data }, { data: st }] = await Promise.all([
+    const [{ data }, { data: st }, { data: auto }] = await Promise.all([
       sb.from("whatsapp_messages").select("*").order("created_at", { ascending: false }).limit(1000),
-      sb.from("whatsapp_account_state").select("sending_paused,last_event").eq("id", 1).maybeSingle(),
+      sb.from("whatsapp_account_state").select("*").eq("id", 1).maybeSingle(),
+      sb.from("whatsapp_auto_replies").select("contact_phone,intent,outcome,reason,reply_message_id,resolved_at,created_at")
+        .order("created_at", { ascending: false }).limit(1000),
     ]);
     setMsgs((data ?? []) as Msg[]);
     setPaused(st?.sending_paused ? st.last_event ?? "paused" : null);
+    // Missing until the auto-answer migration runs.
+    setAutoOn(st && "auto_answer_enabled" in st ? st.auto_answer_enabled !== false : null);
+    setAutoReplies((auto ?? []) as AutoReply[]);
   }, []);
 
   const loadTemplates = useCallback(async () => {
@@ -118,6 +131,21 @@ export default function AdminWhatsApp() {
     return [...map.values()];
   }, [msgs]);
 
+  const autoReplyIds = useMemo(() => new Set(autoReplies.map((a) => a.reply_message_id).filter(Boolean)), [autoReplies]);
+  /** Latest open handoff per contact: the chats that need a staff reply. */
+  const waiting = useMemo(() => {
+    const map = new Map<string, AutoReply>();
+    for (const a of autoReplies) if (a.outcome === "handed_off" && !a.resolved_at && !map.has(a.contact_phone)) map.set(a.contact_phone, a);
+    return map;
+  }, [autoReplies]);
+
+  const toggleAuto = async (on: boolean) => {
+    const sb = await getSupabase();
+    const { error } = await sb.rpc("set_whatsapp_auto_answer", { _enabled: on });
+    if (error) toast({ title: "Not changed", description: error.message, variant: "destructive" });
+    else setAutoOn(on);
+  };
+
   const thread = useMemo(() => msgs.filter((m) => m.contact_phone === active).reverse(), [msgs, active]);
   const activeT = threads.find((t) => t.phone === active);
   const windowOpen = !!activeT?.lastInbound && Date.now() - activeT.lastInbound < DAY;
@@ -144,8 +172,21 @@ export default function AdminWhatsApp() {
         <AdminNav />
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h1 className="text-2xl font-bold">WhatsApp inbox</h1>
-          <Button variant="outline" size="sm" onClick={() => { load(); loadTemplates(); }}><RefreshCw className="mr-1 h-4 w-4" /> Refresh</Button>
+          <div className="flex flex-wrap items-center gap-3">
+            {autoOn !== null && (
+              <label className="flex items-center gap-2 text-sm">
+                <Switch checked={autoOn} disabled={!isAdmin} onCheckedChange={toggleAuto} aria-label="Automatic answers" />
+                Auto-answers {autoOn ? "on" : "off"}
+              </label>
+            )}
+            <Button variant="outline" size="sm" onClick={() => { load(); loadTemplates(); }}><RefreshCw className="mr-1 h-4 w-4" /> Refresh</Button>
+          </div>
         </div>
+        {autoOn !== null && (
+          <p className="text-sm text-muted-foreground">
+            Questions about prices, campus locations and SIWES are answered automatically. Everything else is marked "Needs reply" for you, and the sender is told someone will reply shortly. Auto-answers stay quiet for {AUTO_ANSWER_RULES.staffActiveHours} hours after you reply in a chat.
+          </p>
+        )}
         {paused && <p className="rounded border border-destructive p-3 text-sm text-destructive">Sending is paused because WhatsApp reported "{paused}". Reconnect WhatsApp in Connectors.</p>}
 
         <Tabs defaultValue="inbox">
@@ -164,7 +205,10 @@ export default function AdminWhatsApp() {
                     <li key={t.phone}>
                       <button onClick={() => setActive(t.phone)} className={cn("w-full rounded p-2 text-left text-sm hover:bg-muted", active === t.phone && "bg-muted")}>
                         <div className="flex justify-between gap-2"><span className="font-medium">{t.name ?? `+${t.phone}`}</span>
-                          {t.lastInbound && Date.now() - t.lastInbound < DAY && <Badge variant="secondary">Open</Badge>}</div>
+                          <span className="flex gap-1">
+                            {waiting.has(t.phone) && <Badge>Needs reply</Badge>}
+                            {t.lastInbound && Date.now() - t.lastInbound < DAY && <Badge variant="secondary">Open</Badge>}
+                          </span></div>
                         <p className="truncate text-muted-foreground">{t.last.direction === "outbound" ? "You: " : ""}{t.last.body}</p>
                       </button>
                     </li>
@@ -177,6 +221,11 @@ export default function AdminWhatsApp() {
               {!active ? <CardContent className="p-6 text-muted-foreground">Pick a chat.</CardContent> : (
                 <>
                   <CardHeader className="pb-2"><CardTitle className="text-lg">{activeT?.name ?? `+${active}`}</CardTitle>
+                    {waiting.get(active) && (
+                      <p className="text-xs font-medium text-primary">
+                        Handed to you: {waiting.get(active)!.reason ?? AUTO_ANSWER_LABEL.other}
+                      </p>
+                    )}
                     <p className="text-xs text-muted-foreground">+{active} · {windowOpen ? "You can reply freely (they messaged in the last 24 hours)." : "They haven't messaged in 24 hours — you must use an approved template."}</p>
                   </CardHeader>
                   <CardContent className="space-y-3">
@@ -186,6 +235,7 @@ export default function AdminWhatsApp() {
                           <p className="whitespace-pre-wrap">{m.body}</p>
                           {m.media_id && <Media id={m.media_id} />}
                           <div className="mt-1 flex items-center justify-end gap-1 text-[11px] text-muted-foreground">
+                            {autoReplyIds.has(m.id) && <span className="font-medium">Auto ·</span>}
                             {new Date(m.provider_timestamp ?? m.created_at).toLocaleString()}
                             {m.direction === "outbound" && <StatusIcon s={m.status} />}
                           </div>

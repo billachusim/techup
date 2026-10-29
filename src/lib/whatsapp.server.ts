@@ -132,6 +132,8 @@ export async function processEvent(db: SupabaseClient, row: { delivery_id: strin
       if (m.from && inboundText) {
         const { processInboundLeadWhatsApp } = await import("@/lib/whatsapp-followups.server");
         await processInboundLeadWhatsApp(db, { from: m.from, text: inboundText, timestamp: m.timestamp });
+        const { autoAnswerInbound } = await import("@/lib/whatsapp-auto-answers.server");
+        await autoAnswerInbound(db, { waMessageId: m.id, from: m.from, name: names.get(m.from) ?? null, text: inboundText, timestamp: m.timestamp });
       }
     }
   } else if (row.event === "whatsapp.status") {

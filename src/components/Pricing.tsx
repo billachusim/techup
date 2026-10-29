@@ -559,6 +559,16 @@ const Pricing = () => {
           plan_name: plan.name,
           status: plan.isFree ? "active" : "pending",
           learning_mode: selectedMode,
+          // Lets the server price the request and email a pay link if it stays unpaid.
+          requested_selection: plan.isFree ? null : {
+            planId: plan.id,
+            courseIds: selection.selectedCourses,
+            benefitIds: selection.selectedBenefits,
+            learningModeId: selection.learningMode || null,
+            currency: isNigeria ? 'NGN' : 'USD',
+            discountCode: discountCode.trim() || null,
+            discountRequested: requestDiscount || false,
+          },
         });
         if (enrollError) {
           console.error('Error creating enrollment:', enrollError);

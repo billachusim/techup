@@ -155,6 +155,13 @@
       "when": 1793291507876,
       "tag": "0021_allow_lead_email_consent_submission",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1793291577790,
+      "tag": "0022_restore_weekly_report_storage",
+      "breakpoints": true
     }
   ]
 }

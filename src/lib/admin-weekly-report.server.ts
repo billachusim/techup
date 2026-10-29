@@ -4,7 +4,7 @@
 // never send a second email.
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
-import { needsYouTodayRows, type NeedsYouTodayCounts } from "@/lib/needs-you-today";
+import { needsYouTodayRows, withWhatsAppWaiting, type NeedsYouTodayCounts } from "@/lib/needs-you-today";
 
 export type ReportRow = { label: string; count: number; path: string; detail?: string };
 
@@ -19,9 +19,12 @@ const ACTION_LABEL: Record<string, string> = {
   "enrollment.cancelled": "Enrolments cancelled",
   "certificate.issued": "Certificates issued",
   "lead.status_changed": "Lead status updates",
+  "lead.auto_converted": "Leads marked enrolled automatically (they enrolled)",
+  "lead.auto_archived": "Silent leads archived automatically",
   "referral.reward_paid": "Referral rewards paid",
   "slack.channel_created": "Project Slack channels created",
   "talent.auto_approved": "Talent profiles approved automatically",
+  "whatsapp.auto_answered": "WhatsApp questions answered automatically",
   "payment.pay_link_emailed": "Pay links emailed for WhatsApp/bank requests",
   "payment.pay_link_reminded": "Pay link reminders sent",
   "enrollment.auto_cancelled": "Unpaid WhatsApp/bank requests cancelled after 14 days",
@@ -41,7 +44,7 @@ export async function buildWeeklyReport(now = new Date()) {
   const since = new Date(now.getTime() - 7 * DAY).toISOString();
   const head = { count: "exact" as const, head: true };
 
-  const [autoMatches, promotedOrManual, selected, joinedPool, projectInvites, approvedTalent, audit, jobRuns] = await Promise.all([
+  const [autoMatches, promotedOrManual, selected, joinedPool, projectInvites, approvedTalent, audit, jobRuns, whatsAppHandoffs] = await Promise.all([
     count(supabaseAdmin.from("role_matches").select("id", head).eq("source", "auto").gte("created_at", since)),
     count(supabaseAdmin.from("role_matches").select("id", head).neq("source", "auto").in("status", MATCHED).gte("updated_at", since)),
     count(supabaseAdmin.from("role_matches").select("id", head).in("status", SELECTED).gte("updated_at", since)),
@@ -50,6 +53,7 @@ export async function buildWeeklyReport(now = new Date()) {
     count(supabaseAdmin.from("talent_profiles").select("id", head).gte("vetted_at", since)),
     supabaseAdmin.from("admin_audit_log").select("action").gte("created_at", since).limit(5000),
     supabaseAdmin.from("scheduled_job_runs").select("job, success").gte("ran_at", since).limit(1000),
+    count(supabaseAdmin.from("whatsapp_auto_replies").select("id", head).eq("outcome", "handed_off").gte("created_at", since)),
   ]);
 
   const done: ReportRow[] = [
@@ -59,7 +63,16 @@ export async function buildWeeklyReport(now = new Date()) {
     { label: "Talent approved in total", count: approvedTalent, path: "/admin/talent" },
     { label: "Added to the Slack talent channel", count: joinedPool, path: "/admin/talent" },
     { label: "Added to project Slack channels", count: projectInvites, path: "/admin/talent" },
+    { label: "WhatsApp messages handed to staff by the auto-answers", count: whatsAppHandoffs, path: "/admin/whatsapp" },
   ];
+  // class_reminder_sends comes from a migration generated types may not include yet.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const untyped = supabaseAdmin as unknown as { from: (t: string) => any };
+  done.push({
+    label: "Class reminder emails sent",
+    count: await count(untyped.from("class_reminder_sends").select("lecture_id", head).gte("sent_at", since)),
+    path: "/admin/activity",
+  });
   const byAction = new Map<string, number>();
   for (const row of audit.data ?? []) byAction.set(row.action, (byAction.get(row.action) ?? 0) + 1);
   for (const [action, label] of Object.entries(ACTION_LABEL)) {
@@ -91,7 +104,9 @@ export async function buildWeeklyReport(now = new Date()) {
   ]);
 
   const todo: ReportRow[] = [
-    ...(needs.data ? needsYouTodayRows(needs.data as unknown as NeedsYouTodayCounts) : []),
+    ...(needs.data
+      ? needsYouTodayRows(await withWhatsAppWaiting(needs.data as unknown as NeedsYouTodayCounts, () => supabaseAdmin.rpc("whatsapp_chats_waiting")))
+      : []),
     { label: "AI match suggestions below the threshold to review", count: suggested, path: "/admin/talent" },
     { label: "Talent profiles not approved yet (under 70% strength or un-vetted by staff)", count: unvetted, path: "/admin/talent" },
     {

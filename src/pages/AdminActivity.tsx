@@ -32,6 +32,8 @@ const ACTION_LABEL: Record<string, string> = {
   "referral.status_changed": "Changed referral status",
   "slack.channel_created": "Created project Slack channel",
   "talent.auto_approved": "Approved talent automatically",
+  "payment.balance_reminder_sent": "Emailed instalment balance reminder",
+  "payment.balance_paid_online": "Instalment balance paid online",
 };
 
 const LIMIT = 500;

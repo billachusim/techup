@@ -137,6 +137,31 @@ const PaymentConfirmed = ({ name, plan, facultyId }: { name?: string; plan?: str
   </Layout>
 )
 
+// 7. Student: pay link for a plan requested over WhatsApp or email (and its reminder)
+const PayLink = ({ name, plan, amount, payUrl, cancelOn, reminder }: { name?: string; plan?: string; amount?: string; payUrl?: string; cancelOn?: string; reminder?: boolean }) => (
+  <Layout preview={reminder ? 'Your place is still waiting for payment' : 'Pay for your Tech Faculty plan online'} title={reminder ? 'Your place is still waiting' : 'Pay for your plan online'} cta={`Pay ${amount ?? 'now'}`} href={payUrl ?? `${SITE}/#pricing`}>
+    <Text style={text}>{hi(name)}</Text>
+    <Text style={text}>
+      {reminder
+        ? <>Your enrolment in the <b>{plan ?? 'Tech Faculty'}</b> plan is not paid yet, so your classes are still locked.</>
+        : <>Thanks for choosing the <b>{plan ?? 'Tech Faculty'}</b> plan. To save you waiting for bank details, you can pay{amount ? ` ${amount}` : ''} online now with this secure Flutterwave link: card, bank transfer or USSD.</>}
+    </Text>
+    <Text style={text}>Your classes and class group open as soon as the payment goes through.</Text>
+    {cancelOn && <Text style={muted}>If it isn&apos;t paid by {cancelOn}, we&apos;ll cancel the request and the link will stop working. You can always enrol again.</Text>}
+    <Text style={muted}>Already paid by bank transfer? You don&apos;t need to do anything: we&apos;ll confirm it. Questions? <a href={WHATSAPP} style={link}>Message us on WhatsApp</a>.</Text>
+  </Layout>
+)
+
+// 8. Student: request cancelled after 14 days unpaid
+const PayLinkCancelled = ({ name, plan }: { name?: string; plan?: string }) => (
+  <Layout preview="Your enrolment request was cancelled" title="Your enrolment request was cancelled" cta="Choose a plan" href={`${SITE}/#pricing`}>
+    <Text style={text}>{hi(name)}</Text>
+    <Text style={text}>We didn&apos;t receive payment for the <b>{plan ?? 'Tech Faculty'}</b> plan within 14 days, so we&apos;ve cancelled the request and its pay link.</Text>
+    <Text style={text}>You&apos;re welcome back any time: choose your plan again when you&apos;re ready.</Text>
+    <Text style={muted}>Paid and think this is a mistake? <a href={WHATSAPP} style={link}>Message us on WhatsApp</a> with your payment receipt and we&apos;ll sort it out.</Text>
+  </Layout>
+)
+
 const OrderConfirmed = ({ name, amount, reference, steps = [], downloadUrl }: { name?: string; amount?: string; reference?: string; steps?: { item: string; next: string }[]; downloadUrl?: string }) => (
   <Layout preview="Your payment is confirmed" title="Your payment is confirmed" cta={downloadUrl ? 'Download the SIWES Success Kit' : 'Message us on WhatsApp'} href={downloadUrl ?? WHATSAPP}>
     <Text style={text}>{hi(name)}</Text>
@@ -172,6 +197,20 @@ export const orderConfirmed = {
     reference: 'TFO-0000',
     steps: [{ item: 'Virtual SIWES placement', next: 'A coordinator contacts you on WhatsApp within one working day.' }],
   },
+} satisfies TemplateEntry
+
+export const payLink = {
+  component: PayLink,
+  subject: (d) => (d.reminder ? `Reminder: pay for your ${d.plan ?? 'Tech Faculty'} plan` : `Pay for your ${d.plan ?? 'Tech Faculty'} plan online`),
+  displayName: 'Pay link for a WhatsApp / bank request (and 2-day reminder)',
+  previewData: { name: 'Ada Obi', plan: 'Developer Pro', amount: '₦100,000', payUrl: 'https://checkout.flutterwave.com/v3/hosted/pay/example', cancelOn: '12 November' },
+} satisfies TemplateEntry
+
+export const payLinkCancelled = {
+  component: PayLinkCancelled,
+  subject: 'Your Tech Faculty enrolment request was cancelled',
+  displayName: 'WhatsApp / bank request cancelled after 14 days',
+  previewData: { name: 'Ada Obi', plan: 'Developer Pro' },
 } satisfies TemplateEntry
 
 export const leadFollowUp = {

@@ -28,6 +28,11 @@ const ACTION_LABEL: Record<string, string> = {
   "lead.status_changed": "Changed lead status",
   "referral.reward_paid": "Paid referral reward",
   "referral.status_changed": "Changed referral status",
+  "payment.pay_link_created": "Made a pay link for a WhatsApp/bank request",
+  "payment.pay_link_emailed": "Emailed a pay link",
+  "payment.pay_link_reminded": "Emailed a pay link reminder",
+  "enrollment.auto_cancelled": "Cancelled unpaid request after 14 days",
+  "enrollment.auto_cancel_emailed": "Told student their request was cancelled",
 };
 
 const LIMIT = 500;

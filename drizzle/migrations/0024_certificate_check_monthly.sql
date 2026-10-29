@@ -1,0 +1,3 @@
+SELECT cron.unschedule('certificate-auto-issue') WHERE EXISTS (SELECT 1 FROM cron.job WHERE jobname = 'certificate-auto-issue');
+SELECT cron.schedule('certificate-auto-issue','40 6 1 * *',
+  $$ SELECT net.http_post(url := 'https://techfaculty.ng/api/certificate-auto-issue', headers := '{"Content-Type": "application/json"}'::jsonb, body := '{"trigger": "cron"}'::jsonb, timeout_milliseconds := 60000) as request_id; $$);

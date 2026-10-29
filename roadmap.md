@@ -2,7 +2,7 @@
 
 ## Lead submission repair
 - [x] Confirm missing email-consent insert permissions and apply a column-only grant
-- [ ] Verify real form submissions and consent storage without widening private-field access
+- [x] Verify real checklist and WhatsApp submissions (HTTP 201), stored consent false, private fields still restricted; 24 tests pass
 
 ## Automated social images
 - [x] Public cached Style 1 image endpoint with validated inputs

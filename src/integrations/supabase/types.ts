@@ -342,6 +342,35 @@ export type Database = {
           },
         ]
       }
+      class_reminder_sends: {
+        Row: {
+          email: string | null
+          faculty_id: string
+          lecture_id: string
+          sent_at: string
+        }
+        Insert: {
+          email?: string | null
+          faculty_id: string
+          lecture_id: string
+          sent_at?: string
+        }
+        Update: {
+          email?: string | null
+          faculty_id?: string
+          lecture_id?: string
+          sent_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_reminder_sends_lecture_id_fkey"
+            columns: ["lecture_id"]
+            isOneToOne: false
+            referencedRelation: "lectures"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       course_enrollments: {
         Row: {
           course_id: string
@@ -2568,7 +2597,17 @@ export type Database = {
         }[]
       }
       approve_talent: { Args: { _talent_id: string }; Returns: string }
+      archive_silent_leads: { Args: { _days?: number }; Returns: number }
       archive_stale_listings: { Args: never; Returns: undefined }
+      auto_convert_student_leads: {
+        Args: {
+          _before?: string
+          _enrollment_id: string
+          _faculty_id: string
+          _plan_name: string
+        }
+        Returns: number
+      }
       check_referral_code: {
         Args: { _code: string; _user_id: string }
         Returns: Json
@@ -2666,6 +2705,11 @@ export type Database = {
       is_referral_eligible: { Args: { _user_id: string }; Returns: boolean }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
       issue_talent_faculty_id: { Args: { _talent_id: string }; Returns: string }
+      lead_email_key: {
+        Args: { _contact: string; _email: string }
+        Returns: string
+      }
+      lead_phone_key: { Args: { _phone: string }; Returns: string }
       list_public_talent: {
         Args: never
         Returns: {
@@ -2752,7 +2796,10 @@ export type Database = {
         Returns: boolean
       }
       seed_all_course_lectures: { Args: never; Returns: undefined }
-      set_whatsapp_auto_answer: { Args: { _enabled: boolean }; Returns: undefined }
+      set_whatsapp_auto_answer: {
+        Args: { _enabled: boolean }
+        Returns: undefined
+      }
       verify_certificate: {
         Args: { cert_number: string }
         Returns: {

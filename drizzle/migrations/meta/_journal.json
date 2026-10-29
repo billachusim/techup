@@ -162,6 +162,13 @@
       "when": 1793291577790,
       "tag": "0022_restore_weekly_report_storage",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1793308105649,
+      "tag": "0023_apply_merged_automation_updates",
+      "breakpoints": true
     }
   ]
 }

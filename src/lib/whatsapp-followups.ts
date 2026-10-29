@@ -12,6 +12,7 @@ const ADMISSIONS_INTERESTS = new Set([
   "free_checklist",
   "siwes_placement",
   "virtual_siwes",
+  "free_bootcamp",
 ]);
 
 const INTEREST_COPY: Record<string, string> = {
@@ -20,6 +21,7 @@ const INTEREST_COPY: Record<string, string> = {
   free_checklist: "the free SIWES checklist",
   siwes_placement: "a SIWES placement",
   virtual_siwes: "Virtual SIWES",
+  free_bootcamp: "the Free Tech Bootcamp",
 };
 
 export type WhatsAppLead = {

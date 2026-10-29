@@ -15,7 +15,8 @@ export type LeadInterest =
   | "partner_enquiry"
   | "siwes_placement"
   | "virtual_siwes"
-  | "logbook_service";
+  | "logbook_service"
+  | "free_bootcamp";
 
 export type LeadExtraField = {
   id: string;
@@ -72,6 +73,10 @@ const successCopy: Record<LeadInterest, { title: string; body: string }> = {
   logbook_service: {
     title: "Logbook pickup requested",
     body: "We reply within one working day with payment details for the ₦15,000 service and confirm your courier pickup window. Review, signing, stamping and the return delivery are all included.",
+  },
+  free_bootcamp: {
+    title: "Your free bootcamp seat is requested",
+    body: "A coordinator will contact you with the next start date and your campus address. The bootcamp is free, so there is nothing to pay.",
   },
 };
 
@@ -414,7 +419,7 @@ const LeadCaptureForm = ({
         </p>
       )}
 
-      {channel === "whatsapp" && ["free_checklist", "siwes_placement", "virtual_siwes"].includes(interest) && (
+      {channel === "whatsapp" && ["free_checklist", "siwes_placement", "virtual_siwes", "free_bootcamp"].includes(interest) && (
         <div className="flex items-start gap-2 text-sm">
           <Checkbox
             id={`lead-whatsapp-opt-in-${interest}`}

@@ -194,6 +194,35 @@ const SEQUENCES: Record<string, Sequence> = {
     },
     lastCheckIn("the logbook service", WHATSAPP_URL, "Message us on WhatsApp"),
   ],
+  free_bootcamp: [
+    {
+      subject: "Your seat on the Free Tech Bootcamp",
+      preview: "Three weeks of free tech training at your campus",
+      title: "We have your bootcamp request",
+      paragraphs: [
+        "Thanks for requesting a seat on the Free Tech Bootcamp. It runs for three weeks at your chosen Tech Faculty NG campus, and it is free.",
+        "A coordinator will contact you with the next start date and your campus address. If you want an answer sooner, message us on WhatsApp.",
+      ],
+      cta: "Message us on WhatsApp",
+      href: WHATSAPP_URL,
+    },
+    {
+      subject: "Up to 50% off after the bootcamp",
+      preview: "How top performers save on a full course",
+      title: "Make the three weeks count",
+      paragraphs: [
+        "At the end of the bootcamp, the students who perform best qualify for up to 50% off any of our department courses.",
+        "Attend every session and finish the projects your tutors set. Meanwhile, have a look at the departments so you know which course you want next.",
+      ],
+      cta: "Explore departments",
+      href: `${SITE}/departments`,
+    },
+    lastCheckIn(
+      "the Free Tech Bootcamp",
+      WHATSAPP_URL,
+      "Message us on WhatsApp",
+    ),
+  ],
   general: [
     {
       subject: "Thanks for reaching out to Tech Faculty NG",

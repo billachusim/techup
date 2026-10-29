@@ -1,9 +1,19 @@
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "@/lib/router-compat";
-import { ArrowRight, MessageCircle, Calendar, Briefcase } from "lucide-react";
+import { ArrowUpRight, CalendarDays, MapPin, Percent, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import JoinWhatsAppButton from "@/components/JoinWhatsAppButton";
+import LeadCaptureForm, { type LeadExtraField } from "@/components/leads/LeadCaptureForm";
 import { AI_FELLOWSHIP_WHATSAPP_URL } from "@/lib/whatsapp";
+import { campuses } from "@/data/campuses";
+import { departments } from "@/data/departments";
 import aiForEverything from "@/assets/ai-for-everything.jpg";
 import nnewiTechMeetup from "@/assets/nnewi-tech-meetup.jpg";
 import siwesCover from "@/assets/siwes-featured.jpg";
@@ -18,7 +28,6 @@ type Program = {
   cta: string;
   href: string;
   external?: boolean;
-  icon: typeof ArrowRight;
 };
 
 const programs: Program[] = [
@@ -31,7 +40,6 @@ const programs: Program[] = [
     alt: "SIWES and Industrial Training programme at Tech Faculty",
     cta: "Explore SIWES",
     href: "/siwes",
-    icon: ArrowRight,
   },
   {
     title: "AI for Everything",
@@ -43,7 +51,6 @@ const programs: Program[] = [
     cta: "Join the AI Fellowship",
     href: AI_FELLOWSHIP_WHATSAPP_URL,
     external: true,
-    icon: MessageCircle,
   },
   {
     title: "Nnewi Tech Meetup",
@@ -52,9 +59,8 @@ const programs: Program[] = [
       "The monthly gathering of the Nnewi tech community, on the last Saturday of every month — product demos, lightning talks, networking, and collaboration at Tech Faculty HQ.",
     image: nnewiTechMeetup,
     alt: "Nnewi Tech Meetup community event poster",
-    cta: "See Event Details",
+    cta: "See event details",
     href: "/events#nnewi-tech-meetup",
-    icon: Calendar,
   },
   {
     title: "Talent & Jobs Marketplace",
@@ -63,76 +69,265 @@ const programs: Program[] = [
       "Create your talent profile, apply to open roles with one click, and get matched to real projects with Nigerian and African businesses.",
     image: talentMarketplace,
     alt: "Tech Faculty Talent and Jobs Marketplace",
-    cta: "Browse Open Roles",
+    cta: "Browse open roles",
     href: "/careers",
-    icon: Briefcase,
   },
 ];
 
+/** Links to the homepage with this hash open the bootcamp form, e.g. from ads or WhatsApp. */
+const BOOTCAMP_HASH = "#free-bootcamp";
+
+const bootcampFacts = [
+  { icon: CalendarDays, label: "3 weeks, hands-on" },
+  { icon: MapPin, label: "Free at every campus" },
+  { icon: Percent, label: "Up to 50% off a full course" },
+];
+
+const bootcampFields: LeadExtraField[] = [
+  {
+    id: "campus",
+    label: "Campus",
+    placeholder: "Choose your nearest campus",
+    required: true,
+    options: [...new Set(campuses.map((c) => c.city))],
+  },
+  {
+    id: "department",
+    label: "Course you're most interested in",
+    placeholder: "Not sure yet",
+    options: departments.map((d) => d.title),
+  },
+];
+
+/**
+ * On phones the cards stick on top of each other as you scroll: the next card
+ * slides up over the current one, which shrinks and dims behind it. Nothing
+ * moves on larger screens or when the visitor prefers reduced motion.
+ */
+function useStackedCards() {
+  const listRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+    const query = window.matchMedia("(max-width: 767px) and (prefers-reduced-motion: no-preference)");
+    const items = Array.from(list.children) as HTMLElement[];
+    const cardOf = (item: HTMLElement) => item.firstElementChild as HTMLElement | null;
+    let frame = 0;
+
+    const update = () => {
+      frame = 0;
+      items.forEach((item, i) => {
+        const card = cardOf(item);
+        const next = items[i + 1];
+        if (!card) return;
+        if (!query.matches || !next) {
+          card.style.transform = "";
+          card.style.filter = "";
+          return;
+        }
+        const current = item.getBoundingClientRect();
+        const covered = (current.bottom - next.getBoundingClientRect().top) / current.height;
+        const progress = Math.min(Math.max(covered, 0), 1);
+        card.style.transform = progress ? `scale(${1 - progress * 0.06})` : "";
+        card.style.filter = progress ? `brightness(${1 - progress * 0.3})` : "";
+      });
+    };
+    const schedule = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    query.addEventListener("change", schedule);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      query.removeEventListener("change", schedule);
+    };
+  }, []);
+
+  return listRef;
+}
+
+/** Each list item sticks a little lower than the one before, so the stack shows its edges. */
+const stackItemClass =
+  "fp-reveal max-md:motion-safe:sticky max-md:top-[calc(5rem+var(--i)*0.75rem)]";
+const cardShellClass =
+  "h-full origin-top rounded-[1.75rem] transition-[box-shadow,translate] duration-500 ease-out max-md:min-h-[30rem]";
+
+const BootcampCard = ({ onReserve }: { onReserve: () => void }) => (
+  <article
+    id="free-bootcamp"
+    className={`${cardShellClass} relative isolate flex flex-col overflow-hidden bg-[hsl(165_35%_7%)] p-6 text-white shadow-xl shadow-primary/10 sm:p-8 md:min-h-[24rem] lg:p-10`}
+  >
+    <div aria-hidden className="fp-grid absolute inset-0 -z-10 opacity-40" />
+    <div
+      aria-hidden
+      className="fp-glow absolute -right-24 -top-24 -z-10 size-80 rounded-full bg-primary/40 blur-3xl"
+    />
+    <div
+      aria-hidden
+      className="fp-glow fp-glow-slow absolute -bottom-32 -left-16 -z-10 size-72 rounded-full bg-[hsl(190_100%_45%)]/25 blur-3xl"
+    />
+
+    <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-medium backdrop-blur">
+      <Sparkles size={14} className="text-primary" />
+      Free · Every campus
+    </span>
+
+    <h3 className="mt-5 max-w-xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+      Free Tech <span className="text-gradient">Bootcamp</span>
+    </h3>
+    <p className="mt-3 max-w-xl text-base text-white/70 sm:text-lg">
+      Three weeks of hands-on tech training at any Tech Faculty NG campus, at no cost. Top performers
+      qualify for up to 50% off any of our department courses.
+    </p>
+
+    <ul className="mt-6 flex flex-wrap gap-2">
+      {bootcampFacts.map(({ icon: Icon, label }) => (
+        <li
+          key={label}
+          className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-3.5 py-2 text-sm text-white/85 ring-1 ring-white/10"
+        >
+          <Icon size={15} className="text-primary" />
+          {label}
+        </li>
+      ))}
+    </ul>
+
+    <div className="mt-auto flex flex-col gap-3 pt-8 sm:flex-row sm:items-center">
+      <Button
+        size="lg"
+        onClick={onReserve}
+        className="group/cta h-12 rounded-full bg-primary px-6 text-base font-semibold text-primary-foreground hover:bg-primary/90"
+      >
+        Reserve my free seat
+        <ArrowUpRight className="ml-1 transition-transform duration-300 group-hover/cta:-translate-y-0.5 group-hover/cta:translate-x-0.5" />
+      </Button>
+      <p className="text-sm text-white/55">Limited seats per campus. No payment needed.</p>
+    </div>
+  </article>
+);
+
+const ctaArrow = (
+  <span className="grid size-10 shrink-0 place-items-center rounded-full bg-foreground text-background transition-transform duration-300 group-hover:-rotate-45 motion-reduce:transition-none">
+    <ArrowUpRight size={18} className="rotate-45" />
+  </span>
+);
+
+const ProgramCard = ({ program }: { program: Program }) => (
+  <article
+    className={`${cardShellClass} group flex flex-col border border-border bg-card p-2 hover:shadow-2xl hover:shadow-foreground/5 md:hover:-translate-y-1 motion-reduce:hover:translate-y-0`}
+  >
+    <div className="relative aspect-[16/10] overflow-hidden rounded-[1.35rem] bg-muted">
+      <img
+        src={program.image}
+        alt={program.alt}
+        loading="lazy"
+        className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+      />
+      <span className="absolute left-3 top-3 rounded-full bg-background/85 px-3 py-1 text-xs font-medium shadow-sm backdrop-blur">
+        {program.badge}
+      </span>
+    </div>
+    <div className="flex flex-1 flex-col px-4 pb-4 pt-5">
+      <h3 className="text-xl font-semibold tracking-tight">{program.title}</h3>
+      <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-muted-foreground">
+        {program.description}
+      </p>
+      <div className="mt-5">
+        {program.external ? (
+          <JoinWhatsAppButton
+            url={program.href}
+            groupName={program.title}
+            captureSource={`home-featured:${program.title}`}
+            captureContext={program.title}
+            variant="ghost"
+            className="h-auto w-full justify-between rounded-full p-0 text-base font-semibold hover:bg-transparent"
+          >
+            <span>{program.cta}</span>
+            {ctaArrow}
+          </JoinWhatsAppButton>
+        ) : (
+          <Link
+            to={program.href}
+            className="flex items-center justify-between rounded-full text-base font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
+          >
+            {program.cta}
+            {ctaArrow}
+          </Link>
+        )}
+      </div>
+    </div>
+  </article>
+);
+
 const FeaturedPrograms = () => {
+  const listRef = useStackedCards();
+  const [bootcampOpen, setBootcampOpen] = useState(false);
+
+  useEffect(() => {
+    if (window.location.hash === BOOTCAMP_HASH) setBootcampOpen(true);
+  }, []);
+
   return (
-    <section id="featured-programs" className="py-24 px-4">
+    <section id="featured-programs" className="px-4 py-24">
       <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            Featured <span className="text-gradient">Programs</span>
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            The programs and events our community is joining right now — open to students, professionals, and complete beginners.
+        <div className="mb-12 flex flex-col gap-4 md:mb-16 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              Featured programs
+            </p>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-5xl">
+              Find your way <span className="text-gradient">into tech</span>
+            </h2>
+          </div>
+          <p className="max-w-md text-base text-muted-foreground md:text-right">
+            The programs and events our community is joining right now, open to students,
+            professionals and complete beginners.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {programs.map((program) => {
-            const Icon = program.icon;
-            return (
-              <Card
-                key={program.title}
-                className="h-full border-2 overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-              >
-                <div className="aspect-[16/9] bg-muted overflow-hidden">
-                  <img
-                    src={program.image}
-                    alt={program.alt}
-                    loading="lazy"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <CardContent className="p-6 flex flex-col flex-1">
-                  <span className="text-xs font-semibold bg-primary/10 text-primary px-2 py-1 rounded w-fit mb-3">
-                    {program.badge}
-                  </span>
-                  <h3 className="text-xl font-bold mb-2">{program.title}</h3>
-                  <p className="text-sm text-muted-foreground flex-1">{program.description}</p>
-                  <div className="mt-6">
-                    {program.external ? (
-                      <JoinWhatsAppButton
-                        url={program.href}
-                        groupName={program.title}
-                        captureSource={`home-featured:${program.title}`}
-                        captureContext={program.title}
-                        className="w-full bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background font-semibold hover:opacity-90"
-                      >
-                        <span className="flex items-center justify-center">
-                          <Icon className="mr-2" size={18} />
-                          {program.cta}
-                        </span>
-                      </JoinWhatsAppButton>
-                    ) : (
-                      <Button variant="outline" className="w-full font-semibold" asChild>
-                        <Link to={program.href}>
-                          <Icon className="mr-2" size={18} />
-                          {program.cta}
-                        </Link>
-                      </Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+        <ul ref={listRef} className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <li className={`${stackItemClass} md:col-span-2`} style={{ "--i": 0 } as CSSProperties}>
+            <BootcampCard onReserve={() => setBootcampOpen(true)} />
+          </li>
+          {programs.map((program, i) => (
+            <li
+              key={program.title}
+              className={stackItemClass}
+              style={{ "--i": i + 1 } as CSSProperties}
+            >
+              <ProgramCard program={program} />
+            </li>
+          ))}
+        </ul>
       </div>
+
+      <Dialog open={bootcampOpen} onOpenChange={setBootcampOpen}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Reserve your free bootcamp seat</DialogTitle>
+            <DialogDescription>
+              Three weeks of free, hands-on training at your nearest campus. Top performers qualify for
+              up to 50% off any department course. We'll contact you with the next start date.
+            </DialogDescription>
+          </DialogHeader>
+          <LeadCaptureForm
+            interest="free_bootcamp"
+            source="home-featured:free-bootcamp"
+            submitLabel="Reserve my free seat"
+            whatsappMessage="Hello Tech Faculty NG, I just reserved a seat on the Free Tech Bootcamp."
+            extraFields={bootcampFields}
+            schoolLabel="School or workplace"
+            schoolPlaceholder="e.g. UNIZIK, or where you work"
+            compact
+          />
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

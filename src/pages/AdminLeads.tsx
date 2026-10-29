@@ -39,7 +39,6 @@ const INTEREST_LABEL: Record<string, string> = {
   logbook_service: "Logbook service",
   community_join: "Join WhatsApp community",
   whatsapp_chat: "WhatsApp chat",
-  free_bootcamp: "Free Tech Bootcamp",
 };
 
 /** The checklist form inserts a second "marker" row when someone opens WhatsApp; it is folded into the original lead. */

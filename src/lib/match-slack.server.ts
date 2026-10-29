@@ -150,3 +150,61 @@ export async function retryPendingSlackPool(): Promise<{ checked: number; added:
   }
   return { checked: seen.size, added };
 }
+
+/** Slack-safe channel name for a project role, e.g. proj-frontend-developer-1234. */
+export function projectChannelName(slug: string): string {
+  const clean = slug.toLowerCase().replace(/[^a-z0-9_-]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+  return `proj-${clean}`.slice(0, 80);
+}
+
+/**
+ * Gives every published role without a Slack channel its own #proj-… channel,
+ * saves the link on the role, and adds anyone already selected for it.
+ * Roles that already have a channel or a channel link (set by hand or earlier) are left alone.
+ */
+export async function ensureProjectChannels(roleIds?: string[]): Promise<{ created: number; failed: string[] }> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { ensureChannel } = await import("@/lib/slack.server");
+  let q = supabaseAdmin
+    .from("talent_roles")
+    .select("id, slug, title, company")
+    .eq("status", "published")
+    .is("slack_channel_id", null)
+    .is("slack_channel_url", null);
+  if (roleIds?.length) q = q.in("id", roleIds);
+  const { data: roles } = await q;
+
+  const out = { created: 0, failed: [] as string[] };
+  for (const role of roles ?? []) {
+    try {
+      const channel = await ensureChannel(projectChannelName(role.slug), `${role.title} · ${role.company}`);
+      await supabaseAdmin
+        .from("talent_roles")
+        .update({
+          slack_channel_id: channel.id,
+          slack_channel_url: `https://slack.com/app_redirect?channel=${channel.id}`,
+        })
+        .eq("id", role.id);
+      await supabaseAdmin.from("admin_audit_log").insert({
+        action: "slack.channel_created",
+        actor_email: "automation",
+        target_table: "talent_roles",
+        target_id: role.id,
+        subject: role.title,
+        details: { channel: `#${channel.name}` },
+      });
+      out.created++;
+
+      const { data: selected } = await supabaseAdmin
+        .from("role_matches")
+        .select("id")
+        .eq("role_id", role.id)
+        .in("status", ["accepted", "hired", "onboarded"]);
+      for (const m of selected ?? []) await syncMatchSlack(m.id).catch(() => undefined);
+    } catch (e) {
+      console.error("project channel failed", role.id, (e as Error).message);
+      out.failed.push(role.title);
+    }
+  }
+  return out;
+}

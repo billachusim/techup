@@ -239,7 +239,8 @@ const AdminTalent = () => {
     if (status === "published") {
       triggerAutoMatch({ data: { roleId: id } })
         .then((r) => {
-          if (r.created) { toast({ title: `${r.created} talent auto-matched`, description: "They've been emailed and invited to Slack." }); load(); }
+          if (r.created) { toast({ title: `${r.created} talent auto-matched`, description: "They've been emailed and invited to Slack." }); }
+          load();
         })
         .catch(() => {});
     }
@@ -257,9 +258,16 @@ const AdminTalent = () => {
       const { data, error } = await supabase.functions.invoke("match-talent", { body: { role_id: roleId } });
       if (error) throw error;
       const created = (data as { created?: number } | null)?.created ?? 0;
+      // Suggestions at or above the role's threshold are approved straight away; the rest wait for review.
+      const auto = created ? await triggerAutoMatch({ data: { roleId } }).catch(() => null) : null;
+      const promoted = auto?.promoted ?? 0;
       toast({
         title: created ? `${created} suggested matches ready` : "No new matches",
-        description: created ? "Review them in the Matches tab and approve the good ones." : "Everyone suitable has already been matched to this role.",
+        description: created
+          ? promoted
+            ? `${promoted} cleared the role's threshold and were approved automatically. Review the rest in the Matches tab.`
+            : "Review them in the Matches tab and approve the good ones."
+          : "Everyone suitable has already been matched to this role.",
       });
       load();
     } catch (err) {

@@ -3,7 +3,7 @@ import Hero from "@/components/Hero";
 import StatsBar from "@/components/StatsBar";
 import FeaturedPrograms from "@/components/FeaturedPrograms";
 import HowItWorks from "@/components/HowItWorks";
-import Departments from "@/components/DepartmentsSection";
+import ProgrammesSection from "@/components/ProgrammesSection";
 import LatestJobs from "@/components/LatestJobs";
 import UpcomingEvents from "@/components/UpcomingEvents";
 import Testimonials from "@/components/Testimonials";
@@ -11,7 +11,6 @@ import GraduateStories from "@/components/GraduateStories";
 import Clarity from "@/components/Clarity";
 import FacultyDiscount from "@/components/FacultyDiscount";
 import ServicesSection from "@/components/ServicesSection";
-import Pricing from "@/components/Pricing";
 import GetStarted from "@/components/GetStarted";
 import Footer from "@/components/Footer";
 import HomeWhatsAppPrompts from "@/components/HomeWhatsAppPrompts";
@@ -105,7 +104,7 @@ const courseSchema = {
         "priceCurrency": "NGN",
         "availability": "https://schema.org/InStock",
         "category": "Paid",
-        "url": "https://techfaculty.ng/#pricing"
+        "url": `https://techfaculty.ng/departments/${c.slug}`
       },
       "hasCourseInstance": {
         "@type": "CourseInstance",
@@ -129,13 +128,12 @@ const Index = () => {
         <StatsBar />
         <FeaturedPrograms />
         <HowItWorks />
-        <Departments />
+        <ProgrammesSection />
         <LatestJobs />
         <UpcomingEvents />
         <GraduateStories limit={3} />
         <Testimonials />
         <ServicesSection />
-        <Pricing />
         <Clarity />
         <FacultyDiscount />
         <GetStarted />

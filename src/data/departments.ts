@@ -1,7 +1,7 @@
 import { HYBRID_FEE, PHYSICAL_FEE, naira, planMinimum } from "@/lib/fees";
 
 /** When the department pages were last reviewed. Bump it when you edit their copy. */
-export const DEPARTMENTS_UPDATED = "2026-10-08";
+export const DEPARTMENTS_UPDATED = "2026-10-29";
 
 export interface DepartmentFaq {
   q: string;
@@ -672,7 +672,7 @@ function feeFaq(d: Department): DepartmentFaq {
   }
   return {
     q,
-    a: `The ${d.title} programme takes ${weeks} and costs from ${naira(min)} for online study. Hybrid study with monthly meetups adds ${naira(HYBRID_FEE)}, and weekly on-site classes add ${naira(PHYSICAL_FEE)}. You pick the modules you need when you enrol, and graduates receive a Tech Faculty certificate that employers can verify online.`,
+    a: `The ${d.title} programme takes ${weeks} and costs ${naira(min)} for online study, with every module included. Hybrid study with monthly meetups adds ${naira(HYBRID_FEE)}, and weekly on-site classes add ${naira(PHYSICAL_FEE)}. You can pay in two instalments, and graduates receive a Tech Faculty certificate that employers can verify online.`,
   };
 }
 

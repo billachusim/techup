@@ -6,7 +6,8 @@ import "../../supabase/functions/create-checkout/index.ts";
 import { INSTALMENTS, PLAN_PRICING, instalmentSplit } from "../../supabase/functions/_shared/pricing.ts";
 
 const devProCourses = PLAN_PRICING["developer-pro"].courses;
-const devProTotal = devProCourses.reduce((s, c) => s + c.price, 0);
+// Developer Pro is a flat plan: its fee covers every course.
+const devProTotal = PLAN_PRICING["developer-pro"].minimumAmount;
 
 let db: FakeDb;
 let flutterwave: ReturnType<typeof vi.fn>;

@@ -83,7 +83,7 @@ function departmentPrice(d: (typeof departments)[number]): string | null {
   const min = d.planId ? planMinimum(d.planId) : undefined;
   if (min === undefined) return null; // Fee is quoted by staff (e.g. Robotics & IoT).
   if (min === 0) return `${d.title} is free. It takes ${spokenWeeks(d.duration)}, online or at any of our campuses.`;
-  return `${d.title} takes ${spokenWeeks(d.duration)} and costs from ${naira(min)} for online study.`;
+  return `${d.title} takes ${spokenWeeks(d.duration)} and costs ${naira(min)} for online study, with every module included.`;
 }
 
 function pricesAnswer(t: string): string | null {

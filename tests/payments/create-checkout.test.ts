@@ -11,7 +11,8 @@ import {
 import { NGN_TO_USD_RATE } from "../../src/lib/fees.ts";
 
 const devProCourses = PLAN_PRICING["developer-pro"].courses;
-const devProCourseTotal = devProCourses.reduce((s, c) => s + c.price, 0);
+// Developer Pro is a flat plan: its fee covers every course.
+const devProCourseTotal = PLAN_PRICING["developer-pro"].minimumAmount;
 
 let db: FakeDb;
 let flutterwave: ReturnType<typeof vi.fn>;
@@ -178,7 +179,7 @@ describe("create-checkout", () => {
     ["a course from another plan", { courseIds: ["deep-learning"] }, "Unknown course: deep-learning"],
     ["an unknown benefit", { benefitIds: ["free-laptop"] }, "Unknown benefit: free-laptop"],
     ["an unknown learning mode", { learningModeId: "vip" }, "Unknown learning mode: vip"],
-    ["a selection below the plan minimum", { courseIds: ["html-css"] }, "Selection is below the plan minimum"],
+    ["a custom selection below the plan minimum", { planId: "custom-builder", courseIds: ["html-css"] }, "Selection is below the plan minimum"],
     ["an empty free plan", { planId: "bootcamp-starter", courseIds: [] }, "No items selected for checkout"],
   ];
   it.each(rejected)("rejects %s without charging or saving anything", async (_, body, error) => {

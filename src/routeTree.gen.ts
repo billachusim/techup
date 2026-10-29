@@ -42,6 +42,8 @@ import { Route as AdminTalentRouteImport } from './routes/admin.talent'
 import { Route as AdminWhatsappRouteImport } from './routes/admin.whatsapp'
 import { Route as ApiAdminDigestRouteImport } from './routes/api.admin-digest'
 import { Route as ApiAdminWeeklyReportRouteImport } from './routes/api.admin-weekly-report'
+import { Route as ApiCertificateAutoIssueRouteImport } from './routes/api.certificate-auto-issue'
+import { Route as ApiClassRemindersRouteImport } from './routes/api.class-reminders'
 import { Route as ApiLeadFollowupsRouteImport } from './routes/api.lead-followups'
 import { Route as ApiLeadUnsubscribeRouteImport } from './routes/api.lead-unsubscribe'
 import { Route as ApiPaymentFollowupsRouteImport } from './routes/api.payment-followups'
@@ -248,6 +250,16 @@ const ApiAdminDigestRoute = ApiAdminDigestRouteImport.update({
 const ApiAdminWeeklyReportRoute = ApiAdminWeeklyReportRouteImport.update({
   id: '/api/admin-weekly-report',
   path: '/api/admin-weekly-report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCertificateAutoIssueRoute = ApiCertificateAutoIssueRouteImport.update({
+  id: '/api/certificate-auto-issue',
+  path: '/api/certificate-auto-issue',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiClassRemindersRoute = ApiClassRemindersRouteImport.update({
+  id: '/api/class-reminders',
+  path: '/api/class-reminders',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiLeadFollowupsRoute = ApiLeadFollowupsRouteImport.update({
@@ -494,6 +506,8 @@ export interface FileRoutesByFullPath {
   '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
   '/api/admin-weekly-report': typeof ApiAdminWeeklyReportRoute
+  '/api/certificate-auto-issue': typeof ApiCertificateAutoIssueRoute
+  '/api/class-reminders': typeof ApiClassRemindersRoute
   '/api/lead-followups': typeof ApiLeadFollowupsRoute
   '/api/lead-unsubscribe': typeof ApiLeadUnsubscribeRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
@@ -570,6 +584,8 @@ export interface FileRoutesByTo {
   '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
   '/api/admin-weekly-report': typeof ApiAdminWeeklyReportRoute
+  '/api/certificate-auto-issue': typeof ApiCertificateAutoIssueRoute
+  '/api/class-reminders': typeof ApiClassRemindersRoute
   '/api/lead-followups': typeof ApiLeadFollowupsRoute
   '/api/lead-unsubscribe': typeof ApiLeadUnsubscribeRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
@@ -647,6 +663,8 @@ export interface FileRoutesById {
   '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
   '/api/admin-weekly-report': typeof ApiAdminWeeklyReportRoute
+  '/api/certificate-auto-issue': typeof ApiCertificateAutoIssueRoute
+  '/api/class-reminders': typeof ApiClassRemindersRoute
   '/api/lead-followups': typeof ApiLeadFollowupsRoute
   '/api/lead-unsubscribe': typeof ApiLeadUnsubscribeRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
@@ -725,6 +743,8 @@ export interface FileRouteTypes {
     | '/admin/whatsapp'
     | '/api/admin-digest'
     | '/api/admin-weekly-report'
+    | '/api/certificate-auto-issue'
+    | '/api/class-reminders'
     | '/api/lead-followups'
     | '/api/lead-unsubscribe'
     | '/api/payment-followups'
@@ -801,6 +821,8 @@ export interface FileRouteTypes {
     | '/admin/whatsapp'
     | '/api/admin-digest'
     | '/api/admin-weekly-report'
+    | '/api/certificate-auto-issue'
+    | '/api/class-reminders'
     | '/api/lead-followups'
     | '/api/lead-unsubscribe'
     | '/api/payment-followups'
@@ -877,6 +899,8 @@ export interface FileRouteTypes {
     | '/admin/whatsapp'
     | '/api/admin-digest'
     | '/api/admin-weekly-report'
+    | '/api/certificate-auto-issue'
+    | '/api/class-reminders'
     | '/api/lead-followups'
     | '/api/lead-unsubscribe'
     | '/api/payment-followups'
@@ -954,6 +978,8 @@ export interface RootRouteChildren {
   AdminWhatsappRoute: typeof AdminWhatsappRoute
   ApiAdminDigestRoute: typeof ApiAdminDigestRoute
   ApiAdminWeeklyReportRoute: typeof ApiAdminWeeklyReportRoute
+  ApiCertificateAutoIssueRoute: typeof ApiCertificateAutoIssueRoute
+  ApiClassRemindersRoute: typeof ApiClassRemindersRoute
   ApiLeadFollowupsRoute: typeof ApiLeadFollowupsRoute
   ApiLeadUnsubscribeRoute: typeof ApiLeadUnsubscribeRoute
   ApiPaymentFollowupsRoute: typeof ApiPaymentFollowupsRoute
@@ -1226,6 +1252,20 @@ declare module '@tanstack/react-router' {
       path: '/api/admin-weekly-report'
       fullPath: '/api/admin-weekly-report'
       preLoaderRoute: typeof ApiAdminWeeklyReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/certificate-auto-issue': {
+      id: '/api/certificate-auto-issue'
+      path: '/api/certificate-auto-issue'
+      fullPath: '/api/certificate-auto-issue'
+      preLoaderRoute: typeof ApiCertificateAutoIssueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/class-reminders': {
+      id: '/api/class-reminders'
+      path: '/api/class-reminders'
+      fullPath: '/api/class-reminders'
+      preLoaderRoute: typeof ApiClassRemindersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/lead-followups': {
@@ -1567,6 +1607,8 @@ const rootRouteChildren: RootRouteChildren = {
   AdminWhatsappRoute: AdminWhatsappRoute,
   ApiAdminDigestRoute: ApiAdminDigestRoute,
   ApiAdminWeeklyReportRoute: ApiAdminWeeklyReportRoute,
+  ApiCertificateAutoIssueRoute: ApiCertificateAutoIssueRoute,
+  ApiClassRemindersRoute: ApiClassRemindersRoute,
   ApiLeadFollowupsRoute: ApiLeadFollowupsRoute,
   ApiLeadUnsubscribeRoute: ApiLeadUnsubscribeRoute,
   ApiPaymentFollowupsRoute: ApiPaymentFollowupsRoute,

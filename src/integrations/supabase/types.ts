@@ -311,6 +311,7 @@ export type Database = {
       }
       certificates: {
         Row: {
+          auto_issued: boolean
           certificate_number: string
           certificate_type: string
           course_id: string | null
@@ -321,6 +322,7 @@ export type Database = {
           id: string
           issued_at: string | null
           issued_by: string
+          issued_email_sent_at: string | null
           revoked_at: string | null
           revoked_by: string | null
           revoked_reason: string | null
@@ -328,6 +330,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          auto_issued?: boolean
           certificate_number: string
           certificate_type?: string
           course_id?: string | null
@@ -338,6 +341,7 @@ export type Database = {
           id?: string
           issued_at?: string | null
           issued_by?: string
+          issued_email_sent_at?: string | null
           revoked_at?: string | null
           revoked_by?: string | null
           revoked_reason?: string | null
@@ -345,6 +349,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          auto_issued?: boolean
           certificate_number?: string
           certificate_type?: string
           course_id?: string | null
@@ -355,6 +360,7 @@ export type Database = {
           id?: string
           issued_at?: string | null
           issued_by?: string
+          issued_email_sent_at?: string | null
           revoked_at?: string | null
           revoked_by?: string | null
           revoked_reason?: string | null
@@ -367,6 +373,35 @@ export type Database = {
             columns: ["course_id"]
             isOneToOne: false
             referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      class_reminder_sends: {
+        Row: {
+          email: string | null
+          faculty_id: string
+          lecture_id: string
+          sent_at: string
+        }
+        Insert: {
+          email?: string | null
+          faculty_id: string
+          lecture_id: string
+          sent_at?: string
+        }
+        Update: {
+          email?: string | null
+          faculty_id?: string
+          lecture_id?: string
+          sent_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_reminder_sends_lecture_id_fkey"
+            columns: ["lecture_id"]
+            isOneToOne: false
+            referencedRelation: "lectures"
             referencedColumns: ["id"]
           },
         ]
@@ -566,9 +601,11 @@ export type Database = {
         Row: {
           amount_due: number | null
           amount_paid: number | null
+          auto_cancelled_at: string | null
           balance_due: number | null
           balance_due_by: string | null
           balance_paid_at: string | null
+          cancel_email_sent_at: string | null
           coupon_code: string | null
           created_at: string
           currency: string | null
@@ -578,21 +615,30 @@ export type Database = {
           instalment_total: number | null
           learning_mode: string | null
           paid_at: string | null
+          pay_link_created_at: string | null
+          pay_link_disabled_at: string | null
+          pay_link_reminder_sent_at: string | null
+          pay_link_sent_at: string | null
+          pay_link_skipped_reason: string | null
+          pay_link_url: string | null
           payment_method: string | null
           payment_reference: string | null
           payment_reminder_sent_at: string | null
           plan_name: string
           recovered_at: string | null
           recovered_email_sent_at: string | null
+          requested_selection: Json | null
           status: string
           tx_ref: string | null
         }
         Insert: {
           amount_due?: number | null
           amount_paid?: number | null
+          auto_cancelled_at?: string | null
           balance_due?: number | null
           balance_due_by?: string | null
           balance_paid_at?: string | null
+          cancel_email_sent_at?: string | null
           coupon_code?: string | null
           created_at?: string
           currency?: string | null
@@ -602,21 +648,30 @@ export type Database = {
           instalment_total?: number | null
           learning_mode?: string | null
           paid_at?: string | null
+          pay_link_created_at?: string | null
+          pay_link_disabled_at?: string | null
+          pay_link_reminder_sent_at?: string | null
+          pay_link_sent_at?: string | null
+          pay_link_skipped_reason?: string | null
+          pay_link_url?: string | null
           payment_method?: string | null
           payment_reference?: string | null
           payment_reminder_sent_at?: string | null
           plan_name: string
           recovered_at?: string | null
           recovered_email_sent_at?: string | null
+          requested_selection?: Json | null
           status?: string
           tx_ref?: string | null
         }
         Update: {
           amount_due?: number | null
           amount_paid?: number | null
+          auto_cancelled_at?: string | null
           balance_due?: number | null
           balance_due_by?: string | null
           balance_paid_at?: string | null
+          cancel_email_sent_at?: string | null
           coupon_code?: string | null
           created_at?: string
           currency?: string | null
@@ -626,12 +681,19 @@ export type Database = {
           instalment_total?: number | null
           learning_mode?: string | null
           paid_at?: string | null
+          pay_link_created_at?: string | null
+          pay_link_disabled_at?: string | null
+          pay_link_reminder_sent_at?: string | null
+          pay_link_sent_at?: string | null
+          pay_link_skipped_reason?: string | null
+          pay_link_url?: string | null
           payment_method?: string | null
           payment_reference?: string | null
           payment_reminder_sent_at?: string | null
           plan_name?: string
           recovered_at?: string | null
           recovered_email_sent_at?: string | null
+          requested_selection?: Json | null
           status?: string
           tx_ref?: string | null
         }
@@ -2263,22 +2325,70 @@ export type Database = {
       }
       whatsapp_account_state: {
         Row: {
+          auto_answer_enabled: boolean
           id: number
           last_event: string | null
           sending_paused: boolean
           updated_at: string
         }
         Insert: {
+          auto_answer_enabled?: boolean
           id?: number
           last_event?: string | null
           sending_paused?: boolean
           updated_at?: string
         }
         Update: {
+          auto_answer_enabled?: boolean
           id?: number
           last_event?: string | null
           sending_paused?: boolean
           updated_at?: string
+        }
+        Relationships: []
+      }
+      whatsapp_auto_replies: {
+        Row: {
+          acknowledged: boolean
+          contact_name: string | null
+          contact_phone: string
+          created_at: string
+          id: string
+          inbound_text: string | null
+          inbound_wa_message_id: string
+          intent: string
+          outcome: string
+          reason: string | null
+          reply_message_id: string | null
+          resolved_at: string | null
+        }
+        Insert: {
+          acknowledged?: boolean
+          contact_name?: string | null
+          contact_phone: string
+          created_at?: string
+          id?: string
+          inbound_text?: string | null
+          inbound_wa_message_id: string
+          intent: string
+          outcome: string
+          reason?: string | null
+          reply_message_id?: string | null
+          resolved_at?: string | null
+        }
+        Update: {
+          acknowledged?: boolean
+          contact_name?: string | null
+          contact_phone?: string
+          created_at?: string
+          id?: string
+          inbound_text?: string | null
+          inbound_wa_message_id?: string
+          intent?: string
+          outcome?: string
+          reason?: string | null
+          reply_message_id?: string | null
+          resolved_at?: string | null
         }
         Relationships: []
       }
@@ -2525,7 +2635,17 @@ export type Database = {
         }[]
       }
       approve_talent: { Args: { _talent_id: string }; Returns: string }
+      archive_silent_leads: { Args: { _days?: number }; Returns: number }
       archive_stale_listings: { Args: never; Returns: undefined }
+      auto_convert_student_leads: {
+        Args: {
+          _before?: string
+          _enrollment_id: string
+          _faculty_id: string
+          _plan_name: string
+        }
+        Returns: number
+      }
       check_referral_code: {
         Args: { _code: string; _user_id: string }
         Returns: Json
@@ -2623,6 +2743,11 @@ export type Database = {
       is_referral_eligible: { Args: { _user_id: string }; Returns: boolean }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
       issue_talent_faculty_id: { Args: { _talent_id: string }; Returns: string }
+      lead_email_key: {
+        Args: { _contact: string; _email: string }
+        Returns: string
+      }
+      lead_phone_key: { Args: { _phone: string }; Returns: string }
       list_public_talent: {
         Args: never
         Returns: {
@@ -2709,6 +2834,10 @@ export type Database = {
         Returns: boolean
       }
       seed_all_course_lectures: { Args: never; Returns: undefined }
+      set_whatsapp_auto_answer: {
+        Args: { _enabled: boolean }
+        Returns: undefined
+      }
       verify_certificate: {
         Args: { cert_number: string }
         Returns: {
@@ -2722,6 +2851,7 @@ export type Database = {
           student_name: string
         }[]
       }
+      whatsapp_chats_waiting: { Args: never; Returns: number }
     }
     Enums: {
       app_role: "admin" | "recruiter" | "user"

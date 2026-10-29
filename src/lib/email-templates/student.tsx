@@ -61,6 +61,16 @@ const StudentWorkReviewed = ({ name, title, status, note, score }: { name?: stri
   </Layout>
 )
 
+// 3b. Student: reminder the day a scheduled class is coming up (src/lib/class-reminders.server.ts)
+const ClassReminder = ({ name, classTitle, courseName, when, durationMinutes }: { name?: string; classTitle?: string; courseName?: string; when?: string; durationMinutes?: number }) => (
+  <Layout preview={`Class reminder: ${classTitle ?? 'your next class'}${when ? `, ${when}` : ''}`} title="Your class is coming up" cta="Open your dashboard" href={`${SITE}/dashboard`}>
+    <Text style={text}>{hi(name)}</Text>
+    <Text style={text}>A quick reminder: <b>{classTitle ?? 'your next class'}</b>{courseName ? <> ({courseName})</> : null} starts <b>{when ?? 'soon'}</b>{durationMinutes ? ` and runs about ${durationMinutes} minutes` : ''}.</Text>
+    <Text style={text}>Your notes and the class link are on your dashboard. Please join on time.</Text>
+    <Text style={muted}>Can&apos;t make it? Reply to this email or <a href={WHATSAPP} style={link}>message us on WhatsApp</a>.</Text>
+  </Layout>
+)
+
 // 4. Graduate: ask for a Google review once their certificate is issued
 const GraduateReviewRequest = ({ name, courseName, reviewUrl }: { name?: string; courseName?: string; reviewUrl?: string }) => (
   <Layout preview="Congratulations on your certificate" title="Congratulations, graduate!" cta="Leave a Google review" href={reviewUrl}>
@@ -109,11 +119,36 @@ export const studentWorkReviewed = {
   previewData: { name: 'Ada Obi', title: 'Week 3 project', status: 'reviewed', note: 'Clean work — add tests next time.', score: 82 },
 } satisfies TemplateEntry
 
+export const classReminder = {
+  component: ClassReminder,
+  subject: (d) => `Reminder: ${d.classTitle ?? 'your class'}${d.when ? `, ${d.when}` : ''}`,
+  displayName: 'Class reminder',
+  previewData: { name: 'Ada Obi', classTitle: 'Building APIs with AI assistance', courseName: 'Fullstack Web Development', when: 'today, Thursday 29 October at 4:00 pm (Lagos time)', durationMinutes: 90 },
+} satisfies TemplateEntry
+
 export const graduateReviewRequest = {
   component: GraduateReviewRequest,
   subject: 'Congratulations! Would you review Tech Faculty NG?',
   displayName: 'Graduate Google review request',
   previewData: { name: 'Ada Obi', courseName: 'Fullstack Web Development', reviewUrl: 'https://search.google.com/local/writereview?placeid=ChIJ5ZxSzmi9QxAR23OzR7YbAkM' },
+} satisfies TemplateEntry
+
+// 4b. Graduate: certificate issued automatically, with the link to verify it
+const CertificateIssued = ({ name, courseName, certificateNumber, verifyUrl }: { name?: string; courseName?: string; certificateNumber?: string; verifyUrl?: string }) => (
+  <Layout preview="Your certificate has been issued" title="Your certificate is ready" cta="View and verify your certificate" href={verifyUrl ?? `${SITE}/verify`}>
+    <Text style={text}>{hi(name)}</Text>
+    <Text style={text}>Congratulations! You completed <b>{courseName ?? 'your course'}</b> and your Tech Faculty NG certificate has been issued.</Text>
+    {certificateNumber && <Text style={text}>Your certificate number is <b>{certificateNumber}</b>.</Text>}
+    <Text style={text}>Anyone, such as an employer or your school, can confirm it is genuine at the link below. Add it to your CV and LinkedIn profile.</Text>
+    <Text style={muted}>You can also see your certificate on your <a href={`${SITE}/dashboard`} style={link}>student dashboard</a>. Spot a mistake in your name? Reply to this email and we will correct it.</Text>
+  </Layout>
+)
+
+export const certificateIssued = {
+  component: CertificateIssued,
+  subject: (d) => `Your certificate for ${d.courseName ?? 'your course'} is ready`,
+  displayName: 'Certificate issued (automatic)',
+  previewData: { name: 'Ada Obi', courseName: 'Fullstack Web Development', certificateNumber: 'TF-CERT-20261029-K7P2QX', verifyUrl: 'https://techfaculty.ng/verify/TF-CERT-20261029-K7P2QX' },
 } satisfies TemplateEntry
 
 // 5. Student: card checkout started but never paid
@@ -134,6 +169,31 @@ const PaymentConfirmed = ({ name, plan, facultyId }: { name?: string; plan?: str
     <Text style={text}>Flutterwave has confirmed your payment for the <b>{plan ?? 'Tech Faculty'}</b> plan, so your enrolment is now active.</Text>
     {facultyId && <Text style={text}>Your Faculty ID is <b>{facultyId}</b>.</Text>}
     <Text style={text}>Open your dashboard to see your classes. Your class group opens the first time you visit it.</Text>
+  </Layout>
+)
+
+// 7. Student: pay link for a plan requested over WhatsApp or email (and its reminder)
+const PayLink = ({ name, plan, amount, payUrl, cancelOn, reminder }: { name?: string; plan?: string; amount?: string; payUrl?: string; cancelOn?: string; reminder?: boolean }) => (
+  <Layout preview={reminder ? 'Your place is still waiting for payment' : 'Pay for your Tech Faculty plan online'} title={reminder ? 'Your place is still waiting' : 'Pay for your plan online'} cta={`Pay ${amount ?? 'now'}`} href={payUrl ?? `${SITE}/#pricing`}>
+    <Text style={text}>{hi(name)}</Text>
+    <Text style={text}>
+      {reminder
+        ? <>Your enrolment in the <b>{plan ?? 'Tech Faculty'}</b> plan is not paid yet, so your classes are still locked.</>
+        : <>Thanks for choosing the <b>{plan ?? 'Tech Faculty'}</b> plan. To save you waiting for bank details, you can pay{amount ? ` ${amount}` : ''} online now with this secure Flutterwave link: card, bank transfer or USSD.</>}
+    </Text>
+    <Text style={text}>Your classes and class group open as soon as the payment goes through.</Text>
+    {cancelOn && <Text style={muted}>If it isn&apos;t paid by {cancelOn}, we&apos;ll cancel the request and the link will stop working. You can always enrol again.</Text>}
+    <Text style={muted}>Already paid by bank transfer? You don&apos;t need to do anything: we&apos;ll confirm it. Questions? <a href={WHATSAPP} style={link}>Message us on WhatsApp</a>.</Text>
+  </Layout>
+)
+
+// 8. Student: request cancelled after 14 days unpaid
+const PayLinkCancelled = ({ name, plan }: { name?: string; plan?: string }) => (
+  <Layout preview="Your enrolment request was cancelled" title="Your enrolment request was cancelled" cta="Choose a plan" href={`${SITE}/#pricing`}>
+    <Text style={text}>{hi(name)}</Text>
+    <Text style={text}>We didn&apos;t receive payment for the <b>{plan ?? 'Tech Faculty'}</b> plan within 14 days, so we&apos;ve cancelled the request and its pay link.</Text>
+    <Text style={text}>You&apos;re welcome back any time: choose your plan again when you&apos;re ready.</Text>
+    <Text style={muted}>Paid and think this is a mistake? <a href={WHATSAPP} style={link}>Message us on WhatsApp</a> with your payment receipt and we&apos;ll sort it out.</Text>
   </Layout>
 )
 
@@ -216,6 +276,20 @@ export const balancePaid = {
   subject: 'Payment confirmed: your Tech Faculty plan is fully paid',
   displayName: 'Instalment balance paid online',
   previewData: { name: 'Ada Obi', plan: 'Developer Pro', amount: '₦50,000', reference: '123456789' },
+} satisfies TemplateEntry
+
+export const payLink = {
+  component: PayLink,
+  subject: (d) => (d.reminder ? `Reminder: pay for your ${d.plan ?? 'Tech Faculty'} plan` : `Pay for your ${d.plan ?? 'Tech Faculty'} plan online`),
+  displayName: 'Pay link for a WhatsApp / bank request (and 2-day reminder)',
+  previewData: { name: 'Ada Obi', plan: 'Developer Pro', amount: '₦100,000', payUrl: 'https://checkout.flutterwave.com/v3/hosted/pay/example', cancelOn: '12 November' },
+} satisfies TemplateEntry
+
+export const payLinkCancelled = {
+  component: PayLinkCancelled,
+  subject: 'Your Tech Faculty enrolment request was cancelled',
+  displayName: 'WhatsApp / bank request cancelled after 14 days',
+  previewData: { name: 'Ada Obi', plan: 'Developer Pro' },
 } satisfies TemplateEntry
 
 export const leadFollowUp = {

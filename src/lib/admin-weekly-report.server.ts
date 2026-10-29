@@ -5,7 +5,8 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
 import { lagosToday } from "@/lib/dates";
-import { needsYouTodayRows, type NeedsYouTodayCounts } from "@/lib/needs-you-today";
+import { needsYouTodayRows, withWhatsAppWaiting, type NeedsYouTodayCounts } from "@/lib/needs-you-today";
+import { findCertificateCandidates } from "@/lib/certificate-auto-issue.server";
 
 export type ReportRow = { label: string; count: number; path: string; detail?: string };
 
@@ -19,12 +20,19 @@ const ACTION_LABEL: Record<string, string> = {
   "enrollment.status_changed": "Enrolment status changes",
   "enrollment.cancelled": "Enrolments cancelled",
   "certificate.issued": "Certificates issued",
+  "certificate.auto_issued": "Certificates issued automatically (course finished and paid in full)",
   "lead.status_changed": "Lead status updates",
+  "lead.auto_converted": "Leads marked enrolled automatically (they enrolled)",
+  "lead.auto_archived": "Silent leads archived automatically",
   "referral.reward_paid": "Referral rewards paid",
   "slack.channel_created": "Project Slack channels created",
   "talent.auto_approved": "Talent profiles approved automatically",
   "payment.balance_reminder_sent": "Instalment balance reminders emailed",
   "payment.balance_paid_online": "Instalment balances paid online",
+  "whatsapp.auto_answered": "WhatsApp questions answered automatically",
+  "payment.pay_link_emailed": "Pay links emailed for WhatsApp/bank requests",
+  "payment.pay_link_reminded": "Pay link reminders sent",
+  "enrollment.auto_cancelled": "Unpaid WhatsApp/bank requests cancelled after 14 days",
 };
 
 const names = (rows: { title: string }[] | null, max = 5) => {
@@ -41,7 +49,7 @@ export async function buildWeeklyReport(now = new Date()) {
   const since = new Date(now.getTime() - 7 * DAY).toISOString();
   const head = { count: "exact" as const, head: true };
 
-  const [autoMatches, promotedOrManual, selected, joinedPool, projectInvites, approvedTalent, audit, jobRuns] = await Promise.all([
+  const [autoMatches, promotedOrManual, selected, joinedPool, projectInvites, approvedTalent, audit, jobRuns, whatsAppHandoffs] = await Promise.all([
     count(supabaseAdmin.from("role_matches").select("id", head).eq("source", "auto").gte("created_at", since)),
     count(supabaseAdmin.from("role_matches").select("id", head).neq("source", "auto").in("status", MATCHED).gte("updated_at", since)),
     count(supabaseAdmin.from("role_matches").select("id", head).in("status", SELECTED).gte("updated_at", since)),
@@ -50,6 +58,7 @@ export async function buildWeeklyReport(now = new Date()) {
     count(supabaseAdmin.from("talent_profiles").select("id", head).gte("vetted_at", since)),
     supabaseAdmin.from("admin_audit_log").select("action").gte("created_at", since).limit(5000),
     supabaseAdmin.from("scheduled_job_runs").select("job, success").gte("ran_at", since).limit(1000),
+    count(supabaseAdmin.from("whatsapp_auto_replies").select("id", head).eq("outcome", "handed_off").gte("created_at", since)),
   ]);
 
   const done: ReportRow[] = [
@@ -59,7 +68,16 @@ export async function buildWeeklyReport(now = new Date()) {
     { label: "Talent approved in total", count: approvedTalent, path: "/admin/talent" },
     { label: "Added to the Slack talent channel", count: joinedPool, path: "/admin/talent" },
     { label: "Added to project Slack channels", count: projectInvites, path: "/admin/talent" },
+    { label: "WhatsApp messages handed to staff by the auto-answers", count: whatsAppHandoffs, path: "/admin/whatsapp" },
   ];
+  // class_reminder_sends comes from a migration generated types may not include yet.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const untyped = supabaseAdmin as unknown as { from: (t: string) => any };
+  done.push({
+    label: "Class reminder emails sent",
+    count: await count(untyped.from("class_reminder_sends").select("lecture_id", head).gte("sent_at", since)),
+    path: "/admin/activity",
+  });
   const byAction = new Map<string, number>();
   for (const row of audit.data ?? []) byAction.set(row.action, (byAction.get(row.action) ?? 0) + 1);
   for (const [action, label] of Object.entries(ACTION_LABEL)) {
@@ -67,7 +85,7 @@ export async function buildWeeklyReport(now = new Date()) {
   }
 
   const today = lagosToday(now);
-  const [needs, suggested, unvetted, noWhatsApp, noSlack, notInSlack, overdueBalances] = await Promise.all([
+  const [needs, suggested, unvetted, noWhatsApp, noSlack, notInSlack, certificates, unchased, awaitingPayLink, overdueBalances] = await Promise.all([
     supabaseAdmin.rpc("needs_you_today_counts"),
     count(supabaseAdmin.from("role_matches").select("id", head).eq("status", "suggested")),
     count(supabaseAdmin.from("talent_profiles").select("id", head).eq("is_vetted", false)),
@@ -79,6 +97,17 @@ export async function buildWeeklyReport(now = new Date()) {
       .in("status", MATCHED)
       .is("talent_profiles.slack_user_id", null)
       .limit(1000),
+    findCertificateCandidates().catch(() => []),
+    // WhatsApp / bank requests the pay-link chase leaves to staff, and those it is chasing.
+    count(
+      supabaseAdmin
+        .from("enrollments")
+        .select("id", head)
+        .eq("status", "pending")
+        .is("tx_ref", null)
+        .lte("created_at", new Date(now.getTime() - 3600 * 1000).toISOString()),
+    ),
+    count(supabaseAdmin.from("enrollments").select("id", head).eq("status", "pending").not("pay_link_created_at", "is", null)),
     count(
       supabaseAdmin
         .from("enrollments")
@@ -90,7 +119,9 @@ export async function buildWeeklyReport(now = new Date()) {
   ]);
 
   const todo: ReportRow[] = [
-    ...(needs.data ? needsYouTodayRows(needs.data as unknown as NeedsYouTodayCounts) : []),
+    ...(needs.data
+      ? needsYouTodayRows(await withWhatsAppWaiting(needs.data as unknown as NeedsYouTodayCounts, () => supabaseAdmin.rpc("whatsapp_chats_waiting")))
+      : []),
     {
       label: "Instalment balances overdue (student emailed a pay link; access stays open)",
       count: overdueBalances,
@@ -114,6 +145,26 @@ export async function buildWeeklyReport(now = new Date()) {
       label: "Matched talent not in the Slack workspace yet (emailed the join link)",
       count: new Set((notInSlack.data ?? []).map((r) => r.talent_profile_id)).size,
       path: "/admin/talent",
+    },
+    {
+      label: "Students who finished a course but still owe fees, so no certificate yet",
+      count: certificates.filter((c) => c.status === "waiting_payment").length,
+      path: "/admin/students",
+    },
+    {
+      label: "Students who finished a course with no accepted work yet, so no certificate yet",
+      count: certificates.filter((c) => c.status === "waiting_work").length,
+      path: "/admin/students",
+    },
+    {
+      label: "WhatsApp/bank requests without a pay link (discount asked, can't be priced, or made before the automation)",
+      count: unchased,
+      path: "/admin/students",
+    },
+    {
+      label: "WhatsApp/bank requests waiting on their pay link (cancelled 14 days after the link)",
+      count: awaitingPayLink,
+      path: "/admin/students",
     },
   ];
 

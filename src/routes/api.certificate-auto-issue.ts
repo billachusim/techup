@@ -1,16 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { sameKey } from "@/lib/hr-api-rules";
 
-// Called by pg_cron once a month (1st, 07:40 Lagos). It only issues certificates the rules in
-// certificate-auto-issue.server.ts allow, and emails each one once, so an
-// extra call does nothing a scheduled run wouldn't. It needs no secret.
+// Called by pg_cron once a month (1st, 07:40 Lagos) with the "certificate-auto-issue"
+// secret from cron_secrets. Anyone else is refused. It only issues certificates the
+// rules in certificate-auto-issue.server.ts allow, and emails each one once.
 export const Route = createFileRoute("/api/certificate-auto-issue")({
   server: {
     handlers: {
-      POST: async () => {
+      POST: async ({ request }) => {
         const [{ supabaseAdmin }, { runCertificateAutoIssue }] = await Promise.all([
           import("@/integrations/supabase/client.server"),
           import("@/lib/certificate-auto-issue.server"),
         ]);
+        const given = request.headers.get("x-cron-secret") ?? "";
+        const { data: cron } = await supabaseAdmin.from("cron_secrets").select("secret").eq("job", "certificate-auto-issue").maybeSingle();
+        if (!given || !cron?.secret || !sameKey(given, cron.secret)) {
+          return Response.json({ error: "Not allowed" }, { status: 401 });
+        }
         const started = Date.now();
         try {
           const result = await runCertificateAutoIssue();

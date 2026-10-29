@@ -85,8 +85,8 @@ CREATE TRIGGER guard_student_deliverable_review
   BEFORE INSERT OR UPDATE ON public.student_deliverables
   FOR EACH ROW EXECUTE FUNCTION public.guard_student_deliverable_review();
 
--- 3. Safety net: every 5 minutes, score anything the instant review missed
---    (student closed the page, AI timed out). Each run handles at most 10.
+-- 3. Safety net: Mondays at 06:00 UTC (Bill's choice, 2026-10-29), score anything
+--    the instant review missed (student closed the page, AI timed out). Each run handles at most 10.
 INSERT INTO public.cron_secrets (job, secret)
 VALUES ('ai-work-review', replace(gen_random_uuid()::text || gen_random_uuid()::text, '-', ''))
 ON CONFLICT (job) DO NOTHING;
@@ -98,7 +98,7 @@ SELECT cron.unschedule('ai-work-review') WHERE EXISTS (SELECT 1 FROM cron.job WH
 
 SELECT cron.schedule(
   'ai-work-review',
-  '*/5 * * * *',
+  '0 6 * * 1',
   $$
   SELECT net.http_post(
     url := 'https://techfaculty.ng/api/ai-work-review',

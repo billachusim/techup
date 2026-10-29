@@ -73,8 +73,8 @@ const TalentDashboard = () => {
       }
     }
 
-    // A complete profile earns a Faculty ID without waiting for an admin.
-    if (p && !p.faculty_id && (p.profile_strength ?? 0) >= 100) {
+    // Students and alumni get their existing Faculty ID linked to the profile.
+    if (p && !p.faculty_id) {
       const { data: issued } = await supabase.rpc("claim_talent_faculty_id");
       if (issued) p = { ...p, faculty_id: issued };
     }

@@ -3,6 +3,7 @@
 // exactly like a manual approval (match email + Slack invite).
 import {
   autoMatchBlocker,
+  facultyFieldBoost,
   FILLED_STATUSES,
   keywordScore,
   pickAutoMatches,
@@ -17,6 +18,8 @@ type Candidate = MatchCandidate & {
   years_experience: number | null;
   hours_per_week: number | null;
   work_mode: string | null;
+  user_id: string | null;
+  faculty_id: string | null;
 };
 
 type FullRole = MatchRole & {
@@ -90,7 +93,16 @@ Score every candidate. Judge on skill fit, seniority fit, location/remote fit an
   }
 }
 
-export type AutoMatchResult = { rolesChecked: number; created: number; skipped: Record<string, string> };
+export type AutoMatchResult = {
+  rolesChecked: number;
+  created: number;
+  /** "Run AI matching" suggestions that cleared the role threshold and were approved. */
+  promoted: number;
+  channelsCreated: number;
+  /** Talent profiles approved automatically (strength 70%+). */
+  talentApproved: number;
+  skipped: Record<string, string>;
+};
 
 /**
  * Scores open roles against open talent and creates matches above each role's threshold.
@@ -98,8 +110,27 @@ export type AutoMatchResult = { rolesChecked: number; created: number; skipped: 
  */
 export async function runAutoMatch(opts: { roleIds?: string[]; talentIds?: string[] } = {}): Promise<AutoMatchResult> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { afterMatchStageChange } = await import("@/lib/match-slack.server");
-  const result: AutoMatchResult = { rolesChecked: 0, created: 0, skipped: {} };
+  const { afterMatchStageChange, ensureProjectChannels } = await import("@/lib/match-slack.server");
+  const result: AutoMatchResult = { rolesChecked: 0, created: 0, promoted: 0, channelsCreated: 0, talentApproved: 0, skipped: {} };
+
+  // Approval follows its own rule and doesn't depend on the pause switch.
+  if (opts.talentIds?.length || !opts.roleIds?.length) {
+    try {
+      const { autoApproveStrongProfiles } = await import("@/lib/talent-auto-approve.server");
+      result.talentApproved = (await autoApproveStrongProfiles(opts.talentIds)).approved;
+    } catch (e) {
+      console.error("talent auto-approve failed", (e as Error).message);
+    }
+  }
+
+  // Project channels don't depend on the pause switch; a profile save alone doesn't need the scan.
+  if (opts.roleIds?.length || !opts.talentIds?.length) {
+    try {
+      result.channelsCreated = (await ensureProjectChannels(opts.roleIds)).created;
+    } catch (e) {
+      console.error("project channels failed", (e as Error).message);
+    }
+  }
 
   const { data: settings } = await supabaseAdmin.from("marketplace_settings").select("auto_match_paused").maybeSingle();
   const paused = !!settings?.auto_match_paused;
@@ -114,31 +145,51 @@ export async function runAutoMatch(opts: { roleIds?: string[]; talentIds?: strin
 
   let tq = supabaseAdmin
     .from("talent_profiles")
-    .select("id, full_name, city, country, headline, skills, tools, years_experience, hours_per_week, work_mode, is_vetted, profile_strength")
+    .select("id, full_name, city, country, headline, skills, tools, years_experience, hours_per_week, work_mode, is_vetted, profile_strength, user_id, faculty_id")
     .eq("availability", "open")
     .order("profile_strength", { ascending: false })
     .limit(200);
   if (opts.talentIds?.length) tq = tq.in("id", opts.talentIds);
   const { data: talents } = await tq;
   const pool = (talents ?? []) as Candidate[];
+  const { loadFacultyTalent } = await import("@/lib/faculty-talent.server");
+  const students = await loadFacultyTalent(pool);
+  const boostFor = (role: FullRole, talentId: string) => facultyFieldBoost(role, students.get(talentId)?.field);
 
   for (const role of (roles ?? []) as unknown as FullRole[]) {
     result.rolesChecked++;
-    const { data: existing } = await supabaseAdmin.from("role_matches").select("talent_profile_id, status").eq("role_id", role.id);
+    const { data: existing } = await supabaseAdmin.from("role_matches").select("id, talent_profile_id, status, score").eq("role_id", role.id);
     const filled = (existing ?? []).filter((m) => FILLED_STATUSES.includes(m.status)).length;
     const blocker = autoMatchBlocker(role, filled, paused);
     if (blocker) {
       result.skipped[role.id] = blocker;
       continue;
     }
+    const threshold = role.auto_match_threshold ?? 75;
+    // Suggestions from the "Run AI matching" button follow the same bar as auto-matches.
+    const toPromote = (existing ?? [])
+      .filter((m) => m.status === "suggested" && m.score + boostFor(role, m.talent_profile_id) >= threshold)
+      .map((m) => m.id);
+    if (toPromote.length) {
+      const { data: promoted } = await supabaseAdmin
+        .from("role_matches")
+        .update({ status: "approved" })
+        .in("id", toPromote)
+        .eq("status", "suggested")
+        .select("id");
+      for (const row of promoted ?? []) {
+        result.promoted++;
+        await afterMatchStageChange(row.id);
+      }
+    }
+
     const already = new Set((existing ?? []).map((m) => m.talent_profile_id));
     const fresh = pool.filter((c) => !already.has(c.id));
     if (!fresh.length) continue;
 
-    const threshold = role.auto_match_threshold ?? 75;
     // Keyword pre-rank first; skip AI cost when nobody is close to the bar.
     const shortlist = fresh
-      .map((c) => ({ c, base: keywordScore(role, c) }))
+      .map((c) => ({ c, base: keywordScore(role, c) + boostFor(role, c.id) }))
       .filter((x) => x.base >= threshold - 25)
       .sort((a, b) => b.base - a.base)
       .slice(0, 15);
@@ -153,7 +204,18 @@ export async function runAutoMatch(opts: { roleIds?: string[]; talentIds?: strin
         reason: `Skills overlap with the role requirements${c.city ? ` and based in ${c.city}` : ""}.`,
       }));
 
-    const picks = pickAutoMatches(scored, threshold, already);
+    // Students and alumni get extra points on roles in the field they studied.
+    const boosted = scored.map((s) => {
+      const extra = boostFor(role, s.id);
+      if (!extra) return s;
+      // Keyword fallback scores already include the boost; AI scores don't.
+      return {
+        id: s.id,
+        score: Math.min(100, s.score + (ai ? extra : 0)),
+        reason: `${s.reason} Tech Faculty trained in this field (+${extra}).`.slice(0, 280),
+      };
+    });
+    const picks = pickAutoMatches(boosted, threshold, already);
     if (!picks.length) continue;
 
     const { data: inserted, error } = await supabaseAdmin

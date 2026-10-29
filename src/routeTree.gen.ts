@@ -40,6 +40,7 @@ import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminTalentRouteImport } from './routes/admin.talent'
 import { Route as AdminWhatsappRouteImport } from './routes/admin.whatsapp'
 import { Route as ApiAdminDigestRouteImport } from './routes/api.admin-digest'
+import { Route as ApiAdminWeeklyReportRouteImport } from './routes/api.admin-weekly-report'
 import { Route as ApiLeadFollowupsRouteImport } from './routes/api.lead-followups'
 import { Route as ApiLeadUnsubscribeRouteImport } from './routes/api.lead-unsubscribe'
 import { Route as ApiPaymentFollowupsRouteImport } from './routes/api.payment-followups'
@@ -236,6 +237,11 @@ const AdminWhatsappRoute = AdminWhatsappRouteImport.update({
 const ApiAdminDigestRoute = ApiAdminDigestRouteImport.update({
   id: '/api/admin-digest',
   path: '/api/admin-digest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminWeeklyReportRoute = ApiAdminWeeklyReportRouteImport.update({
+  id: '/api/admin-weekly-report',
+  path: '/api/admin-weekly-report',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiLeadFollowupsRoute = ApiLeadFollowupsRouteImport.update({
@@ -480,6 +486,7 @@ export interface FileRoutesByFullPath {
   '/admin/talent': typeof AdminTalentRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
+  '/api/admin-weekly-report': typeof ApiAdminWeeklyReportRoute
   '/api/lead-followups': typeof ApiLeadFollowupsRoute
   '/api/lead-unsubscribe': typeof ApiLeadUnsubscribeRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
@@ -554,6 +561,7 @@ export interface FileRoutesByTo {
   '/admin/talent': typeof AdminTalentRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
+  '/api/admin-weekly-report': typeof ApiAdminWeeklyReportRoute
   '/api/lead-followups': typeof ApiLeadFollowupsRoute
   '/api/lead-unsubscribe': typeof ApiLeadUnsubscribeRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
@@ -629,6 +637,7 @@ export interface FileRoutesById {
   '/admin/talent': typeof AdminTalentRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
+  '/api/admin-weekly-report': typeof ApiAdminWeeklyReportRoute
   '/api/lead-followups': typeof ApiLeadFollowupsRoute
   '/api/lead-unsubscribe': typeof ApiLeadUnsubscribeRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
@@ -705,6 +714,7 @@ export interface FileRouteTypes {
     | '/admin/talent'
     | '/admin/whatsapp'
     | '/api/admin-digest'
+    | '/api/admin-weekly-report'
     | '/api/lead-followups'
     | '/api/lead-unsubscribe'
     | '/api/payment-followups'
@@ -779,6 +789,7 @@ export interface FileRouteTypes {
     | '/admin/talent'
     | '/admin/whatsapp'
     | '/api/admin-digest'
+    | '/api/admin-weekly-report'
     | '/api/lead-followups'
     | '/api/lead-unsubscribe'
     | '/api/payment-followups'
@@ -853,6 +864,7 @@ export interface FileRouteTypes {
     | '/admin/talent'
     | '/admin/whatsapp'
     | '/api/admin-digest'
+    | '/api/admin-weekly-report'
     | '/api/lead-followups'
     | '/api/lead-unsubscribe'
     | '/api/payment-followups'
@@ -928,6 +940,7 @@ export interface RootRouteChildren {
   AdminTalentRoute: typeof AdminTalentRoute
   AdminWhatsappRoute: typeof AdminWhatsappRoute
   ApiAdminDigestRoute: typeof ApiAdminDigestRoute
+  ApiAdminWeeklyReportRoute: typeof ApiAdminWeeklyReportRoute
   ApiLeadFollowupsRoute: typeof ApiLeadFollowupsRoute
   ApiLeadUnsubscribeRoute: typeof ApiLeadUnsubscribeRoute
   ApiPaymentFollowupsRoute: typeof ApiPaymentFollowupsRoute
@@ -1186,6 +1199,13 @@ declare module '@tanstack/react-router' {
       path: '/api/admin-digest'
       fullPath: '/api/admin-digest'
       preLoaderRoute: typeof ApiAdminDigestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin-weekly-report': {
+      id: '/api/admin-weekly-report'
+      path: '/api/admin-weekly-report'
+      fullPath: '/api/admin-weekly-report'
+      preLoaderRoute: typeof ApiAdminWeeklyReportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/lead-followups': {
@@ -1525,6 +1545,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminTalentRoute: AdminTalentRoute,
   AdminWhatsappRoute: AdminWhatsappRoute,
   ApiAdminDigestRoute: ApiAdminDigestRoute,
+  ApiAdminWeeklyReportRoute: ApiAdminWeeklyReportRoute,
   ApiLeadFollowupsRoute: ApiLeadFollowupsRoute,
   ApiLeadUnsubscribeRoute: ApiLeadUnsubscribeRoute,
   ApiPaymentFollowupsRoute: ApiPaymentFollowupsRoute,

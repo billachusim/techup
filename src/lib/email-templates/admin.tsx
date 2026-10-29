@@ -51,6 +51,58 @@ export const adminMorningDigest = {
   },
 } satisfies TemplateEntry
 
+type ReportRow = { label: string; count: number; path: string; detail?: string }
+
+// Staff: Monday report of what was done last week and what is still waiting
+const WeeklyReport = ({ done = [], todo = [] }: { done?: ReportRow[]; todo?: ReportRow[] }) => {
+  const line = (r: ReportRow) => (
+    <Text key={r.label} style={text}>
+      <b>{r.count}</b> {r.label.toLowerCase()}
+      {r.detail ? ` (${r.detail})` : ''} · <Link href={`${SITE}${r.path}`} style={link}>open</Link>
+    </Text>
+  )
+  return (
+    <Html lang="en" dir="ltr">
+      <Head />
+      <Preview>{`Last week: ${done.length} kinds of work done, ${todo.length} still waiting`}</Preview>
+      <Body style={main}>
+        <Container style={container}>
+          <Text style={brand}>TECH FACULTY</Text>
+          <Heading style={h1}>Weekly admin report</Heading>
+          <Heading as="h2" style={h2}>Done in the last 7 days</Heading>
+          {done.length ? done.map(line) : <Text style={text}>Nothing recorded this week.</Text>}
+          <Heading as="h2" style={h2}>Still to do</Heading>
+          {todo.length ? todo.map(line) : <Text style={text}>Nothing waiting. All clear.</Text>}
+          <Button style={button} href={`${SITE}/admin`}>Open admin</Button>
+          <Hr style={hr} />
+          <Text style={footer}>Sent every Monday morning. Matching, Slack invites and project channels run on their own; this lists what they did and what still needs a person.</Text>
+        </Container>
+      </Body>
+    </Html>
+  )
+}
+
+export const adminWeeklyReport = {
+  component: WeeklyReport,
+  subject: (d) => {
+    const todo = ((d.todo as ReportRow[] | undefined) ?? []).reduce((n, r) => n + r.count, 0)
+    return todo ? `Weekly admin report: ${todo} item${todo === 1 ? '' : 's'} still to do` : 'Weekly admin report: all clear'
+  },
+  displayName: 'Weekly admin report (staff)',
+  to: 'nachusim@gmail.com',
+  previewData: {
+    done: [
+      { label: 'Talent auto-matched to roles', count: 6, path: '/admin/talent' },
+      { label: 'Added to the Slack talent channel', count: 4, path: '/admin/talent' },
+      { label: 'Project Slack channels created', count: 2, path: '/admin/activity' },
+    ],
+    todo: [
+      { label: 'Open roles without a WhatsApp group link', count: 2, path: '/admin/talent', detail: 'Frontend Developer, Data Analyst' },
+      { label: 'Talent profiles waiting for approval', count: 5, path: '/admin/talent' },
+    ],
+  },
+} satisfies TemplateEntry
+
 // Staff: an online order (Virtual SIWES, logbook service, kit) has been paid
 const OrderPaidAdmin = ({ name, email, phone, school, items, amount, notes, reference }: Record<string, string | undefined>) => (
   <Html lang="en" dir="ltr">
@@ -83,6 +135,7 @@ export const orderPaidAdmin = {
 const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, Helvetica, sans-serif' }
 const container = { padding: '28px 24px', maxWidth: '560px' }
 const brand = { fontSize: '12px', letterSpacing: '2px', fontWeight: 700, color: '#000000', margin: '0 0 16px' }
+const h2 = { fontSize: '16px', fontWeight: 700, color: '#000000', margin: '20px 0 8px' }
 const h1 = { fontSize: '22px', fontWeight: 700, color: '#000000', margin: '0 0 16px' }
 const text = { fontSize: '15px', lineHeight: '24px', color: '#333333', margin: '0 0 10px' }
 const link = { color: '#000000', textDecoration: 'underline' }

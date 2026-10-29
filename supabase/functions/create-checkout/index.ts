@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import type { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
   PLAN_NAMES,
   PROMO_CODES,
@@ -82,7 +83,7 @@ type BalancePlan = { id: string; faculty_id: string; plan_name: string; status: 
 
 /** A Flutterwave checkout for what is left to pay on an instalment plan. */
 async function balanceCheckout(
-  admin: ReturnType<typeof createClient>,
+  admin: SupabaseClient,
   flutterwaveKey: string,
   enrollment: BalancePlan,
   successUrl: string,

@@ -183,6 +183,13 @@
       "when": 1793309474752,
       "tag": "0025_ai_work_review_and_balance_reminders",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1793309608059,
+      "tag": "0026_schedule_admin_weekly_report",
+      "breakpoints": true
     }
   ]
 }

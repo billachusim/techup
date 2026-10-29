@@ -26,6 +26,8 @@ const ACTION_LABEL: Record<string, string> = {
   "certificate.reinstated": "Reinstated certificate",
   "certificate.deleted": "Deleted certificate",
   "lead.status_changed": "Changed lead status",
+  "lead.auto_converted": "Marked lead enrolled (they enrolled)",
+  "lead.auto_archived": "Archived silent lead",
   "referral.reward_paid": "Paid referral reward",
   "referral.status_changed": "Changed referral status",
 };

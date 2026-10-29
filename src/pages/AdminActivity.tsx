@@ -30,6 +30,8 @@ const ACTION_LABEL: Record<string, string> = {
   "referral.status_changed": "Changed referral status",
   "slack.channel_created": "Created project Slack channel",
   "talent.auto_approved": "Approved talent automatically",
+  "work.ai_reviewed": "AI scored student work",
+  "work.ai_review_overridden": "Changed AI score on student work",
 };
 
 const LIMIT = 500;
@@ -61,8 +63,11 @@ function describe(entry: Entry): string {
   >;
   const parts: string[] = [];
   if (typeof d.from === "string" && typeof d.to === "string") parts.push(`${pretty(d.from)} → ${pretty(d.to)}`);
+  else if (typeof d.to === "string") parts.push(pretty(d.to));
   if (typeof d.plan === "string") parts.push(d.plan);
   if (typeof d.course === "string") parts.push(d.course);
+  if (typeof d.title === "string") parts.push(d.title);
+  if (typeof d.score === "number") parts.push(`${d.score}%`);
   if (typeof d.certificate_number === "string") parts.push(d.certificate_number);
   if (typeof d.channel === "string") parts.push(d.channel);
   if (typeof d.amount === "number" || typeof d.amount === "string") {

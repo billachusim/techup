@@ -14,15 +14,16 @@ async function assertStaff(supabase: SupabaseClient<Database>, userId: string) {
 /** Staff: list student submissions with student names. */
 export const listStudentWork = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ status: z.enum(["submitted", "reviewed", "needs_changes", "all"]) }).parse(d))
+  .inputValidator((d) => z.object({ status: z.enum(["submitted", "reviewed", "needs_changes", "ai", "all"]) }).parse(d))
   .handler(async ({ data, context }) => {
     await assertStaff(context.supabase, context.userId);
     let q = context.supabase
       .from("student_deliverables")
-      .select("id, user_id, faculty_id, course_name, class_number, title, proof_url, summary, status, score, reviewer_note, created_at")
+      .select("id, user_id, faculty_id, course_name, class_number, title, proof_url, summary, status, score, reviewer_note, reviewed_by, ai_status, ai_score, ai_verdict, ai_feedback, ai_confidence, created_at")
       .order("created_at", { ascending: false })
       .limit(200);
-    if (data.status !== "all") q = q.eq("status", data.status);
+    if (data.status === "ai") q = q.eq("reviewed_by", "ai");
+    else if (data.status !== "all") q = q.eq("status", data.status);
     const { data: rows, error } = await q;
     if (error) throw new Error(error.message);
     const ids = [...new Set((rows ?? []).map((r) => r.user_id))];
@@ -53,6 +54,9 @@ export const listStudentWork = createServerFn({ method: "POST" })
     });
   });
 
+const reviewLabel = (status: string, score: number | null) =>
+  `${status === "reviewed" ? "accepted" : status === "needs_changes" ? "needs changes" : status}${score != null ? ` ${score}%` : ""}`;
+
 const ReviewInput = z.object({
   id: z.string().uuid(),
   status: z.enum(["reviewed", "needs_changes"]),
@@ -60,40 +64,55 @@ const ReviewInput = z.object({
   note: z.string().max(1000).optional(),
 });
 
-/** Staff: score a submission, then email the student and post in their class group. */
+/** Staff: score a submission (or change the AI's review), then email the student and post in their class group. */
 export const reviewStudentWork = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => ReviewInput.parse(d))
   .handler(async ({ data, context }) => {
     await assertStaff(context.supabase, context.userId);
     const note = data.note?.trim() || null;
+    const { data: before } = await context.supabase
+      .from("student_deliverables").select("status, score, reviewer_note, reviewed_by").eq("id", data.id).maybeSingle();
     const { data: row, error } = await context.supabase
       .from("student_deliverables")
-      .update({ status: data.status, score: data.score, reviewer_note: note, reviewed_at: new Date().toISOString() })
+      .update({ status: data.status, score: data.score, reviewer_note: note, reviewed_at: new Date().toISOString(), reviewed_by: "staff" })
       .eq("id", data.id)
-      .select("id, user_id, title")
+      .select("id, user_id, title, faculty_id")
       .single();
     if (error) throw new Error(error.message);
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: profile } = await supabaseAdmin
-      .from("profiles").select("name, email, slack_user_id, slack_channel_id").eq("id", row.user_id).maybeSingle();
+    if (before?.reviewed_by === "ai" && (before.status !== data.status || before.score !== data.score)) {
+      const { recordAdminAction } = await import("@/lib/admin-audit");
+      const { data: student } = await supabaseAdmin.from("profiles").select("name").eq("id", row.user_id).maybeSingle();
+      await recordAdminAction(supabaseAdmin, context.userId, {
+        action: "work.ai_review_overridden",
+        target_table: "student_deliverables",
+        target_id: row.id,
+        faculty_id: row.faculty_id,
+        subject: student?.name ?? null,
+        details: { title: row.title, from: reviewLabel(before.status, before.score), to: reviewLabel(data.status, data.score) },
+      });
+    }
 
-    if (profile?.email) {
-      try {
-        const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
-        await sendTemplateEmail("student-work-reviewed", profile.email, {
-          templateData: { name: profile.name, title: row.title, status: data.status, note, score: data.score ?? undefined },
-          idempotencyKey: `student-work-reviewed-${row.id}-${data.status}-${data.score ?? "x"}`,
-        });
-      } catch (e) { console.error("review email failed", (e as Error).message); }
-    }
-    if (profile?.slack_channel_id && data.status === "reviewed") {
-      const { postChannelMessage } = await import("@/lib/slack.server");
-      const who = profile.slack_user_id ? `<@${profile.slack_user_id}>` : (profile.name ?? "A student");
-      await postChannelMessage(profile.slack_channel_id, `:white_check_mark: ${who}'s work *${row.title}* was reviewed${data.score != null ? ` — ${data.score}%` : ""}. Keep going!`);
-    }
+    // Re-saving a review unchanged (e.g. staff confirming the AI's) doesn't email the student again.
+    const unchanged = before?.status === data.status && before?.score === data.score && (before?.reviewer_note ?? null) === note;
+    if (unchanged) return { ok: true as const };
+    const { notifyStudentReviewed } = await import("@/lib/student-review.server");
+    await notifyStudentReviewed({ id: row.id, user_id: row.user_id, title: row.title, status: data.status, score: data.score, note });
     return { ok: true as const };
+  });
+
+/** Student: ask the AI to score the work they just submitted. Returns once it is scored (or left for staff). */
+export const requestAiWorkReview = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ deliverableId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { data: row } = await context.supabase
+      .from("student_deliverables").select("id, user_id").eq("id", data.deliverableId).maybeSingle();
+    if (!row || row.user_id !== context.userId) return { outcome: "not_claimed" as const };
+    const { aiReviewSubmission } = await import("@/lib/ai-work-review.server");
+    return { outcome: await aiReviewSubmission(row.id) };
   });
 
 const BriefInput = z.object({

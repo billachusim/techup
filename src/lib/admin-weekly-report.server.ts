@@ -22,6 +22,8 @@ const ACTION_LABEL: Record<string, string> = {
   "referral.reward_paid": "Referral rewards paid",
   "slack.channel_created": "Project Slack channels created",
   "talent.auto_approved": "Talent profiles approved automatically",
+  "work.ai_reviewed": "Student submissions scored by the AI tutor",
+  "work.ai_review_overridden": "AI scores changed by staff",
 };
 
 const names = (rows: { title: string }[] | null, max = 5) => {
@@ -99,6 +101,15 @@ export async function buildWeeklyReport(now = new Date()) {
       path: "/admin/talent",
     },
   ];
+
+  const [aiUnsure, aiWaiting] = await Promise.all([
+    count(supabaseAdmin.from("student_deliverables").select("id", head).eq("status", "submitted").eq("ai_status", "needs_staff")),
+    count(supabaseAdmin.from("student_deliverables").select("id", head).eq("status", "submitted").in("ai_status", ["pending", "running", "failed"]).lt("created_at", new Date(now.getTime() - DAY).toISOString())),
+  ]);
+  todo.push(
+    { label: "Student submissions the AI tutor was unsure about (draft waiting for staff)", count: aiUnsure, path: "/admin/students" },
+    { label: "Student submissions still not scored by the AI after a day", count: aiWaiting, path: "/admin/students" },
+  );
 
   const failedJobs = [...new Set((jobRuns.data ?? []).filter((r) => !r.success).map((r) => r.job))];
   if (failedJobs.length) {

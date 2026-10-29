@@ -13,7 +13,7 @@ Short version with links: https://techfaculty.ng/llms.txt
 - Campuses: 22 centres in 19 states and the FCT (Nnewi, Awka, Onitsha, Owerri, Aba, Enugu, Abakaliki, Abuja, Lagos, Ibadan, Port Harcourt, Benin City, Kaduna, Kano, Jos, Bauchi, Makurdi, Uyo, Calabar, Sokoto, Ilorin, Akure). 20 of them operate inside NBTI Technology Incubation Centres.
 - Departments: Web Development, Mobile App Development, Data Science & Analytics, Cybersecurity, AI & Machine Learning, Basic Internet & AI Studies, Social Media & Digital Marketing, Design, Cloud Computing, Robotics & IoT.
 - Every department can be studied online, hybrid or in person.
-- Free starting point: Basic Internet & AI Studies (4-6 weeks), no fee.
+- Free starting point: Basic Internet & AI Studies (3 weeks), no fee.
 - Paid programmes are priced per module in naira and shown in US dollars outside Nigeria. Learning mode adds to the module total: online only is included, hybrid mode +₦12,000, physical classes +₦22,500.
 - On-site SIWES at any campus: no separate placement fee. Learn & Pay students pay the regular course fee for their department, with up to 50% off for SIWES and IT students on request; Tutor & Earn students are paid. Virtual SIWES is charged because it covers courier delivery.
 - Virtual SIWES (online industrial training placement): ₦45,000. Logbook review, signing, stamping and two-way courier delivery: ₦15,000.
@@ -151,10 +151,10 @@ A: Yes. Many AI & Machine Learning graduates start on AI training and evaluation
 ### Basic Internet & AI Studies
 
 Page: https://techfaculty.ng/departments/basic-internet-ai-studies
-Duration: 4-6 weeks. Level: Beginner.
+Duration: 3 weeks. Level: Beginner.
 Price: Free.
 
-You do not need to become a programmer to benefit from AI. This department is for adults, traders, civil servants, teachers and students who want confidence with a computer and real productivity with AI tools. In four to six weeks you learn the internet safely, handle email and documents, use ChatGPT and other assistants for writing, research and business tasks, and protect yourself from the scams that follow every new technology.
+You do not need to become a programmer to benefit from AI. This department is for adults, traders, civil servants, teachers and students who want confidence with a computer and real productivity with AI tools. In three weeks you learn the internet safely, handle email and documents, use ChatGPT and other assistants for writing, research and business tasks, and protect yourself from the scams that follow every new technology.
 
 Curriculum: Computer & Internet Basics; Email, Documents & Microsoft Office; AI Tools for Everyday Work; ChatGPT & AI Assistants for Business; Online Safety, Privacy & Scam Awareness; Digital Communication & Social Presence.
 Tools: Windows, Google Workspace, Microsoft Office, ChatGPT, Gemini, Canva.

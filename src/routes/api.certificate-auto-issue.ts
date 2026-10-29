@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-// Called by pg_cron every hour. It only issues certificates the rules in
+// Called by pg_cron once a month (1st, 07:40 Lagos). It only issues certificates the rules in
 // certificate-auto-issue.server.ts allow, and emails each one once, so an
 // extra call does nothing a scheduled run wouldn't. It needs no secret.
 export const Route = createFileRoute("/api/certificate-auto-issue")({

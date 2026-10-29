@@ -116,6 +116,24 @@ export const graduateReviewRequest = {
   previewData: { name: 'Ada Obi', courseName: 'Fullstack Web Development', reviewUrl: 'https://search.google.com/local/writereview?placeid=ChIJ5ZxSzmi9QxAR23OzR7YbAkM' },
 } satisfies TemplateEntry
 
+// 4b. Graduate: certificate issued automatically, with the link to verify it
+const CertificateIssued = ({ name, courseName, certificateNumber, verifyUrl }: { name?: string; courseName?: string; certificateNumber?: string; verifyUrl?: string }) => (
+  <Layout preview="Your certificate has been issued" title="Your certificate is ready" cta="View and verify your certificate" href={verifyUrl ?? `${SITE}/verify`}>
+    <Text style={text}>{hi(name)}</Text>
+    <Text style={text}>Congratulations! You completed <b>{courseName ?? 'your course'}</b> and your Tech Faculty NG certificate has been issued.</Text>
+    {certificateNumber && <Text style={text}>Your certificate number is <b>{certificateNumber}</b>.</Text>}
+    <Text style={text}>Anyone, such as an employer or your school, can confirm it is genuine at the link below. Add it to your CV and LinkedIn profile.</Text>
+    <Text style={muted}>You can also see your certificate on your <a href={`${SITE}/dashboard`} style={link}>student dashboard</a>. Spot a mistake in your name? Reply to this email and we will correct it.</Text>
+  </Layout>
+)
+
+export const certificateIssued = {
+  component: CertificateIssued,
+  subject: (d) => `Your certificate for ${d.courseName ?? 'your course'} is ready`,
+  displayName: 'Certificate issued (automatic)',
+  previewData: { name: 'Ada Obi', courseName: 'Fullstack Web Development', certificateNumber: 'TF-CERT-20261029-K7P2QX', verifyUrl: 'https://techfaculty.ng/verify/TF-CERT-20261029-K7P2QX' },
+} satisfies TemplateEntry
+
 // 5. Student: card checkout started but never paid
 const CheckoutReminder = ({ name, plan, amount }: { name?: string; plan?: string; amount?: string }) => (
   <Layout preview="Your Tech Faculty enrolment is waiting for payment" title="Finish your enrolment" cta="Finish enrolling" href={`${SITE}/#pricing`}>

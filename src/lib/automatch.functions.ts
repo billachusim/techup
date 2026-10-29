@@ -15,9 +15,9 @@ export const triggerAutoMatch = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => Input.parse(d))
   .handler(async ({ data, context }) => {
-    if (!data.roleId && !data.talentId) return { ok: false, created: 0 };
+    if (!data.roleId && !data.talentId) return { ok: false, created: 0, promoted: 0 };
     const { data: staff } = await context.supabase.rpc("is_staff", { _user_id: context.userId });
-    if (data.roleId && !staff) return { ok: false, created: 0 };
+    if (data.roleId && !staff) return { ok: false, created: 0, promoted: 0 };
     if (data.talentId && !staff) {
       const { data: own } = await context.supabase
         .from("talent_profiles")
@@ -25,7 +25,7 @@ export const triggerAutoMatch = createServerFn({ method: "POST" })
         .eq("id", data.talentId)
         .eq("user_id", context.userId)
         .maybeSingle();
-      if (!own) return { ok: false, created: 0 };
+      if (!own) return { ok: false, created: 0, promoted: 0 };
     }
     try {
       const { runAutoMatch } = await import("@/lib/matching.server");
@@ -33,9 +33,9 @@ export const triggerAutoMatch = createServerFn({ method: "POST" })
         roleIds: data.roleId ? [data.roleId] : undefined,
         talentIds: data.talentId ? [data.talentId] : undefined,
       });
-      return { ok: true, created: res.created };
+      return { ok: true, created: res.created, promoted: res.promoted };
     } catch (e) {
       console.error("auto-match trigger failed", (e as Error).message);
-      return { ok: false, created: 0 };
+      return { ok: false, created: 0, promoted: 0 };
     }
   });

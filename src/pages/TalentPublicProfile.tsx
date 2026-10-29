@@ -1,6 +1,6 @@
 import { Link, useParams } from "@/lib/router-compat";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, BriefcaseBusiness, ExternalLink, MapPin, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowLeft, BriefcaseBusiness, ExternalLink, GraduationCap, MapPin, ShieldCheck, Sparkles } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TalentNav from "@/components/talent/TalentNav";
@@ -69,6 +69,7 @@ const TalentPublicProfile = () => {
           <header className="space-y-3">
             <div className="flex flex-wrap gap-2">
               {person.is_vetted && <Badge className="gap-1"><ShieldCheck size={12} /> Vetted by Tech Faculty</Badge>}
+              {person.faculty_id && <Badge variant="secondary" className="gap-1"><GraduationCap size={12} /> Tech Faculty trained</Badge>}
               {person.is_client_interested && <Badge variant="secondary">Client interested</Badge>}
               {person.is_matched && <Badge variant="outline" className="gap-1"><Sparkles size={12} /> Matched to a project</Badge>}
               {person.is_working && <Badge variant="outline" className="gap-1"><BriefcaseBusiness size={12} /> Currently working</Badge>}

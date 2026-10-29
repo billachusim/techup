@@ -28,6 +28,8 @@ const ACTION_LABEL: Record<string, string> = {
   "lead.status_changed": "Changed lead status",
   "referral.reward_paid": "Paid referral reward",
   "referral.status_changed": "Changed referral status",
+  "slack.channel_created": "Created project Slack channel",
+  "talent.auto_approved": "Approved talent automatically",
   "payment.pay_link_created": "Made a pay link for a WhatsApp/bank request",
   "payment.pay_link_emailed": "Emailed a pay link",
   "payment.pay_link_reminded": "Emailed a pay link reminder",
@@ -67,6 +69,7 @@ function describe(entry: Entry): string {
   if (typeof d.plan === "string") parts.push(d.plan);
   if (typeof d.course === "string") parts.push(d.course);
   if (typeof d.certificate_number === "string") parts.push(d.certificate_number);
+  if (typeof d.channel === "string") parts.push(d.channel);
   if (typeof d.amount === "number" || typeof d.amount === "string") {
     parts.push(`${typeof d.currency === "string" ? `${d.currency} ` : ""}${Number(d.amount).toLocaleString("en-NG")}`);
   }

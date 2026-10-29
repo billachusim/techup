@@ -16,11 +16,12 @@ import { PendingPayments } from "@/components/student/PendingPayments";
 import { OutstandingBalances } from "@/components/student/OutstandingBalances";
 import { AdminExports } from "@/components/admin/AdminExports";
 
-type Status = "submitted" | "reviewed" | "needs_changes" | "all";
+type Status = "submitted" | "reviewed" | "needs_changes" | "ai" | "all";
 const FILTERS: { v: Status; label: string }[] = [
   { v: "submitted", label: "Awaiting review" },
   { v: "needs_changes", label: "Needs changes" },
   { v: "reviewed", label: "Accepted" },
+  { v: "ai", label: "Scored by AI" },
   { v: "all", label: "All" },
 ];
 
@@ -39,7 +40,11 @@ export default function AdminStudents() {
     try {
       const data = await list({ data: { status: filter } });
       setRows(data);
-      setDrafts(Object.fromEntries(data.map((r) => [r.id, { score: r.score?.toString() ?? "", note: r.reviewer_note ?? "" }])));
+      // Unsure AI reviews aren't applied, but their score and feedback are pre-filled for staff.
+      setDrafts(Object.fromEntries(data.map((r) => [r.id, {
+        score: (r.score ?? (r.ai_status === "needs_staff" ? r.ai_score : null))?.toString() ?? "",
+        note: r.reviewer_note ?? (r.ai_status === "needs_staff" ? r.ai_feedback : null) ?? "",
+      }])));
     } catch (e) {
       toast.error((e as Error).message);
     } finally {
@@ -82,7 +87,7 @@ export default function AdminStudents() {
         <AdminNav />
         <div>
           <h1 className="text-2xl font-bold">Student work review</h1>
-          <p className="text-sm text-muted-foreground">Score weekly submissions. Each review emails the student and, when accepted, posts in their class group on Slack.</p>
+          <p className="text-sm text-muted-foreground">The AI tutor scores each submission as it arrives and emails the student. When it isn't sure, the work waits here with its draft. Change any score or feedback below: each change emails the student and, when accepted, posts in their class group on Slack.</p>
         </div>
         {loading ? (
           <Loader2 className="h-5 w-5 animate-spin" />
@@ -120,6 +125,7 @@ export default function AdminStudents() {
                   </div>
                   {r.proof_url && <a href={r.proof_url} target="_blank" rel="noreferrer" className="text-sm underline break-all">{r.proof_url}</a>}
                   {r.summary && <p className="text-sm border-l-2 pl-2 text-muted-foreground">{r.summary}</p>}
+                  <AiNote r={r} />
                   <div className="grid sm:grid-cols-[120px_1fr] gap-2">
                     <Input
                       type="number" min={0} max={100} placeholder="Score %"
@@ -147,4 +153,22 @@ export default function AdminStudents() {
       <Footer />
     </div>
   );
+}
+
+function AiNote({ r }: { r: { status: string; reviewed_by: string | null; ai_status: string; ai_score: number | null; ai_verdict: string | null; ai_confidence: number | null } }) {
+  const sure = r.ai_confidence != null ? ` (${Math.round(r.ai_confidence * 100)}% sure)` : "";
+  if (r.reviewed_by === "ai") {
+    return <p className="text-xs"><Badge variant="outline" className="mr-2">Scored by AI</Badge>The student has this score and feedback{sure}. Change it below if you disagree.</p>;
+  }
+  if (r.reviewed_by === "staff" && r.ai_score != null) {
+    return <p className="text-xs text-muted-foreground">AI suggested {r.ai_score}%, {r.ai_verdict === "reviewed" ? "accept" : "needs changes"}{sure}.</p>;
+  }
+  if (r.status !== "submitted") return null;
+  if (r.ai_status === "needs_staff") {
+    return <p className="text-xs"><Badge variant="secondary" className="mr-2">AI unsure</Badge>{r.ai_score != null ? `Its draft is filled in below${sure}; check the work and save.` : "The AI couldn't score this one; please review it."}</p>;
+  }
+  if (r.ai_status === "pending" || r.ai_status === "running" || r.ai_status === "failed") {
+    return <p className="text-xs text-muted-foreground">The AI tutor is scoring this. You can review it yourself now if you like.</p>;
+  }
+  return null;
 }

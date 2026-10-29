@@ -61,6 +61,16 @@ const StudentWorkReviewed = ({ name, title, status, note, score }: { name?: stri
   </Layout>
 )
 
+// 3b. Student: reminder the day a scheduled class is coming up (src/lib/class-reminders.server.ts)
+const ClassReminder = ({ name, classTitle, courseName, when, durationMinutes }: { name?: string; classTitle?: string; courseName?: string; when?: string; durationMinutes?: number }) => (
+  <Layout preview={`Class reminder: ${classTitle ?? 'your next class'}${when ? `, ${when}` : ''}`} title="Your class is coming up" cta="Open your dashboard" href={`${SITE}/dashboard`}>
+    <Text style={text}>{hi(name)}</Text>
+    <Text style={text}>A quick reminder: <b>{classTitle ?? 'your next class'}</b>{courseName ? <> ({courseName})</> : null} starts <b>{when ?? 'soon'}</b>{durationMinutes ? ` and runs about ${durationMinutes} minutes` : ''}.</Text>
+    <Text style={text}>Your notes and the class link are on your dashboard. Please join on time.</Text>
+    <Text style={muted}>Can&apos;t make it? Reply to this email or <a href={WHATSAPP} style={link}>message us on WhatsApp</a>.</Text>
+  </Layout>
+)
+
 // 4. Graduate: ask for a Google review once their certificate is issued
 const GraduateReviewRequest = ({ name, courseName, reviewUrl }: { name?: string; courseName?: string; reviewUrl?: string }) => (
   <Layout preview="Congratulations on your certificate" title="Congratulations, graduate!" cta="Leave a Google review" href={reviewUrl}>
@@ -107,6 +117,13 @@ export const studentWorkReviewed = {
   subject: (d) => (d.status === 'needs_changes' ? 'Changes requested on your assignment' : 'Your assignment was reviewed'),
   displayName: 'Student assignment reviewed',
   previewData: { name: 'Ada Obi', title: 'Week 3 project', status: 'reviewed', note: 'Clean work — add tests next time.', score: 82 },
+} satisfies TemplateEntry
+
+export const classReminder = {
+  component: ClassReminder,
+  subject: (d) => `Reminder: ${d.classTitle ?? 'your class'}${d.when ? `, ${d.when}` : ''}`,
+  displayName: 'Class reminder',
+  previewData: { name: 'Ada Obi', classTitle: 'Building APIs with AI assistance', courseName: 'Fullstack Web Development', when: 'today, Thursday 29 October at 4:00 pm (Lagos time)', durationMinutes: 90 },
 } satisfies TemplateEntry
 
 export const graduateReviewRequest = {

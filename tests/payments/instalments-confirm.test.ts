@@ -78,9 +78,18 @@ describe("paying an instalment balance", () => {
     expect(payment().status).toBe("pending");
   });
 
-  it("doesn't let another student check it", async () => {
-    expect((await verify("other-token")).status).toBe(404);
-    expect(flutterwave).not.toHaveBeenCalled();
+  it("confirms without sign-in, for students who paid from a reminder's pay link", async () => {
+    // The reference holds a random UUID only the payer was sent back with, as for online orders.
+    const res = await verify("no-session");
+    expect(await res.json()).toEqual({ status: "active", planName: "Developer Pro", facultyId: "TF001" });
+    expect(plan().balance_due).toBe(0);
+  });
+
+  it("reports an unknown balance reference as not found", async () => {
+    const res = await servedHandler()(
+      new Request("https://fn.test/verify-payment", { method: "POST", body: JSON.stringify({ txRef: "TFB-TF001-nope" }) }),
+    );
+    expect(res.status).toBe(404);
   });
 
   it("is safe to confirm twice", async () => {

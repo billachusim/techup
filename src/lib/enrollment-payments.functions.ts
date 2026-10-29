@@ -111,12 +111,30 @@ export const listOutstandingBalances = createServerFn({ method: "POST" })
       ? await supabaseAdmin.from("profiles").select("faculty_id, name, email, phone").in("faculty_id", ids)
       : { data: [] };
     const byId = new Map((profiles ?? []).map((p) => [p.faculty_id, p]));
-    return (rows ?? []).map((r) => ({
-      ...r,
-      student_name: byId.get(r.faculty_id)?.name || "Student",
-      student_email: byId.get(r.faculty_id)?.email || null,
-      student_phone: byId.get(r.faculty_id)?.phone || null,
-    }));
+    // Which automatic reminders went out (empty until the balance-reminders migration runs).
+    const { data: reminders } = rows?.length
+      ? await supabaseAdmin
+          .from("balance_reminders")
+          .select("enrollment_id, due_soon_sent_at, due_tomorrow_sent_at, overdue_sent_at")
+          .in("enrollment_id", rows.map((r) => r.id))
+      : { data: [] };
+    const remindedById = new Map((reminders ?? []).map((r) => [r.enrollment_id, r]));
+    return (rows ?? []).map((r) => {
+      const sent = remindedById.get(r.id);
+      return {
+        ...r,
+        student_name: byId.get(r.faculty_id)?.name || "Student",
+        student_email: byId.get(r.faculty_id)?.email || null,
+        student_phone: byId.get(r.faculty_id)?.phone || null,
+        last_reminder: sent?.overdue_sent_at
+          ? "overdue"
+          : sent?.due_tomorrow_sent_at
+            ? "day before"
+            : sent?.due_soon_sent_at
+              ? "7 days before"
+              : null,
+      };
+    });
   });
 
 /** Admin: the balance of an instalment plan came in by bank transfer, cash or WhatsApp. */

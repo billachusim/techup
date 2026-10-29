@@ -124,4 +124,23 @@ describe("create-checkout with instalments", () => {
     expect((await checkout({ balanceForEnrollmentId: "enr-1" })).status).toBe(502);
     expect(db.tables.enrollment_payments).toHaveLength(0);
   });
+
+  it("starts a balance payment from a reminder's pay link without sign-in", async () => {
+    db.tables.enrollments.push({ id: "enr-1", faculty_id: "TF001", plan_name: "Developer Pro", status: "active", balance_due: 41250, currency: "NGN" });
+    db.tables.balance_reminders = [{ enrollment_id: "enr-1", pay_token: "tok-1" }];
+    const res = await checkout({ balancePayToken: "tok-1", successUrl: "https://evil.test/x" }, "no-session");
+    expect(res.status).toBe(200);
+    const payment = sentToFlutterwave();
+    expect(payment).toMatchObject({ amount: 41250, currency: "NGN" });
+    expect(payment.redirect_url).toMatch(/^https:\/\/techfaculty\.ng\/payment-success\?tx_ref=TFB-TF001-/);
+    expect(db.tables.enrollment_payments[0]).toMatchObject({ enrollment_id: "enr-1", tx_ref: payment.tx_ref, status: "pending" });
+  });
+
+  it("refuses an unknown pay link, or one for a plan already paid", async () => {
+    db.tables.enrollments.push({ id: "enr-1", faculty_id: "TF001", plan_name: "Developer Pro", status: "active", balance_due: 0, currency: "NGN" });
+    db.tables.balance_reminders = [{ enrollment_id: "enr-1", pay_token: "tok-1" }];
+    expect((await checkout({ balancePayToken: "tok-2" }, "no-session")).status).toBe(404);
+    expect((await checkout({ balancePayToken: "tok-1" }, "no-session")).status).toBe(400);
+    expect(flutterwave).not.toHaveBeenCalled();
+  });
 });

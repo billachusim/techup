@@ -136,6 +136,41 @@ export type Database = {
           },
         ]
       }
+      balance_reminders: {
+        Row: {
+          created_at: string
+          due_soon_sent_at: string | null
+          due_tomorrow_sent_at: string | null
+          enrollment_id: string
+          overdue_sent_at: string | null
+          pay_token: string
+        }
+        Insert: {
+          created_at?: string
+          due_soon_sent_at?: string | null
+          due_tomorrow_sent_at?: string | null
+          enrollment_id: string
+          overdue_sent_at?: string | null
+          pay_token?: string
+        }
+        Update: {
+          created_at?: string
+          due_soon_sent_at?: string | null
+          due_tomorrow_sent_at?: string | null
+          enrollment_id?: string
+          overdue_sent_at?: string | null
+          pay_token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "balance_reminders_enrollment_id_fkey"
+            columns: ["enrollment_id"]
+            isOneToOne: true
+            referencedRelation: "enrollments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blog_post_likes: {
         Row: {
           created_at: string
@@ -489,6 +524,7 @@ export type Database = {
           id: string
           paid_at: string | null
           payment_reference: string | null
+          receipt_sent_at: string | null
           status: string
           tx_ref: string
         }
@@ -500,6 +536,7 @@ export type Database = {
           id?: string
           paid_at?: string | null
           payment_reference?: string | null
+          receipt_sent_at?: string | null
           status?: string
           tx_ref: string
         }
@@ -511,6 +548,7 @@ export type Database = {
           id?: string
           paid_at?: string | null
           payment_reference?: string | null
+          receipt_sent_at?: string | null
           status?: string
           tx_ref?: string
         }

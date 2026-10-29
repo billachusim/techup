@@ -53,7 +53,7 @@ export async function buildWeeklyReport(now = new Date()) {
     { label: "Talent auto-matched to roles", count: autoMatches, path: "/admin/talent" },
     { label: "AI or manual matches approved", count: promotedOrManual, path: "/admin/talent" },
     { label: "Talent selected for projects", count: selected, path: "/admin/talent" },
-    { label: "Talent approved in total (Faculty ID issued)", count: approvedTalent, path: "/admin/talent" },
+    { label: "Talent approved in total", count: approvedTalent, path: "/admin/talent" },
     { label: "Added to the Slack talent channel", count: joinedPool, path: "/admin/talent" },
     { label: "Added to project Slack channels", count: projectInvites, path: "/admin/talent" },
   ];

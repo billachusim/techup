@@ -30,58 +30,11 @@ SELECT cron.schedule(
   $$
 );
 
--- 3. Let the site's server (service role) approve talent and issue Faculty IDs,
---    so profiles at 70%+ strength are approved automatically. Staff checks are unchanged.
-
-CREATE OR REPLACE FUNCTION public.issue_talent_faculty_id(_talent_id uuid)
-RETURNS text
-LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = public
-AS $$
-DECLARE
-  t record;
-  new_id text;
-  track text;
-BEGIN
-  IF auth.role() IS DISTINCT FROM 'service_role' AND NOT public.is_staff(auth.uid()) THEN
-    RAISE EXCEPTION 'Only staff can issue Faculty IDs';
-  END IF;
-
-  SELECT * INTO t FROM public.talent_profiles WHERE id = _talent_id;
-  IF t.id IS NULL THEN
-    RAISE EXCEPTION 'Talent not found';
-  END IF;
-  IF t.faculty_id IS NOT NULL THEN
-    RETURN t.faculty_id;
-  END IF;
-
-  track := COALESCE(NULLIF(btrim(COALESCE(t.headline, '')), ''), COALESCE(t.skills[1], 'general'));
-
-  new_id := public.next_faculty_id(
-    track,
-    'online',
-    EXTRACT(MONTH FROM COALESCE(t.created_at, now()))::integer,
-    EXTRACT(YEAR FROM COALESCE(t.created_at, now()))::integer
-  );
-
-  INSERT INTO public.faculty_ids (faculty_id, name, email, phone, course_interest, hear_about_us, status, department)
-  VALUES (new_id, t.full_name, COALESCE(t.email, ''), COALESCE(t.phone, t.whatsapp, ''), track, 'talent_marketplace', 'active', track);
-
-  UPDATE public.talent_profiles SET faculty_id = new_id, updated_at = now() WHERE id = _talent_id;
-
-  IF t.user_id IS NOT NULL THEN
-    UPDATE public.profiles SET faculty_id = new_id, updated_at = now()
-    WHERE id = t.user_id AND faculty_id IS NULL;
-  END IF;
-
-  RETURN new_id;
-END;
-$$;
-
-REVOKE EXECUTE ON FUNCTION public.issue_talent_faculty_id(uuid) FROM anon, public;
-GRANT EXECUTE ON FUNCTION public.issue_talent_faculty_id(uuid) TO authenticated, service_role;
-
+-- 3. Approving a talent no longer mints a Faculty ID. Faculty IDs belong to
+--    students and alumni: approval links the student's existing ID (from
+--    profiles) when they have one, and otherwise leaves it empty. The site's
+--    server (service role) may now approve, so profiles at 70%+ strength are
+--    approved automatically. Staff can still issue an ID by hand.
 CREATE OR REPLACE FUNCTION public.approve_talent(_talent_id uuid)
 RETURNS text
 LANGUAGE plpgsql
@@ -89,21 +42,31 @@ SECURITY DEFINER
 SET search_path = public
 AS $$
 DECLARE
-  new_id text;
+  t record;
+  student_id text;
 BEGIN
   IF auth.role() IS DISTINCT FROM 'service_role' AND NOT public.is_staff(auth.uid()) THEN
     RAISE EXCEPTION 'Only staff can approve talent';
+  END IF;
+
+  SELECT * INTO t FROM public.talent_profiles WHERE id = _talent_id;
+  IF t.id IS NULL THEN
+    RAISE EXCEPTION 'Talent not found';
+  END IF;
+
+  IF t.faculty_id IS NULL AND t.user_id IS NOT NULL THEN
+    SELECT faculty_id INTO student_id FROM public.profiles WHERE id = t.user_id;
   END IF;
 
   UPDATE public.talent_profiles
   SET is_vetted = true,
       vetted_at = COALESCE(vetted_at, now()),
       is_public = true,
+      faculty_id = COALESCE(faculty_id, student_id),
       updated_at = now()
   WHERE id = _talent_id;
 
-  new_id := public.issue_talent_faculty_id(_talent_id);
-  RETURN new_id;
+  RETURN COALESCE(t.faculty_id, student_id);
 END;
 $$;
 

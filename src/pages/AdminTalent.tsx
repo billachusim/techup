@@ -353,7 +353,7 @@ const AdminTalent = () => {
     const { data, error } = await supabase.rpc("approve_talent", { _talent_id: talent.id });
     if (error) { toast({ title: "Could not approve", description: error.message, variant: "destructive" }); return; }
     notifyMarketplaceEvent({ data: { event: "talent_approved", id: talent.id } }).catch(() => {});
-    toast({ title: "Approved as talent", description: data ? `Faculty ID ${data}` : "Faculty ID issued." });
+    toast({ title: "Approved as talent", description: data ? `Linked to Faculty ID ${data}` : "No Faculty ID: they haven't studied with us." });
     load();
   };
 
@@ -898,8 +898,8 @@ const AdminTalent = () => {
                             <Button size="sm" variant="outline"><MessageCircle size={14} className="mr-1.5" /> Message</Button>
                           </a>
                         )}
-                        {!t.faculty_id && (
-                          <Button size="sm" onClick={() => approveTalent(t)}>Approve &amp; issue Faculty ID</Button>
+                        {!t.is_vetted && (
+                          <Button size="sm" onClick={() => approveTalent(t)}>Approve</Button>
                         )}
                         {!t.faculty_id && t.is_vetted && (
                           <Button size="sm" variant="outline" onClick={() => issueFacultyId(t)}>Issue Faculty ID only</Button>

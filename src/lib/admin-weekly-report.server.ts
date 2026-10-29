@@ -4,7 +4,7 @@
 // never send a second email.
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
-import { needsYouTodayRows, type NeedsYouTodayCounts } from "@/lib/needs-you-today";
+import { needsYouTodayRows, withWhatsAppWaiting, type NeedsYouTodayCounts } from "@/lib/needs-you-today";
 
 export type ReportRow = { label: string; count: number; path: string; detail?: string };
 
@@ -24,6 +24,7 @@ const ACTION_LABEL: Record<string, string> = {
   "referral.reward_paid": "Referral rewards paid",
   "slack.channel_created": "Project Slack channels created",
   "talent.auto_approved": "Talent profiles approved automatically",
+  "whatsapp.auto_answered": "WhatsApp questions answered automatically",
 };
 
 const names = (rows: { title: string }[] | null, max = 5) => {
@@ -40,7 +41,7 @@ export async function buildWeeklyReport(now = new Date()) {
   const since = new Date(now.getTime() - 7 * DAY).toISOString();
   const head = { count: "exact" as const, head: true };
 
-  const [autoMatches, promotedOrManual, selected, joinedPool, projectInvites, approvedTalent, audit, jobRuns] = await Promise.all([
+  const [autoMatches, promotedOrManual, selected, joinedPool, projectInvites, approvedTalent, audit, jobRuns, whatsAppHandoffs] = await Promise.all([
     count(supabaseAdmin.from("role_matches").select("id", head).eq("source", "auto").gte("created_at", since)),
     count(supabaseAdmin.from("role_matches").select("id", head).neq("source", "auto").in("status", MATCHED).gte("updated_at", since)),
     count(supabaseAdmin.from("role_matches").select("id", head).in("status", SELECTED).gte("updated_at", since)),
@@ -49,6 +50,7 @@ export async function buildWeeklyReport(now = new Date()) {
     count(supabaseAdmin.from("talent_profiles").select("id", head).gte("vetted_at", since)),
     supabaseAdmin.from("admin_audit_log").select("action").gte("created_at", since).limit(5000),
     supabaseAdmin.from("scheduled_job_runs").select("job, success").gte("ran_at", since).limit(1000),
+    count(supabaseAdmin.from("whatsapp_auto_replies").select("id", head).eq("outcome", "handed_off").gte("created_at", since)),
   ]);
 
   const done: ReportRow[] = [
@@ -58,6 +60,7 @@ export async function buildWeeklyReport(now = new Date()) {
     { label: "Talent approved in total", count: approvedTalent, path: "/admin/talent" },
     { label: "Added to the Slack talent channel", count: joinedPool, path: "/admin/talent" },
     { label: "Added to project Slack channels", count: projectInvites, path: "/admin/talent" },
+    { label: "WhatsApp messages handed to staff by the auto-answers", count: whatsAppHandoffs, path: "/admin/whatsapp" },
   ];
   // class_reminder_sends comes from a migration generated types may not include yet.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -88,7 +91,9 @@ export async function buildWeeklyReport(now = new Date()) {
   ]);
 
   const todo: ReportRow[] = [
-    ...(needs.data ? needsYouTodayRows(needs.data as unknown as NeedsYouTodayCounts) : []),
+    ...(needs.data
+      ? needsYouTodayRows(await withWhatsAppWaiting(needs.data as unknown as NeedsYouTodayCounts, () => supabaseAdmin.rpc("whatsapp_chats_waiting")))
+      : []),
     { label: "AI match suggestions below the threshold to review", count: suggested, path: "/admin/talent" },
     { label: "Talent profiles not approved yet (under 70% strength or un-vetted by staff)", count: unvetted, path: "/admin/talent" },
     {

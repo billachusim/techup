@@ -3,12 +3,13 @@
 // admin_digest_sends before sending, so extra calls never send a second email.
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
-import { needsYouTodayRows, type NeedsYouTodayCounts } from "@/lib/needs-you-today";
+import { needsYouTodayRows, withWhatsAppWaiting, type NeedsYouTodayCounts } from "@/lib/needs-you-today";
 
 export async function runAdminDigest() {
   const { data, error } = await supabaseAdmin.rpc("needs_you_today_counts");
   if (error) throw new Error(error.message);
-  const rows = needsYouTodayRows(data as unknown as NeedsYouTodayCounts);
+  const counts = await withWhatsAppWaiting(data as unknown as NeedsYouTodayCounts, () => supabaseAdmin.rpc("whatsapp_chats_waiting"));
+  const rows = needsYouTodayRows(counts);
   const total = rows.reduce((n, r) => n + r.count, 0);
   if (total === 0) return { status: "nothing_waiting" as const };
 

@@ -32,6 +32,9 @@ const ACTION_LABEL: Record<string, string> = {
   "referral.status_changed": "Changed referral status",
   "slack.channel_created": "Created project Slack channel",
   "talent.auto_approved": "Approved talent automatically",
+  "whatsapp.auto_answered": "Answered a WhatsApp question automatically",
+  "whatsapp.auto_answer_on": "Turned WhatsApp auto-answers on",
+  "whatsapp.auto_answer_off": "Turned WhatsApp auto-answers off",
 };
 
 const LIMIT = 500;

@@ -2225,22 +2225,70 @@ export type Database = {
       }
       whatsapp_account_state: {
         Row: {
+          auto_answer_enabled: boolean
           id: number
           last_event: string | null
           sending_paused: boolean
           updated_at: string
         }
         Insert: {
+          auto_answer_enabled?: boolean
           id?: number
           last_event?: string | null
           sending_paused?: boolean
           updated_at?: string
         }
         Update: {
+          auto_answer_enabled?: boolean
           id?: number
           last_event?: string | null
           sending_paused?: boolean
           updated_at?: string
+        }
+        Relationships: []
+      }
+      whatsapp_auto_replies: {
+        Row: {
+          acknowledged: boolean
+          contact_name: string | null
+          contact_phone: string
+          created_at: string
+          id: string
+          inbound_text: string | null
+          inbound_wa_message_id: string
+          intent: string
+          outcome: string
+          reason: string | null
+          reply_message_id: string | null
+          resolved_at: string | null
+        }
+        Insert: {
+          acknowledged?: boolean
+          contact_name?: string | null
+          contact_phone: string
+          created_at?: string
+          id?: string
+          inbound_text?: string | null
+          inbound_wa_message_id: string
+          intent: string
+          outcome: string
+          reason?: string | null
+          reply_message_id?: string | null
+          resolved_at?: string | null
+        }
+        Update: {
+          acknowledged?: boolean
+          contact_name?: string | null
+          contact_phone?: string
+          created_at?: string
+          id?: string
+          inbound_text?: string | null
+          inbound_wa_message_id?: string
+          intent?: string
+          outcome?: string
+          reason?: string | null
+          reply_message_id?: string | null
+          resolved_at?: string | null
         }
         Relationships: []
       }
@@ -2671,6 +2719,7 @@ export type Database = {
         Returns: boolean
       }
       seed_all_course_lectures: { Args: never; Returns: undefined }
+      set_whatsapp_auto_answer: { Args: { _enabled: boolean }; Returns: undefined }
       verify_certificate: {
         Args: { cert_number: string }
         Returns: {
@@ -2684,6 +2733,7 @@ export type Database = {
           student_name: string
         }[]
       }
+      whatsapp_chats_waiting: { Args: never; Returns: number }
     }
     Enums: {
       app_role: "admin" | "recruiter" | "user"

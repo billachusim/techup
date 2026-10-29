@@ -376,7 +376,7 @@ export const departments: Department[] = [
       "basic computer classes Nnewi",
     ],
     intro:
-      "You do not need to become a programmer to benefit from AI. This department is for adults, traders, civil servants, teachers and students who want confidence with a computer and real productivity with AI tools. In four to six weeks you learn the internet safely, handle email and documents, use ChatGPT and other assistants for writing, research and business tasks, and protect yourself from the scams that follow every new technology.",
+      "You do not need to become a programmer to benefit from AI. This department is for adults, traders, civil servants, teachers and students who want confidence with a computer and real productivity with AI tools. In three weeks you learn the internet safely, handle email and documents, use ChatGPT and other assistants for writing, research and business tasks, and protect yourself from the scams that follow every new technology.",
     courses: [
       "Computer & Internet Basics",
       "Email, Documents & Microsoft Office",
@@ -404,7 +404,7 @@ export const departments: Department[] = [
       },
     ],
     enrollment: "4,500+",
-    duration: "4-6 weeks",
+    duration: "3 weeks",
     difficulty: "Beginner",
     trending: false,
   },

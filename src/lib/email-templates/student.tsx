@@ -235,6 +235,50 @@ export const orderConfirmed = {
   },
 } satisfies TemplateEntry
 
+// 8. Student on an instalment plan: balance due soon, due tomorrow, or missed
+const BALANCE_COPY = {
+  due_soon: { title: 'Your balance is due soon', preview: 'Your Tech Faculty balance is due in a week', lead: 'is due by' },
+  due_tomorrow: { title: 'Your balance is due tomorrow', preview: 'Your Tech Faculty balance is due tomorrow', lead: 'is due by' },
+  overdue: { title: 'Your balance is overdue', preview: 'Your Tech Faculty balance is overdue', lead: 'was due by' },
+} as const
+type BalanceStage = keyof typeof BALANCE_COPY
+
+const BalanceReminder = ({ name, plan, amount, dueDate, stage, payUrl }: { name?: string; plan?: string; amount?: string; dueDate?: string; stage?: BalanceStage; payUrl?: string }) => {
+  const copy = BALANCE_COPY[stage ?? 'due_soon'] ?? BALANCE_COPY.due_soon
+  return (
+    <Layout preview={copy.preview} title={copy.title} cta={amount ? `Pay ${amount} now` : 'Pay your balance'} href={payUrl ?? `${SITE}/dashboard`}>
+      <Text style={text}>{hi(name)}</Text>
+      <Text style={text}>The balance of your <b>{plan ?? 'Tech Faculty'}</b> instalment plan{amount ? <> (<b>{amount}</b>)</> : null} {copy.lead} <b>{dueDate ?? 'the due date'}</b>.</Text>
+      <Text style={text}>Use the button below to pay by card or bank transfer through Flutterwave. You don&apos;t need to sign in, and your plan is marked paid automatically.</Text>
+      {stage === 'overdue' && <Text style={text}>Your classes stay open. Please pay as soon as you can, or reply to tell us when you will.</Text>}
+      <Text style={muted}>Already paid by bank transfer or cash? Reply with your receipt and we will update your plan. Need more time? <a href={WHATSAPP} style={link}>Message us on WhatsApp</a>.</Text>
+    </Layout>
+  )
+}
+
+// 9. Student: instalment balance paid online
+const BalancePaid = ({ name, plan, amount, reference }: { name?: string; plan?: string; amount?: string; reference?: string }) => (
+  <Layout preview="Your balance is paid" title="Your plan is fully paid" cta="Open your student dashboard" href={`${SITE}/dashboard`}>
+    <Text style={text}>{hi(name)}</Text>
+    <Text style={text}>Flutterwave has confirmed your payment{amount ? <> of <b>{amount}</b></> : null}, so your <b>{plan ?? 'Tech Faculty'}</b> plan is now fully paid. This email is your receipt.</Text>
+    {reference && <Text style={muted}>Payment reference: {reference}</Text>}
+  </Layout>
+)
+
+export const balanceReminder = {
+  component: BalanceReminder,
+  subject: (d) => `${(BALANCE_COPY[d.stage as BalanceStage] ?? BALANCE_COPY.due_soon).title}${d.amount ? `: ${d.amount}` : ''}`,
+  displayName: 'Instalment balance reminder (7 days before, day before, overdue)',
+  previewData: { name: 'Ada Obi', plan: 'Developer Pro', amount: '₦50,000', dueDate: '20 November 2026', stage: 'due_soon', payUrl: 'https://techfaculty.ng/pay-balance?t=00000000-0000-0000-0000-000000000000' },
+} satisfies TemplateEntry
+
+export const balancePaid = {
+  component: BalancePaid,
+  subject: 'Payment confirmed: your Tech Faculty plan is fully paid',
+  displayName: 'Instalment balance paid online',
+  previewData: { name: 'Ada Obi', plan: 'Developer Pro', amount: '₦50,000', reference: '123456789' },
+} satisfies TemplateEntry
+
 export const payLink = {
   component: PayLink,
   subject: (d) => (d.reminder ? `Reminder: pay for your ${d.plan ?? 'Tech Faculty'} plan` : `Pay for your ${d.plan ?? 'Tech Faculty'} plan online`),

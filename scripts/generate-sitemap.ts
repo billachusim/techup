@@ -30,6 +30,7 @@ const EXCLUDE = new Set([
   "/dashboard",
   "/payment-success",
   "/order-complete",
+  "/pay-balance",
   "/talent/dashboard",
   "/talent/profile",
   "/.lovable/oauth/consent",

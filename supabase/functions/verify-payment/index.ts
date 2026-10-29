@@ -2,7 +2,9 @@
 // It confirms the payment server-side (same check as the webhook) and tells
 // the page whether the enrolment is active yet. The order-complete page uses
 // it the same way for online orders (TFO- references), which need no sign-in:
-// the reference is a random UUID only the buyer was sent back with.
+// the reference is a random UUID only the buyer was sent back with. Instalment
+// balances (TFB- references) work the same way, so a student who paid from the
+// pay link in a reminder email is not asked to sign in.
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { confirmOrderPayment, confirmPayment } from "../_shared/flutterwave.ts";
@@ -40,6 +42,17 @@ serve(async (req) => {
       return json(result.status === "paid" ? { status: "paid", items: result.items } : { status: result.status });
     }
 
+    if (txRef.startsWith("TFB-")) {
+      const result = await confirmPayment(admin, secretKey, txRef);
+      if (result.status === "not_found") return json({ status: "not_found" }, 404);
+      if (result.status === "active") {
+        // Send the receipt now rather than at the next re-check. Safe to repeat.
+        await triggerPaymentFollowups(admin).catch((e) => console.error("verify-payment: follow-ups failed", e));
+        return json({ status: "active", planName: result.planName, facultyId: result.facultyId });
+      }
+      return json({ status: result.status });
+    }
+
     const token = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
     const { data: { user } } = await admin.auth.getUser(token);
     if (!user) return json({ error: "Please sign in" }, 401);
@@ -53,18 +66,7 @@ serve(async (req) => {
       .eq("tx_ref", txRef)
       .eq("faculty_id", facultyId)
       .maybeSingle();
-    if (!owned) {
-      // Or the balance of one of their instalment plans.
-      const { data: payment } = await admin
-        .from("enrollment_payments")
-        .select("enrollment_id")
-        .eq("tx_ref", txRef)
-        .maybeSingle();
-      const { data: plan } = payment
-        ? await admin.from("enrollments").select("id").eq("id", payment.enrollment_id).eq("faculty_id", facultyId).maybeSingle()
-        : { data: null };
-      if (!plan) return json({ status: "not_found" }, 404);
-    }
+    if (!owned) return json({ status: "not_found" }, 404);
 
     const result = await confirmPayment(admin, secretKey, txRef);
     return json(result.status === "active" ? { status: "active", planName: result.planName, facultyId: result.facultyId } : { status: result.status });

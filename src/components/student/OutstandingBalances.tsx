@@ -15,9 +15,10 @@ const money = (currency: string | null, amount: number | null) =>
   `${currency === "USD" ? "$" : "₦"}${Number(amount ?? 0).toLocaleString()}`;
 
 /**
- * Admin list of instalment plans with a balance left. Card balances clear on
- * their own when the student pays from their dashboard; mark bank, cash or
- * WhatsApp payments here. Hidden while nobody owes anything.
+ * Admin list of instalment plans with a balance left. Students are emailed a
+ * pay link 7 days before the due date, the day before, and once when overdue.
+ * Card balances clear on their own when the student pays from their dashboard
+ * or that link; mark bank, cash or WhatsApp payments here. Hidden while nobody owes anything.
  */
 export function OutstandingBalances() {
   const list = useServerFn(listOutstandingBalances);
@@ -84,6 +85,7 @@ export function OutstandingBalances() {
                   {r.balance_due_by
                     ? ` · due ${formatDay(r.balance_due_by)}`
                     : ""}
+                  {r.last_reminder ? ` · reminded ${r.last_reminder}` : ""}
                 </p>
               </div>
               <div className="flex items-center gap-2">

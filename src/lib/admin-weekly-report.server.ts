@@ -4,6 +4,7 @@
 // never send a second email.
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
+import { lagosToday } from "@/lib/dates";
 import { needsYouTodayRows, withWhatsAppWaiting, type NeedsYouTodayCounts } from "@/lib/needs-you-today";
 import { findCertificateCandidates } from "@/lib/certificate-auto-issue.server";
 
@@ -26,6 +27,8 @@ const ACTION_LABEL: Record<string, string> = {
   "referral.reward_paid": "Referral rewards paid",
   "slack.channel_created": "Project Slack channels created",
   "talent.auto_approved": "Talent profiles approved automatically",
+  "payment.balance_reminder_sent": "Instalment balance reminders emailed",
+  "payment.balance_paid_online": "Instalment balances paid online",
   "work.ai_reviewed": "Student submissions scored by the AI tutor",
   "work.ai_review_overridden": "AI scores changed by staff",
   "whatsapp.auto_answered": "WhatsApp questions answered automatically",
@@ -83,7 +86,8 @@ export async function buildWeeklyReport(now = new Date()) {
     done.push({ label, count: byAction.get(action) ?? 0, path: "/admin/activity" });
   }
 
-  const [needs, suggested, unvetted, noWhatsApp, noSlack, notInSlack, certificates, unchased, awaitingPayLink] = await Promise.all([
+  const today = lagosToday(now);
+  const [needs, suggested, unvetted, noWhatsApp, noSlack, notInSlack, certificates, unchased, awaitingPayLink, overdueBalances] = await Promise.all([
     supabaseAdmin.rpc("needs_you_today_counts"),
     count(supabaseAdmin.from("role_matches").select("id", head).eq("status", "suggested")),
     count(supabaseAdmin.from("talent_profiles").select("id", head).eq("is_vetted", false)),
@@ -106,12 +110,25 @@ export async function buildWeeklyReport(now = new Date()) {
         .lte("created_at", new Date(now.getTime() - 3600 * 1000).toISOString()),
     ),
     count(supabaseAdmin.from("enrollments").select("id", head).eq("status", "pending").not("pay_link_created_at", "is", null)),
+    count(
+      supabaseAdmin
+        .from("enrollments")
+        .select("id", head)
+        .in("status", ["active", "confirmed"])
+        .gt("balance_due", 0)
+        .lt("balance_due_by", today),
+    ),
   ]);
 
   const todo: ReportRow[] = [
     ...(needs.data
       ? needsYouTodayRows(await withWhatsAppWaiting(needs.data as unknown as NeedsYouTodayCounts, () => supabaseAdmin.rpc("whatsapp_chats_waiting")))
       : []),
+    {
+      label: "Instalment balances overdue (student emailed a pay link; access stays open)",
+      count: overdueBalances,
+      path: "/admin/students",
+    },
     { label: "AI match suggestions below the threshold to review", count: suggested, path: "/admin/talent" },
     { label: "Talent profiles not approved yet (under 70% strength or un-vetted by staff)", count: unvetted, path: "/admin/talent" },
     {

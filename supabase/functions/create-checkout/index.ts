@@ -78,6 +78,46 @@ async function paymentLink(
   return jsonResponse({ url: flwData.data.link });
 }
 
+type BalancePlan = { id: string; faculty_id: string; plan_name: string; status: string; balance_due: number | null; currency: string | null };
+
+/** A Flutterwave checkout for what is left to pay on an instalment plan. */
+async function balanceCheckout(
+  admin: ReturnType<typeof createClient>,
+  flutterwaveKey: string,
+  enrollment: BalancePlan,
+  successUrl: string,
+): Promise<Response> {
+  if (!['active', 'confirmed'].includes(enrollment.status) || !(Number(enrollment.balance_due) > 0)) {
+    return jsonResponse({ error: 'Nothing is left to pay on this plan' }, 400);
+  }
+  const balanceTxRef = `TFB-${enrollment.faculty_id}-${crypto.randomUUID()}`;
+  const balanceCurrency = enrollment.currency === 'USD' ? 'USD' : 'NGN';
+  const { error: paymentErr } = await admin.from('enrollment_payments').insert({
+    enrollment_id: enrollment.id,
+    tx_ref: balanceTxRef,
+    amount: Number(enrollment.balance_due),
+    currency: balanceCurrency,
+    status: 'pending',
+  });
+  if (paymentErr) {
+    console.error('Failed to save balance payment:', paymentErr);
+    return jsonResponse({ error: 'Could not start your payment. Please try again.' }, 500);
+  }
+  return await paymentLink(flutterwaveKey, {
+    tx_ref: balanceTxRef,
+    amount: Number(enrollment.balance_due),
+    currency: balanceCurrency,
+    redirect_url: `${successUrl}?tx_ref=${encodeURIComponent(balanceTxRef)}&faculty_id=${encodeURIComponent(enrollment.faculty_id)}&plan=${encodeURIComponent(enrollment.plan_name)}`,
+    meta: { faculty_id: enrollment.faculty_id, plan_name: enrollment.plan_name, balance_for: enrollment.id },
+    customer: { email: `${enrollment.faculty_id}@techfaculty.ng` },
+    customizations: {
+      title: 'Tech Faculty',
+      description: `${enrollment.plan_name} — balance`,
+      logo: 'https://techfaculty.ng/favicon.png',
+    },
+  }, () => admin.from('enrollment_payments').delete().eq('tx_ref', balanceTxRef).eq('status', 'pending'));
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -92,13 +132,36 @@ serve(async (req) => {
     const admin = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!, {
       auth: { persistSession: false },
     });
+    const body = await req.json();
+
+    // The pay link in a balance reminder email: the token stands in for
+    // signing in, and only lets the holder pay that plan's balance.
+    if (body.balancePayToken) {
+      const { data: reminder } = await admin
+        .from('balance_reminders')
+        .select('enrollment_id')
+        .eq('pay_token', String(body.balancePayToken))
+        .maybeSingle();
+      const { data: enrollment } = reminder
+        ? await admin
+          .from('enrollments')
+          .select('id, faculty_id, plan_name, status, balance_due, currency')
+          .eq('id', reminder.enrollment_id)
+          .maybeSingle()
+        : { data: null };
+      if (!enrollment) {
+        return jsonResponse({ error: 'This payment link is not valid. Sign in to pay from your dashboard.' }, 404);
+      }
+      const site = Deno.env.get('SITE_URL') ?? 'https://techfaculty.ng';
+      return await balanceCheckout(admin, flutterwaveKey, enrollment, `${site}/payment-success`);
+    }
+
     const token = (req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '');
     const { data: { user } } = await admin.auth.getUser(token);
     if (!user) {
       return jsonResponse({ error: 'Please sign in to pay' }, 401);
     }
 
-    const body = await req.json();
     const {
       planId,
       planName,
@@ -128,35 +191,7 @@ serve(async (req) => {
       if (!enrollment) {
         return jsonResponse({ error: 'This enrolment is not yours' }, 403);
       }
-      if (!['active', 'confirmed'].includes(enrollment.status) || !(Number(enrollment.balance_due) > 0)) {
-        return jsonResponse({ error: 'Nothing is left to pay on this plan' }, 400);
-      }
-      const balanceTxRef = `TFB-${enrollment.faculty_id}-${crypto.randomUUID()}`;
-      const balanceCurrency = enrollment.currency === 'USD' ? 'USD' : 'NGN';
-      const { error: paymentErr } = await admin.from('enrollment_payments').insert({
-        enrollment_id: enrollment.id,
-        tx_ref: balanceTxRef,
-        amount: Number(enrollment.balance_due),
-        currency: balanceCurrency,
-        status: 'pending',
-      });
-      if (paymentErr) {
-        console.error('Failed to save balance payment:', paymentErr);
-        return jsonResponse({ error: 'Could not start your payment. Please try again.' }, 500);
-      }
-      return await paymentLink(flutterwaveKey, {
-        tx_ref: balanceTxRef,
-        amount: Number(enrollment.balance_due),
-        currency: balanceCurrency,
-        redirect_url: `${successUrl}?tx_ref=${encodeURIComponent(balanceTxRef)}&faculty_id=${encodeURIComponent(enrollment.faculty_id)}&plan=${encodeURIComponent(enrollment.plan_name)}`,
-        meta: { faculty_id: enrollment.faculty_id, plan_name: enrollment.plan_name, balance_for: enrollment.id },
-        customer: { email: `${enrollment.faculty_id}@techfaculty.ng` },
-        customizations: {
-          title: 'Tech Faculty',
-          description: `${enrollment.plan_name} — balance`,
-          logo: 'https://techfaculty.ng/favicon.png',
-        },
-      }, () => admin.from('enrollment_payments').delete().eq('tx_ref', balanceTxRef).eq('status', 'pending'));
+      return await balanceCheckout(admin, flutterwaveKey, enrollment, successUrl);
     }
 
     if (!profile?.faculty_id || profile.faculty_id !== facultyId) {

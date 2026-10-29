@@ -19,6 +19,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as LovableRouteImport } from './routes/lovable'
 import { Route as OrderCompleteRouteImport } from './routes/order-complete'
 import { Route as OutcomesRouteImport } from './routes/outcomes'
+import { Route as PayBalanceRouteImport } from './routes/pay-balance'
 import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
@@ -134,6 +135,11 @@ const OrderCompleteRoute = OrderCompleteRouteImport.update({
 const OutcomesRoute = OutcomesRouteImport.update({
   id: '/outcomes',
   path: '/outcomes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PayBalanceRoute = PayBalanceRouteImport.update({
+  id: '/pay-balance',
+  path: '/pay-balance',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
@@ -484,6 +490,7 @@ export interface FileRoutesByFullPath {
   '/lovable': typeof LovableRouteWithChildren
   '/order-complete': typeof OrderCompleteRoute
   '/outcomes': typeof OutcomesRoute
+  '/pay-balance': typeof PayBalanceRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
   '/rss.xml': typeof RssDotxmlRoute
@@ -562,6 +569,7 @@ export interface FileRoutesByTo {
   '/lovable': typeof LovableRouteWithChildren
   '/order-complete': typeof OrderCompleteRoute
   '/outcomes': typeof OutcomesRoute
+  '/pay-balance': typeof PayBalanceRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
   '/rss.xml': typeof RssDotxmlRoute
@@ -641,6 +649,7 @@ export interface FileRoutesById {
   '/lovable': typeof LovableRouteWithChildren
   '/order-complete': typeof OrderCompleteRoute
   '/outcomes': typeof OutcomesRoute
+  '/pay-balance': typeof PayBalanceRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/products': typeof ProductsRoute
   '/rss.xml': typeof RssDotxmlRoute
@@ -721,6 +730,7 @@ export interface FileRouteTypes {
     | '/lovable'
     | '/order-complete'
     | '/outcomes'
+    | '/pay-balance'
     | '/payment-success'
     | '/products'
     | '/rss.xml'
@@ -799,6 +809,7 @@ export interface FileRouteTypes {
     | '/lovable'
     | '/order-complete'
     | '/outcomes'
+    | '/pay-balance'
     | '/payment-success'
     | '/products'
     | '/rss.xml'
@@ -877,6 +888,7 @@ export interface FileRouteTypes {
     | '/lovable'
     | '/order-complete'
     | '/outcomes'
+    | '/pay-balance'
     | '/payment-success'
     | '/products'
     | '/rss.xml'
@@ -956,6 +968,7 @@ export interface RootRouteChildren {
   LovableRoute: typeof LovableRouteWithChildren
   OrderCompleteRoute: typeof OrderCompleteRoute
   OutcomesRoute: typeof OutcomesRoute
+  PayBalanceRoute: typeof PayBalanceRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
   ProductsRoute: typeof ProductsRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
@@ -1091,6 +1104,13 @@ declare module '@tanstack/react-router' {
       path: '/outcomes'
       fullPath: '/outcomes'
       preLoaderRoute: typeof OutcomesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pay-balance': {
+      id: '/pay-balance'
+      path: '/pay-balance'
+      fullPath: '/pay-balance'
+      preLoaderRoute: typeof PayBalanceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/payment-success': {
@@ -1584,6 +1604,7 @@ const rootRouteChildren: RootRouteChildren = {
   LovableRoute: LovableRouteWithChildren,
   OrderCompleteRoute: OrderCompleteRoute,
   OutcomesRoute: OutcomesRoute,
+  PayBalanceRoute: PayBalanceRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
   ProductsRoute: ProductsRoute,
   RssDotxmlRoute: RssDotxmlRoute,

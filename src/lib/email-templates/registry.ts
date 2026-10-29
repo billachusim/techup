@@ -14,7 +14,7 @@ import {
   hrMessage,
 } from './marketplace'
 import { adminMorningDigest, adminWeeklyReport, orderPaidAdmin } from './admin'
-import { studentWelcome, classUnlocked, studentWorkReviewed, graduateReviewRequest, certificateIssued, checkoutReminder, paymentConfirmed, orderConfirmed, classReminder, payLink, payLinkCancelled } from './student'
+import { studentWelcome, classUnlocked, studentWorkReviewed, graduateReviewRequest, certificateIssued, checkoutReminder, paymentConfirmed, orderConfirmed, classReminder, payLink, payLinkCancelled, balanceReminder, balancePaid } from './student'
 
 export interface TemplateEntry {
   // Each template has its own props, so the registry can't name one props type
@@ -62,6 +62,8 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'pay-link': payLink,
   'pay-link-cancelled': payLinkCancelled,
   'order-paid-admin': orderPaidAdmin,
+  'balance-reminder': balanceReminder,
+  'balance-paid': balancePaid,
   // Add templates here as they are created, e.g.:
   // 'welcome': welcomeTemplate,
 }

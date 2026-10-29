@@ -282,12 +282,12 @@ const TalentProfile = () => {
       }
       toast({ title: "Profile saved", description: "You are now in the matching pool." });
 
-      // A fully complete profile earns a Faculty ID straight away.
-      if (!facultyId && strength >= 100) {
+      // Students and alumni get their existing Faculty ID linked to the profile.
+      if (!facultyId) {
         const { data: issued } = await supabase.rpc("claim_talent_faculty_id");
         if (issued) {
           setFacultyId(issued);
-          toast({ title: "Your Faculty ID is ready", description: `${issued} — your profile is complete and verified.` });
+          toast({ title: "Faculty ID linked", description: `${issued}: you get priority matching as a Tech Faculty student.` });
         }
       }
 
@@ -347,7 +347,7 @@ const TalentProfile = () => {
               </p>
             ) : (
               <p className="mt-3 text-xs text-muted-foreground">
-                Reach 100% and we issue your Faculty ID automatically when you save.
+                Profiles at 70% or more are approved automatically. Tech Faculty students and alumni get their Faculty ID linked here, plus priority matching.
               </p>
             )}
           </div>

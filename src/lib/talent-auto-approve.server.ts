@@ -1,6 +1,7 @@
 // Server-only: approves strong talent profiles without waiting for staff.
-// Rule (Bill, 2026-10-29): profile strength 70% or more. Approval never mints a
-// Faculty ID (those are for students and alumni); a student's existing ID is linked.
+// Rules (Bill, 2026-10-29): profile strength 70% or more, or a Tech Faculty student
+// or alumnus (Faculty ID from a course) at any strength. Approval never mints a
+// Faculty ID; a student's existing ID is linked.
 
 export const AUTO_APPROVE_MIN_STRENGTH = 70;
 
@@ -13,13 +14,16 @@ export async function autoApproveStrongProfiles(talentIds?: string[]): Promise<{
   const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
   let q = supabaseAdmin
     .from("talent_profiles")
-    .select("id, full_name, email")
+    .select("id, full_name, email, profile_strength, user_id, faculty_id")
     .eq("is_vetted", false)
-    .gte("profile_strength", AUTO_APPROVE_MIN_STRENGTH)
-    .limit(100);
+    .or(`profile_strength.gte.${AUTO_APPROVE_MIN_STRENGTH},user_id.not.is.null,faculty_id.not.is.null`)
+    .limit(300);
   if (talentIds?.length) q = q.in("id", talentIds);
-  const { data: profiles } = await q;
-  if (!profiles?.length) return { approved: 0 };
+  const { data: candidates } = await q;
+  const { loadFacultyTalent } = await import("@/lib/faculty-talent.server");
+  const students = await loadFacultyTalent(candidates ?? []);
+  const profiles = (candidates ?? []).filter((t) => t.profile_strength >= AUTO_APPROVE_MIN_STRENGTH || students.has(t.id));
+  if (!profiles.length) return { approved: 0 };
 
   const { data: done } = await supabaseAdmin
     .from("admin_audit_log")
@@ -43,7 +47,7 @@ export async function autoApproveStrongProfiles(talentIds?: string[]): Promise<{
       target_id: t.id,
       faculty_id: facultyId ? String(facultyId) : null,
       subject: t.full_name,
-      details: { rule: `profile strength ${AUTO_APPROVE_MIN_STRENGTH}%+` },
+      details: { rule: students.has(t.id) ? "Tech Faculty student or alumnus" : `profile strength ${AUTO_APPROVE_MIN_STRENGTH}%+` },
     });
     if (t.email) {
       await sendTemplateEmail("talent-approved", t.email, {

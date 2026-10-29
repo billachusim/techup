@@ -72,3 +72,40 @@ $$;
 
 REVOKE EXECUTE ON FUNCTION public.approve_talent(uuid) FROM anon, public;
 GRANT EXECUTE ON FUNCTION public.approve_talent(uuid) TO authenticated, service_role;
+
+-- 4. A talent profile no longer earns a new Faculty ID at 100%. Signing in links
+--    the student's existing Faculty ID (from registering for a course), if any.
+CREATE OR REPLACE FUNCTION public.claim_talent_faculty_id()
+RETURNS text
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path TO 'public'
+AS $function$
+DECLARE
+  t record;
+  student_id text;
+BEGIN
+  IF auth.uid() IS NULL THEN
+    RAISE EXCEPTION 'Please sign in first';
+  END IF;
+
+  SELECT * INTO t FROM public.talent_profiles WHERE user_id = auth.uid() LIMIT 1;
+  IF t.id IS NULL THEN
+    RETURN NULL;
+  END IF;
+  IF t.faculty_id IS NOT NULL THEN
+    RETURN t.faculty_id;
+  END IF;
+
+  SELECT faculty_id INTO student_id FROM public.profiles WHERE id = auth.uid();
+  IF student_id IS NULL THEN
+    RETURN NULL;
+  END IF;
+
+  UPDATE public.talent_profiles SET faculty_id = student_id, updated_at = now() WHERE id = t.id;
+  RETURN student_id;
+END;
+$function$;
+
+REVOKE ALL ON FUNCTION public.claim_talent_faculty_id() FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.claim_talent_faculty_id() TO authenticated;

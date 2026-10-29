@@ -3,6 +3,7 @@
 // exactly like a manual approval (match email + Slack invite).
 import {
   autoMatchBlocker,
+  facultyFieldBoost,
   FILLED_STATUSES,
   keywordScore,
   pickAutoMatches,
@@ -17,6 +18,8 @@ type Candidate = MatchCandidate & {
   years_experience: number | null;
   hours_per_week: number | null;
   work_mode: string | null;
+  user_id: string | null;
+  faculty_id: string | null;
 };
 
 type FullRole = MatchRole & {
@@ -142,13 +145,16 @@ export async function runAutoMatch(opts: { roleIds?: string[]; talentIds?: strin
 
   let tq = supabaseAdmin
     .from("talent_profiles")
-    .select("id, full_name, city, country, headline, skills, tools, years_experience, hours_per_week, work_mode, is_vetted, profile_strength")
+    .select("id, full_name, city, country, headline, skills, tools, years_experience, hours_per_week, work_mode, is_vetted, profile_strength, user_id, faculty_id")
     .eq("availability", "open")
     .order("profile_strength", { ascending: false })
     .limit(200);
   if (opts.talentIds?.length) tq = tq.in("id", opts.talentIds);
   const { data: talents } = await tq;
   const pool = (talents ?? []) as Candidate[];
+  const { loadFacultyTalent } = await import("@/lib/faculty-talent.server");
+  const students = await loadFacultyTalent(pool);
+  const boostFor = (role: FullRole, talentId: string) => facultyFieldBoost(role, students.get(talentId)?.field);
 
   for (const role of (roles ?? []) as unknown as FullRole[]) {
     result.rolesChecked++;
@@ -161,7 +167,9 @@ export async function runAutoMatch(opts: { roleIds?: string[]; talentIds?: strin
     }
     const threshold = role.auto_match_threshold ?? 75;
     // Suggestions from the "Run AI matching" button follow the same bar as auto-matches.
-    const toPromote = (existing ?? []).filter((m) => m.status === "suggested" && m.score >= threshold).map((m) => m.id);
+    const toPromote = (existing ?? [])
+      .filter((m) => m.status === "suggested" && m.score + boostFor(role, m.talent_profile_id) >= threshold)
+      .map((m) => m.id);
     if (toPromote.length) {
       const { data: promoted } = await supabaseAdmin
         .from("role_matches")
@@ -181,7 +189,7 @@ export async function runAutoMatch(opts: { roleIds?: string[]; talentIds?: strin
 
     // Keyword pre-rank first; skip AI cost when nobody is close to the bar.
     const shortlist = fresh
-      .map((c) => ({ c, base: keywordScore(role, c) }))
+      .map((c) => ({ c, base: keywordScore(role, c) + boostFor(role, c.id) }))
       .filter((x) => x.base >= threshold - 25)
       .sort((a, b) => b.base - a.base)
       .slice(0, 15);
@@ -196,7 +204,18 @@ export async function runAutoMatch(opts: { roleIds?: string[]; talentIds?: strin
         reason: `Skills overlap with the role requirements${c.city ? ` and based in ${c.city}` : ""}.`,
       }));
 
-    const picks = pickAutoMatches(scored, threshold, already);
+    // Students and alumni get extra points on roles in the field they studied.
+    const boosted = scored.map((s) => {
+      const extra = boostFor(role, s.id);
+      if (!extra) return s;
+      // Keyword fallback scores already include the boost; AI scores don't.
+      return {
+        id: s.id,
+        score: Math.min(100, s.score + (ai ? extra : 0)),
+        reason: `${s.reason} Tech Faculty trained in this field (+${extra}).`.slice(0, 280),
+      };
+    });
+    const picks = pickAutoMatches(boosted, threshold, already);
     if (!picks.length) continue;
 
     const { data: inserted, error } = await supabaseAdmin

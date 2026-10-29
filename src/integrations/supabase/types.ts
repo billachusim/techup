@@ -136,6 +136,41 @@ export type Database = {
           },
         ]
       }
+      balance_reminders: {
+        Row: {
+          created_at: string
+          due_soon_sent_at: string | null
+          due_tomorrow_sent_at: string | null
+          enrollment_id: string
+          overdue_sent_at: string | null
+          pay_token: string
+        }
+        Insert: {
+          created_at?: string
+          due_soon_sent_at?: string | null
+          due_tomorrow_sent_at?: string | null
+          enrollment_id: string
+          overdue_sent_at?: string | null
+          pay_token?: string
+        }
+        Update: {
+          created_at?: string
+          due_soon_sent_at?: string | null
+          due_tomorrow_sent_at?: string | null
+          enrollment_id?: string
+          overdue_sent_at?: string | null
+          pay_token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "balance_reminders_enrollment_id_fkey"
+            columns: ["enrollment_id"]
+            isOneToOne: true
+            referencedRelation: "enrollments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blog_post_likes: {
         Row: {
           created_at: string
@@ -524,6 +559,7 @@ export type Database = {
           id: string
           paid_at: string | null
           payment_reference: string | null
+          receipt_sent_at: string | null
           status: string
           tx_ref: string
         }
@@ -535,6 +571,7 @@ export type Database = {
           id?: string
           paid_at?: string | null
           payment_reference?: string | null
+          receipt_sent_at?: string | null
           status?: string
           tx_ref: string
         }
@@ -546,6 +583,7 @@ export type Database = {
           id?: string
           paid_at?: string | null
           payment_reference?: string | null
+          receipt_sent_at?: string | null
           status?: string
           tx_ref?: string
         }
@@ -1674,6 +1712,13 @@ export type Database = {
       }
       student_deliverables: {
         Row: {
+          ai_attempts: number
+          ai_confidence: number | null
+          ai_feedback: string | null
+          ai_reviewed_at: string | null
+          ai_score: number | null
+          ai_status: string
+          ai_verdict: string | null
           class_number: number | null
           course_id: string | null
           course_name: string | null
@@ -1682,6 +1727,7 @@ export type Database = {
           id: string
           proof_url: string | null
           reviewed_at: string | null
+          reviewed_by: string | null
           reviewer_note: string | null
           score: number | null
           status: string
@@ -1692,6 +1738,13 @@ export type Database = {
           week_of: string
         }
         Insert: {
+          ai_attempts?: number
+          ai_confidence?: number | null
+          ai_feedback?: string | null
+          ai_reviewed_at?: string | null
+          ai_score?: number | null
+          ai_status?: string
+          ai_verdict?: string | null
           class_number?: number | null
           course_id?: string | null
           course_name?: string | null
@@ -1700,6 +1753,7 @@ export type Database = {
           id?: string
           proof_url?: string | null
           reviewed_at?: string | null
+          reviewed_by?: string | null
           reviewer_note?: string | null
           score?: number | null
           status?: string
@@ -1710,6 +1764,13 @@ export type Database = {
           week_of?: string
         }
         Update: {
+          ai_attempts?: number
+          ai_confidence?: number | null
+          ai_feedback?: string | null
+          ai_reviewed_at?: string | null
+          ai_score?: number | null
+          ai_status?: string
+          ai_verdict?: string | null
           class_number?: number | null
           course_id?: string | null
           course_name?: string | null
@@ -1718,6 +1779,7 @@ export type Database = {
           id?: string
           proof_url?: string | null
           reviewed_at?: string | null
+          reviewed_by?: string | null
           reviewer_note?: string | null
           score?: number | null
           status?: string

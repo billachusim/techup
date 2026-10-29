@@ -52,11 +52,12 @@ const ClassUnlocked = ({ name, classTitle, programme, classNumber, date }: { nam
 )
 
 // 3. Student: work reviewed
-const StudentWorkReviewed = ({ name, title, status, note, score }: { name?: string; title?: string; status?: string; note?: string; score?: number }) => (
+const StudentWorkReviewed = ({ name, title, status, note, score, byAi }: { name?: string; title?: string; status?: string; note?: string; score?: number; byAi?: boolean }) => (
   <Layout preview={status === 'needs_changes' ? 'Changes requested on your assignment' : 'Your assignment was reviewed'} title={status === 'needs_changes' ? 'Changes requested' : 'Assignment reviewed'} cta="See your progress" href={`${SITE}/dashboard`}>
     <Text style={text}>{hi(name)}</Text>
     <Text style={text}>Your submission <b>{title ?? ''}</b> was {status === 'needs_changes' ? 'returned for changes' : 'reviewed and accepted'}{typeof score === 'number' ? ` with a score of ${score}%` : ''}.</Text>
     {note && <Text style={quote}>{note}</Text>}
+    {byAi && <Text style={muted}>This first review was written by the Tech Faculty AI tutor. Your tutor can still adjust it; if they do, you&apos;ll get another email.</Text>}
     <Text style={muted}>Every accepted submission moves you closer to your assessment and certificate.</Text>
   </Layout>
 )

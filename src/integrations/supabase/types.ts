@@ -1712,6 +1712,13 @@ export type Database = {
       }
       student_deliverables: {
         Row: {
+          ai_attempts: number
+          ai_confidence: number | null
+          ai_feedback: string | null
+          ai_reviewed_at: string | null
+          ai_score: number | null
+          ai_status: string
+          ai_verdict: string | null
           class_number: number | null
           course_id: string | null
           course_name: string | null
@@ -1720,6 +1727,7 @@ export type Database = {
           id: string
           proof_url: string | null
           reviewed_at: string | null
+          reviewed_by: string | null
           reviewer_note: string | null
           score: number | null
           status: string
@@ -1730,6 +1738,13 @@ export type Database = {
           week_of: string
         }
         Insert: {
+          ai_attempts?: number
+          ai_confidence?: number | null
+          ai_feedback?: string | null
+          ai_reviewed_at?: string | null
+          ai_score?: number | null
+          ai_status?: string
+          ai_verdict?: string | null
           class_number?: number | null
           course_id?: string | null
           course_name?: string | null
@@ -1738,6 +1753,7 @@ export type Database = {
           id?: string
           proof_url?: string | null
           reviewed_at?: string | null
+          reviewed_by?: string | null
           reviewer_note?: string | null
           score?: number | null
           status?: string
@@ -1748,6 +1764,13 @@ export type Database = {
           week_of?: string
         }
         Update: {
+          ai_attempts?: number
+          ai_confidence?: number | null
+          ai_feedback?: string | null
+          ai_reviewed_at?: string | null
+          ai_score?: number | null
+          ai_status?: string
+          ai_verdict?: string | null
           class_number?: number | null
           course_id?: string | null
           course_name?: string | null
@@ -1756,6 +1779,7 @@ export type Database = {
           id?: string
           proof_url?: string | null
           reviewed_at?: string | null
+          reviewed_by?: string | null
           reviewer_note?: string | null
           score?: number | null
           status?: string

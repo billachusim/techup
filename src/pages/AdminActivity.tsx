@@ -35,6 +35,8 @@ const ACTION_LABEL: Record<string, string> = {
   "talent.auto_approved": "Approved talent automatically",
   "payment.balance_reminder_sent": "Emailed instalment balance reminder",
   "payment.balance_paid_online": "Instalment balance paid online",
+  "work.ai_reviewed": "AI scored student work",
+  "work.ai_review_overridden": "Changed AI score on student work",
   "whatsapp.auto_answered": "Answered a WhatsApp question automatically",
   "whatsapp.auto_answer_on": "Turned WhatsApp auto-answers on",
   "whatsapp.auto_answer_off": "Turned WhatsApp auto-answers off",
@@ -74,8 +76,11 @@ function describe(entry: Entry): string {
   >;
   const parts: string[] = [];
   if (typeof d.from === "string" && typeof d.to === "string") parts.push(`${pretty(d.from)} → ${pretty(d.to)}`);
+  else if (typeof d.to === "string") parts.push(pretty(d.to));
   if (typeof d.plan === "string") parts.push(d.plan);
   if (typeof d.course === "string") parts.push(d.course);
+  if (typeof d.title === "string") parts.push(d.title);
+  if (typeof d.score === "number") parts.push(`${d.score}%`);
   if (typeof d.certificate_number === "string") parts.push(d.certificate_number);
   if (typeof d.channel === "string") parts.push(d.channel);
   if (typeof d.amount === "number" || typeof d.amount === "string") {

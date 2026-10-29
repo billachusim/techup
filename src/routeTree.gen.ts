@@ -42,6 +42,7 @@ import { Route as AdminTalentRouteImport } from './routes/admin.talent'
 import { Route as AdminWhatsappRouteImport } from './routes/admin.whatsapp'
 import { Route as ApiAdminDigestRouteImport } from './routes/api.admin-digest'
 import { Route as ApiAdminWeeklyReportRouteImport } from './routes/api.admin-weekly-report'
+import { Route as ApiAiWorkReviewRouteImport } from './routes/api.ai-work-review'
 import { Route as ApiCertificateAutoIssueRouteImport } from './routes/api.certificate-auto-issue'
 import { Route as ApiClassRemindersRouteImport } from './routes/api.class-reminders'
 import { Route as ApiLeadFollowupsRouteImport } from './routes/api.lead-followups'
@@ -250,6 +251,11 @@ const ApiAdminDigestRoute = ApiAdminDigestRouteImport.update({
 const ApiAdminWeeklyReportRoute = ApiAdminWeeklyReportRouteImport.update({
   id: '/api/admin-weekly-report',
   path: '/api/admin-weekly-report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAiWorkReviewRoute = ApiAiWorkReviewRouteImport.update({
+  id: '/api/ai-work-review',
+  path: '/api/ai-work-review',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiCertificateAutoIssueRoute = ApiCertificateAutoIssueRouteImport.update({
@@ -506,6 +512,7 @@ export interface FileRoutesByFullPath {
   '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
   '/api/admin-weekly-report': typeof ApiAdminWeeklyReportRoute
+  '/api/ai-work-review': typeof ApiAiWorkReviewRoute
   '/api/certificate-auto-issue': typeof ApiCertificateAutoIssueRoute
   '/api/class-reminders': typeof ApiClassRemindersRoute
   '/api/lead-followups': typeof ApiLeadFollowupsRoute
@@ -584,6 +591,7 @@ export interface FileRoutesByTo {
   '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
   '/api/admin-weekly-report': typeof ApiAdminWeeklyReportRoute
+  '/api/ai-work-review': typeof ApiAiWorkReviewRoute
   '/api/certificate-auto-issue': typeof ApiCertificateAutoIssueRoute
   '/api/class-reminders': typeof ApiClassRemindersRoute
   '/api/lead-followups': typeof ApiLeadFollowupsRoute
@@ -663,6 +671,7 @@ export interface FileRoutesById {
   '/admin/whatsapp': typeof AdminWhatsappRoute
   '/api/admin-digest': typeof ApiAdminDigestRoute
   '/api/admin-weekly-report': typeof ApiAdminWeeklyReportRoute
+  '/api/ai-work-review': typeof ApiAiWorkReviewRoute
   '/api/certificate-auto-issue': typeof ApiCertificateAutoIssueRoute
   '/api/class-reminders': typeof ApiClassRemindersRoute
   '/api/lead-followups': typeof ApiLeadFollowupsRoute
@@ -743,6 +752,7 @@ export interface FileRouteTypes {
     | '/admin/whatsapp'
     | '/api/admin-digest'
     | '/api/admin-weekly-report'
+    | '/api/ai-work-review'
     | '/api/certificate-auto-issue'
     | '/api/class-reminders'
     | '/api/lead-followups'
@@ -821,6 +831,7 @@ export interface FileRouteTypes {
     | '/admin/whatsapp'
     | '/api/admin-digest'
     | '/api/admin-weekly-report'
+    | '/api/ai-work-review'
     | '/api/certificate-auto-issue'
     | '/api/class-reminders'
     | '/api/lead-followups'
@@ -899,6 +910,7 @@ export interface FileRouteTypes {
     | '/admin/whatsapp'
     | '/api/admin-digest'
     | '/api/admin-weekly-report'
+    | '/api/ai-work-review'
     | '/api/certificate-auto-issue'
     | '/api/class-reminders'
     | '/api/lead-followups'
@@ -978,6 +990,7 @@ export interface RootRouteChildren {
   AdminWhatsappRoute: typeof AdminWhatsappRoute
   ApiAdminDigestRoute: typeof ApiAdminDigestRoute
   ApiAdminWeeklyReportRoute: typeof ApiAdminWeeklyReportRoute
+  ApiAiWorkReviewRoute: typeof ApiAiWorkReviewRoute
   ApiCertificateAutoIssueRoute: typeof ApiCertificateAutoIssueRoute
   ApiClassRemindersRoute: typeof ApiClassRemindersRoute
   ApiLeadFollowupsRoute: typeof ApiLeadFollowupsRoute
@@ -1252,6 +1265,13 @@ declare module '@tanstack/react-router' {
       path: '/api/admin-weekly-report'
       fullPath: '/api/admin-weekly-report'
       preLoaderRoute: typeof ApiAdminWeeklyReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ai-work-review': {
+      id: '/api/ai-work-review'
+      path: '/api/ai-work-review'
+      fullPath: '/api/ai-work-review'
+      preLoaderRoute: typeof ApiAiWorkReviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/certificate-auto-issue': {
@@ -1607,6 +1627,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminWhatsappRoute: AdminWhatsappRoute,
   ApiAdminDigestRoute: ApiAdminDigestRoute,
   ApiAdminWeeklyReportRoute: ApiAdminWeeklyReportRoute,
+  ApiAiWorkReviewRoute: ApiAiWorkReviewRoute,
   ApiCertificateAutoIssueRoute: ApiCertificateAutoIssueRoute,
   ApiClassRemindersRoute: ApiClassRemindersRoute,
   ApiLeadFollowupsRoute: ApiLeadFollowupsRoute,

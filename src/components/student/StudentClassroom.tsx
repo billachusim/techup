@@ -10,6 +10,7 @@ import { Hash, ExternalLink, Upload, CheckCircle2, Clock, AlertCircle, Loader2 }
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { onboardStudent, notifyStudentWork } from "@/lib/student-onboarding.functions";
+import { requestAiWorkReview } from "@/lib/student-review.functions";
 import { findProgram, SLACK_JOIN_URL, slackChannelUrl } from "@/data/coursePrograms";
 
 interface Props {
@@ -30,6 +31,7 @@ interface Deliverable {
   status: string;
   score: number | null;
   reviewer_note: string | null;
+  reviewed_by: string | null;
   class_number: number | null;
   created_at: string;
 }
@@ -44,6 +46,7 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
   const { toast } = useToast();
   const runOnboarding = useServerFn(onboardStudent);
   const runNotify = useServerFn(notifyStudentWork);
+  const runAiReview = useServerFn(requestAiWorkReview);
 
   const program = findProgram(department);
   const [channelName, setChannelName] = useState<string>(program.channel);
@@ -60,7 +63,7 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
   const loadDeliverables = async () => {
     const { data } = await supabase
       .from("student_deliverables")
-      .select("id, title, proof_url, status, score, reviewer_note, class_number, created_at")
+      .select("id, title, proof_url, status, score, reviewer_note, reviewed_by, class_number, created_at")
       .order("created_at", { ascending: false })
       .limit(10);
     setItems((data as Deliverable[]) ?? []);
@@ -147,8 +150,11 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
         try {
           await runNotify({ data: { deliverableId: data.id } });
         } catch { /* Slack notice is best effort */ }
+        // The AI tutor scores it in the background; the list refreshes when it's done.
+        // If this call is cut short, the scheduled sweep picks the work up within minutes.
+        runAiReview({ data: { deliverableId: data.id } }).then(loadDeliverables, () => undefined);
       }
-      toast({ title: "Work submitted", description: "Your tutor will review it and score your progress." });
+      toast({ title: "Work submitted", description: "Your AI tutor is scoring it now. You'll get feedback here and by email in a minute or two." });
     } catch (e) {
       toast({ title: "Could not submit", description: (e as Error).message, variant: "destructive" });
     } finally {
@@ -252,7 +258,7 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
                       {STATUS_LABEL[d.status] ?? d.status}
                     </Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground">{new Date(d.created_at).toLocaleDateString()}{typeof d.score === "number" ? ` · Score ${d.score}%` : ""}</p>
+                  <p className="text-xs text-muted-foreground">{new Date(d.created_at).toLocaleDateString()}{typeof d.score === "number" ? ` · Score ${d.score}%` : ""}{d.reviewed_by === "ai" ? " · AI tutor" : d.reviewed_by === "staff" ? " · Tutor" : ""}</p>
                   {d.proof_url && (
                     <a href={d.proof_url} target="_blank" rel="noreferrer" className="text-xs underline break-all">
                       {d.proof_url}

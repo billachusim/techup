@@ -19,6 +19,8 @@ const ACTION_LABEL: Record<string, string> = {
   "enrollment.cancelled": "Enrolments cancelled",
   "certificate.issued": "Certificates issued",
   "lead.status_changed": "Lead status updates",
+  "lead.auto_converted": "Leads marked enrolled automatically (they enrolled)",
+  "lead.auto_archived": "Silent leads archived automatically",
   "referral.reward_paid": "Referral rewards paid",
   "slack.channel_created": "Project Slack channels created",
   "talent.auto_approved": "Talent profiles approved automatically",

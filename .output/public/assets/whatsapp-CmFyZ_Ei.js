@@ -1,0 +1,1 @@
+var e=`https://chat.whatsapp.com/D8kuxWVZRTKKeAx6ERjSqc`,t=`https://chat.whatsapp.com/FWxf8PpzZcDG9czk455VI6`,n=()=>typeof navigator<`u`&&/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);export{e as n,n as r,t};

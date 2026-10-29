@@ -1,0 +1,463 @@
+import { t as __exportAll } from "./rolldown-runtime-D7D4PA-g.mjs";
+//#region ../../../tmp/claude-0/-home-claude-techup/6ef4cad5-0fa7-5b2a-928f-84af921f0d32/scratchpad/deps/node_modules/.nitro/vite/services/ssr/assets/siwesCourses-DZzSWWov.js
+var siwesCourses_exports = /* @__PURE__ */ __exportAll({
+	SIWES_COURSES_UPDATED: () => SIWES_COURSES_UPDATED,
+	SIWES_GUIDES: () => SIWES_GUIDES,
+	getSiwesCourse: () => getSiwesCourse,
+	siwesCourseGuides: () => siwesCourseGuides,
+	siwesCourses: () => siwesCourses
+});
+/**
+* SIWES hub pages by course of study, served at /siwes/courses and
+* /siwes/courses/:slug. Each page answers one question a student actually
+* searches for: "can I do my SIWES in tech if I study X, and what would I do?"
+*
+* Computer science and ICT already have a full guide on the blog
+* (siwes-computer-science-ict-students-nigeria-2026), so the hub links to it
+* instead of repeating it here.
+*/
+/** When these pages' copy last changed. Bump it when you edit them. */
+var SIWES_COURSES_UPDATED = "2026-10-25";
+/**
+* Titles of the SIWES blog guides these pages link to. Kept here so the pages
+* don't pull the whole blog into their bundle.
+*/
+var SIWES_GUIDES = {
+	"everything-you-need-to-know-about-siwes-nigeria": "Everything you need to know about SIWES in Nigeria",
+	"how-to-find-siwes-placement-tech-nigeria-2026": "How to find a tech SIWES placement in Nigeria",
+	"siwes-logbook-mistakes-nigeria-fix": "SIWES logbook mistakes that cost you marks",
+	"siwes-allowance-nigeria-2026-itf-rates": "SIWES allowance in Nigeria: ITF rates and timeline",
+	"how-to-get-the-most-out-of-your-it-placement": "How to get the most out of your IT placement",
+	"siwes-placement-ai-data-science-nigeria-2026": "SIWES in AI and data science",
+	"siwes-computer-science-ict-students-nigeria-2026": "SIWES for computer science and ICT students",
+	"virtual-siwes-nigeria-2026-online-it-logbook-signing": "Virtual SIWES: online IT and logbook signing"
+};
+var siwesCourses = [
+	{
+		slug: "electrical-electronic-computer-engineering",
+		name: "Electrical, Electronic & Computer Engineering",
+		alsoFor: [
+			"Computer Engineering",
+			"Electrical/Electronic Engineering",
+			"Mechatronics Engineering",
+			"Electrical Engineering Technology (ND/HND)",
+			"Physics with Electronics"
+		],
+		metaTitle: "SIWES for Electrical & Computer Engineering",
+		metaDescription: "SIWES for electrical, electronic and computer engineering students in Nigeria: embedded systems, IoT and automation projects, logbook examples and costs.",
+		h1: "SIWES for Electrical, Electronic & Computer Engineering Students",
+		shortAnswer: "Engineering students can do SIWES in embedded systems, IoT and automation: wiring and programming microcontrollers, building sensor systems and connecting them to dashboards. It is hands-on engineering work your logbook can describe in detail, and it suits students who cannot get into a power company, manufacturer or telecom firm this session.",
+		whyItFits: "Electrical and computer engineering curricula already cover circuit analysis, digital electronics, microprocessors and control. What most students never get is a project where those pieces meet: a circuit you designed, firmware you wrote, and a device that does something useful. An embedded and IoT placement gives you exactly that, and the same skills carry into power, telecoms, manufacturing and building-automation jobs after graduation.",
+		coordinatorCheck: "Some engineering departments want students in power, manufacturing or telecoms specifically, and some accept any host doing relevant electrical or electronic work. Show your coordinator the project list below and ask whether embedded systems, IoT and automation count for your option (power, electronics, telecoms or computer). Computer engineering and electronics options almost always fit; heavy-current power options sometimes need a utility or contractor instead.",
+		projects: [
+			{
+				title: "Sensor and data logging system",
+				detail: "Build a temperature, humidity or energy monitor on an ESP32 or Arduino, log readings over Wi-Fi and show them on a live dashboard.",
+				department: "robotics-iot"
+			},
+			{
+				title: "Automation controller for a real use",
+				detail: "Design a relay-based controller for a pump, generator changeover or smart irrigation line, with a circuit diagram, firmware and a test log.",
+				department: "robotics-iot"
+			},
+			{
+				title: "Embedded firmware in C/C++",
+				detail: "Write and debug firmware that reads sensors, drives motors or displays, and talks to other devices over MQTT or serial.",
+				department: "robotics-iot"
+			},
+			{
+				title: "Device dashboard and cloud link",
+				detail: "Connect your device to a cloud service and a small web dashboard so someone can monitor or control it remotely.",
+				department: "cloud-computing"
+			}
+		],
+		logbook: [{
+			weak: "Worked on Arduino in the lab.",
+			strong: "Wired a DHT22 sensor and 16x2 LCD to an Arduino Uno, wrote the code to read and display temperature every 2 seconds, and fixed a wrong pull-up resistor value found during testing."
+		}, {
+			weak: "Learnt about IoT.",
+			strong: "Sent ESP32 sensor readings to an MQTT broker over Wi-Fi, built a simple dashboard to plot them, and documented the circuit diagram and pin mapping for the project report."
+		}],
+		skills: [
+			"Arduino",
+			"ESP32",
+			"Raspberry Pi",
+			"Embedded C/C++",
+			"Python",
+			"MQTT",
+			"Circuit design and testing",
+			"Technical documentation"
+		],
+		virtualFit: "Engineering work is best done with components in your hands, so on-site or hybrid suits this course most. If you choose Virtual SIWES, you can still do real work: firmware and circuit design in simulators, then build on a starter kit at home. Our centres provide lab components for on-site students, so you do not need to buy anything if you attend in person.",
+		guides: [
+			"how-to-find-siwes-placement-tech-nigeria-2026",
+			"siwes-logbook-mistakes-nigeria-fix",
+			"everything-you-need-to-know-about-siwes-nigeria"
+		],
+		faqs: [
+			{
+				q: "Can electrical engineering students do SIWES in a tech company?",
+				a: "Often, yes, when the work is genuinely electrical or electronic, such as embedded systems, IoT devices or automation controllers. Departments differ, and some power options prefer a utility or contractor, so show your SIWES coordinator the planned projects and confirm before you resume."
+			},
+			{
+				q: "What will I build during an engineering SIWES at Tech Faculty NG?",
+				a: "Real devices: sensor and data logging systems, automation controllers, embedded firmware and dashboards that monitor or control them. Every project is documented with circuit diagrams and test results you can use in your logbook, report and defence."
+			},
+			{
+				q: "Do I need to buy my own components?",
+				a: "Not if you attend on site, because our centres provide shared lab components. Virtual interns work in simulators first and can buy a starter kit from the Tech Faculty tech store if they want to build at home."
+			},
+			{
+				q: "Is this good for a computer engineering student?",
+				a: "Yes. Computer engineering sits between hardware and software, and an embedded and IoT placement uses both: you write firmware, design circuits and connect devices to the cloud."
+			}
+		]
+	},
+	{
+		slug: "mass-communication",
+		name: "Mass Communication & Journalism",
+		alsoFor: [
+			"Mass Communication",
+			"Journalism and Media Studies",
+			"Broadcasting",
+			"Public Relations and Advertising",
+			"English and Literary Studies"
+		],
+		metaTitle: "SIWES for Mass Communication Students",
+		metaDescription: "SIWES for mass communication students in Nigeria: social media, content, design and digital PR work for real clients, logbook examples and what it costs.",
+		h1: "SIWES for Mass Communication & Journalism Students",
+		shortAnswer: "Mass communication students can do SIWES in digital media: planning and running social media for real businesses, writing and editing content, designing graphics, editing short video and reading the analytics. Most media jobs now start online, so this is relevant industrial training, not a detour.",
+		whyItFits: "Newsrooms, PR agencies and brands in Nigeria now publish first on Instagram, TikTok, X, WhatsApp and the web. A placement where you plan content, write to a brief, edit video, schedule posts and report on what worked covers the same skills your courses in news writing, public relations, advertising and media management describe, applied to the channels employers actually use.",
+		coordinatorCheck: "Most mass communication departments accept a host that does media, PR, advertising or content work. Tell your coordinator the placement is in digital media and content production for client businesses, and show the project list below. If your department insists on a broadcast station or newspaper, follow that rule.",
+		projects: [
+			{
+				title: "Social media content calendar for a client",
+				detail: "Plan a month of posts for a real business, write the captions, design the graphics and schedule them, then report reach and engagement at the end.",
+				department: "digital-marketing"
+			},
+			{
+				title: "Short video production",
+				detail: "Script, shoot and edit short-form videos in CapCut for Reels and TikTok, following the brand's tone and a clear call to action.",
+				department: "digital-marketing"
+			},
+			{
+				title: "Brand graphics and templates",
+				detail: "Design post templates, flyers and a simple brand kit in Canva and Figma that the client can keep using after you leave.",
+				department: "design"
+			},
+			{
+				title: "Press release and blog writing",
+				detail: "Write a press release, a blog article and an email newsletter for an event or product launch, and edit each one through feedback rounds.",
+				department: "digital-marketing"
+			}
+		],
+		logbook: [{
+			weak: "Posted on social media for the company.",
+			strong: "Wrote and designed 6 Instagram posts for a pharmacy client's back-to-school campaign, scheduled them in Meta Business Suite, and recorded reach and saves for each post in the weekly report."
+		}, {
+			weak: "Edited videos.",
+			strong: "Scripted and edited two 30-second Reels in CapCut from raw footage of a client's shop, added captions and a WhatsApp call to action, and revised the second one after supervisor feedback on pacing."
+		}],
+		skills: [
+			"Content planning",
+			"Copywriting and editing",
+			"Canva and Figma",
+			"CapCut video editing",
+			"Meta Business Suite",
+			"Google Analytics",
+			"Press releases",
+			"Campaign reporting"
+		],
+		virtualFit: "Digital media work is done online anyway, so Virtual SIWES fits this course well. You join weekly live sessions, work on client briefs from wherever you are, and your logbook is signed and stamped through the logbook service without you travelling.",
+		guides: [
+			"how-to-find-siwes-placement-tech-nigeria-2026",
+			"siwes-logbook-mistakes-nigeria-fix",
+			"how-to-get-the-most-out-of-your-it-placement"
+		],
+		faqs: [
+			{
+				q: "Can mass communication students do SIWES online?",
+				a: "Many departments accept it when the host does real media or content work and supervises you. Digital media is done online anyway, so a virtual placement here means real client content, weekly reviews and a signed logbook. Confirm with your SIWES coordinator first."
+			},
+			{
+				q: "What will a mass communication student do during SIWES at Tech Faculty NG?",
+				a: "Plan and run social media for real businesses, write captions, press releases and articles, design graphics, edit short videos and report on results. You leave with a portfolio of published work, not just a logbook."
+			},
+			{
+				q: "Is digital marketing relevant to a mass communication degree?",
+				a: "Yes. Public relations, advertising, news writing and media management all now happen largely on digital channels, and most entry-level media and PR roles in Nigeria ask for social media and content skills."
+			},
+			{
+				q: "Will I get published work for my portfolio?",
+				a: "Yes, with the client's permission. Most interns finish with live posts, videos and articles they can link to, plus the analytics showing how they performed."
+			}
+		]
+	},
+	{
+		slug: "statistics-mathematics",
+		name: "Statistics & Mathematics",
+		alsoFor: [
+			"Statistics",
+			"Mathematics",
+			"Industrial Mathematics",
+			"Mathematics and Statistics (ND/HND)",
+			"Actuarial Science",
+			"Physics"
+		],
+		metaTitle: "SIWES for Statistics & Mathematics Students",
+		metaDescription: "SIWES for statistics and mathematics students in Nigeria: data cleaning, SQL, Excel, Python and dashboard projects, logbook examples, and what each option costs.",
+		h1: "SIWES for Statistics & Mathematics Students",
+		shortAnswer: "Statistics and mathematics students are a natural fit for a data placement: cleaning real datasets, writing SQL, analysing survey and sales data in Excel and Python, and building dashboards people use to make decisions. It turns the theory from your courses into the skills data analyst jobs ask for.",
+		whyItFits: "Your courses teach probability, regression, sampling and inference. Industry uses the same ideas every day, but through spreadsheets, databases and code. A data analytics placement makes you do the whole job: get messy data, clean it, choose the right method, and explain the answer to someone who is not a statistician. That last step is what most graduates are missing.",
+		coordinatorCheck: "Statistics departments usually accept any host where you analyse data under supervision, including banks, research firms, hospitals, government agencies and data training institutes. Tell your coordinator the placement is in data analysis with real datasets, and list the methods you will use, such as descriptive statistics, regression and survey analysis.",
+		projects: [
+			{
+				title: "Clean and analyse a real business dataset",
+				detail: "Take a messy sales, inventory or attendance dataset, clean it in Excel and Python, and answer three questions the business actually has.",
+				department: "data-science-analytics"
+			},
+			{
+				title: "Survey design and analysis",
+				detail: "Design a short questionnaire, collect responses with Google Forms, then analyse and present the results with the right summary statistics and charts.",
+				department: "data-science-analytics"
+			},
+			{
+				title: "SQL reporting",
+				detail: "Write SQL queries against a real database to produce weekly reports, and check your numbers against the source records.",
+				department: "data-science-analytics"
+			},
+			{
+				title: "Dashboard for decision makers",
+				detail: "Build a Power BI or Looker Studio dashboard that a manager can open every week, with clear definitions for every figure on it.",
+				department: "data-science-analytics"
+			},
+			{
+				title: "A first predictive model",
+				detail: "Fit a regression or classification model in Python with scikit-learn, test it honestly on held-out data and explain its limits in plain English.",
+				department: "ai-machine-learning"
+			}
+		],
+		logbook: [{
+			weak: "Did data analysis.",
+			strong: "Cleaned 4,200 rows of a client's 2025 sales records in Excel (removed duplicates, fixed date formats, filled missing branch codes) and produced monthly totals by branch for the manager."
+		}, {
+			weak: "Learnt Python.",
+			strong: "Used pandas to compare average order value across three customer groups, ran a t-test on the two largest groups, and wrote a one-page summary of the result and its limitations."
+		}],
+		skills: [
+			"Excel",
+			"SQL",
+			"Python and pandas",
+			"Power BI",
+			"Looker Studio",
+			"Survey analysis",
+			"Regression",
+			"Presenting findings"
+		],
+		virtualFit: "Data work runs on a laptop, so Virtual SIWES fits statistics and mathematics well. You get datasets, weekly live sessions and mentor reviews online, and the logbook service handles signing and stamping by courier.",
+		guides: [
+			"siwes-placement-ai-data-science-nigeria-2026",
+			"how-to-find-siwes-placement-tech-nigeria-2026",
+			"siwes-logbook-mistakes-nigeria-fix"
+		],
+		faqs: [
+			{
+				q: "Where can statistics students do SIWES in Nigeria?",
+				a: "Anywhere you analyse real data under supervision: banks, research and survey firms, hospitals, government statistics offices, fintech companies and data training institutes. Confirm the host with your SIWES coordinator before you resume."
+			},
+			{
+				q: "What will a statistics student do during SIWES at Tech Faculty NG?",
+				a: "Clean and analyse real datasets, write SQL, design and analyse surveys, build dashboards and, if you are ready, fit a first predictive model in Python. Every task is reviewed by a mentor and logged weekly."
+			},
+			{
+				q: "Do I need to know programming before I start?",
+				a: "No. You start in Excel and move to SQL and Python as the work needs them. Students who already code can go straight to Python and modelling."
+			},
+			{
+				q: "Is a data placement relevant for a mathematics degree?",
+				a: "Usually, yes. Data analysis applies statistics, linear algebra and modelling directly, and departments commonly accept it. Some pure mathematics departments prefer teaching or research placements, so check with your coordinator."
+			}
+		]
+	},
+	{
+		slug: "accounting-business-economics",
+		name: "Accounting, Business & Economics",
+		alsoFor: [
+			"Accounting / Accountancy",
+			"Banking and Finance",
+			"Economics",
+			"Business Administration",
+			"Marketing",
+			"Entrepreneurship"
+		],
+		metaTitle: "SIWES for Accounting & Business Students",
+		metaDescription: "SIWES for accounting, banking, economics and business students in Nigeria: Excel, financial dashboards, digital sales and AI tools for real businesses.",
+		h1: "SIWES for Accounting, Banking, Economics & Business Students",
+		shortAnswer: "Accounting, finance, economics and business students can do SIWES on the data and digital side of business: building financial reports and dashboards in Excel and Power BI, analysing sales, and helping small businesses sell and keep records online. These are the skills that separate business graduates in today's job market.",
+		whyItFits: "Every accounting, finance and management role now runs on spreadsheets, dashboards and digital tools. A placement where you reconcile records, build a cash flow or sales report, analyse margins and present the result to a business owner applies your coursework in financial accounting, cost accounting, economics and management to real numbers.",
+		coordinatorCheck: "Be careful here. Some accounting and banking departments insist on an audit firm, bank or accounting department, and will not accept a tech host. Others accept any host where you do financial or business analysis. Ask your coordinator before you apply, and show the project list below so they can see the work is financial and analytical.",
+		projects: [
+			{
+				title: "Financial and sales reporting in Excel",
+				detail: "Turn a small business's daily sales and expense records into monthly income statements, cash flow summaries and margin reports.",
+				department: "data-science-analytics"
+			},
+			{
+				title: "Business dashboard",
+				detail: "Build a Power BI or Looker Studio dashboard showing revenue, costs, stock and debtors that the owner can check every week.",
+				department: "data-science-analytics"
+			},
+			{
+				title: "Digital sales for a small business",
+				detail: "Set up a WhatsApp Business catalogue, Google Business Profile and a simple ad campaign, then measure the enquiries and sales that come from them.",
+				department: "digital-marketing"
+			},
+			{
+				title: "AI tools for business admin",
+				detail: "Use AI tools to draft invoices, summarise reports and answer routine customer questions, with a clear record of what was automated and what was checked by a person.",
+				department: "basic-internet-ai-studies"
+			}
+		],
+		logbook: [{
+			weak: "Worked on Excel.",
+			strong: "Built a monthly income statement for a client's provision store from 3 months of handwritten sales and expense records, found ₦86,000 of expenses recorded twice, and reconciled the cash balance."
+		}, {
+			weak: "Did marketing.",
+			strong: "Set up the client's WhatsApp Business catalogue with 40 products and prices, and tracked 23 enquiries from it in the first week in a sales log."
+		}],
+		skills: [
+			"Excel (pivot tables, lookups, formulas)",
+			"Financial reporting",
+			"Power BI",
+			"Sales analysis",
+			"WhatsApp Business and Google Business Profile",
+			"AI tools for admin",
+			"Presenting to business owners"
+		],
+		virtualFit: "Most of this work is done on a laptop with records the business shares, so Virtual SIWES works for these courses. Confirm with your department first, because accounting and banking departments are the most likely to require a specific kind of host.",
+		guides: [
+			"how-to-find-siwes-placement-tech-nigeria-2026",
+			"siwes-logbook-mistakes-nigeria-fix",
+			"siwes-allowance-nigeria-2026-itf-rates"
+		],
+		faqs: [
+			{
+				q: "Can accounting students do SIWES at a tech company?",
+				a: "Sometimes. Some accounting departments require an audit firm, bank or accounting office, while others accept any host where you do supervised financial work. Ask your SIWES coordinator first, and show them that the placement involves financial reporting and analysis."
+			},
+			{
+				q: "What will a business or economics student do during SIWES at Tech Faculty NG?",
+				a: "Financial and sales reporting in Excel, business dashboards in Power BI or Looker Studio, digital sales set-up for small businesses, and AI tools for routine admin. The work uses real business records and is reviewed by a mentor every week."
+			},
+			{
+				q: "Will Excel and Power BI help me get a job?",
+				a: "Yes. Excel is expected in almost every accounting, banking and business role, and Power BI or similar dashboard skills are increasingly listed in finance and analyst job adverts in Nigeria."
+			},
+			{
+				q: "Is this placement acceptable for banking and finance students?",
+				a: "It depends on your department. Financial analysis and reporting is relevant, but some banking and finance departments want a bank or financial institution. Confirm before you apply."
+			}
+		]
+	},
+	{
+		slug: "office-technology-management",
+		name: "Office Technology & Management",
+		alsoFor: [
+			"Office Technology and Management (OTM)",
+			"Secretarial Studies",
+			"Library and Information Science",
+			"Business Education",
+			"Public Administration"
+		],
+		metaTitle: "SIWES for Office Technology & Management",
+		metaDescription: "SIWES for OTM, secretarial and library science students in Nigeria: digital records, Google Workspace, Microsoft Office and AI tools in a working office.",
+		h1: "SIWES for Office Technology & Management (OTM) Students",
+		shortAnswer: "OTM and secretarial students can do SIWES running a modern digital office: managing records and shared drives, producing documents and presentations in Microsoft Office and Google Workspace, handling email and scheduling, and using AI tools to speed up routine admin. It is the office of today, not the typewriter room.",
+		whyItFits: "Office Technology and Management trains you for records management, office administration, business communication and information processing. Real offices now do all of that digitally: shared drives instead of filing cabinets, online forms instead of paper, and AI tools for first drafts. A placement where you run those systems for a real organisation is exactly what an OTM programme is preparing you for.",
+		coordinatorCheck: "OTM and secretarial departments generally accept any organisation where you do supervised office and administrative work. Tell your coordinator you will handle records management, document production and office administration in a digital office, and show the project list below.",
+		projects: [
+			{
+				title: "Digitise and organise records",
+				detail: "Scan, name, file and index paper records into a shared drive with a clear folder structure and access rules, then document the system for staff.",
+				department: "basic-internet-ai-studies"
+			},
+			{
+				title: "Document and presentation production",
+				detail: "Produce letters, memos, reports and slide decks in Microsoft Office and Google Workspace to the organisation's house style.",
+				department: "basic-internet-ai-studies"
+			},
+			{
+				title: "Online forms and scheduling",
+				detail: "Replace a paper process with Google Forms and Sheets, and manage shared calendars and meeting bookings for a team.",
+				department: "basic-internet-ai-studies"
+			},
+			{
+				title: "AI-assisted admin",
+				detail: "Use ChatGPT or Gemini to draft letters, summarise long documents and prepare minutes, checking every output before it is sent.",
+				department: "basic-internet-ai-studies"
+			},
+			{
+				title: "Office graphics",
+				detail: "Design notices, flyers, certificates and letterheads in Canva for internal and public use.",
+				department: "design"
+			}
+		],
+		logbook: [{
+			weak: "Did typing work in the office.",
+			strong: "Typed and formatted 12 admission letters in Microsoft Word using mail merge from an Excel list, proofread them against the register and filed signed copies in the shared drive."
+		}, {
+			weak: "Filed documents.",
+			strong: "Scanned 150 student registration forms, renamed them by matric number, filed them in a shared Google Drive folder, and built an index sheet so any form can be found in under a minute."
+		}],
+		skills: [
+			"Microsoft Word, Excel and PowerPoint",
+			"Google Workspace",
+			"Records management",
+			"Mail merge",
+			"Google Forms",
+			"AI tools for admin",
+			"Canva",
+			"Business correspondence"
+		],
+		virtualFit: "On-site suits OTM best, because office administration is easiest to learn inside a working office. A virtual placement is possible for document production, digital records and AI-assisted admin, and the logbook service handles signing and stamping by courier.",
+		guides: [
+			"how-to-find-siwes-placement-tech-nigeria-2026",
+			"siwes-logbook-mistakes-nigeria-fix",
+			"everything-you-need-to-know-about-siwes-nigeria"
+		],
+		faqs: [
+			{
+				q: "Where can OTM students do SIWES in Nigeria?",
+				a: "In any organisation where you do supervised office and administrative work: schools, hospitals, businesses, government offices and training institutes. Choose one that uses digital tools, so your logbook shows modern office skills."
+			},
+			{
+				q: "What will an OTM student do during SIWES at Tech Faculty NG?",
+				a: "Digitise and organise records, produce documents and presentations, run online forms and scheduling, design office graphics and use AI tools for routine admin, all supervised and logged weekly."
+			},
+			{
+				q: "Do I need a laptop?",
+				a: "Not for on-site placement, because you work on the office computers at our centres. For a virtual placement you need a laptop and internet; our tech store sells tested student laptops with part-payment options if that is the blocker."
+			},
+			{
+				q: "Will I learn AI tools during SIWES?",
+				a: "Yes. You use AI tools such as ChatGPT and Gemini to draft, summarise and organise office work, and you learn to check their output before anything is sent, which is how employers expect them to be used."
+			}
+		]
+	}
+];
+var getSiwesCourse = (slug) => siwesCourses.find((c) => c.slug === slug);
+/**
+* Courses covered by a blog guide instead of a hub page. Shown on /siwes/courses
+* alongside the hub pages so students of these courses still find their answer.
+*/
+var siwesCourseGuides = [{
+	name: "Computer Science & ICT",
+	alsoFor: "Computer Science, Information Technology, Software Engineering, Cybersecurity, Information Systems",
+	slug: "siwes-computer-science-ict-students-nigeria-2026"
+}, {
+	name: "AI & Data Science",
+	alsoFor: "Data Science, Artificial Intelligence, and any student aiming for a data or AI placement",
+	slug: "siwes-placement-ai-data-science-nigeria-2026"
+}];
+//#endregion
+export { siwesCourses as a, siwesCourseGuides as i, SIWES_GUIDES as n, siwesCourses_exports as o, getSiwesCourse as r, SIWES_COURSES_UPDATED as t };

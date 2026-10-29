@@ -1,0 +1,1 @@
+var e=`/assets/fmsti-logo-b_SQDLBA.png`;export{e as t};

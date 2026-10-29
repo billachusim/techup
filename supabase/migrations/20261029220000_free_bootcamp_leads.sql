@@ -1,0 +1,3 @@
+-- Free Tech Bootcamp seat requests from the homepage featured programs section are stored as leads.
+ALTER TABLE public.leads DROP CONSTRAINT IF EXISTS leads_interest_check;
+ALTER TABLE public.leads ADD CONSTRAINT leads_interest_check CHECK (interest IN ('free_checklist','success_kit','partner_enquiry','siwes_placement','virtual_siwes','logbook_service','community_join','whatsapp_chat','free_bootcamp'));

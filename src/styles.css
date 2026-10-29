@@ -211,3 +211,36 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* Featured programs (src/components/FeaturedPrograms.tsx) */
+.fp-grid {
+  background-image:
+    linear-gradient(to right, hsl(0 0% 100% / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(0 0% 100% / 0.07) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse at 70% 0%, black 20%, transparent 75%);
+}
+
+@keyframes fp-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-24px, 18px) scale(1.12); }
+}
+
+@keyframes fp-rise {
+  from { opacity: 0; transform: translateY(48px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fp-glow { animation: fp-drift 12s ease-in-out infinite; }
+  .fp-glow-slow { animation-duration: 18s; animation-direction: reverse; }
+
+  /* Cards rise into place as they scroll into view, in browsers with scroll-driven animations. */
+  @supports (animation-timeline: view()) {
+    .fp-reveal {
+      animation: fp-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}

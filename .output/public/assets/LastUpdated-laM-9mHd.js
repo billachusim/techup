@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-lyXjfMfH.js";var t=e(),n=e=>new Date(e).toLocaleDateString(`en-NG`,{year:`numeric`,month:`long`,day:`numeric`,timeZone:`UTC`}),r=({date:e,className:r=``})=>(0,t.jsxs)(`p`,{className:`text-xs text-muted-foreground ${r}`,children:[`Last updated `,(0,t.jsx)(`time`,{dateTime:e,children:n(e)})]});export{n,r as t};

@@ -1,0 +1,1 @@
+SELECT cron.alter_job(jobid, schedule := '0 6 * * 1') FROM cron.job WHERE jobname = 'ai-work-review';

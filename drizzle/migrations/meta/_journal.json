@@ -190,6 +190,13 @@
       "when": 1793309608059,
       "tag": "0026_schedule_admin_weekly_report",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1793309735692,
+      "tag": "0027_ai_work_review_weekly",
+      "breakpoints": true
     }
   ]
 }

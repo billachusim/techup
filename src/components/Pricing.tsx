@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { onboardStudent } from "@/lib/student-onboarding.functions";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -13,6 +13,7 @@ import { getSupabase, mightHaveSession } from "@/integrations/supabase/lazy";
 import type { Tables } from "@/integrations/supabase/types";
 import { useToast } from "@/hooks/use-toast";
 import { SignupForm } from "./Auth/SignupForm";
+import { FREE_BOOTCAMP_HASH, START_FREE_BOOTCAMP_EVENT } from "@/lib/free-bootcamp";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Check, ShieldCheck, Users, Trophy, AlertCircle, Code, Database, Shield, Cloud, Palette, TrendingUp, Sparkles, Smartphone, type LucideIcon } from "lucide-react";
 import { CourseSelector } from "./Pricing/CourseSelector";
@@ -160,6 +161,8 @@ const Pricing = () => {
   const [activeCategory, setActiveCategory] = useState<PlanCategory>("beginner");
   const [facultyIdDialogOpen, setFacultyIdDialogOpen] = useState(false);
   const [signupDialogOpen, setSignupDialogOpen] = useState(false);
+  // Set when the homepage bootcamp card sent a signed-out visitor to sign up first.
+  const [startFreeAfterSignup, setStartFreeAfterSignup] = useState(false);
   const [checkoutDialogOpen, setCheckoutDialogOpen] = useState(false);
   const [facultyId, setFacultyId] = useState("");
   const [selectedPlanId, setSelectedPlanId] = useState<string>("");
@@ -420,6 +423,43 @@ const Pricing = () => {
 
     // Fallback: show faculty ID dialog for unauthenticated users
     setFacultyIdDialogOpen(true);
+  };
+
+  const submitRequestRef = useRef(handleSubmitRequest);
+  submitRequestRef.current = handleSubmitRequest;
+
+  // The homepage Free Tech Bootcamp card (and /#free-bootcamp links) start the
+  // free plan here: signed-in students go straight to enrolment, everyone else
+  // signs up first and enrolment continues once the account exists.
+  useEffect(() => {
+    const freePlanId = departmentPlans.find((p) => p.isFree)?.id;
+    if (!freePlanId) return;
+    const start = async () => {
+      setActiveCategory("beginner");
+      document.getElementById("pricing")?.scrollIntoView();
+      if (mightHaveSession()) {
+        const supabase = await getSupabase();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          void submitRequestRef.current(freePlanId);
+          return;
+        }
+      }
+      setStartFreeAfterSignup(true);
+      setSignupDialogOpen(true);
+    };
+    const onStart = () => void start();
+    window.addEventListener(START_FREE_BOOTCAMP_EVENT, onStart);
+    if (window.location.hash === FREE_BOOTCAMP_HASH) void start();
+    return () => window.removeEventListener(START_FREE_BOOTCAMP_EVENT, onStart);
+  }, []);
+
+  const handleSignupSuccess = () => {
+    setSignupDialogOpen(false);
+    if (!startFreeAfterSignup) return;
+    setStartFreeAfterSignup(false);
+    const freePlanId = departmentPlans.find((p) => p.isFree)?.id;
+    if (freePlanId) void submitRequestRef.current(freePlanId);
   };
 
   const handleFacultyIdSubmit = async () => {
@@ -1085,13 +1125,19 @@ Please share the payment details so I can complete my enrollment. Thank you!`;
         </DialogContent>
       </Dialog>
 
-      <Dialog open={signupDialogOpen} onOpenChange={setSignupDialogOpen}>
+      <Dialog
+        open={signupDialogOpen}
+        onOpenChange={(open) => {
+          setSignupDialogOpen(open);
+          if (!open) setStartFreeAfterSignup(false);
+        }}
+      >
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Create Your Account</DialogTitle>
             <DialogDescription>Sign up to get your faculty ID and enroll</DialogDescription>
           </DialogHeader>
-          <SignupForm onSuccess={() => setSignupDialogOpen(false)} />
+          <SignupForm onSuccess={handleSignupSuccess} />
         </DialogContent>
       </Dialog>
 

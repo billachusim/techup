@@ -1,19 +1,10 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import { Link } from "@/lib/router-compat";
 import { ArrowUpRight, CalendarDays, MapPin, Percent, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import JoinWhatsAppButton from "@/components/JoinWhatsAppButton";
-import LeadCaptureForm, { type LeadExtraField } from "@/components/leads/LeadCaptureForm";
 import { AI_FELLOWSHIP_WHATSAPP_URL } from "@/lib/whatsapp";
-import { campuses } from "@/data/campuses";
-import { departments } from "@/data/departments";
+import { START_FREE_BOOTCAMP_EVENT } from "@/lib/free-bootcamp";
 import aiForEverything from "@/assets/ai-for-everything.jpg";
 import nnewiTechMeetup from "@/assets/nnewi-tech-meetup.jpg";
 import siwesCover from "@/assets/siwes-featured.jpg";
@@ -74,29 +65,10 @@ const programs: Program[] = [
   },
 ];
 
-/** Links to the homepage with this hash open the bootcamp form, e.g. from ads or WhatsApp. */
-const BOOTCAMP_HASH = "#free-bootcamp";
-
 const bootcampFacts = [
   { icon: CalendarDays, label: "3 weeks, hands-on" },
   { icon: MapPin, label: "Free at every campus" },
   { icon: Percent, label: "Up to 50% off a full course" },
-];
-
-const bootcampFields: LeadExtraField[] = [
-  {
-    id: "campus",
-    label: "Campus",
-    placeholder: "Choose your nearest campus",
-    required: true,
-    options: [...new Set(campuses.map((c) => c.city))],
-  },
-  {
-    id: "department",
-    label: "Course you're most interested in",
-    placeholder: "Not sure yet",
-    options: departments.map((d) => d.title),
-  },
 ];
 
 /**
@@ -158,9 +130,11 @@ const stackItemClass =
 const cardShellClass =
   "h-full origin-top rounded-[1.75rem] transition-[box-shadow,translate] duration-500 ease-out max-md:min-h-[30rem]";
 
-const BootcampCard = ({ onReserve }: { onReserve: () => void }) => (
+/** Starts the free Bootcamp Starter enrolment in the pricing section below. */
+const startFreeBootcamp = () => window.dispatchEvent(new Event(START_FREE_BOOTCAMP_EVENT));
+
+const BootcampCard = () => (
   <article
-    id="free-bootcamp"
     className={`${cardShellClass} relative isolate flex flex-col overflow-hidden bg-[hsl(165_35%_7%)] p-6 text-white shadow-xl shadow-primary/10 sm:p-8 md:min-h-[24rem] lg:p-10`}
   >
     <div aria-hidden className="fp-grid absolute inset-0 -z-10 opacity-40" />
@@ -201,13 +175,13 @@ const BootcampCard = ({ onReserve }: { onReserve: () => void }) => (
     <div className="mt-auto flex flex-col gap-3 pt-8 sm:flex-row sm:items-center">
       <Button
         size="lg"
-        onClick={onReserve}
+        onClick={startFreeBootcamp}
         className="group/cta h-12 rounded-full bg-primary px-6 text-base font-semibold text-primary-foreground hover:bg-primary/90"
       >
-        Reserve my free seat
+        Join the free bootcamp
         <ArrowUpRight className="ml-1 transition-transform duration-300 group-hover/cta:-translate-y-0.5 group-hover/cta:translate-x-0.5" />
       </Button>
-      <p className="text-sm text-white/55">Limited seats per campus. No payment needed.</p>
+      <p className="text-sm text-white/55">Create your free account and start today.</p>
     </div>
   </article>
 );
@@ -267,11 +241,6 @@ const ProgramCard = ({ program }: { program: Program }) => (
 
 const FeaturedPrograms = () => {
   const listRef = useStackedCards();
-  const [bootcampOpen, setBootcampOpen] = useState(false);
-
-  useEffect(() => {
-    if (window.location.hash === BOOTCAMP_HASH) setBootcampOpen(true);
-  }, []);
 
   return (
     <section id="featured-programs" className="px-4 py-24">
@@ -293,7 +262,7 @@ const FeaturedPrograms = () => {
 
         <ul ref={listRef} className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           <li className={`${stackItemClass} md:col-span-2`} style={{ "--i": 0 } as CSSProperties}>
-            <BootcampCard onReserve={() => setBootcampOpen(true)} />
+            <BootcampCard />
           </li>
           {programs.map((program, i) => (
             <li
@@ -307,27 +276,6 @@ const FeaturedPrograms = () => {
         </ul>
       </div>
 
-      <Dialog open={bootcampOpen} onOpenChange={setBootcampOpen}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Reserve your free bootcamp seat</DialogTitle>
-            <DialogDescription>
-              Three weeks of free, hands-on training at your nearest campus. Top performers qualify for
-              up to 50% off any department course. We'll contact you with the next start date.
-            </DialogDescription>
-          </DialogHeader>
-          <LeadCaptureForm
-            interest="free_bootcamp"
-            source="home-featured:free-bootcamp"
-            submitLabel="Reserve my free seat"
-            whatsappMessage="Hello Tech Faculty NG, I just reserved a seat on the Free Tech Bootcamp."
-            extraFields={bootcampFields}
-            schoolLabel="School or workplace"
-            schoolPlaceholder="e.g. UNIZIK, or where you work"
-            compact
-          />
-        </DialogContent>
-      </Dialog>
     </section>
   );
 };

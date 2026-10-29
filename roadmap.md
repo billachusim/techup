@@ -1,5 +1,9 @@
 # Roadmap
 
+## Lead submission repair
+- [x] Confirm missing email-consent insert permissions and apply a column-only grant
+- [ ] Verify real form submissions and consent storage without widening private-field access
+
 ## Automated social images
 - [x] Public cached Style 1 image endpoint with validated inputs
 - [x] Article-specific blog metadata and structured data images

@@ -72,10 +72,29 @@ describe("plan catalogue", () => {
 describe("priceSelection", () => {
   const devPro = PLAN_PRICING["developer-pro"];
 
-  it("adds up courses, benefits and the learning mode from the catalogue", () => {
-    const result = priceSelection("developer-pro", ids(devPro.courses), ["job-placement", "internship"], "hybrid");
-    const courses = devPro.courses.reduce((s, c) => s + c.price, 0);
-    expect(result).toMatchObject({ ok: true, total: courses + 15000 + 12000 + 12000 });
+  it("charges a flat plan its fee plus the learning mode and benefits", () => {
+    const result = priceSelection("developer-pro", [], ["job-placement", "internship"], "hybrid");
+    expect(result).toMatchObject({ ok: true, total: devPro.minimumAmount + 15000 + 12000 + 12000 });
+    expect(result.ok && ids(result.courses)).toEqual(ids(devPro.courses));
+  });
+
+  it("includes every course in a flat plan, whichever were sent", () => {
+    for (const [id, plan] of paidPlans) {
+      if (!plan.flat) continue;
+      const none = priceSelection(id, [], [], null);
+      const some = priceSelection(id, ids(plan.courses).slice(0, 1), [], null);
+      expect(none, id).toMatchObject({ ok: true, total: plan.minimumAmount });
+      expect(some, id).toMatchObject({ ok: true, total: plan.minimumAmount });
+    }
+  });
+
+  it("makes every department plan flat, and only the custom builder per-course", () => {
+    for (const [id, plan] of paidPlans) expect(!!plan.flat, id).toBe(id !== "custom-builder");
+  });
+
+  it("adds up courses, benefits and the learning mode in the custom builder", () => {
+    const result = priceSelection("custom-builder", ["deep-learning", "react", "aws"], ["job-placement"], "hybrid");
+    expect(result).toMatchObject({ ok: true, total: 27000 + 18000 + 18000 + 15000 + 12000 });
   });
 
   it("charges nothing extra for online-only or no learning mode", () => {
@@ -132,25 +151,16 @@ describe("priceSelection", () => {
     });
   });
 
-  it("refuses a selection below the plan minimum", () => {
-    expect(priceSelection("developer-pro", ["html-css"], [], null)).toEqual({
-      ok: false,
-      error: "Selection is below the plan minimum",
-    });
-    expect(priceSelection("ai-innovator", ids(PLAN_PRICING["ai-innovator"].courses).slice(0, 2), [], null)).toEqual({
+  it("refuses a custom selection below the plan minimum", () => {
+    expect(priceSelection("custom-builder", ["html-css"], [], null)).toEqual({
       ok: false,
       error: "Selection is below the plan minimum",
     });
   });
 
-  it("accepts a selection exactly at the minimum", () => {
-    // 12,000 + 15,000 + 15,000 + 18,000 = ₦60,000, Digital Marketing Pro's minimum.
-    const exact = priceSelection(
-      "digital-marketing-pro",
-      ["content-marketing", "seo-sem"],
-      ["job-placement", "mentor-network"],
-      "online-only",
-    );
-    expect(exact).toMatchObject({ ok: true, total: 60000 });
+  it("accepts a custom selection over the minimum", () => {
+    // 18,000 + 18,000 + 12,000 + 7,500 = ₦55,500.
+    const result = priceSelection("custom-builder", ["react", "nodejs", "database", "html-css"], [], "online-only");
+    expect(result).toMatchObject({ ok: true, total: 55500 });
   });
 });

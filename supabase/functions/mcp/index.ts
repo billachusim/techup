@@ -22,7 +22,7 @@ var departments = [
 var list_departments_default = defineTool({
   name: "list_departments",
   title: "List departments",
-  description: "List Tech Faculty departments/tracks with starting prices (in NGN) and descriptions.",
+  description: "List Tech Faculty departments/tracks with their fees in NGN (one flat fee covering every course; the custom programme is priced per course from the amount shown) and descriptions.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: () => ({
@@ -993,30 +993,30 @@ var blogPosts = [
     description: "What tech courses cost in Nigeria in 2026, with Tech Faculty NG's real naira prices for web, data, AI, cybersecurity, cloud, design and marketing, plus SIWES fees.",
     content: `# How Much Do Tech Courses Cost in Nigeria in 2026? Real Naira Prices
 
-*By Bill Achusim \xB7 Published Oct 8, 2026 \xB7 Last updated Oct 8, 2026*
+*By Bill Achusim \xB7 Published Oct 8, 2026 \xB7 Last updated Oct 29, 2026*
 
-**Short answer:** At Tech Faculty NG, a tech course in 2026 costs nothing for the free online foundation bootcamp, and a full department track starts at between \u20A650,000 and \u20A6150,000, depending on the skill. Hybrid study adds \u20A612,000 and weekly physical classes add \u20A622,500. Fees elsewhere vary widely, so always compare what each fee actually includes.
+**Short answer:** At Tech Faculty NG, a tech course in 2026 costs nothing for the free online foundation bootcamp, and a full department track costs one flat fee between \u20A650,000 and \u20A6150,000, depending on the skill, with every course in the track included. Hybrid study adds \u20A612,000 and weekly physical classes add \u20A622,500. Fees elsewhere vary widely, so always compare what each fee actually includes.
 
-Most "how much is a tech course" answers online give a vague range. This page gives our own prices, line by line, as they appear on our [pricing page](/#pricing) and as our checkout charges them. We cannot speak for other schools' fees, so where we mention the wider market we tell you what to check rather than quoting numbers we cannot verify.
+Most "how much is a tech course" answers online give a vague range. This page gives our own prices, as they appear on our [pricing page](/#pricing) and as our checkout charges them. We cannot speak for other schools' fees, so where we mention the wider market we tell you what to check rather than quoting numbers we cannot verify.
 
 ## Tech Faculty NG course fees in 2026
 
-Every paid track has a **minimum fee**, which is the least you can pay to enrol in that department. You build your plan from individual courses and optional benefits, and the total must reach that minimum.
+Every paid track has **one flat fee** that covers all of its courses and the Tech Faculty certificate. The only things that change it are the study mode you choose and any optional extras you add. You can pay it in two instalments within 30 days.
 
-| Track | Department | Starts from | All courses in the track | Typical duration |
-|---|---|---|---|---|
-| Everyday AI & Digital Productivity (Bootcamp Starter) | Foundation for [every department](/departments) | Free | Free | Self-paced |
-| AI for Full-Stack Web Development | [Web Development](/departments/web-development) | \u20A650,000 | \u20A682,500 | 12 to 16 weeks |
-| AI for Digital Marketing & Growth | [Social Media & Digital Marketing](/departments/digital-marketing) | \u20A660,000 | \u20A672,000 | 10 to 14 weeks |
-| AI for UI/UX & Product Design | [Design](/departments/design) | \u20A670,000 | \u20A678,000 | 12 to 16 weeks |
-| AI for Mobile App Development | [Mobile App Development](/departments/mobile-app-development) | \u20A680,000 | \u20A6105,000 | 14 to 18 weeks |
-| AI for Data Analytics & Business Intelligence | [Data Science & Analytics](/departments/data-science-analytics) | \u20A6100,000 | \u20A682,500 | 12 to 16 weeks |
-| AI for Cybersecurity & Threat Intelligence | [Cybersecurity](/departments/cybersecurity) | \u20A6120,000 | \u20A6100,500 | 16 to 20 weeks |
-| AI for Cloud & DevOps Engineering | [Cloud Computing](/departments/cloud-computing) | \u20A6130,000 | \u20A6103,500 | 14 to 18 weeks |
-| AI & Autonomous Agents Engineering | [AI & Machine Learning](/departments/ai-machine-learning) | \u20A6150,000 | \u20A6124,500 | 16 to 20 weeks |
-| Custom Programme (pick any courses) | [All departments](/departments) | \u20A650,000 | Depends on choice | Depends on choice |
+| Track | Department | Fee (online, all courses) | Typical duration |
+|---|---|---|---|
+| Everyday AI & Digital Productivity (Bootcamp Starter) | Foundation for [every department](/departments) | Free | Self-paced |
+| AI for Full-Stack Web Development | [Web Development](/departments/web-development) | \u20A650,000 | 12 to 16 weeks |
+| AI for Digital Marketing & Growth | [Social Media & Digital Marketing](/departments/digital-marketing) | \u20A660,000 | 10 to 14 weeks |
+| AI for UI/UX & Product Design | [Design](/departments/design) | \u20A670,000 | 12 to 16 weeks |
+| AI for Mobile App Development | [Mobile App Development](/departments/mobile-app-development) | \u20A680,000 | 14 to 18 weeks |
+| AI for Data Analytics & Business Intelligence | [Data Science & Analytics](/departments/data-science-analytics) | \u20A6100,000 | 12 to 16 weeks |
+| AI for Cybersecurity & Threat Intelligence | [Cybersecurity](/departments/cybersecurity) | \u20A6120,000 | 16 to 20 weeks |
+| AI for Cloud & DevOps Engineering | [Cloud Computing](/departments/cloud-computing) | \u20A6130,000 | 14 to 18 weeks |
+| AI & Autonomous Agents Engineering | [AI & Machine Learning](/departments/ai-machine-learning) | \u20A6150,000 | 16 to 20 weeks |
+| Custom Programme (pick any courses) | [All departments](/departments) | From \u20A650,000 | Depends on choice |
 
-Where "all courses" is lower than "starts from", the minimum is reached by adding a learning mode or one of the benefits below.
+The custom programme is the one exception: you pick individual courses from any department, each priced separately, and the total must come to at least \u20A650,000.
 
 ### The free option
 
@@ -1026,7 +1026,7 @@ The Bootcamp Starter track costs \u20A60. It covers Intro to Programming, Intro 
 
 **Learning mode.** Online-only study with recorded lectures adds nothing. Hybrid mode, which is online study plus monthly physical meetups, adds \u20A612,000. Physical classes, meaning weekly on-site classes at a campus, add \u20A622,500. Our [online vs physical guide](/blog/online-vs-physical-tech-bootcamp-nigeria-2026) covers which one suits you.
 
-**Benefits you choose.** These are optional and priced separately:
+**Optional extras.** These are not needed to finish a track and are priced separately:
 
 - Job Placement Support: \u20A615,000
 - Internship Access: \u20A612,000
@@ -1036,7 +1036,7 @@ The Bootcamp Starter track costs \u20A60. It covers Intro to Programming, Intro 
 - VIP Classes at a chosen location (AI track): \u20A675,000
 - Tech Faculty Certificate: included at no cost
 
-**A worked example.** A student taking every course in the web development track (\u20A682,500), choosing physical classes (\u20A622,500) and adding Job Placement Support (\u20A615,000) pays \u20A6120,000 in total.
+**A worked example.** A student on the web development track (\u20A650,000, all courses included) who chooses physical classes (\u20A622,500) and adds Job Placement Support (\u20A615,000) pays \u20A687,500 in total, or two payments of \u20A643,750.
 
 ## SIWES and industrial training fees
 
@@ -1061,24 +1061,25 @@ A lower fee is not always cheaper, and a higher one is not always better. Before
 ## Frequently asked questions
 
 ### What is the cheapest way to learn tech in Nigeria in 2026?
-Start free. Tech Faculty NG's Bootcamp Starter track costs \u20A60 and covers programming basics, AI tools, Git and career guidance online. Once you know which skill you want, the lowest-priced paid track is web development, starting at \u20A650,000.
+Start free. Tech Faculty NG's Bootcamp Starter track costs \u20A60 and covers programming basics, AI tools, Git and career guidance online. Once you know which skill you want, the lowest-priced paid track is web development, at \u20A650,000 with every course included.
 
 ### How much is a data analytics course in Nigeria?
-At Tech Faculty NG, the data analytics and business intelligence track starts at \u20A6100,000. It covers Python, SQL, data visualisation, statistics, machine learning basics and real-world projects, and runs for 12 to 16 weeks. See the [Data Science & Analytics department](/departments/data-science-analytics).
+At Tech Faculty NG, the data analytics and business intelligence track costs \u20A6100,000. It covers Python, SQL, data visualisation, statistics, machine learning basics and real-world projects, and runs for 12 to 16 weeks. See the [Data Science & Analytics department](/departments/data-science-analytics).
 
 ### How much is a cybersecurity course in Nigeria?
-Our cybersecurity and threat intelligence track starts at \u20A6120,000 and runs for 16 to 20 weeks. It covers network security, ethical hacking, SOC operations, incident response and certification prep. See the [Cybersecurity department](/departments/cybersecurity).
+Our cybersecurity and threat intelligence track costs \u20A6120,000 and runs for 16 to 20 weeks. It covers network security, ethical hacking, SOC operations, incident response and certification prep. See the [Cybersecurity department](/departments/cybersecurity).
 
 ### Do physical classes cost more than online classes?
 Yes. Online-only study adds nothing to the track fee, hybrid study adds \u20A612,000 and weekly physical classes add \u20A622,500.
 
 ### Can I pay in instalments?
-Message us on [WhatsApp](https://wa.me/2348068597140?text=Hello%20Tech%20Faculty%20NG%2C%20I%20read%20your%20course%20fees%20guide.%20Can%20I%20pay%20in%20instalments%3F) with the track you want and we will tell you the payment options for the next cohort.
+Yes. Any track fee of \u20A650,000 or more can be paid in two parts: half when you enrol, which starts your classes, and the rest within 30 days from your student dashboard.
 
 ## Next step
 
-Browse the [departments](/departments), pick a track, and build your plan on the [pricing page](/#pricing). If you are unsure which skill to choose, start with the free Bootcamp Starter.`,
+Browse the [departments](/departments), pick a track, and enrol from its page or the [pricing section](/#pricing). If you are unsure which skill to choose, start with the free Bootcamp Starter.`,
     date: "2026-10-08",
+    updated: "2026-10-29",
     author: "Bill Achusim",
     tags: ["Tech Careers", "tech course fees Nigeria 2026", "cost of tech training Nigeria", "bootcamp prices Nigeria", "how much is a tech course in Nigeria"],
     readTime: 7

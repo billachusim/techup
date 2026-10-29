@@ -52,8 +52,8 @@ const steps = [
     body: "Compare the departments below. Each page lists the modules, tools and duration.",
   },
   {
-    title: "Build your plan",
-    body: "In the pricing section, choose the plan and modules you want and keep the learning mode on Online Only, which adds nothing to the fee.",
+    title: "Press Enrol",
+    body: "Each department has one flat fee that covers all of its modules. Keep the study mode on Online Only, which adds nothing to the fee.",
   },
   {
     title: "Pay or message us",

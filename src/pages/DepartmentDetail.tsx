@@ -6,7 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import JoinWhatsAppButton from "@/components/JoinWhatsAppButton";
 import { COMMUNITY_WHATSAPP_URL } from "@/lib/whatsapp";
-import { ArrowLeft, CalendarCheck, CheckCircle2, Clock, MessageCircle, Users, TrendingUp } from "lucide-react";
+import { EnrolProvider } from "@/components/enrol/EnrolProvider";
+import { DepartmentEnrolCard, EnrolButton } from "@/components/enrol/DepartmentEnrolCard";
+import { ArrowLeft, CheckCircle2, Clock, MessageCircle, Users, TrendingUp } from "lucide-react";
 import LastUpdated from "@/components/LastUpdated";
 import {
   departmentFaqs,
@@ -16,7 +18,6 @@ import {
 } from "@/data/departments";
 import { DEPARTMENT_GUIDES } from "@/data/internalLinks";
 import { planMinimum } from "@/lib/fees";
-import { INSTALMENTS } from "../../supabase/functions/_shared/pricing.ts";
 
 const DepartmentDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -30,7 +31,6 @@ const DepartmentDetail = () => {
   const courseWorkload = weeks ? `P${weeks[weeks.length - 1]}W` : undefined;
   const faqs = departmentFaqs(dept);
   const fee = dept.planId ? planMinimum(dept.planId) : undefined;
-  const instalments = INSTALMENTS.enabled && fee !== undefined && fee >= INSTALMENTS.minimumTotal;
   const updated = departmentUpdated(dept);
 
   const courseSchema = {
@@ -49,7 +49,12 @@ const DepartmentDetail = () => {
       url: "https://techfaculty.ng/",
       areaServed: "NG",
     },
-    offers: { "@type": "Offer", category: "Paid", url },
+    offers: {
+      "@type": "Offer",
+      category: fee === 0 ? "Free" : "Paid",
+      url,
+      ...(fee !== undefined && { price: String(fee), priceCurrency: "NGN", availability: "https://schema.org/InStock" }),
+    },
     hasCourseInstance: [
       { "@type": "CourseInstance", courseMode: "Online", courseWorkload },
       {
@@ -96,6 +101,7 @@ const DepartmentDetail = () => {
   const guides = DEPARTMENT_GUIDES[dept.slug] ?? [];
 
   return (
+    <EnrolProvider>
     <div className="min-h-screen bg-background">
       <>
         <script type="application/ld+json">{JSON.stringify(courseSchema)}</script>
@@ -144,27 +150,8 @@ const DepartmentDetail = () => {
             <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-4">
               {dept.intro}
             </p>
-            <div className="mb-4 rounded-lg border border-primary/30 bg-primary/5 p-4">
-              <p className="flex items-center gap-2 font-semibold">
-                <CalendarCheck className="h-4 w-4 text-primary" /> Start any time
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Registration is continuous. Enrol today and join the current {dept.title} cohort, or learn one-on-one.
-                {instalments && ` You can pay in two instalments within ${INSTALMENTS.balanceDueDays} days.`}
-              </p>
-            </div>
-            <LastUpdated date={updated} className="mb-4" />
-            <JoinWhatsAppButton
-              url={COMMUNITY_WHATSAPP_URL}
-              groupName="the Tech Faculty WhatsApp community"
-              captureSource={`department:${dept.slug}`}
-              captureContext={dept.title}
-              size="lg"
-            >
-              <span className="flex items-center justify-center gap-2">
-                Join the {dept.title} community <MessageCircle size={16} />
-              </span>
-            </JoinWhatsAppButton>
+            <DepartmentEnrolCard dept={dept} />
+            <LastUpdated date={updated} />
           </div>
         </section>
 
@@ -255,12 +242,24 @@ const DepartmentDetail = () => {
           <div className="container mx-auto max-w-4xl">
             <h2 className="text-2xl font-bold mb-4">How to join</h2>
             <ol className="space-y-2 text-sm text-muted-foreground list-decimal list-inside">
-              <li>Join the Tech Faculty WhatsApp community and tell us which department you want.</li>
-              <li>Create your account to receive a Faculty ID.</li>
-              <li>Choose online, hybrid, or on-campus study at any of our centres nationwide.</li>
-              <li>Complete your projects and receive a verifiable Tech Faculty certificate.</li>
+              {dept.planId ? (
+                <>
+                  <li>Press Enrol and choose online, hybrid, or on-campus study at any of our centres nationwide.</li>
+                  <li>Create your free account. Your Faculty ID is issued when you enrol.</li>
+                  <li>Pay by card, in full or in two instalments, or send your request on WhatsApp and pay by transfer.</li>
+                  <li>Start straight away, complete your projects and receive a verifiable Tech Faculty certificate.</li>
+                </>
+              ) : (
+                <>
+                  <li>Message us on WhatsApp and we confirm the fee for the modules you want.</li>
+                  <li>Create your account to receive a Faculty ID.</li>
+                  <li>Choose online, hybrid, or on-campus study at any of our centres nationwide.</li>
+                  <li>Complete your projects and receive a verifiable Tech Faculty certificate.</li>
+                </>
+              )}
             </ol>
             <div className="flex flex-wrap gap-3 mt-5">
+              {dept.planId && <EnrolButton planId={dept.planId} label={dept.planId === "bootcamp-starter" ? "Join free" : "Enrol now"} />}
               <JoinWhatsAppButton url={COMMUNITY_WHATSAPP_URL} groupName="the Tech Faculty WhatsApp community" captureSource={`department-footer:${dept.slug}`} captureContext={dept.title}>
                 <span className="flex items-center justify-center gap-2">
                   Join Community <MessageCircle size={14} />
@@ -314,6 +313,7 @@ const DepartmentDetail = () => {
       </main>
       <Footer />
     </div>
+    </EnrolProvider>
   );
 };
 

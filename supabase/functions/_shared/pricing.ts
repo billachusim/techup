@@ -25,7 +25,13 @@ export interface LearningMode {
 }
 
 export interface PlanPricing {
+  /** The lowest total a selection may come to; for a flat plan, its fee. */
   minimumAmount: number;
+  /**
+   * A flat plan charges minimumAmount for all of its courses, plus the
+   * learning mode and any benefits picked; courseIds are not needed.
+   */
+  flat?: boolean;
   courses: Course[];
   learningModes: LearningMode[];
   benefits: Benefit[];
@@ -346,6 +352,7 @@ export const PLAN_PRICING: Record<string, PlanPricing> = {
   },
   "developer-pro": {
     minimumAmount: 50000,
+    flat: true,
     courses: [
       { id: "html-css", name: "HTML/CSS Fundamentals", price: 7500 },
       { id: "javascript", name: "JavaScript Mastery", price: 12000 },
@@ -390,6 +397,7 @@ export const PLAN_PRICING: Record<string, PlanPricing> = {
   },
   "data-wizard": {
     minimumAmount: 100000,
+    flat: true,
     courses: [
       { id: "python", name: "Python Programming", price: 10500 },
       { id: "sql", name: "SQL & Databases", price: 9000 },
@@ -434,6 +442,7 @@ export const PLAN_PRICING: Record<string, PlanPricing> = {
   },
   "ai-innovator": {
     minimumAmount: 150000,
+    flat: true,
     courses: [
       { id: "deep-learning", name: "Deep Learning", price: 27000 },
       { id: "neural-networks", name: "Neural Networks", price: 22500 },
@@ -484,6 +493,7 @@ export const PLAN_PRICING: Record<string, PlanPricing> = {
   },
   "security-shield": {
     minimumAmount: 120000,
+    flat: true,
     courses: [
       { id: "network-security", name: "Network Security", price: 15000 },
       { id: "ethical-hacking", name: "Ethical Hacking", price: 22500 },
@@ -528,6 +538,7 @@ export const PLAN_PRICING: Record<string, PlanPricing> = {
   },
   "mobile-app-developer": {
     minimumAmount: 80000,
+    flat: true,
     courses: [
       { id: "react-native", name: "React Native Development", price: 18000 },
       { id: "flutter-dart", name: "Flutter & Dart", price: 18000 },
@@ -576,6 +587,7 @@ export const PLAN_PRICING: Record<string, PlanPricing> = {
   },
   "cloud-architect": {
     minimumAmount: 130000,
+    flat: true,
     courses: [
       { id: "aws", name: "AWS Fundamentals", price: 18000 },
       { id: "azure", name: "Azure Basics", price: 18000 },
@@ -620,6 +632,7 @@ export const PLAN_PRICING: Record<string, PlanPricing> = {
   },
   "design-master": {
     minimumAmount: 70000,
+    flat: true,
     courses: [
       { id: "design-principles", name: "Design Principles", price: 9000 },
       { id: "figma", name: "Figma Mastery", price: 12000 },
@@ -658,6 +671,7 @@ export const PLAN_PRICING: Record<string, PlanPricing> = {
   },
   "digital-marketing-pro": {
     minimumAmount: 60000,
+    flat: true,
     courses: [
       { id: "social-media", name: "Social Media Strategy", price: 10500 },
       { id: "content-marketing", name: "Content Marketing", price: 12000 },
@@ -738,8 +752,9 @@ export type PricedSelection =
   | { ok: false; error: string };
 
 /**
- * Prices a selection from its ids alone. Custom plans may pick from every
- * course; other plans only from their own. Unknown ids are rejected rather
+ * Prices a selection from its ids alone. Flat plans always include all of
+ * their courses at the plan fee. Custom plans may pick from every course;
+ * other plans only from their own. Unknown ids are rejected rather
  * than ignored, so a tampered request can't slip through at a lower price.
  */
 export function priceSelection(
@@ -758,6 +773,7 @@ export function priceSelection(
     if (!course) return { ok: false, error: `Unknown course: ${id}` };
     courses.push(course);
   }
+  if (plan.flat) courses.splice(0, courses.length, ...plan.courses);
   const benefits: Benefit[] = [];
   for (const id of new Set(benefitIds)) {
     const benefit = plan.benefits.find((b) => b.id === id);
@@ -773,7 +789,7 @@ export function priceSelection(
   }
 
   const total =
-    courses.reduce((sum, c) => sum + c.price, 0) +
+    (plan.flat ? plan.minimumAmount : courses.reduce((sum, c) => sum + c.price, 0)) +
     benefits.reduce((sum, b) => sum + b.price, 0) +
     (learningMode?.price ?? 0);
   if (total < plan.minimumAmount)

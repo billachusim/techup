@@ -62,6 +62,7 @@ const navGroups = [
 
 const directLinks = [
   { label: "Home", href: "/" },
+  { label: "Pricing", href: "/#pricing" },
   { label: "Locations", href: "/locations", icon: MapPin },
   { label: "About", href: "/about" },
 ];
@@ -180,6 +181,9 @@ const Header = () => {
               </DropdownMenu>
             ))}
 
+            <Button asChild variant="ghost" size="sm" className="text-muted-foreground">
+              <Link to="/#pricing" onClick={() => handleNavClick("/#pricing")}>Pricing</Link>
+            </Button>
             <Button asChild variant="ghost" size="sm" className={`gap-1.5 ${isActive("/locations") ? "bg-muted font-semibold text-foreground" : "text-muted-foreground"}`}>
               <Link to="/locations"><MapPin className="h-3.5 w-3.5" /> Locations</Link>
             </Button>

@@ -20,7 +20,7 @@ describe("decideAutoAnswer", () => {
 
   it("quotes one department when it is named", () => {
     const d = answer("what is the fee for data analytics");
-    expect(d.reply).toContain("Data Science & Analytics takes 12 to 16 weeks and costs from ₦100,000");
+    expect(d.reply).toContain("Data Science & Analytics takes 12 to 16 weeks and costs ₦100,000");
     expect(d.reply).toContain("/departments/data-science-analytics");
     expect(d.reply).not.toContain("Web Development");
   });

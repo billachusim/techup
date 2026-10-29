@@ -16,7 +16,7 @@ const departments = [
 export default defineTool({
   name: "list_departments",
   title: "List departments",
-  description: "List Tech Faculty departments/tracks with starting prices (in NGN) and descriptions.",
+  description: "List Tech Faculty departments/tracks with their fees in NGN (one flat fee covering every course; the custom programme is priced per course from the amount shown) and descriptions.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: () => ({

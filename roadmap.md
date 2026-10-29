@@ -1,5 +1,9 @@
 # Roadmap
 
+## Lead submission repair
+- [x] Confirm missing email-consent insert permissions and apply a column-only grant
+- [x] Verify real checklist and WhatsApp submissions (HTTP 201), stored consent false, private fields still restricted; 24 tests pass
+
 ## Automated social images
 - [x] Public cached Style 1 image endpoint with validated inputs
 - [x] Article-specific blog metadata and structured data images

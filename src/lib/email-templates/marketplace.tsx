@@ -105,7 +105,7 @@ const ProfileSubmitted = ({ name, strength, facultyId }: { name?: string; streng
     {facultyId ? (
       <Text style={text}>Your Faculty ID is <b>{facultyId}</b>. Keep it for applications and certificates.</Text>
     ) : (
-      <Text style={text}>Get to 100% — CV, skills, experience and availability — to unlock your Faculty ID and one-click applications.</Text>
+      <Text style={text}>Profiles at 70% or more are approved automatically, so add your CV, skills, experience and availability. Taking a Tech Faculty course gets you a Faculty ID and priority matching for roles in your field.</Text>
     )}
     <Text style={muted}>Next: browse open roles and apply with your profile.</Text>
   </Layout>

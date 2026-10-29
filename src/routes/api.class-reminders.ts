@@ -10,7 +10,8 @@ export const Route = createFileRoute("/api/class-reminders")({
     handlers: {
       POST: async ({ request }) => {
         const given = request.headers.get("x-cron-secret") ?? "";
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const { supabaseAdmin } =
+          await import("@/integrations/supabase/client.server");
         const { data } = await supabaseAdmin
           .from("cron_secrets")
           .select("secret")
@@ -19,28 +20,42 @@ export const Route = createFileRoute("/api/class-reminders")({
         if (!given || !data?.secret || !sameKey(given, data.secret)) {
           return Response.json({ error: "Not allowed" }, { status: 401 });
         }
-        const { runClassReminders } = await import("@/lib/class-reminders.server");
+        const { runClassReminders } =
+          await import("@/lib/class-reminders.server");
         const started = Date.now();
         try {
           const result = await runClassReminders();
-          const { error: logError } = await supabaseAdmin.from("scheduled_job_runs").insert({
-            job: "class-reminders",
-            trigger: "cron",
-            success: result.failed === 0,
-            items: result.sent,
-            report: result,
-            duration_ms: Date.now() - started,
-          });
-          if (logError) console.error("Could not log class reminder run", logError.message);
-          if (result.sent > 0) {
-            const { error: auditError } = await supabaseAdmin.from("admin_audit_log").insert({
-              actor_email: "automation",
-              action: "class_reminders.sent",
-              target_table: "lectures",
-              subject: `${result.sent} class reminder${result.sent === 1 ? "" : "s"} for ${result.classes.length} class${result.classes.length === 1 ? "" : "es"}`,
-              details: { classes: result.classes, skipped: result.skipped, failed: result.failed },
+          const { error: logError } = await supabaseAdmin
+            .from("scheduled_job_runs")
+            .insert({
+              job: "class-reminders",
+              trigger: "cron",
+              success: result.failed === 0,
+              items: result.sent,
+              report: result,
+              duration_ms: Date.now() - started,
             });
-            if (auditError) console.error("Could not write admin audit log", auditError.message);
+          if (logError)
+            console.error("Could not log class reminder run", logError.message);
+          if (result.sent > 0) {
+            const { error: auditError } = await supabaseAdmin
+              .from("admin_audit_log")
+              .insert({
+                actor_email: "automation",
+                action: "class_reminders.sent",
+                target_table: "lectures",
+                subject: `${result.sent} class reminder${result.sent === 1 ? "" : "s"} for ${result.classes.length} class${result.classes.length === 1 ? "" : "es"}`,
+                details: {
+                  classes: result.classes,
+                  skipped: result.skipped,
+                  failed: result.failed,
+                },
+              });
+            if (auditError)
+              console.error(
+                "Could not write admin audit log",
+                auditError.message,
+              );
           }
           return Response.json(result);
         } catch (e) {
@@ -55,7 +70,10 @@ export const Route = createFileRoute("/api/class-reminders")({
             error: message,
             duration_ms: Date.now() - started,
           });
-          return Response.json({ error: "Could not send class reminders" }, { status: 500 });
+          return Response.json(
+            { error: "Could not send class reminders" },
+            { status: 500 },
+          );
         }
       },
     },

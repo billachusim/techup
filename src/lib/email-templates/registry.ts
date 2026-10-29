@@ -13,7 +13,7 @@ import {
   hiringRequestAdmin,
   hrMessage,
 } from './marketplace'
-import { adminMorningDigest, orderPaidAdmin } from './admin'
+import { adminMorningDigest, adminWeeklyReport, orderPaidAdmin } from './admin'
 import { studentWelcome, classUnlocked, studentWorkReviewed, graduateReviewRequest, checkoutReminder, paymentConfirmed, orderConfirmed, classReminder } from './student'
 
 export interface TemplateEntry {
@@ -54,6 +54,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'student-work-reviewed': studentWorkReviewed,
   'graduate-review-request': graduateReviewRequest,
   'admin-morning-digest': adminMorningDigest,
+  'admin-weekly-report': adminWeeklyReport,
   'checkout-reminder': checkoutReminder,
   'payment-confirmed': paymentConfirmed,
   'order-confirmed': orderConfirmed,

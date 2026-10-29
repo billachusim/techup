@@ -256,7 +256,7 @@ Q: Can I do my SIWES or IT online in Nigeria?
 A: Yes. Many institutions accept a remote or hybrid placement for Computer Science, IT, Software Engineering, Data Science and related courses, provided the host is real, registered, relevant and willing to supervise and stamp your logbook. Tech Faculty NG is licensed by the Federal Ministry of Science, Technology and Innovation through NBTI. Virtual SIWES costs ₦45,000.
 
 Q: How much does Virtual SIWES cost?
-A: The virtual IT placement costs ₦45,000 for the full duration of your training, whether that is three or six months, paid before onboarding. The logbook review, signing, stamping and two-way delivery service is a separate ₦15,000. Nothing is charged automatically online; we send payment details after you submit the form.
+A: The virtual IT placement costs ₦45,000 for the full duration of your training, whether that is three or six months, paid before onboarding. The logbook review, signing, stamping and two-way delivery service is a separate ₦15,000. You can pay online by card, bank transfer or USSD on this page, or reserve your slot and pay by bank transfer when a coordinator sends the details.
 
 Q: Who signs and stamps my SIWES logbook?
 A: Your assigned Tech Faculty supervisor signs your logbook, and it is stamped with our official company stamp, exactly as it would be if you sat in our Nnewi office every day. Attendance and supervision records are kept for your school and the ITF throughout your placement, so the signature reflects real supervised work.
@@ -303,7 +303,7 @@ Q: Does the kit guarantee a placement?
 A: No. No honest guide can promise a SIWES placement. The kit gives you the documents, templates and outreach system that our placed students used, but you still have to send the emails and attend the interviews. What it removes is the guesswork about what to send and when.
 
 Q: How do I pay?
-A: Reserve your kit on this page and our team confirms your order on WhatsApp or email with current payment details for the ₦4,500 price. Card checkout is being finalised, so nothing is charged automatically. Your kit is sent as soon as your payment is confirmed.
+A: Pay ₦4,500 online on this page by card, bank transfer or USSD through Flutterwave, and your download opens as soon as the payment is confirmed, with a copy of the link sent to your email. Prefer to pay by bank transfer to us directly? Reserve your kit and we send the details on WhatsApp or email.
 
 Q: Can I use it if I'm not a Tech Faculty student?
 A: Yes. The SIWES Success Kit is written for any Nigerian student on SIWES or industrial training, from any university, polytechnic or college of education. You do not need a Faculty ID or a Tech Faculty placement to use the templates, the checklist or the WhatsApp support channel.

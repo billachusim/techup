@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { pingIndexNow } from "../_shared/indexnow.ts";
 import { isRetiredBlogSlug } from "../_shared/blog-redirects.ts";
 import { requireCronOrAdmin } from "../_shared/scheduled-auth.ts";

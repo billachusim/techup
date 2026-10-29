@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { pingIndexNow, SITE_ORIGIN } from "../_shared/indexnow.ts";
 
 const corsHeaders = {

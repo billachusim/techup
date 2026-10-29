@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { requireCronOrAdmin } from "../_shared/scheduled-auth.ts";
 import { countryCode, servesOurAudience } from "../_shared/event-audience.ts";
 

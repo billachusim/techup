@@ -108,7 +108,7 @@ const SiwesCourses = () => {
                       <p className="text-sm text-muted-foreground mb-3">
                         {c.projects.slice(0, 2).map((p) => p.title).join(", ")} and more.
                       </p>
-                      <span className="text-sm text-primary font-medium inline-flex items-center gap-1">
+                      <span className="text-sm text-link font-medium inline-flex items-center gap-1">
                         See the placement <ArrowRight size={14} />
                       </span>
                     </CardContent>
@@ -121,7 +121,7 @@ const SiwesCourses = () => {
                     <CardContent className="p-6">
                       <p className="text-lg font-semibold mb-1">{g.name}</p>
                       <p className="text-xs text-muted-foreground mb-3">{g.alsoFor}</p>
-                      <span className="text-sm text-primary font-medium inline-flex items-center gap-1">
+                      <span className="text-sm text-link font-medium inline-flex items-center gap-1">
                         <BookOpen size={14} /> Read the full guide
                       </span>
                     </CardContent>

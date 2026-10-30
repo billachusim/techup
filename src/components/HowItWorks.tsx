@@ -81,7 +81,7 @@ const HowItWorks = () => {
               </div>
               <h3 className="text-xl font-semibold mb-2">{f.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed flex-1">{f.description}</p>
-              <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+              <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-link">
                 {f.hint}
                 <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </span>

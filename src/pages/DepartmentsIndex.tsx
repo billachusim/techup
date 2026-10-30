@@ -74,11 +74,11 @@ const DepartmentsIndex = () => {
                         <Users size={12} /> {d.enrollment}
                       </span>
                     </div>
-                    <h2 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">
+                    <h2 className="text-lg font-bold mb-2 group-hover:text-link transition-colors">
                       {d.title}
                     </h2>
                     <p className="text-sm text-muted-foreground flex-1">{d.tagline}</p>
-                    <div className="flex items-center gap-1 text-primary text-sm font-medium mt-4">
+                    <div className="flex items-center gap-1 text-link text-sm font-medium mt-4">
                       Enter department <ArrowRight size={14} />
                     </div>
                   </CardContent>

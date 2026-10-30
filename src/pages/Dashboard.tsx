@@ -141,7 +141,12 @@ const Dashboard = () => {
         });
         if (userCoursesError) throw userCoursesError;
 
-        courseEnrollments = userCourses?.enrollments || [];
+        // Show courses in the order students should take them
+        courseEnrollments = [...(userCourses?.enrollments || [])].sort(
+          (a: CourseEnrollment, b: CourseEnrollment) =>
+            (a.courses?.sort_order ?? 100) - (b.courses?.sort_order ?? 100) ||
+            (a.courses?.name ?? "").localeCompare(b.courses?.name ?? ""),
+        );
         setCoursesData(courseEnrollments);
 
         try {

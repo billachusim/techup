@@ -204,6 +204,13 @@
       "when": 1793310525165,
       "tag": "0028_lock_ai_class_content",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1793351826194,
+      "tag": "0029_migration",
+      "breakpoints": true
     }
   ]
 }

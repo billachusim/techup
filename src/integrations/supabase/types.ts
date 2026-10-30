@@ -2840,6 +2840,7 @@ export type Database = {
         Returns: string
       }
       referral_code_exists: { Args: { _code: string }; Returns: boolean }
+      refresh_class_schedule: { Args: never; Returns: undefined }
       request_talent_intro: {
         Args: {
           _message?: string

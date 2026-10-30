@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams, Link } from "@/lib/router-compat";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,6 +6,7 @@ import { Loader2, Wallet } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getSupabase } from "@/integrations/supabase/lazy";
+import { createBalanceCheckoutRequest } from "@/lib/balance-checkout-request";
 
 // The pay link in a balance reminder email (/pay-balance?t=<token>). It opens a
 // Flutterwave checkout for the balance straight away, without signing in;
@@ -16,18 +17,18 @@ const PayBalance = () => {
   const [error, setError] = useState(
     token ? "" : "This payment link is incomplete.",
   );
+  const checkoutRequest = useRef(createBalanceCheckoutRequest(async (payToken: string) => {
+    const supabase = await getSupabase();
+    return supabase.functions.invoke("create-checkout", {
+      body: { balancePayToken: payToken },
+    });
+  }));
 
   useEffect(() => {
     if (!token) return;
     let cancelled = false;
     (async () => {
-      const supabase = await getSupabase();
-      const { data, error: fnError } = await supabase.functions.invoke(
-        "create-checkout",
-        {
-          body: { balancePayToken: token },
-        },
-      );
+      const { data, error: fnError } = await checkoutRequest.current(token);
       const url = data?.url?.trim();
       if (cancelled) return;
       if (fnError || !url || !/^https?:\/\//i.test(url)) {

@@ -4,7 +4,7 @@ import type { BlogPost } from "@/types/blog";
 import { campuses } from "@/data/campuses";
 import { getCityGuideForCity, getPostLinks, isCityGuide } from "@/data/internalLinks";
 
-const linkClass = "text-primary hover:underline";
+const linkClass = "text-link hover:underline";
 
 /** "a", "a and b", "a, b and c" for a list of nodes. */
 const joinNodes = (nodes: ReactNode[]) =>

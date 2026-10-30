@@ -31,7 +31,7 @@ const sourceNumber = (id: string) => sources.findIndex((s) => s.id === id) + 1;
 /** Superscript link to a numbered entry in the Sources list. */
 const Cite = ({ id }: { id: string }) => (
   <sup>
-    <a href={`#source-${id}`} className="text-primary hover:underline">
+    <a href={`#source-${id}`} className="text-link hover:underline">
       [{sourceNumber(id)}]
     </a>
   </sup>
@@ -192,7 +192,7 @@ const AdvertisedPay = () => {
       </div>
       <p className="text-sm text-muted-foreground mt-3">
         Counted live from the open listings on our{" "}
-        <Link to="/careers" className="text-primary hover:underline">
+        <Link to="/careers" className="text-link hover:underline">
           careers page
         </Link>{" "}
         that state a salary. The midpoint of each advertised range is used, and
@@ -220,7 +220,7 @@ const SalaryReport = () => (
             By{" "}
             <Link
               to="/team/bill-achusim"
-              className="text-primary hover:underline"
+              className="text-link hover:underline"
             >
               {BLOG_AUTHOR.name}
             </Link>{" "}
@@ -525,7 +525,7 @@ const SalaryReport = () => (
               Journalists: for comment or the underlying files, email{" "}
               <a
                 href="mailto:thetechfaculty@gmail.com"
-                className="text-primary hover:underline"
+                className="text-link hover:underline"
               >
                 thetechfaculty@gmail.com
               </a>
@@ -543,7 +543,7 @@ const SalaryReport = () => (
                     href={s.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-primary hover:underline"
+                    className="text-link hover:underline"
                   >
                     {s.name}
                   </a>

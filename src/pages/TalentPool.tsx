@@ -21,7 +21,7 @@ const TalentCard = ({ person, onRequested }: { person: PublicTalentSummary; onRe
     <div className="space-y-3">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <h3 className="text-lg font-semibold leading-snug">
-          <Link to={`/talent/pool/${person.id}`} className="hover:text-primary">{person.full_name}</Link>
+          <Link to={`/talent/pool/${person.id}`} className="hover:text-link">{person.full_name}</Link>
         </h3>
         <div className="flex flex-wrap gap-1.5">
           {person.is_vetted && <Badge className="gap-1"><ShieldCheck size={12} /> Vetted</Badge>}

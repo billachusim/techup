@@ -85,7 +85,7 @@ const About = () => {
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Licensed by the Federal Ministry of Science, Technology & Innovation via NBTI.
-              Over 6,000 students trained since 2022. 75% of graduates employed within six months (<Link to="/outcomes" className="underline hover:text-primary">how we count</Link>).
+              Over 6,000 students trained since 2022. 75% of graduates employed within six months (<Link to="/outcomes" className="underline hover:text-link">how we count</Link>).
               We build Africa's remote and physical tech workforce.
             </p>
           </div>
@@ -111,13 +111,13 @@ const About = () => {
             <h2 className="text-3xl font-bold text-center mb-8">Our Story</h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
-                Tech Faculty NG was founded in 2022 by <Link to="/team/bill-achusim" className="underline hover:text-primary">Bill Achusim</Link> at the Digital Village in Nnewi, Anambra State. South-East Nigeria is rich in entrepreneurial energy, but many young people lack access to quality tech education. We set out to change that.
+                Tech Faculty NG was founded in 2022 by <Link to="/team/bill-achusim" className="underline hover:text-link">Bill Achusim</Link> at the Digital Village in Nnewi, Anambra State. South-East Nigeria is rich in entrepreneurial energy, but many young people lack access to quality tech education. We set out to change that.
               </p>
               <p>
-                In over four years, we've trained more than 6,000 students across {departments.length} departments — from Web Development and Data Science to AI, Cybersecurity, and Digital Marketing. 75% of our graduates secure tech roles within six months of completing their program. <Link to="/outcomes" className="underline hover:text-primary">See how we count our outcomes</Link>.
+                In over four years, we've trained more than 6,000 students across {departments.length} departments — from Web Development and Data Science to AI, Cybersecurity, and Digital Marketing. 75% of our graduates secure tech roles within six months of completing their program. <Link to="/outcomes" className="underline hover:text-link">See how we count our outcomes</Link>.
               </p>
               <p>
-                According to the <a href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">World Economic Forum Future of Jobs Report (2025)</a>, AI and big data are the fastest-growing skills worldwide. We're positioning our students at the forefront of this growth.
+                According to the <a href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/" target="_blank" rel="noopener noreferrer" className="underline hover:text-link">World Economic Forum Future of Jobs Report (2025)</a>, AI and big data are the fastest-growing skills worldwide. We're positioning our students at the forefront of this growth.
               </p>
               <p>
                 Today, over 100 partner companies are ready to hire our graduates who perform at the required level. We also collaborate with universities to bring bootcamps to campuses, and provide SIWES/IT placements for students seeking real-world experience.

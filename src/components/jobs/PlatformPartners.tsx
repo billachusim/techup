@@ -33,7 +33,7 @@ const PlatformPartners = () => (
               </a>
               <Link
                 to={`/careers/platforms/${platform.slug}`}
-                className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                className="inline-flex items-center gap-1 text-sm font-medium text-link hover:underline"
               >
                   View {platform.name} jobs
                   <ArrowRight size={14} />

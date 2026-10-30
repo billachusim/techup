@@ -135,7 +135,7 @@ const BlogPost = () => {
     ? splitAtMiddleHeading(body)
     : [body, ""];
   const proseClass =
-    "prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-muted-foreground prose-p:mb-6 prose-p:leading-relaxed prose-li:text-muted-foreground prose-li:leading-relaxed prose-ul:mb-6 prose-ol:mb-6 prose-strong:text-foreground prose-a:text-primary hover:prose-a:underline prose-hr:my-8";
+    "prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3 prose-p:text-muted-foreground prose-p:mb-6 prose-p:leading-relaxed prose-li:text-muted-foreground prose-li:leading-relaxed prose-ul:mb-6 prose-ol:mb-6 prose-strong:text-foreground prose-a:text-link hover:prose-a:underline prose-hr:my-8";
   const renderMarkdown = (markdown: string) => (
     <div className={proseClass}>
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
@@ -244,7 +244,7 @@ const BlogPost = () => {
                 <ol className="list-decimal space-y-1.5 pl-5 text-sm">
                   {tocItems(body).map((item) => (
                     <li key={item.id}>
-                      <a href={`#${item.id}`} className="text-muted-foreground hover:text-primary hover:underline">
+                      <a href={`#${item.id}`} className="text-muted-foreground hover:text-link hover:underline">
                         {item.text}
                       </a>
                     </li>

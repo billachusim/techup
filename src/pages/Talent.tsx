@@ -107,7 +107,7 @@ const Talent = () => {
                   Current Tech Faculty openings and approved client projects.
                 </p>
               </div>
-              <Link to="/careers" className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline">
+              <Link to="/careers" className="inline-flex items-center gap-1.5 text-sm text-link hover:underline">
                 Browse all openings <ArrowRight size={14} />
               </Link>
             </div>

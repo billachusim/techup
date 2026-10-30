@@ -47,7 +47,7 @@ const RoleCard = ({ role }: { role: TalentRole }) => (
     </div>
     <Link
       to={`/talent/roles/${role.slug}`}
-      className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+      className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-link hover:underline"
     >
       View role and apply <ArrowRight size={14} />
     </Link>

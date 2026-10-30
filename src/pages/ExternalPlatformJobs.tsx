@@ -59,7 +59,7 @@ const ExternalPlatformJobs = () => {
       <Header />
       <main className="px-4 pb-20 pt-24">
         <div className="container mx-auto max-w-6xl">
-          <Link to="/careers" className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary">
+          <Link to="/careers" className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-link">
             <ArrowLeft size={14} /> Back to Tech Faculty Careers
           </Link>
 

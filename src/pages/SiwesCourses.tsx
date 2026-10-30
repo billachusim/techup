@@ -79,9 +79,9 @@ const SiwesCourses = () => {
         <section className="px-4 pt-8 pb-10">
           <div className="container mx-auto max-w-5xl">
             <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-6">
-              <Link to="/" className="hover:text-primary">Home</Link>
+              <Link to="/" className="hover:text-link">Home</Link>
               <span className="mx-2">/</span>
-              <Link to="/siwes" className="hover:text-primary">SIWES</Link>
+              <Link to="/siwes" className="hover:text-link">SIWES</Link>
               <span className="mx-2">/</span>
               <span className="text-foreground">By course</span>
             </nav>
@@ -108,7 +108,7 @@ const SiwesCourses = () => {
                       <p className="text-sm text-muted-foreground mb-3">
                         {c.projects.slice(0, 2).map((p) => p.title).join(", ")} and more.
                       </p>
-                      <span className="text-sm text-primary font-medium inline-flex items-center gap-1">
+                      <span className="text-sm text-link font-medium inline-flex items-center gap-1">
                         See the placement <ArrowRight size={14} />
                       </span>
                     </CardContent>
@@ -121,7 +121,7 @@ const SiwesCourses = () => {
                     <CardContent className="p-6">
                       <p className="text-lg font-semibold mb-1">{g.name}</p>
                       <p className="text-xs text-muted-foreground mb-3">{g.alsoFor}</p>
-                      <span className="text-sm text-primary font-medium inline-flex items-center gap-1">
+                      <span className="text-sm text-link font-medium inline-flex items-center gap-1">
                         <BookOpen size={14} /> Read the full guide
                       </span>
                     </CardContent>
@@ -149,11 +149,11 @@ const SiwesCourses = () => {
                   {siwesCourses.map((c) => (
                     <tr key={c.slug} className="border-t border-border align-top">
                       <td className="p-3">
-                        <Link to={`/siwes/courses/${c.slug}`} className="text-primary hover:underline">{c.name}</Link>
+                        <Link to={`/siwes/courses/${c.slug}`} className="text-link hover:underline">{c.name}</Link>
                       </td>
                       <td className="p-3 text-muted-foreground">{c.projects[0].title}</td>
                       <td className="p-3">
-                        <Link to={`/departments/${c.projects[0].department}`} className="hover:text-primary">
+                        <Link to={`/departments/${c.projects[0].department}`} className="hover:text-link">
                           {deptTitle(c.projects[0].department)}
                         </Link>
                       </td>
@@ -175,7 +175,7 @@ const SiwesCourses = () => {
                   Learn &amp; Pay students pay their department's regular course fee with up to {SIWES_MAX_DISCOUNT_PCT}% off for
                   SIWES. Tutor &amp; Earn students get paid.
                 </p>
-                <Link to="/siwes" className="text-sm text-primary font-medium hover:underline inline-flex items-center gap-1">
+                <Link to="/siwes" className="text-sm text-link font-medium hover:underline inline-flex items-center gap-1">
                   How on-site SIWES works <ArrowRight size={14} />
                 </Link>
               </CardContent>
@@ -187,7 +187,7 @@ const SiwesCourses = () => {
                   Full placement from any Nigerian city, plus {formatNaira(VIRTUAL_SIWES.logbookPriceNGN)} for logbook signing,
                   stamping and two-way courier delivery.
                 </p>
-                <Link to="/virtual-siwes" className="text-sm text-primary font-medium hover:underline inline-flex items-center gap-1">
+                <Link to="/virtual-siwes" className="text-sm text-link font-medium hover:underline inline-flex items-center gap-1">
                   How Virtual SIWES works <ArrowRight size={14} />
                 </Link>
               </CardContent>
@@ -207,7 +207,7 @@ const SiwesCourses = () => {
                 <Link
                   key={c.slug}
                   to={`/locations/${c.slug}#siwes`}
-                  className="flex items-center gap-1.5 rounded-md border border-border px-3 py-2 text-sm hover:border-primary/50 hover:text-primary"
+                  className="flex items-center gap-1.5 rounded-md border border-border px-3 py-2 text-sm hover:border-primary/50 hover:text-link"
                 >
                   <MapPin size={14} className="shrink-0" /> SIWES in {c.city}
                 </Link>
@@ -223,7 +223,7 @@ const SiwesCourses = () => {
             <ul className="grid gap-2 sm:grid-cols-2 text-sm">
               {Object.entries(SIWES_GUIDES).map(([slug, label]) => (
                 <li key={slug}>
-                  <Link to={`/blog/${slug}`} className="text-primary hover:underline">{label}</Link>
+                  <Link to={`/blog/${slug}`} className="text-link hover:underline">{label}</Link>
                 </li>
               ))}
             </ul>

@@ -67,9 +67,9 @@ const BlogCategory = () => {
         <section className="px-4 pt-8">
           <div className="container mx-auto max-w-4xl">
             <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-4">
-              <Link to="/" className="hover:text-primary">Home</Link>
+              <Link to="/" className="hover:text-link">Home</Link>
               <span className="mx-2">/</span>
-              <Link to="/blog" className="hover:text-primary">Blog</Link>
+              <Link to="/blog" className="hover:text-link">Blog</Link>
               <span className="mx-2">/</span>
               <span className="text-foreground">{category.name}</span>
             </nav>
@@ -134,11 +134,11 @@ const BlogCategory = () => {
                             </span>
                           )}
                         </div>
-                        <h2 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">
+                        <h2 className="text-lg font-bold mb-2 group-hover:text-link transition-colors">
                           {post.title}
                         </h2>
                         <p className="text-sm text-muted-foreground flex-1">{post.description}</p>
-                        <div className="flex items-center gap-1 text-primary text-sm font-medium mt-4">
+                        <div className="flex items-center gap-1 text-link text-sm font-medium mt-4">
                           Read article <ArrowRight size={14} />
                         </div>
                       </CardContent>

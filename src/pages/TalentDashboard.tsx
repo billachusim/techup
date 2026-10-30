@@ -211,7 +211,7 @@ const TalentDashboard = () => {
                   <p className="mt-1 text-2xl font-bold">{profile.profile_strength}%</p>
                   <Progress className="mt-3" value={profile.profile_strength} />
                   {profile.profile_strength < 80 && (
-                    <Link to="/talent/profile" className="mt-3 inline-block text-xs text-primary hover:underline">
+                    <Link to="/talent/profile" className="mt-3 inline-block text-xs text-link hover:underline">
                       Complete your profile to rank higher
                     </Link>
                   )}
@@ -255,7 +255,7 @@ const TalentDashboard = () => {
                     <p className="flex items-center gap-2 text-sm font-medium"><Eye size={16} /> Show me in the public talent directory</p>
                     <p className="mt-1 text-xs text-muted-foreground">
                       Businesses see your name, skills and city — never your phone, email or CV.{" "}
-                      <Link to={`/talent/pool/${profile.id}`} className="text-primary hover:underline">Preview my public profile</Link>
+                      <Link to={`/talent/pool/${profile.id}`} className="text-link hover:underline">Preview my public profile</Link>
                     </p>
                   </div>
                   <Switch checked={profile.is_public} onCheckedChange={setDirectoryVisible} aria-label="Show me in the public talent directory" />
@@ -400,7 +400,7 @@ const TalentDashboard = () => {
                 ) : (
                   <div className="rounded-lg border border-border bg-card p-8 text-center text-sm text-muted-foreground">
                     You have not applied to anything yet.{" "}
-                    <Link to="/talent" className="text-primary hover:underline">Browse open roles</Link>.
+                    <Link to="/talent" className="text-link hover:underline">Browse open roles</Link>.
                   </div>
                 )}
               </section>

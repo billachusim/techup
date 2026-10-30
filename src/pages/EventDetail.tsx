@@ -104,9 +104,9 @@ const EventDetail = () => {
       <main className="pt-24 pb-20 px-4">
         <div className="container mx-auto max-w-3xl space-y-8">
           <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground">
-            <Link to="/" className="hover:text-primary">Home</Link>
+            <Link to="/" className="hover:text-link">Home</Link>
             <span className="mx-2">/</span>
-            <Link to="/events" className="hover:text-primary">Tech Events</Link>
+            <Link to="/events" className="hover:text-link">Tech Events</Link>
             <span className="mx-2">/</span>
             <span className="text-foreground">{categoryLabel(event.category)}</span>
           </nav>

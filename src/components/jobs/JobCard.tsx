@@ -22,7 +22,7 @@ const JobCard = ({ job }: { job: Job }) => {
 
       <div className="space-y-1">
         <h3 className="font-semibold leading-snug">
-          <Link to={`/careers/jobs/${job.slug}`} className="hover:text-primary transition-colors">
+          <Link to={`/careers/jobs/${job.slug}`} className="hover:text-link transition-colors">
             {job.title}
           </Link>
         </h3>
@@ -44,7 +44,7 @@ const JobCard = ({ job }: { job: Job }) => {
       <div className="flex items-center justify-between gap-3 pt-1">
         <Link
           to={`/careers/jobs/${job.slug}`}
-          className="text-sm font-medium text-primary hover:underline"
+          className="text-sm font-medium text-link hover:underline"
           aria-label={`View details for ${job.title} at ${job.company}`}
         >
           View role →
@@ -63,7 +63,7 @@ const JobCard = ({ job }: { job: Job }) => {
             href={job.source_url}
             target="_blank"
             rel="noopener noreferrer nofollow"
-            className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1"
+            className="text-sm font-medium text-muted-foreground hover:text-link transition-colors inline-flex items-center gap-1"
             aria-label={`Apply for ${job.title} on ${job.source_platform}`}
           >
             Apply <ExternalLink size={12} />

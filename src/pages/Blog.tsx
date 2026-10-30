@@ -113,7 +113,7 @@ const Blog = () => {
             <div className="container mx-auto max-w-4xl text-center mt-4">
               <Link
                 to={`/blog/category/${getCategoryByName(activeCategory)!.slug}`}
-                className="text-sm text-primary hover:underline"
+                className="text-sm text-link hover:underline"
               >
                 View full {activeCategory} category page →
               </Link>
@@ -156,13 +156,13 @@ const Blog = () => {
                         )}
                       </div>
                       <Link to={`/blog/${post.slug}`} className="flex-1 flex flex-col">
-                        <h2 className="text-lg font-bold mb-2 group-hover:text-primary transition-colors">
+                        <h2 className="text-lg font-bold mb-2 group-hover:text-link transition-colors">
                           {post.title}
                         </h2>
                         <p className="text-sm text-muted-foreground flex-1">
                           {post.description}
                         </p>
-                        <div className="flex items-center gap-1 text-primary text-sm font-medium mt-4">
+                        <div className="flex items-center gap-1 text-link text-sm font-medium mt-4">
                           Read article <ArrowRight size={14} />
                         </div>
                       </Link>

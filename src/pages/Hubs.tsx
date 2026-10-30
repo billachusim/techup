@@ -169,7 +169,7 @@ const Hubs = () => {
                     </span>
                   </div>
                   <h2 className="font-semibold leading-snug mb-1">
-                    <Link to={`/hubs/${hub.slug}`} className="hover:text-primary transition-colors">
+                    <Link to={`/hubs/${hub.slug}`} className="hover:text-link transition-colors">
                       {hub.name}
                     </Link>
                   </h2>
@@ -229,11 +229,11 @@ const Hubs = () => {
               <p className="text-muted-foreground mb-4 leading-relaxed">
                 If there is no hub near you, distance is no longer the blocker. Our online
                 and hybrid tracks run nationwide and across Africa, our{" "}
-                <Link to="/virtual-siwes" className="text-primary hover:underline">
+                <Link to="/virtual-siwes" className="text-link hover:underline">
                   virtual SIWES and logbook service
                 </Link>{" "}
                 covers students on industrial training, and our{" "}
-                <Link to="/careers" className="text-primary hover:underline">
+                <Link to="/careers" className="text-link hover:underline">
                   remote jobs board
                 </Link>{" "}
                 is where graduates go next. Message us with your city and the course you

@@ -61,11 +61,11 @@ const SiwesCourseDetail = () => {
         <section className="px-4 pt-8">
           <div className="container mx-auto max-w-4xl">
             <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-4">
-              <Link to="/" className="hover:text-primary">Home</Link>
+              <Link to="/" className="hover:text-link">Home</Link>
               <span className="mx-2">/</span>
-              <Link to="/siwes" className="hover:text-primary">SIWES</Link>
+              <Link to="/siwes" className="hover:text-link">SIWES</Link>
               <span className="mx-2">/</span>
-              <Link to="/siwes/courses" className="hover:text-primary">By course</Link>
+              <Link to="/siwes/courses" className="hover:text-link">By course</Link>
               <span className="mx-2">/</span>
               <span className="text-foreground">{course.name}</span>
             </nav>
@@ -130,7 +130,7 @@ const SiwesCourseDetail = () => {
                   <CardContent className="p-5">
                     <p className="font-semibold mb-2">{p.title}</p>
                     <p className="text-sm text-muted-foreground mb-3">{p.detail}</p>
-                    <Link to={`/departments/${p.department}`} className="text-xs text-primary font-medium hover:underline">
+                    <Link to={`/departments/${p.department}`} className="text-xs text-link font-medium hover:underline">
                       {deptTitle(p.department)} department
                     </Link>
                   </CardContent>
@@ -164,7 +164,7 @@ const SiwesCourseDetail = () => {
             </div>
             <p className="text-sm text-muted-foreground mt-4">
               More on this in our guide to{" "}
-              <Link to="/blog/siwes-logbook-mistakes-nigeria-fix" className="text-primary hover:underline">
+              <Link to="/blog/siwes-logbook-mistakes-nigeria-fix" className="text-link hover:underline">
                 SIWES logbook mistakes and how to fix them
               </Link>
               .
@@ -197,7 +197,7 @@ const SiwesCourseDetail = () => {
                     {formatNaira(LOWEST_PAID_PLAN)}, with up to {SIWES_MAX_DISCOUNT_PCT}% off for SIWES students. On Tutor &amp;
                     Earn, if you are already skilled enough to teach, we pay you.
                   </p>
-                  <Link to="/locations" className="text-sm text-primary font-medium hover:underline inline-flex items-center gap-1">
+                  <Link to="/locations" className="text-sm text-link font-medium hover:underline inline-flex items-center gap-1">
                     Find a centre near you <ArrowRight size={14} />
                   </Link>
                 </CardContent>
@@ -274,7 +274,7 @@ const SiwesCourseDetail = () => {
                 </Link>
               ))}
             </div>
-            <Link to="/siwes/courses" className="inline-flex items-center gap-1 text-sm text-primary font-medium hover:underline mt-4">
+            <Link to="/siwes/courses" className="inline-flex items-center gap-1 text-sm text-link font-medium hover:underline mt-4">
               See every course, including computer science <ArrowRight size={14} />
             </Link>
           </div>

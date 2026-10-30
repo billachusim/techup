@@ -1217,7 +1217,7 @@ const AdminTalent = () => {
                         </p>
                         {d.summary && <p className="mt-1 text-xs text-muted-foreground">{d.summary}</p>}
                         {d.link_url && (
-                          <a href={d.link_url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline">
+                          <a href={d.link_url} target="_blank" rel="noopener noreferrer" className="text-xs text-link hover:underline">
                             Open the work
                           </a>
                         )}

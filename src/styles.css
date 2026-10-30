@@ -58,6 +58,8 @@
   --color-sidebar-border: hsl(var(--sidebar-border));
   --color-sidebar-ring: hsl(var(--sidebar-ring));
   --color-electric-green: hsl(var(--electric-green));
+  --color-link: hsl(var(--link));
+  --color-link-hover: hsl(var(--link-hover));
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
 }
@@ -144,6 +146,10 @@
 
   /* Tech Faculty custom tokens */
   --electric-green: 158 100% 50%;
+  /* Link accent: same hue as the CTA green, darkened so links read as links
+     on light surfaces (5.1:1 on white vs 1.3:1 for the bright CTA mint). */
+  --link: 158 90% 26%;
+  --link-hover: 158 92% 20%;
   --gradient-green: linear-gradient(135deg, hsl(158 100% 50%), hsl(180 100% 45%));
 
   /* Pricing plan colors */

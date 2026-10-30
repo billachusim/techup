@@ -23,7 +23,7 @@ const StatsBar = () => {
           ))}
         </div>
         <p className="text-xs text-muted-foreground text-center mt-6">
-          <Link to="/outcomes" className="underline hover:text-primary">How we count these numbers</Link>
+          <Link to="/outcomes" className="underline hover:text-link">How we count these numbers</Link>
         </p>
         <p className="text-xs text-muted-foreground text-center mt-4 max-w-3xl mx-auto leading-relaxed">
           According to the{" "}
@@ -31,7 +31,7 @@ const StatsBar = () => {
             href="https://www.weforum.org/publications/the-future-of-jobs-report-2025/"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline hover:text-primary"
+            className="underline hover:text-link"
           >
             World Economic Forum Future of Jobs Report (2025)
           </a>

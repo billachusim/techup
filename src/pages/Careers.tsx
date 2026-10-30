@@ -172,7 +172,7 @@ const Careers = () => {
                 You get an email confirmation immediately, and a shortlist within two working days.
               </p>
               <p className="text-sm">
-                <Link to="/talent/pool" className="font-medium text-primary hover:underline">Browse the talent directory →</Link>
+                <Link to="/talent/pool" className="font-medium text-link hover:underline">Browse the talent directory →</Link>
               </p>
             </div>
             <HiringRequestForm />

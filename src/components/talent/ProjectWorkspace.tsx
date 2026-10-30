@@ -143,7 +143,7 @@ const ProjectWorkspace = ({ roleId, roleTitle, company, profileId }: Props) => {
                     {log.link_url && (
                       <>
                         {" · "}
-                        <a href={log.link_url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                        <a href={log.link_url} target="_blank" rel="noopener noreferrer" className="text-link hover:underline">
                           Open link
                         </a>
                       </>

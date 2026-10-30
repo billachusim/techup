@@ -55,7 +55,7 @@ const HowItWorks = () => {
             er; <span className="text-primary">3</span> Steps in <span className="text-primary">3</span> Months.
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
-            <Link to="/outcomes" className="underline hover:text-primary">Over 6,000 students</Link> trained.
+            <Link to="/outcomes" className="underline hover:text-link">Over 6,000 students</Link> trained.
             Learn, get certified, and start earning from month 3.
           </p>
         </div>
@@ -81,7 +81,7 @@ const HowItWorks = () => {
               </div>
               <h3 className="text-xl font-semibold mb-2">{f.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed flex-1">{f.description}</p>
-              <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+              <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-link">
                 {f.hint}
                 <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </span>

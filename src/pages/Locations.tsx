@@ -184,7 +184,7 @@ const Locations = () => {
                         <Link
                           to={`/locations/${c.slug}`}
                           onClick={(e) => e.stopPropagation()}
-                          className="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1"
+                          className="text-xs font-semibold text-link hover:underline inline-flex items-center gap-1"
                         >
                           Tech Faculty {c.city} details <ArrowRight className="w-3 h-3" />
                         </Link>
@@ -193,7 +193,7 @@ const Locations = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="text-xs font-semibold text-primary hover:underline inline-flex items-center gap-1"
+                          className="text-xs font-semibold text-link hover:underline inline-flex items-center gap-1"
                         >
                           <Navigation className="w-3 h-3" /> Directions
                         </a>
@@ -225,7 +225,7 @@ const Locations = () => {
                 <Link
                   key={c.slug}
                   to={`/locations/${c.slug}`}
-                  className="text-sm text-muted-foreground hover:text-primary py-1.5 inline-flex items-center gap-1"
+                  className="text-sm text-muted-foreground hover:text-link py-1.5 inline-flex items-center gap-1"
                 >
                   Tech training in {c.city} <ArrowRight className="w-3 h-3" />
                 </Link>

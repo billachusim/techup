@@ -31,7 +31,7 @@ const Founder = () => {
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-3xl">
             <p className="text-sm text-muted-foreground mb-2">
-              <Link to="/about" className="hover:text-primary">About Tech Faculty NG</Link> / Team
+              <Link to="/about" className="hover:text-link">About Tech Faculty NG</Link> / Team
             </p>
             <h1 className="text-4xl md:text-5xl font-bold mb-2">{BLOG_AUTHOR.name}</h1>
             <p className="text-lg text-muted-foreground mb-6">{BLOG_AUTHOR.role}</p>
@@ -61,7 +61,7 @@ const Founder = () => {
             </div>
 
             <p className="mt-8 text-sm">
-              <Link to="/outcomes" className="text-primary hover:underline">See our student outcomes and how we count them</Link>
+              <Link to="/outcomes" className="text-link hover:underline">See our student outcomes and how we count them</Link>
             </p>
           </div>
         </section>
@@ -76,12 +76,12 @@ const Founder = () => {
                     <time dateTime={a.date} className="text-sm text-muted-foreground shrink-0 w-28">
                       {new Date(a.date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}
                     </time>
-                    <Link to={`/blog/${a.slug}`} className="font-medium hover:text-primary">{a.title}</Link>
+                    <Link to={`/blog/${a.slug}`} className="font-medium hover:text-link">{a.title}</Link>
                   </li>
                 ))}
               </ul>
               <p className="mt-6 text-sm">
-                <Link to="/blog" className="text-primary hover:underline">All articles</Link>
+                <Link to="/blog" className="text-link hover:underline">All articles</Link>
               </p>
             </div>
           </section>

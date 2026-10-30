@@ -2866,6 +2866,19 @@ export type Database = {
         Args: { _enabled: boolean }
         Returns: undefined
       }
+      student_timetable: {
+        Args: { _faculty_id: string }
+        Returns: {
+          class_number: number
+          course_id: string
+          course_name: string
+          description: string
+          duration_minutes: number
+          lecture_id: string
+          scheduled_at: string
+          title: string
+        }[]
+      }
       verify_certificate: {
         Args: { cert_number: string }
         Returns: {

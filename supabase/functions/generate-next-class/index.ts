@@ -56,73 +56,26 @@ serve(async (req) => {
       );
     }
 
-    // The next class is the soonest upcoming class across the student's courses
-    const allCourseIds = courses.map((c: any) => c.courses?.id || c.course_id);
-    const { data: upcoming } = await admin
-      .from("lectures")
-      .select("course_id")
-      .in("course_id", allCourseIds)
-      .eq("status", "scheduled")
-      .gte("scheduled_at", new Date().toISOString())
-      .order("scheduled_at", { ascending: true })
-      .limit(1);
+    // The next class comes from the student's own timetable (counted from when they started)
+    const facultyId = caller.isStaff ? (courses[0]?.faculty_id ?? caller.facultyId) : caller.facultyId;
+    const nowIso = new Date().toISOString();
+    const { data: timetable, error: ttErr } = await admin.rpc("student_timetable", { _faculty_id: facultyId });
+    if (ttErr) throw ttErr;
+    const allowed = new Set(courses.map((c: any) => c.courses?.id || c.course_id));
+    const slot = (timetable ?? []).find(
+      (t: any) => allowed.has(t.course_id) && t.scheduled_at >= nowIso,
+    );
 
-    const targetCourse =
-      courses.find((c: any) => (c.courses?.id || c.course_id) === upcoming?.[0]?.course_id) ?? courses[0];
-
-    const courseId = targetCourse.courses?.id || targetCourse.course_id;
-
-    // Get saved lectures for this course
-    const { data: lectures, error: lecturesErr } = await admin
-      .from("lectures")
-      .select("*")
-      .eq("course_id", courseId)
-      .eq("status", "scheduled")
-      .gte("scheduled_at", new Date().toISOString())
-      .order("scheduled_at", { ascending: true })
-      .limit(1);
-
-    if (lecturesErr) throw lecturesErr;
-
-    if (!lectures || lectures.length === 0) {
-      // No lectures found, ensure they're created
-      await admin.rpc('ensure_course_lectures', { course_uuid: courseId });
-      
-      // Fetch again
-      const { data: newLectures } = await admin
-        .from("lectures")
-        .select("*")
-        .eq("course_id", courseId)
-        .eq("status", "scheduled")
-        .order("scheduled_at", { ascending: true })
-        .limit(1);
-
-      if (!newLectures || newLectures.length === 0) {
-        throw new Error("Failed to create lectures");
-      }
-
-      const nextLecture = newLectures[0];
+    if (!slot) {
       return new Response(
-        JSON.stringify({ 
-          nextClass: {
-            id: nextLecture.id,
-            title: nextLecture.title,
-            description: nextLecture.description,
-            date: nextLecture.scheduled_at,
-            duration: nextLecture.duration_minutes,
-            course: targetCourse.courses?.name,
-            meetingLink: nextLecture.meeting_link,
-            status: nextLecture.status
-          }
-        }),
-        {
-          status: 200,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
+        JSON.stringify({ nextClass: { title: "No upcoming classes", description: "You've reached the end of your timetable.", date: null, meetingLink: null } }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
 
-    const nextLecture = lectures[0];
+    const targetCourse = courses.find((c: any) => (c.courses?.id || c.course_id) === slot.course_id) ?? courses[0];
+    const { data: lec } = await admin.from("lectures").select("*").eq("id", slot.lecture_id).single();
+    const nextLecture = { ...lec, scheduled_at: slot.scheduled_at };
 
     return new Response(
       JSON.stringify({ 

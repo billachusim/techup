@@ -5529,21 +5529,21 @@ var list_my_upcoming_classes_default = defineTool15({
     if (auth2.error) return auth2.error;
     const supabase = supabaseForUser(ctx);
     const nowIso = (/* @__PURE__ */ new Date()).toISOString();
-    const { data, error } = await supabase.from("lectures").select("id,title,description,scheduled_at,duration_minutes,status,course_id,courses(name)").gte("scheduled_at", nowIso).eq("status", "scheduled").order("scheduled_at", { ascending: true }).limit(50);
+    const { data: u } = await supabase.auth.getUser();
+    const { data: me } = await supabase.from("profiles").select("faculty_id").eq("id", u.user?.id ?? "").maybeSingle();
+    if (!me?.faculty_id) return { content: [{ type: "text", text: "[]" }], structuredContent: { classes: [] } };
+    const { data, error } = await supabase.rpc("student_timetable", { _faculty_id: me.faculty_id });
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
-    const items = (data ?? []).map((l) => {
-      const course = Array.isArray(l.courses) ? l.courses[0] : l.courses;
-      return {
-        id: l.id,
-        title: l.title,
-        description: l.description,
-        scheduledAt: l.scheduled_at,
-        durationMinutes: l.duration_minutes,
-        status: l.status,
-        courseId: l.course_id,
-        courseName: course?.name ?? null
-      };
-    });
+    const items = (data ?? []).filter((l) => l.scheduled_at >= nowIso).slice(0, 50).map((l) => ({
+      id: l.lecture_id,
+      title: l.title,
+      description: l.description,
+      scheduledAt: l.scheduled_at,
+      durationMinutes: l.duration_minutes,
+      status: "scheduled",
+      courseId: l.course_id,
+      courseName: l.course_name ?? null
+    }));
     return { content: [{ type: "text", text: JSON.stringify(items, null, 2) }], structuredContent: { classes: items } };
   }
 });

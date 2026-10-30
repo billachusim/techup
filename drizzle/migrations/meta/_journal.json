@@ -218,6 +218,13 @@
       "when": 1793352126911,
       "tag": "0030_class_schedule_twice_weekly",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1793352351506,
+      "tag": "0031_per_student_timetable",
+      "breakpoints": true
     }
   ]
 }

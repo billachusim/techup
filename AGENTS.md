@@ -7,3 +7,4 @@
 - WhatsApp Business messaging goes through `src/lib/whatsapp.server.ts` (gateway send + records outbound); Meta callbacks hit `/api/public/whatsapp/webhook`, are stored in `whatsapp_webhook_events` before processing, and failed rows retry with backoff on later calls.
 - Promotional lead-email sequences are disabled by default and excluded from the app-email registry; future dispatch requires explicit email consent and a dedicated marketing provider to protect app-email delivery.
 - Lead forms use column-only INSERT grants: grant new visitor-submitted fields to anon/authenticated in the same migration, while keeping consent timestamps, versions and staff fields server-controlled.
+- Class dates are per student: read them from the `student_timetable(faculty_id)` database function, never from `lectures.scheduled_at`, because each student starts class 1 from their own start date.

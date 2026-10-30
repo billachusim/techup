@@ -57,7 +57,7 @@ serve(async (req) => {
     }
 
     // The next class comes from the student's own timetable (counted from when they started)
-    const facultyId = courses[0]?.faculty_id;
+    const facultyId = caller.isStaff ? (courses[0]?.faculty_id ?? caller.facultyId) : caller.facultyId;
     const nowIso = new Date().toISOString();
     const { data: timetable, error: ttErr } = await admin.rpc("student_timetable", { _faculty_id: facultyId });
     if (ttErr) throw ttErr;

@@ -1,5 +1,10 @@
 # Roadmap
 
+## Replacement payment key verification
+- [x] Test enrolment checkout through the live function and open its Flutterwave Card form without payment or email
+- [x] Test outstanding-balance checkout through the real balance-link page and open its Flutterwave Card form without payment or email
+- [x] Remove temporary payment records; redeploy stale checkout pricing, prevent duplicate balance-page effect requests, and pass payment regressions
+
 ## Lead submission repair
 - [x] Confirm missing email-consent insert permissions and apply a column-only grant
 - [x] Verify real checklist and WhatsApp submissions (HTTP 201), stored consent false, private fields still restricted; 24 tests pass

@@ -28,7 +28,7 @@ const EventCard = ({ event }: { event: TechEvent }) => {
 
       <div className="space-y-1">
         <h3 className="font-semibold leading-snug">
-          <Link to={`/events/${event.slug}`} className="hover:text-primary transition-colors">
+          <Link to={`/events/${event.slug}`} className="hover:text-link transition-colors">
             {event.title}
           </Link>
         </h3>
@@ -57,7 +57,7 @@ const EventCard = ({ event }: { event: TechEvent }) => {
       <div className="flex items-center justify-between gap-3 pt-1">
         <Link
           to={`/events/${event.slug}`}
-          className="text-sm font-medium text-primary hover:underline"
+          className="text-sm font-medium text-link hover:underline"
           aria-label={`Full details for ${event.title}`}
         >
           Event details →
@@ -66,7 +66,7 @@ const EventCard = ({ event }: { event: TechEvent }) => {
           href={event.source_url}
           target="_blank"
           rel="noopener noreferrer nofollow"
-          className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+          className="text-sm font-medium text-muted-foreground hover:text-link transition-colors"
           aria-label={`Register for ${event.title} on ${event.source_platform}`}
         >
           Register

@@ -13,16 +13,16 @@ const Footer = () => {
               Get trained, certified, and employed.
             </p>
             <div className="flex gap-3 pt-2">
-              <a href="https://x.com/TechFacultyNG" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors" aria-label="X (Twitter)">
+              <a href="https://x.com/TechFacultyNG" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-link transition-colors" aria-label="X (Twitter)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
                   <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
                 </svg>
               </a>
-              <a href="https://facebook.com/TechFacultyNG" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors" aria-label="Facebook">
+              <a href="https://facebook.com/TechFacultyNG" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-link transition-colors" aria-label="Facebook">
                 <Facebook size={18} />
               </a>
-              <a href="https://www.linkedin.com/company/techfaculty" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/company/techfaculty" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-link transition-colors" aria-label="LinkedIn">
                 <Linkedin size={18} />
               </a>
             </div>
@@ -32,14 +32,14 @@ const Footer = () => {
           <div className="space-y-3">
             <h4 className="text-sm font-semibold">Training</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link to="/departments" className="hover:text-primary transition-colors">Departments</Link>
-              <Link to="/locations" className="hover:text-primary transition-colors">Campus Locations</Link>
-              <Link to="/study-online-africa" className="hover:text-primary transition-colors">Study Online from Africa</Link>
-              <Link to="/hubs" className="hover:text-primary transition-colors">Tech Hubs Directory</Link>
-              <Link to="/talent" className="hover:text-primary transition-colors">Talent Pool</Link>
-              <Link to="/hire" className="hover:text-primary transition-colors">Hire Talent</Link>
-              <Link to="/#pricing" className="hover:text-primary transition-colors">Pricing</Link>
-              <Link to="/#get-started" className="hover:text-primary transition-colors">Get Started</Link>
+              <Link to="/departments" className="hover:text-link transition-colors">Departments</Link>
+              <Link to="/locations" className="hover:text-link transition-colors">Campus Locations</Link>
+              <Link to="/study-online-africa" className="hover:text-link transition-colors">Study Online from Africa</Link>
+              <Link to="/hubs" className="hover:text-link transition-colors">Tech Hubs Directory</Link>
+              <Link to="/talent" className="hover:text-link transition-colors">Talent Pool</Link>
+              <Link to="/hire" className="hover:text-link transition-colors">Hire Talent</Link>
+              <Link to="/#pricing" className="hover:text-link transition-colors">Pricing</Link>
+              <Link to="/#get-started" className="hover:text-link transition-colors">Get Started</Link>
 
             </nav>
           </div>
@@ -48,19 +48,19 @@ const Footer = () => {
           <div className="space-y-3">
             <h4 className="text-sm font-semibold">Services</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link to="/business-partnerships" className="hover:text-primary transition-colors">Business Partnerships</Link>
-              <Link to="/school-collaborations" className="hover:text-primary transition-colors">School Collaborations</Link>
-              <Link to="/events" className="hover:text-primary transition-colors">Events</Link>
-              <Link to="/siwes" className="hover:text-primary transition-colors">Internships</Link>
-              <Link to="/siwes/courses" className="hover:text-primary transition-colors">SIWES by Course</Link>
-              <Link to="/virtual-siwes" className="hover:text-primary transition-colors">Virtual SIWES (Online IT)</Link>
-              <Link to="/siwes-success-kit" className="hover:text-primary transition-colors">SIWES Success Kit</Link>
+              <Link to="/business-partnerships" className="hover:text-link transition-colors">Business Partnerships</Link>
+              <Link to="/school-collaborations" className="hover:text-link transition-colors">School Collaborations</Link>
+              <Link to="/events" className="hover:text-link transition-colors">Events</Link>
+              <Link to="/siwes" className="hover:text-link transition-colors">Internships</Link>
+              <Link to="/siwes/courses" className="hover:text-link transition-colors">SIWES by Course</Link>
+              <Link to="/virtual-siwes" className="hover:text-link transition-colors">Virtual SIWES (Online IT)</Link>
+              <Link to="/siwes-success-kit" className="hover:text-link transition-colors">SIWES Success Kit</Link>
               
             </nav>
             <h4 className="text-sm font-semibold pt-4">Partners</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link to="/tinypeople" className="hover:text-primary transition-colors">Tiny People AI</Link>
-              <Link to="/lovable" className="hover:text-primary transition-colors">Lovable</Link>
+              <Link to="/tinypeople" className="hover:text-link transition-colors">Tiny People AI</Link>
+              <Link to="/lovable" className="hover:text-link transition-colors">Lovable</Link>
             </nav>
           </div>
 
@@ -68,20 +68,20 @@ const Footer = () => {
           <div className="space-y-3">
             <h4 className="text-sm font-semibold">Company</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link to="/about" className="hover:text-primary transition-colors">About</Link>
-              <Link to="/outcomes" className="hover:text-primary transition-colors">Student Outcomes</Link>
-              <Link to="/reports/nigeria-tech-salaries" className="hover:text-primary transition-colors">Tech Salary Report</Link>
-              <Link to="/blog" className="hover:text-primary transition-colors">Blog</Link>
-              <Link to="/careers" className="hover:text-primary transition-colors">Careers</Link>
-              <Link to="/products" className="hover:text-primary transition-colors">Products</Link>
-              <a href="/verify" className="hover:text-primary transition-colors">Verify Certificate</a>
-              <Link to="/tech-store" className="hover:text-primary transition-colors flex items-center gap-1">
+              <Link to="/about" className="hover:text-link transition-colors">About</Link>
+              <Link to="/outcomes" className="hover:text-link transition-colors">Student Outcomes</Link>
+              <Link to="/reports/nigeria-tech-salaries" className="hover:text-link transition-colors">Tech Salary Report</Link>
+              <Link to="/blog" className="hover:text-link transition-colors">Blog</Link>
+              <Link to="/careers" className="hover:text-link transition-colors">Careers</Link>
+              <Link to="/products" className="hover:text-link transition-colors">Products</Link>
+              <a href="/verify" className="hover:text-link transition-colors">Verify Certificate</a>
+              <Link to="/tech-store" className="hover:text-link transition-colors flex items-center gap-1">
                 <ShoppingBag size={14} /> Tech Store
               </Link>
-              <a href="mailto:thetechfaculty@gmail.com" className="hover:text-primary transition-colors flex items-center gap-1">
+              <a href="mailto:thetechfaculty@gmail.com" className="hover:text-link transition-colors flex items-center gap-1">
                 <Mail size={14} /> Email Us
               </a>
-              <a href="https://wa.me/2348068597140" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors flex items-center gap-1">
+              <a href="https://wa.me/2348068597140" target="_blank" rel="noopener noreferrer" className="hover:text-link transition-colors flex items-center gap-1">
                 <MessageCircle size={14} /> WhatsApp
               </a>
             </nav>

@@ -55,7 +55,7 @@ const TalentPoolEvidence = () => {
       )}
       <p className="text-xs text-muted-foreground text-center mt-6">
         Counted live from the{" "}
-        <Link to="/talent/pool" className="underline hover:text-primary">public Talent Pool</Link>. Only people who chose to
+        <Link to="/talent/pool" className="underline hover:text-link">public Talent Pool</Link>. Only people who chose to
         publish a profile appear there, so these numbers are a floor, not the full picture.
       </p>
     </div>
@@ -114,7 +114,7 @@ const Outcomes = () => {
             <p className="text-muted-foreground text-center mb-8">
               <Star className="inline w-4 h-4 text-primary fill-primary -mt-1" aria-hidden="true" />{" "}
               {GOOGLE_RATING.rating} from {GOOGLE_RATING.count} reviews on our{" "}
-              <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">
+              <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener noreferrer" className="underline hover:text-link">
                 Google Business Profile
               </a>{" "}
               ({GOOGLE_RATING.checked}).
@@ -132,7 +132,7 @@ const Outcomes = () => {
             </div>
             <p className="text-sm text-center mt-6">
               Studied with us?{" "}
-              <a href={GOOGLE_WRITE_REVIEW_URL} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+              <a href={GOOGLE_WRITE_REVIEW_URL} target="_blank" rel="noopener noreferrer" className="text-link hover:underline">
                 Leave a Google review
               </a>
               .
@@ -146,7 +146,7 @@ const Outcomes = () => {
             <ul className="space-y-4 text-muted-foreground">
               <li>
                 <span className="font-semibold text-foreground">Certificates.</span> Every certificate we issue carries an ID
-                anyone can look up on our <a href="/verify" className="text-primary hover:underline">certificate verification page</a>.
+                anyone can look up on our <a href="/verify" className="text-link hover:underline">certificate verification page</a>.
               </li>
               <li>
                 <span className="font-semibold text-foreground">Licence.</span> Tech Faculty NG is licensed by the Federal
@@ -154,9 +154,9 @@ const Outcomes = () => {
               </li>
               <li>
                 <span className="font-semibold text-foreground">People.</span> Our founder,{" "}
-                <Link to="/team/bill-achusim" className="text-primary hover:underline">Bill Achusim</Link>, and many of our
+                <Link to="/team/bill-achusim" className="text-link hover:underline">Bill Achusim</Link>, and many of our
                 graduates are on{" "}
-                <a href="https://www.linkedin.com/company/techfaculty" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                <a href="https://www.linkedin.com/company/techfaculty" target="_blank" rel="noopener noreferrer" className="text-link hover:underline">
                   LinkedIn
                 </a>
                 .

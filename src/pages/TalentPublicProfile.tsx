@@ -179,7 +179,7 @@ const TalentPublicProfile = () => {
               <ul className="space-y-1.5">
                 {links.map((item) => (
                   <li key={item.label}>
-                    <a href={item.url as string} target="_blank" rel="noopener noreferrer nofollow" className="inline-flex items-center gap-1.5 text-primary hover:underline">
+                    <a href={item.url as string} target="_blank" rel="noopener noreferrer nofollow" className="inline-flex items-center gap-1.5 text-link hover:underline">
                       {item.label} <ExternalLink size={13} />
                     </a>
                   </li>

@@ -176,7 +176,7 @@ const Events = () => {
           }} />
           <div className="container mx-auto max-w-4xl text-center relative z-10">
             <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-4">
-              <Link to="/" className="hover:text-primary">Home</Link>
+              <Link to="/" className="hover:text-link">Home</Link>
               <span className="mx-2">/</span>
               <span className="text-foreground">Tech Events</span>
             </nav>

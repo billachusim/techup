@@ -88,7 +88,7 @@ const DepartmentCard = ({ dept }: { dept: Department }) => {
       <h3 className="mt-5 text-xl font-semibold tracking-tight">
         <Link
           to={`/departments/${dept.slug}`}
-          className="hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="hover:text-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {dept.title}
         </Link>

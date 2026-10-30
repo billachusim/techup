@@ -114,7 +114,7 @@ const Hire = () => {
                 the right people to it.
               </p>
               <p className="text-sm">
-                <Link to="/talent/pool" className="font-medium text-primary hover:underline">
+                <Link to="/talent/pool" className="font-medium text-link hover:underline">
                   Browse the talent directory →
                 </Link>
               </p>
@@ -224,7 +224,7 @@ const Hire = () => {
                     {submitting ? "Sending…" : "Send my brief"}
                   </Button>
                   <p className="text-center text-xs text-muted-foreground">
-                    Looking for work instead? <Link to="/talent" className="text-primary hover:underline">Join the talent pool</Link>.
+                    Looking for work instead? <Link to="/talent" className="text-link hover:underline">Join the talent pool</Link>.
                   </p>
                 </form>
               )}

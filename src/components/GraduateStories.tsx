@@ -56,7 +56,7 @@ const StoryCard = ({ story }: { story: GraduateStory }) => (
           href={story.linkedin}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+          className="inline-flex items-center gap-1 text-sm text-link hover:underline"
         >
           <Linkedin size={14} aria-hidden="true" /> {story.name} on LinkedIn
         </a>

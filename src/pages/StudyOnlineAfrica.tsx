@@ -119,7 +119,7 @@ const StudyOnlineAfrica = () => {
               <h2 className="text-xl font-semibold mb-2">A certificate anyone can check</h2>
               <p className="text-muted-foreground leading-relaxed">
                 Graduates receive a Tech Faculty NG certificate with a unique ID. An employer anywhere can look it up on
-                our <a href="/verify" className="text-primary hover:underline">certificate verification page</a>. Our licence
+                our <a href="/verify" className="text-link hover:underline">certificate verification page</a>. Our licence
                 is Nigerian: Tech Faculty NG is licensed by the Federal Ministry of Science, Technology and Innovation
                 through the National Board for Technology Incubation.
               </p>
@@ -139,9 +139,9 @@ const StudyOnlineAfrica = () => {
               <h2 className="text-xl font-semibold mb-2">No branches outside Nigeria</h2>
               <p className="text-muted-foreground leading-relaxed">
                 All{" "}
-                <Link to="/locations" className="text-primary hover:underline">our campuses</Link> are in Nigeria, and we
+                <Link to="/locations" className="text-link hover:underline">our campuses</Link> are in Nigeria, and we
                 have no partner centres in other countries. If you want somewhere to learn in person near you, our{" "}
-                <Link to="/blog/top-tech-hubs-in-africa-where-to-learn-tech-2026" className="text-primary hover:underline">
+                <Link to="/blog/top-tech-hubs-in-africa-where-to-learn-tech-2026" className="text-link hover:underline">
                   guide to Africa&apos;s top tech hubs
                 </Link>{" "}
                 covers independent hubs in Kenya, Ghana, Rwanda, South Africa, Egypt and more.
@@ -160,7 +160,7 @@ const StudyOnlineAfrica = () => {
             <ul className="grid gap-3 md:grid-cols-2">
               {onlineDepartments.map(({ d, min }) => (
                 <li key={d.slug} className="rounded-lg border border-border bg-card p-4">
-                  <Link to={`/departments/${d.slug}`} className="font-semibold hover:text-primary">
+                  <Link to={`/departments/${d.slug}`} className="font-semibold hover:text-link">
                     {d.title}
                   </Link>
                   <p className="text-sm text-muted-foreground mt-1">

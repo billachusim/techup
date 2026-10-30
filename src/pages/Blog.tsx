@@ -113,7 +113,7 @@ const Blog = () => {
             <div className="container mx-auto max-w-4xl text-center mt-4">
               <Link
                 to={`/blog/category/${getCategoryByName(activeCategory)!.slug}`}
-                className="text-sm text-primary hover:underline"
+                className="text-sm text-link hover:underline"
               >
                 View full {activeCategory} category page →
               </Link>

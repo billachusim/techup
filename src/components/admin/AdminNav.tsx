@@ -28,7 +28,7 @@ export default function AdminNav() {
       {current !== "/admin" && (
         <Link
           to="/admin"
-          className="mr-1 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+          className="mr-1 inline-flex items-center gap-1 text-sm font-medium text-link hover:underline"
         >
           <ArrowLeft className="h-4 w-4" /> Back to admin
         </Link>

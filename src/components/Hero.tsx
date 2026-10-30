@@ -79,7 +79,7 @@ const Hero = () => {
         {/* Subheading */}
         <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
           Over 6,000 students trained across {departments.length} departments since 2022.
-          75% of graduates secure tech roles within six months (<Link to="/outcomes" className="underline hover:text-primary">how we count</Link>).
+          75% of graduates secure tech roles within six months (<Link to="/outcomes" className="underline hover:text-link">how we count</Link>).
           Our top students start earning through internships as early as month 3.
         </p>
 

@@ -349,7 +349,7 @@ const TechStore = () => {
                 <p className="mt-2 text-sm text-muted-foreground">
                   Collect free from our Nnewi headquarters or any Technology Incubation Centre we operate from —
                   Onitsha, Awka, Enugu, Owerri, Aba, Abakaliki, Abuja, Lagos and more.{" "}
-                  <Link to="/locations" className="text-primary underline">
+                  <Link to="/locations" className="text-link underline">
                     See all centres
                   </Link>
                   .

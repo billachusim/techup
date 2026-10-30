@@ -364,11 +364,11 @@ const VirtualSIWES = () => {
                 </p>
                 <p>
                   Prefer to be in a room with people? Compare our{" "}
-                  <Link to="/siwes" className="underline hover:text-primary">
+                  <Link to="/siwes" className="underline hover:text-link">
                     on-site SIWES and IT placement tracks
                   </Link>{" "}
                   or find your nearest{" "}
-                  <Link to="/locations" className="underline hover:text-primary">
+                  <Link to="/locations" className="underline hover:text-link">
                     Tech Faculty campus
                   </Link>
                   .

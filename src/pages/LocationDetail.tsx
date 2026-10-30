@@ -101,9 +101,9 @@ const LocationDetail = () => {
       <main className="pt-24 pb-16">
         <section className="container mx-auto px-4">
           <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-4">
-            <Link to="/" className="hover:text-primary">Home</Link>
+            <Link to="/" className="hover:text-link">Home</Link>
             <span className="mx-2">/</span>
-            <Link to="/locations" className="hover:text-primary">Locations</Link>
+            <Link to="/locations" className="hover:text-link">Locations</Link>
             <span className="mx-2">/</span>
             <span className="text-foreground">{campus.city}</span>
           </nav>
@@ -155,7 +155,7 @@ const LocationDetail = () => {
                 </div>
                 <div className="flex items-start gap-3">
                   <Phone className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                  <a href={`tel:${CAMPUS_PHONE.replace(/-/g, "")}`} className="text-sm text-muted-foreground hover:text-primary">
+                  <a href={`tel:${CAMPUS_PHONE.replace(/-/g, "")}`} className="text-sm text-muted-foreground hover:text-link">
                     {CAMPUS_PHONE.replace(/-/g, " ")}
                   </a>
                 </div>
@@ -219,7 +219,7 @@ const LocationDetail = () => {
                   <p className="text-sm text-muted-foreground flex-1">{p.body}</p>
                   <Link
                     to={p.href}
-                    className="text-sm font-semibold text-primary hover:underline inline-flex items-center gap-1 mt-4"
+                    className="text-sm font-semibold text-link hover:underline inline-flex items-center gap-1 mt-4"
                   >
                     See the {p.title} curriculum <ArrowRight size={14} />
                   </Link>
@@ -251,10 +251,10 @@ const LocationDetail = () => {
                 Placement includes supervised project work, weekly reviews, logbook guidance and documentation your
                 institution accepts. Students leave with a portfolio, not photocopies.
               </p>
-              <Link to="/siwes" className="text-primary font-semibold hover:underline inline-flex items-center gap-1">
+              <Link to="/siwes" className="text-link font-semibold hover:underline inline-flex items-center gap-1">
                 Read the full SIWES programme details <ArrowRight size={14} />
               </Link>
-              <Link to="/siwes/courses" className="text-primary font-semibold hover:underline inline-flex items-center gap-1">
+              <Link to="/siwes/courses" className="text-link font-semibold hover:underline inline-flex items-center gap-1">
                 See what you would do for your course <ArrowRight size={14} />
               </Link>
             </div>
@@ -319,7 +319,7 @@ const LocationDetail = () => {
                 {cityGuides.map((g, i) => (
                   <span key={g.slug}>
                     {i > 0 && (i === cityGuides.length - 1 ? " and " : ", ")}
-                    <Link to={`/blog/${g.slug}`} className="text-primary hover:underline">
+                    <Link to={`/blog/${g.slug}`} className="text-link hover:underline">
                       our guide to the {g.city} tech scene
                     </Link>
                   </span>
@@ -331,7 +331,7 @@ const LocationDetail = () => {
                 See{" "}
                 <Link
                   to="/blog/best-tech-hubs-and-training-institutes-in-nigeria-by-city-2026"
-                  className="text-primary hover:underline"
+                  className="text-link hover:underline"
                 >
                   the best tech hubs and training institutes in Nigeria by city
                 </Link>{" "}
@@ -344,7 +344,7 @@ const LocationDetail = () => {
                   <li key={h.slug} className="flex items-start gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
                     <span>
-                      <Link to={`/hubs/${h.slug}`} className="text-foreground font-medium hover:text-primary hover:underline">
+                      <Link to={`/hubs/${h.slug}`} className="text-foreground font-medium hover:text-link hover:underline">
                         {h.name}
                       </Link>{" "}
                       — {h.focus}
@@ -355,7 +355,7 @@ const LocationDetail = () => {
             )}
             <p>
               Compare every listing in{" "}
-              <Link to="/hubs" className="text-primary hover:underline">
+              <Link to="/hubs" className="text-link hover:underline">
                 our directory of tech hubs in Nigeria and Africa
               </Link>
               .

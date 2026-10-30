@@ -117,9 +117,9 @@ const HubDetail = () => {
       <main className="pt-24 pb-16">
         <section className="container mx-auto px-4">
           <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground mb-6">
-            <Link to="/" className="hover:text-primary">Home</Link>
+            <Link to="/" className="hover:text-link">Home</Link>
             <span className="mx-2">/</span>
-            <Link to="/hubs" className="hover:text-primary">Tech Hubs</Link>
+            <Link to="/hubs" className="hover:text-link">Tech Hubs</Link>
             <span className="mx-2">/</span>
             <span className="text-foreground">{hub.city}</span>
           </nav>
@@ -154,7 +154,7 @@ const HubDetail = () => {
                   </div>
                   <p>
                     Our{" "}
-                    <Link to={`/blog/${cityGuide.slug}`} className="text-primary hover:underline">
+                    <Link to={`/blog/${cityGuide.slug}`} className="text-link hover:underline">
                       guide to the {hub.city} tech scene
                     </Link>{" "}
                     covers the courses and first projects that fit those sectors.
@@ -166,7 +166,7 @@ const HubDetail = () => {
                   {campus.city === hub.city
                     ? "Tech Faculty also has its own campus here: "
                     : `There is no Tech Faculty campus in ${hub.city}; the nearest is `}
-                  <Link to={`/locations/${campus.slug}`} className="text-primary hover:underline">
+                  <Link to={`/locations/${campus.slug}`} className="text-link hover:underline">
                     the Tech Faculty campus in {campus.city}
                   </Link>
                   .
@@ -225,7 +225,7 @@ const HubDetail = () => {
                 {hub.courseAreas.map((c) => (
                   <li key={c} className="flex items-start gap-2 text-sm">
                     <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                    <Link to={`/departments/${COURSE_AREA_DEPARTMENT[c]}`} className="hover:text-primary hover:underline">
+                    <Link to={`/departments/${COURSE_AREA_DEPARTMENT[c]}`} className="hover:text-link hover:underline">
                       {c}
                     </Link>
                   </li>
@@ -233,7 +233,7 @@ const HubDetail = () => {
               </ul>
               <p className="text-xs text-muted-foreground mt-4">
                 Tech Faculty teaches each of these as a certified track — see{" "}
-                <Link to="/departments" className="text-primary hover:underline">
+                <Link to="/departments" className="text-link hover:underline">
                   our departments
                 </Link>{" "}
                 for modules, duration and outcomes.
@@ -290,13 +290,13 @@ const HubDetail = () => {
                 <p>
                   <span className="text-foreground font-semibold">Structured teaching.</span>{" "}
                   Licensed by the Federal Ministry of Science, Technology and Innovation via the
-                  National Board for Technology Incubation, with <Link to="/outcomes" className="text-primary hover:underline">over 6,000 students trained</Link> and
+                  National Board for Technology Incubation, with <Link to="/outcomes" className="text-link hover:underline">over 6,000 students trained</Link> and
                   4+ years of training experience.
                 </p>
                 <p>
                   <span className="text-foreground font-semibold">Certification.</span> Every
                   completed track ends in a certificate you can verify publicly at{" "}
-                  <Link to="/verify" className="text-primary hover:underline">
+                  <Link to="/verify" className="text-link hover:underline">
                     techfaculty.ng/verify
                   </Link>
                   .
@@ -313,7 +313,7 @@ const HubDetail = () => {
                     href={hub.website}
                     target="_blank"
                     rel="nofollow noopener noreferrer"
-                    className="text-primary hover:underline inline-flex items-center gap-1"
+                    className="text-link hover:underline inline-flex items-center gap-1"
                   >
                     Visit the {hub.name} website <ExternalLink className="w-3.5 h-3.5" />
                   </a>
@@ -347,7 +347,7 @@ const HubDetail = () => {
                 <Card key={r.slug}>
                   <CardContent className="p-5">
                     <h3 className="font-semibold mb-1">
-                      <Link to={`/hubs/${r.slug}`} className="hover:text-primary transition-colors">
+                      <Link to={`/hubs/${r.slug}`} className="hover:text-link transition-colors">
                         {r.name}
                       </Link>
                     </h3>

@@ -74,7 +74,7 @@ const JobDetail = () => {
       <Header />
       <main className="pt-24 pb-20 px-4">
         <article className="container mx-auto max-w-3xl space-y-8">
-          <Link to={platform ? `/careers/platforms/${platform.slug}` : "/careers"} className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary">
+          <Link to={platform ? `/careers/platforms/${platform.slug}` : "/careers"} className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-link">
             <ArrowLeft size={14} /> Back to {platform ? `${platform.name} jobs` : "Careers"}
           </Link>
 

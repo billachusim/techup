@@ -179,13 +179,21 @@ const Dashboard = () => {
 
       if (courseEnrollments && courseEnrollments.length > 0) {
         const courseIds = courseEnrollments.map((ce) => ce.course_id);
-        const { data: allLectures } = await supabase
-          .from('lectures')
-          .select('*, courses (*)')
-          .in('course_id', courseIds)
-          .order('scheduled_at', { ascending: true });
+        const [{ data: allLectures }, { data: timetable }] = await Promise.all([
+          supabase
+            .from('lectures')
+            .select('*, courses (*)')
+            .in('course_id', courseIds),
+          // Each student's own dates, counted from when they started
+          supabase.rpc('student_timetable', { _faculty_id: facultyIdToFetch }),
+        ]);
+        const dateFor = new Map((timetable ?? []).map((t) => [t.lecture_id, t.scheduled_at]));
+        const personal = (allLectures || [])
+          .filter((l) => dateFor.has(l.id))
+          .map((l) => ({ ...l, scheduled_at: dateFor.get(l.id)! }))
+          .sort((a, b) => a.scheduled_at.localeCompare(b.scheduled_at));
 
-        setLecturesData(allLectures || []);
+        setLecturesData(personal);
 
         const { data: progressRecords } = await supabase
           .from('course_progress')

@@ -56,26 +56,29 @@ serve(async (req) => {
       );
     }
 
-    // Find the course with the least progress
-    let targetCourse = courses[0];
-    let minProgress = courses[0]?.course_progress?.[0]?.classes_completed || 0;
+    // The next class is the soonest upcoming class across the student's courses
+    const allCourseIds = courses.map((c: any) => c.courses?.id || c.course_id);
+    const { data: upcoming } = await admin
+      .from("lectures")
+      .select("course_id")
+      .in("course_id", allCourseIds)
+      .eq("status", "scheduled")
+      .gte("scheduled_at", new Date().toISOString())
+      .order("scheduled_at", { ascending: true })
+      .limit(1);
 
-    for (const course of courses) {
-      const progress = course.course_progress?.[0]?.classes_completed || 0;
-      if (progress < minProgress) {
-        minProgress = progress;
-        targetCourse = course;
-      }
-    }
+    const targetCourse =
+      courses.find((c: any) => (c.courses?.id || c.course_id) === upcoming?.[0]?.course_id) ?? courses[0];
 
     const courseId = targetCourse.courses?.id || targetCourse.course_id;
-    
+
     // Get saved lectures for this course
     const { data: lectures, error: lecturesErr } = await admin
       .from("lectures")
       .select("*")
       .eq("course_id", courseId)
       .eq("status", "scheduled")
+      .gte("scheduled_at", new Date().toISOString())
       .order("scheduled_at", { ascending: true })
       .limit(1);
 

@@ -508,6 +508,7 @@ export type Database = {
           id: string
           name: string
           plan_required: string
+          sort_order: number
           updated_at: string
         }
         Insert: {
@@ -518,6 +519,7 @@ export type Database = {
           id?: string
           name: string
           plan_required?: string
+          sort_order?: number
           updated_at?: string
         }
         Update: {
@@ -528,6 +530,7 @@ export type Database = {
           id?: string
           name?: string
           plan_required?: string
+          sort_order?: number
           updated_at?: string
         }
         Relationships: []

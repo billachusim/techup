@@ -12,7 +12,8 @@ export default defineTool({
     if (auth.error) return auth.error;
     const supabase = supabaseForUser(ctx);
     const nowIso = new Date().toISOString();
-    const { data: me } = await supabase.from("profiles").select("faculty_id").maybeSingle();
+    const { data: u } = await supabase.auth.getUser();
+    const { data: me } = await supabase.from("profiles").select("faculty_id").eq("id", u.user?.id ?? "").maybeSingle();
     if (!me?.faculty_id) return { content: [{ type: "text", text: "[]" }], structuredContent: { classes: [] } };
     // Each student's own timetable, counted from when they started
     const { data, error } = await supabase.rpc("student_timetable", { _faculty_id: me.faculty_id });

@@ -12,27 +12,24 @@ export default defineTool({
     if (auth.error) return auth.error;
     const supabase = supabaseForUser(ctx);
     const nowIso = new Date().toISOString();
-    const { data, error } = await supabase
-      .from("lectures")
-      .select("id,title,description,scheduled_at,duration_minutes,status,course_id,courses(name)")
-      .gte("scheduled_at", nowIso)
-      .eq("status", "scheduled")
-      .order("scheduled_at", { ascending: true })
-      .limit(50);
+    const { data: me } = await supabase.from("profiles").select("faculty_id").maybeSingle();
+    if (!me?.faculty_id) return { content: [{ type: "text", text: "[]" }], structuredContent: { classes: [] } };
+    // Each student's own timetable, counted from when they started
+    const { data, error } = await supabase.rpc("student_timetable", { _faculty_id: me.faculty_id });
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
-    const items = (data ?? []).map((l: { id: string; title: string; description: string | null; scheduled_at: string; duration_minutes: number | null; status: string; course_id: string; courses: Array<{ name: string }> | { name: string } | null }) => {
-      const course = Array.isArray(l.courses) ? l.courses[0] : l.courses;
-      return {
-        id: l.id,
+    const items = (data ?? [])
+      .filter((l: { scheduled_at: string }) => l.scheduled_at >= nowIso)
+      .slice(0, 50)
+      .map((l: { lecture_id: string; title: string; description: string | null; scheduled_at: string; duration_minutes: number | null; course_id: string; course_name: string }) => ({
+        id: l.lecture_id,
         title: l.title,
         description: l.description,
         scheduledAt: l.scheduled_at,
         durationMinutes: l.duration_minutes,
-        status: l.status,
+        status: "scheduled",
         courseId: l.course_id,
-        courseName: course?.name ?? null,
-      };
-    });
+        courseName: l.course_name ?? null,
+      }));
     return { content: [{ type: "text", text: JSON.stringify(items, null, 2) }], structuredContent: { classes: items } };
   },
 });

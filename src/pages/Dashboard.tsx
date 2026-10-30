@@ -207,7 +207,7 @@ const Dashboard = () => {
           const progress = enrollment.course_progress?.[0];
           const classesCompleted = progress?.classes_completed || 0;
           if (classesCompleted < 4) {
-            const courseLectures = (allLectures || []).filter((l) => l.course_id === enrollment.course_id);
+            const courseLectures = personal.filter((l) => l.course_id === enrollment.course_id);
             const nextClassIndex = classesCompleted;
             nextLectureToShow = courseLectures[nextClassIndex] || courseLectures[0];
             calculatedNextClassNumber = classesCompleted + 1;

@@ -4,6 +4,7 @@ import { Check, CheckCheck, Clock, Loader2, Paperclip, RefreshCw, Send, X } from
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AdminNav from "@/components/admin/AdminNav";
+import { WhatsAppCampaign } from "@/components/admin/WhatsAppCampaign";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -190,7 +191,8 @@ export default function AdminWhatsApp() {
         {paused && <p className="rounded border border-destructive p-3 text-sm text-destructive">Sending is paused because WhatsApp reported "{paused}". Reconnect WhatsApp in Connectors.</p>}
 
         <Tabs defaultValue="inbox">
-          <TabsList><TabsTrigger value="inbox">Chats</TabsTrigger><TabsTrigger value="templates">Templates</TabsTrigger></TabsList>
+          <TabsList><TabsTrigger value="inbox">Chats</TabsTrigger><TabsTrigger value="templates">Templates</TabsTrigger>{isAdmin && <TabsTrigger value="campaign">Revamp message</TabsTrigger>}</TabsList>
+          {isAdmin && <TabsContent value="campaign"><WhatsAppCampaign /></TabsContent>}
 
           <TabsContent value="inbox" className="grid gap-4 md:grid-cols-[280px_1fr]">
             <Card>

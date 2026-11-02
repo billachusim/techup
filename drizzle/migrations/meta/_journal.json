@@ -225,6 +225,13 @@
       "when": 1793352351506,
       "tag": "0031_per_student_timetable",
       "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1793605091290,
+      "tag": "0032_whatsapp_campaign_sends",
+      "breakpoints": true
     }
   ]
 }

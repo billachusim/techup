@@ -2419,6 +2419,56 @@ export type Database = {
         }
         Relationships: []
       }
+      whatsapp_campaign_sends: {
+        Row: {
+          campaign: string
+          created_at: string
+          error: string | null
+          id: string
+          lead_id: string
+          message_id: string | null
+          phone: string
+          segment: string
+          sent_by: string | null
+          status: string
+          template_name: string
+        }
+        Insert: {
+          campaign: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          lead_id: string
+          message_id?: string | null
+          phone: string
+          segment: string
+          sent_by?: string | null
+          status?: string
+          template_name: string
+        }
+        Update: {
+          campaign?: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          lead_id?: string
+          message_id?: string | null
+          phone?: string
+          segment?: string
+          sent_by?: string | null
+          status?: string
+          template_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_campaign_sends_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       whatsapp_lead_followups: {
         Row: {
           attempt_count: number

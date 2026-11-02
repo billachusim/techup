@@ -8,3 +8,4 @@
 - Promotional lead-email sequences are disabled by default and excluded from the app-email registry; future dispatch requires explicit email consent and a dedicated marketing provider to protect app-email delivery.
 - Lead forms use column-only INSERT grants: grant new visitor-submitted fields to anon/authenticated in the same migration, while keeping consent timestamps, versions and staff fields server-controlled.
 - Class dates are per student: read them from the `student_timetable(faculty_id)` database function, never from `lectures.scheduled_at`, because each student starts class 1 from their own start date.
+- Lead WhatsApp campaigns: segment rules live in `src/lib/whatsapp-campaign.ts` (pure, tested); sends go through `sendWhatsApp` with a reserve-then-send row in `whatsapp_campaign_sends` (unique per campaign+lead, one per phone) so repeated clicks never double-message, and STOP opt-outs are always skipped.

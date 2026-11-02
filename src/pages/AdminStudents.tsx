@@ -15,6 +15,8 @@ import AdminNav from "@/components/admin/AdminNav";
 import { PendingPayments } from "@/components/student/PendingPayments";
 import { OutstandingBalances } from "@/components/student/OutstandingBalances";
 import { AdminExports } from "@/components/admin/AdminExports";
+import { StudentDirectory } from "@/components/admin/StudentDirectory";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type Status = "submitted" | "reviewed" | "needs_changes" | "ai" | "all";
 const FILTERS: { v: Status; label: string }[] = [
@@ -162,7 +164,8 @@ export default function AdminStudents() {
                 </CardContent>
               </Card>
             ))}
-          </>
+            </TabsContent>
+          </Tabs>
         )}
       </main>
       <Footer />

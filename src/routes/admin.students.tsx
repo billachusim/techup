@@ -5,8 +5,8 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/admin/students")({
   head: () =>
     pageHead({
-      title: "Student Work Review",
-      description: "Staff area for reviewing and scoring Tech Faculty student submissions.",
+      title: "Admin · Students",
+      description: "Staff area to find students, filter by department, contact them, review work and follow up payments.",
       path: "/admin/students",
       noindex: true,
     }),

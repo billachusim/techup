@@ -36,13 +36,14 @@ async function loadAudience() {
     const price = d.planId ? planMinimum(d.planId) : undefined;
     if (price) courses[d.slug] = { slug: d.slug, title: d.title, price };
   }
+  const courseSlugs = new Set(Object.keys(courses));
   const sentByLead = new Map((sends.data ?? []).map((s) => [s.lead_id, s]));
   const sentPhones = new Set((sends.data ?? []).filter((s) => s.status === "sent").map((s) => phoneKey(s.phone)));
 
   // One message per phone number, even when the same person filled several forms.
   const seen = new Set<string>();
   const audience = (leads.data as (CampaignLead & { channel: string })[]).map((l) => {
-    const segment = segmentFor(l, studentPhones);
+    const segment = segmentFor(l, studentPhones, courseSlugs);
     const key = phoneKey(l.contact);
     const duplicate = seen.has(key);
     seen.add(key);

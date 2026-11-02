@@ -52,18 +52,6 @@ export const CAMPAIGN_TEMPLATES: Record<Segment, { name: string; body: string; e
 
 export interface CourseOffer { slug: string; title: string; price: number }
 
-/** Words in a lead's notes/source that point to one department. */
-const COURSE_WORDS: Array<[RegExp, string]> = [
-  [/web ?dev|website|frontend|backend|full.?stack/i, "web-development"],
-  [/mobile|app dev|android|ios|flutter/i, "mobile-app-development"],
-  [/data|analytic|excel|power ?bi/i, "data-science-analytics"],
-  [/cyber|security|hacking/i, "cybersecurity"],
-  [/\bai\b|machine learning|artificial/i, "ai-machine-learning"],
-  [/marketing|social media|seo/i, "digital-marketing"],
-  [/design|ui|ux|figma|graphics/i, "design"],
-  [/cloud|devops|aws/i, "cloud-computing"],
-];
-
 const SIWES_INTERESTS = new Set(["virtual_siwes", "logbook_service", "success_kit", "siwes_placement", "free_checklist"]);
 
 export interface CampaignLead {
@@ -80,15 +68,20 @@ export interface CampaignLead {
 /** Last 10 digits, so 0803…, 234803… and +234 803… match. */
 export const phoneKey = (raw: string) => raw.replace(/\D/g, "").slice(-10);
 
+/** The department page the lead signed up on, e.g. source "department-footer:web-development". */
 export function courseFor(lead: CampaignLead): string | null {
-  const text = `${lead.notes ?? ""} ${lead.source ?? ""}`;
-  return COURSE_WORDS.find(([re]) => re.test(text))?.[1] ?? null;
+  return lead.source?.match(/^department(?:-footer)?:([a-z0-9-]+)/)?.[1] ?? null;
 }
 
-export function segmentFor(lead: CampaignLead, studentPhones: Set<string>): Segment {
+const isSiwes = (lead: CampaignLead) =>
+  SIWES_INTERESTS.has(lead.interest) || /siwes|industrial training/i.test(`${lead.notes ?? ""} ${lead.source ?? ""}`);
+
+/** courseSlugs: departments with a current price, so a course lead always gets a real offer. */
+export function segmentFor(lead: CampaignLead, studentPhones: Set<string>, courseSlugs: Set<string>): Segment {
   if (lead.status === "enrolled" || studentPhones.has(phoneKey(lead.contact))) return "student";
-  if (SIWES_INTERESTS.has(lead.interest)) return "siwes";
-  if (courseFor(lead)) return "course";
+  if (isSiwes(lead)) return "siwes";
+  const slug = courseFor(lead);
+  if (slug && courseSlugs.has(slug)) return "course";
   return "general";
 }
 

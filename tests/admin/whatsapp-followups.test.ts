@@ -22,18 +22,17 @@ const eligible = {
 };
 
 describe("WhatsApp admissions follow-up safeguards", () => {
-  it("requires explicit WhatsApp consent and an active lead", () => {
+  it("follows up every new lead (no opt-in box needed) unless they said STOP or replied", () => {
     expect(isEligibleForWhatsAppFollowup(eligible)).toBe(true);
-    expect(isEligibleForWhatsAppFollowup({ ...eligible, whatsapp_opt_in: false })).toBe(false);
+    expect(isEligibleForWhatsAppFollowup({ ...eligible, whatsapp_opt_in: false })).toBe(true);
     expect(isEligibleForWhatsAppFollowup({ ...eligible, whatsapp_opt_out_at: "2026-10-21T08:00:00Z" })).toBe(false);
     expect(isEligibleForWhatsAppFollowup({ ...eligible, whatsapp_last_inbound_at: "2026-10-21T08:00:00Z" })).toBe(false);
     expect(isEligibleForWhatsAppFollowup({ ...eligible, whatsapp_last_inbound_at: "2026-10-21T07:59:59Z" })).toBe(true);
     expect(isEligibleForWhatsAppFollowup({ ...eligible, status: "contacted" })).toBe(false);
   });
 
-  it("does not include non-admissions requests in this workflow", () => {
-    expect(isEligibleForWhatsAppFollowup({ ...eligible, interest: "success_kit" })).toBe(false);
-    expect(isEligibleForWhatsAppFollowup({ ...eligible, interest: "partner_enquiry" })).toBe(false);
+  it("includes every kind of new lead enquiry", () => {
+    expect(isEligibleForWhatsAppFollowup({ ...eligible, interest: "success_kit" })).toBe(true);
   });
 
   it("limits automated follow-ups to the defined admissions request types", () => {
@@ -51,10 +50,10 @@ describe("WhatsApp admissions follow-up safeguards", () => {
     expect(isApprovedUtilityTemplate(templates, WHATSAPP_ADMISSIONS_TEMPLATES.confirmation, "en" )).toBe(false);
   });
 
-  it("schedules the second follow-up exactly 48 hours after confirmation", () => {
-    const sentAt = new Date("2026-10-21T08:00:00.000Z");
-    expect(WHATSAPP_FOLLOWUP_DELAY_HOURS).toBe(48);
-    expect(whatsAppFollowupDueAt(sentAt).toISOString()).toBe("2026-10-23T08:00:00.000Z");
+  it("sends the single follow-up 54 hours (day 3) after the lead arrives", () => {
+    const createdAt = new Date("2026-10-21T08:00:00.000Z");
+    expect(WHATSAPP_FOLLOWUP_DELAY_HOURS).toBe(54);
+    expect(whatsAppFollowupDueAt(createdAt).toISOString()).toBe("2026-10-23T14:00:00.000Z");
   });
 
   it("suppresses the second follow-up only for replies after confirmation", () => {

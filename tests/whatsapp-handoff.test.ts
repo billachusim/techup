@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { FOUNDER_WHATSAPP_NUMBER, HANDOFF_ORDER, handoffMessage } from "./whatsapp-handoff";
-import { renderStoredBody } from "./whatsapp-render";
+import { FOUNDER_WHATSAPP_NUMBER, HANDOFF_ORDER, handoffMessage } from "@/lib/whatsapp-handoff";
+import { renderStoredBody } from "@/lib/whatsapp-render";
 
 describe("handoff presets", () => {
   it("only the payment preset mentions payment", () => {

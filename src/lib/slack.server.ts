@@ -125,7 +125,10 @@ export async function inviteToChannel(channelId: string, slackUserId: string): P
 /** Best-effort channel announcement; never blocks the main flow. */
 export async function postChannelMessage(channelId: string, text: string): Promise<void> {
   try {
-    const res = await slackPost("chat.postMessage", { channel: channelId, text, unfurl_links: false });
+    const res = await slackPost("chat.postMessage", {
+      channel: channelId, text, unfurl_links: false,
+      username: "Tech Faculty NG", icon_url: "https://techfaculty.ng/logo.png",
+    });
     if (!res.ok) console.error("slack chat.postMessage failed", res.error);
   } catch (e) {
     console.error("slack chat.postMessage error", (e as Error).message);

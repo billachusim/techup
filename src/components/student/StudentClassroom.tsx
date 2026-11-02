@@ -61,9 +61,16 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
   const [saving, setSaving] = useState(false);
 
   const loadDeliverables = async () => {
+    // Staff can read every row through RLS, so always scope this personal list to the signed-in user.
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setItems([]);
+      return;
+    }
     const { data } = await supabase
       .from("student_deliverables")
       .select("id, title, proof_url, status, score, reviewer_note, reviewed_by, class_number, created_at")
+      .eq("user_id", user.id)
       .order("created_at", { ascending: false })
       .limit(10);
     setItems((data as Deliverable[]) ?? []);

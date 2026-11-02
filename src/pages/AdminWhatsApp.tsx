@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Check, CheckCheck, Clock, Loader2, Paperclip, RefreshCw, Send, X } from "lucide-react";
+import { ArrowLeft, Check, CheckCheck, Clock, Loader2, Paperclip, RefreshCw, Search, Send, X } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AdminNav from "@/components/admin/AdminNav";
@@ -17,7 +17,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useIsStaff } from "@/hooks/useIsStaff";
 import { getSupabase } from "@/integrations/supabase/lazy";
 import { cn } from "@/lib/utils";
-import { HANDOFF_LABEL, handoffMessage, type HandoffKind } from "@/lib/whatsapp-handoff";
+import { HANDOFF_LABEL, HANDOFF_ORDER, handoffMessage } from "@/lib/whatsapp-handoff";
+import { renderStoredBody, shortUrl, splitLinks } from "@/lib/whatsapp-render";
 import { AUTO_ANSWER_LABEL, AUTO_ANSWER_RULES } from "@/lib/whatsapp-auto-answers";
 import {
   createWhatsAppTemplate, deleteWhatsAppTemplate, getWhatsAppMedia, listWhatsAppTemplates, sendWhatsAppMessage,
@@ -34,6 +35,18 @@ type AutoReply = {
 type Template = { name: string; status: string; language: string; category: string; components: any[] };
 
 const DAY = 24 * 3600 * 1000;
+
+function dayLabel(ts: string) {
+  const d = new Date(ts); const now = new Date();
+  const y = new Date(now); y.setDate(now.getDate() - 1);
+  if (d.toDateString() === now.toDateString()) return "Today";
+  if (d.toDateString() === y.toDateString()) return "Yesterday";
+  return d.toLocaleDateString([], { day: "numeric", month: "short", year: d.getFullYear() === now.getFullYear() ? undefined : "numeric" });
+}
+function timeLabel(ts: string) {
+  const l = dayLabel(ts);
+  return l === "Today" ? new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : l;
+}
 
 function StatusIcon({ s }: { s: string }) {
   if (s === "read") return <CheckCheck className="h-3.5 w-3.5 text-primary" aria-label="Read" />;
@@ -85,6 +98,9 @@ export default function AdminWhatsApp() {
   const [tplPick, setTplPick] = useState("");
   const [tplParams, setTplParams] = useState<string[]>([]);
   const [form, setForm] = useState({ name: "", category: "UTILITY", body: "", examples: "" });
+  const [filter, setFilter] = useState<"waiting" | "open" | "all">("all");
+  const [query, setQuery] = useState("");
+  const endRef = useRef<HTMLDivElement>(null);
 
   const load = useCallback(async () => {
     const sb = await getSupabase();
@@ -148,6 +164,17 @@ export default function AdminWhatsApp() {
   };
 
   const thread = useMemo(() => msgs.filter((m) => m.contact_phone === active).reverse(), [msgs, active]);
+  const shownThreads = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const qd = q.replace(/\D/g, "");
+    return threads.filter((t) => {
+      if (filter === "waiting" && !waiting.has(t.phone)) return false;
+      if (filter === "open" && !(t.lastInbound && Date.now() - t.lastInbound < DAY)) return false;
+      if (!q) return true;
+      return (t.name ?? "").toLowerCase().includes(q) || (qd.length > 2 && t.phone.includes(qd));
+    });
+  }, [threads, filter, query, waiting]);
+  useEffect(() => { endRef.current?.scrollIntoView({ block: "end" }); }, [active, thread.length]);
   const activeT = threads.find((t) => t.phone === active);
   const windowOpen = !!activeT?.lastInbound && Date.now() - activeT.lastInbound < DAY;
   const approved = templates.filter((t) => t.status === "APPROVED");
@@ -194,93 +221,139 @@ export default function AdminWhatsApp() {
           <TabsList><TabsTrigger value="inbox">Chats</TabsTrigger><TabsTrigger value="templates">Templates</TabsTrigger>{isAdmin && <TabsTrigger value="campaign">Revamp message</TabsTrigger>}</TabsList>
           {isAdmin && <TabsContent value="campaign"><WhatsAppCampaign /></TabsContent>}
 
-          <TabsContent value="inbox" className="grid gap-4 md:grid-cols-[280px_1fr]">
-            <Card>
-              <CardContent className="space-y-2 p-3">
-                <div className="flex gap-2">
-                  <Input placeholder="New chat: phone e.g. 0803..." value={newTo} onChange={(e) => setNewTo(e.target.value)} aria-label="Phone number for a new chat" />
-                  <Button size="sm" onClick={() => { const d = newTo.replace(/\D/g, ""); const p = d.startsWith("0") && d.length === 11 ? "234" + d.slice(1) : d; if (p.length >= 8) { setActive(p); setNewTo(""); } }}>Open</Button>
+          <TabsContent value="inbox">
+            <div className="flex h-[calc(100dvh-12rem)] min-h-[520px] overflow-hidden rounded-lg border bg-card">
+              {/* Chat list */}
+              <aside className={cn("flex w-full min-w-0 flex-col border-r md:w-[340px] md:shrink-0", active && "hidden md:flex")}>
+                <div className="space-y-2 border-b p-3">
+                  <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input className="pl-8" placeholder="Search name or number" value={query} onChange={(e) => setQuery(e.target.value)} aria-label="Search chats" />
+                  </div>
+                  <div className="flex gap-1">
+                    {(["waiting", "open", "all"] as const).map((f) => (
+                      <Button key={f} size="sm" variant={filter === f ? "default" : "ghost"} className="h-7 rounded-full px-3 text-xs" onClick={() => setFilter(f)}>
+                        {f === "waiting" ? `Needs reply (${waiting.size})` : f === "open" ? "Open (24h)" : "All"}
+                      </Button>
+                    ))}
+                  </div>
+                  <div className="flex gap-2">
+                    <Input className="h-8" placeholder="New chat: 0803..." value={newTo} onChange={(e) => setNewTo(e.target.value)} aria-label="Phone number for a new chat" />
+                    <Button size="sm" className="h-8" onClick={() => { const d = newTo.replace(/\D/g, ""); const p = d.startsWith("0") && d.length === 11 ? "234" + d.slice(1) : d; if (p.length >= 8) { setActive(p); setNewTo(""); } }}>Open</Button>
+                  </div>
                 </div>
-                {threads.length === 0 && <p className="p-2 text-sm text-muted-foreground">No chats yet. Messages people send to your WhatsApp number appear here.</p>}
-                <ul className="max-h-[60vh] space-y-1 overflow-y-auto">
-                  {threads.map((t) => (
-                    <li key={t.phone}>
-                      <button onClick={() => setActive(t.phone)} className={cn("w-full rounded p-2 text-left text-sm hover:bg-muted", active === t.phone && "bg-muted")}>
-                        <div className="flex justify-between gap-2"><span className="font-medium">{t.name ?? `+${t.phone}`}</span>
-                          <span className="flex gap-1">
-                            {waiting.has(t.phone) && <Badge>Needs reply</Badge>}
-                            {t.lastInbound && Date.now() - t.lastInbound < DAY && <Badge variant="secondary">Open</Badge>}
-                          </span></div>
-                        <p className="truncate text-muted-foreground">{t.last.direction === "outbound" ? "You: " : ""}{t.last.body}</p>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card>
-              {!active ? <CardContent className="p-6 text-muted-foreground">Pick a chat.</CardContent> : (
-                <>
-                  <CardHeader className="pb-2"><CardTitle className="text-lg">{activeT?.name ?? `+${active}`}</CardTitle>
-                    {waiting.get(active) && (
-                      <p className="text-xs font-medium text-primary">
-                        Handed to you: {waiting.get(active)!.reason ?? AUTO_ANSWER_LABEL.other}
-                      </p>
-                    )}
-                    <p className="text-xs text-muted-foreground">+{active} · {windowOpen ? "You can reply freely (they messaged in the last 24 hours)." : "They haven't messaged in 24 hours — you must use an approved template."}</p>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="max-h-[50vh] space-y-2 overflow-y-auto">
-                      {thread.map((m) => (
-                        <div key={m.id} className={cn("max-w-[80%] rounded-lg p-2 text-sm", m.direction === "outbound" ? "ml-auto bg-primary/10" : "bg-muted")}>
-                          <p className="whitespace-pre-wrap">{m.body}</p>
-                          {m.media_id && <Media id={m.media_id} />}
-                          <div className="mt-1 flex items-center justify-end gap-1 text-[11px] text-muted-foreground">
-                            {autoReplyIds.has(m.id) && <span className="font-medium">Auto ·</span>}
-                            {new Date(m.provider_timestamp ?? m.created_at).toLocaleString()}
-                            {m.direction === "outbound" && <StatusIcon s={m.status} />}
+                <ul className="flex-1 overflow-y-auto">
+                  {shownThreads.length === 0 && <li className="p-4 text-sm text-muted-foreground">No chats here.</li>}
+                  {shownThreads.map((t) => {
+                    const preview = renderStoredBody(t.last.body, templates);
+                    return (
+                      <li key={t.phone}>
+                        <button onClick={() => setActive(t.phone)} className={cn("flex w-full min-w-0 flex-col gap-0.5 border-b px-3 py-2.5 text-left hover:bg-muted/60", active === t.phone && "bg-muted")}>
+                          <div className="flex min-w-0 items-center justify-between gap-2">
+                            <span className="truncate font-medium">{t.name ?? `+${t.phone}`}</span>
+                            <span className="shrink-0 text-[11px] text-muted-foreground">{timeLabel(t.last.provider_timestamp ?? t.last.created_at)}</span>
                           </div>
-                          {m.status === "failed" && <p className="text-[11px] text-destructive">{m.error?.message ?? m.error?.[0]?.title ?? "Failed"}</p>}
-                        </div>
-                      ))}
+                          <div className="flex min-w-0 items-center justify-between gap-2">
+                            <p className="truncate text-sm text-muted-foreground">{t.last.direction === "outbound" ? "You: " : ""}{preview.text.replace(/\s+/g, " ")}</p>
+                            {waiting.has(t.phone) ? <Badge className="shrink-0">Needs reply</Badge> : t.lastInbound && Date.now() - t.lastInbound < DAY ? <Badge variant="secondary" className="shrink-0">Open</Badge> : null}
+                          </div>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </aside>
+
+              {/* Conversation */}
+              <section className={cn("min-w-0 flex-1 flex-col", active ? "flex" : "hidden md:flex")}>
+                {!active ? <div className="m-auto p-6 text-sm text-muted-foreground">Pick a chat to start replying.</div> : (
+                  <>
+                    <header className="flex min-w-0 items-center gap-2 border-b px-3 py-2">
+                      <Button size="icon" variant="ghost" className="shrink-0 md:hidden" onClick={() => setActive(null)} aria-label="Back to chats"><ArrowLeft className="h-4 w-4" /></Button>
+                      <div className="min-w-0">
+                        <p className="truncate font-semibold">{activeT?.name ?? `+${active}`}</p>
+                        <p className="truncate text-xs text-muted-foreground">
+                          +{active} · {windowOpen ? "Handled by staff · reply freely (24h window open)" : "No message in 24h — approved template needed"}
+                        </p>
+                        {waiting.get(active) && <p className="truncate text-xs font-medium text-primary">Needs you: {waiting.get(active)!.reason ?? AUTO_ANSWER_LABEL.other}</p>}
+                      </div>
+                    </header>
+
+                    <div className="flex-1 space-y-1.5 overflow-y-auto bg-muted/40 px-3 py-4">
+                      {thread.map((m, i) => {
+                        const ts = m.provider_timestamp ?? m.created_at;
+                        const day = dayLabel(ts);
+                        const showDay = i === 0 || dayLabel(thread[i - 1].provider_timestamp ?? thread[i - 1].created_at) !== day;
+                        const r = renderStoredBody(m.body, templates);
+                        const out = m.direction === "outbound";
+                        return (
+                          <div key={m.id}>
+                            {showDay && <p className="my-3 text-center"><span className="rounded-full bg-card px-3 py-1 text-[11px] text-muted-foreground shadow-sm">{day}</span></p>}
+                            <div className={cn("flex", out ? "justify-end" : "justify-start")}>
+                              <div className={cn("max-w-[85%] rounded-lg px-3 py-1.5 text-sm shadow-sm sm:max-w-[70%]", out ? "rounded-tr-none bg-primary/15" : "rounded-tl-none bg-card")}>
+                                {r.template && <p className="mb-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">Template</p>}
+                                <p className="whitespace-pre-wrap break-words">
+                                  {splitLinks(r.text).map((p, j) => p.type === "link"
+                                    ? <a key={j} href={p.value} target="_blank" rel="noreferrer" className="text-link underline break-all">{shortUrl(p.value)}</a>
+                                    : <span key={j}>{p.value}</span>)}
+                                </p>
+                                {m.media_id && <Media id={m.media_id} />}
+                                <div className="mt-0.5 flex items-center justify-end gap-1 text-[10px] text-muted-foreground">
+                                  {autoReplyIds.has(m.id) && <span className="font-medium">Auto ·</span>}
+                                  {new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                                  {out && <StatusIcon s={m.status} />}
+                                </div>
+                                {m.status === "failed" && <p className="text-[11px] text-destructive">{m.error?.message ?? m.error?.[0]?.title ?? "Failed"}</p>}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                      <div ref={endRef} />
                     </div>
-                    {windowOpen && (
-                      <div className="flex flex-wrap gap-2" aria-label="Handoff shortcuts">
-                        {(Object.keys(HANDOFF_LABEL) as HandoffKind[]).map((k) => (
-                          <Button key={k} type="button" size="sm" variant="outline" onClick={() => setDraft(handoffMessage(k))}>{HANDOFF_LABEL[k]}</Button>
-                        ))}
-                      </div>
-                    )}
-                    {windowOpen ? (
-                      <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); if (draft.trim()) doSend(active, { text: draft.trim() }); }}>
-                        <Textarea rows={2} value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Type a reply" aria-label="Reply message" />
-                        <Button type="submit" disabled={sending || !!paused} aria-label="Send reply">{sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}</Button>
-                      </form>
-                    ) : (
-                      <div className="space-y-2 rounded border p-3">
-                        {approved.length === 0 ? <p className="text-sm text-muted-foreground">No approved templates yet. Create one in the Templates tab; WhatsApp usually approves within 48 hours.</p> : (
-                          <>
-                            <Select value={tplPick} onValueChange={(v) => { setTplPick(v); setTplParams([]); }}>
-                              <SelectTrigger aria-label="Choose a template"><SelectValue placeholder="Choose a template" /></SelectTrigger>
-                              <SelectContent>{approved.map((t) => <SelectItem key={t.name + t.language} value={`${t.name}|${t.language}`}>{t.name} ({t.language})</SelectItem>)}</SelectContent>
-                            </Select>
-                            {pickedTpl && <p className="text-sm text-muted-foreground whitespace-pre-wrap">{pickedTpl.components.find((c: any) => c.type === "BODY")?.text}</p>}
-                            {Array.from({ length: pickedVars }).map((_, i) => (
-                              <Input key={i} placeholder={`Blank {{${i + 1}}}`} value={tplParams[i] ?? ""} onChange={(e) => { const p = [...tplParams]; p[i] = e.target.value; setTplParams(p); }} />
+
+                    <footer className="space-y-2 border-t p-2">
+                      {windowOpen ? (
+                        <>
+                          <div className="flex gap-1.5 overflow-x-auto pb-1" aria-label="Quick replies">
+                            {HANDOFF_ORDER.map((k) => (
+                              <Button key={k} type="button" size="sm" variant="outline" className="h-7 shrink-0 rounded-full px-3 text-xs" onClick={() => setDraft(handoffMessage(k, { name: activeT?.name }))}>{HANDOFF_LABEL[k]}</Button>
                             ))}
-                            <Button disabled={!pickedTpl || sending || !!paused || tplParams.filter(Boolean).length < pickedVars}
-                              onClick={() => pickedTpl && doSend(active, { template: { name: pickedTpl.name, language: pickedTpl.language, params: tplParams.slice(0, pickedVars) } })}>
-                              Send template
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    )}
-                  </CardContent>
-                </>
-              )}
-            </Card>
+                          </div>
+                          <form className="flex items-end gap-2" onSubmit={(e) => { e.preventDefault(); if (draft.trim()) doSend(active, { text: draft.trim() }); }}>
+                            <Textarea rows={Math.min(6, Math.max(1, draft.split("\n").length))} className="min-h-[40px] resize-none" value={draft} onChange={(e) => setDraft(e.target.value)}
+                              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); if (draft.trim() && !sending) doSend(active, { text: draft.trim() }); } }}
+                              placeholder="Type a message (Enter to send, Shift+Enter for new line)" aria-label="Reply message" />
+                            <Button type="submit" size="icon" className="shrink-0 rounded-full" disabled={sending || !!paused} aria-label="Send reply">{sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}</Button>
+                          </form>
+                        </>
+                      ) : (
+                        <div className="space-y-2">
+                          {approved.length === 0 ? <p className="text-sm text-muted-foreground">No approved templates yet.</p> : (
+                            <>
+                              <Select value={tplPick} onValueChange={(v) => { setTplPick(v); setTplParams([]); }}>
+                                <SelectTrigger aria-label="Choose a template"><SelectValue placeholder="Choose a template" /></SelectTrigger>
+                                <SelectContent>{approved.map((t) => <SelectItem key={t.name + t.language} value={`${t.name}|${t.language}`}>{t.name} ({t.language})</SelectItem>)}</SelectContent>
+                              </Select>
+                              {pickedTpl && <p className="whitespace-pre-wrap rounded bg-muted p-2 text-sm text-muted-foreground">{pickedTpl.components.find((c: any) => c.type === "BODY")?.text}</p>}
+                              <div className="grid gap-2 sm:grid-cols-2">
+                                {Array.from({ length: pickedVars }).map((_, i) => (
+                                  <Input key={i} placeholder={`Blank {{${i + 1}}}`} value={tplParams[i] ?? ""} onChange={(e) => { const p = [...tplParams]; p[i] = e.target.value; setTplParams(p); }} />
+                                ))}
+                              </div>
+                              <Button disabled={!pickedTpl || sending || !!paused || tplParams.filter(Boolean).length < pickedVars}
+                                onClick={() => pickedTpl && doSend(active, { template: { name: pickedTpl.name, language: pickedTpl.language, params: tplParams.slice(0, pickedVars) } })}>
+                                Send template
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </footer>
+                  </>
+                )}
+              </section>
+            </div>
           </TabsContent>
 
           <TabsContent value="templates" className="grid gap-4 md:grid-cols-2">

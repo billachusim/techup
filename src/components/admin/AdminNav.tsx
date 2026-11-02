@@ -8,7 +8,6 @@ const ITEMS = [
   { to: "/admin/leads", label: "Leads", adminOnly: true },
   { to: "/admin/whatsapp", label: "WhatsApp" },
   { to: "/admin/students", label: "Students" },
-  { to: "/admin/lookup", label: "Lookup", adminOnly: true },
   { to: "/admin/talent", label: "Jobs" },
   { to: "/admin/certificates", label: "Certificates", adminOnly: true },
   { to: "/admin/referrals", label: "Referrals", adminOnly: true },

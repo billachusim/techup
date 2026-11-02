@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -87,7 +87,7 @@ function Section({
 }
 
 /** Admin: find a student by name, phone, email or Faculty ID and see their whole record. */
-export default function AdminLookup() {
+export function StudentLookupPanel({ openWith, onClose }: { openWith?: StudentMatch | null; onClose?: () => void }) {
   const { loading, isAdmin } = useIsStaff();
   const search = useServerFn(searchStudents);
   const fetchRecord = useServerFn(getStudentRecord);
@@ -138,18 +138,16 @@ export default function AdminLookup() {
     record?.enrollments.filter((e) => e.status === "active" || e.paid_at) ?? [];
   const totalPaid = paid.reduce((s, e) => s + (e.amount_due ?? 0), 0);
 
+  useEffect(() => {
+    if (openWith) {
+      setMatches(null);
+      void open(openWith);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openWith]);
+
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-1 container mx-auto px-4 pt-28 pb-16 max-w-4xl space-y-6">
-        <AdminNav />
-        <div>
-          <h1 className="text-2xl font-bold">Student lookup</h1>
-          <p className="text-sm text-muted-foreground">
-            Search by name, phone, email or Faculty ID to see a student's
-            enrolments, payments, work and certificates together.
-          </p>
-        </div>
+    <div className="space-y-4">
         {loading ? (
           <Loader2 className="h-5 w-5 animate-spin" />
         ) : !isAdmin ? (
@@ -470,6 +468,25 @@ export default function AdminLookup() {
             )}
           </>
         )}
+    </div>
+  );
+}
+
+/** Admin: standalone lookup page (the same panel also sits in the Students tab). */
+export default function AdminLookup() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <main className="flex-1 container mx-auto px-4 pt-28 pb-16 max-w-4xl space-y-6">
+        <AdminNav />
+        <div>
+          <h1 className="text-2xl font-bold">Student lookup</h1>
+          <p className="text-sm text-muted-foreground">
+            Search by name, phone, email or Faculty ID to see a student's
+            enrolments, payments, work and certificates together.
+          </p>
+        </div>
+        <StudentLookupPanel />
       </main>
       <Footer />
     </div>

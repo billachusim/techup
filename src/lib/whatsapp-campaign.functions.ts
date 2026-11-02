@@ -20,7 +20,7 @@ async function loadAudience() {
     db.from("enrollments").select("faculty_id").in("status", ["active", "confirmed"]),
     db.from("profiles").select("faculty_id, phone").not("phone", "is", null),
     db.from("faculty_ids").select("faculty_id, phone").not("phone", "is", null),
-    db.from("whatsapp_campaign_sends").select("lead_id, phone, status, error").eq("campaign", CAMPAIGN_ID),
+    db.from("whatsapp_campaign_sends").select("lead_id, phone, status, error, message_id").eq("campaign", CAMPAIGN_ID),
   ]);
   for (const r of [leads, enrols, profiles, regs, sends]) if (r.error) throw new Error(r.error.message);
 
@@ -37,8 +37,22 @@ async function loadAudience() {
     if (price) courses[d.slug] = { slug: d.slug, title: d.title, price };
   }
   const courseSlugs = new Set(Object.keys(courses));
-  const sentByLead = new Map((sends.data ?? []).map((s) => [s.lead_id, s]));
-  const sentPhones = new Set((sends.data ?? []).filter((s) => s.status === "sent").map((s) => phoneKey(s.phone)));
+  // Meta reports delivery failures later; fold them into the campaign status.
+  // Account/billing errors (e.g. 131042) are retryable; bad numbers are not.
+  const msgIds = (sends.data ?? []).map((s: any) => s.message_id).filter(Boolean);
+  const failedMsgs = new Map<string, string>();
+  for (let i = 0; i < msgIds.length; i += 200) {
+    const { data: m } = await db.from("whatsapp_messages").select("id, status, error").in("id", msgIds.slice(i, i + 200));
+    for (const r of m ?? []) if (r.status === "failed") failedMsgs.set(r.id, String((r.error as any)?.[0]?.code ?? (r.error as any)?.code ?? ""));
+  }
+  const RETRYABLE = new Set(["131042", "131048", "130472", "131049"]);
+  const effective = (sends.data ?? []).map((s: any) => {
+    if (s.status !== "sent" || !failedMsgs.has(s.message_id)) return s;
+    const code = failedMsgs.get(s.message_id)!;
+    return { ...s, status: RETRYABLE.has(code) ? "failed" : "undeliverable", error: `Meta error ${code}`, dbStatus: "sent" };
+  });
+  const sentByLead = new Map(effective.map((s: any) => [s.lead_id, s]));
+  const sentPhones = new Set(effective.filter((s: any) => s.status === "sent" || s.status === "undeliverable").map((s: any) => phoneKey(s.phone)));
 
   // One message per phone number, even when the same person filled several forms.
   const seen = new Set<string>();

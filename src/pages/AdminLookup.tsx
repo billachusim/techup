@@ -223,6 +223,11 @@ export function StudentLookupPanel({ openWith, onClose }: { openWith?: StudentMa
 
             {record && (
               <div className="space-y-4">
+                {onClose && !matches && (
+                  <Button variant="outline" size="sm" onClick={() => { setRecord(null); onClose(); }}>
+                    Back to student list
+                  </Button>
+                )}
                 {matches && matches.length > 1 && (
                   <Button
                     variant="outline"

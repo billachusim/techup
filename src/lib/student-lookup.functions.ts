@@ -242,3 +242,86 @@ export const getStudentRecord = createServerFn({ method: "POST" })
       certificates: certificates.data ?? [],
     };
   });
+
+export type StudentStanding = "current" | "past" | "pending" | "registered";
+
+export interface DirectoryStudent {
+  facultyId: string;
+  userId: string | null;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  department: string | null;
+  location: string | null;
+  plan: string | null;
+  learningMode: string | null;
+  standing: StudentStanding;
+  hasCertificate: boolean;
+  joinedAt: string;
+}
+
+/**
+ * Admin: every registered student (one row per Faculty ID) with department and standing.
+ * current = active/confirmed enrolment and no certificate yet; past = certificate issued or
+ * only cancelled enrolments; pending = awaiting payment; registered = no enrolment.
+ */
+export const listStudentDirectory = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<DirectoryStudent[]> => {
+    await assertAdmin(context.supabase, context.userId);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const [regs, profiles, enrols, certs] = await Promise.all([
+      supabaseAdmin.from("faculty_ids").select("faculty_id, name, email, phone, department, created_at").order("created_at", { ascending: false }).limit(3000),
+      supabaseAdmin.from("profiles").select("id, faculty_id, name, email, phone, department, location, learning_mode, created_at").not("faculty_id", "is", null).limit(3000),
+      supabaseAdmin.from("enrollments").select("faculty_id, status, plan_name, learning_mode, created_at").order("created_at", { ascending: false }).limit(5000),
+      supabaseAdmin.from("certificates").select("faculty_id").limit(5000),
+    ]);
+    for (const r of [regs, profiles, enrols, certs]) if (r.error) throw new Error(r.error.message);
+
+    const out = new Map<string, DirectoryStudent>();
+    for (const r of regs.data ?? []) {
+      out.set(r.faculty_id, {
+        facultyId: r.faculty_id, userId: null, name: r.name || "Student", email: r.email || null,
+        phone: r.phone || null, department: r.department || null, location: null, plan: null,
+        learningMode: null, standing: "registered", hasCertificate: false, joinedAt: r.created_at,
+      });
+    }
+    for (const p of profiles.data ?? []) {
+      const fid = p.faculty_id!;
+      const s = out.get(fid) ?? {
+        facultyId: fid, userId: null, name: p.name || "Student", email: null, phone: null,
+        department: null, location: null, plan: null, learningMode: null,
+        standing: "registered" as StudentStanding, hasCertificate: false, joinedAt: p.created_at,
+      };
+      s.userId = p.id;
+      s.name = p.name || s.name;
+      s.email = p.email || s.email;
+      s.phone = p.phone || s.phone;
+      s.department = s.department ?? p.department ?? null;
+      s.location = p.location ?? null;
+      s.learningMode = p.learning_mode ?? null;
+      out.set(fid, s);
+    }
+    const certified = new Set((certs.data ?? []).map((c) => c.faculty_id).filter(Boolean) as string[]);
+    const byFid = new Map<string, { status: string; plan_name: string | null; learning_mode: string | null }[]>();
+    for (const e of enrols.data ?? []) {
+      if (!e.faculty_id) continue;
+      const list = byFid.get(e.faculty_id) ?? [];
+      list.push(e);
+      byFid.set(e.faculty_id, list);
+    }
+    for (const s of out.values()) {
+      s.hasCertificate = certified.has(s.facultyId);
+      const list = byFid.get(s.facultyId) ?? [];
+      const live = list.find((e) => e.status === "active" || e.status === "confirmed");
+      const latest = live ?? list[0];
+      s.plan = latest?.plan_name ?? null;
+      s.learningMode = latest?.learning_mode ?? s.learningMode;
+      if (s.hasCertificate) s.standing = "past";
+      else if (live) s.standing = "current";
+      else if (list.some((e) => e.status === "pending")) s.standing = "pending";
+      else if (list.length > 0) s.standing = "past";
+      else s.standing = "registered";
+    }
+    return [...out.values()].sort((a, b) => b.joinedAt.localeCompare(a.joinedAt));
+  });

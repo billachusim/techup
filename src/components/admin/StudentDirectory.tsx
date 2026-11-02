@@ -136,7 +136,7 @@ export function StudentDirectory() {
                       {r.hasCertificate && <Badge variant="outline">Certified</Badge>}
                     </span>
                     <span className="block text-xs text-muted-foreground truncate">
-                      {[r.facultyId, r.department, r.plan, r.learningMode, r.location, `Joined ${new Date(r.joinedAt).toLocaleDateString()}`]
+                      {[r.facultyId, r.department, r.plan !== r.department ? r.plan : null, r.learningMode, r.location, `Joined ${new Date(r.joinedAt).toLocaleDateString()}`]
                         .filter(Boolean)
                         .join(" · ")}
                     </span>

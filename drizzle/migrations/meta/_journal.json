@@ -232,6 +232,13 @@
       "when": 1793605091290,
       "tag": "0032_whatsapp_campaign_sends",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1793613902287,
+      "tag": "0033_whatsapp_single_day3_followup",
+      "breakpoints": true
     }
   ]
 }

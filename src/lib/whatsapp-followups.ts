@@ -1,5 +1,5 @@
 export const WHATSAPP_OPT_IN_VERSION = "admissions-follow-up-2026-10-21-v1";
-export const WHATSAPP_FOLLOWUP_DELAY_HOURS = 48;
+export const WHATSAPP_FOLLOWUP_DELAY_HOURS = 54;
 
 export const WHATSAPP_ADMISSIONS_TEMPLATES = {
   confirmation: "tf_admissions_confirmation",
@@ -42,10 +42,8 @@ export type WhatsAppTemplateStatus = {
 export function isEligibleForWhatsAppFollowup(lead: WhatsAppLead): boolean {
   return lead.channel === "whatsapp"
     && lead.status === "new"
-    && lead.whatsapp_opt_in
     && !lead.whatsapp_opt_out_at
-    && !(lead.whatsapp_last_inbound_at && new Date(lead.whatsapp_last_inbound_at).getTime() >= new Date(lead.created_at).getTime())
-    && ADMISSIONS_INTERESTS.has(lead.interest);
+    && !(lead.whatsapp_last_inbound_at && new Date(lead.whatsapp_last_inbound_at).getTime() >= new Date(lead.created_at).getTime());
 }
 
 export function hasRepliedSince(lead: Pick<WhatsAppLead, "whatsapp_last_inbound_at">, sentAt: string | null): boolean {

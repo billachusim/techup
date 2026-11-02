@@ -55,15 +55,7 @@ async function templateParameter(row: FollowupRow, db: SupabaseClient) {
   const { data, error } = await db.from("leads").select("whatsapp_last_inbound_at").eq("id", row.lead_id).single();
   if (error || !data) throw new Error(`Could not recheck lead reply status: ${error?.message ?? "Lead missing"}`);
 
-  const { data: confirmation, error: confirmationError } = await db.from("whatsapp_lead_followups")
-    .select("sent_at").eq("lead_id", row.lead_id).eq("stage", "confirmation").maybeSingle();
-  if (confirmationError) throw new Error(`Could not recheck follow-up timing: ${confirmationError.message}`);
-
-  if (row.stage === "confirmation") {
-    if (hasRepliedSince({ whatsapp_last_inbound_at: data.whatsapp_last_inbound_at }, row.lead_created_at)) {
-      return null;
-    }
-  } else if (hasRepliedSince({ whatsapp_last_inbound_at: data.whatsapp_last_inbound_at }, confirmation?.sent_at ?? null)) {
+  if (hasRepliedSince({ whatsapp_last_inbound_at: data.whatsapp_last_inbound_at }, row.lead_created_at)) {
     return null;
   }
   return followupParam(row);

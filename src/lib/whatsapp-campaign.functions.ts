@@ -165,7 +165,7 @@ export const sendCampaignBatch = createServerFn({ method: "POST" })
         if (error) continue;
       } else {
         const { data: claimed } = await db.from("whatsapp_campaign_sends")
-          .update({ status: "sending", error: null }).eq("campaign", CAMPAIGN_ID).eq("lead_id", a.lead.id).eq("status", "failed").select("id");
+          .update({ status: "sending", error: null }).eq("campaign", CAMPAIGN_ID).eq("lead_id", a.lead.id).eq("status", (a.send as any).dbStatus ?? "failed").select("id");
         if (!claimed?.length) continue;
       }
       try {

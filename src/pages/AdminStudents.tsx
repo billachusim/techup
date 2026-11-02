@@ -86,19 +86,34 @@ export default function AdminStudents() {
       <main className="flex-1 container mx-auto px-4 pt-28 pb-16 max-w-4xl space-y-6">
         <AdminNav />
         <div>
-          <h1 className="text-2xl font-bold">Student work review</h1>
-          <p className="text-sm text-muted-foreground">The AI tutor scores each submission as it arrives and emails the student. When it isn't sure, the work waits here with its draft. Change any score or feedback below: each change emails the student and, when accepted, posts in their class group on Slack.</p>
+          <h1 className="text-2xl font-bold">Students</h1>
+          <p className="text-sm text-muted-foreground">Find any student, see who is current or past by department, contact them, review their work and follow up payments.</p>
         </div>
         {loading ? (
           <Loader2 className="h-5 w-5 animate-spin" />
         ) : !isStaff ? (
           <p className="text-sm text-muted-foreground">This page is for Tech Faculty staff. Sign in with a staff account.</p>
         ) : (
-          <>
-            {isAdmin && <PendingPayments />}
-            {isAdmin && <OutstandingBalances />}
-            {isAdmin && <AdminExports />}
-            <h2 className="text-xl font-bold pt-2">Submissions</h2>
+          <Tabs defaultValue={isAdmin ? "directory" : "work"} className="space-y-4">
+            <TabsList className="flex-wrap h-auto">
+              {isAdmin && <TabsTrigger value="directory">All students</TabsTrigger>}
+              <TabsTrigger value="work">Work review</TabsTrigger>
+              {isAdmin && <TabsTrigger value="payments">Payments & exports</TabsTrigger>}
+            </TabsList>
+            {isAdmin && (
+              <TabsContent value="directory">
+                <StudentDirectory />
+              </TabsContent>
+            )}
+            {isAdmin && (
+              <TabsContent value="payments" className="space-y-6">
+                <PendingPayments />
+                <OutstandingBalances />
+                <AdminExports />
+              </TabsContent>
+            )}
+            <TabsContent value="work" className="space-y-4">
+            <p className="text-sm text-muted-foreground">The AI tutor scores each submission as it arrives and emails the student. When it isn't sure, the work waits here with its draft. Each change you save emails the student and, when accepted, posts in their class group on Slack.</p>
             <div className="flex flex-wrap gap-2">
               {FILTERS.map((f) => (
                 <Button key={f.v} size="sm" variant={filter === f.v ? "default" : "outline"} onClick={() => setFilter(f.v)}>{f.label}</Button>

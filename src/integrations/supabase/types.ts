@@ -630,7 +630,6 @@ export type Database = {
           plan_name: string
           recovered_at: string | null
           recovered_email_sent_at: string | null
-          ref_code: string | null
           requested_selection: Json | null
           status: string
           tx_ref: string | null
@@ -664,7 +663,6 @@ export type Database = {
           plan_name: string
           recovered_at?: string | null
           recovered_email_sent_at?: string | null
-          ref_code?: string | null
           requested_selection?: Json | null
           status?: string
           tx_ref?: string | null
@@ -698,7 +696,6 @@ export type Database = {
           plan_name?: string
           recovered_at?: string | null
           recovered_email_sent_at?: string | null
-          ref_code?: string | null
           requested_selection?: Json | null
           status?: string
           tx_ref?: string | null
@@ -887,80 +884,6 @@ export type Database = {
           phone?: string
           status?: string
           updated_at?: string
-        }
-        Relationships: []
-      }
-      field_rep_payouts: {
-        Row: {
-          amount: number
-          created_at: string
-          created_by: string | null
-          id: string
-          note: string | null
-          paid_on: string
-          rep_id: string
-        }
-        Insert: {
-          amount: number
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          note?: string | null
-          paid_on?: string
-          rep_id: string
-        }
-        Update: {
-          amount?: number
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          note?: string | null
-          paid_on?: string
-          rep_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "field_rep_payouts_rep_id_fkey"
-            columns: ["rep_id"]
-            isOneToOne: false
-            referencedRelation: "field_reps"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      field_reps: {
-        Row: {
-          area: string | null
-          code: string
-          created_at: string
-          created_by: string | null
-          id: string
-          name: string
-          notes: string | null
-          phone: string | null
-          status: string
-        }
-        Insert: {
-          area?: string | null
-          code: string
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          name: string
-          notes?: string | null
-          phone?: string | null
-          status?: string
-        }
-        Update: {
-          area?: string | null
-          code?: string
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          name?: string
-          notes?: string | null
-          phone?: string | null
-          status?: string
         }
         Relationships: []
       }
@@ -1262,7 +1185,6 @@ export type Database = {
           location: string | null
           name: string | null
           notes: string | null
-          ref_code: string | null
           school: string | null
           source: string | null
           status: string
@@ -1286,7 +1208,6 @@ export type Database = {
           location?: string | null
           name?: string | null
           notes?: string | null
-          ref_code?: string | null
           school?: string | null
           source?: string | null
           status?: string
@@ -1310,7 +1231,6 @@ export type Database = {
           location?: string | null
           name?: string | null
           notes?: string | null
-          ref_code?: string | null
           school?: string | null
           source?: string | null
           status?: string
@@ -2792,30 +2712,6 @@ export type Database = {
     Functions: {
       admin_conversion_funnel: { Args: { _days?: number }; Returns: Json }
       admin_dashboard_metrics: { Args: { _days?: number }; Returns: Json }
-      admin_field_rep_activity: {
-        Args: { _code: string; _days?: number }
-        Returns: Json
-      }
-      admin_field_rep_summary: {
-        Args: { _days?: number }
-        Returns: {
-          id: string
-          code: string
-          name: string
-          phone: string
-          area: string
-          status: string
-          notes: string
-          created_at: string
-          leads: number
-          bootcamp_signups: number
-          paid_enrolments: number
-          received: number
-          commission: number
-          paid_out: number
-          owed: number
-        }[]
-      }
       admin_list_referrals: {
         Args: never
         Returns: {
@@ -2895,30 +2791,6 @@ export type Database = {
       ensure_course_lectures: {
         Args: { course_uuid: string }
         Returns: undefined
-      }
-      field_rep_activity: {
-        Args: { _code: string; _days?: number }
-        Returns: Json
-      }
-      field_rep_summary: {
-        Args: { _days?: number }
-        Returns: {
-          id: string
-          code: string
-          name: string
-          phone: string
-          area: string
-          status: string
-          notes: string
-          created_at: string
-          leads: number
-          bootcamp_signups: number
-          paid_enrolments: number
-          received: number
-          commission: number
-          paid_out: number
-          owed: number
-        }[]
       }
       generate_faculty_id: {
         Args: {

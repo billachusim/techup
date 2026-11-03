@@ -42,7 +42,7 @@ export function handoffMessage(kind: HandoffKind, opts: { name?: string | null }
     case "bootcamp":
       return `${hi}, you can start our free tech bootcamp today. It takes one tap to join: ${SITE}/#free-bootcamp\n\nYou'll learn the basics online and can upgrade to a full course whenever you're ready.`;
     case "course":
-      return `${hi}, here are our courses and current prices, with online classes and campuses across Nigeria: ${SITE}/pricing\n\nTell me the course you're interested in and I'll share the details.`;
+      return `${hi}, here are our courses and current prices, with online classes and campuses across Nigeria: ${SITE}/#pricing\n\nTell me the course you're interested in and I'll share the details.`;
     case "siwes":
       return `${hi}, for SIWES/IT we offer Virtual SIWES, an online industrial training you can do from anywhere, with logbook support: ${SITE}/virtual-siwes`;
     case "founder":

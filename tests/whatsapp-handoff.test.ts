@@ -1,6 +1,41 @@
+import { readdirSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { FOUNDER_WHATSAPP_NUMBER, HANDOFF_ORDER, handoffMessage } from "@/lib/whatsapp-handoff";
 import { renderStoredBody } from "@/lib/whatsapp-render";
+
+const SITE = "https://techfaculty.ng";
+const ROUTES_DIR = resolve(process.cwd(), "src/routes");
+
+/** Route files that exist, e.g. "virtual-siwes.tsx", "siwes.courses.index.tsx". */
+const ROUTE_FILES = new Set(readdirSync(ROUTES_DIR).filter((f) => f.endsWith(".tsx")));
+
+/** Maps a URL path to the route file that must exist for it to resolve. */
+function routeFileFor(path: string): string {
+  const segs = path.split("/").filter(Boolean);
+  if (segs.length === 0) return "index.tsx";
+  if (segs.length === 1) return `${segs[0]}.tsx`;
+  return `${segs.join(".")}.index.tsx`;
+}
+
+describe("handoff preset links", () => {
+  it("every Tech Faculty link points at a page or homepage anchor that exists", () => {
+    for (const kind of HANDOFF_ORDER) {
+      const urls = handoffMessage(kind, { name: "Ada" }).match(new RegExp(`${SITE}[^\\s]*`, "g")) ?? [];
+      expect(urls.length, kind).toBeGreaterThan(0);
+      for (const url of urls) {
+        const [path, hash] = url.slice(SITE.length).split("#");
+        if (hash) {
+          // homepage anchors: the free-bootcamp card and the fees section
+          expect(path, url).toBe("");
+          expect(["free-bootcamp", "pricing"], url).toContain(hash);
+        } else {
+          expect(ROUTE_FILES.has(routeFileFor(path)), `${kind} -> ${url}`).toBe(true);
+        }
+      }
+    }
+  });
+});
 
 describe("handoff presets", () => {
   it("only the payment preset mentions payment", () => {

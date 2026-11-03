@@ -2799,21 +2799,21 @@ export type Database = {
       admin_field_rep_summary: {
         Args: { _days?: number }
         Returns: {
-          id: string
-          code: string
-          name: string
-          phone: string
           area: string
-          status: string
-          notes: string
-          created_at: string
-          leads: number
           bootcamp_signups: number
-          paid_enrolments: number
-          received: number
+          code: string
           commission: number
-          paid_out: number
+          created_at: string
+          id: string
+          leads: number
+          name: string
+          notes: string
           owed: number
+          paid_enrolments: number
+          paid_out: number
+          phone: string
+          received: number
+          status: string
         }[]
       }
       admin_list_referrals: {
@@ -2903,21 +2903,21 @@ export type Database = {
       field_rep_summary: {
         Args: { _days?: number }
         Returns: {
-          id: string
-          code: string
-          name: string
-          phone: string
           area: string
-          status: string
-          notes: string
-          created_at: string
-          leads: number
           bootcamp_signups: number
-          paid_enrolments: number
-          received: number
+          code: string
           commission: number
-          paid_out: number
+          created_at: string
+          id: string
+          leads: number
+          name: string
+          notes: string
           owed: number
+          paid_enrolments: number
+          paid_out: number
+          phone: string
+          received: number
+          status: string
         }[]
       }
       generate_faculty_id: {

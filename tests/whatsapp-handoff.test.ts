@@ -23,7 +23,7 @@ describe("handoff preset links", () => {
     for (const kind of HANDOFF_ORDER) {
       const urls = handoffMessage(kind, { name: "Ada" }).match(new RegExp(`${SITE}[^\\s]*`, "g")) ?? [];
       for (const url of urls) {
-        const [path, hash] = url.slice(SITE.length).split("#");
+        const [path, hash] = url.slice(SITE.length).replace(/\/$/, "").split("#");
         if (hash) {
           // homepage anchors: the free-bootcamp card and the fees section
           expect(path, url).toBe("");

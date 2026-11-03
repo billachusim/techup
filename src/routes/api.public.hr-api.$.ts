@@ -12,6 +12,10 @@ export const Route = createFileRoute("/api/public/hr-api/$")({
         const { handleHrApi } = await import("@/lib/hr-api.server");
         return handleHrApi(request, params._splat ?? "");
       },
+      PATCH: async ({ request, params }) => {
+        const { handleHrApi } = await import("@/lib/hr-api.server");
+        return handleHrApi(request, params._splat ?? "");
+      },
     },
   },
 });

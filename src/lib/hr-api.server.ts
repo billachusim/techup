@@ -26,6 +26,49 @@ const EmailBody = z.object({
 const ManagerBody = z.object({ manager_user_id: UUID });
 const NoteBody = z.object({ talent_id: UUID, role_id: UUID.nullable().optional(), text: z.string().trim().min(1).max(8000) });
 
+// Role fields the agent may set. Same columns the admin "Create role" form writes.
+const list = z.array(z.string().trim().min(1).max(500)).max(50);
+const RoleFields = z.object({
+  title: z.string().trim().min(1).max(200),
+  summary: z.string().trim().min(1).max(1000),
+  description: z.string().trim().min(1).max(20000),
+  role_kind: z.string().max(50),
+  company: z.string().trim().min(1).max(200),
+  city: z.string().trim().max(200).nullable(),
+  country: z.string().trim().min(1).max(100),
+  is_remote: z.boolean(),
+  employment_type: z.string().max(50),
+  seniority: z.string().max(50),
+  responsibilities: list,
+  required_skills: list,
+  nice_to_have: list,
+  budget_min: z.number().nonnegative().nullable(),
+  budget_max: z.number().nonnegative().nullable(),
+  budget_currency: z.string().max(10),
+  budget_unit: z.string().max(20),
+  pay_text: z.string().trim().max(500).nullable(),
+  openings: z.number().int().min(1).max(10000),
+  selection_process: z.string().max(50),
+  assessment_url: z.string().url().nullable(),
+  interview_url: z.string().url().nullable(),
+  interview_channel: z.string().max(50),
+  apply_deadline: z.string().nullable(),
+  project_brief: z.string().max(20000).nullable(),
+  auto_match_enabled: z.boolean(),
+  auto_match_threshold: z.number().int().min(0).max(100),
+});
+const RoleCreateBody = RoleFields.partial().required({ title: true, summary: true, description: true }).strict();
+const RoleUpdateBody = RoleFields.partial().strict().refine((v) => Object.keys(v).length > 0, "Nothing to update");
+export const ROLE_STATUSES = ["draft", "published", "closed"] as const;
+const RoleStatusBody = z.object({ status: z.enum(ROLE_STATUSES) });
+const MatchCreateBody = z.object({
+  role_id: UUID,
+  talent_id: UUID,
+  status: z.enum(HR_STATUSES).default("shortlisted"),
+  score: z.number().min(0).max(100).default(100),
+  reason: z.string().trim().max(2000).optional(),
+}).strict();
+
 function paging(url: URL) {
   const limit = Math.min(100, Math.max(1, Number(url.searchParams.get("limit")) || 50));
   const page = Math.max(1, Number(url.searchParams.get("page")) || 1);
@@ -80,7 +123,7 @@ async function audit(admin: Admin, method: string, endpoint: string, status: num
 async function route(admin: Admin, request: Request, method: string, path: string) {
   const url = new URL(request.url);
   const parts = path.split("/").filter(Boolean);
-  const body = async () => (method === "POST" ? await request.json().catch(() => ({})) : {});
+  const body = async () => (method === "POST" || method === "PATCH" ? await request.json().catch(() => ({})) : {});
 
   if (method === "GET" && path === "/roles") return getRoles(admin, url);
   if (method === "GET" && path === "/matches") return listPairs(admin, url, "role_matches");
@@ -95,6 +138,17 @@ async function route(admin: Admin, request: Request, method: string, path: strin
     return setManager(admin, UUID.parse(parts[1]), ManagerBody.parse(await body()));
   }
   if (method === "POST" && path === "/notes") return addNote(admin, NoteBody.parse(await body()));
+
+  if (method === "GET" && parts[0] === "roles" && parts.length === 2) return getRole(admin, UUID.parse(parts[1]));
+  if (method === "POST" && path === "/roles") return createRole(admin, RoleCreateBody.parse(await body()));
+  if ((method === "POST" || method === "PATCH") && parts[0] === "roles" && parts.length === 2) {
+    return updateRole(admin, UUID.parse(parts[1]), RoleUpdateBody.parse(await body()));
+  }
+  if (method === "POST" && parts[0] === "roles" && parts[2] === "status" && parts.length === 3) {
+    return setRoleStatus(admin, UUID.parse(parts[1]), RoleStatusBody.parse(await body()));
+  }
+  if (method === "POST" && parts[0] === "roles" && parts[2] === "match" && parts.length === 3) return rematchRole(admin, UUID.parse(parts[1]));
+  if (method === "POST" && path === "/matches") return createMatch(admin, MatchCreateBody.parse(await body()));
 
   return { status: 404, body: { error: "Not found" } };
 }
@@ -273,4 +327,89 @@ async function addNote(admin: Admin, input: z.infer<typeof NoteBody>) {
     .single();
   if (error) return { status: 400, body: { error: "Could not save the note (check talent_id / role_id)" } };
   return { status: 201, body: data, changes: { note_id: data.id, talent_id: input.talent_id, role_id: input.role_id ?? null } };
+}
+
+async function getRole(admin: Admin, id: string) {
+  const { data, error } = await admin.from("talent_roles").select("*").eq("id", id).maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) return { status: 404, body: { error: "Role not found" } };
+  return { status: 200, body: data };
+}
+
+// New roles always start as drafts; publish with POST /roles/:id/status.
+async function createRole(admin: Admin, input: z.infer<typeof RoleCreateBody>) {
+  const { slugify } = await import("@/lib/talent");
+  const row = {
+    company: "Tech Faculty",
+    country: "Nigeria",
+    ...input,
+    slug: `${slugify(input.title)}-${Date.now().toString().slice(-4)}`,
+    status: "draft",
+  };
+  const { data, error } = await admin.from("talent_roles").insert(row).select("id, slug, status").single();
+  if (error) return { status: 400, body: { error: `Could not create the role: ${error.message}` } };
+  return { status: 201, body: data, changes: { role_id: data.id, created: input } };
+}
+
+async function updateRole(admin: Admin, id: string, input: z.infer<typeof RoleUpdateBody>) {
+  const fields = Object.keys(input).join(", ");
+  const { data: before } = await admin.from("talent_roles").select(fields).eq("id", id).maybeSingle();
+  if (!before) return { status: 404, body: { error: "Role not found" } };
+  const { error } = await admin.from("talent_roles").update(input).eq("id", id);
+  if (error) return { status: 400, body: { error: `Could not update the role: ${error.message}` } };
+  return { status: 200, body: { id, updated: Object.keys(input) }, changes: { role_id: id, from: before, to: input } };
+}
+
+// Publishing runs auto-matching, the same as the admin Publish button.
+async function setRoleStatus(admin: Admin, id: string, input: z.infer<typeof RoleStatusBody>) {
+  const { data: role } = await admin.from("talent_roles").select("id, status").eq("id", id).maybeSingle();
+  if (!role) return { status: 404, body: { error: "Role not found" } };
+  const { error } = await admin.from("talent_roles").update({ status: input.status }).eq("id", id);
+  if (error) throw new Error(error.message);
+  let auto_match: { created: number; promoted: number } | null = null;
+  if (input.status === "published" && role.status !== "published") {
+    try {
+      const { runAutoMatch } = await import("@/lib/matching.server");
+      const r = await runAutoMatch({ roleIds: [id] });
+      auto_match = { created: r.created, promoted: r.promoted };
+    } catch (e) {
+      console.error("hr-api auto-match failed", (e as Error).message);
+    }
+  }
+  return { status: 200, body: { id, status: input.status, auto_match }, changes: { role_id: id, from: role.status, to: input.status } };
+}
+
+// On-demand rescan for one role (same engine as the Mon/Thu rescan). Matches at or
+// above the role's threshold are approved and emailed, as with auto-matching.
+async function rematchRole(admin: Admin, id: string) {
+  const { data: role } = await admin.from("talent_roles").select("id, status").eq("id", id).maybeSingle();
+  if (!role) return { status: 404, body: { error: "Role not found" } };
+  if (role.status !== "published") return { status: 409, body: { error: "Publish the role before matching" } };
+  const { runAutoMatch } = await import("@/lib/matching.server");
+  const r = await runAutoMatch({ roleIds: [id] });
+  return { status: 200, body: { id, created: r.created, promoted: r.promoted }, changes: { role_id: id, created: r.created, promoted: r.promoted } };
+}
+
+// Adds a talent to a role by hand. Defaults to "shortlisted", which sends nothing;
+// a later stage (e.g. "matched") fires the same email and Slack steps as a status change.
+async function createMatch(admin: Admin, input: z.infer<typeof MatchCreateBody>) {
+  const stored = toMatchStatus(input.status);
+  const { data, error } = await admin
+    .from("role_matches")
+    .insert({
+      role_id: input.role_id,
+      talent_profile_id: input.talent_id,
+      score: input.score,
+      reason: input.reason ?? "Matched by the Tech Faculty team.",
+      status: stored,
+      source: "manual",
+    })
+    .select("id")
+    .single();
+  if (error) return { status: 400, body: { error: `Could not add the match: ${error.message}` } };
+  if (stored !== "shortlisted" && stored !== "suggested") {
+    const { afterMatchStageChange } = await import("@/lib/match-slack.server");
+    await afterMatchStageChange(data.id);
+  }
+  return { status: 201, body: { id: data.id, status: input.status, stored_status: stored }, changes: { match_id: data.id, role_id: input.role_id, talent_id: input.talent_id, to: stored } };
 }

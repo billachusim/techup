@@ -1692,6 +1692,42 @@ export type Database = {
         }
         Relationships: []
       }
+      slack_assistant_log: {
+        Row: {
+          answer: string | null
+          channel_id: string
+          created_at: string
+          event_id: string
+          id: string
+          question: string | null
+          status: string
+          thread_ts: string
+          user_id: string | null
+        }
+        Insert: {
+          answer?: string | null
+          channel_id: string
+          created_at?: string
+          event_id: string
+          id?: string
+          question?: string | null
+          status?: string
+          thread_ts: string
+          user_id?: string | null
+        }
+        Update: {
+          answer?: string | null
+          channel_id?: string
+          created_at?: string
+          event_id?: string
+          id?: string
+          question?: string | null
+          status?: string
+          thread_ts?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       student_class_briefings: {
         Row: {
           class_key: string

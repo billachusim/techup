@@ -27,10 +27,10 @@ describe("handoff preset links", () => {
         const page = (path ?? "").replace(/\/$/, "");
         if (hash) {
           // homepage anchors: the free-bootcamp card and the fees section
-          expect(path, url).toBe("");
+          expect(page, url).toBe("");
           expect(["free-bootcamp", "pricing"], url).toContain(hash);
         } else {
-          expect(ROUTE_FILES.has(routeFileFor(path)), `${kind} -> ${url}`).toBe(true);
+          expect(ROUTE_FILES.has(routeFileFor(page)), `${kind} -> ${url}`).toBe(true);
         }
       }
     }

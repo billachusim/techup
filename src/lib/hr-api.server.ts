@@ -22,6 +22,9 @@ const EmailBody = z.object({
   template: z.string(),
   variables: z.record(z.string(), z.union([z.string().max(4000), z.number(), z.null()])).default({}),
   role_id: UUID.optional(),
+  /** Optional overrides: a custom subject line and where replies go (default: noreply). */
+  subject: z.string().trim().min(1).max(200).optional(),
+  reply_to: z.string().email().optional(),
 });
 const ManagerBody = z.object({ manager_user_id: UUID });
 const NoteBody = z.object({ talent_id: UUID, role_id: UUID.nullable().optional(), text: z.string().trim().min(1).max(8000) });
@@ -295,11 +298,12 @@ async function sendEmail(admin: Admin, input: z.infer<typeof EmailBody>) {
   const { data: override } = await admin.from("hr_email_templates").select("subject, body").eq("key", input.template).maybeSingle();
   const tpl = override ?? HR_EMAIL_DEFAULTS[input.template];
   const vars = { name: t.full_name?.split(" ")[0] ?? "", ...input.variables };
-  const subject = fillTemplate(tpl.subject, vars);
+  const subject = fillTemplate(input.subject ?? tpl.subject, vars);
   const text = fillTemplate(tpl.body, vars);
   const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
   const sent = await sendTemplateEmail("hr-message", t.email, {
     templateData: { subject, title: subject, body: text },
+    ...(input.reply_to ? { replyTo: input.reply_to } : {}),
     idempotencyKey: `hr-${input.template}-${t.id}-${crypto.randomUUID()}`,
   });
   return {

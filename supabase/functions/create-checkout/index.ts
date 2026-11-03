@@ -171,6 +171,7 @@ serve(async (req) => {
       learningModeId,
       currencyCode: rawCurrencyCode,
       discountCode,
+      refCode,
       successUrl,
       payInInstalments,
     } = body;
@@ -247,6 +248,20 @@ serve(async (req) => {
 
     const toChargeCurrency = (ngn: number) => toCharge(currencyCode, ngn);
 
+    // The field rep whose link brought this student, if any. Credit only;
+    // it never changes the price.
+    const rawRef = refCode ? String(refCode).trim().toUpperCase() : '';
+    let repCode: string | null = null;
+    if (/^[A-Z0-9-]{3,24}$/.test(rawRef)) {
+      const { data: rep } = await admin
+        .from('field_reps')
+        .select('code')
+        .eq('code', rawRef)
+        .eq('status', 'active')
+        .maybeSingle();
+      repCode = rep?.code ?? null;
+    }
+
     // Paying in instalments charges the deposit now and records the rest as
     // the balance, which the student pays later from their dashboard.
     const split = payInInstalments ? instalmentSplit(totalAmount) : null;
@@ -278,6 +293,7 @@ serve(async (req) => {
       status: 'pending',
       learning_mode: learningMode?.name ?? 'online-only',
       coupon_code: code || null,
+      ref_code: repCode,
       tx_ref: txRef,
       amount_due: amount,
       currency,

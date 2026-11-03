@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Mail, MessageCircle, CheckCircle2, Loader2, FileDown } from "lucide-react";
 import { SUCCESS_KIT } from "@/data/successKit";
+import { getStoredRef } from "@/lib/ref-code";
 
 export type LeadInterest =
   | "free_checklist"
@@ -140,6 +141,7 @@ const LeadCaptureForm = ({
       .join(" | ");
     const supabase = await getSupabase();
     const { error: insertError } = await supabase.from("leads").insert({
+      ref_code: getStoredRef(),
       name: clampLeadField(name, "name"),
       channel,
       contact: clampLeadField(contact, "contact") ?? "",

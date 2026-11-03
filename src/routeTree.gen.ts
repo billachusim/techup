@@ -37,6 +37,7 @@ import { Route as AdminCertificatesRouteImport } from './routes/admin.certificat
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
 import { Route as AdminLookupRouteImport } from './routes/admin.lookup'
 import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
+import { Route as AdminRepsRouteImport } from './routes/admin.reps'
 import { Route as AdminSlackRouteImport } from './routes/admin.slack'
 import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminTalentRouteImport } from './routes/admin.talent'
@@ -63,6 +64,7 @@ import { Route as HubsIndexRouteImport } from './routes/hubs.index'
 import { Route as HubsSlugRouteImport } from './routes/hubs.$slug'
 import { Route as LocationsIndexRouteImport } from './routes/locations.index'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
+import { Route as RCodeRouteImport } from './routes/r.$code'
 import { Route as ReportsNigeriaTechSalariesRouteImport } from './routes/reports.nigeria-tech-salaries'
 import { Route as SiwesIndexRouteImport } from './routes/siwes.index'
 import { Route as TagSplatRouteImport } from './routes/tag.$'
@@ -231,6 +233,11 @@ const AdminReferralsRoute = AdminReferralsRouteImport.update({
   path: '/admin/referrals',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRepsRoute = AdminRepsRouteImport.update({
+  id: '/admin/reps',
+  path: '/admin/reps',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminSlackRoute = AdminSlackRouteImport.update({
   id: '/admin/slack',
   path: '/admin/slack',
@@ -359,6 +366,11 @@ const LocationsIndexRoute = LocationsIndexRouteImport.update({
 const LocationsSlugRoute = LocationsSlugRouteImport.update({
   id: '/locations/$slug',
   path: '/locations/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RCodeRoute = RCodeRouteImport.update({
+  id: '/r/$code',
+  path: '/r/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReportsNigeriaTechSalariesRoute =
@@ -525,6 +537,7 @@ export interface FileRoutesByFullPath {
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lookup': typeof AdminLookupRoute
   '/admin/referrals': typeof AdminReferralsRoute
+  '/admin/reps': typeof AdminRepsRoute
   '/admin/slack': typeof AdminSlackRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
@@ -545,6 +558,7 @@ export interface FileRoutesByFullPath {
   '/events/$slug': typeof EventsSlugRoute
   '/hubs/$slug': typeof HubsSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/r/$code': typeof RCodeRoute
   '/reports/nigeria-tech-salaries': typeof ReportsNigeriaTechSalariesRoute
   '/tag/$': typeof TagSplatRoute
   '/talent/dashboard': typeof TalentDashboardRoute
@@ -607,6 +621,7 @@ export interface FileRoutesByTo {
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lookup': typeof AdminLookupRoute
   '/admin/referrals': typeof AdminReferralsRoute
+  '/admin/reps': typeof AdminRepsRoute
   '/admin/slack': typeof AdminSlackRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
@@ -627,6 +642,7 @@ export interface FileRoutesByTo {
   '/events/$slug': typeof EventsSlugRoute
   '/hubs/$slug': typeof HubsSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/r/$code': typeof RCodeRoute
   '/reports/nigeria-tech-salaries': typeof ReportsNigeriaTechSalariesRoute
   '/tag/$': typeof TagSplatRoute
   '/talent/dashboard': typeof TalentDashboardRoute
@@ -690,6 +706,7 @@ export interface FileRoutesById {
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lookup': typeof AdminLookupRoute
   '/admin/referrals': typeof AdminReferralsRoute
+  '/admin/reps': typeof AdminRepsRoute
   '/admin/slack': typeof AdminSlackRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
@@ -710,6 +727,7 @@ export interface FileRoutesById {
   '/events/$slug': typeof EventsSlugRoute
   '/hubs/$slug': typeof HubsSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/r/$code': typeof RCodeRoute
   '/reports/nigeria-tech-salaries': typeof ReportsNigeriaTechSalariesRoute
   '/tag/$': typeof TagSplatRoute
   '/talent/dashboard': typeof TalentDashboardRoute
@@ -774,6 +792,7 @@ export interface FileRouteTypes {
     | '/admin/leads'
     | '/admin/lookup'
     | '/admin/referrals'
+    | '/admin/reps'
     | '/admin/slack'
     | '/admin/students'
     | '/admin/talent'
@@ -794,6 +813,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/hubs/$slug'
     | '/locations/$slug'
+    | '/r/$code'
     | '/reports/nigeria-tech-salaries'
     | '/tag/$'
     | '/talent/dashboard'
@@ -856,6 +876,7 @@ export interface FileRouteTypes {
     | '/admin/leads'
     | '/admin/lookup'
     | '/admin/referrals'
+    | '/admin/reps'
     | '/admin/slack'
     | '/admin/students'
     | '/admin/talent'
@@ -876,6 +897,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/hubs/$slug'
     | '/locations/$slug'
+    | '/r/$code'
     | '/reports/nigeria-tech-salaries'
     | '/tag/$'
     | '/talent/dashboard'
@@ -938,6 +960,7 @@ export interface FileRouteTypes {
     | '/admin/leads'
     | '/admin/lookup'
     | '/admin/referrals'
+    | '/admin/reps'
     | '/admin/slack'
     | '/admin/students'
     | '/admin/talent'
@@ -958,6 +981,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/hubs/$slug'
     | '/locations/$slug'
+    | '/r/$code'
     | '/reports/nigeria-tech-salaries'
     | '/tag/$'
     | '/talent/dashboard'
@@ -1021,6 +1045,7 @@ export interface RootRouteChildren {
   AdminLeadsRoute: typeof AdminLeadsRoute
   AdminLookupRoute: typeof AdminLookupRoute
   AdminReferralsRoute: typeof AdminReferralsRoute
+  AdminRepsRoute: typeof AdminRepsRoute
   AdminSlackRoute: typeof AdminSlackRoute
   AdminStudentsRoute: typeof AdminStudentsRoute
   AdminTalentRoute: typeof AdminTalentRoute
@@ -1041,6 +1066,7 @@ export interface RootRouteChildren {
   EventsSlugRoute: typeof EventsSlugRoute
   HubsSlugRoute: typeof HubsSlugRoute
   LocationsSlugRoute: typeof LocationsSlugRoute
+  RCodeRoute: typeof RCodeRoute
   ReportsNigeriaTechSalariesRoute: typeof ReportsNigeriaTechSalariesRoute
   TagSplatRoute: typeof TagSplatRoute
   TalentDashboardRoute: typeof TalentDashboardRoute
@@ -1271,6 +1297,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminReferralsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/reps': {
+      id: '/admin/reps'
+      path: '/admin/reps'
+      fullPath: '/admin/reps'
+      preLoaderRoute: typeof AdminRepsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/slack': {
       id: '/admin/slack'
       path: '/admin/slack'
@@ -1451,6 +1484,13 @@ declare module '@tanstack/react-router' {
       path: '/locations/$slug'
       fullPath: '/locations/$slug'
       preLoaderRoute: typeof LocationsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/r/$code': {
+      id: '/r/$code'
+      path: '/r/$code'
+      fullPath: '/r/$code'
+      preLoaderRoute: typeof RCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reports/nigeria-tech-salaries': {
@@ -1682,6 +1722,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLeadsRoute: AdminLeadsRoute,
   AdminLookupRoute: AdminLookupRoute,
   AdminReferralsRoute: AdminReferralsRoute,
+  AdminRepsRoute: AdminRepsRoute,
   AdminSlackRoute: AdminSlackRoute,
   AdminStudentsRoute: AdminStudentsRoute,
   AdminTalentRoute: AdminTalentRoute,
@@ -1702,6 +1743,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsSlugRoute: EventsSlugRoute,
   HubsSlugRoute: HubsSlugRoute,
   LocationsSlugRoute: LocationsSlugRoute,
+  RCodeRoute: RCodeRoute,
   ReportsNigeriaTechSalariesRoute: ReportsNigeriaTechSalariesRoute,
   TagSplatRoute: TagSplatRoute,
   TalentDashboardRoute: TalentDashboardRoute,

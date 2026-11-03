@@ -48,6 +48,7 @@ import { Route as ApiClassRemindersRouteImport } from './routes/api.class-remind
 import { Route as ApiLeadFollowupsRouteImport } from './routes/api.lead-followups'
 import { Route as ApiLeadUnsubscribeRouteImport } from './routes/api.lead-unsubscribe'
 import { Route as ApiPaymentFollowupsRouteImport } from './routes/api.payment-followups'
+import { Route as ApiSlackCommunityUpdateRouteImport } from './routes/api.slack-community-update'
 import { Route as ApiSuccessKitRouteImport } from './routes/api.success-kit'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -81,6 +82,7 @@ import { Route as TalentPoolIdRouteImport } from './routes/talent.pool.$id'
 import { Route as TalentRolesSlugRouteImport } from './routes/talent.roles.$slug'
 import { Route as ApiPublicHrApiSplatRouteImport } from './routes/api.public.hr-api.$'
 import { Route as ApiPublicJobsAutoMatchRouteImport } from './routes/api.public.jobs.auto-match'
+import { Route as ApiPublicSlackEventsRouteImport } from './routes/api/public/slack/events'
 import { Route as ApiPublicWhatsappLeadFollowupsRouteImport } from './routes/api.public.whatsapp.lead-followups'
 import { Route as ApiPublicWhatsappWebhookRouteImport } from './routes/api/public/whatsapp/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
@@ -283,6 +285,11 @@ const ApiPaymentFollowupsRoute = ApiPaymentFollowupsRouteImport.update({
   path: '/api/payment-followups',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiSlackCommunityUpdateRoute = ApiSlackCommunityUpdateRouteImport.update({
+  id: '/api/slack-community-update',
+  path: '/api/slack-community-update',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiSuccessKitRoute = ApiSuccessKitRouteImport.update({
   id: '/api/success-kit',
   path: '/api/success-kit',
@@ -450,6 +457,11 @@ const ApiPublicJobsAutoMatchRoute = ApiPublicJobsAutoMatchRouteImport.update({
   path: '/api/public/jobs/auto-match',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicSlackEventsRoute = ApiPublicSlackEventsRouteImport.update({
+  id: '/api/public/slack/events',
+  path: '/api/public/slack/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicWhatsappLeadFollowupsRoute =
   ApiPublicWhatsappLeadFollowupsRouteImport.update({
     id: '/api/public/whatsapp/lead-followups',
@@ -518,6 +530,7 @@ export interface FileRoutesByFullPath {
   '/api/lead-followups': typeof ApiLeadFollowupsRoute
   '/api/lead-unsubscribe': typeof ApiLeadUnsubscribeRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
+  '/api/slack-community-update': typeof ApiSlackCommunityUpdateRoute
   '/api/success-kit': typeof ApiSuccessKitRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
@@ -552,6 +565,7 @@ export interface FileRoutesByFullPath {
   '/talent/pool/': typeof TalentPoolIndexRoute
   '/api/public/hr-api/$': typeof ApiPublicHrApiSplatRoute
   '/api/public/jobs/auto-match': typeof ApiPublicJobsAutoMatchRoute
+  '/api/public/slack/events': typeof ApiPublicSlackEventsRoute
   '/api/public/whatsapp/lead-followups': typeof ApiPublicWhatsappLeadFollowupsRoute
   '/api/public/whatsapp/webhook': typeof ApiPublicWhatsappWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -597,6 +611,7 @@ export interface FileRoutesByTo {
   '/api/lead-followups': typeof ApiLeadFollowupsRoute
   '/api/lead-unsubscribe': typeof ApiLeadUnsubscribeRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
+  '/api/slack-community-update': typeof ApiSlackCommunityUpdateRoute
   '/api/success-kit': typeof ApiSuccessKitRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
@@ -631,6 +646,7 @@ export interface FileRoutesByTo {
   '/talent/pool': typeof TalentPoolIndexRoute
   '/api/public/hr-api/$': typeof ApiPublicHrApiSplatRoute
   '/api/public/jobs/auto-match': typeof ApiPublicJobsAutoMatchRoute
+  '/api/public/slack/events': typeof ApiPublicSlackEventsRoute
   '/api/public/whatsapp/lead-followups': typeof ApiPublicWhatsappLeadFollowupsRoute
   '/api/public/whatsapp/webhook': typeof ApiPublicWhatsappWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -677,6 +693,7 @@ export interface FileRoutesById {
   '/api/lead-followups': typeof ApiLeadFollowupsRoute
   '/api/lead-unsubscribe': typeof ApiLeadUnsubscribeRoute
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
+  '/api/slack-community-update': typeof ApiSlackCommunityUpdateRoute
   '/api/success-kit': typeof ApiSuccessKitRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
@@ -711,6 +728,7 @@ export interface FileRoutesById {
   '/talent/pool/': typeof TalentPoolIndexRoute
   '/api/public/hr-api/$': typeof ApiPublicHrApiSplatRoute
   '/api/public/jobs/auto-match': typeof ApiPublicJobsAutoMatchRoute
+  '/api/public/slack/events': typeof ApiPublicSlackEventsRoute
   '/api/public/whatsapp/lead-followups': typeof ApiPublicWhatsappLeadFollowupsRoute
   '/api/public/whatsapp/webhook': typeof ApiPublicWhatsappWebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -758,6 +776,7 @@ export interface FileRouteTypes {
     | '/api/lead-followups'
     | '/api/lead-unsubscribe'
     | '/api/payment-followups'
+    | '/api/slack-community-update'
     | '/api/success-kit'
     | '/blog/$slug'
     | '/category/$'
@@ -792,6 +811,7 @@ export interface FileRouteTypes {
     | '/talent/pool/'
     | '/api/public/hr-api/$'
     | '/api/public/jobs/auto-match'
+    | '/api/public/slack/events'
     | '/api/public/whatsapp/lead-followups'
     | '/api/public/whatsapp/webhook'
     | '/lovable/email/auth/preview'
@@ -837,6 +857,7 @@ export interface FileRouteTypes {
     | '/api/lead-followups'
     | '/api/lead-unsubscribe'
     | '/api/payment-followups'
+    | '/api/slack-community-update'
     | '/api/success-kit'
     | '/blog/$slug'
     | '/category/$'
@@ -871,6 +892,7 @@ export interface FileRouteTypes {
     | '/talent/pool'
     | '/api/public/hr-api/$'
     | '/api/public/jobs/auto-match'
+    | '/api/public/slack/events'
     | '/api/public/whatsapp/lead-followups'
     | '/api/public/whatsapp/webhook'
     | '/lovable/email/auth/preview'
@@ -916,6 +938,7 @@ export interface FileRouteTypes {
     | '/api/lead-followups'
     | '/api/lead-unsubscribe'
     | '/api/payment-followups'
+    | '/api/slack-community-update'
     | '/api/success-kit'
     | '/blog/$slug'
     | '/category/$'
@@ -950,6 +973,7 @@ export interface FileRouteTypes {
     | '/talent/pool/'
     | '/api/public/hr-api/$'
     | '/api/public/jobs/auto-match'
+    | '/api/public/slack/events'
     | '/api/public/whatsapp/lead-followups'
     | '/api/public/whatsapp/webhook'
     | '/lovable/email/auth/preview'
@@ -996,6 +1020,7 @@ export interface RootRouteChildren {
   ApiLeadFollowupsRoute: typeof ApiLeadFollowupsRoute
   ApiLeadUnsubscribeRoute: typeof ApiLeadUnsubscribeRoute
   ApiPaymentFollowupsRoute: typeof ApiPaymentFollowupsRoute
+  ApiSlackCommunityUpdateRoute: typeof ApiSlackCommunityUpdateRoute
   ApiSuccessKitRoute: typeof ApiSuccessKitRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CategorySplatRoute: typeof CategorySplatRoute
@@ -1030,6 +1055,7 @@ export interface RootRouteChildren {
   TalentPoolIndexRoute: typeof TalentPoolIndexRoute
   ApiPublicHrApiSplatRoute: typeof ApiPublicHrApiSplatRoute
   ApiPublicJobsAutoMatchRoute: typeof ApiPublicJobsAutoMatchRoute
+  ApiPublicSlackEventsRoute: typeof ApiPublicSlackEventsRoute
   ApiPublicWhatsappLeadFollowupsRoute: typeof ApiPublicWhatsappLeadFollowupsRoute
   ApiPublicWhatsappWebhookRoute: typeof ApiPublicWhatsappWebhookRoute
 }
@@ -1309,6 +1335,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPaymentFollowupsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/slack-community-update': {
+      id: '/api/slack-community-update'
+      path: '/api/slack-community-update'
+      fullPath: '/api/slack-community-update'
+      preLoaderRoute: typeof ApiSlackCommunityUpdateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/success-kit': {
       id: '/api/success-kit'
       path: '/api/success-kit'
@@ -1540,6 +1573,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicJobsAutoMatchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/slack/events': {
+      id: '/api/public/slack/events'
+      path: '/api/public/slack/events'
+      fullPath: '/api/public/slack/events'
+      preLoaderRoute: typeof ApiPublicSlackEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/whatsapp/lead-followups': {
       id: '/api/public/whatsapp/lead-followups'
       path: '/api/public/whatsapp/lead-followups'
@@ -1633,6 +1673,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiLeadFollowupsRoute: ApiLeadFollowupsRoute,
   ApiLeadUnsubscribeRoute: ApiLeadUnsubscribeRoute,
   ApiPaymentFollowupsRoute: ApiPaymentFollowupsRoute,
+  ApiSlackCommunityUpdateRoute: ApiSlackCommunityUpdateRoute,
   ApiSuccessKitRoute: ApiSuccessKitRoute,
   BlogSlugRoute: BlogSlugRoute,
   CategorySplatRoute: CategorySplatRoute,
@@ -1667,6 +1708,7 @@ const rootRouteChildren: RootRouteChildren = {
   TalentPoolIndexRoute: TalentPoolIndexRoute,
   ApiPublicHrApiSplatRoute: ApiPublicHrApiSplatRoute,
   ApiPublicJobsAutoMatchRoute: ApiPublicJobsAutoMatchRoute,
+  ApiPublicSlackEventsRoute: ApiPublicSlackEventsRoute,
   ApiPublicWhatsappLeadFollowupsRoute: ApiPublicWhatsappLeadFollowupsRoute,
   ApiPublicWhatsappWebhookRoute: ApiPublicWhatsappWebhookRoute,
 }

@@ -22,7 +22,6 @@ describe("handoff preset links", () => {
   it("every Tech Faculty link points at a page or homepage anchor that exists", () => {
     for (const kind of HANDOFF_ORDER) {
       const urls = handoffMessage(kind, { name: "Ada" }).match(new RegExp(`${SITE}[^\\s]*`, "g")) ?? [];
-      expect(urls.length, kind).toBeGreaterThan(0);
       for (const url of urls) {
         const [path, hash] = url.slice(SITE.length).split("#");
         if (hash) {

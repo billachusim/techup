@@ -37,6 +37,7 @@ import { Route as AdminCertificatesRouteImport } from './routes/admin.certificat
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
 import { Route as AdminLookupRouteImport } from './routes/admin.lookup'
 import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
+import { Route as AdminSlackRouteImport } from './routes/admin.slack'
 import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminTalentRouteImport } from './routes/admin.talent'
 import { Route as AdminWhatsappRouteImport } from './routes/admin.whatsapp'
@@ -228,6 +229,11 @@ const AdminLookupRoute = AdminLookupRouteImport.update({
 const AdminReferralsRoute = AdminReferralsRouteImport.update({
   id: '/admin/referrals',
   path: '/admin/referrals',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminSlackRoute = AdminSlackRouteImport.update({
+  id: '/admin/slack',
+  path: '/admin/slack',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminStudentsRoute = AdminStudentsRouteImport.update({
@@ -519,6 +525,7 @@ export interface FileRoutesByFullPath {
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lookup': typeof AdminLookupRoute
   '/admin/referrals': typeof AdminReferralsRoute
+  '/admin/slack': typeof AdminSlackRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
@@ -600,6 +607,7 @@ export interface FileRoutesByTo {
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lookup': typeof AdminLookupRoute
   '/admin/referrals': typeof AdminReferralsRoute
+  '/admin/slack': typeof AdminSlackRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
@@ -682,6 +690,7 @@ export interface FileRoutesById {
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lookup': typeof AdminLookupRoute
   '/admin/referrals': typeof AdminReferralsRoute
+  '/admin/slack': typeof AdminSlackRoute
   '/admin/students': typeof AdminStudentsRoute
   '/admin/talent': typeof AdminTalentRoute
   '/admin/whatsapp': typeof AdminWhatsappRoute
@@ -765,6 +774,7 @@ export interface FileRouteTypes {
     | '/admin/leads'
     | '/admin/lookup'
     | '/admin/referrals'
+    | '/admin/slack'
     | '/admin/students'
     | '/admin/talent'
     | '/admin/whatsapp'
@@ -846,6 +856,7 @@ export interface FileRouteTypes {
     | '/admin/leads'
     | '/admin/lookup'
     | '/admin/referrals'
+    | '/admin/slack'
     | '/admin/students'
     | '/admin/talent'
     | '/admin/whatsapp'
@@ -927,6 +938,7 @@ export interface FileRouteTypes {
     | '/admin/leads'
     | '/admin/lookup'
     | '/admin/referrals'
+    | '/admin/slack'
     | '/admin/students'
     | '/admin/talent'
     | '/admin/whatsapp'
@@ -1009,6 +1021,7 @@ export interface RootRouteChildren {
   AdminLeadsRoute: typeof AdminLeadsRoute
   AdminLookupRoute: typeof AdminLookupRoute
   AdminReferralsRoute: typeof AdminReferralsRoute
+  AdminSlackRoute: typeof AdminSlackRoute
   AdminStudentsRoute: typeof AdminStudentsRoute
   AdminTalentRoute: typeof AdminTalentRoute
   AdminWhatsappRoute: typeof AdminWhatsappRoute
@@ -1256,6 +1269,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/referrals'
       fullPath: '/admin/referrals'
       preLoaderRoute: typeof AdminReferralsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/slack': {
+      id: '/admin/slack'
+      path: '/admin/slack'
+      fullPath: '/admin/slack'
+      preLoaderRoute: typeof AdminSlackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/students': {
@@ -1662,6 +1682,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLeadsRoute: AdminLeadsRoute,
   AdminLookupRoute: AdminLookupRoute,
   AdminReferralsRoute: AdminReferralsRoute,
+  AdminSlackRoute: AdminSlackRoute,
   AdminStudentsRoute: AdminStudentsRoute,
   AdminTalentRoute: AdminTalentRoute,
   AdminWhatsappRoute: AdminWhatsappRoute,

@@ -239,6 +239,13 @@
       "when": 1793613902287,
       "tag": "0033_whatsapp_single_day3_followup",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1793702235338,
+      "tag": "0034_slack_assistant_log",
+      "breakpoints": true
     }
   ]
 }

@@ -7,6 +7,7 @@ const ITEMS = [
   { to: "/admin", label: "Dashboard" },
   { to: "/admin/leads", label: "Leads", adminOnly: true },
   { to: "/admin/whatsapp", label: "WhatsApp" },
+  { to: "/admin/slack", label: "Slack", adminOnly: true },
   { to: "/admin/students", label: "Students" },
   { to: "/admin/talent", label: "Jobs" },
   { to: "/admin/certificates", label: "Certificates", adminOnly: true },

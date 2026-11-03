@@ -98,12 +98,14 @@ export async function sendMatchEmail(matchId: string): Promise<void> {
   if (!m || !MATCH_EMAIL_STATUSES.includes(m.status) || !m.talent_profiles?.email) return;
   const r = m.talent_roles;
   const { SLACK_JOIN_URL } = await import("@/data/coursePrograms");
+  const { HR_DEFAULT_REPLY_TO } = await import("@/lib/hr-api-rules");
   // Talent not yet in the workspace can't be added to the pool, so the email carries the join link.
   const slackUrl = m.talent_profiles.slack_user_id ? null : SLACK_JOIN_URL;
   try {
     await sendTemplateEmail("match-update", m.talent_profiles.email, {
       templateData: { name: m.talent_profiles.full_name, roleTitle: r?.title, company: r?.company, status: m.status, assessmentUrl: r?.assessment_url, interviewUrl: r?.interview_url, interviewChannel: r?.interview_channel, slackUrl },
       idempotencyKey: `match-update-${m.id}-${m.status}`,
+      replyTo: HR_DEFAULT_REPLY_TO,
     });
   } catch (e) {
     console.error("match email failed", (e as Error).message);

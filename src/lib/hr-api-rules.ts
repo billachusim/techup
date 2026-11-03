@@ -79,7 +79,7 @@ export const HR_EMAIL_DEFAULTS: Record<HrEmailKey, { label: string; subject: str
 };
 
 /** Where replies to HR emails go when the caller doesn't name an address. */
-export const HR_DEFAULT_REPLY_TO = "billachusim@gmail.com";
+export const HR_DEFAULT_REPLY_TO = "thetechfaculty@gmail.com";
 
 export const isHrEmailKey = (v: unknown): v is HrEmailKey => typeof v === "string" && v in HR_EMAIL_DEFAULTS;
 

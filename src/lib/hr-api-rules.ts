@@ -37,7 +37,10 @@ const APPLICATION_MAP: Partial<Record<HrStatus, string>> = {
 export const toMatchStatus = (s: HrStatus) => MATCH_MAP[s] ?? s;
 export const toApplicationStatus = (s: HrStatus) => APPLICATION_MAP[s] ?? s;
 
-export type HrEmailKey = "interview_invite" | "assessment_invite" | "offer" | "decline" | "reminder";
+/** Replies to recruit emails (HR messages and match updates) go to this inbox, not the noreply sender. */
+export const HR_REPLY_TO = "thetechfaculty@gmail.com";
+
+export type HrEmailKey = "interview_invite" | "assessment_invite" | "offer" | "decline" | "reminder" | "message";
 
 export const HR_EMAIL_DEFAULTS: Record<HrEmailKey, { label: string; subject: string; body: string; variables: string[] }> = {
   interview_invite: {
@@ -69,6 +72,12 @@ export const HR_EMAIL_DEFAULTS: Record<HrEmailKey, { label: string; subject: str
     subject: "Reminder: {{role}}",
     body: "Hi {{name}},\n\nA quick reminder about {{role}}:\n\n{{message}}\n\nTech Faculty Talent",
     variables: ["name", "role", "message"],
+  },
+  message: {
+    label: "Free-form message",
+    subject: "{{subject}}",
+    body: "Hi {{name}},\n\n{{message}}\n\nTech Faculty Talent",
+    variables: ["name", "subject", "message"],
   },
 };
 

@@ -4,6 +4,7 @@ import { z } from "zod";
 import {
   HR_EMAIL_DEFAULTS,
   HR_RATE_LIMIT_PER_MINUTE,
+  HR_REPLY_TO,
   HR_STATUSES,
   fillTemplate,
   isHrEmailKey,
@@ -301,6 +302,7 @@ async function sendEmail(admin: Admin, input: z.infer<typeof EmailBody>) {
   const sent = await sendTemplateEmail("hr-message", t.email, {
     templateData: { subject, title: subject, body: text },
     idempotencyKey: `hr-${input.template}-${t.id}-${crypto.randomUUID()}`,
+    replyTo: HR_REPLY_TO,
   });
   return {
     status: 200,

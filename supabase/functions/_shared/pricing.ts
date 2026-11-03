@@ -805,6 +805,11 @@ export function priceSelection(
 export const REFERRAL_DISCOUNT_PERCENT = 10;
 export const REFERRER_REWARD_PERCENT = 10;
 
+// Field reps (/admin/reps) earn this share of what their recruits actually
+// pay, instalments included. The student gets no discount for a rep's code.
+// public.field_rep_summary() applies the same 10%; change both together.
+export const FIELD_REP_COMMISSION_PERCENT = 10;
+
 /** The fixed promo codes and the share of the total each one takes off. */
 export const PROMO_CODES: Record<string, number> = {
   TECHUP50: 50,

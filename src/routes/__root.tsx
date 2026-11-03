@@ -14,6 +14,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { UserProvider } from "@/contexts/UserContext";
 import { installWhatsAppClickTracking } from "@/lib/analytics";
+import { captureRefFromUrl } from "@/lib/ref-code";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
 import { DEFAULT_OG_IMAGE, LOGO_URL } from "@/lib/seo";
 import NotFound from "@/pages/NotFound";
@@ -194,6 +195,8 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   useEffect(() => {
     installWhatsAppClickTracking();
+    // Keep a rep's or graduate's ?ref= code from whichever page they land on.
+    captureRefFromUrl();
   }, []);
   return (
     <QueryClientProvider client={queryClient}>

@@ -13,6 +13,7 @@ import { getSupabase, mightHaveSession } from "@/integrations/supabase/lazy";
 import { useToast } from "@/hooks/use-toast";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { rememberCheckout, trackEvent } from "@/lib/analytics";
+import { REF_STORAGE_KEY, captureRefFromUrl, getStoredRef } from "@/lib/ref-code";
 import {
   FREE_BOOTCAMP_HASH,
   START_FREE_BOOTCAMP_EVENT,
@@ -49,7 +50,6 @@ export const useEnrol = () => {
   return value;
 };
 
-const REFERRAL_STORAGE_KEY = "tf_referral_code";
 // A visitor who has to sign up first (or sign in with Google, which leaves
 // the page) picks up where they left off when they come back signed in.
 const PENDING_KEY = "tf_pending_enrol";
@@ -118,20 +118,23 @@ export const EnrolProvider = ({
   // Whether the typed code is a graduate's referral code (null: not checked).
   const [referralValid, setReferralValid] = useState<boolean | null>(null);
 
-  // A graduate's share link (?ref=CODE) fills in their code, and it is kept
-  // for later visits in case the student signs up first.
+  // A share link (?ref=CODE) is kept for later visits in case the student
+  // signs up first. A graduate's code also fills the discount box; a field
+  // rep's code gives no discount and is only stamped on the enrolment.
   useEffect(() => {
-    try {
-      const fromLink = new URLSearchParams(window.location.search)
-        .get("ref")
-        ?.trim()
-        .toUpperCase();
-      if (fromLink) localStorage.setItem(REFERRAL_STORAGE_KEY, fromLink);
-      const code = fromLink || localStorage.getItem(REFERRAL_STORAGE_KEY);
-      if (code) setDiscountCode((current) => current || code);
-    } catch {
-      // Storage can be blocked; the code can still be typed in.
-    }
+    const code = captureRefFromUrl() || getStoredRef();
+    if (!code) return;
+    let active = true;
+    void getSupabase().then(async (supabase) => {
+      const { data } = await supabase.rpc("referral_code_exists", {
+        _code: code,
+      });
+      if (active && data === true)
+        setDiscountCode((current) => current || code);
+    });
+    return () => {
+      active = false;
+    };
   }, []);
 
   const typedCode = discountCode.trim().toUpperCase();
@@ -345,6 +348,7 @@ export const EnrolProvider = ({
             plan_name: planName,
             status: isFree ? "active" : "pending",
             learning_mode: selectedMode,
+            ref_code: getStoredRef(),
             // Lets the server price the request and email a pay link if it stays unpaid.
             requested_selection: isFree
               ? null
@@ -401,6 +405,7 @@ export const EnrolProvider = ({
               learningModeId: current.learningModeId || null,
               currencyCode: isNigeria ? "NGN" : "USD",
               discountCode: discountCode || "",
+              refCode: getStoredRef() || "",
               payInInstalments: payInInstalments || undefined,
               successUrl: `${window.location.origin}/payment-success`,
               cancelUrl: `${window.location.origin}${window.location.pathname}#pricing`,
@@ -421,7 +426,7 @@ export const EnrolProvider = ({
 
         try {
           // The code has been used; don't prefill it on this student's next plan.
-          localStorage.removeItem(REFERRAL_STORAGE_KEY);
+          localStorage.removeItem(REF_STORAGE_KEY);
         } catch {
           // Storage can be blocked.
         }

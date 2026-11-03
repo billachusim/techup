@@ -24,6 +24,7 @@ import { campuses } from "@/data/campuses";
 import { SUCCESS_KIT } from "@/data/successKit";
 import { isMobileDevice } from "@/lib/whatsapp";
 import { trackLead } from "@/lib/analytics";
+import { getStoredRef } from "@/lib/ref-code";
 
 export const LEAD_CAPTURED_KEY = "tf_wa_lead_captured";
 
@@ -149,6 +150,7 @@ const WhatsAppLeadDialog = ({
 
     const supabase = await getSupabase();
     const { error: insertError } = await supabase.from("leads").insert({
+      ref_code: getStoredRef(),
       name: clampLeadField(name, "name"),
       channel: "whatsapp",
       contact: clampLeadField(phone, "contact") ?? "",

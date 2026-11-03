@@ -12,6 +12,7 @@ const ITEMS = [
   { to: "/admin/talent", label: "Jobs" },
   { to: "/admin/certificates", label: "Certificates", adminOnly: true },
   { to: "/admin/referrals", label: "Referrals", adminOnly: true },
+  { to: "/admin/reps", label: "Reps", adminOnly: true },
   { to: "/admin/activity", label: "Activity", adminOnly: true },
 ];
 

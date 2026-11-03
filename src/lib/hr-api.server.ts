@@ -149,6 +149,9 @@ async function route(admin: Admin, request: Request, method: string, path: strin
   }
   if (method === "POST" && parts[0] === "roles" && parts[2] === "match" && parts.length === 3) return rematchRole(admin, UUID.parse(parts[1]));
   if (method === "POST" && path === "/matches") return createMatch(admin, MatchCreateBody.parse(await body()));
+  // Field reps, for the manager's weekly sheet: per-rep totals, and one rep's sign-ups.
+  if (method === "GET" && path === "/field-reps") return fieldReps(admin, url);
+  if (method === "GET" && parts[0] === "field-reps" && parts.length === 2) return fieldRepActivity(admin, url, parts[1]);
 
   return { status: 404, body: { error: "Not found" } };
 }
@@ -412,4 +415,22 @@ async function createMatch(admin: Admin, input: z.infer<typeof MatchCreateBody>)
     await afterMatchStageChange(data.id);
   }
   return { status: 201, body: { id: data.id, status: input.status, stored_status: stored }, changes: { match_id: data.id, role_id: input.role_id, talent_id: input.talent_id, to: stored } };
+}
+const daysParam = (url: URL, fallback: number) => {
+  const n = Number(url.searchParams.get("days"));
+  return Number.isFinite(n) && n > 0 ? Math.min(3650, Math.floor(n)) : fallback;
+};
+
+async function fieldReps(admin: Admin, url: URL) {
+  const { data, error } = await admin.rpc("field_rep_summary", { _days: daysParam(url, 7) });
+  if (error) throw new Error(error.message);
+  return { status: 200, body: { data: data ?? [] } };
+}
+
+async function fieldRepActivity(admin: Admin, url: URL, rawCode: string) {
+  const code = rawCode.trim().toUpperCase();
+  if (!/^[A-Z0-9-]{3,24}$/.test(code)) return { status: 400, body: { error: "Invalid rep code" } };
+  const { data, error } = await admin.rpc("field_rep_activity", { _code: code, _days: daysParam(url, 30) });
+  if (error) throw new Error(error.message);
+  return { status: 200, body: data };
 }

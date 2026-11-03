@@ -3,6 +3,7 @@
 import { z } from "zod";
 import {
   HR_EMAIL_DEFAULTS,
+  HR_DEFAULT_REPLY_TO,
   HR_RATE_LIMIT_PER_MINUTE,
   HR_STATUSES,
   fillTemplate,
@@ -22,6 +23,8 @@ const EmailBody = z.object({
   template: z.string(),
   variables: z.record(z.string(), z.union([z.string().max(4000), z.number(), z.null()])).default({}),
   role_id: UUID.optional(),
+  /** Replies go here instead of the no-reply sender. Defaults to HR_DEFAULT_REPLY_TO. */
+  reply_to: z.string().trim().email().max(320).optional(),
 });
 const ManagerBody = z.object({ manager_user_id: UUID });
 const NoteBody = z.object({ talent_id: UUID, role_id: UUID.nullable().optional(), text: z.string().trim().min(1).max(8000) });
@@ -301,6 +304,7 @@ async function sendEmail(admin: Admin, input: z.infer<typeof EmailBody>) {
   const sent = await sendTemplateEmail("hr-message", t.email, {
     templateData: { subject, title: subject, body: text },
     idempotencyKey: `hr-${input.template}-${t.id}-${crypto.randomUUID()}`,
+    replyTo: input.reply_to ?? HR_DEFAULT_REPLY_TO,
   });
   return {
     status: 200,

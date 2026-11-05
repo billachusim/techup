@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import Products from "@/pages/Products";
 import { pageHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/products")({
+export const Route = createFileRoute("/products/")({
   head: () =>
     pageHead({
       title: "Software Products",

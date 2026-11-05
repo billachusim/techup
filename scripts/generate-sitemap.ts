@@ -19,6 +19,7 @@ import { departments } from "../src/data/departments";
 import { jobPlatforms } from "../src/data/jobPlatforms";
 import { siwesCourses } from "../src/data/siwesCourses";
 import { techHubs } from "../src/data/techHubs";
+import { apps } from "../src/data/apps";
 
 const BASE_URL = "https://techfaculty.ng";
 const ROUTES_DIR = resolve("src/routes");
@@ -138,6 +139,10 @@ const DYNAMIC: Record<string, Resolver | null> = {
   "/locations/$slug": (file) => {
     const lastmod = gitDate(pageFiles(file));
     return campuses.map((c) => ({ path: `/locations/${c.slug}`, lastmod }));
+  },
+  "/products/$slug": (file) => {
+    const lastmod = gitDate(pageFiles(file));
+    return apps.map((a) => ({ path: `/products/${a.slug}`, lastmod }));
   },
   "/hubs/$slug": (file) => {
     const lastmod = gitDate(pageFiles(file));

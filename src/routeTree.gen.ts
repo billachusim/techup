@@ -21,7 +21,6 @@ import { Route as OrderCompleteRouteImport } from './routes/order-complete'
 import { Route as OutcomesRouteImport } from './routes/outcomes'
 import { Route as PayBalanceRouteImport } from './routes/pay-balance'
 import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
-import { Route as ProductsRouteImport } from './routes/products'
 import { Route as RssDotxmlRouteImport } from './routes/rss[.]xml'
 import { Route as SchoolCollaborationsRouteImport } from './routes/school-collaborations'
 import { Route as SiwesSuccessKitRouteImport } from './routes/siwes-success-kit'
@@ -64,6 +63,8 @@ import { Route as HubsIndexRouteImport } from './routes/hubs.index'
 import { Route as HubsSlugRouteImport } from './routes/hubs.$slug'
 import { Route as LocationsIndexRouteImport } from './routes/locations.index'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
+import { Route as ProductsIndexRouteImport } from './routes/products.index'
+import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as RCodeRouteImport } from './routes/r.$code'
 import { Route as ReportsNigeriaTechSalariesRouteImport } from './routes/reports.nigeria-tech-salaries'
 import { Route as SiwesIndexRouteImport } from './routes/siwes.index'
@@ -150,11 +151,6 @@ const PayBalanceRoute = PayBalanceRouteImport.update({
 const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
   id: '/payment-success',
   path: '/payment-success',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProductsRoute = ProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RssDotxmlRoute = RssDotxmlRouteImport.update({
@@ -368,6 +364,16 @@ const LocationsSlugRoute = LocationsSlugRouteImport.update({
   path: '/locations/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductsIndexRoute = ProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsSlugRoute = ProductsSlugRouteImport.update({
+  id: '/products/$slug',
+  path: '/products/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RCodeRoute = RCodeRouteImport.update({
   id: '/r/$code',
   path: '/r/$code',
@@ -522,7 +528,6 @@ export interface FileRoutesByFullPath {
   '/outcomes': typeof OutcomesRoute
   '/pay-balance': typeof PayBalanceRoute
   '/payment-success': typeof PaymentSuccessRoute
-  '/products': typeof ProductsRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
@@ -558,6 +563,7 @@ export interface FileRoutesByFullPath {
   '/events/$slug': typeof EventsSlugRoute
   '/hubs/$slug': typeof HubsSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/products/$slug': typeof ProductsSlugRoute
   '/r/$code': typeof RCodeRoute
   '/reports/nigeria-tech-salaries': typeof ReportsNigeriaTechSalariesRoute
   '/tag/$': typeof TagSplatRoute
@@ -572,6 +578,7 @@ export interface FileRoutesByFullPath {
   '/events/': typeof EventsIndexRoute
   '/hubs/': typeof HubsIndexRoute
   '/locations/': typeof LocationsIndexRoute
+  '/products/': typeof ProductsIndexRoute
   '/siwes/': typeof SiwesIndexRoute
   '/talent/': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -606,7 +613,6 @@ export interface FileRoutesByTo {
   '/outcomes': typeof OutcomesRoute
   '/pay-balance': typeof PayBalanceRoute
   '/payment-success': typeof PaymentSuccessRoute
-  '/products': typeof ProductsRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
@@ -642,6 +648,7 @@ export interface FileRoutesByTo {
   '/events/$slug': typeof EventsSlugRoute
   '/hubs/$slug': typeof HubsSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/products/$slug': typeof ProductsSlugRoute
   '/r/$code': typeof RCodeRoute
   '/reports/nigeria-tech-salaries': typeof ReportsNigeriaTechSalariesRoute
   '/tag/$': typeof TagSplatRoute
@@ -656,6 +663,7 @@ export interface FileRoutesByTo {
   '/events': typeof EventsIndexRoute
   '/hubs': typeof HubsIndexRoute
   '/locations': typeof LocationsIndexRoute
+  '/products': typeof ProductsIndexRoute
   '/siwes': typeof SiwesIndexRoute
   '/talent': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -691,7 +699,6 @@ export interface FileRoutesById {
   '/outcomes': typeof OutcomesRoute
   '/pay-balance': typeof PayBalanceRoute
   '/payment-success': typeof PaymentSuccessRoute
-  '/products': typeof ProductsRoute
   '/rss.xml': typeof RssDotxmlRoute
   '/school-collaborations': typeof SchoolCollaborationsRoute
   '/siwes-success-kit': typeof SiwesSuccessKitRoute
@@ -727,6 +734,7 @@ export interface FileRoutesById {
   '/events/$slug': typeof EventsSlugRoute
   '/hubs/$slug': typeof HubsSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/products/$slug': typeof ProductsSlugRoute
   '/r/$code': typeof RCodeRoute
   '/reports/nigeria-tech-salaries': typeof ReportsNigeriaTechSalariesRoute
   '/tag/$': typeof TagSplatRoute
@@ -741,6 +749,7 @@ export interface FileRoutesById {
   '/events/': typeof EventsIndexRoute
   '/hubs/': typeof HubsIndexRoute
   '/locations/': typeof LocationsIndexRoute
+  '/products/': typeof ProductsIndexRoute
   '/siwes/': typeof SiwesIndexRoute
   '/talent/': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -777,7 +786,6 @@ export interface FileRouteTypes {
     | '/outcomes'
     | '/pay-balance'
     | '/payment-success'
-    | '/products'
     | '/rss.xml'
     | '/school-collaborations'
     | '/siwes-success-kit'
@@ -813,6 +821,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/hubs/$slug'
     | '/locations/$slug'
+    | '/products/$slug'
     | '/r/$code'
     | '/reports/nigeria-tech-salaries'
     | '/tag/$'
@@ -827,6 +836,7 @@ export interface FileRouteTypes {
     | '/events/'
     | '/hubs/'
     | '/locations/'
+    | '/products/'
     | '/siwes/'
     | '/talent/'
     | '/.lovable/oauth/consent'
@@ -861,7 +871,6 @@ export interface FileRouteTypes {
     | '/outcomes'
     | '/pay-balance'
     | '/payment-success'
-    | '/products'
     | '/rss.xml'
     | '/school-collaborations'
     | '/siwes-success-kit'
@@ -897,6 +906,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/hubs/$slug'
     | '/locations/$slug'
+    | '/products/$slug'
     | '/r/$code'
     | '/reports/nigeria-tech-salaries'
     | '/tag/$'
@@ -911,6 +921,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/hubs'
     | '/locations'
+    | '/products'
     | '/siwes'
     | '/talent'
     | '/.lovable/oauth/consent'
@@ -945,7 +956,6 @@ export interface FileRouteTypes {
     | '/outcomes'
     | '/pay-balance'
     | '/payment-success'
-    | '/products'
     | '/rss.xml'
     | '/school-collaborations'
     | '/siwes-success-kit'
@@ -981,6 +991,7 @@ export interface FileRouteTypes {
     | '/events/$slug'
     | '/hubs/$slug'
     | '/locations/$slug'
+    | '/products/$slug'
     | '/r/$code'
     | '/reports/nigeria-tech-salaries'
     | '/tag/$'
@@ -995,6 +1006,7 @@ export interface FileRouteTypes {
     | '/events/'
     | '/hubs/'
     | '/locations/'
+    | '/products/'
     | '/siwes/'
     | '/talent/'
     | '/.lovable/oauth/consent'
@@ -1030,7 +1042,6 @@ export interface RootRouteChildren {
   OutcomesRoute: typeof OutcomesRoute
   PayBalanceRoute: typeof PayBalanceRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
-  ProductsRoute: typeof ProductsRoute
   RssDotxmlRoute: typeof RssDotxmlRoute
   SchoolCollaborationsRoute: typeof SchoolCollaborationsRoute
   SiwesSuccessKitRoute: typeof SiwesSuccessKitRoute
@@ -1066,6 +1077,7 @@ export interface RootRouteChildren {
   EventsSlugRoute: typeof EventsSlugRoute
   HubsSlugRoute: typeof HubsSlugRoute
   LocationsSlugRoute: typeof LocationsSlugRoute
+  ProductsSlugRoute: typeof ProductsSlugRoute
   RCodeRoute: typeof RCodeRoute
   ReportsNigeriaTechSalariesRoute: typeof ReportsNigeriaTechSalariesRoute
   TagSplatRoute: typeof TagSplatRoute
@@ -1080,6 +1092,7 @@ export interface RootRouteChildren {
   EventsIndexRoute: typeof EventsIndexRoute
   HubsIndexRoute: typeof HubsIndexRoute
   LocationsIndexRoute: typeof LocationsIndexRoute
+  ProductsIndexRoute: typeof ProductsIndexRoute
   SiwesIndexRoute: typeof SiwesIndexRoute
   TalentIndexRoute: typeof TalentIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
@@ -1183,13 +1196,6 @@ declare module '@tanstack/react-router' {
       path: '/payment-success'
       fullPath: '/payment-success'
       preLoaderRoute: typeof PaymentSuccessRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/products': {
-      id: '/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rss.xml': {
@@ -1486,6 +1492,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LocationsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/products/': {
+      id: '/products/'
+      path: '/products'
+      fullPath: '/products/'
+      preLoaderRoute: typeof ProductsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products/$slug': {
+      id: '/products/$slug'
+      path: '/products/$slug'
+      fullPath: '/products/$slug'
+      preLoaderRoute: typeof ProductsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/r/$code': {
       id: '/r/$code'
       path: '/r/$code'
@@ -1706,7 +1726,6 @@ const rootRouteChildren: RootRouteChildren = {
   OutcomesRoute: OutcomesRoute,
   PayBalanceRoute: PayBalanceRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
-  ProductsRoute: ProductsRoute,
   RssDotxmlRoute: RssDotxmlRoute,
   SchoolCollaborationsRoute: SchoolCollaborationsRoute,
   SiwesSuccessKitRoute: SiwesSuccessKitRoute,
@@ -1743,6 +1762,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsSlugRoute: EventsSlugRoute,
   HubsSlugRoute: HubsSlugRoute,
   LocationsSlugRoute: LocationsSlugRoute,
+  ProductsSlugRoute: ProductsSlugRoute,
   RCodeRoute: RCodeRoute,
   ReportsNigeriaTechSalariesRoute: ReportsNigeriaTechSalariesRoute,
   TagSplatRoute: TagSplatRoute,
@@ -1757,6 +1777,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsIndexRoute: EventsIndexRoute,
   HubsIndexRoute: HubsIndexRoute,
   LocationsIndexRoute: LocationsIndexRoute,
+  ProductsIndexRoute: ProductsIndexRoute,
   SiwesIndexRoute: SiwesIndexRoute,
   TalentIndexRoute: TalentIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,

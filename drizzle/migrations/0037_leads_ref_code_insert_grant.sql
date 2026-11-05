@@ -1,0 +1,1 @@
+GRANT INSERT (ref_code) ON public.leads TO anon, authenticated;

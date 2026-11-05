@@ -3,91 +3,9 @@ import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Smartphone } from "lucide-react";
-import dearClaireCover from "@/assets/dear-claire-cover.png.asset.json";
-import aiclopediaCover from "@/assets/aiclopedia-cover.png.asset.json";
-import alterEgoCover from "@/assets/alter-ego-cover.png.asset.json";
-import eavesdropCover from "@/assets/eavesdrop-cover.png.asset.json";
 import { Link } from "@/lib/router-compat";
 import { Sparkles } from "lucide-react";
-
-type Platform = "playstore" | "appstore";
-
-interface Product {
-  name: string;
-  tagline: string;
-  description: string;
-  platforms: Platform[];
-  links: {
-    playstore?: string;
-    appstore?: string;
-  };
-  accent: string;
-  previewImage?: string;
-  rating?: string;
-  downloads?: string;
-  developer: string;
-}
-
-const products: Product[] = [
-  {
-    name: "Dear Claire",
-    tagline: "Secret Diary Chat",
-    description:
-      "Speak freely, get real advice, feel understood. Write or record your day in a 100% anonymous secret diary and receive kind, honest perspectives. Or be like Claire — follow other diaries, give positive advice, and earn Loves you can convert to cash.",
-    platforms: ["playstore", "appstore"],
-    links: {
-      playstore: "https://play.google.com/store/apps/details?id=com.mobymagic.clairediary",
-      appstore: "https://apps.apple.com/ng/app/dear-claire-secret-diary-chat/id1635333304",
-    },
-    accent: "from-pink-500 to-rose-600",
-    previewImage: dearClaireCover.url,
-    rating: "4.5★",
-    downloads: "1M+",
-    developer: "Social Faculty",
-  },
-  {
-    name: "Alter Ego",
-    tagline: "Private Self Map",
-    description:
-      "You are not one personality — you are many. Map your inner identities across 8 key dimensions, consult your inner council before you decide, and check in daily. 100% local: no account, no cloud, no tracking.",
-    platforms: ["playstore", "appstore"],
-    links: {
-      appstore: "https://apps.apple.com/app/alter-ego-know-all-yourselves/id6759404823",
-      playstore: "https://play.google.com/store/apps/details?id=com.socialfaculty.alter_ego",
-    },
-    accent: "from-violet-500 to-purple-600",
-    previewImage: alterEgoCover.url,
-    developer: "Social Faculty",
-  },
-  {
-    name: "Eavesdrop",
-    tagline: "Live Stories",
-    description:
-      "Some conversations weren't meant for you. Listen live to real people, join thousands of rooms on every topic, raise your hand to speak, or book and host your own conversation.",
-    platforms: ["playstore", "appstore"],
-    links: {
-      playstore: "https://play.google.com/store/apps/details?id=com.socialfaculty.eavesdrop",
-      appstore: "https://apps.apple.com/us/app/eavesdrop-live-stories/id6759225893",
-    },
-    accent: "from-emerald-500 to-teal-600",
-    previewImage: eavesdropCover.url,
-    developer: "Social Faculty",
-  },
-  {
-    name: "AI Clopedia",
-    tagline: "Ask AI Anything",
-    description:
-      "Your AI-powered encyclopedia. Browse featured questions, get answers the way you'll never forget, see an image for every question, and follow your curiosity through your own question history.",
-    platforms: ["playstore", "appstore"],
-    links: {
-      playstore: "https://play.google.com/store/apps/details?id=com.socialfaculty.AiClopedia",
-      appstore: "https://apps.apple.com/us/app/ai-clopedia-ask-ai-anything/id6447000971",
-    },
-    accent: "from-blue-500 to-cyan-600",
-    previewImage: aiclopediaCover.url,
-    developer: "Social Faculty",
-  },
-];
+import { apps as products, type AppProduct as Product } from "@/data/apps";
 
 const PlayStoreBadge = ({ href }: { href: string }) => (
   <a
@@ -160,6 +78,10 @@ const ProductCard = ({ product }: { product: Product }) => (
         {product.links.playstore && <PlayStoreBadge href={product.links.playstore} />}
         {product.links.appstore && <AppStoreBadge href={product.links.appstore} />}
       </div>
+
+      <Link to={`/products/${product.slug}`} className="inline-block text-sm font-medium text-primary hover:underline">
+        About {product.name}, features and FAQ →
+      </Link>
     </CardContent>
   </Card>
 );
@@ -181,7 +103,7 @@ const Products = () => {
             description: p.description,
             applicationCategory: "Application",
             operatingSystem: "iOS, Android",
-            url: p.links.appstore || p.links.playstore,
+            url: `https://techfaculty.ng/products/${p.slug}`,
           })),
         })}</script>
       </>

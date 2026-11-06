@@ -16,7 +16,7 @@ export const VIRTUAL_SIWES = {
   logbookPriceNGN: PRODUCTS.logbook_service.priceNGN,
   whatsappNumber: "2348068597140",
   email: "thetechfaculty@gmail.com",
-  hqAddress: "Technology Incubation Centre, Nnewi, Anambra State, Nigeria",
+  hqAddress: "Technology Incubation Centre, Onitsha-Okigwe Expressway, by Area Command, Umudim, Nnewi, Anambra State, Nigeria",
   turnaround: "5–7 working days from the day your logbook reaches our headquarters",
 };
 

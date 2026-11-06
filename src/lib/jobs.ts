@@ -83,7 +83,7 @@ export function locationLabel(job: Job) {
 }
 
 const HQ_ADDRESS = {
-  streetAddress: "Technology Incubation Center, NBTI South-East Zonal Office",
+  streetAddress: "Technology Incubation Centre, Onitsha-Okigwe Expressway, by Area Command, Umudim",
   addressLocality: "Nnewi",
   addressRegion: "Anambra",
   postalCode: "435101",
@@ -91,17 +91,17 @@ const HQ_ADDRESS = {
 };
 
 const CITY_ADDRESS: Record<string, { addressRegion: string; postalCode: string; streetAddress: string }> = {
-  lagos: { addressRegion: "Lagos", postalCode: "101233", streetAddress: "Technology Incubation Center, Yaba" },
-  abuja: { addressRegion: "FCT", postalCode: "900001", streetAddress: "Technology Incubation Center, Central Business District" },
-  onitsha: { addressRegion: "Anambra", postalCode: "420001", streetAddress: "Anene Close, Off Ezeiweka Road, Awada" },
+  lagos: { addressRegion: "Lagos", postalCode: "101233", streetAddress: "Technology Incubation Centre, No. 1 Oba Ogunji Road, Pen Cinema, Agege" },
+  abuja: { addressRegion: "FCT", postalCode: "900001", streetAddress: "10 Zambezi Crescent, WAEC Building Complex, Maitama" },
+  onitsha: { addressRegion: "Anambra", postalCode: "420001", streetAddress: "No 8 Anene Close, Off Ezeiweka Road, Awada-Obosi" },
   nnewi: { addressRegion: "Anambra", postalCode: "435101", streetAddress: HQ_ADDRESS.streetAddress },
-  enugu: { addressRegion: "Enugu", postalCode: "400001", streetAddress: "Technology Incubation Center, Independence Layout" },
-  owerri: { addressRegion: "Imo", postalCode: "460001", streetAddress: "Technology Incubation Center, Wetheral Road" },
-  aba: { addressRegion: "Abia", postalCode: "450001", streetAddress: "Technology Incubation Center, Aba" },
-  abakaliki: { addressRegion: "Ebonyi", postalCode: "480001", streetAddress: "Technology Incubation Center, Abakaliki" },
-  "port harcourt": { addressRegion: "Rivers", postalCode: "500001", streetAddress: "Technology Incubation Center, Port Harcourt" },
-  ibadan: { addressRegion: "Oyo", postalCode: "200001", streetAddress: "Technology Incubation Center, Ibadan" },
-  kano: { addressRegion: "Kano", postalCode: "700001", streetAddress: "Technology Incubation Center, Kano" },
+  enugu: { addressRegion: "Enugu", postalCode: "400001", streetAddress: "Technology Incubation Centre, IMT Industrial Development Centre" },
+  owerri: { addressRegion: "Imo", postalCode: "460001", streetAddress: "Technology Incubation Centre, Naze Industrial Cluster, Off Nekede Road" },
+  aba: { addressRegion: "Abia", postalCode: "450001", streetAddress: "Technology Incubation Centre, Industrial Road" },
+  abakaliki: { addressRegion: "Ebonyi", postalCode: "480001", streetAddress: "Technology Incubation Centre (Abakaliki extension), Ebonyi State University Old Site" },
+  "port harcourt": { addressRegion: "Rivers", postalCode: "500001", streetAddress: "Technology Incubation Centre, Feedmill Complex, ADP Road, Rumuodomaya, Obio-Akpor" },
+  ibadan: { addressRegion: "Oyo", postalCode: "200001", streetAddress: "Technology Incubation Centre, Opposite Trade Fair Complex, Sango-UI Road, Expoyo, Sango" },
+  kano: { addressRegion: "Kano", postalCode: "700001", streetAddress: "Technology Incubation Centre, TIC Complex, Farm Centre" },
 };
 
 /** Always yields a complete PostalAddress; remote/unknown roles fall back to the Nnewi HQ address. */

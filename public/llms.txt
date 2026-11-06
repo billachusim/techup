@@ -52,25 +52,25 @@
 - [Tech Faculty Nnewi (headquarters)](https://techfaculty.ng/locations/nnewi): Technology Incubation Center, Onitsha-Okigwe Expressway, by Area Command, Umudim, Nnewi, Anambra State. Headquarters and South-East zonal base — full-time labs, mentors and exam venue.
 - [Tech Faculty Awka](https://techfaculty.ng/locations/awka): Sea Shelters Plaza, Amawbia Junction, Opposite MRS Filling Station, Amawbia, Awka, Anambra State. Anambra State capital campus serving students, civil servants and businesses.
 - [Tech Faculty Onitsha](https://techfaculty.ng/locations/onitsha): No 8 Anene Close, Off Ezeiweka Road, Awada-Obosi, Onitsha, Anambra State. Standalone Awada centre serving Nigeria's largest commercial hub.
-- [Tech Faculty Owerri](https://techfaculty.ng/locations/owerri): Technology Incubation Centre, Owerri, Imo State. Imo State campus with a strong student and youth pipeline.
-- [Tech Faculty Aba](https://techfaculty.ng/locations/aba): Technology Incubation Centre, Aba, Abia State. Aba campus serving Nigeria's manufacturing and garment capital.
-- [Tech Faculty Enugu](https://techfaculty.ng/locations/enugu): Technology Incubation Centre, Enugu, Enugu State. Enugu campus with strong public-sector and startup demand.
-- [Tech Faculty Abakaliki](https://techfaculty.ng/locations/abakaliki): Technology Incubation Centre, Abakaliki, Ebonyi State. Ebonyi State campus with an agritech and data focus.
+- [Tech Faculty Owerri](https://techfaculty.ng/locations/owerri): Technology Incubation Centre, Naze Industrial Cluster, Off Nekede Road, Owerri, Imo State. Imo State campus with a strong student and youth pipeline.
+- [Tech Faculty Aba](https://techfaculty.ng/locations/aba): Technology Incubation Centre, Industrial Road, Aba, Abia State. Aba campus serving Nigeria's manufacturing and garment capital.
+- [Tech Faculty Enugu](https://techfaculty.ng/locations/enugu): Technology Incubation Centre, IMT Industrial Development Centre, Enugu, Enugu State. Enugu campus with strong public-sector and startup demand.
+- [Tech Faculty Abakaliki](https://techfaculty.ng/locations/abakaliki): Technology Incubation Centre (Abakaliki extension), Ebonyi State University Old Site, Abakaliki, Ebonyi State. Ebonyi State campus with an agritech and data focus.
 - [Tech Faculty Abuja](https://techfaculty.ng/locations/abuja): 10 Zambezi Crescent, WAEC Building Complex, Maitama, Federal Capital Territory. Federal Capital Territory presence at the NBTI national headquarters.
-- [Tech Faculty Lagos](https://techfaculty.ng/locations/lagos): Technology Incubation Centre, Lagos State. Lagos campus connected to Nigeria's largest tech job market.
-- [Tech Faculty Ibadan](https://techfaculty.ng/locations/ibadan): Technology Incubation Centre, Ibadan, Oyo State. Oyo State campus with deep university and research links.
-- [Tech Faculty Port Harcourt](https://techfaculty.ng/locations/port-harcourt): Technology Incubation Centre, Port Harcourt, Rivers State. Rivers State campus serving the energy and industrial corridor.
-- [Tech Faculty Benin City](https://techfaculty.ng/locations/benin-city): Technology Incubation Centre, Benin City, Edo State. Edo State campus with a strong remote-work and creative focus.
-- [Tech Faculty Kaduna](https://techfaculty.ng/locations/kaduna): Technology Incubation Centre, Kaduna, Kaduna State. Kaduna campus serving the North-West's industrial and academic base.
-- [Tech Faculty Kano](https://techfaculty.ng/locations/kano): Technology Incubation Centre, Kano, Kano State. Kano campus built around commerce, agriculture and youth training.
-- [Tech Faculty Jos](https://techfaculty.ng/locations/jos): Technology Incubation Centre, Jos, Plateau State. Plateau State campus with a strong software and creative community.
-- [Tech Faculty Bauchi](https://techfaculty.ng/locations/bauchi): Technology Incubation Centre, Bauchi, Bauchi State. North-East campus focused on digital literacy and first tech jobs.
-- [Tech Faculty Makurdi](https://techfaculty.ng/locations/makurdi): Technology Incubation Centre, Makurdi, Benue State. Benue State campus with an agritech and data emphasis.
-- [Tech Faculty Uyo](https://techfaculty.ng/locations/uyo): Technology Incubation Centre, Uyo, Akwa Ibom State. Akwa Ibom campus with strong graduate and remote-work demand.
-- [Tech Faculty Calabar](https://techfaculty.ng/locations/calabar): Technology Incubation Centre, Calabar, Cross River State. Cross River campus with tourism, creative and remote-work focus.
-- [Tech Faculty Sokoto](https://techfaculty.ng/locations/sokoto): Technology Incubation Centre, Sokoto, Sokoto State. North-West campus prioritising access, literacy and first skills.
-- [Tech Faculty Ilorin](https://techfaculty.ng/locations/ilorin): Technology Incubation Centre, Ilorin, Kwara State. Kwara State campus bridging the North-Central and South-West.
-- [Tech Faculty Akure](https://techfaculty.ng/locations/akure): Technology Incubation Centre, Akure, Ondo State. Ondo State campus with an engineering and robotics leaning.
+- [Tech Faculty Lagos](https://techfaculty.ng/locations/lagos): Technology Incubation Centre, No. 1 Oba Ogunji Road, Pen Cinema, Agege, Lagos State. Lagos campus connected to Nigeria's largest tech job market.
+- [Tech Faculty Ibadan](https://techfaculty.ng/locations/ibadan): Technology Incubation Centre, Opposite Trade Fair Complex, Sango-UI Road, Expoyo, Sango, Ibadan, Oyo State. Oyo State campus with deep university and research links.
+- [Tech Faculty Port Harcourt](https://techfaculty.ng/locations/port-harcourt): Technology Incubation Centre, Feedmill Complex, ADP Road, Rumuodomaya, Obio-Akpor, Port Harcourt, Rivers State. Rivers State campus serving the energy and industrial corridor.
+- [Tech Faculty Benin City](https://techfaculty.ng/locations/benin-city): Technology Incubation Centre, 188 Sapele Road, Benin City, Edo State. Edo State campus with a strong remote-work and creative focus.
+- [Tech Faculty Kaduna](https://techfaculty.ng/locations/kaduna): Technology Incubation Centre, Km 7 Kaduna-Zaria Expressway, Opposite B&S Filling Station, Rigachikun, Kaduna State. Kaduna campus serving the North-West's industrial and academic base.
+- [Tech Faculty Kano](https://techfaculty.ng/locations/kano): Technology Incubation Centre, TIC Complex, Farm Centre, Kano, Kano State. Kano campus built around commerce, agriculture and youth training.
+- [Tech Faculty Jos](https://techfaculty.ng/locations/jos): Technology Incubation Centre, Former NALDA Office, Agwa Debba, Bukuru Expressway, Bukuru, Jos, Plateau State. Plateau State campus with a strong software and creative community.
+- [Tech Faculty Bauchi](https://techfaculty.ng/locations/bauchi): Technology Incubation Centre, Area Engineers Office, Bayin Garri, Bauchi, Bauchi State. North-East campus focused on digital literacy and first tech jobs.
+- [Tech Faculty Makurdi](https://techfaculty.ng/locations/makurdi): Technology Incubation Centre, c/o Ministry of Science and Technology, Opposite Benue Hotel, Old GRA, Makurdi, Benue State. Benue State campus with an agritech and data emphasis.
+- [Tech Faculty Uyo](https://techfaculty.ng/locations/uyo): Technology Incubation Centre, 95 Aka Nung Udoe Road, in front of Nung Oku Park, Uyo, Akwa Ibom State. Akwa Ibom campus with strong graduate and remote-work demand.
+- [Tech Faculty Calabar](https://techfaculty.ng/locations/calabar): Technology Incubation Centre, Industrial Layout, No. 4 Off Harbour/EPZ Road, Calabar, Cross River State. Cross River campus with tourism, creative and remote-work focus.
+- [Tech Faculty Sokoto](https://techfaculty.ng/locations/sokoto): Technology Incubation Centre, Garba Mohammed Road, Near NTA, Runjin Sambo Industrial Layout, Sokoto, Sokoto State. North-West campus prioritising access, literacy and first skills.
+- [Tech Faculty Ilorin](https://techfaculty.ng/locations/ilorin): Technology Incubation Centre, GSS Roundabout, Old Jebba Road, Ilorin, Kwara State. Kwara State campus bridging the North-Central and South-West.
+- [Tech Faculty Akure](https://techfaculty.ng/locations/akure): Technology Incubation Centre, Ondo State Industrial Park, Ilesha/Owo Expressway, Akure, Ondo State. Ondo State campus with an engineering and robotics leaning.
 
 ## Pages
 

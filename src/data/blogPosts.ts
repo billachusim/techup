@@ -3139,11 +3139,11 @@ Digital safety is a survival skill every Nigerian teenager needs:
 
 Every centre runs the full bootcamp calendar. Choose the location closest to you:
 
-- **Nnewi** — Technology Incubation Centre, NBTI South-East Zonal Office, Nnewi, Anambra State
-- **Onitsha / Awada** — Technology Incubation Centre, Onitsha, Anambra State
-- **Enugu** — Technology Incubation Centre, Enugu, Enugu State
-- **Aba** — Technology Incubation Centre, Aba, Abia State
-- **Owerri** — Technology Incubation Centre, Owerri, Imo State
+- **Nnewi** — Technology Incubation Centre (NBTI South-East Zonal Office), Onitsha-Okigwe Expressway, by Area Command, Umudim, Nnewi, Anambra State
+- **Onitsha / Awada** — No 8 Anene Close, Off Ezeiweka Road, Awada-Obosi, Onitsha, Anambra State
+- **Enugu** — Technology Incubation Centre, IMT Industrial Development Centre, Enugu, Enugu State
+- **Aba** — Technology Incubation Centre, Industrial Road, Aba, Abia State
+- **Owerri** — Technology Incubation Centre, Naze Industrial Cluster, Off Nekede Road, Owerri, Imo State
 
 All centres are licensed by the Federal Ministry of Science, Technology & Innovation via NBTI.
 

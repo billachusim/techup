@@ -76,6 +76,7 @@ import { Route as TalentProfileRouteImport } from './routes/talent.profile'
 import { Route as TeamBillAchusimRouteImport } from './routes/team.bill-achusim'
 import { Route as VerifySplatRouteImport } from './routes/verify.$'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
+import { Route as ApiClassVideosIngestRouteImport } from './routes/api.class-videos.ingest'
 import { Route as ApiPublicOgRouteImport } from './routes/api/public/og'
 import { Route as BlogCategorySlugRouteImport } from './routes/blog.category.$slug'
 import { Route as CareersJobsSlugRouteImport } from './routes/careers.jobs.$slug'
@@ -431,6 +432,11 @@ const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiClassVideosIngestRoute = ApiClassVideosIngestRouteImport.update({
+  id: '/api/class-videos/ingest',
+  path: '/api/class-videos/ingest',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicOgRoute = ApiPublicOgRouteImport.update({
   id: '/api/public/og',
   path: '/api/public/og',
@@ -589,6 +595,7 @@ export interface FileRoutesByFullPath {
   '/siwes/': typeof SiwesIndexRoute
   '/talent/': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/api/class-videos/ingest': typeof ApiClassVideosIngestRoute
   '/api/public/og': typeof ApiPublicOgRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/careers/jobs/$slug': typeof CareersJobsSlugRoute
@@ -675,6 +682,7 @@ export interface FileRoutesByTo {
   '/siwes': typeof SiwesIndexRoute
   '/talent': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/api/class-videos/ingest': typeof ApiClassVideosIngestRoute
   '/api/public/og': typeof ApiPublicOgRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/careers/jobs/$slug': typeof CareersJobsSlugRoute
@@ -762,6 +770,7 @@ export interface FileRoutesById {
   '/siwes/': typeof SiwesIndexRoute
   '/talent/': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/api/class-videos/ingest': typeof ApiClassVideosIngestRoute
   '/api/public/og': typeof ApiPublicOgRoute
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/careers/jobs/$slug': typeof CareersJobsSlugRoute
@@ -850,6 +859,7 @@ export interface FileRouteTypes {
     | '/siwes/'
     | '/talent/'
     | '/.lovable/oauth/consent'
+    | '/api/class-videos/ingest'
     | '/api/public/og'
     | '/blog/category/$slug'
     | '/careers/jobs/$slug'
@@ -936,6 +946,7 @@ export interface FileRouteTypes {
     | '/siwes'
     | '/talent'
     | '/.lovable/oauth/consent'
+    | '/api/class-videos/ingest'
     | '/api/public/og'
     | '/blog/category/$slug'
     | '/careers/jobs/$slug'
@@ -1022,6 +1033,7 @@ export interface FileRouteTypes {
     | '/siwes/'
     | '/talent/'
     | '/.lovable/oauth/consent'
+    | '/api/class-videos/ingest'
     | '/api/public/og'
     | '/blog/category/$slug'
     | '/careers/jobs/$slug'
@@ -1109,6 +1121,7 @@ export interface RootRouteChildren {
   SiwesIndexRoute: typeof SiwesIndexRoute
   TalentIndexRoute: typeof TalentIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
+  ApiClassVideosIngestRoute: typeof ApiClassVideosIngestRoute
   ApiPublicOgRoute: typeof ApiPublicOgRoute
   BlogCategorySlugRoute: typeof BlogCategorySlugRoute
   CareersJobsSlugRoute: typeof CareersJobsSlugRoute
@@ -1596,6 +1609,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/class-videos/ingest': {
+      id: '/api/class-videos/ingest'
+      path: '/api/class-videos/ingest'
+      fullPath: '/api/class-videos/ingest'
+      preLoaderRoute: typeof ApiClassVideosIngestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/og': {
       id: '/api/public/og'
       path: '/api/public/og'
@@ -1802,6 +1822,7 @@ const rootRouteChildren: RootRouteChildren = {
   SiwesIndexRoute: SiwesIndexRoute,
   TalentIndexRoute: TalentIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
+  ApiClassVideosIngestRoute: ApiClassVideosIngestRoute,
   ApiPublicOgRoute: ApiPublicOgRoute,
   BlogCategorySlugRoute: BlogCategorySlugRoute,
   CareersJobsSlugRoute: CareersJobsSlugRoute,

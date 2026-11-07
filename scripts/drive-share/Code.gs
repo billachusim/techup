@@ -21,6 +21,13 @@
  *     file already in the folder, then is removed from the folder. New uploads
  *     after that reach students only through the website, one class at a time.
  * Every grant/removal is logged to a "Class video access log" sheet.
+ *
+ * Auto-attach new uploads (watchFolders, run hourly by a time trigger):
+ *   Script properties WATCH_FOLDERS = comma-separated folder IDs (e.g. Dave's
+ *   two class folders) and SITE_INGEST_URL = https://techfaculty.ng/api/class-videos/ingest.
+ *   Run setupWatcher() once from the editor. Each new video named like
+ *   month1week3day2_topic.mp4 is sent to the website, which attaches it to the
+ *   right class; students get it when they reach that class.
  */
 
 function doPost(e) {
@@ -153,4 +160,48 @@ function log_(what, email, id, note) {
     props.setProperty("LOG_SHEET", ss.getId());
   }
   ss.getSheets()[0].appendRow([new Date(), what, email, id, note]);
+}
+
+/** Run once from the editor: hourly trigger for watchFolders. */
+function setupWatcher() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === "watchFolders") ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger("watchFolders").timeBased().everyHours(1).create();
+  PropertiesService.getScriptProperties().setProperty("LAST_WATCH", String(Date.now()));
+}
+
+/** Sends each video uploaded since the last run to the website to attach. */
+function watchFolders() {
+  var props = PropertiesService.getScriptProperties();
+  var url = props.getProperty("SITE_INGEST_URL");
+  var secret = props.getProperty("SECRET");
+  var ids = String(props.getProperty("WATCH_FOLDERS") || "").split(",");
+  var since = Number(props.getProperty("LAST_WATCH") || Date.now());
+  var now = Date.now();
+  if (!url || !secret) return;
+  ids.forEach(function (id) {
+    id = id.trim();
+    if (!id) return;
+    var folder = DriveApp.getFolderById(id);
+    var all = [];
+    var it = folder.getFiles();
+    while (it.hasNext()) all.push(it.next());
+    var siblings = all.map(function (f) {
+      return { fileId: f.getId(), name: f.getName() };
+    });
+    all.forEach(function (f) {
+      if (f.getDateCreated().getTime() <= since) return;
+      if (String(f.getMimeType()).indexOf("video/") !== 0) return;
+      var res = UrlFetchApp.fetch(url, {
+        method: "post",
+        contentType: "application/json",
+        headers: { "x-drive-share-secret": secret },
+        payload: JSON.stringify({ fileId: f.getId(), name: f.getName(), siblings: siblings }),
+        muteHttpExceptions: true,
+      });
+      log_("auto-attach", "", f.getId(), f.getName() + " -> " + res.getContentText().slice(0, 200));
+    });
+  });
+  props.setProperty("LAST_WATCH", String(now));
 }

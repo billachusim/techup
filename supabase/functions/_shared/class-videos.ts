@@ -138,3 +138,50 @@ export function driveFileId(url: string): string | null {
   const id = m?.[1] ?? u.searchParams.get("id");
   return id && /^[A-Za-z0-9_-]{10,}$/.test(id) ? id : null;
 }
+
+export interface Lesson {
+  month: number;
+  week: number;
+  day: number;
+}
+
+/** "month1week3day2_topic.mp4", "Month2-Week3-Day1.mp4", "M1 wk3 day2" → lesson; else null. */
+export function parseLessonName(name: string): Lesson | null {
+  const m = name
+    .toLowerCase()
+    .match(/m(?:onth)?\s*[-_ ]?\s*(\d{1,2}).*?w(?:ee)?k?\s*[-_ ]?\s*(\d{1,2}).*?d(?:ay)?\s*[-_ ]?\s*(\d{1,2})/);
+  if (!m) return null;
+  const [month, week, day] = [m[1], m[2], m[3]].map(Number);
+  if (!month || !week || !day || week > 6 || day > 7) return null;
+  return { month, week, day };
+}
+
+const lessonOrder = (l: Lesson) => l.month * 100 + l.week * 10 + l.day;
+
+/**
+ * Which course and class a new lesson video belongs to, judged from the videos
+ * already attached from the same folder: the sibling from the same month and
+ * week, else the closest earlier lesson, else the closest later one.
+ */
+export function pickClassFor(
+  target: Lesson,
+  siblings: (Lesson & { course_id: string; class_number: number })[],
+): { course_id: string; class_number: number } | null {
+  if (!siblings.length) return null;
+  const same = siblings.find(
+    (s) => s.month === target.month && s.week === target.week,
+  );
+  const t = lessonOrder(target);
+  const earlier = siblings
+    .filter((s) => lessonOrder(s) <= t)
+    .sort((a, b) => lessonOrder(b) - lessonOrder(a))[0];
+  const later = siblings
+    .filter((s) => lessonOrder(s) > t)
+    .sort((a, b) => lessonOrder(a) - lessonOrder(b))[0];
+  const pick = same ?? earlier ?? later;
+  return pick ? { course_id: pick.course_id, class_number: pick.class_number } : null;
+}
+
+export function lessonTitle(l: Lesson): string {
+  return `Tech Faculty: Month ${l.month} Week ${l.week} Day ${l.day} class video`;
+}

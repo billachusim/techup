@@ -4,6 +4,9 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import {
   classResources,
+  lessonTitle,
+  parseLessonName,
+  pickClassFor,
   slackVideoLines,
   type ClassResource,
 } from "../../supabase/functions/_shared/class-videos.ts";
@@ -58,4 +61,61 @@ export async function classVideosFor(
   opts: Parameters<typeof classResourcesFor>[0],
 ): Promise<string[]> {
   return slackVideoLines(await classResourcesFor(opts));
+}
+
+const FILE_ID = /^[A-Za-z0-9_-]{10,}$/;
+
+/**
+ * Attach a newly uploaded lesson video to its class. Its course and class
+ * come from the same folder's videos already in class_videos (same month and
+ * week, else the nearest lesson). Returns why it was skipped otherwise.
+ */
+export async function ingestLessonVideo(input: {
+  fileId?: string;
+  name?: string;
+  siblings?: { fileId?: string; name?: string }[];
+}): Promise<{ ok: boolean; skipped?: string; course_id?: string; class_number?: number }> {
+  const fileId = String(input.fileId ?? "");
+  if (!FILE_ID.test(fileId)) return { ok: false, skipped: "bad fileId" };
+  const lesson = parseLessonName(String(input.name ?? ""));
+  if (!lesson) return { ok: false, skipped: "name has no month/week/day" };
+
+  const sibs = (input.siblings ?? [])
+    .map((s) => ({ fileId: String(s.fileId ?? ""), lesson: parseLessonName(String(s.name ?? "")) }))
+    .filter((s) => FILE_ID.test(s.fileId) && s.fileId !== fileId && s.lesson)
+    .slice(0, 300);
+  if (!sibs.length) return { ok: false, skipped: "no dated videos in folder" };
+
+  const { data: rows } = await db
+    .from("class_videos")
+    .select("course_id, class_number, url")
+    .eq("source", "drive")
+    .or(sibs.map((s) => `url.ilike.%${s.fileId}%`).join(","));
+  const known = ((rows ?? []) as { course_id: string; class_number: number; url: string }[])
+    .map((r) => {
+      const s = sibs.find((x) => r.url.includes(x.fileId));
+      return s?.lesson ? { ...s.lesson, course_id: r.course_id, class_number: r.class_number } : null;
+    })
+    .filter((x): x is NonNullable<typeof x> => !!x);
+  const target = pickClassFor(lesson, known);
+  if (!target) return { ok: false, skipped: "folder has no attached videos yet" };
+
+  const { data: existing } = await db
+    .from("class_videos")
+    .select("id")
+    .eq("course_id", target.course_id)
+    .eq("class_number", target.class_number);
+  const { error } = await db.from("class_videos").upsert(
+    {
+      course_id: target.course_id,
+      class_number: target.class_number,
+      title: lessonTitle(lesson),
+      url: `https://drive.google.com/file/d/${fileId}/view`,
+      source: "drive",
+      position: (existing ?? []).length,
+    },
+    { onConflict: "course_id,class_number,url" },
+  );
+  if (error) return { ok: false, skipped: error.message };
+  return { ok: true, ...target };
 }

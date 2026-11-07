@@ -16,8 +16,8 @@ export async function grantClassVideos(opts: {
   urls: string[];
   label?: string;
 }): Promise<{ granted: number; skipped?: string }> {
-  const endpoint = process.env["DRIVE_SHARE_URL"];
-  const secret = process.env["DRIVE_SHARE_SECRET"];
+  const endpoint = process.env["DRIVE_SHARE_URL"]?.trim();
+  const secret = process.env["DRIVE_SHARE_SECRET"]?.trim();
   const fileIds = [
     ...new Set(opts.urls.map(driveFileId).filter((x): x is string => !!x)),
   ];

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  classForMonth,
   classResources,
   driveFileId,
   parseLessonName,
@@ -103,5 +104,12 @@ describe("class video links", () => {
     expect(pickClassFor({ month: 1, week: 4, day: 1 }, sibs)).toEqual({ course_id: "a", class_number: 2 });
     expect(pickClassFor({ month: 2, week: 2, day: 1 }, sibs)).toEqual({ course_id: "b", class_number: 1 });
     expect(pickClassFor({ month: 1, week: 1, day: 1 }, [])).toBeNull();
+  });
+
+  it("places a new tutor folder's lesson by month, capped at the last class", () => {
+    expect(classForMonth({ month: 1, week: 2, day: 1 }, 4)).toBe(1);
+    expect(classForMonth({ month: 3, week: 1, day: 1 }, 4)).toBe(3);
+    expect(classForMonth({ month: 6, week: 1, day: 1 }, 4)).toBe(4);
+    expect(classForMonth({ month: 2, week: 1, day: 1 }, 0)).toBe(2);
   });
 });

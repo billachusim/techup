@@ -23,11 +23,20 @@
  * Every grant/removal is logged to a "Class video access log" sheet.
  *
  * Auto-attach new uploads (watchFolders, run hourly by a time trigger):
- *   Script properties WATCH_FOLDERS = comma-separated folder IDs (e.g. Dave's
- *   two class folders) and SITE_INGEST_URL = https://techfaculty.ng/api/class-videos/ingest.
+ *   Script properties SITE_INGEST_URL = https://techfaculty.ng/api/class-videos/ingest,
+ *   optional WATCH_FOLDERS = comma-separated folder IDs (Dave's first two
+ *   folders), optional TUTOR_SHEET = spreadsheet ID holding the "Tutor folders"
+ *   tab (defaults to the class video catalogue sheet).
  *   Run setupWatcher() once from the editor. Each new video named like
  *   month1week3day2_topic.mp4 is sent to the website, which attaches it to the
  *   right class; students get it when they reach that class.
+ *
+ * Adding a tutor (no code change): the tutor shares their class folder with
+ *   this account as Editor, then add a row to the "Tutor folders" tab:
+ *   Folder link | Website course name (exactly as on the site) | Tutor | (leave blank).
+ *   On the next hourly run every video already in that folder (and its
+ *   subfolders) is attached, the 4th column is stamped, and later uploads are
+ *   attached as they arrive.
  */
 
 function doPost(e) {
@@ -171,37 +180,101 @@ function setupWatcher() {
   PropertiesService.getScriptProperties().setProperty("LAST_WATCH", String(Date.now()));
 }
 
-/** Sends each video uploaded since the last run to the website to attach. */
+var CATALOGUE_SHEET = "1PzAU1zgJW-K8A0c2kEZS_QYFp_PJuRZce26mewAHA-Q";
+var TUTOR_TAB = "Tutor folders";
+
+function folderId_(v) {
+  v = String(v || "").trim();
+  var m = v.match(/\/folders\/([A-Za-z0-9_-]{10,})/) || v.match(/[?&]id=([A-Za-z0-9_-]{10,})/);
+  if (m) return m[1];
+  return /^[A-Za-z0-9_-]{10,}$/.test(v) ? v : "";
+}
+
+/** The "Tutor folders" tab (created with a header row if missing). */
+function tutorTab_() {
+  var id = PropertiesService.getScriptProperties().getProperty("TUTOR_SHEET") || CATALOGUE_SHEET;
+  var ss = SpreadsheetApp.openById(id);
+  var tab = ss.getSheetByName(TUTOR_TAB);
+  if (!tab) {
+    tab = ss.insertSheet(TUTOR_TAB);
+    tab.appendRow(["Folder link", "Website course name", "Tutor", "Attached since (filled by script)"]);
+    tab.setFrozenRows(1);
+  }
+  return tab;
+}
+
+/** Every file in a folder and its subfolders (3 levels). */
+function filesIn_(folder, depth, out) {
+  var it = folder.getFiles();
+  while (it.hasNext()) out.push(it.next());
+  if (depth <= 0) return out;
+  var subs = folder.getFolders();
+  while (subs.hasNext()) filesIn_(subs.next(), depth - 1, out);
+  return out;
+}
+
+/** Sends each new video in every watched folder to the website to attach. */
 function watchFolders() {
-  var props = PropertiesService.getScriptProperties();
-  var url = props.getProperty("SITE_INGEST_URL");
-  var secret = props.getProperty("SECRET");
-  var ids = String(props.getProperty("WATCH_FOLDERS") || "").split(",");
-  var since = Number(props.getProperty("LAST_WATCH") || Date.now());
-  var now = Date.now();
-  if (!url || !secret) return;
-  ids.forEach(function (id) {
-    id = id.trim();
-    if (!id) return;
-    var folder = DriveApp.getFolderById(id);
-    var all = [];
-    var it = folder.getFiles();
-    while (it.hasNext()) all.push(it.next());
-    var siblings = all.map(function (f) {
-      return { fileId: f.getId(), name: f.getName() };
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(1000)) return;
+  try {
+    var props = PropertiesService.getScriptProperties();
+    var url = props.getProperty("SITE_INGEST_URL");
+    var secret = props.getProperty("SECRET");
+    var since = Number(props.getProperty("LAST_WATCH") || Date.now());
+    var now = Date.now();
+    if (!url || !secret) return;
+
+    // [{ id, course, row, all }] from WATCH_FOLDERS and the Tutor folders tab.
+    var watch = [];
+    var seen = {};
+    String(props.getProperty("WATCH_FOLDERS") || "").split(",").forEach(function (v) {
+      var id = folderId_(v);
+      if (id && !seen[id]) { seen[id] = true; watch.push({ id: id, course: "", row: 0, all: false }); }
     });
-    all.forEach(function (f) {
-      if (f.getDateCreated().getTime() <= since) return;
-      if (String(f.getMimeType()).indexOf("video/") !== 0) return;
-      var res = UrlFetchApp.fetch(url, {
-        method: "post",
-        contentType: "application/json",
-        headers: { "x-drive-share-secret": secret },
-        payload: JSON.stringify({ fileId: f.getId(), name: f.getName(), siblings: siblings }),
-        muteHttpExceptions: true,
+    var tab = tutorTab_();
+    var rows = tab.getLastRow() > 1 ? tab.getRange(2, 1, tab.getLastRow() - 1, 4).getValues() : [];
+    rows.forEach(function (r, i) {
+      var id = folderId_(r[0]);
+      if (!id) return;
+      var course = String(r[1] || "").trim();
+      var fresh = !String(r[3] || "").trim();
+      if (seen[id]) {
+        watch.forEach(function (w) { if (w.id === id) { w.course = course; w.row = i + 2; w.all = fresh; } });
+        return;
+      }
+      seen[id] = true;
+      watch.push({ id: id, course: course, row: i + 2, all: fresh });
+    });
+
+    watch.forEach(function (w) {
+      var all;
+      try {
+        all = filesIn_(DriveApp.getFolderById(w.id), 3, []);
+      } catch (err) {
+        log_("auto-attach", "", w.id, "cannot open folder (share it with this account as Editor): " + err.message);
+        if (w.row) tab.getRange(w.row, 4).setValue("Cannot open folder: share it with this account as Editor");
+        return;
+      }
+      var siblings = all.map(function (f) { return { fileId: f.getId(), name: f.getName() }; }).slice(0, 300);
+      var sent = 0;
+      all.forEach(function (f) {
+        if (!w.all && f.getDateCreated().getTime() <= since) return;
+        if (String(f.getMimeType()).indexOf("video/") !== 0) return;
+        var res = UrlFetchApp.fetch(url, {
+          method: "post",
+          contentType: "application/json",
+          headers: { "x-drive-share-secret": secret },
+          payload: JSON.stringify({ fileId: f.getId(), name: f.getName(), course: w.course, siblings: siblings }),
+          muteHttpExceptions: true,
+        });
+        sent++;
+        log_("auto-attach", "", f.getId(), f.getName() + " -> " + res.getContentText().slice(0, 200));
       });
-      log_("auto-attach", "", f.getId(), f.getName() + " -> " + res.getContentText().slice(0, 200));
+      if (w.row && w.all) tab.getRange(w.row, 4).setValue(new Date() + " (" + sent + " videos sent)");
     });
-  });
-  props.setProperty("LAST_WATCH", String(now));
+    props.setProperty("LAST_WATCH", String(now));
+  } finally {
+    lock.releaseLock();
+  }
 }

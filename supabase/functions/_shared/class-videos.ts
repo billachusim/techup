@@ -182,6 +182,15 @@ export function pickClassFor(
   return pick ? { course_id: pick.course_id, class_number: pick.class_number } : null;
 }
 
+/**
+ * Class for a lesson from a tutor folder with no attached videos yet: its
+ * month, capped at the course's last class (courses run about 4 classes).
+ */
+export function classForMonth(target: Lesson, lastClass: number): number {
+  const last = Math.max(1, Math.floor(lastClass) || 4);
+  return Math.min(Math.max(1, target.month), last);
+}
+
 export function lessonTitle(l: Lesson): string {
   return `Tech Faculty: Month ${l.month} Week ${l.week} Day ${l.day} class video`;
 }

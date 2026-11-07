@@ -3,6 +3,7 @@
 // supabase/functions/_shared/class-videos.ts (real saved videos only).
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import {
+  classForMonth,
   classResources,
   lessonTitle,
   parseLessonName,
@@ -68,37 +69,85 @@ const FILE_ID = /^[A-Za-z0-9_-]{10,}$/;
 /**
  * Attach a newly uploaded lesson video to its class. Its course and class
  * come from the same folder's videos already in class_videos (same month and
- * week, else the nearest lesson). Returns why it was skipped otherwise.
+ * week, else the nearest lesson). A new tutor's folder has none yet, so the
+ * watcher also sends the folder's course name (from the "Tutor folders" sheet)
+ * and the video goes to the class matching its month, capped at the course's
+ * last class. Returns why it was skipped otherwise.
  */
 export async function ingestLessonVideo(input: {
   fileId?: string;
   name?: string;
+  course?: string;
   siblings?: { fileId?: string; name?: string }[];
-}): Promise<{ ok: boolean; skipped?: string; course_id?: string; class_number?: number }> {
+}): Promise<{
+  ok: boolean;
+  skipped?: string;
+  course_id?: string;
+  class_number?: number;
+}> {
   const fileId = String(input.fileId ?? "");
   if (!FILE_ID.test(fileId)) return { ok: false, skipped: "bad fileId" };
   const lesson = parseLessonName(String(input.name ?? ""));
   if (!lesson) return { ok: false, skipped: "name has no month/week/day" };
 
   const sibs = (input.siblings ?? [])
-    .map((s) => ({ fileId: String(s.fileId ?? ""), lesson: parseLessonName(String(s.name ?? "")) }))
+    .map((s) => ({
+      fileId: String(s.fileId ?? ""),
+      lesson: parseLessonName(String(s.name ?? "")),
+    }))
     .filter((s) => FILE_ID.test(s.fileId) && s.fileId !== fileId && s.lesson)
     .slice(0, 300);
-  if (!sibs.length) return { ok: false, skipped: "no dated videos in folder" };
 
-  const { data: rows } = await db
-    .from("class_videos")
-    .select("course_id, class_number, url")
-    .eq("source", "drive")
-    .or(sibs.map((s) => `url.ilike.%${s.fileId}%`).join(","));
-  const known = ((rows ?? []) as { course_id: string; class_number: number; url: string }[])
-    .map((r) => {
-      const s = sibs.find((x) => r.url.includes(x.fileId));
-      return s?.lesson ? { ...s.lesson, course_id: r.course_id, class_number: r.class_number } : null;
-    })
-    .filter((x): x is NonNullable<typeof x> => !!x);
-  const target = pickClassFor(lesson, known);
-  if (!target) return { ok: false, skipped: "folder has no attached videos yet" };
+  let target: { course_id: string; class_number: number } | null = null;
+  if (sibs.length) {
+    const { data: rows } = await db
+      .from("class_videos")
+      .select("course_id, class_number, url")
+      .eq("source", "drive")
+      .or(sibs.map((s) => `url.ilike.%${s.fileId}%`).join(","));
+    const known = (
+      (rows ?? []) as { course_id: string; class_number: number; url: string }[]
+    )
+      .map((r) => {
+        const s = sibs.find((x) => r.url.includes(x.fileId));
+        return s?.lesson
+          ? {
+              ...s.lesson,
+              course_id: r.course_id,
+              class_number: r.class_number,
+            }
+          : null;
+      })
+      .filter((x): x is NonNullable<typeof x> => !!x);
+    target = pickClassFor(lesson, known);
+  }
+  if (!target) {
+    const courseName = String(input.course ?? "")
+      .trim()
+      .slice(0, 120);
+    if (!courseName)
+      return {
+        ok: false,
+        skipped: "folder has no attached videos yet and no course given",
+      };
+    const { data: courses } = await db.from("courses").select("id, name");
+    const course = ((courses ?? []) as { id: string; name: string }[]).find(
+      (c) => c.name.trim().toLowerCase() === courseName.toLowerCase(),
+    );
+    if (!course)
+      return { ok: false, skipped: `no course named "${courseName}"` };
+    const { data: last } = await db
+      .from("class_videos")
+      .select("class_number")
+      .eq("course_id", course.id)
+      .order("class_number", { ascending: false })
+      .limit(1);
+    const lastClass = Number(last?.[0]?.class_number ?? 4);
+    target = {
+      course_id: course.id,
+      class_number: classForMonth(lesson, lastClass),
+    };
+  }
 
   const { data: existing } = await db
     .from("class_videos")

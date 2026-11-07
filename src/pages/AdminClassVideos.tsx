@@ -159,9 +159,10 @@ const AdminClassVideos = () => {
             <p className="text-muted-foreground text-sm">
               YouTube or Google Drive links saved here go out with that class
               automatically: on the student dashboard and in the Slack "next
-              class" post. Add at least one real video to every class. Drive
-              videos must be shared "Anyone with the link" so students can open
-              them.
+              class" post. Add at least one real video to every class. Keep
+              Drive videos "Restricted": each student's Google account is added
+              to a video only when they reach that class, so nobody gets a
+              folder or a later class early.
             </p>
           </div>
 

@@ -1,28 +1,21 @@
 import { describe, expect, it } from "vitest";
 import {
   classResources,
-  classTopic,
   parseVideoLine,
   slackVideoLines,
   videoSource,
-  youtubeSearchUrl,
 } from "../../supabase/functions/_shared/class-videos";
 
 describe("class video links", () => {
-  it("always gives a class at least one YouTube link", () => {
+  it("shows no made-up video when none is saved", () => {
     const r = classResources({
-      classTitle: "Class 1 — Web Development Basics",
-      courseName: "General Tech",
+      classTitle: "Web Development Basics",
       aiResources: [],
     });
-    expect(r).toHaveLength(1);
-    expect(r[0].type).toBe("youtube");
-    expect(r[0].url).toBe(
-      youtubeSearchUrl("Web Development Basics General Tech tutorial"),
-    );
+    expect(r).toEqual([]);
   });
 
-  it("puts curated tutor videos first and keeps Drive links", () => {
+  it("puts saved videos first and keeps AI reading links", () => {
     const r = classResources({
       classTitle: "Linux permissions",
       curated: [
@@ -30,43 +23,32 @@ describe("class video links", () => {
           title: "Week 1 day 2",
           url: "https://drive.google.com/file/d/abc/view",
         },
+        {
+          title: "Linux permissions explained",
+          url: "https://www.youtube.com/watch?v=real1",
+        },
       ],
       aiResources: [
         { type: "documentation", title: "Docs", url: "https://linux.die.net" },
       ],
     });
-    expect(r.map((x) => x.type)).toEqual(["drive", "documentation", "youtube"]);
+    expect(r.map((x) => x.type)).toEqual(["drive", "youtube", "documentation"]);
   });
 
-  it("does not add a search when a curated YouTube video exists", () => {
-    const r = classResources({
-      classTitle: "HTML",
-      curated: [{ title: "HTML intro", url: "https://youtu.be/xyz" }],
-    });
-    expect(r).toEqual([
-      { type: "youtube", title: "HTML intro", url: "https://youtu.be/xyz" },
-    ]);
-  });
-
-  it("turns AI-guessed YouTube video ids into searches and drops unsafe links", () => {
+  it("drops AI-guessed YouTube links and unsafe links", () => {
     const r = classResources({
       classTitle: "Nmap",
       aiResources: [
         {
           type: "youtube",
-          title: "Nmap tutorial - NetworkChuck",
+          title: "Nmap tutorial",
           url: "https://www.youtube.com/watch?v=FAKE123",
         },
+        { type: "website", title: "Guessed", url: "https://youtu.be/FAKE" },
         { type: "website", title: "bad", url: "javascript:alert(1)" },
       ],
     });
-    expect(r).toEqual([
-      {
-        type: "youtube",
-        title: "Nmap tutorial - NetworkChuck",
-        url: youtubeSearchUrl("Nmap tutorial - NetworkChuck"),
-      },
-    ]);
+    expect(r).toEqual([]);
   });
 
   it("formats Slack lines for videos only", () => {
@@ -77,13 +59,10 @@ describe("class video links", () => {
     expect(lines).toEqual(["• <https://drive.google.com/x|Day 1>"]);
   });
 
-  it("detects sources and topics", () => {
+  it("detects sources", () => {
     expect(videoSource("https://m.youtube.com/watch?v=1")).toBe("youtube");
     expect(videoSource("https://drive.google.com/file/d/1")).toBe("drive");
     expect(videoSource("https://vimeo.com/1")).toBe("other");
-    expect(classTopic("Class 2 — Network Security Fundamentals")).toBe(
-      "Network Security Fundamentals",
-    );
   });
 
   it("parses pasted admin lines", () => {

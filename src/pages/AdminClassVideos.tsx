@@ -159,9 +159,9 @@ const AdminClassVideos = () => {
             <p className="text-muted-foreground text-sm">
               YouTube or Google Drive links saved here go out with that class
               automatically: on the student dashboard and in the Slack "next
-              class" post. Classes without one still get a YouTube search link
-              for the topic. Drive videos must be shared "Anyone with the link"
-              so students can open them.
+              class" post. Add at least one real video to every class. Drive
+              videos must be shared "Anyone with the link" so students can open
+              them.
             </p>
           </div>
 
@@ -282,8 +282,8 @@ const AdminClassVideos = () => {
                 <CardContent>
                   {forCourse.length === 0 ? (
                     <p className="text-sm text-muted-foreground">
-                      No videos yet. Students still get a YouTube search link
-                      for each class topic.
+                      No videos yet. Students of this course get no class video
+                      until one is added here.
                     </p>
                   ) : (
                     <ul className="divide-y">

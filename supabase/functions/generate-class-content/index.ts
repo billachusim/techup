@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { canUseCourse, getCaller } from "../_shared/caller.ts";
+import { classResources, type ClassResource } from "../_shared/class-videos.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -51,6 +52,11 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Every class goes out with its video links (curated tutor videos first,
+  // always at least one working YouTube link), whatever path the response takes.
+  let withVideos = (resources: ClassResource[] | null | undefined): ClassResource[] =>
+    classResources({ classTitle: "Tech class", aiResources: resources });
+
   try {
     const body = await req.json().catch(() => ({}));
     const courseId = typeof body?.courseId === "string" ? body.courseId : "";
@@ -79,6 +85,14 @@ serve(async (req) => {
       .range(classNumber - 1, classNumber - 1)
       .maybeSingle();
     const classTitle: string = lecture?.title ?? `${courseName} — Class ${classNumber}`;
+    const { data: curated } = await authClient
+      .from("class_videos")
+      .select("title, url, source")
+      .eq("course_id", courseId)
+      .eq("class_number", classNumber)
+      .order("position", { ascending: true })
+      .order("created_at", { ascending: true });
+    withVideos = (resources) => classResources({ classTitle, courseName, curated, aiResources: resources });
     const forceRefresh = body?.forceRefresh === true && caller.isStaff;
     
     // Check cache first unless forceRefresh is true
@@ -108,7 +122,7 @@ serve(async (req) => {
                   title: cache.title,
                   summary: cache.summary,
                   description: cache.description,
-                  resources: cache.resources || [],
+                  resources: withVideos(cache.resources),
                   handoutContent: cache.handout_content,
                   cached: true
                 }),
@@ -133,7 +147,7 @@ serve(async (req) => {
         JSON.stringify({ 
           error: "API key not configured",
           description: `Welcome to ${classTitle}! In this class, you'll learn essential ${courseName} concepts and practical skills that will help advance your career in technology.`,
-          resources: [],
+          resources: withVideos([]),
           handoutContent: `# ${classTitle}\n\nThis is class ${classNumber} of 4 in the ${courseName} course.\n\n## Overview\nHandout content will be available soon. Please check back later or contact your instructor for more information.`
         }),
         {
@@ -211,7 +225,7 @@ serve(async (req) => {
     }
 
     // Generate resources with tool calling for structured output
-    const resourcesPrompt = `Generate 3-4 high-quality learning resources for "${classTitle}" in ${courseName}. Include a mix of YouTube videos, documentation, and articles.`;
+    const resourcesPrompt = `Generate 3-4 high-quality learning resources for "${classTitle}" in ${courseName}. Include a mix of YouTube videos, documentation, and articles. For each YouTube video give its exact title and channel name (we link it as a YouTube search, so do not guess video ids).`;
 
     let resources = [];
     try {
@@ -271,10 +285,8 @@ serve(async (req) => {
       resources = JSON.parse(toolCall.function.arguments).resources;
     } catch (error) {
       console.error("Failed to generate resources:", error);
-      resources = [
-        { type: "documentation", title: `${courseName} Official Documentation`, url: "https://docs.lovable.dev" },
-        { type: "website", title: "Learn More", url: "https://lovable.dev" }
-      ];
+      // No made-up links: withVideos() still adds a YouTube search for the topic.
+      resources = [];
     }
 
     // Generate handout content
@@ -342,7 +354,7 @@ Prepare for the next class by reviewing today's materials and completing any ass
       title: aiTitle,
       summary,
       description,
-      resources,
+      resources: withVideos(resources),
       handoutContent
     };
 
@@ -396,10 +408,7 @@ Prepare for the next class by reviewing today's materials and completing any ass
       JSON.stringify({ 
         error: error instanceof Error ? error.message : "Unknown error",
         description: "Welcome to this class! We'll cover important concepts and practical skills. This bootcamp session will help you develop the knowledge and abilities needed for your technology career.",
-        resources: [
-          { type: "documentation", title: "Course Documentation", url: "https://docs.lovable.dev" },
-          { type: "website", title: "Additional Resources", url: "https://lovable.dev" }
-        ],
+        resources: withVideos([]),
         handoutContent: `# Class Handout
 
 ## Overview

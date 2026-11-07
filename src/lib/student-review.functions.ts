@@ -120,6 +120,8 @@ const BriefInput = z.object({
   classTitle: z.string().min(1).max(200),
   classNumber: z.number().int().min(1).max(100).optional(),
   date: z.string().max(60).optional(),
+  courseId: z.string().uuid().optional(),
+  courseName: z.string().max(200).optional(),
 });
 
 /** Student: once per class, brief their Slack class group and email them. */
@@ -139,10 +141,19 @@ export const briefNextClass = createServerFn({ method: "POST" })
 
     if (profile?.slack_channel_id) {
       const { postChannelMessage } = await import("@/lib/slack.server");
+      const { classVideosFor } = await import("@/lib/class-videos.server");
+      const videos = await classVideosFor({
+        courseId: data.courseId,
+        classNumber: data.classNumber,
+        classTitle: data.classTitle,
+        courseName: data.courseName ?? program.title,
+      });
       const who = profile.slack_user_id ? `<@${profile.slack_user_id}>` : (profile.name ?? "a student");
       await postChannelMessage(
         profile.slack_channel_id,
-        `:books: Next class for ${who}: *${data.classNumber ? `Class ${data.classNumber} — ` : ""}${data.classTitle}*${data.date ? ` (${data.date})` : ""}.\nNotes and this week's assignment: https://techfaculty.ng/dashboard`,
+        `:books: Next class for ${who}: *${data.classNumber ? `Class ${data.classNumber} — ` : ""}${data.classTitle}*${data.date ? ` (${data.date})` : ""}.` +
+          `\n:tv: Class videos:\n${videos.join("\n")}` +
+          `\nNotes and this week's assignment: https://techfaculty.ng/dashboard`,
       );
     }
     if (profile?.email) {

@@ -4,7 +4,7 @@ import { COMMUNITY_WHATSAPP_URL } from "@/lib/whatsapp";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LogOut, Calendar, Users, BookOpen, ExternalLink, MessageCircle, CheckCircle2, Circle, FileText, BadgeCheck, RefreshCw } from "lucide-react";
+import { LogOut, Calendar, Users, BookOpen, ExternalLink, MessageCircle, CheckCircle2, Circle, FileText, BadgeCheck, RefreshCw, PlayCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
@@ -360,6 +360,8 @@ const Dashboard = () => {
         classTitle: title,
         classNumber: nextClassNumber,
         date: nextLecture.scheduled_at ? new Date(nextLecture.scheduled_at).toDateString() : undefined,
+        courseId: nextLecture.course_id || undefined,
+        courseName: nextLecture.courses?.name || undefined,
       },
     }).catch(() => { /* best effort */ });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -524,6 +526,22 @@ const Dashboard = () => {
                           <div><span className="text-muted-foreground">Time:</span> <span className="font-medium">{new Date(nextLecture.scheduled_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span></div>
                         )}
                       </div>
+                      {(() => {
+                        const videos = (aiGeneratedContent?.resources || []).filter((r) => ["youtube", "drive", "video"].includes(r.type));
+                        if (!videos.length) return null;
+                        return (
+                          <div className="space-y-1">
+                            <p className="text-sm font-medium flex items-center gap-1.5"><PlayCircle className="text-primary" size={16} />Class videos</p>
+                            <ul className="space-y-1">
+                              {videos.slice(0, 5).map((v) => (
+                                <li key={v.url}>
+                                  <a href={v.url} target="_blank" rel="noopener noreferrer" className="text-sm text-link hover:underline break-words">{v.title}</a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        );
+                      })()}
                       <Button size="sm" variant="outline" className="w-full" onClick={() => setHandoutModalOpen(true)}>
                         <FileText className="mr-2" size={16} />View Class Handout
                       </Button>

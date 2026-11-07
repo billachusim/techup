@@ -9,6 +9,7 @@ const ITEMS = [
   { to: "/admin/whatsapp", label: "WhatsApp" },
   { to: "/admin/slack", label: "Slack", adminOnly: true },
   { to: "/admin/students", label: "Students" },
+  { to: "/admin/class-videos", label: "Class videos" },
   { to: "/admin/talent", label: "Jobs" },
   { to: "/admin/certificates", label: "Certificates", adminOnly: true },
   { to: "/admin/referrals", label: "Referrals", adminOnly: true },

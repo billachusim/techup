@@ -33,6 +33,7 @@ import { Route as Why90OfTechLearnersQuitButYouDontHaveToRouteImport } from './r
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 import { Route as AdminCertificatesRouteImport } from './routes/admin.certificates'
+import { Route as AdminClassVideosRouteImport } from './routes/admin.class-videos'
 import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
 import { Route as AdminLookupRouteImport } from './routes/admin.lookup'
 import { Route as AdminReferralsRouteImport } from './routes/admin.referrals'
@@ -212,6 +213,11 @@ const AdminActivityRoute = AdminActivityRouteImport.update({
 const AdminCertificatesRoute = AdminCertificatesRouteImport.update({
   id: '/admin/certificates',
   path: '/admin/certificates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminClassVideosRoute = AdminClassVideosRouteImport.update({
+  id: '/admin/class-videos',
+  path: '/admin/class-videos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLeadsRoute = AdminLeadsRouteImport.update({
@@ -539,6 +545,7 @@ export interface FileRoutesByFullPath {
   '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/certificates': typeof AdminCertificatesRoute
+  '/admin/class-videos': typeof AdminClassVideosRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lookup': typeof AdminLookupRoute
   '/admin/referrals': typeof AdminReferralsRoute
@@ -624,6 +631,7 @@ export interface FileRoutesByTo {
   '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/certificates': typeof AdminCertificatesRoute
+  '/admin/class-videos': typeof AdminClassVideosRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lookup': typeof AdminLookupRoute
   '/admin/referrals': typeof AdminReferralsRoute
@@ -710,6 +718,7 @@ export interface FileRoutesById {
   '/why-90-of-tech-learners-quit-but-you-dont-have-to': typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
   '/admin/activity': typeof AdminActivityRoute
   '/admin/certificates': typeof AdminCertificatesRoute
+  '/admin/class-videos': typeof AdminClassVideosRoute
   '/admin/leads': typeof AdminLeadsRoute
   '/admin/lookup': typeof AdminLookupRoute
   '/admin/referrals': typeof AdminReferralsRoute
@@ -797,6 +806,7 @@ export interface FileRouteTypes {
     | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
     | '/admin/activity'
     | '/admin/certificates'
+    | '/admin/class-videos'
     | '/admin/leads'
     | '/admin/lookup'
     | '/admin/referrals'
@@ -882,6 +892,7 @@ export interface FileRouteTypes {
     | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
     | '/admin/activity'
     | '/admin/certificates'
+    | '/admin/class-videos'
     | '/admin/leads'
     | '/admin/lookup'
     | '/admin/referrals'
@@ -967,6 +978,7 @@ export interface FileRouteTypes {
     | '/why-90-of-tech-learners-quit-but-you-dont-have-to'
     | '/admin/activity'
     | '/admin/certificates'
+    | '/admin/class-videos'
     | '/admin/leads'
     | '/admin/lookup'
     | '/admin/referrals'
@@ -1053,6 +1065,7 @@ export interface RootRouteChildren {
   Why90OfTechLearnersQuitButYouDontHaveToRoute: typeof Why90OfTechLearnersQuitButYouDontHaveToRoute
   AdminActivityRoute: typeof AdminActivityRoute
   AdminCertificatesRoute: typeof AdminCertificatesRoute
+  AdminClassVideosRoute: typeof AdminClassVideosRoute
   AdminLeadsRoute: typeof AdminLeadsRoute
   AdminLookupRoute: typeof AdminLookupRoute
   AdminReferralsRoute: typeof AdminReferralsRoute
@@ -1280,6 +1293,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/certificates'
       fullPath: '/admin/certificates'
       preLoaderRoute: typeof AdminCertificatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/class-videos': {
+      id: '/admin/class-videos'
+      path: '/admin/class-videos'
+      fullPath: '/admin/class-videos'
+      preLoaderRoute: typeof AdminClassVideosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/leads': {
@@ -1738,6 +1758,7 @@ const rootRouteChildren: RootRouteChildren = {
     Why90OfTechLearnersQuitButYouDontHaveToRoute,
   AdminActivityRoute: AdminActivityRoute,
   AdminCertificatesRoute: AdminCertificatesRoute,
+  AdminClassVideosRoute: AdminClassVideosRoute,
   AdminLeadsRoute: AdminLeadsRoute,
   AdminLookupRoute: AdminLookupRoute,
   AdminReferralsRoute: AdminReferralsRoute,

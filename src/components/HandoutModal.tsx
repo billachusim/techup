@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Download, ExternalLink, Youtube, Globe, FileText } from "lucide-react";
+import { Download, ExternalLink, Youtube, Globe, FileText, PlayCircle } from "lucide-react";
 import { useState } from "react";
 
 interface Resource {
@@ -39,6 +39,9 @@ export const HandoutModal = ({
         return <Youtube className="h-4 w-4" />;
       case "website":
         return <Globe className="h-4 w-4" />;
+      case "drive":
+      case "video":
+        return <PlayCircle className="h-4 w-4" />;
       default:
         return <FileText className="h-4 w-4" />;
     }

@@ -90,7 +90,9 @@ describe("class video links", () => {
     expect(parseLessonName("month1week3day2_firewalls.mp4")).toEqual({ month: 1, week: 3, day: 2 });
     expect(parseLessonName("Month2-Week3-Day1.mp4")).toEqual({ month: 2, week: 3, day: 1 });
     expect(parseLessonName("Month1-wk1-day3.mp4")).toEqual({ month: 1, week: 1, day: 3 });
-    expect(parseLessonName("WEEK 3 LESSON 1.mp4")).toBeNull();
+    expect(parseLessonName("WEEK 3 LESSON 1.mp4")).toEqual({ month: 1, week: 3, day: 1 });
+    expect(parseLessonName("Week 6 - Day 1 wireframes.mp4")).toEqual({ month: 2, week: 2, day: 1 });
+    expect(parseLessonName("Pivot Tables.mp4")).toBeNull();
     expect(parseLessonName("intro.mp4")).toBeNull();
   });
 

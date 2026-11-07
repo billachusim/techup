@@ -145,12 +145,26 @@ export interface Lesson {
   day: number;
 }
 
-/** "month1week3day2_topic.mp4", "Month2-Week3-Day1.mp4", "M1 wk3 day2" → lesson; else null. */
+/**
+ * "month1week3day2_topic.mp4", "Month2-Week3-Day1.mp4", "M1 wk3 day2" → lesson.
+ * Without a month, "Week 6 - Day 1" or "WEEK 3 LESSON 1" counts weeks from the
+ * start (4 weeks a month), so week 6 is month 2 week 2. Else null.
+ */
 export function parseLessonName(name: string): Lesson | null {
-  const m = name
-    .toLowerCase()
-    .match(/m(?:onth)?\s*[-_ ]?\s*(\d{1,2}).*?w(?:ee)?k?\s*[-_ ]?\s*(\d{1,2}).*?d(?:ay)?\s*[-_ ]?\s*(\d{1,2})/);
-  if (!m) return null;
+  const lower = name.toLowerCase();
+  const m = lower.match(
+    /m(?:onth)?\s*[-_ ]?\s*(\d{1,2}).*?w(?:ee)?k?\s*[-_ ]?\s*(\d{1,2}).*?d(?:ay)?\s*[-_ ]?\s*(\d{1,2})/,
+  );
+  if (!m) {
+    const w = lower.match(
+      /\bw(?:ee)?k\s*[-_ ]?\s*(\d{1,2})\b.*?\b(?:day|lesson|class)\s*[-_ ]?\s*(\d{1,2})\b/,
+    );
+    if (!w) return null;
+    const weekNo = Number(w[1]);
+    const day = Number(w[2]);
+    if (!weekNo || weekNo > 52 || !day || day > 7) return null;
+    return { month: Math.ceil(weekNo / 4), week: ((weekNo - 1) % 4) + 1, day };
+  }
   const [month, week, day] = [m[1], m[2], m[3]].map(Number);
   if (!month || !week || !day || week > 6 || day > 7) return null;
   return { month, week, day };
@@ -179,7 +193,9 @@ export function pickClassFor(
     .filter((s) => lessonOrder(s) > t)
     .sort((a, b) => lessonOrder(a) - lessonOrder(b))[0];
   const pick = same ?? earlier ?? later;
-  return pick ? { course_id: pick.course_id, class_number: pick.class_number } : null;
+  return pick
+    ? { course_id: pick.course_id, class_number: pick.class_number }
+    : null;
 }
 
 /**

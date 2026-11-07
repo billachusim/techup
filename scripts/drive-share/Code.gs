@@ -118,14 +118,10 @@ function migrateFolder_(body) {
       }),
     };
   }
+  // Remove the folder access FIRST, then add each file. While the folder
+  // access exists Drive treats a file grant as already covered and drops it
+  // when the folder access is removed.
   people.forEach(function (em) {
-    files.forEach(function (f) {
-      try {
-        addViewer_(f.getId(), em);
-      } catch (err) {
-        log_("migrate grant failed", em, f.getId(), err.message);
-      }
-    });
     try {
       folder.removeViewer(em);
     } catch (e1) {}
@@ -133,6 +129,14 @@ function migrateFolder_(body) {
       folder.removeEditor(em);
     } catch (e2) {}
     log_("removed from folder", em, folder.getId(), folder.getName());
+    files.forEach(function (f) {
+      try {
+        addViewer_(f.getId(), em);
+        log_("grant", em, f.getId(), f.getName());
+      } catch (err) {
+        log_("migrate grant failed", em, f.getId(), err.message);
+      }
+    });
   });
   return { folder: folder.getName(), students: people, filesKept: files.length };
 }

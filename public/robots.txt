@@ -17,3 +17,4 @@ Allow: /
 # from the database so jobs, events and posts added between deploys are found.
 Sitemap: https://techfaculty.ng/sitemap.xml
 Sitemap: https://flxwtwzjslufglpwfjdx.supabase.co/functions/v1/sitemap
+Disallow: /demo/

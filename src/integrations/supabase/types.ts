@@ -406,6 +406,50 @@ export type Database = {
           },
         ]
       }
+      class_videos: {
+        Row: {
+          class_number: number
+          course_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          position: number
+          source: string
+          title: string
+          url: string
+        }
+        Insert: {
+          class_number: number
+          course_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          position?: number
+          source?: string
+          title: string
+          url: string
+        }
+        Update: {
+          class_number?: number
+          course_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          position?: number
+          source?: string
+          title?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_videos_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       course_enrollments: {
         Row: {
           course_id: string

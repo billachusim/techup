@@ -36,6 +36,7 @@ export const Route = createFileRoute("/api/class-videos/ingest")({
         const body = (await request.json().catch(() => null)) as {
           fileId?: string;
           name?: string;
+          course?: string;
           siblings?: { fileId?: string; name?: string }[];
         } | null;
         const { ingestLessonVideo } = await import("@/lib/class-videos.server");

@@ -4,6 +4,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Database } from "@/integrations/supabase/types";
 import { recordAdminAction } from "@/lib/admin-audit";
+import { groupPendingRequests } from "@/lib/pending-requests";
 
 async function assertAdmin(supabase: SupabaseClient<Database>, userId: string) {
   const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
@@ -28,7 +29,9 @@ export const listPendingEnrollments = createServerFn({ method: "POST" })
       ? await supabaseAdmin.from("profiles").select("faculty_id, name, email, phone").in("faculty_id", ids)
       : { data: [] };
     const byId = new Map((profiles ?? []).map((p) => [p.faculty_id, p]));
-    return (rows ?? []).map((r) => ({
+    // One card per student and plan: repeat requests and abandoned card
+    // checkouts for the same plan are folded into one (duplicate_ids).
+    return groupPendingRequests(rows ?? []).map((r) => ({
       ...r,
       student_name: byId.get(r.faculty_id)?.name || "Student",
       student_email: byId.get(r.faculty_id)?.email || null,
@@ -76,6 +79,18 @@ export const decidePendingEnrollment = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     if (!row) throw new Error("This enrolment is no longer pending");
 
+    // The same student's other pending requests for this plan are copies of
+    // this one: settle them together so they don't linger in the list. Their
+    // pay links are switched off by the hourly payment chase.
+    const { data: copies } = await supabaseAdmin
+      .from("enrollments")
+      .update({ status: "cancelled" })
+      .eq("faculty_id", row.faculty_id)
+      .eq("plan_name", row.plan_name)
+      .eq("status", "pending")
+      .neq("id", row.id)
+      .select("id");
+
     const { data: profile } = await supabaseAdmin
       .from("profiles").select("name").eq("faculty_id", row.faculty_id).limit(1).maybeSingle();
     await recordAdminAction(supabaseAdmin, context.userId, {
@@ -89,6 +104,16 @@ export const decidePendingEnrollment = createServerFn({ method: "POST" })
           ? { from: "pending", to: update.status, plan: row.plan_name, amount: data.amount, currency: data.currency, method: data.method }
           : { from: "pending", to: update.status, plan: row.plan_name, amount: row.amount_due, currency: row.currency },
     });
+    if (copies?.length) {
+      await recordAdminAction(supabaseAdmin, context.userId, {
+        action: "enrollment.duplicates_cancelled",
+        target_table: "enrollments",
+        target_id: row.id,
+        faculty_id: row.faculty_id,
+        subject: profile?.name ?? null,
+        details: { plan: row.plan_name, cancelled_ids: copies.map((c) => c.id) },
+      });
+    }
     return { ok: true as const };
   });
 

@@ -124,6 +124,11 @@ export function PendingPayments() {
                 {r.pay_link_created_at ? ` · cancels ${new Date(Date.parse(r.pay_link_created_at) + 14 * 24 * 3600 * 1000).toLocaleDateString()} if unpaid` : ""}
                 {r.pay_link_skipped_reason ? ` · no pay link: ${r.pay_link_skipped_reason}` : ""}
               </p>
+              {r.duplicate_ids.length > 0 && (
+                <p className="text-xs text-muted-foreground">
+                  Also asked {r.duplicate_ids.length} more time{r.duplicate_ids.length === 1 ? "" : "s"} for this plan; marking paid or cancelling settles all of them.
+                </p>
+              )}
             </div>
             <div className="flex gap-2">
               {r.pay_link_url && (

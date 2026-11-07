@@ -1,6 +1,6 @@
 // Server side of class video links: loads a class's curated tutor videos and
 // cached AI resources, then applies the shared rule in
-// supabase/functions/_shared/class-videos.ts (always at least one YouTube link).
+// supabase/functions/_shared/class-videos.ts (real saved videos only).
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import {
   classResources,
@@ -53,7 +53,7 @@ export async function classResourcesFor(opts: {
   });
 }
 
-/** Slack bullet lines for a class's videos; never empty. */
+/** Slack bullet lines for a class's saved videos (empty when none are saved). */
 export async function classVideosFor(
   opts: Parameters<typeof classResourcesFor>[0],
 ): Promise<string[]> {

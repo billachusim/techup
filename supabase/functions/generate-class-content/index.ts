@@ -52,8 +52,8 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // Every class goes out with its video links (curated tutor videos first,
-  // always at least one working YouTube link), whatever path the response takes.
+  // Every class goes out with its saved real videos (our Drive videos and
+  // checked YouTube videos), whatever path the response takes.
   let withVideos = (resources: ClassResource[] | null | undefined): ClassResource[] =>
     classResources({ classTitle: "Tech class", aiResources: resources });
 
@@ -225,7 +225,7 @@ serve(async (req) => {
     }
 
     // Generate resources with tool calling for structured output
-    const resourcesPrompt = `Generate 3-4 high-quality learning resources for "${classTitle}" in ${courseName}. Include a mix of YouTube videos, documentation, and articles. For each YouTube video give its exact title and channel name (we link it as a YouTube search, so do not guess video ids).`;
+    const resourcesPrompt = `Generate 3-4 high-quality learning resources for "${classTitle}" in ${courseName}. Use only official documentation and well-known articles (no YouTube or other video links; class videos are added separately).`;
 
     let resources = [];
     try {
@@ -285,7 +285,7 @@ serve(async (req) => {
       resources = JSON.parse(toolCall.function.arguments).resources;
     } catch (error) {
       console.error("Failed to generate resources:", error);
-      // No made-up links: withVideos() still adds a YouTube search for the topic.
+      // No made-up links; real class videos come from class_videos via withVideos().
       resources = [];
     }
 

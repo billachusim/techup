@@ -1,11 +1,8 @@
 // Video links for a class. Every class a student is sent (dashboard handout and
-// the Slack "next class" post) must carry at least one working video link.
-//
-// Curated links come first: tutors' YouTube or Google Drive videos saved per
-// class in public.class_videos (managed at /admin/class-videos). AI-suggested
-// YouTube links are rewritten to YouTube searches, because the model invents
-// video ids that often don't exist. If a class has no YouTube link at all, a
-// search for the class topic is added, so a student is never left without one.
+// the Slack "next class" post) carries the real videos saved for it in
+// public.class_videos (managed at /admin/class-videos): our own Google Drive
+// class videos and hand-checked YouTube videos. AI-suggested YouTube links are
+// never shown, because the model invents video ids that often don't exist.
 // Plain data with no imports, so the app and the edge functions share one rule.
 
 export interface ClassResource {
@@ -18,10 +15,6 @@ export interface CuratedVideo {
   title: string;
   url: string;
   source?: string | null;
-}
-
-export function youtubeSearchUrl(query: string): string {
-  return `https://www.youtube.com/results?search_query=${encodeURIComponent(query.trim())}`;
 }
 
 export function videoSource(url: string): "youtube" | "drive" | "other" {
@@ -41,7 +34,7 @@ export function videoSource(url: string): "youtube" | "drive" | "other" {
   return "other";
 }
 
-/** A link we can trust: http(s), and for YouTube a search page rather than an AI-guessed video id. */
+/** Only http(s) links. */
 function isSafeUrl(url: string): boolean {
   try {
     const u = new URL(url);
@@ -51,18 +44,10 @@ function isSafeUrl(url: string): boolean {
   }
 }
 
-/** Strip "Class 3 —", "Session 2" and similar so the topic makes a good search. */
-export function classTopic(classTitle: string): string {
-  return classTitle
-    .replace(/^\s*(class|session)\s+\d+\s*[—–:-]\s*/i, "")
-    .replace(/\s*-?\s*(session|class)\s+\d+/gi, "")
-    .trim();
-}
-
 /**
- * The resources list a student sees for one class: curated videos first, then
- * the AI-suggested resources (YouTube ones turned into searches), always with
- * at least one YouTube link.
+ * The resources list a student sees for one class: real curated videos first
+ * (our Drive videos and checked YouTube videos), then AI-suggested non-video
+ * reading.
  */
 export function classResources(opts: {
   classTitle: string;
@@ -92,42 +77,19 @@ export function classResources(opts: {
     });
   }
 
+  // AI-suggested YouTube links are left out: the model guesses video ids
+  // that often don't exist. Real videos come only from class_videos.
   for (const r of opts.aiResources ?? []) {
     if (!r || typeof r.url !== "string" || typeof r.title !== "string")
       continue;
     if (
       String(r.type).toLowerCase() === "youtube" ||
       videoSource(r.url) === "youtube"
-    ) {
-      const alreadySearch = /youtube\.com\/results\?/.test(r.url);
-      push({
-        type: "youtube",
-        title: r.title,
-        url: alreadySearch ? r.url : youtubeSearchUrl(r.title),
-      });
-    } else {
-      push(r);
-    }
+    )
+      continue;
+    push(r);
   }
 
-  if (!out.some((r) => r.type === "youtube")) {
-    const topic = classTopic(opts.classTitle) || opts.classTitle;
-    const query = [
-      topic,
-      opts.courseName &&
-      !topic.toLowerCase().includes(opts.courseName.toLowerCase())
-        ? opts.courseName
-        : "",
-      "tutorial",
-    ]
-      .filter(Boolean)
-      .join(" ");
-    push({
-      type: "youtube",
-      title: `YouTube: ${topic} videos`,
-      url: youtubeSearchUrl(query),
-    });
-  }
   return out;
 }
 

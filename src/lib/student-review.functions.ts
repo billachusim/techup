@@ -152,7 +152,7 @@ export const briefNextClass = createServerFn({ method: "POST" })
       await postChannelMessage(
         profile.slack_channel_id,
         `:books: Next class for ${who}: *${data.classNumber ? `Class ${data.classNumber} — ` : ""}${data.classTitle}*${data.date ? ` (${data.date})` : ""}.` +
-          `\n:tv: Class videos:\n${videos.join("\n")}` +
+          (videos.length ? `\n:tv: Class videos:\n${videos.join("\n")}` : "") +
           `\nNotes and this week's assignment: https://techfaculty.ng/dashboard`,
       );
     }

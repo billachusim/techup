@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Election Situation Room Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1220; --panel:#111a2e; --panel2:#16213a; --line:#22304f; --text:#e6ecf7; --muted:#8a9bbb;
+  --green:#22c55e; --amber:#f59e0b; --red:#ef4444; --blue:#3b82f6;
+  --pA:#16a34a; --pB:#2563eb; --pC:#dc2626; --pD:#d97706; --pE:#7c3aed; --pO:#64748b;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;font-size:14px}
+.wrap{max-width:1440px;margin:0 auto;padding:16px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:12px 16px;background:linear-gradient(90deg,#0f1b33,#111a2e);border:1px solid var(--line);border-radius:14px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .dot{width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 0 0 0 rgba(239,68,68,.7);animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(239,68,68,.6)}70%{box-shadow:0 0 0 10px rgba(239,68,68,0)}100%{box-shadow:0 0 0 0 rgba(239,68,68,0)}}
+h1{font-size:18px;margin:0;font-weight:800;letter-spacing:.2px}
+.sub{color:var(--muted);font-size:12px;margin-top:2px}
+.hdr-right{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--panel2);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+.chip b{color:var(--text)}
+.chip.live{color:#fecaca;border-color:#7f1d1d;background:#2a1215}
+.clock{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700}
+.banner{margin:10px 0 0;padding:8px 12px;border-radius:10px;background:#1c1a0e;border:1px solid #4d4313;color:#fde68a;font-size:12px}
+.grid{display:grid;gap:14px;margin-top:14px}
+.kpis{grid-template-columns:repeat(6,1fr)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.kpi .lbl{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.6px}
+.kpi .val{font-size:26px;font-weight:800;margin-top:6px;font-variant-numeric:tabular-nums}
+.kpi .delta{font-size:12px;color:var(--green);margin-top:2px}
+.bar{height:6px;background:#0b1323;border-radius:4px;margin-top:8px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--green);border-radius:4px;transition:width .8s}
+.main{grid-template-columns:1.35fr 1fr 1fr}
+.card h2{font-size:13px;margin:0 0 12px;text-transform:uppercase;letter-spacing:.7px;color:#c7d2e8;display:flex;justify-content:space-between;align-items:center}
+.card h2 small{font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0}
+.party{display:grid;grid-template-columns:110px 1fr 90px;align-items:center;gap:10px;margin:10px 0}
+.party .nm{display:flex;align-items:center;gap:8px;font-weight:700}
+.sw{width:12px;height:12px;border-radius:3px}
+.track{height:22px;background:#0b1323;border-radius:6px;overflow:hidden}
+.track>i{display:block;height:100%;border-radius:6px;transition:width .8s}
+.party .num{text-align:right;font-variant-numeric:tabular-nums}
+.party .num b{display:block;font-size:15px}
+.party .num span{color:var(--muted);font-size:11px}
+.lead{margin-top:12px;padding:10px 12px;border-radius:10px;background:#0f2a1a;border:1px solid #14532d;color:#bbf7d0;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.pill{display:inline-block;padding:2px 7px;border-radius:999px;font-size:11px;font-weight:700}
+.feed{max-height:330px;overflow:hidden}
+.feed .it{display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line);animation:slide .5s ease}
+@keyframes slide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.feed .t{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:11px;min-width:58px;padding-top:2px}
+.feed .tx{font-size:12.5px;line-height:1.35}
+.feed .tx small{color:var(--muted)}
+.heat{display:grid;grid-template-columns:repeat(18,1fr);gap:4px}
+.heat i{aspect-ratio:1;border-radius:4px;background:#1b2742;transition:background .6s}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:5px}
+.row2{grid-template-columns:1.35fr 2fr}
+.alerts .al{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:10px;margin-bottom:8px;font-size:12.5px}
+.al.r{background:#2a1215;border:1px solid #7f1d1d}
+.al.a{background:#2a2110;border:1px solid #78350f}
+.al.g{background:#0f2a1a;border:1px solid #14532d}
+svg text{fill:var(--muted);font-size:10px;font-family:Inter}
+footer{color:var(--muted);font-size:11.5px;text-align:center;padding:18px 0 6px;line-height:1.6}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.main,.row2{grid-template-columns:1fr}}
+@media (max-width:560px){.kpis{grid-template-columns:repeat(2,1fr)}.party{grid-template-columns:80px 1fr 70px}.kpi .val{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="dot"></div>
+      <div>
+        <h1 id="title">Election Situation Room</h1>
+        <div class="sub" id="subtitle">Live results monitor · 2027 elections · sample constituency (Anambra LGAs used for illustration)</div>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <span class="chip live">● LIVE (DEMO)</span>
+      <span class="chip">Sources: <b>public result sheets</b> + <b>field agents</b></span>
+      <span class="chip">Last sync <b id="sync">just now</b></span>
+      <span class="clock" id="clock">--:--:--</span>
+    </div>
+  </header>
+  <div class="banner">SAMPLE DEMO built by Tech Faculty. All names, parties and figures on this page are placeholder data for illustration only. Not affiliated with or endorsed by INEC.</div>
+
+  <section class="grid kpis">
+    <div class="card kpi"><div class="lbl">Polling units reported</div><div class="val" id="k-pu">0</div><div class="delta" id="k-pu-d">of 4,608</div><div class="bar"><i id="k-pu-b" style="width:0"></i></div></div>
+    <div class="card kpi"><div class="lbl">Result sheets uploaded</div><div class="val" id="k-up">0%</div><div class="delta">public portal (EC8A)</div><div class="bar"><i id="k-up-b" style="width:0;background:var(--blue)"></i></div></div>
+    <div class="card kpi"><div class="lbl">Registered voters</div><div class="val">2,656,437</div><div class="delta" style="color:var(--muted)">sample register</div></div>
+    <div class="card kpi"><div class="lbl">Accredited (BVAS)</div><div class="val" id="k-acc">0</div><div class="delta" id="k-turn">turnout 0%</div></div>
+    <div class="card kpi"><div class="lbl">Total valid votes</div><div class="val" id="k-valid">0</div><div class="delta" id="k-rej" style="color:var(--amber)">rejected 0</div></div>
+    <div class="card kpi"><div class="lbl">Our agents online</div><div class="val" id="k-ag">3,912</div><div class="delta">85% of polling units covered</div></div>
+  </section>
+
+  <section class="grid main">
+    <div class="card">
+      <h2>Running totals <small id="pct-note">0% of polling units</small></h2>
+      <div id="parties"></div>
+      <div class="lead" id="lead">Waiting for first results…</div>
+    </div>
+    <div class="card">
+      <h2>Results by LGA <small>sample</small></h2>
+      <table id="lga"><thead><tr><th>LGA</th><th>PUs in</th><th>Party A</th><th>Party B</th><th>Lead</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div class="card">
+      <h2>Live result feed <small>auto-updating</small></h2>
+      <div class="feed" id="feed"></div>
+    </div>
+  </section>
+
+  <section class="grid row2">
+    <div class="card">
+      <h2>Polling unit status by ward <small>each square = one ward</small></h2>
+      <div class="heat" id="heat"></div>
+      <div class="legend">
+        <span><i class="sw" style="background:#1b2742"></i>Awaiting</span>
+        <span><i class="sw" style="background:#475569"></i>Partly in</span>
+        <span><i class="sw" style="background:var(--pA)"></i>Party A leads</span>
+        <span><i class="sw" style="background:var(--pB)"></i>Party B leads</span>
+        <span><i class="sw" style="background:var(--red)"></i>Incident flagged</span>
+      </div>
+      <h2 style="margin-top:18px">Alerts for the situation room</h2>
+      <div class="alerts" id="alerts"></div>
+    </div>
+    <div class="card">
+      <h2>Results uploaded over time <small>polling units reporting, cumulative</small></h2>
+      <svg id="chart" viewBox="0 0 640 230" width="100%" preserveAspectRatio="none"></svg>
+      <h2 style="margin-top:14px">Agent report vs public result sheet <small>mismatch check</small></h2>
+      <table id="cmp"><thead><tr><th>Polling unit</th><th>Agent (A / B)</th><th>Result sheet (A / B)</th><th>Status</th></tr></thead><tbody></tbody></table>
+    </div>
+  </section>
+
+  <footer>Sample election monitoring dashboard · Built by <b>Tech Faculty</b> (techfaculty.ng) · Placeholder data refreshes every few seconds to show how live results would flow in.<br>The full build connects to publicly available result sheets and your own field agents' reports.</footer>
+</div>
+
+<script>
+const PARTIES=[
+  {k:'A',name:'Party A',c:'var(--pA)',w:.41},
+  {k:'B',name:'Party B',c:'var(--pB)',w:.33},
+  {k:'C',name:'Party C',c:'var(--pC)',w:.14},
+  {k:'D',name:'Party D',c:'var(--pD)',w:.07},
+  {k:'E',name:'Others',c:'var(--pO)',w:.05},
+];
+const LGAS=['Aguata','Anambra East','Anambra West','Anaocha','Awka North','Awka South','Ayamelum','Dunukofia','Ekwusigo','Idemili North','Idemili South','Ihiala','Njikoka','Nnewi North','Nnewi South','Ogbaru','Onitsha North','Onitsha South','Orumba North','Orumba South','Oyi'];
+const WB=Array.from({length:400},(_,i)=>((i*7919)%100)/100*.75-.5);
+const TOTAL_PU=4608, WARDS=326, REG=2656437;
+let seed=7;function rnd(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646}
+const st={pu:0,votes:{A:0,B:0,C:0,D:0,E:0},acc:0,rej:0,hist:[],lga:LGAS.map(n=>({n,pu:0,tot:Math.round(TOTAL_PU/LGAS.length),A:0,B:0,bias:rnd()*.24-.12})),ward:Array.from({length:WARDS},()=>({A:0,B:0})),inc:new Set()};
+const fmt=n=>n.toLocaleString('en-US');
+
+function addPU(){
+  if(st.pu>=TOTAL_PU)return null;
+  const l=st.lga[Math.floor(rnd()*st.lga.length)];
+  if(l.pu>=l.tot)return null;
+  const acc=Math.round(180+rnd()*260);
+  const rej=Math.round(acc*(.01+rnd()*.025));
+  const valid=acc-rej;let left=valid;const v={};
+  PARTIES.forEach((p,i)=>{let w=p.w+(p.k==='A'?l.bias:p.k==='B'?-l.bias:0)+(rnd()-.5)*.08;w=Math.max(.01,w);v[p.k]=i<PARTIES.length-1?Math.min(left,Math.round(valid*w)):left;left-=v[p.k]});
+  for(const k in v){st.votes[k]+=v[k]}
+  l.pu++;l.A+=v.A;l.B+=v.B;st.pu++;st.acc+=acc;st.rej+=rej;
+  const w=Math.floor(rnd()*WARDS);st.ward[w].A+=v.A;st.ward[w].B+=v.B;
+  return {l,v,acc,ward:w};
+}
+function tick(n){
+  let last=null;for(let i=0;i<n;i++){const r=addPU();if(r)last=r}
+  st.hist.push(st.pu);if(st.hist.length>48)st.hist.shift();
+  render(last);
+}
+function render(last){
+  const pct=st.pu/TOTAL_PU*100;
+  q('k-pu').textContent=fmt(st.pu);q('k-pu-b').style.width=pct+'%';q('k-pu-d').textContent=`of ${fmt(TOTAL_PU)} (${pct.toFixed(1)}%)`;
+  const up=Math.min(100,pct*.93);q('k-up').textContent=up.toFixed(1)+'%';q('k-up-b').style.width=up+'%';
+  q('k-acc').textContent=fmt(st.acc);q('k-turn').textContent='turnout '+(st.acc/REG*100).toFixed(1)+'% so far';
+  const valid=Object.values(st.votes).reduce((a,b)=>a+b,0);
+  q('k-valid').textContent=fmt(valid);q('k-rej').textContent='rejected '+fmt(st.rej);
+  q('pct-note').textContent=pct.toFixed(1)+'% of polling units';
+  const max=Math.max(...Object.values(st.votes),1);
+  q('parties').innerHTML=PARTIES.map(p=>{const v=st.votes[p.k],s=valid?v/valid*100:0;return `<div class="party"><div class="nm"><i class="sw" style="background:${p.c}"></i>${p.name}</div><div class="track"><i style="width:${v/max*100}%;background:${p.c}"></i></div><div class="num"><b>${fmt(v)}</b><span>${s.toFixed(1)}%</span></div></div>`}).join('');
+  const sorted=PARTIES.slice().sort((a,b)=>st.votes[b.k]-st.votes[a.k]);
+  if(valid){const m=st.votes[sorted[0].k]-st.votes[sorted[1].k];q('lead').innerHTML=`<b>${sorted[0].name}</b> leads by <b>${fmt(m)}</b> votes with ${pct.toFixed(1)}% of polling units in. Spread rule: leading in <b>${st.lga.filter(l=>l.A>l.B).length}</b> of ${LGAS.length} LGAs.`}
+  q('lga').querySelector('tbody').innerHTML=st.lga.slice().sort((a,b)=>b.pu-a.pu).slice(0,9).map(l=>{const lead=l.A===l.B?'<span class="pill" style="background:#22304f">—</span>':l.A>l.B?'<span class="pill" style="background:#14532d;color:#bbf7d0">A +'+fmt(l.A-l.B)+'</span>':'<span class="pill" style="background:#1e3a8a;color:#bfdbfe">B +'+fmt(l.B-l.A)+'</span>';return `<tr><td>${l.n}</td><td>${l.pu}/${l.tot}</td><td>${fmt(l.A)}</td><td>${fmt(l.B)}</td><td>${lead}</td></tr>`}).join('');
+  if(last){const t=new Date().toTimeString().slice(0,8);const pu=String(Math.floor(rnd()*40)+1).padStart(3,'0');const wd=String(Math.floor(rnd()*14)+1).padStart(2,'0');
+    const el=document.createElement('div');el.className='it';el.innerHTML=`<div class="t">${t}</div><div class="tx"><b>${last.l.n}</b> · Ward ${wd} · PU ${pu} result sheet received<br><small>A ${fmt(last.v.A)} · B ${fmt(last.v.B)} · C ${fmt(last.v.C)} · accredited ${last.acc}</small></div>`;
+    const f=q('feed');f.prepend(el);while(f.children.length>8)f.lastChild.remove();}
+  q('heat').innerHTML=st.ward.slice(0,126).map((s,i)=>{const n=s.A+s.B;const c=st.inc.has(i)?'var(--red)':n===0?'#1b2742':n<1500?'#475569':s.A*(1+WB[i])>=s.B?'var(--pA)':'var(--pB)';return `<i title="Ward ${i+1}" style="background:${c}"></i>`}).join('');
+  drawChart();
+  q('sync').textContent=new Date().toTimeString().slice(0,8);
+}
+function drawChart(){
+  const h=st.hist,W=640,H=230,p=30;const mx=TOTAL_PU;
+  const pts=h.map((v,i)=>[p+i*(W-p-10)/47,H-p-(v/mx)*(H-p-14)]);
+  let g='';for(let i=0;i<=4;i++){const y=H-p-i*(H-p-14)/4;g+=`<line x1="${p}" x2="${W-10}" y1="${y}" y2="${y}" stroke="#22304f"/><text x="2" y="${y+3}">${Math.round(mx*i/4/100)/10}k</text>`}
+  const d=pts.map((pt,i)=>(i?'L':'M')+pt[0].toFixed(1)+' '+pt[1].toFixed(1)).join(' ');
+  const area=pts.length?d+` L${pts[pts.length-1][0]} ${H-p} L${pts[0][0]} ${H-p} Z`:'';
+  q('chart').innerHTML=`<defs><linearGradient id="gr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b82f6" stop-opacity=".45"/><stop offset="1" stop-color="#3b82f6" stop-opacity="0"/></linearGradient></defs>${g}<path d="${area}" fill="url(#gr)"/><path d="${d}" fill="none" stroke="#60a5fa" stroke-width="2.5"/><text x="${p}" y="${H-10}">Polls close</text><text x="${W-80}" y="${H-10}">Now</text>`;
+}
+function alerts(){
+  q('alerts').innerHTML=[
+    ['r','🔴','<b>Ihiala · Ward 07 · PU 014:</b> agent reports BVAS not working since 10:42. Escalated to legal team.'],
+    ['a','🟠','<b>Ogbaru · Ward 03:</b> 6 polling units counted but result sheets not yet on public portal (over 2 hrs).'],
+    ['a','🟠','<b>Onitsha North · PU 022:</b> votes on result sheet differ from agent report by 118. Flagged for review.'],
+    ['g','🟢','<b>Awka South:</b> 92% of polling units in, no incidents reported.'],
+  ].map(a=>`<div class="al ${a[0]}"><span>${a[1]}</span><span>${a[2]}</span></div>`).join('');
+  q('cmp').querySelector('tbody').innerHTML=[
+    ['Onitsha North · W05 · PU 022','212 / 141','330 / 141','<span class="pill" style="background:#7f1d1d;color:#fecaca">Mismatch</span>'],
+    ['Nnewi North · W02 · PU 009','188 / 97','188 / 97','<span class="pill" style="background:#14532d;color:#bbf7d0">Match</span>'],
+    ['Aguata · W11 · PU 031','154 / 166','154 / 166','<span class="pill" style="background:#14532d;color:#bbf7d0">Match</span>'],
+    ['Ogbaru · W03 · PU 006','201 / 120','awaiting upload','<span class="pill" style="background:#78350f;color:#fde68a">Pending</span>'],
+  ].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('');
+}
+function q(id){return document.getElementById(id)}
+setInterval(()=>{q('clock').textContent=new Date().toTimeString().slice(0,8)},1000);
+st.inc=new Set([12,47,95]);
+// warm start so the page is never empty
+for(let i=0;i<44;i++){const n=Math.round(20+90*Math.sin(Math.PI*i/44));for(let j=0;j<n;j++)addPU();st.hist.push(st.pu)}
+alerts();render(null);for(let i=0;i<6;i++)tick(1);
+setInterval(()=>tick(3+Math.floor(rnd()*6)),2500);
+</script>
+</body>
+</html>

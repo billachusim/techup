@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 import {
   classResources,
   driveFileId,
+  parseLessonName,
   parseVideoLine,
+  pickClassFor,
   slackVideoLines,
   videoSource,
 } from "../../supabase/functions/_shared/class-videos";
@@ -81,5 +83,25 @@ describe("class video links", () => {
     expect(driveFileId("https://drive.google.com/open?id=1AbC_def-123456789")).toBe("1AbC_def-123456789");
     expect(driveFileId("https://youtu.be/abc")).toBeNull();
     expect(driveFileId("https://drive.google.com/drive/folders/")).toBeNull();
+  });
+
+  it("reads month/week/day from tutor file names", () => {
+    expect(parseLessonName("month1week3day2_firewalls.mp4")).toEqual({ month: 1, week: 3, day: 2 });
+    expect(parseLessonName("Month2-Week3-Day1.mp4")).toEqual({ month: 2, week: 3, day: 1 });
+    expect(parseLessonName("Month1-wk1-day3.mp4")).toEqual({ month: 1, week: 1, day: 3 });
+    expect(parseLessonName("WEEK 3 LESSON 1.mp4")).toBeNull();
+    expect(parseLessonName("intro.mp4")).toBeNull();
+  });
+
+  it("puts a new lesson in the class of its folder siblings", () => {
+    const sibs = [
+      { month: 1, week: 1, day: 1, course_id: "a", class_number: 1 },
+      { month: 1, week: 2, day: 1, course_id: "a", class_number: 2 },
+      { month: 2, week: 1, day: 1, course_id: "b", class_number: 1 },
+    ];
+    expect(pickClassFor({ month: 1, week: 2, day: 3 }, sibs)).toEqual({ course_id: "a", class_number: 2 });
+    expect(pickClassFor({ month: 1, week: 4, day: 1 }, sibs)).toEqual({ course_id: "a", class_number: 2 });
+    expect(pickClassFor({ month: 2, week: 2, day: 1 }, sibs)).toEqual({ course_id: "b", class_number: 1 });
+    expect(pickClassFor({ month: 1, week: 1, day: 1 }, [])).toBeNull();
   });
 });

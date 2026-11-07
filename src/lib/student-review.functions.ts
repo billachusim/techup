@@ -139,15 +139,17 @@ export const briefNextClass = createServerFn({ method: "POST" })
       .from("profiles").select("name, email, department, slack_user_id, slack_channel_id").eq("id", context.userId).maybeSingle();
     const program = findProgram(profile?.department);
 
+    // This class's saved videos (Drive access is given by openClassVideos).
+    const { classVideosFor } = await import("@/lib/class-videos.server");
+    const videos = await classVideosFor({
+      courseId: data.courseId,
+      classNumber: data.classNumber,
+      classTitle: data.classTitle,
+      courseName: data.courseName ?? program.title,
+    });
+
     if (profile?.slack_channel_id) {
       const { postChannelMessage } = await import("@/lib/slack.server");
-      const { classVideosFor } = await import("@/lib/class-videos.server");
-      const videos = await classVideosFor({
-        courseId: data.courseId,
-        classNumber: data.classNumber,
-        classTitle: data.classTitle,
-        courseName: data.courseName ?? program.title,
-      });
       const who = profile.slack_user_id ? `<@${profile.slack_user_id}>` : (profile.name ?? "a student");
       await postChannelMessage(
         profile.slack_channel_id,
@@ -166,4 +168,43 @@ export const briefNextClass = createServerFn({ method: "POST" })
       } catch (e) { console.error("class email failed", (e as Error).message); }
     }
     return { ok: true as const, alreadySent: false };
+  });
+
+/**
+ * Opens this student's Drive class videos: their email becomes a Viewer on the
+ * Drive videos of the classes they have reached in a course (class 1 up to
+ * their current class), and on nothing else. The current class comes from the
+ * database (course_progress), not from the browser, so a student can't open a
+ * later class early. Safe to call on every dashboard load: granting again
+ * changes nothing, and a failed grant is simply retried next time.
+ */
+export const openClassVideos = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ courseId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: profile } = await supabaseAdmin
+      .from("profiles").select("email, faculty_id").eq("id", context.userId).maybeSingle();
+    if (!profile?.email || !profile.faculty_id) return { granted: 0 };
+
+    const [{ data: enrolment }, { data: progress }] = await Promise.all([
+      supabaseAdmin.from("course_enrollments").select("id")
+        .eq("faculty_id", profile.faculty_id).eq("course_id", data.courseId).limit(1).maybeSingle(),
+      supabaseAdmin.from("course_progress").select("classes_completed")
+        .eq("faculty_id", profile.faculty_id).eq("course_id", data.courseId).maybeSingle(),
+    ]);
+    if (!enrolment) return { granted: 0 };
+    const currentClass = (progress?.classes_completed ?? 0) + 1;
+
+    // class_videos comes from a migration that generated types may not include yet.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const db = supabaseAdmin as unknown as { from: (table: string) => any };
+    const { data: rows } = await db.from("class_videos").select("url")
+      .eq("course_id", data.courseId).eq("source", "drive").lte("class_number", currentClass);
+    const urls = ((rows ?? []) as { url: string }[]).map((r) => r.url);
+    if (!urls.length) return { granted: 0 };
+
+    const { grantClassVideos } = await import("@/lib/drive-share.server");
+    const r = await grantClassVideos({ email: profile.email, urls, label: `course ${data.courseId} up to class ${currentClass}` });
+    return { granted: r.granted };
   });

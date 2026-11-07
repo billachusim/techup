@@ -121,3 +121,20 @@ export function parseVideoLine(
     return null;
   return { class_number: n, title: parts[1], url };
 }
+
+/**
+ * The Google Drive file id in a Drive link, or null for any other link.
+ * Handles /file/d/<id>/..., open?id=<id> and uc?id=<id>.
+ */
+export function driveFileId(url: string): string | null {
+  if (videoSource(url) !== "drive") return null;
+  let u: URL;
+  try {
+    u = new URL(url);
+  } catch {
+    return null;
+  }
+  const m = u.pathname.match(/\/(?:file\/)?d\/([A-Za-z0-9_-]{10,})/);
+  const id = m?.[1] ?? u.searchParams.get("id");
+  return id && /^[A-Za-z0-9_-]{10,}$/.test(id) ? id : null;
+}

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   classResources,
+  driveFileId,
   parseVideoLine,
   slackVideoLines,
   videoSource,
@@ -73,5 +74,12 @@ describe("class video links", () => {
     });
     expect(parseVideoLine("x | Recon | https://a")).toBeNull();
     expect(parseVideoLine("3 | Recon | ftp://a")).toBeNull();
+  });
+
+  it("reads the Drive file id from Drive links only", () => {
+    expect(driveFileId("https://drive.google.com/file/d/1AbC_def-123456789/view?usp=sharing")).toBe("1AbC_def-123456789");
+    expect(driveFileId("https://drive.google.com/open?id=1AbC_def-123456789")).toBe("1AbC_def-123456789");
+    expect(driveFileId("https://youtu.be/abc")).toBeNull();
+    expect(driveFileId("https://drive.google.com/drive/folders/")).toBeNull();
   });
 });

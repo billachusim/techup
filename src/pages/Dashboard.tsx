@@ -19,7 +19,7 @@ import { LocationPrompt } from "@/components/student/LocationPrompt";
 import { isFreePlan } from "../../supabase/functions/_shared/enrollment-access.ts";
 
 import { useServerFn } from "@tanstack/react-start";
-import { briefNextClass } from "@/lib/student-review.functions";
+import { briefNextClass, openClassVideos } from "@/lib/student-review.functions";
 import { claimMyCertificates } from "@/lib/certificate-auto-issue.functions";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -366,6 +366,15 @@ const Dashboard = () => {
     }).catch(() => { /* best effort */ });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nextLecture?.course_id, nextLecture?.title, nextClassNumber, facultyId]);
+
+  // Give this student's Google account access to the Drive videos of the
+  // classes they have reached (never a folder, never a later class).
+  const runOpenVideos = useServerFn(openClassVideos);
+  useEffect(() => {
+    if (!nextLecture?.course_id || !facultyId) return;
+    void runOpenVideos({ data: { courseId: nextLecture.course_id } }).catch(() => { /* best effort */ });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nextLecture?.course_id, nextClassNumber, facultyId]);
 
   const handleRefreshContent = async () => {
     if (!nextLecture?.course_id || !facultyId) return;

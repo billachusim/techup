@@ -17,9 +17,19 @@ function sameKey(a: string, b: string) {
 export const Route = createFileRoute("/api/class-videos/ingest")({
   server: {
     handlers: {
+      // Safe setup check: says whether the server can see the secrets, and the
+      // secret's length, never its value.
+      GET: async () => {
+        const secret = (process.env["DRIVE_SHARE_SECRET"] ?? "").trim();
+        return Response.json({
+          secret_set: secret.length > 0,
+          secret_length: secret.length,
+          share_url_set: !!process.env["DRIVE_SHARE_URL"],
+        });
+      },
       POST: async ({ request }) => {
-        const secret = process.env["DRIVE_SHARE_SECRET"] ?? "";
-        const given = request.headers.get("x-drive-share-secret") ?? "";
+        const secret = (process.env["DRIVE_SHARE_SECRET"] ?? "").trim();
+        const given = (request.headers.get("x-drive-share-secret") ?? "").trim();
         if (!secret || !given || !sameKey(given, secret)) {
           return Response.json({ error: "Not allowed" }, { status: 401 });
         }

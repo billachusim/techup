@@ -6,5 +6,8 @@
 - [x] Weekly Monday community update (open roles, free bootcamp, courses, careers, events) to #general — scheduled; needs publish
 - [ ] Auto-answer questions in Slack — built; waiting on publish + creating the Tech Faculty NG Slack app (needs Bill's go-ahead to publish)
 
+## Claude PRs
+- [ ] Review PR #101 "Work trial before selection" (merge vetting) — waiting for it to be merged into main
+
 ## Notes
 - Do not post in the dedicated Aboutbot channel; posting about Aboutbot roles elsewhere is fine.

@@ -47,7 +47,7 @@ async function buildFacts(): Promise<string> {
   };
   return [
     `Links: free bootcamp ${LINKS.freeBootcamp}; courses & fees ${LINKS.courses}; departments ${LINKS.departments}; jobs ${LINKS.careers}; events ${LINKS.events}; SIWES ${LINKS.siwes}; Virtual SIWES ${LINKS.virtualSiwes}; campuses ${LINKS.locations}; certificate check ${LINKS.verify}.`,
-    "Classes run online twice a week (Tue/Thu 6pm Lagos); each student starts from class 1 on their own timetable. Graduates get a verifiable Certificate of Achievement.",
+    "Online classes run 2-3 times a week at 6pm Lagos depending on level (beginner Mon/Wed/Fri, intermediate Tue/Thu, advanced Tue only); each student starts from class 1 on their own timetable. Every class has a task the AI tutor marks, and a pass unlocks the next class. Graduates get a verifiable Certificate of Achievement.",
     "Open roles (apply on the page; matching is automatic, selected people are added to the project Slack channel):",
     ...roles.map((r) => `- ${r.title} | ${r.company ?? ""} | ${r.is_remote ? "remote" : r.city ?? ""}${r.pay_text ? ` | pay: ${r.pay_text}` : ""} | ${roleUrl(r.slug)}`),
     "Fees:", auto("how much are your course prices"),

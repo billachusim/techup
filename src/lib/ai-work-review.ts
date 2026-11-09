@@ -20,6 +20,8 @@ export type WorkForReview = {
   proof_url: string | null;
   course_name: string | null;
   class_number: number | null;
+  /** The task set for this class, when there is one (online classes). */
+  task?: string | null;
 };
 
 /** True for http(s) links to public hosts; refuses localhost, private and link-local addresses. */
@@ -70,12 +72,12 @@ export function buildReviewPrompt(work: WorkForReview, page: { text: string; sta
 
 PROGRAMME: ${work.course_name ?? "unknown"}
 CLASS: ${work.class_number ?? "not given"}
-TITLE: ${work.title}
+${work.task?.trim() ? `TASK SET FOR THIS CLASS: ${work.task.trim()}\n` : ""}TITLE: ${work.title}
 STUDENT'S SUMMARY: ${work.summary?.trim() || "(none)"}
 PROOF LINK: ${work.proof_url ?? "(none)"}
 ${page ? `WHAT THE LINK SHOWED (${page.status}, text only, may be cut short):\n${page.text || "(empty page)"}` : "The link was not opened."}
 
-Score 0-100 on: does it do what the title and summary say, is it relevant to the programme, quality and effort for a learner at this stage, and is there real proof of the work.
+Score 0-100 on: ${work.task?.trim() ? "does it do the task set for this class, " : ""}does it do what the title and summary say, is it relevant to the programme, quality and effort for a learner at this stage, and is there real proof of the work.
 - "reviewed" means accepted. "needs_changes" means the student should improve and resubmit. Anything under ${PASS_MARK} is needs_changes.
 - No proof link and a vague summary: needs_changes, and ask for a link to the work (GitHub, live site, Figma, shared Drive file with link access, etc).
 - If the link needed a sign-in, was empty, or you can't tell what the work is, say so and set confidence below ${MIN_CONFIDENCE}.

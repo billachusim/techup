@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { canUseCourse, getCaller } from "../_shared/caller.ts";
 import { classResources, type ClassResource } from "../_shared/class-videos.ts";
+import { courseLevel, fallbackTask, getOrCreateClassTask } from "../_shared/class-task.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -74,7 +75,7 @@ serve(async (req) => {
     if (!courseId || !classNumber) return deny(400, "courseId and classNumber are required");
     if (!(await canUseCourse(authClient, caller, courseId))) return deny(403, "You are not enrolled in this course");
 
-    const { data: courseRow } = await authClient.from("courses").select("name").eq("id", courseId).maybeSingle();
+    const { data: courseRow } = await authClient.from("courses").select("name, level").eq("id", courseId).maybeSingle();
     if (!courseRow) return deny(404, "Course not found");
     const courseName: string = courseRow.name;
     const { data: lecture } = await authClient
@@ -85,6 +86,24 @@ serve(async (req) => {
       .range(classNumber - 1, classNumber - 1)
       .maybeSingle();
     const classTitle: string = lecture?.title ?? `${courseName} — Class ${classNumber}`;
+    const taskInput = { classTitle, courseName, classNumber, level: courseLevel(courseRow.level) };
+    // Every class has one task, the same for all its students (public.class_tasks).
+    const classTask = () =>
+      getOrCreateClassTask(
+        {
+          get: async () => {
+            const { data } = await authClient.from("class_tasks").select("task")
+              .eq("course_id", courseId).eq("class_number", classNumber).maybeSingle();
+            return data?.task ?? null;
+          },
+          put: async (task) => {
+            await authClient.from("class_tasks")
+              .upsert({ course_id: courseId, class_number: classNumber, task }, { onConflict: "course_id,class_number", ignoreDuplicates: true });
+          },
+        },
+        Deno.env.get("LOVABLE_API_KEY"),
+        taskInput,
+      );
     const { data: curated } = await authClient
       .from("class_videos")
       .select("title, url, source")
@@ -117,6 +136,7 @@ serve(async (req) => {
             if (cachedData && cachedData.length > 0) {
               const cache = cachedData[0];
               console.log(`Returning cached content for course ${courseId}, class ${classNumber}`);
+              const assignment = await classTask();
               return new Response(
                 JSON.stringify({
                   title: cache.title,
@@ -124,6 +144,7 @@ serve(async (req) => {
                   description: cache.description,
                   resources: withVideos(cache.resources),
                   handoutContent: cache.handout_content,
+                  assignment,
                   cached: true
                 }),
                 { 
@@ -148,6 +169,7 @@ serve(async (req) => {
           error: "API key not configured",
           description: `Welcome to ${classTitle}! In this class, you'll learn essential ${courseName} concepts and practical skills that will help advance your career in technology.`,
           resources: withVideos([]),
+          assignment: fallbackTask(taskInput),
           handoutContent: `# ${classTitle}\n\nThis is class ${classNumber} of 4 in the ${courseName} course.\n\n## Overview\nHandout content will be available soon. Please check back later or contact your instructor for more information.`
         }),
         {
@@ -350,12 +372,15 @@ Content coming soon.
 Prepare for the next class by reviewing today's materials and completing any assigned exercises.`;
     }
 
+    const assignment = await classTask();
+
     const finalResponse = {
       title: aiTitle,
       summary,
       description,
       resources: withVideos(resources),
-      handoutContent
+      handoutContent,
+      assignment
     };
 
     // Cache the generated content

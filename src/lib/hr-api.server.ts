@@ -55,6 +55,9 @@ const RoleFields = z.object({
   interview_channel: z.string().max(50),
   apply_deadline: z.string().nullable(),
   project_brief: z.string().max(20000).nullable(),
+  work_trial_works: z.number().int().min(0).max(3),
+  work_trial_days: z.number().int().min(3).max(28),
+  trial_brief: z.string().max(20000).nullable(),
   auto_match_enabled: z.boolean(),
   auto_match_threshold: z.number().int().min(0).max(100),
 });
@@ -162,7 +165,7 @@ async function getRoles(admin: Admin, url: URL) {
   const status = url.searchParams.get("status") ?? "open";
   let q = admin
     .from("talent_roles")
-    .select("id, slug, title, company, summary, description, project_brief, employment_type, budget_min, budget_max, budget_currency, budget_unit, apply_deadline, openings, auto_match_threshold, manager_user_id, status, applications_closed", { count: "exact" })
+    .select("id, slug, title, company, summary, description, project_brief, employment_type, budget_min, budget_max, budget_currency, budget_unit, apply_deadline, openings, auto_match_threshold, manager_user_id, status, applications_closed, selection_process, work_trial_works, work_trial_days, trial_brief", { count: "exact" })
     .order("created_at", { ascending: false })
     .range(from, to);
   if (status === "open") q = q.eq("status", "published").eq("applications_closed", false);
@@ -204,7 +207,7 @@ async function getRoles(admin: Admin, url: URL) {
 
 async function listPairs(admin: Admin, url: URL, table: "role_matches" | "talent_applications") {
   const { limit, page, from, to } = paging(url);
-  const cols = table === "role_matches" ? "id, role_id, talent_profile_id, score, status, source, created_at, updated_at" : "id, role_id, talent_profile_id, status, created_at, updated_at";
+  const cols = table === "role_matches" ? "id, role_id, talent_profile_id, score, status, source, trial_started_at, trial_due_at, created_at, updated_at" : "id, role_id, talent_profile_id, status, created_at, updated_at";
   let q = admin.from(table).select(cols, { count: "exact" }).order("created_at", { ascending: false }).range(from, to);
   const roleId = url.searchParams.get("role_id");
   if (roleId) q = q.eq("role_id", UUID.parse(roleId));
@@ -214,7 +217,7 @@ async function listPairs(admin: Admin, url: URL, table: "role_matches" | "talent
   if (since) q = q.gte("updated_at", since);
   const { data, count, error } = await q;
   if (error) throw new Error(error.message);
-  const rows = (data ?? []) as unknown as Array<{ id: string; role_id: string; talent_profile_id: string; score?: number; status: string; source?: string; created_at: string; updated_at: string }>;
+  const rows = (data ?? []) as unknown as Array<{ id: string; role_id: string; talent_profile_id: string; score?: number; status: string; source?: string; trial_started_at?: string | null; trial_due_at?: string | null; created_at: string; updated_at: string }>;
   return {
     status: 200,
     body: {
@@ -225,6 +228,7 @@ async function listPairs(admin: Admin, url: URL, table: "role_matches" | "talent
         talent_id: r.talent_profile_id,
         score: r.score ?? null,
         status: r.status,
+        ...(table === "role_matches" ? { trial_started_at: r.trial_started_at ?? null, trial_due_at: r.trial_due_at ?? null } : {}),
         created_at: r.created_at,
         updated_at: r.updated_at,
         origin: table === "talent_applications" ? "application" : r.source === "manual" ? "manual" : "auto",

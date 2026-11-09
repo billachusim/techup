@@ -21,12 +21,13 @@ import {
   formatMoney,
   projectManagerUrl,
   weeksSince,
+  workTrialText,
   type TalentEngagement,
   type TalentProfile,
 } from "@/lib/talent";
 import ProjectWorkspace from "@/components/talent/ProjectWorkspace";
 
-const MATCHED_STATUSES = ["approved", "accepted", "assessment", "interview", "hired"];
+const MATCHED_STATUSES = ["approved", "accepted", "trial", "assessment", "interview", "hired"];
 
 type MatchRow = {
   id: string;
@@ -34,9 +35,11 @@ type MatchRow = {
   reason: string | null;
   status: string;
   role_id: string;
+  trial_due_at: string | null;
   talent_roles: {
     slug: string; title: string; company: string; summary: string;
     budget_min: number | null; budget_max: number | null; budget_currency: string; budget_unit: string;
+    work_trial_works: number; work_trial_days: number; trial_brief: string | null;
   } | null;
 };
 
@@ -84,7 +87,7 @@ const TalentDashboard = () => {
       const [{ data: m }, { data: a }, { data: e }] = await Promise.all([
         supabase
           .from("role_matches")
-          .select("id, score, reason, status, role_id, talent_roles(slug, title, company, summary, budget_min, budget_max, budget_currency, budget_unit)")
+          .select("id, score, reason, status, role_id, trial_due_at, talent_roles(slug, title, company, summary, budget_min, budget_max, budget_currency, budget_unit, work_trial_works, work_trial_days, trial_brief)")
           .eq("talent_profile_id", p.id)
           .order("score", { ascending: false }),
         supabase
@@ -117,9 +120,10 @@ const TalentDashboard = () => {
   useEffect(() => { load(); }, [load]);
 
   // Selected members get a workspace per project they are on.
-  const activeProjects = matches.filter((m) => ["accepted", "assessment", "interview", "hired"].includes(m.status));
+  const activeProjects = matches.filter((m) => ["accepted", "trial", "assessment", "interview", "hired"].includes(m.status));
 
-  const respond = async (matchId: string, status: "accepted" | "declined") => {
+  const respond = async (matchId: string, status: "accepted" | "declined", hasTrial = false) => {
+    // On a work-trial role the database turns "accepted" into "trial" (see migration 20261109090000).
     const { error } = await supabase.from("role_matches").update({ status }).eq("id", matchId);
     if (error) {
       toast({ title: "Could not save that", description: error.message, variant: "destructive" });
@@ -127,8 +131,13 @@ const TalentDashboard = () => {
     }
     if (status === "accepted") notifyMarketplaceEvent({ data: { event: "match_updated", id: matchId } }).catch(() => {});
     toast({
-      title: status === "accepted" ? "Interest sent" : "Match declined",
-      description: status === "accepted" ? "Our team will follow up with next steps." : "We will keep matching you to other roles.",
+      title: status === "declined" ? "Match declined" : hasTrial ? "Your work trial has started" : "Interest sent",
+      description:
+        status === "declined"
+          ? "We will keep matching you to other roles."
+          : hasTrial
+            ? "Read the trial brief under Your projects and submit your work there."
+            : "Our team will follow up with next steps.",
     });
     load();
   };
@@ -306,6 +315,10 @@ const TalentDashboard = () => {
                         roleTitle={match.talent_roles?.title ?? "Project"}
                         company={match.talent_roles?.company ?? "Tech Faculty"}
                         profileId={profile.id}
+                        mode={match.status === "trial" ? "trial" : "selected"}
+                        trialWorks={Math.max(1, match.talent_roles?.work_trial_works ?? 1)}
+                        trialDueAt={match.trial_due_at}
+                        trialBrief={match.talent_roles?.trial_brief}
                       />
                     ))}
                   </div>
@@ -334,7 +347,19 @@ const TalentDashboard = () => {
                         {match.talent_roles && (
                           <p className="mt-2 text-xs text-muted-foreground">{formatBudget(match.talent_roles)}</p>
                         )}
-                        {MATCHED_STATUSES.includes(match.status) && (
+                        {match.status === "approved" && (match.talent_roles?.work_trial_works ?? 0) > 0 && (
+                          <p className="mt-3 text-xs text-muted-foreground">
+                            This role starts with a short work trial: if you are interested, you submit{" "}
+                            {workTrialText(match.talent_roles?.work_trial_works ?? 1, match.talent_roles?.work_trial_days ?? 14)} from
+                            this dashboard, and we confirm your selection based on it.
+                          </p>
+                        )}
+                        {match.status === "trial" && (
+                          <p className="mt-3 text-xs text-muted-foreground">
+                            Your work trial is open under Your projects above. Submit your work there before the due date.
+                          </p>
+                        )}
+                        {MATCHED_STATUSES.includes(match.status) && match.status !== "trial" && !(match.status === "approved" && (match.talent_roles?.work_trial_works ?? 0) > 0) && (
                           <p className="mt-3 text-xs text-muted-foreground">
                             Next step is a short assessment or interview on WhatsApp. If you do not hear back within two days,
                             reach out to the project manager yourself.
@@ -348,7 +373,9 @@ const TalentDashboard = () => {
                           )}
                           {match.status === "approved" && (
                             <>
-                              <Button size="sm" onClick={() => respond(match.id, "accepted")}>I am interested</Button>
+                              <Button size="sm" onClick={() => respond(match.id, "accepted", (match.talent_roles?.work_trial_works ?? 0) > 0)}>
+                                {(match.talent_roles?.work_trial_works ?? 0) > 0 ? "I am interested, start the trial" : "I am interested"}
+                              </Button>
                               <Button size="sm" variant="ghost" onClick={() => respond(match.id, "declined")}>Not for me</Button>
                             </>
                           )}

@@ -172,7 +172,42 @@ export const INTERVIEW_CHANNEL_LABEL: Record<string, string> = {
   google_meet: "Google Meet",
 };
 
-export const hiringStepsText = (role: { selection_process?: string | null; interview_channel?: string | null }) => {
+/**
+ * Work trial before selection (Bill, 2026-11-09): matched talent who say they are
+ * interested submit 1-2 pieces of work over 1-2 weeks, then staff confirm or reject.
+ * 0 works = no trial. Work submissions are only for this trial; selected staff work on Slack.
+ */
+export const WORK_TRIAL_PRESETS = [
+  { value: "off", label: "No work trial", works: 0, days: 14 },
+  { value: "urgent", label: "Urgent: 1 work in 1 week", works: 1, days: 7 },
+  { value: "standard", label: "Standard: 2 works over 2 weeks", works: 2, days: 14 },
+] as const;
+
+export const workTrialPreset = (role: { work_trial_works?: number | null; work_trial_days?: number | null }) => {
+  const works = role.work_trial_works ?? 0;
+  if (works <= 0) return "off";
+  return WORK_TRIAL_PRESETS.find((p) => p.works === works && p.days === (role.work_trial_days ?? 14))?.value ?? "custom";
+};
+
+export const workTrialText = (works: number, days: number) => {
+  const weeks = days % 7 === 0 ? `${days / 7} week${days === 7 ? "" : "s"}` : `${days} days`;
+  return `${works === 1 ? "1 piece of work" : `${works} pieces of work`} within ${weeks}`;
+};
+
+export const hiringStepsText = (role: {
+  selection_process?: string | null;
+  interview_channel?: string | null;
+  work_trial_works?: number | null;
+  work_trial_days?: number | null;
+}) => {
+  const base = selectionStepsText(role);
+  const works = role.work_trial_works ?? 0;
+  if (works <= 0) return base;
+  const trial = `Matched talent who are interested first do a short work trial: submit ${workTrialText(works, role.work_trial_days ?? 14)} from your dashboard. We confirm selection based on that work.`;
+  return role.selection_process && role.selection_process !== "direct" ? `${trial} ${base}` : `${trial} Selected talent are then added to the project Slack.`;
+};
+
+const selectionStepsText = (role: { selection_process?: string | null; interview_channel?: string | null }) => {
   const p = role.selection_process ?? "direct";
   const via = INTERVIEW_CHANNEL_LABEL[role.interview_channel ?? "whatsapp"] ?? "WhatsApp call";
   if (p === "assessment") return "Shortlisted talent will be emailed a short assessment link. Selected talent are then added to the project Slack.";
@@ -185,6 +220,7 @@ export const MATCH_STATUS_LABEL: Record<string, string> = {
   suggested: "Awaiting review",
   approved: "Shared with talent",
   accepted: "Talent accepted",
+  trial: "Work trial",
   assessment: "In assessment",
   interview: "In interview",
   shortlisted: "Shortlisted",
@@ -248,6 +284,14 @@ export const DELIVERABLE_STATUS_LABEL: Record<string, string> = {
   submitted: "Submitted",
   reviewed: "Reviewed",
   needs_changes: "Needs changes",
+};
+
+/** Days left on a trial (negative = overdue), or null when there is no due date. */
+export const trialDaysLeft = (dueAt: string | null | undefined, now = Date.now()) => {
+  if (!dueAt) return null;
+  const due = new Date(dueAt).getTime();
+  if (Number.isNaN(due)) return null;
+  return Math.ceil((due - now) / 86_400_000);
 };
 
 /** Project links are only readable by matched talent and staff (database gated). */

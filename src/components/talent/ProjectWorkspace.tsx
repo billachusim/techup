@@ -12,19 +12,32 @@ import {
   fetchProjectWorkspace,
   hasWorkspaceLinks,
   startOfWeek,
+  trialDaysLeft,
   type ProjectWorkspace as Workspace,
   type TalentDeliverable,
 } from "@/lib/talent";
 
-type Props = { roleId: string; roleTitle: string; company: string; profileId: string };
+type Props = {
+  roleId: string;
+  roleTitle: string;
+  company: string;
+  profileId: string;
+  /** "trial": matched talent proving themselves with work submissions. "selected": on the team, work runs on Slack. */
+  mode?: "trial" | "selected";
+  trialWorks?: number;
+  trialDueAt?: string | null;
+  trialBrief?: string | null;
+};
 
 const emptyLog = { title: "", link_url: "", summary: "" };
 
 /**
- * What a selected member sees once they are on a project: the private team
- * links, and a simple weekly log of work with a link to the proof.
+ * Trial mode: the trial brief and a form to submit work, which staff use to confirm or
+ * reject the selection. Selected mode: the private team links; day-to-day work runs on
+ * Slack (WhatsApp as backup), not on this site (Bill, 2026-11-09).
  */
-const ProjectWorkspace = ({ roleId, roleTitle, company, profileId }: Props) => {
+const ProjectWorkspace = ({ roleId, roleTitle, company, profileId, mode = "selected", trialWorks = 1, trialDueAt, trialBrief }: Props) => {
+  const isTrial = mode === "trial";
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [logs, setLogs] = useState<TalentDeliverable[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,9 +61,12 @@ const ProjectWorkspace = ({ roleId, roleTitle, company, profileId }: Props) => {
 
   useEffect(() => { load(); }, [load]);
 
+  const submitted = logs.length;
+  const daysLeft = trialDaysLeft(trialDueAt);
+
   const addLog = async () => {
     if (!draft.title.trim()) {
-      toast({ title: "Say what you worked on", variant: "destructive" });
+      toast({ title: "Give your work a title", variant: "destructive" });
       return;
     }
     setSaving(true);
@@ -68,7 +84,7 @@ const ProjectWorkspace = ({ roleId, roleTitle, company, profileId }: Props) => {
       return;
     }
     setDraft(emptyLog);
-    toast({ title: "Work logged", description: "Your project lead can now review it." });
+    toast({ title: "Work submitted", description: "Our team will review it before confirming your selection." });
     load();
   };
 
@@ -92,16 +108,37 @@ const ProjectWorkspace = ({ roleId, roleTitle, company, profileId }: Props) => {
   return (
     <div className="space-y-4 rounded-lg border border-primary/30 bg-card p-5">
       <div>
-        <p className="text-xs font-medium uppercase tracking-wide text-primary">Project workspace</p>
+        <p className="text-xs font-medium uppercase tracking-wide text-primary">{isTrial ? "Work trial" : "Project workspace"}</p>
         <h3 className="mt-1 font-semibold">{roleTitle}</h3>
         <p className="text-xs text-muted-foreground">{company}</p>
       </div>
+
+      {isTrial && (
+        <div className="space-y-2 rounded-md bg-muted/40 p-3 text-sm">
+          <p>
+            Before we confirm your selection, submit{" "}
+            <b>{trialWorks === 1 ? "1 piece of work" : `${trialWorks} pieces of work`}</b>
+            {trialDueAt && <> by <b>{new Date(trialDueAt).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })}</b></>}.
+          </p>
+          <p className="text-xs text-muted-foreground">
+            {Math.min(submitted, trialWorks)} of {trialWorks} submitted
+            {daysLeft != null && (daysLeft >= 0 ? ` · ${daysLeft} day${daysLeft === 1 ? "" : "s"} left` : " · past the due date, submit as soon as you can")}
+          </p>
+          {trialBrief && <p className="whitespace-pre-line text-muted-foreground">{trialBrief}</p>}
+        </div>
+      )}
 
       {workspace?.project_brief && (
         <p className="whitespace-pre-line text-sm text-muted-foreground">{workspace.project_brief}</p>
       )}
 
-      {hasWorkspaceLinks(workspace) ? (
+      {isTrial ? (
+        workspace?.drive_url ? (
+          <a href={workspace.drive_url} target="_blank" rel="noopener noreferrer">
+            <Button size="sm" variant="outline"><FolderOpen className="mr-1.5" size={14} /> Shared files</Button>
+          </a>
+        ) : null
+      ) : hasWorkspaceLinks(workspace) ? (
         <div className="flex flex-wrap gap-2">
           {workspace?.whatsapp_group_url && (
             <a href={workspace.whatsapp_group_url} target="_blank" rel="noopener noreferrer">
@@ -130,8 +167,15 @@ const ProjectWorkspace = ({ roleId, roleTitle, company, profileId }: Props) => {
         </p>
       )}
 
+      {!isTrial && (
+        <p className="text-sm text-muted-foreground">
+          Your tasks, updates and check-ins happen on the project Slack channel, with WhatsApp as a backup.
+        </p>
+      )}
+
+      {isTrial && (
       <div className="space-y-3 border-t border-border pt-4">
-        <p className="text-sm font-medium">This week&apos;s work</p>
+        <p className="text-sm font-medium">Your trial work</p>
         {logs.length > 0 && (
           <div className="divide-y divide-border overflow-hidden rounded-md border border-border">
             {logs.map((log) => (
@@ -139,7 +183,7 @@ const ProjectWorkspace = ({ roleId, roleTitle, company, profileId }: Props) => {
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium">{log.title}</p>
                   <p className="text-xs text-muted-foreground">
-                    Week of {new Date(log.week_of).toLocaleDateString("en-GB")}
+                    Submitted {new Date(log.created_at).toLocaleDateString("en-GB")}
                     {log.link_url && (
                       <>
                         {" · "}
@@ -169,17 +213,17 @@ const ProjectWorkspace = ({ roleId, roleTitle, company, profileId }: Props) => {
 
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <Label className="text-xs">What did you work on?</Label>
+            <Label className="text-xs">What is this work?</Label>
             <Input
               className="mt-1"
               value={draft.title}
               maxLength={160}
-              placeholder="Built the product page layout"
+              placeholder="Product page design for the store"
               onChange={(e) => setDraft({ ...draft, title: e.target.value })}
             />
           </div>
           <div className="sm:col-span-2">
-            <Label className="text-xs">Link to the work (optional)</Label>
+            <Label className="text-xs">Link to the work (Drive, GitHub, TikTok, Figma…)</Label>
             <Input
               className="mt-1"
               value={draft.link_url}
@@ -200,9 +244,10 @@ const ProjectWorkspace = ({ roleId, roleTitle, company, profileId }: Props) => {
         </div>
         <Button size="sm" onClick={addLog} disabled={saving}>
           {saving ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <Plus size={14} className="mr-1.5" />}
-          Log this work
+          Submit this work
         </Button>
       </div>
+      )}
     </div>
   );
 };

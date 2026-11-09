@@ -15,8 +15,6 @@ const Input = z.object({
   id: z.string().uuid(),
 });
 
-const MATCH_EMAIL_STATUSES = ["approved", "accepted", "assessment", "interview", "hired"];
-
 /**
  * Sends the marketplace email for one event. The recipient is always looked up
  * server-side from the record — callers only pass the event and record id.
@@ -67,6 +65,20 @@ export const notifyMarketplaceEvent = createServerFn({ method: "POST" })
       return { ok: true };
     }
 
+    // Talent starting a work trial ("I am interested" on a trial role): the database moved
+    // their own match to "trial"; send the trial email and add them to the talent pool on Slack.
+    if (data.event === "match_updated" && !staff) {
+      const { data: m } = await supabaseAdmin
+        .from("role_matches")
+        .select("id, status, talent_profiles(user_id)")
+        .eq("id", data.id)
+        .maybeSingle();
+      if (!m || m.talent_profiles?.user_id !== context.userId || m.status !== "trial") return { ok: false };
+      const { afterMatchStageChange } = await import("@/lib/match-slack.server");
+      await afterMatchStageChange(m.id);
+      return { ok: true };
+    }
+
     if (!staff) return { ok: false };
 
     if (data.event === "intro_approved") {
@@ -99,14 +111,9 @@ export const notifyMarketplaceEvent = createServerFn({ method: "POST" })
     }
 
     if (data.event === "match_updated") {
-      const { data: m } = await supabaseAdmin
-        .from("role_matches")
-        .select("id, status, talent_profiles(full_name, email), talent_roles(title, company, assessment_url, interview_url, interview_channel)")
-        .eq("id", data.id)
-        .maybeSingle();
-      if (!m || !MATCH_EMAIL_STATUSES.includes(m.status)) return { ok: false };
-      const p = m.talent_profiles, r = m.talent_roles;
-      await send("match-update", p?.email, { name: p?.full_name, roleTitle: r?.title, company: r?.company, status: m.status, assessmentUrl: r?.assessment_url, interviewUrl: r?.interview_url, interviewChannel: r?.interview_channel }, `${m.id}-${m.status}`);
+      // One email path for admin buttons, auto-matching and the HR API.
+      const { sendMatchEmail } = await import("@/lib/match-slack.server");
+      await sendMatchEmail(data.id);
       return { ok: true };
     }
 

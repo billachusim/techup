@@ -42,13 +42,27 @@ const NewApplicationAdmin = ({ talentName, roleTitle, company }: { talentName?: 
 // 3. Talent: match status update
 const STATUS_COPY: Record<string, { title: string; body: string }> = {
   approved: { title: "You've been matched to a project", body: 'Our matching system and team think you are a strong fit. Open your dashboard to accept or decline.' },
-  accepted: { title: "You're selected for the project", body: 'Your project workspace is now open on your dashboard, with the group, task board and files.' },
+  accepted: { title: "You're selected for the project", body: 'Welcome to the team. Your work runs on the project Slack channel, with WhatsApp as a backup. Your dashboard has the project links.' },
+  trial: { title: 'Next step: a short work trial', body: 'Before we confirm your selection, we would like to see your work. Open your dashboard to read the trial brief and submit your work there.' },
+  trial_declined: { title: 'Update on your work trial', body: 'Thank you for the work you submitted. We have gone with other talent for this role this time. You stay in the Tech Faculty talent pool and we will match you to other roles that fit.' },
   assessment: { title: 'Next step: assessment', body: 'You have moved to the assessment stage. Our team will share the assessment on WhatsApp shortly.' },
   interview: { title: 'Next step: interview', body: 'You have moved to the interview stage. Our team will reach out on WhatsApp to schedule it.' },
-  hired: { title: "Congratulations, you're hired", body: 'You are now working on this project. Log your weekly work from your dashboard so it counts toward your pay.' },
+  hired: { title: "Congratulations, you're hired", body: 'You are now working on this project. Your tasks, updates and check-ins happen on the project Slack channel, with WhatsApp as a backup.' },
   slack_link: { title: 'Join your project Slack', body: 'You have been selected for this project. Join the project Slack channel with the button below to meet the team and get your first tasks.' },
 }
-const MatchUpdate = ({ name, roleTitle, company, status, assessmentUrl, interviewUrl, interviewChannel, slackUrl }: { name?: string; roleTitle?: string; company?: string; status?: string; assessmentUrl?: string | null; interviewUrl?: string | null; interviewChannel?: string | null; slackUrl?: string | null }) => {
+type MatchUpdateProps = {
+  name?: string; roleTitle?: string; company?: string; status?: string;
+  assessmentUrl?: string | null; interviewUrl?: string | null; interviewChannel?: string | null; slackUrl?: string | null;
+  projectSlackUrl?: string | null; groupUrl?: string | null;
+  trialWorks?: number | null; trialDays?: number | null; trialDueAt?: string | null; trialBrief?: string | null;
+}
+const trialLine = (works?: number | null, dueAt?: string | null) => {
+  const n = works && works > 0 ? works : 1
+  const what = n === 1 ? '1 piece of work' : `${n} pieces of work`
+  const due = dueAt ? new Date(dueAt).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }) : null
+  return `Please submit ${what}${due ? ` by ${due}` : ''}.`
+}
+const MatchUpdate = ({ name, roleTitle, company, status, assessmentUrl, interviewUrl, interviewChannel, slackUrl, projectSlackUrl, groupUrl, trialWorks, trialDueAt, trialBrief }: MatchUpdateProps) => {
   const c = STATUS_COPY[status ?? 'approved'] ?? STATUS_COPY.approved
   const via = interviewChannel === 'google_meet' ? 'Google Meet' : 'WhatsApp call'
   let body = c.body
@@ -62,27 +76,38 @@ const MatchUpdate = ({ name, roleTitle, company, status, assessmentUrl, intervie
     cta = 'Book your interview'; href = interviewUrl
   } else if (status === 'slack_link' && slackUrl) {
     cta = 'Join the project Slack'; href = slackUrl
+  } else if (status === 'trial') {
+    cta = 'Open the trial brief'
+  } else if ((status === 'accepted' || status === 'hired') && projectSlackUrl) {
+    cta = 'Open the project Slack'; href = projectSlackUrl
+  } else if (status === 'trial_declined') {
+    cta = 'See other open roles'; href = `${SITE}/careers`
   }
   return (
     <Layout preview={c.title} title={c.title} cta={cta} href={href}>
       <Text style={text}>{hi(name)}</Text>
       <Text style={text}>Project: <b>{roleTitle ?? 'Project'}</b>{company ? ` · ${company}` : ''}</Text>
       <Text style={text}>{body}</Text>
-      {slackUrl && status !== 'slack_link' && (
+      {status === 'trial' && <Text style={text}>{trialLine(trialWorks, trialDueAt)}</Text>}
+      {status === 'trial' && trialBrief && <Text style={quote}>{trialBrief}</Text>}
+      {(status === 'accepted' || status === 'hired') && groupUrl && (
+        <Text style={text}><a href={groupUrl} style={{ color: '#000000' }}>Join the project WhatsApp group</a> for backup and quick follow-ups.</Text>
+      )}
+      {slackUrl && status !== 'slack_link' && status !== 'trial_declined' && (
         <Text style={text}>
           <a href={slackUrl} style={{ color: '#000000' }}>Join the Tech Faculty Slack</a> with this same email address. We add you to the talent pool automatically once you're in.
         </Text>
       )}
-      <Text style={muted}>No update after two days? Message your project manager from your dashboard.</Text>
+      {status !== 'trial_declined' && <Text style={muted}>No update after two days? Message your project manager from your dashboard.</Text>}
     </Layout>
   )
 }
 
 // 4. Talent: work log reviewed
 const DeliverableReviewed = ({ name, title, roleTitle, status, note }: { name?: string; title?: string; roleTitle?: string; status?: string; note?: string }) => (
-  <Layout preview={`Your work log was ${status === 'needs_changes' ? 'returned for changes' : 'reviewed'}`} title={status === 'needs_changes' ? 'Changes requested' : 'Work reviewed'} cta="View on your dashboard" href={`${SITE}/talent/dashboard`}>
+  <Layout preview={`Your work was ${status === 'needs_changes' ? 'returned for changes' : 'reviewed'}`} title={status === 'needs_changes' ? 'Changes requested' : 'Work reviewed'} cta="View on your dashboard" href={`${SITE}/talent/dashboard`}>
     <Text style={text}>{hi(name)}</Text>
-    <Text style={text}>Your work log <b>{title ?? ''}</b> on <b>{roleTitle ?? 'your project'}</b> was {status === 'needs_changes' ? 'returned for changes' : 'reviewed and accepted'}.</Text>
+    <Text style={text}>Your work <b>{title ?? ''}</b> for <b>{roleTitle ?? 'the role'}</b> was {status === 'needs_changes' ? 'returned for changes. You can submit an improved version from your dashboard' : 'reviewed'}.</Text>
     {note && <Text style={quote}>{note}</Text>}
   </Layout>
 )
@@ -169,7 +194,7 @@ export const hiringRequestAdmin = { component: HiringRequestAdmin, subject: (d) 
 export const applicationReceived = { component: ApplicationReceived, subject: (d) => `Application received: ${d.roleTitle ?? 'your role'}`, displayName: 'Application received', previewData: { name: 'Ada Obi', roleTitle: 'Frontend Developer', company: 'Tech Faculty' } } satisfies TemplateEntry
 export const newApplicationAdmin = { component: NewApplicationAdmin, subject: (d) => `New application: ${d.roleTitle ?? 'role'}`, displayName: 'New application (staff)', to: 'nachusim@gmail.com', previewData: { talentName: 'Ada Obi', roleTitle: 'Frontend Developer', company: 'Tech Faculty' } } satisfies TemplateEntry
 export const matchUpdate = { component: MatchUpdate, subject: (d) => `${(STATUS_COPY[d.status as string] ?? STATUS_COPY.approved).title}: ${d.roleTitle ?? 'project'}`, displayName: 'Match / selection update', previewData: { name: 'Ada Obi', roleTitle: 'Tech Faculty Store', company: 'Tech Faculty', status: 'accepted' } } satisfies TemplateEntry
-export const deliverableReviewed = { component: DeliverableReviewed, subject: (d) => (d.status === 'needs_changes' ? 'Changes requested on your work log' : 'Your work log was reviewed'), displayName: 'Work log reviewed', previewData: { name: 'Ada Obi', title: 'Product page UI', roleTitle: 'Tech Faculty Store', status: 'reviewed', note: 'Great work.' } } satisfies TemplateEntry
+export const deliverableReviewed = { component: DeliverableReviewed, subject: (d) => (d.status === 'needs_changes' ? 'Changes requested on your work' : 'Your work was reviewed'), displayName: 'Trial work reviewed', previewData: { name: 'Ada Obi', title: 'Product page UI', roleTitle: 'Tech Faculty Store', status: 'reviewed', note: 'Great work.' } } satisfies TemplateEntry
 export const talentApproved = { component: TalentApproved, subject: "You're an approved Tech Faculty talent", displayName: 'Talent approved', previewData: { name: 'Ada Obi', facultyId: 'TF-WD-OL-0926-0001' } } satisfies TemplateEntry
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, Helvetica, sans-serif' }

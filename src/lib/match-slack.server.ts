@@ -1,7 +1,7 @@
 // Server-only: Slack + email side effects of a match changing stage.
 // Shared by the admin buttons, auto-matching and the HR API.
 
-const MATCH_EMAIL_STATUSES = ["approved", "accepted", "assessment", "interview", "hired"];
+const MATCH_EMAIL_STATUSES = ["approved", "accepted", "trial", "assessment", "interview", "hired", "declined"];
 
 /**
  * Matched (approved) -> general talent channel.
@@ -43,7 +43,7 @@ export async function syncMatchSlack(matchId: string): Promise<{ ok: boolean; no
     };
   }
 
-  const wantsGeneral = ["approved", "accepted", "assessment", "interview", "hired", "onboarded", "offer_sent", "shortlisted", "interviewed"].includes(match.status);
+  const wantsGeneral = ["approved", "accepted", "trial", "assessment", "interview", "hired", "onboarded", "offer_sent", "shortlisted", "interviewed"].includes(match.status);
   const wantsProject = ["accepted", "hired", "onboarded"].includes(match.status);
 
   if (wantsGeneral) {
@@ -92,10 +92,14 @@ export async function sendMatchEmail(matchId: string): Promise<void> {
   const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
   const { data: m } = await supabaseAdmin
     .from("role_matches")
-    .select("id, status, talent_profiles(full_name, email, slack_user_id), talent_roles(title, company, assessment_url, interview_url, interview_channel)")
+    .select("id, status, trial_started_at, trial_due_at, talent_profiles(full_name, email, slack_user_id), talent_roles(title, company, assessment_url, interview_url, interview_channel, work_trial_works, work_trial_days, trial_brief, slack_channel_url, whatsapp_group_url)")
     .eq("id", matchId)
     .maybeSingle();
   if (!m || !MATCH_EMAIL_STATUSES.includes(m.status) || !m.talent_profiles?.email) return;
+  // "Declined" is only emailed when it closes a work trial; other declines (talent said no,
+  // staff skipped a suggestion) stay silent as before.
+  if (m.status === "declined" && !m.trial_started_at) return;
+  const status = m.status === "declined" ? "trial_declined" : m.status;
   const r = m.talent_roles;
   const { SLACK_JOIN_URL } = await import("@/data/coursePrograms");
   const { HR_REPLY_TO } = await import("@/lib/hr-api-rules");
@@ -103,8 +107,13 @@ export async function sendMatchEmail(matchId: string): Promise<void> {
   const slackUrl = m.talent_profiles.slack_user_id ? null : SLACK_JOIN_URL;
   try {
     await sendTemplateEmail("match-update", m.talent_profiles.email, {
-      templateData: { name: m.talent_profiles.full_name, roleTitle: r?.title, company: r?.company, status: m.status, assessmentUrl: r?.assessment_url, interviewUrl: r?.interview_url, interviewChannel: r?.interview_channel, slackUrl },
-      idempotencyKey: `match-update-${m.id}-${m.status}`,
+      templateData: {
+        name: m.talent_profiles.full_name, roleTitle: r?.title, company: r?.company, status,
+        assessmentUrl: r?.assessment_url, interviewUrl: r?.interview_url, interviewChannel: r?.interview_channel, slackUrl,
+        projectSlackUrl: r?.slack_channel_url, groupUrl: r?.whatsapp_group_url,
+        trialWorks: r?.work_trial_works, trialDays: r?.work_trial_days, trialDueAt: m.trial_due_at, trialBrief: r?.trial_brief,
+      },
+      idempotencyKey: `match-update-${m.id}-${status}`,
       replyTo: HR_REPLY_TO,
     });
   } catch (e) {

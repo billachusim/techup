@@ -157,6 +157,35 @@ export const apps: AppProduct[] = [
     previewImage: aiclopediaCover.url,
     developer: "Social Faculty",
   },
+  {
+    slug: "pet-care-card",
+    name: "Pet Care Card",
+    tagline: "Pet Sitter Notes in One Card",
+    description:
+      "Going away? Put your pet's feeding, walks, medication, vet and emergency contacts into one care card and share it with your pet sitter by link, QR code or printable PDF.",
+    summary:
+      "Pet Care Card lets you put your pet's feeding schedule, routines, medication instructions, vet details and emergency contacts into one care card you can share by link, QR code or printable PDF with a pet sitter, friend or boarding facility.",
+    features: [
+      "Feeding, walks and daily routines",
+      "Medication instructions and reminders",
+      "Vet and emergency contacts",
+      "Share by QR code or printable PDF",
+      "One-time lifetime premium, no subscription",
+    ],
+    faq: [
+      { q: "What is a pet care card?", a: "A single page with everything a pet sitter needs: feeding, routines, medication, vet and emergency contacts." },
+      { q: "Can I print it?", a: "Yes. Premium creates a printable PDF care card." },
+      { q: "Does Pet Care Card give veterinary advice?", a: "No. It organizes instructions you already have and does not diagnose or recommend medication." },
+      { q: "Is there a subscription?", a: "No. It is free for one pet, with a one-time lifetime premium upgrade." },
+    ],
+    platforms: ["playstore"],
+    links: {
+      playstore: "https://play.google.com/store/apps/details?id=com.techfaculty.pet_care_card",
+    },
+    category: "LifestyleApplication",
+    accent: "from-amber-500 to-orange-600",
+    developer: "Tech Faculty",
+  },
 ];
 
 export const getApp = (slug: string) => apps.find((a) => a.slug === slug);

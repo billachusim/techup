@@ -85,8 +85,8 @@ export const jobPlatforms: JobPlatform[] = [
   },
   {
     slug: "outlier",
-    seoTitle: "Outlier AI Jobs 2026: Paid Remote AI Tasks",
-    seoDescription: "Open Outlier AI jobs for Nigerians: get paid hourly to train AI as a writer, coder or biology, maths or chemistry expert. See current roles, pay and how to join.",
+    seoTitle: "Outlier AI Jobs Nigeria 2026: Pay, Roles & How to Join",
+    seoDescription: "Outlier AI jobs for Nigerians: paid hourly to train AI as a writer, coder or maths/science expert. See live roles and pay, plus free AI training to qualify.",
     name: "Outlier",
     keyword: "Outlier AI Jobs",
     match: ["Outlier", "Outlier AI"],

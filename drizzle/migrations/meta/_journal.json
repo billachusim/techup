@@ -302,6 +302,13 @@
       "when": 1794213183153,
       "tag": "0042_work_trial_vetting",
       "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1794251774481,
+      "tag": "0043_class_pace_and_tasks",
+      "breakpoints": true
     }
   ]
 }

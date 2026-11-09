@@ -406,6 +406,41 @@ export type Database = {
           },
         ]
       }
+      class_tasks: {
+        Row: {
+          class_number: number
+          course_id: string
+          created_at: string
+          task: string
+          updated_at: string
+          written_by: string
+        }
+        Insert: {
+          class_number: number
+          course_id: string
+          created_at?: string
+          task: string
+          updated_at?: string
+          written_by?: string
+        }
+        Update: {
+          class_number?: number
+          course_id?: string
+          created_at?: string
+          task?: string
+          updated_at?: string
+          written_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_tasks_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       class_videos: {
         Row: {
           class_number: number
@@ -550,6 +585,7 @@ export type Database = {
           description: string | null
           duration_weeks: number | null
           id: string
+          level: string
           name: string
           plan_required: string
           sort_order: number
@@ -561,6 +597,7 @@ export type Database = {
           description?: string | null
           duration_weeks?: number | null
           id?: string
+          level?: string
           name: string
           plan_required?: string
           sort_order?: number
@@ -572,6 +609,7 @@ export type Database = {
           description?: string | null
           duration_weeks?: number | null
           id?: string
+          level?: string
           name?: string
           plan_required?: string
           sort_order?: number
@@ -2943,6 +2981,7 @@ export type Database = {
           template_name: string
         }[]
       }
+      class_day_ok: { Args: { _day: string; _level: string }; Returns: boolean }
       complete_whatsapp_lead_followup: {
         Args: {
           p_id: string

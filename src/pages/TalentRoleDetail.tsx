@@ -271,7 +271,9 @@ const TalentRoleDetail = () => {
             <section className="mt-10 rounded-lg border border-primary/40 bg-primary/5 p-6">
               <h2 className="text-lg font-semibold">You have been matched to this role</h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                {role.selection_process === "direct" ? "Next you will be added to the project Slack." : "Watch your email for the assessment or interview link."} If you do not hear back within two days,
+                {(role.work_trial_works ?? 0) > 0
+                  ? "This role starts with a short work trial. Open your dashboard to start it and submit your work."
+                  : role.selection_process === "direct" ? "Next you will be added to the project Slack." : "Watch your email for the assessment or interview link."} If you do not hear back within two days,
                 message the project manager yourself.
               </p>
               <div className="mt-4 flex flex-wrap gap-3">

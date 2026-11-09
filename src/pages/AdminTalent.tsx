@@ -26,6 +26,9 @@ import {
   ENGAGEMENT_STATUS_LABEL,
   DELIVERABLE_STATUS_LABEL,
   ROLE_KIND_LABEL, SELECTION_PROCESS_LABEL,
+  WORK_TRIAL_PRESETS,
+  workTrialPreset,
+  trialDaysLeft,
   formatMoney,
   parseList,
   slugify,
@@ -38,7 +41,7 @@ import {
 
 type MatchRow = {
   id: string; score: number; reason: string | null; status: string; source: string;
-  role_id: string; talent_profile_id: string;
+  role_id: string; talent_profile_id: string; trial_started_at: string | null; trial_due_at: string | null;
   talent_roles: { title: string; company: string } | null;
   talent_profiles: { full_name: string; city: string | null; skills: string[]; phone: string | null } | null;
 };
@@ -77,6 +80,7 @@ const emptyRole = {
   responsibilities: "", required_skills: "", nice_to_have: "", seniority: "mid",
   budget_min: "", budget_max: "", pay_text: "", budget_currency: "NGN", budget_unit: "MONTH", openings: "1",
   selection_process: "direct", assessment_url: "", interview_url: "", interview_channel: "whatsapp",
+  work_trial: "off", trial_brief: "",
 };
 
 const AdminTalent = () => {
@@ -120,7 +124,7 @@ const AdminTalent = () => {
       supabase.from("talent_profiles").select("*").order("profile_strength", { ascending: false }),
       supabase
         .from("role_matches")
-        .select("id, score, reason, status, source, role_id, talent_profile_id, talent_roles(title, company), talent_profiles(full_name, city, skills, phone)")
+        .select("id, score, reason, status, source, role_id, talent_profile_id, trial_started_at, trial_due_at, talent_roles(title, company), talent_profiles(full_name, city, skills, phone)")
         .order("score", { ascending: false }),
       supabase
         .from("talent_applications")
@@ -202,6 +206,9 @@ const AdminTalent = () => {
         assessment_url: newRole.assessment_url.trim() || null,
         interview_url: newRole.interview_url.trim() || null,
         interview_channel: newRole.interview_channel,
+        work_trial_works: WORK_TRIAL_PRESETS.find((t) => t.value === newRole.work_trial)?.works ?? 0,
+        work_trial_days: WORK_TRIAL_PRESETS.find((t) => t.value === newRole.work_trial)?.days ?? 14,
+        trial_brief: newRole.trial_brief.trim() || null,
         status: "draft",
         created_by: auth.user?.id ?? null,
       });
@@ -216,7 +223,7 @@ const AdminTalent = () => {
     }
   };
 
-  const updateHiring = async (id: string, patch: { selection_process?: string; assessment_url?: string | null; interview_url?: string | null; interview_channel?: string }) => {
+  const updateHiring = async (id: string, patch: { selection_process?: string; assessment_url?: string | null; interview_url?: string | null; interview_channel?: string; work_trial_works?: number; work_trial_days?: number; trial_brief?: string | null }) => {
     const { error } = await supabase.from("talent_roles").update(patch).eq("id", id);
     if (error) { toast({ title: "Could not save hiring steps", description: error.message, variant: "destructive" }); return; }
     toast({ title: "Hiring steps saved" });
@@ -495,8 +502,48 @@ const AdminTalent = () => {
     );
   }
 
+  const renderDeliverable = (d: DeliverableRow) => (
+                  <div key={d.id} className="space-y-3 rounded-lg border border-border bg-card p-4">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="font-medium">{d.title}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {d.talent_profiles?.full_name} · {d.talent_roles?.title ?? "Project"} · submitted{" "}
+                          {new Date(d.created_at).toLocaleDateString("en-GB")}
+                        </p>
+                        {d.summary && <p className="mt-1 text-xs text-muted-foreground">{d.summary}</p>}
+                        {d.link_url && (
+                          <a href={d.link_url} target="_blank" rel="noopener noreferrer" className="text-xs text-link hover:underline">
+                            Open the work
+                          </a>
+                        )}
+                      </div>
+                      <Badge variant="outline">{DELIVERABLE_STATUS_LABEL[d.status] ?? d.status}</Badge>
+                    </div>
+                    <div className="flex flex-wrap items-end gap-2">
+                      <div className="min-w-[16rem] flex-1">
+                        <Label className="text-xs">Feedback for the talent</Label>
+                        <Input
+                          className="mt-1"
+                          value={noteDrafts[d.id] ?? ""}
+                          onChange={(ev) => setNoteDrafts({ ...noteDrafts, [d.id]: ev.target.value })}
+                        />
+                      </div>
+                      <Button size="sm" onClick={() => reviewDeliverable(d.id, "reviewed")}>
+                        <Check size={14} className="mr-1.5" /> Reviewed
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={() => reviewDeliverable(d.id, "needs_changes")}>
+                        <X size={14} className="mr-1.5" /> Needs changes
+                      </Button>
+                    </div>
+                  </div>
+  );
+
   const suggested = matches.filter((m) => m.status === "suggested");
   const decided = matches.filter((m) => m.status !== "suggested");
+  const trials = matches.filter((m) => m.status === "trial");
+  const trialLogs = (m: MatchRow) =>
+    deliverables.filter((d) => d.role_id === m.role_id && d.talent_profile_id === m.talent_profile_id);
 
   return (
     <div className="min-h-screen bg-background">
@@ -521,7 +568,7 @@ const AdminTalent = () => {
                 <TabsTrigger value="briefs">Briefs ({briefs.filter((b) => b.status === "new").length})</TabsTrigger>
                 <TabsTrigger value="interest">Interest ({interests.filter((i) => i.status === "new").length})</TabsTrigger>
                 <TabsTrigger value="pay">Work &amp; pay ({engagements.filter((e) => e.status === "active").length})</TabsTrigger>
-                <TabsTrigger value="logs">Work logs ({deliverables.filter((d) => d.status === "submitted").length})</TabsTrigger>
+                <TabsTrigger value="logs">Trial work ({trials.length})</TabsTrigger>
                 <TabsTrigger value="hr">HR automation</TabsTrigger>
               </TabsList>
 
@@ -616,6 +663,25 @@ const AdminTalent = () => {
                         </SelectContent>
                       </Select>
                     </div>
+                    <div className="sm:col-span-2">
+                      <Label>Work trial before selection</Label>
+                      <Select value={newRole.work_trial} onValueChange={(v) => setNewRole({ ...newRole, work_trial: v })}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          {WORK_TRIAL_PRESETS.map((t) => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
+                        </SelectContent>
+                      </Select>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        Matched talent who say they are interested submit work from their dashboard; you confirm or reject them in the Trial work tab.
+                      </p>
+                    </div>
+                    {newRole.work_trial !== "off" && (
+                      <div className="sm:col-span-2">
+                        <Label>Trial brief (what to submit)</Label>
+                        <Textarea rows={3} value={newRole.trial_brief} placeholder="e.g. Make two 30-second AI videos for the Social Faculty TikTok, one about our cyber security course."
+                          onChange={(e) => setNewRole({ ...newRole, trial_brief: e.target.value })} />
+                      </div>
+                    )}
                     {newRole.selection_process.includes("assessment") && (
                       <div className="sm:col-span-2">
                         <Label>Assessment link (emailed at the assessment stage)</Label>
@@ -702,8 +768,8 @@ const AdminTalent = () => {
                               <Badge variant="outline" className="ml-1">{role.status}</Badge>
                             </p>
                             <p className="mt-1 text-xs text-muted-foreground">
-                              {count(["approved", "accepted", "assessment", "interview", "hired"])} matched ·{" "}
-                              {count(["accepted"])} accepted · {count(["assessment"])} in assessment ·{" "}
+                              {count(["approved", "accepted", "trial", "assessment", "interview", "hired"])} matched ·{" "}
+                              {count(["trial"])} in trial · {count(["accepted"])} accepted · {count(["assessment"])} in assessment ·{" "}
                               {count(["interview"])} in interview · {count(["hired"])} hired
                             </p>
                           </div>
@@ -757,6 +823,31 @@ const AdminTalent = () => {
                               </SelectContent>
                             </Select>
                           </div>
+                          <div>
+                            <Label className="text-xs">Work trial</Label>
+                            <Select
+                              value={workTrialPreset(role)}
+                              onValueChange={(v) => {
+                                const t = WORK_TRIAL_PRESETS.find((p) => p.value === v);
+                                if (t) void updateHiring(role.id, { work_trial_works: t.works, work_trial_days: t.days });
+                              }}
+                            >
+                              <SelectTrigger className="mt-1 h-8"><SelectValue /></SelectTrigger>
+                              <SelectContent>
+                                {WORK_TRIAL_PRESETS.map((t) => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
+                                {workTrialPreset(role) === "custom" && (
+                                  <SelectItem value="custom">{role.work_trial_works} works in {role.work_trial_days} days</SelectItem>
+                                )}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          {role.work_trial_works > 0 && (
+                            <div className="sm:col-span-4">
+                              <Label className="text-xs">Trial brief (what to submit)</Label>
+                              <Textarea className="mt-1" rows={2} key={`t-${role.trial_brief}`} defaultValue={role.trial_brief ?? ""}
+                                onBlur={(e) => { const v = e.target.value.trim() || null; if (v !== role.trial_brief) void updateHiring(role.id, { trial_brief: v }); }} />
+                            </div>
+                          )}
                           {role.selection_process.includes("assessment") && (
                             <div>
                               <Label className="text-xs">Assessment link</Label>
@@ -994,6 +1085,7 @@ const AdminTalent = () => {
                             <SelectContent>
                               <SelectItem value="approved">Shared with talent</SelectItem>
                               <SelectItem value="accepted">Talent accepted</SelectItem>
+                              <SelectItem value="trial">Work trial</SelectItem>
                               <SelectItem value="assessment">In assessment</SelectItem>
                               <SelectItem value="interview">In interview</SelectItem>
                               <SelectItem value="shortlisted">Shortlisted</SelectItem>
@@ -1199,49 +1291,70 @@ const AdminTalent = () => {
                 </section>
               </TabsContent>
 
-              {/* WORK LOGS */}
-              <TabsContent value="logs" className="space-y-3 pt-6">
-                {deliverables.length === 0 && (
-                  <p className="rounded-lg border border-border bg-card p-8 text-center text-sm text-muted-foreground">
-                    No work has been logged yet. Selected talent log their weekly work from their dashboard.
+              {/* TRIAL WORK: matched talent submitting work before selection is confirmed */}
+              <TabsContent value="logs" className="space-y-6 pt-6">
+                <section className="space-y-3">
+                  <h2 className="text-lg font-semibold">Open work trials ({trials.length})</h2>
+                  <p className="text-sm text-muted-foreground">
+                    Talent on a work-trial role who said they are interested. Review each piece of work, then confirm or reject the selection.
                   </p>
+                  {trials.length === 0 && (
+                    <p className="rounded-lg border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+                      No open trials. Turn on "Work trial" in a role's hiring steps to use this.
+                    </p>
+                  )}
+                  {trials.map((m) => {
+                    const role = roles.find((r) => r.id === m.role_id);
+                    const need = Math.max(1, role?.work_trial_works ?? 1);
+                    const logs = trialLogs(m);
+                    const left = trialDaysLeft(m.trial_due_at);
+                    const nextStep = role?.selection_process?.startsWith("assessment") ? "assessment" : role?.selection_process === "interview" ? "interview" : null;
+                    return (
+                      <div key={m.id} className="space-y-3 rounded-lg border border-primary/30 bg-card p-4">
+                        <div className="flex flex-wrap items-start justify-between gap-3">
+                          <div>
+                            <p className="font-medium">{m.talent_profiles?.full_name} → {m.talent_roles?.title}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {logs.length} of {need} submitted
+                              {m.trial_due_at && ` · due ${new Date(m.trial_due_at).toLocaleDateString("en-GB")}`}
+                              {left != null && left < 0 && " · overdue"}
+                            </p>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {m.talent_profiles?.phone && (
+                              <a href={contactUrl(m.talent_profiles.phone, m.talent_profiles.full_name)} target="_blank" rel="noopener noreferrer">
+                                <Button size="sm" variant="outline"><MessageCircle size={14} className="mr-1.5" /> Message</Button>
+                              </a>
+                            )}
+                            <Button size="sm" onClick={() => setMatchStatus(m.id, "accepted")}>
+                              <Check size={14} className="mr-1.5" /> Confirm selection
+                            </Button>
+                            {nextStep && (
+                              <Button size="sm" variant="outline" onClick={() => setMatchStatus(m.id, nextStep)}>
+                                Move to {nextStep}
+                              </Button>
+                            )}
+                            <Button size="sm" variant="ghost" onClick={() => setMatchStatus(m.id, "declined")}>
+                              <X size={14} className="mr-1.5" /> Not selected
+                            </Button>
+                          </div>
+                        </div>
+                        {logs.length === 0 && <p className="text-xs text-muted-foreground">Nothing submitted yet.</p>}
+                        {logs.map((d) => renderDeliverable(d))}
+                      </div>
+                    );
+                  })}
+                </section>
+
+                {deliverables.length > 0 && (
+                  <section className="space-y-3">
+                    <h2 className="text-lg font-semibold">All submissions ({deliverables.length})</h2>
+                    <p className="text-sm text-muted-foreground">
+                      Includes older weekly work logs from before 9 Nov 2026. Staff work is now managed on Slack.
+                    </p>
+                    {deliverables.map((d) => renderDeliverable(d))}
+                  </section>
                 )}
-                {deliverables.map((d) => (
-                  <div key={d.id} className="space-y-3 rounded-lg border border-border bg-card p-4">
-                    <div className="flex flex-wrap items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <p className="font-medium">{d.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {d.talent_profiles?.full_name} · {d.talent_roles?.title ?? "Project"} · week of{" "}
-                          {new Date(d.week_of).toLocaleDateString("en-GB")}
-                        </p>
-                        {d.summary && <p className="mt-1 text-xs text-muted-foreground">{d.summary}</p>}
-                        {d.link_url && (
-                          <a href={d.link_url} target="_blank" rel="noopener noreferrer" className="text-xs text-link hover:underline">
-                            Open the work
-                          </a>
-                        )}
-                      </div>
-                      <Badge variant="outline">{DELIVERABLE_STATUS_LABEL[d.status] ?? d.status}</Badge>
-                    </div>
-                    <div className="flex flex-wrap items-end gap-2">
-                      <div className="min-w-[16rem] flex-1">
-                        <Label className="text-xs">Feedback for the talent</Label>
-                        <Input
-                          className="mt-1"
-                          value={noteDrafts[d.id] ?? ""}
-                          onChange={(ev) => setNoteDrafts({ ...noteDrafts, [d.id]: ev.target.value })}
-                        />
-                      </div>
-                      <Button size="sm" onClick={() => reviewDeliverable(d.id, "reviewed")}>
-                        <Check size={14} className="mr-1.5" /> Reviewed
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={() => reviewDeliverable(d.id, "needs_changes")}>
-                        <X size={14} className="mr-1.5" /> Needs changes
-                      </Button>
-                    </div>
-                  </div>
-                ))}
               </TabsContent>
 
               {/* HR AUTOMATION */}

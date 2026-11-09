@@ -25,6 +25,7 @@ const EmailBody = z.object({
   role_id: UUID.optional(),
 });
 const ManagerBody = z.object({ manager_user_id: UUID });
+const ReviewBody = z.object({ status: z.enum(["reviewed", "needs_changes"]), note: z.string().trim().max(2000).optional() });
 const NoteBody = z.object({ talent_id: UUID, role_id: UUID.nullable().optional(), text: z.string().trim().min(1).max(8000) });
 
 // Role fields the agent may set. Same columns the admin "Create role" form writes.
@@ -55,6 +56,9 @@ const RoleFields = z.object({
   interview_channel: z.string().max(50),
   apply_deadline: z.string().nullable(),
   project_brief: z.string().max(20000).nullable(),
+  work_trial_works: z.number().int().min(0).max(3),
+  work_trial_days: z.number().int().min(3).max(28),
+  trial_brief: z.string().max(20000).nullable(),
   auto_match_enabled: z.boolean(),
   auto_match_threshold: z.number().int().min(0).max(100),
 });
@@ -139,6 +143,11 @@ async function route(admin: Admin, request: Request, method: string, path: strin
     return setManager(admin, UUID.parse(parts[1]), ManagerBody.parse(await body()));
   }
   if (method === "POST" && path === "/notes") return addNote(admin, NoteBody.parse(await body()));
+  // Work trials: matched talent submitting work before selection. Confirm with POST /matches/:id/status selected, reject with declined.
+  if (method === "GET" && path === "/trials") return listTrials(admin);
+  if (method === "POST" && parts[0] === "submissions" && parts[2] === "review" && parts.length === 3) {
+    return reviewSubmission(admin, UUID.parse(parts[1]), ReviewBody.parse(await body()));
+  }
 
   if (method === "GET" && parts[0] === "roles" && parts.length === 2) return getRole(admin, UUID.parse(parts[1]));
   if (method === "POST" && path === "/roles") return createRole(admin, RoleCreateBody.parse(await body()));
@@ -162,7 +171,7 @@ async function getRoles(admin: Admin, url: URL) {
   const status = url.searchParams.get("status") ?? "open";
   let q = admin
     .from("talent_roles")
-    .select("id, slug, title, company, summary, description, project_brief, employment_type, budget_min, budget_max, budget_currency, budget_unit, apply_deadline, openings, auto_match_threshold, manager_user_id, status, applications_closed", { count: "exact" })
+    .select("id, slug, title, company, summary, description, project_brief, employment_type, budget_min, budget_max, budget_currency, budget_unit, apply_deadline, openings, auto_match_threshold, manager_user_id, status, applications_closed, selection_process, work_trial_works, work_trial_days, trial_brief", { count: "exact" })
     .order("created_at", { ascending: false })
     .range(from, to);
   if (status === "open") q = q.eq("status", "published").eq("applications_closed", false);
@@ -204,7 +213,7 @@ async function getRoles(admin: Admin, url: URL) {
 
 async function listPairs(admin: Admin, url: URL, table: "role_matches" | "talent_applications") {
   const { limit, page, from, to } = paging(url);
-  const cols = table === "role_matches" ? "id, role_id, talent_profile_id, score, status, source, created_at, updated_at" : "id, role_id, talent_profile_id, status, created_at, updated_at";
+  const cols = table === "role_matches" ? "id, role_id, talent_profile_id, score, status, source, trial_started_at, trial_due_at, created_at, updated_at" : "id, role_id, talent_profile_id, status, created_at, updated_at";
   let q = admin.from(table).select(cols, { count: "exact" }).order("created_at", { ascending: false }).range(from, to);
   const roleId = url.searchParams.get("role_id");
   if (roleId) q = q.eq("role_id", UUID.parse(roleId));
@@ -214,7 +223,7 @@ async function listPairs(admin: Admin, url: URL, table: "role_matches" | "talent
   if (since) q = q.gte("updated_at", since);
   const { data, count, error } = await q;
   if (error) throw new Error(error.message);
-  const rows = (data ?? []) as unknown as Array<{ id: string; role_id: string; talent_profile_id: string; score?: number; status: string; source?: string; created_at: string; updated_at: string }>;
+  const rows = (data ?? []) as unknown as Array<{ id: string; role_id: string; talent_profile_id: string; score?: number; status: string; source?: string; trial_started_at?: string | null; trial_due_at?: string | null; created_at: string; updated_at: string }>;
   return {
     status: 200,
     body: {
@@ -225,6 +234,7 @@ async function listPairs(admin: Admin, url: URL, table: "role_matches" | "talent
         talent_id: r.talent_profile_id,
         score: r.score ?? null,
         status: r.status,
+        ...(table === "role_matches" ? { trial_started_at: r.trial_started_at ?? null, trial_due_at: r.trial_due_at ?? null } : {}),
         created_at: r.created_at,
         updated_at: r.updated_at,
         origin: table === "talent_applications" ? "application" : r.source === "manual" ? "manual" : "auto",
@@ -332,6 +342,70 @@ async function addNote(admin: Admin, input: z.infer<typeof NoteBody>) {
     .single();
   if (error) return { status: 400, body: { error: "Could not save the note (check talent_id / role_id)" } };
   return { status: 201, body: data, changes: { note_id: data.id, talent_id: input.talent_id, role_id: input.role_id ?? null } };
+}
+
+async function listTrials(admin: Admin) {
+  const { data: matches, error } = await admin
+    .from("role_matches")
+    .select("id, role_id, talent_profile_id, trial_started_at, trial_due_at, talent_profiles(full_name), talent_roles(title, work_trial_works, trial_brief)")
+    .eq("status", "trial")
+    .order("trial_due_at", { ascending: true })
+    .limit(200);
+  if (error) throw new Error(error.message);
+  const rows = matches ?? [];
+  const { data: subs } = rows.length
+    ? await admin
+        .from("talent_deliverables")
+        .select("id, role_id, talent_profile_id, title, link_url, summary, status, reviewer_note, created_at")
+        .in("role_id", Array.from(new Set(rows.map((m) => m.role_id))))
+        .in("talent_profile_id", Array.from(new Set(rows.map((m) => m.talent_profile_id))))
+        .order("created_at", { ascending: true })
+    : { data: [] };
+  const now = Date.now();
+  return {
+    status: 200,
+    body: {
+      data: rows.map((m) => {
+        const mine = (subs ?? []).filter((d) => d.role_id === m.role_id && d.talent_profile_id === m.talent_profile_id);
+        const needed = Math.max(1, m.talent_roles?.work_trial_works ?? 1);
+        return {
+          match_id: m.id,
+          role_id: m.role_id,
+          role_title: m.talent_roles?.title ?? null,
+          talent_id: m.talent_profile_id,
+          talent_name: m.talent_profiles?.full_name ?? null,
+          trial_brief: m.talent_roles?.trial_brief ?? null,
+          works_needed: needed,
+          works_submitted: mine.length,
+          started_at: m.trial_started_at,
+          due_at: m.trial_due_at,
+          overdue: Boolean(m.trial_due_at && Date.parse(m.trial_due_at) < now),
+          ready_to_decide: mine.length >= needed && mine.every((d) => d.status !== "submitted"),
+          submissions: mine.map(({ role_id: _r, talent_profile_id: _t, ...d }) => d),
+        };
+      }),
+    },
+  };
+}
+
+async function reviewSubmission(admin: Admin, id: string, input: z.infer<typeof ReviewBody>) {
+  const { data: d, error } = await admin
+    .from("talent_deliverables")
+    .update({ status: input.status, reviewer_note: input.note ?? null })
+    .eq("id", id)
+    .select("id, title, status, reviewer_note, updated_at, talent_profiles(full_name, email), talent_roles(title)")
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!d) return { status: 404, body: { error: "Submission not found" } };
+  if (d.talent_profiles?.email) {
+    const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
+    await sendTemplateEmail("deliverable-reviewed", d.talent_profiles.email, {
+      templateData: { name: d.talent_profiles.full_name, title: d.title, roleTitle: d.talent_roles?.title, status: d.status, note: d.reviewer_note },
+      idempotencyKey: `deliverable-reviewed-${d.id}-${d.updated_at}`,
+      replyTo: HR_REPLY_TO,
+    }).catch((e) => console.error("deliverable-reviewed email failed", (e as Error).message));
+  }
+  return { status: 200, body: { id: d.id, status: d.status }, changes: { table: "talent_deliverables", id, to: input.status } };
 }
 
 async function getRole(admin: Admin, id: string) {

@@ -6,6 +6,7 @@ export const HR_STATUSES = [
   "shortlisted",
   "interview_invited",
   "assessment_invited",
+  "work_trial",
   "interviewed",
   "selected",
   "offer_sent",
@@ -25,6 +26,7 @@ const MATCH_MAP: Partial<Record<HrStatus, string>> = {
   selected: "accepted",
   assessment_invited: "assessment",
   interview_invited: "interview",
+  work_trial: "trial",
 };
 
 const APPLICATION_MAP: Partial<Record<HrStatus, string>> = {

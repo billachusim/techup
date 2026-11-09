@@ -1735,6 +1735,8 @@ export type Database = {
           source: string
           status: string
           talent_profile_id: string
+          trial_due_at: string | null
+          trial_started_at: string | null
           updated_at: string
         }
         Insert: {
@@ -1748,6 +1750,8 @@ export type Database = {
           source?: string
           status?: string
           talent_profile_id: string
+          trial_due_at?: string | null
+          trial_started_at?: string | null
           updated_at?: string
         }
         Update: {
@@ -1761,6 +1765,8 @@ export type Database = {
           source?: string
           status?: string
           talent_profile_id?: string
+          trial_due_at?: string | null
+          trial_started_at?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -2394,6 +2400,9 @@ export type Database = {
           summary: string
           task_board_url: string | null
           title: string
+          trial_brief: string | null
+          work_trial_days: number
+          work_trial_works: number
           updated_at: string
           whatsapp_group_url: string | null
         }
@@ -2439,6 +2448,9 @@ export type Database = {
           summary: string
           task_board_url?: string | null
           title: string
+          trial_brief?: string | null
+          work_trial_days?: number
+          work_trial_works?: number
           updated_at?: string
           whatsapp_group_url?: string | null
         }
@@ -2484,6 +2496,9 @@ export type Database = {
           summary?: string
           task_board_url?: string | null
           title?: string
+          trial_brief?: string | null
+          work_trial_days?: number
+          work_trial_works?: number
           updated_at?: string
           whatsapp_group_url?: string | null
         }

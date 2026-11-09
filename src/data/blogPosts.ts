@@ -1123,8 +1123,8 @@ Our **Web Development Bootcamp** goes from HTML to production-ready React + Type
   {
     slug: "cybersecurity-salary-nigeria-2026",
     title: "Cybersecurity Salary Nigeria: 2026 Entry to Senior Guide",
-    seoTitle: "Cyber Security Salary Nigeria 2026 by Role",
-    description: "Cybersecurity salaries in Nigeria in 2026: mid-level analysts earn about ₦450k–₦900k a month and seniors ₦1.5M–₦2M. Pay by role, sources, and what employers screen for.",
+    seoTitle: "Cyber Security Salary in Nigeria 2026: ₦450k to ₦2M a Month",
+    description: "Cyber security salary in Nigeria 2026: analysts earn ₦450k–₦900k a month, seniors ₦1.5M–₦2M. Pay by role, and how to train for your first SOC job.",
     content: `# Cybersecurity Salary in Nigeria 2026: SOC, Pentest & GRC Pay by Level
 
 *By Bill Achusim · Published Jul 2, 2026 · Last updated Oct 25, 2026*

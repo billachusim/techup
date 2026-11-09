@@ -20,7 +20,6 @@ import { isFreePlan } from "../../supabase/functions/_shared/enrollment-access.t
 
 import { useServerFn } from "@tanstack/react-start";
 import { briefNextClass, openClassVideos } from "@/lib/student-review.functions";
-import { claimMyCertificates } from "@/lib/certificate-auto-issue.functions";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Link, useNavigate } from "@/lib/router-compat";
@@ -58,6 +57,7 @@ type ClassContent = {
   description?: string;
   resources?: { type: string; title: string; url: string }[];
   handoutContent?: string;
+  assignment?: string;
 };
 
 const Dashboard = () => {
@@ -281,71 +281,6 @@ const Dashboard = () => {
     await logout();
     toast({ title: "Signed Out", description: "You've been signed out successfully." });
     navigate('/');
-  };
-
-  const runClaimCertificates = useServerFn(claimMyCertificates);
-
-  const handleCheckpointComplete = async (courseId: string, checkpointNumber: number) => {
-    if (!userData?.faculty_id) return;
-    try {
-      const { data: progressData } = await supabase
-        .from("course_progress").select("*")
-        .eq("faculty_id", userData.faculty_id).eq("course_id", courseId).maybeSingle();
-
-      const currentCompleted = progressData?.classes_completed || 0;
-      let newClassesCompleted: number;
-      if (checkpointNumber === currentCompleted) {
-        newClassesCompleted = Math.max(0, currentCompleted - 1);
-      } else if (checkpointNumber === currentCompleted + 1) {
-        newClassesCompleted = checkpointNumber;
-      } else {
-        toast({ title: "Complete in Order", description: "Please complete classes in order.", variant: "destructive" });
-        return;
-      }
-
-      const newProgress = newClassesCompleted * 25;
-      if (progressData) {
-        const { error } = await supabase.from("course_progress").update({
-          classes_completed: newClassesCompleted, progress_percentage: newProgress,
-          last_accessed: new Date().toISOString(),
-          ...(newProgress === 100 ? { completed_at: new Date().toISOString() } : { completed_at: null })
-        }).eq("id", progressData.id);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.from("course_progress").insert({
-          faculty_id: userData.faculty_id, course_id: courseId,
-          classes_completed: newClassesCompleted, progress_percentage: newProgress,
-          last_accessed: new Date().toISOString()
-        });
-        if (error) throw error;
-      }
-
-      toast({
-        title: "Progress Updated",
-        description: newClassesCompleted > currentCompleted
-          ? `Class ${newClassesCompleted} of 4 completed!`
-          : `Progress reset to ${newClassesCompleted} of 4 classes`,
-      });
-      localStorage.removeItem(`aiNextClass_${userData.faculty_id}`);
-      // Last class ticked: issue the certificate now if the course is paid in full
-      // and some work has been accepted. Otherwise the hourly run issues it later.
-      if (newProgress === 100) {
-        try {
-          const result = await runClaimCertificates();
-          if (result.issued > 0) {
-            toast({ title: "Certificate issued", description: "Congratulations! We've emailed you the link to verify it." });
-          } else if (result.waitingPayment > 0) {
-            toast({ title: "Course complete", description: "Your certificate will be issued once your fees are paid in full." });
-          } else if (result.waitingWork > 0) {
-            toast({ title: "Course complete", description: "Your certificate will be issued once a tutor accepts your submitted work." });
-          }
-        } catch { /* the hourly run will try again */ }
-      }
-      await fetchUserDashboardData(userData.faculty_id);
-    } catch (error) {
-      console.error("Error updating progress:", error);
-      toast({ title: "Error", description: "Failed to update progress. Please try again.", variant: "destructive" });
-    }
   };
 
   // Once per class: brief the student's Slack class group and email them.
@@ -575,6 +510,8 @@ const Dashboard = () => {
               department={userData?.department}
               courseName={nextLecture?.courses?.name}
               classNumber={nextClassNumber}
+              courseId={nextLecture?.course_id ?? null}
+              classTask={aiGeneratedContent?.assignment ?? null}
               classTitle={(aiGeneratedContent?.title || nextLecture?.title || '').replace(/\s*-?\s*(Session|Class)\s+\d+/gi, '')}
               meetingLink={nextLecture && !nextLecture.isAiGenerated ? nextLecture.meeting_link : null}
               whatsappGroupLink={nextLecture && !nextLecture.isAiGenerated ? nextLecture.courses?.whatsapp_group_link : null}
@@ -618,28 +555,25 @@ const Dashboard = () => {
                             </div>
                             <Progress value={progressPercentage} className="h-2" />
                             <div className="flex items-center gap-2 pt-1">
-                              <span className="text-xs text-muted-foreground min-w-fit">Mark class:</span>
+                              <span className="text-xs text-muted-foreground min-w-fit">Classes:</span>
                               <div className="flex gap-2 flex-1">
                                 {[1, 2, 3, 4].map((checkpoint) => {
                                   const isCompleted = classesCompleted >= checkpoint;
                                   const isNext = checkpoint === classesCompleted + 1;
-                                  const isCurrentLast = checkpoint === classesCompleted;
-                                  const canInteract = isCourseActive && (isNext || isCurrentLast);
+                                  // Classes are marked done automatically when the task for them passes.
                                   return (
-                                    <button
+                                    <div
                                       key={checkpoint}
-                                      onClick={() => canInteract && handleCheckpointComplete(enrollment.course_id, checkpoint)}
-                                      disabled={!canInteract}
-                                      className={`flex-1 h-8 rounded-md border-2 transition-all flex items-center justify-center ${
-                                        !isCourseActive ? "bg-background border-muted-foreground/20 cursor-not-allowed opacity-40"
+                                      className={`flex-1 h-8 rounded-md border-2 flex items-center justify-center ${
+                                        !isCourseActive ? "bg-background border-muted-foreground/20 opacity-40"
                                           : isCompleted ? "bg-primary border-primary text-primary-foreground"
-                                          : isNext ? "bg-background border-primary/50 hover:border-primary hover:bg-primary/5 cursor-pointer"
-                                          : "bg-background border-muted-foreground/20 cursor-not-allowed opacity-50"
-                                      } ${isCourseActive && isCurrentLast && isCompleted ? "cursor-pointer hover:opacity-80" : ""}`}
-                                      title={!isCourseActive ? "Complete previous course first" : isCurrentLast && isCompleted ? "Click to undo" : isNext ? "Click to complete" : isCompleted ? "Completed" : "Complete previous classes first"}
+                                          : isNext ? "bg-background border-primary/50"
+                                          : "bg-background border-muted-foreground/20 opacity-50"
+                                      }`}
+                                      title={!isCourseActive ? "Finish the previous course first" : isCompleted ? "Done: your task passed" : isNext ? "Current class: submit its task to finish it" : "Locked until the class before it is done"}
                                     >
                                       <span className="text-xs font-medium">{checkpoint}</span>
-                                    </button>
+                                    </div>
                                   );
                                 })}
                               </div>

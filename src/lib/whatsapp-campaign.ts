@@ -44,7 +44,7 @@ export const CAMPAIGN_TEMPLATES: Record<Segment, { name: string; body: string; e
     name: "tf_student_keep_going",
     body:
       "Hi {{1}}, a quick update from Tech Faculty! 🎓\n\n" +
-      "We've upgraded the platform: classes twice a week, AI tutor feedback on your work, and your Certificate of Achievement when you finish. Keep going, you're doing great!\n\n" +
+      "We've upgraded the platform: classes 2-3 times a week, AI tutor feedback on your work, and your Certificate of Achievement when you finish. Keep going, you're doing great!\n\n" +
       "Open your dashboard: {{2}}",
     examples: ["Ada", `${SITE}/dashboard`],
   },

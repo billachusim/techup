@@ -3,7 +3,6 @@ import { z } from "zod";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Database } from "@/integrations/supabase/types";
-import { findProgram } from "@/data/coursePrograms";
 
 async function assertStaff(supabase: SupabaseClient<Database>, userId: string) {
   const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
@@ -100,6 +99,10 @@ export const reviewStudentWork = createServerFn({ method: "POST" })
     if (unchanged) return { ok: true as const };
     const { notifyStudentReviewed } = await import("@/lib/student-review.server");
     await notifyStudentReviewed({ id: row.id, user_id: row.user_id, title: row.title, status: data.status, score: data.score, note });
+    if (data.status === "reviewed") {
+      const { advanceAfterAcceptedWork } = await import("@/lib/class-progress.server");
+      await advanceAfterAcceptedWork(row.id);
+    }
     return { ok: true as const };
   });
 
@@ -129,45 +132,9 @@ export const briefNextClass = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => BriefInput.parse(d))
   .handler(async ({ data, context }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error: dup } = await supabaseAdmin
-      .from("student_class_briefings")
-      .insert({ user_id: context.userId, class_key: data.classKey });
-    if (dup) return { ok: true as const, alreadySent: true };
-
-    const { data: profile } = await supabaseAdmin
-      .from("profiles").select("name, email, department, slack_user_id, slack_channel_id").eq("id", context.userId).maybeSingle();
-    const program = findProgram(profile?.department);
-
-    // This class's saved videos (Drive access is given by openClassVideos).
-    const { classVideosFor } = await import("@/lib/class-videos.server");
-    const videos = await classVideosFor({
-      courseId: data.courseId,
-      classNumber: data.classNumber,
-      classTitle: data.classTitle,
-      courseName: data.courseName ?? program.title,
-    });
-
-    if (profile?.slack_channel_id) {
-      const { postChannelMessage } = await import("@/lib/slack.server");
-      const who = profile.slack_user_id ? `<@${profile.slack_user_id}>` : (profile.name ?? "a student");
-      await postChannelMessage(
-        profile.slack_channel_id,
-        `:books: Next class for ${who}: *${data.classNumber ? `Class ${data.classNumber} — ` : ""}${data.classTitle}*${data.date ? ` (${data.date})` : ""}.` +
-          (videos.length ? `\n:tv: Class videos:\n${videos.join("\n")}` : "") +
-          `\nNotes and this week's assignment: https://techfaculty.ng/dashboard`,
-      );
-    }
-    if (profile?.email) {
-      try {
-        const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
-        await sendTemplateEmail("class-unlocked", profile.email, {
-          templateData: { name: profile.name, classTitle: data.classTitle, programme: program.title, classNumber: data.classNumber, date: data.date },
-          idempotencyKey: `class-unlocked-${context.userId}-${data.classKey}`,
-        });
-      } catch (e) { console.error("class email failed", (e as Error).message); }
-    }
-    return { ok: true as const, alreadySent: false };
+    const { sendClassBriefing } = await import("@/lib/class-progress.server");
+    const { alreadySent } = await sendClassBriefing(context.userId, data);
+    return { ok: true as const, alreadySent };
   });
 
 /**
@@ -195,16 +162,7 @@ export const openClassVideos = createServerFn({ method: "POST" })
     ]);
     if (!enrolment) return { granted: 0 };
     const currentClass = (progress?.classes_completed ?? 0) + 1;
-
-    // class_videos comes from a migration that generated types may not include yet.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const db = supabaseAdmin as unknown as { from: (table: string) => any };
-    const { data: rows } = await db.from("class_videos").select("url")
-      .eq("course_id", data.courseId).eq("source", "drive").lte("class_number", currentClass);
-    const urls = ((rows ?? []) as { url: string }[]).map((r) => r.url);
-    if (!urls.length) return { granted: 0 };
-
-    const { grantClassVideos } = await import("@/lib/drive-share.server");
-    const r = await grantClassVideos({ email: profile.email, urls, label: `course ${data.courseId} up to class ${currentClass}` });
-    return { granted: r.granted };
+    const { openDriveVideosUpTo } = await import("@/lib/class-progress.server");
+    const granted = await openDriveVideosUpTo({ email: profile.email, courseId: data.courseId, currentClass });
+    return { granted };
   });

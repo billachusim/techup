@@ -19,6 +19,10 @@ interface Props {
   courseName?: string | null;
   classNumber?: number;
   classTitle?: string | null;
+  /** The course of the current class, saved with the work so a pass can unlock the next class. */
+  courseId?: string | null;
+  /** This class's task (online classes: written by the AI, marked by the AI). */
+  classTask?: string | null;
   meetingLink?: string | null;
   whatsappGroupLink?: string | null;
   liveClassMessage?: string | null;
@@ -42,7 +46,7 @@ const STATUS_LABEL: Record<string, string> = {
   needs_changes: "Needs changes",
 };
 
-export const StudentClassroom = ({ facultyId, department, courseName, classNumber, classTitle, meetingLink, whatsappGroupLink, liveClassMessage }: Props) => {
+export const StudentClassroom = ({ facultyId, department, courseName, classNumber, classTitle, courseId, classTask, meetingLink, whatsappGroupLink, liveClassMessage }: Props) => {
   const { toast } = useToast();
   const runOnboarding = useServerFn(onboardStudent);
   const runNotify = useServerFn(notifyStudentWork);
@@ -144,6 +148,7 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
           proof_url: proofUrl.trim() ? proofUrl.trim().slice(0, 500) : null,
           summary: summary.trim() ? summary.trim().slice(0, 1000) : null,
           course_name: courseName ?? program.title,
+          course_id: courseId ?? null,
           class_number: classNumber ?? null,
         })
         .select("id")
@@ -161,7 +166,7 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
         // If this call is cut short, the scheduled sweep picks the work up within minutes.
         runAiReview({ data: { deliverableId: data.id } }).then(loadDeliverables, () => undefined);
       }
-      toast({ title: "Work submitted", description: "Your AI tutor is scoring it now. You'll get feedback here and by email in a minute or two." });
+      toast({ title: "Task submitted", description: "Your AI tutor is marking it now. You'll get feedback here and by email in a few minutes. When it passes, your next class unlocks." });
     } catch (e) {
       toast({ title: "Could not submit", description: (e as Error).message, variant: "destructive" });
     } finally {
@@ -224,20 +229,26 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
         <CardContent className="p-6 space-y-4">
           <div className="flex items-center gap-2">
             <Upload className="h-5 w-5" />
-            <h3 className="font-semibold">Submit this week's work</h3>
+            <h3 className="font-semibold">{classNumber ? `Your Class ${classNumber} task` : "Your class task"}</h3>
           </div>
           {classTitle && (
             <p className="text-sm text-muted-foreground">
               Current class: <span className="font-medium text-foreground">{classTitle}</span>
             </p>
           )}
+          {classTask && (
+            <div className="rounded-lg border bg-muted/40 p-3 text-sm whitespace-pre-line">{classTask}</div>
+          )}
+          <p className="text-xs text-muted-foreground">
+            Do the task, put your work in a shareable link and submit it below. The AI tutor marks it in a few minutes. A pass (50% or more) finishes this class and unlocks the next one; otherwise you get feedback and can submit again.
+          </p>
           <div className="grid gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="work-title">What did you build or complete?</Label>
-              <Input id="work-title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Class 3 project: portfolio page" maxLength={160} />
+              <Label htmlFor="work-title">What did you do?</Label>
+              <Input id="work-title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder={classNumber ? `e.g. Class ${classNumber} task: my portfolio page` : "e.g. My portfolio page"} maxLength={160} />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="work-link">Link to your work (optional)</Label>
+              <Label htmlFor="work-link">Link to your work</Label>
               <Input id="work-link" value={proofUrl} onChange={(e) => setProofUrl(e.target.value)} placeholder="GitHub, live link, Figma or Google Doc" maxLength={500} />
             </div>
             <div className="space-y-1.5">
@@ -246,7 +257,7 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
             </div>
             <Button onClick={submit} disabled={saving}>
               {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              Submit my work
+              Submit my task
             </Button>
           </div>
 

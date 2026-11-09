@@ -78,7 +78,7 @@ export type AiReviewOutcome = "applied" | "needs_staff" | "failed" | "not_claime
 export async function aiReviewSubmission(id: string): Promise<AiReviewOutcome> {
   const { data: row } = await supabaseAdmin
     .from("student_deliverables")
-    .select("id, user_id, faculty_id, title, summary, proof_url, course_name, class_number, status, ai_status, ai_attempts, ai_reviewed_at")
+    .select("id, user_id, faculty_id, title, summary, proof_url, course_id, course_name, class_number, status, ai_status, ai_attempts, ai_reviewed_at")
     .eq("id", id)
     .maybeSingle();
   if (!row || !waitingForAi(row)) return "not_claimed";
@@ -97,9 +97,19 @@ export async function aiReviewSubmission(id: string): Promise<AiReviewOutcome> {
     .maybeSingle();
   if (!claimed) return "not_claimed";
 
+  // The task set for this class, so the AI marks the work against it.
+  let task: string | null = null;
+  if (row.course_id && claimed.class_number) {
+    // class_tasks comes from a migration that generated types may not include yet.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: t } = await (supabaseAdmin as unknown as { from: (table: string) => any })
+      .from("class_tasks").select("task").eq("course_id", row.course_id).eq("class_number", claimed.class_number).maybeSingle();
+    task = (t?.task as string | undefined) ?? null;
+  }
+
   let review: AiReview | null = null;
   try {
-    review = await askAi(claimed);
+    review = await askAi({ ...claimed, task });
   } catch (e) {
     console.error("AI work review failed", (e as Error).message);
   }
@@ -175,6 +185,11 @@ export async function aiReviewSubmission(id: string): Promise<AiReviewOutcome> {
     note: review.feedback,
     byAi: true,
   });
+  // A pass finishes this class and queues the next one in Slack (online classes have no tutor).
+  if (review.verdict === "reviewed") {
+    const { advanceAfterAcceptedWork } = await import("@/lib/class-progress.server");
+    await advanceAfterAcceptedWork(id);
+  }
   return "applied";
 }
 

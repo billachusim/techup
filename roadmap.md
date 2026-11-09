@@ -7,7 +7,7 @@
 - [ ] Auto-answer questions in Slack — built; waiting on publish + creating the Tech Faculty NG Slack app (needs Bill's go-ahead to publish)
 
 ## Claude PRs
-- [ ] Review PR #101 "Work trial before selection" (merge vetting) — waiting for it to be merged into main
+- [x] PR #101 "Work trial before selection" — merged; database change applied 2026-11-09
 
 ## Notes
 - Do not post in the dedicated Aboutbot channel; posting about Aboutbot roles elsewhere is fine.

@@ -2401,10 +2401,10 @@ export type Database = {
           task_board_url: string | null
           title: string
           trial_brief: string | null
-          work_trial_days: number
-          work_trial_works: number
           updated_at: string
           whatsapp_group_url: string | null
+          work_trial_days: number
+          work_trial_works: number
         }
         Insert: {
           applications_closed?: boolean
@@ -2449,10 +2449,10 @@ export type Database = {
           task_board_url?: string | null
           title: string
           trial_brief?: string | null
-          work_trial_days?: number
-          work_trial_works?: number
           updated_at?: string
           whatsapp_group_url?: string | null
+          work_trial_days?: number
+          work_trial_works?: number
         }
         Update: {
           applications_closed?: boolean
@@ -2497,10 +2497,10 @@ export type Database = {
           task_board_url?: string | null
           title?: string
           trial_brief?: string | null
-          work_trial_days?: number
-          work_trial_works?: number
           updated_at?: string
           whatsapp_group_url?: string | null
+          work_trial_days?: number
+          work_trial_works?: number
         }
         Relationships: []
       }

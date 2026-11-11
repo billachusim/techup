@@ -196,7 +196,7 @@ export default function AdminWhatsApp() {
   return (
     <>
       <Header />
-      <main className="container space-y-6 py-8">
+      <main className="container space-y-6 pb-8 pt-24 md:pt-28">
         <AdminNav />
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h1 className="text-2xl font-bold">WhatsApp inbox</h1>

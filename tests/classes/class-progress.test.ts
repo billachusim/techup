@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { classBriefingText, progressAfterAcceptedWork } from "@/lib/class-progress";
+import { classBriefingText, classGroupNoticeText, progressAfterAcceptedWork } from "@/lib/class-progress";
 import {
   buildTaskPrompt,
   cleanTask,
@@ -48,6 +48,20 @@ describe("classBriefingText", () => {
 
   it("points to the dashboard when the task isn't written yet", () => {
     expect(classBriefingText({ who: "Ada", classTitle: "Intro", videos: [] })).toContain("on your dashboard");
+  });
+});
+
+describe("classGroupNoticeText", () => {
+  it("tags the student, names the class, and points to their DMs without task or videos", () => {
+    const text = classGroupNoticeText({ who: "<@U1>", classNumber: 2, classTitle: "Writing good prompts", hasDm: true });
+    expect(text).toContain("<@U1>");
+    expect(text).toContain("Class 2 — Writing good prompts");
+    expect(text).toContain("Check your DMs");
+    expect(text).not.toContain("http");
+  });
+
+  it("points to email when the DM couldn't be sent", () => {
+    expect(classGroupNoticeText({ who: "Ada", classTitle: "Intro", hasDm: false })).toContain("Check your email");
   });
 });
 

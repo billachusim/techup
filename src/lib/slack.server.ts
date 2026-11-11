@@ -134,3 +134,23 @@ export async function postChannelMessage(channelId: string, text: string): Promi
     console.error("slack chat.postMessage error", (e as Error).message);
   }
 }
+
+/** Best-effort direct message from Tech Faculty NG to one Slack member. Returns whether it was delivered. */
+export async function sendDirectMessage(slackUserId: string, text: string): Promise<boolean> {
+  try {
+    const opened = await slackPost("conversations.open", { users: slackUserId });
+    if (!opened.ok || !opened.channel?.id) {
+      console.error("slack conversations.open failed", opened.error);
+      return false;
+    }
+    const res = await slackPost("chat.postMessage", {
+      channel: opened.channel.id, text, unfurl_links: false,
+      username: "Tech Faculty NG", icon_url: "https://techfaculty.ng/logo.png",
+    });
+    if (!res.ok) console.error("slack DM failed", res.error);
+    return res.ok;
+  } catch (e) {
+    console.error("slack DM error", (e as Error).message);
+    return false;
+  }
+}

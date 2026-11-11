@@ -31,7 +31,22 @@ export function progressAfterAcceptedWork(input: {
   };
 }
 
-/** The Slack post that queues a class: title, date, videos, and the task to hand in. */
+/**
+ * The short class-group post: a tag and the class name only. Videos, the task
+ * and dates go to the student privately (Slack DM, or email if they have no
+ * Slack account), so the cohort channel carries as little about them as possible.
+ */
+export function classGroupNoticeText(input: {
+  who: string;
+  classNumber?: number;
+  classTitle: string;
+  hasDm: boolean;
+}): string {
+  const where = input.hasDm ? "Check your DMs" : "Check your email";
+  return `:books: ${input.who}, your next class is ready: *${input.classNumber ? `Class ${input.classNumber} — ` : ""}${input.classTitle}*. ${where} for the videos and your task.`;
+}
+
+/** The private (DM) message that queues a class: title, date, videos, and the task to hand in. */
 export function classBriefingText(input: {
   who: string;
   classNumber?: number;
@@ -40,7 +55,7 @@ export function classBriefingText(input: {
   videos: string[];
   task?: string | null;
 }): string {
-  const head = `:books: Next class for ${input.who}: *${input.classNumber ? `Class ${input.classNumber} — ` : ""}${input.classTitle}*${input.date ? ` (${input.date})` : ""}.`;
+  const head = `:books: ${input.who === "you" ? "Your next class" : `Next class for ${input.who}`}: *${input.classNumber ? `Class ${input.classNumber} — ` : ""}${input.classTitle}*${input.date ? ` (${input.date})` : ""}.`;
   const videos = input.videos.length
     ? `\n:tv: Class videos:\n${input.videos.join("\n")}`
     : "";

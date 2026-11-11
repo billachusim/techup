@@ -11,3 +11,4 @@
 
 ## Notes
 - Do not post in the dedicated Aboutbot channel; posting about Aboutbot roles elsewhere is fine.
+- [x] Add admin navigation to the WhatsApp inbox page (no way to leave it today)

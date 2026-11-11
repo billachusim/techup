@@ -33,7 +33,7 @@ export async function notifyStudentReviewed(review: {
     try {
       const { postChannelMessage } = await import("@/lib/slack.server");
       const who = profile.slack_user_id ? `<@${profile.slack_user_id}>` : (profile.name ?? "A student");
-      await postChannelMessage(profile.slack_channel_id, `:white_check_mark: ${who}'s work *${review.title}* was reviewed${review.score != null ? ` — ${review.score}%` : ""}. Keep going!`);
+      await postChannelMessage(profile.slack_channel_id, `:white_check_mark: ${who}'s work *${review.title}* was accepted. Keep going!`);
     } catch (e) { console.error("review Slack post failed", (e as Error).message); }
   }
 }

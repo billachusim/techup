@@ -5,7 +5,10 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Smartphone } from "lucide-react";
 import { Link } from "@/lib/router-compat";
 import { Sparkles } from "lucide-react";
-import { apps as products, type AppProduct as Product } from "@/data/apps";
+import { apps as products, isWebOnly, type AppProduct as Product } from "@/data/apps";
+
+const mobileApps = products.filter((p) => !isWebOnly(p));
+const webApps = products.filter((p) => isWebOnly(p));
 
 const PlayStoreBadge = ({ href }: { href: string }) => (
   <a
@@ -75,6 +78,13 @@ const ProductCard = ({ product }: { product: Product }) => (
 
       {/* Store badges */}
       <div className="flex flex-wrap items-center gap-2">
+        {product.links.web && (
+          <Button asChild size="sm" className="gap-1.5">
+            <a href={product.links.web} target="_blank" rel="noopener noreferrer">
+              {isWebOnly(product) ? `Open ${product.name}` : "Use it on the web"} <ExternalLink size={14} />
+            </a>
+          </Button>
+        )}
         {product.links.playstore && <PlayStoreBadge href={product.links.playstore} />}
         {product.links.appstore && <AppStoreBadge href={product.links.appstore} />}
       </div>
@@ -95,14 +105,14 @@ const Products = () => {
           "@type": "CollectionPage",
           name: "Software Products — Tech Faculty NG",
           description:
-            "Portfolio of mobile apps built by Tech Faculty NG including Dear Claire, Alter Ego, Eavesdrop and AI Clopedia.",
+            "Portfolio of mobile and web apps built by Tech Faculty NG, including Dear Claire, Alter Ego, Eavesdrop, AI Clopedia, ExamsAi.ng, SkillFlow, UnilagLife, Pet Care Card, Baby Care Cards and AutoPR.",
           url: "https://techfaculty.ng/products",
           hasPart: products.map((p) => ({
             "@type": "SoftwareApplication",
             name: p.name,
             description: p.description,
-            applicationCategory: "Application",
-            operatingSystem: "iOS, Android",
+            applicationCategory: p.category,
+            operatingSystem: isWebOnly(p) ? "Web browser" : p.links.web ? "Web, Android" : "iOS, Android",
             url: `https://techfaculty.ng/products/${p.slug}`,
           })),
         })}</script>
@@ -120,17 +130,23 @@ const Products = () => {
             Our Software Products
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Mobile apps built by Tech Faculty and Social Faculty — social, AI and
-            self-discovery apps used by over a million people worldwide, live on the
-            App Store and Google Play.
+            Mobile and web apps built by Tech Faculty, Social Faculty and PR Faculty: social,
+            AI, learning and self-discovery apps on the App Store, Google Play and the web.
           </p>
         </section>
 
         {/* Product Grid */}
         <section className="container mx-auto px-4 max-w-6xl" aria-labelledby="our-apps">
-          <h2 id="our-apps" className="text-2xl md:text-3xl font-bold mb-6">Apps built by Tech Faculty</h2>
+          <h2 id="our-apps" className="text-2xl md:text-3xl font-bold mb-6">Mobile apps</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {products.map((product) => (
+            {mobileApps.map((product) => (
+              <ProductCard key={product.name} product={product} />
+            ))}
+          </div>
+
+          <h2 id="web-apps" className="text-2xl md:text-3xl font-bold mb-6 mt-16">Web apps</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {webApps.map((product) => (
               <ProductCard key={product.name} product={product} />
             ))}
           </div>

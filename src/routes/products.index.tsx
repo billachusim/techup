@@ -7,7 +7,7 @@ export const Route = createFileRoute("/products/")({
     pageHead({
       title: "Software Products",
       description:
-        "Explore the mobile apps built by Tech Faculty and Social Faculty — Dear Claire, Alter Ego, Eavesdrop and AI Clopedia, live on the App Store and Google Play.",
+        "Mobile and web apps by Tech Faculty: Dear Claire, Alter Ego, Eavesdrop, AI Clopedia, ExamsAi.ng (JAMB/WAEC AI coach), SkillFlow, UnilagLife, Pet Care Card, Baby Care Cards and AutoPR.",
       path: "/products",
     }),
   component: Products,

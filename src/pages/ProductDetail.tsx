@@ -4,7 +4,9 @@ import Footer from "@/components/Footer";
 import NotFound from "@/pages/NotFound";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link, useParams } from "@/lib/router-compat";
-import { apps, getApp } from "@/data/apps";
+import { apps, getApp, isWebOnly } from "@/data/apps";
+import { ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { SITE_URL } from "@/lib/seo";
 
 const ProductDetail = () => {
@@ -16,17 +18,19 @@ const ProductDetail = () => {
   const pageUrl = `${SITE_URL}/products/${app.slug}`;
   const appLd = {
     "@context": "https://schema.org",
-    "@type": "MobileApplication",
+    "@type": isWebOnly(app) ? "WebApplication" : "MobileApplication",
     name: app.name,
     alternateName: `${app.name}: ${app.tagline}`,
     description: app.summary,
     url: pageUrl,
-    operatingSystem: "Android, iOS",
+    operatingSystem: isWebOnly(app)
+      ? "Web browser"
+      : [app.links.web && "Web", app.links.playstore && "Android", app.links.appstore && "iOS"].filter(Boolean).join(", "),
     applicationCategory: app.category,
     image: app.previewImage ? `${SITE_URL}${app.previewImage}` : undefined,
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    installUrl: app.links.playstore,
-    sameAs: [app.links.playstore, app.links.appstore].filter(Boolean),
+    installUrl: app.links.playstore ?? app.links.web,
+    sameAs: [app.links.web, app.links.playstore, app.links.appstore].filter(Boolean),
     publisher: { "@type": "Organization", name: "Tech Faculty", url: SITE_URL },
     author: { "@type": "Organization", name: app.developer },
   };
@@ -75,6 +79,13 @@ const ProductDetail = () => {
               )}
 
               <div className="flex flex-wrap items-center gap-2">
+                {app.links.web && (
+                  <Button asChild className="gap-1.5">
+                    <a href={app.links.web} target="_blank" rel="noopener noreferrer">
+                      {isWebOnly(app) ? `Open ${app.name}` : "Use it on the web"} <ExternalLink size={16} />
+                    </a>
+                  </Button>
+                )}
                 {app.links.playstore && (
                   <a href={app.links.playstore} target="_blank" rel="noopener noreferrer" aria-label={`Get ${app.name} on Google Play`} className="inline-block hover:opacity-80">
                     <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" className="h-[50px] w-auto" />
@@ -114,7 +125,7 @@ const ProductDetail = () => {
         </section>
 
         <section className="container mx-auto px-4 max-w-4xl mt-12">
-          <h2 className="text-xl font-bold mb-3">More apps from us</h2>
+          <h2 className="text-xl font-bold mb-3">More products from us</h2>
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             {others.map((o) => (
               <li key={o.slug}>

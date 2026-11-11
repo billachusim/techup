@@ -316,6 +316,13 @@
       "when": 1794380083398,
       "tag": "0044_timetable_class_order",
       "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1794380096130,
+      "tag": "0045_class_tasks_enrolled_read",
+      "breakpoints": true
     }
   ]
 }

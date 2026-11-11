@@ -4,7 +4,7 @@
 - [x] Post Aboutbot + Tech Faculty outreach reps priority update in #general
 - [x] One-time follow-up tagging people who listed skills in #general with matching roles
 - [x] Weekly Monday community update (open roles, free bootcamp, courses, careers, events) to #general — scheduled; needs publish
-- [ ] Auto-answer questions in Slack — built; waiting on publish + creating the Tech Faculty NG Slack app (needs Bill's go-ahead to publish)
+- [x] Auto-answer questions in Slack — dropped by Bill 2026-11-11; no dedicated Slack app needed. Code stays in the repo, unused; staff answer manually.
 
 ## Claude PRs
 - [x] PR #101 "Work trial before selection" — merged; database change applied 2026-11-09

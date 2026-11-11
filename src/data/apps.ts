@@ -185,6 +185,7 @@ export const apps: AppProduct[] = [
     },
     category: "LifestyleApplication",
     accent: "from-amber-500 to-orange-600",
+    previewImage: "/products/pet-care-card-cover.jpg",
     developer: "Tech Faculty",
   },
   {
@@ -212,6 +213,7 @@ export const apps: AppProduct[] = [
     links: { web: "https://examsai.lovable.app" },
     category: "EducationalApplication",
     accent: "from-green-500 to-emerald-600",
+    previewImage: "/products/examsai-cover.jpg",
     developer: "Tech Faculty",
   },
   {
@@ -238,6 +240,7 @@ export const apps: AppProduct[] = [
     links: { web: "https://skill-scroll-ai.lovable.app" },
     category: "EducationalApplication",
     accent: "from-violet-500 to-indigo-600",
+    previewImage: "/products/skillflow-cover.jpg",
     developer: "Tech Faculty",
   },
   {
@@ -263,6 +266,7 @@ export const apps: AppProduct[] = [
     links: { web: "https://unilaglife-app.vercel.app" },
     category: "GameApplication",
     accent: "from-sky-600 to-blue-800",
+    previewImage: "/products/unilag-life-cover.jpg",
     developer: "Tech Faculty",
   },
   {
@@ -289,6 +293,7 @@ export const apps: AppProduct[] = [
     links: { web: "https://babycarecards.com" },
     category: "LifestyleApplication",
     accent: "from-rose-400 to-pink-500",
+    previewImage: "/products/baby-care-cards-cover.jpg",
     developer: "Tech Faculty",
   },
   {
@@ -315,6 +320,7 @@ export const apps: AppProduct[] = [
     links: { web: "https://autopr.lovable.app" },
     category: "BusinessApplication",
     accent: "from-slate-700 to-zinc-900",
+    previewImage: "/products/autopr-cover.jpg",
     developer: "PR Faculty",
   },
 ];

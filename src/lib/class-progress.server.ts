@@ -7,6 +7,7 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { findProgram } from "@/data/coursePrograms";
 import {
   classBriefingText,
+  classGroupNoticeText,
   progressAfterAcceptedWork,
 } from "@/lib/class-progress";
 import {
@@ -107,26 +108,44 @@ export async function sendClassBriefing(
         })
       : null;
 
-  if (profile?.slack_channel_id) {
-    try {
-      const { postChannelMessage } = await import("@/lib/slack.server");
-      const who = profile.slack_user_id
-        ? `<@${profile.slack_user_id}>`
-        : (profile.name ?? "a student");
+  // Full details go to the student privately; the class group only gets a tag and the class name.
+  try {
+    const { findSlackUserByEmail, postChannelMessage, sendDirectMessage } =
+      await import("@/lib/slack.server");
+    let slackUserId = profile?.slack_user_id ?? null;
+    if (!slackUserId && profile?.email) {
+      slackUserId = await findSlackUserByEmail(profile.email).catch(() => null);
+      if (slackUserId) {
+        await supabaseAdmin.from("profiles").update({ slack_user_id: slackUserId }).eq("id", userId);
+      }
+    }
+    const hasDm = slackUserId
+      ? await sendDirectMessage(
+          slackUserId,
+          classBriefingText({
+            who: "you",
+            classNumber: data.classNumber,
+            classTitle: data.classTitle,
+            date: data.date,
+            videos,
+            task,
+          }),
+        )
+      : false;
+    if (profile?.slack_channel_id) {
+      const firstName = (profile.name ?? "").trim().split(/\s+/)[0] || "A student";
       await postChannelMessage(
         profile.slack_channel_id,
-        classBriefingText({
-          who,
+        classGroupNoticeText({
+          who: slackUserId ? `<@${slackUserId}>` : firstName,
           classNumber: data.classNumber,
           classTitle: data.classTitle,
-          date: data.date,
-          videos,
-          task,
+          hasDm,
         }),
       );
-    } catch (e) {
-      console.error("class Slack post failed", (e as Error).message);
     }
+  } catch (e) {
+    console.error("class Slack post failed", (e as Error).message);
   }
   if (profile?.email) {
     try {

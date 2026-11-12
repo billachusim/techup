@@ -297,6 +297,33 @@ export const apps: AppProduct[] = [
     developer: "Tech Faculty",
   },
   {
+    slug: "plant-care-cards",
+    name: "Plant Care Cards",
+    tagline: "Plant Sitter Instructions in One Card",
+    description:
+      "Going away? Put watering, light, humidity, feeding, pests and emergency contacts for every plant in your home into one care card, then share it with your plant sitter by link, print it or hand over a QR code.",
+    summary:
+      "Plant Care Cards helps people who travel leave clear plant sitter instructions for a friend, neighbour or family member. One card covers every houseplant, balcony pot and garden plant, with watering days and amounts, a finger test, light, humidity, fertiliser, pests, what to do if a plant droops or yellows, and whether it is toxic to pets. It builds a day-by-day sitter checklist, can be shared by link, QR code or print, and can be filled in by voice.",
+    features: [
+      "Watering days, amounts and a check-the-soil test for each plant",
+      "Light, humidity, feeding, pests and what to do if a plant droops",
+      "One card for every plant in the home, with a day-by-day sitter checklist",
+      "Share by link or QR code, print it, or save a PDF",
+      "Fill it in by voice if you don't want to type",
+    ],
+    faq: [
+      { q: "What should plant sitter instructions include?", a: "Each plant's name and location, when and how much to water, light and humidity needs, anything not to do (like feeding or repotting), what to do if a plant droops, and who to call. Plant Care Cards asks for each of these in short steps." },
+      { q: "Is Plant Care Cards free?", a: "Yes. One plant with a full care card, share link and QR code is free. A one-time $4.99 payment unlocks unlimited plants, PDF export, reminders and unlimited voice fill." },
+      { q: "Do I need an account?", a: "No. Your plants are saved in your browser. An optional account backup is available." },
+    ],
+    platforms: ["web"],
+    links: { web: "https://plantcarecard.lovable.app" },
+    category: "LifestyleApplication",
+    accent: "from-emerald-500 to-green-700",
+    previewImage: "/products/plant-care-cards-cover.jpg",
+    developer: "Tech Faculty",
+  },
+  {
     slug: "autopr",
     name: "AutoPR by PR Faculty",
     tagline: "AI PR, Marketing and Sales for Small Businesses",

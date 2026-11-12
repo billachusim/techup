@@ -105,7 +105,7 @@ const Products = () => {
           "@type": "CollectionPage",
           name: "Software Products — Tech Faculty NG",
           description:
-            "Portfolio of mobile and web apps built by Tech Faculty NG, including Dear Claire, Alter Ego, Eavesdrop, AI Clopedia, ExamsAi.ng, SkillFlow, UnilagLife, Pet Care Card, Baby Care Cards and AutoPR.",
+            "Portfolio of mobile and web apps built by Tech Faculty NG, including Dear Claire, Alter Ego, Eavesdrop, AI Clopedia, ExamsAi.ng, SkillFlow, UnilagLife, Pet Care Card, Baby Care Cards, Plant Care Cards and AutoPR.",
           url: "https://techfaculty.ng/products",
           hasPart: products.map((p) => ({
             "@type": "SoftwareApplication",

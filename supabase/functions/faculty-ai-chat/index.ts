@@ -1,4 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { getCaller } from "../_shared/caller.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -14,6 +16,18 @@ serve(async (req) => {
   }
 
   try {
+    // Signed-in visitors only: every message uses AI credits.
+    const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
+      auth: { persistSession: false },
+    });
+    const caller = await getCaller(req, admin);
+    if (!caller) {
+      return new Response(JSON.stringify({ error: "Please sign in to chat with Faculty AI" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const body = await req.json().catch(() => ({}));
     const message = typeof body?.message === "string" ? body.message.trim().slice(0, MAX_TEXT) : "";
     if (!message) {

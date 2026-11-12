@@ -330,6 +330,13 @@
       "when": 1794489263231,
       "tag": "0046_security_fixes_likes_talent_claim_cron",
       "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1794501647928,
+      "tag": "0047_ai_chat_free_first_message",
+      "breakpoints": true
     }
   ]
 }

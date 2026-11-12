@@ -9,6 +9,11 @@ const corsHeaders = {
 
 const MAX_TEXT = 2000;
 const MAX_TURNS = 20;
+// Free replies for visitors who aren't signed in (one per visitor in the chat
+// window). Shared mobile networks can put many people behind one address, so
+// the per-network cap is generous; the site-wide cap bounds the daily spend.
+const FREE_PER_NETWORK_DAILY = 10;
+const FREE_SITE_DAILY = 300;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -16,18 +21,6 @@ serve(async (req) => {
   }
 
   try {
-    // Signed-in visitors only: every message uses AI credits.
-    const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
-      auth: { persistSession: false },
-    });
-    const caller = await getCaller(req, admin);
-    if (!caller) {
-      return new Response(JSON.stringify({ error: "Please sign in to chat with Faculty AI" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
     const body = await req.json().catch(() => ({}));
     const message = typeof body?.message === "string" ? body.message.trim().slice(0, MAX_TEXT) : "";
     if (!message) {
@@ -45,6 +38,31 @@ serve(async (req) => {
         typeof (m as { content?: unknown }).content === "string")
       .slice(-MAX_TURNS)
       .map((m: { role: string; content: string }) => ({ role: m.role, content: m.content.slice(0, MAX_TEXT) }));
+    // Every message uses AI credits. Visitors who aren't signed in get their
+    // first reply free (capped per network and per day); after that they sign in.
+    const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
+      auth: { persistSession: false },
+    });
+    const caller = await getCaller(req, admin);
+    if (!caller) {
+      const signIn = () =>
+        new Response(JSON.stringify({ error: "Please sign in to keep chatting with Faculty AI", signInRequired: true }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      if (history.some((m: { role: string }) => m.role === "user")) return signIn();
+      const ip = (req.headers.get("cf-connecting-ip") ?? req.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown").trim();
+      const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`faculty-ai-chat:${ip}`));
+      const ipHash = Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, "0")).join("");
+      const { data: allowed, error: claimError } = await admin.rpc("claim_anon_ai_chat", {
+        _ip_hash: ipHash,
+        _per_network: FREE_PER_NETWORK_DAILY,
+        _site_daily: FREE_SITE_DAILY,
+      });
+      if (claimError) console.error("claim_anon_ai_chat failed:", claimError.message);
+      if (allowed !== true) return signIn();
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {

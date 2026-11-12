@@ -89,6 +89,24 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_chat_anon_usage: {
+        Row: {
+          day: string
+          ip_hash: string
+          uses: number
+        }
+        Insert: {
+          day?: string
+          ip_hash: string
+          uses?: number
+        }
+        Update: {
+          day?: string
+          ip_hash?: string
+          uses?: number
+        }
+        Relationships: []
+      }
       ai_class_content: {
         Row: {
           class_number: number
@@ -2974,6 +2992,10 @@ export type Database = {
       check_referral_code: {
         Args: { _code: string; _user_id: string }
         Returns: Json
+      }
+      claim_anon_ai_chat: {
+        Args: { _ip_hash: string; _per_network: number; _site_daily: number }
+        Returns: boolean
       }
       claim_my_talent_profile: { Args: never; Returns: string }
       claim_talent_faculty_id: { Args: never; Returns: string }

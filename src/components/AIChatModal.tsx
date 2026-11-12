@@ -16,13 +16,34 @@ interface AIChatModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
+// Keeps the conversation across the sign-in round trip (same browser tab).
+const STORAGE_KEY = "faculty-ai-chat";
+
 export const AIChatModal = ({ open, onOpenChange }: AIChatModalProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
-  // null = still checking. Chat is for signed-in visitors only (it uses AI credits).
+  // Visitors who aren't signed in get one free reply, then sign in to continue.
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
+  const [blockedBySignIn, setBlockedBySignIn] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(STORAGE_KEY);
+      if (saved) setMessages(JSON.parse(saved) as Message[]);
+    } catch {
+      /* ignore unreadable saved chat */
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(messages.slice(-20)));
+    } catch {
+      /* storage full or blocked */
+    }
+  }, [messages]);
 
   useEffect(() => {
     if (!open) return;
@@ -43,8 +64,11 @@ export const AIChatModal = ({ open, onOpenChange }: AIChatModalProps) => {
     };
   }, [open]);
 
+  const usedFreeReply = messages.some((m) => m.role === "assistant");
+  const needsSignIn = signedIn === false && (usedFreeReply || blockedBySignIn);
+
   const handleSend = async () => {
-    if (!input.trim() || isLoading || !signedIn) return;
+    if (!input.trim() || isLoading || needsSignIn || signedIn === null) return;
 
     const userMessage = input.trim();
     setInput("");
@@ -57,7 +81,14 @@ export const AIChatModal = ({ open, onOpenChange }: AIChatModalProps) => {
         body: { message: userMessage, conversationHistory: messages }
       });
 
-      if (error) throw error;
+      if (error) {
+        const status = (error as { context?: { status?: number } }).context?.status;
+        if (status === 401) {
+          setBlockedBySignIn(true);
+          return;
+        }
+        throw error;
+      }
 
       if (data?.response) {
         setMessages(prev => [...prev, { role: "assistant", content: data.response }]);
@@ -89,20 +120,7 @@ export const AIChatModal = ({ open, onOpenChange }: AIChatModalProps) => {
         </DialogHeader>
         
         <div className="flex-1 overflow-y-auto space-y-4 py-4">
-          {signedIn === false ? (
-            <div className="text-center text-muted-foreground py-8 space-y-4">
-              <p className="mb-2">Hi! I'm Faculty AI 👋</p>
-              <p className="text-sm">
-                Sign in (it's free and takes a few seconds with Google) and I'll recommend the best courses for your goals.
-              </p>
-              <Button asChild>
-                <a href="/login?next=/">
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Sign in to chat
-                </a>
-              </Button>
-            </div>
-          ) : messages.length === 0 ? (
+          {messages.length === 0 ? (
             <div className="text-center text-muted-foreground py-8">
               <p className="mb-2">Hi! I'm Faculty AI 👋</p>
               <p className="text-sm">Tell me about your interests, goals, or what you'd like to learn, and I'll recommend the best courses for you!</p>
@@ -134,24 +152,38 @@ export const AIChatModal = ({ open, onOpenChange }: AIChatModalProps) => {
           )}
         </div>
 
-        <div className="flex gap-2 pt-4 border-t">
-          <Textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Tell me about yourself and what you want to learn..."
-            className="min-h-[60px] resize-none"
-            disabled={isLoading || !signedIn}
-          />
-          <Button
-            onClick={handleSend}
-            disabled={!input.trim() || isLoading || !signedIn}
-            size="icon"
-            className="h-[60px] w-[60px] shrink-0"
-          >
-            <Send className="h-5 w-5" />
-          </Button>
-        </div>
+        {needsSignIn && !isLoading ? (
+          <div className="pt-4 border-t text-center space-y-3">
+            <p className="text-sm text-muted-foreground">
+              Want to keep chatting? Sign in for free (a few seconds with Google) and pick up right where you left off.
+            </p>
+            <Button asChild className="w-full sm:w-auto">
+              <a href="/login?next=/">
+                <LogIn className="h-4 w-4 mr-2" />
+                Sign in to continue
+              </a>
+            </Button>
+          </div>
+        ) : (
+          <div className="flex gap-2 pt-4 border-t">
+            <Textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Tell me about yourself and what you want to learn..."
+              className="min-h-[60px] resize-none"
+              disabled={isLoading || needsSignIn}
+            />
+            <Button
+              onClick={handleSend}
+              disabled={!input.trim() || isLoading || needsSignIn || signedIn === null}
+              size="icon"
+              className="h-[60px] w-[60px] shrink-0"
+            >
+              <Send className="h-5 w-5" />
+            </Button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

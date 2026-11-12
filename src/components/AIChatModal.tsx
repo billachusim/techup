@@ -150,39 +150,40 @@ export const AIChatModal = ({ open, onOpenChange }: AIChatModalProps) => {
               </div>
             </div>
           )}
-          {needsSignIn && !isLoading && (
-            <div className="rounded-lg border bg-card p-4 text-center space-y-3">
-              <p className="text-sm text-muted-foreground">
-                Want to keep chatting? Sign in for free (a few seconds with Google) and pick up right where you left off.
-              </p>
-              <Button asChild>
-                <a href="/login?next=/">
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Sign in to continue
-                </a>
-              </Button>
-            </div>
-          )}
         </div>
 
-        <div className="flex gap-2 pt-4 border-t">
-          <Textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder={needsSignIn ? "Sign in to keep chatting..." : "Tell me about yourself and what you want to learn..."}
-            className="min-h-[60px] resize-none"
-            disabled={isLoading || needsSignIn}
-          />
-          <Button
-            onClick={handleSend}
-            disabled={!input.trim() || isLoading || needsSignIn || signedIn === null}
-            size="icon"
-            className="h-[60px] w-[60px] shrink-0"
-          >
-            <Send className="h-5 w-5" />
-          </Button>
-        </div>
+        {needsSignIn && !isLoading ? (
+          <div className="pt-4 border-t text-center space-y-3">
+            <p className="text-sm text-muted-foreground">
+              Want to keep chatting? Sign in for free (a few seconds with Google) and pick up right where you left off.
+            </p>
+            <Button asChild className="w-full sm:w-auto">
+              <a href="/login?next=/">
+                <LogIn className="h-4 w-4 mr-2" />
+                Sign in to continue
+              </a>
+            </Button>
+          </div>
+        ) : (
+          <div className="flex gap-2 pt-4 border-t">
+            <Textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Tell me about yourself and what you want to learn..."
+              className="min-h-[60px] resize-none"
+              disabled={isLoading || needsSignIn}
+            />
+            <Button
+              onClick={handleSend}
+              disabled={!input.trim() || isLoading || needsSignIn || signedIn === null}
+              size="icon"
+              className="h-[60px] w-[60px] shrink-0"
+            >
+              <Send className="h-5 w-5" />
+            </Button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

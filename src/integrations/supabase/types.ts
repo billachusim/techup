@@ -2960,6 +2960,17 @@ export type Database = {
         }
         Returns: number
       }
+      blog_like_counts: {
+        Args: { _slugs?: string[] }
+        Returns: {
+          likes: number
+          post_slug: string
+        }[]
+      }
+      blog_visitor_liked: {
+        Args: { _slug: string; _visitor_id: string }
+        Returns: boolean
+      }
       check_referral_code: {
         Args: { _code: string; _user_id: string }
         Returns: Json

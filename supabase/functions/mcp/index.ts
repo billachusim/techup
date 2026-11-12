@@ -5205,11 +5205,11 @@ async function fetchLikeCounts(slugs) {
   const key = env2.SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key || slugs.length === 0) return {};
   const supabase = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
-  const { data, error } = await supabase.from("blog_post_likes").select("post_slug").in("post_slug", slugs);
+  const { data, error } = await supabase.rpc("blog_like_counts", { _slugs: slugs });
   if (error || !data) return {};
   const counts = {};
   for (const row of data) {
-    counts[row.post_slug] = (counts[row.post_slug] ?? 0) + 1;
+    counts[row.post_slug] = Number(row.likes) || 0;
   }
   return counts;
 }
@@ -5261,8 +5261,8 @@ async function fetchLikeCount(slug) {
   const key = env2.SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return 0;
   const supabase = createClient2(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
-  const { count } = await supabase.from("blog_post_likes").select("*", { count: "exact", head: true }).eq("post_slug", slug);
-  return count ?? 0;
+  const { data } = await supabase.rpc("blog_like_counts", { _slugs: [slug] });
+  return Number(data?.[0]?.likes ?? 0);
 }
 var get_blog_post_default = defineTool6({
   name: "get_blog_post",

@@ -9,11 +9,8 @@ async function fetchLikeCount(slug: string): Promise<number> {
   const key = env.SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return 0;
   const supabase = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
-  const { count } = await supabase
-    .from("blog_post_likes")
-    .select("*", { count: "exact", head: true })
-    .eq("post_slug", slug);
-  return count ?? 0;
+  const { data } = await supabase.rpc("blog_like_counts", { _slugs: [slug] });
+  return Number((data as Array<{ likes: number }> | null)?.[0]?.likes ?? 0);
 }
 
 export default defineTool({

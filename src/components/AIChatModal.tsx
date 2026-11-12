@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Loader2 } from "lucide-react";
+import { Send, Loader2, LogIn } from "lucide-react";
 import { getSupabase } from "@/integrations/supabase/lazy";
 import { useToast } from "@/hooks/use-toast";
 
@@ -21,9 +21,30 @@ export const AIChatModal = ({ open, onOpenChange }: AIChatModalProps) => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  // null = still checking. Chat is for signed-in visitors only (it uses AI credits).
+  const [signedIn, setSignedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    let unsubscribe: (() => void) | undefined;
+    (async () => {
+      const supabase = await getSupabase();
+      const { data } = await supabase.auth.getSession();
+      if (!cancelled) setSignedIn(!!data.session);
+      const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+        if (!cancelled) setSignedIn(!!session);
+      });
+      unsubscribe = () => sub.subscription.unsubscribe();
+    })();
+    return () => {
+      cancelled = true;
+      unsubscribe?.();
+    };
+  }, [open]);
 
   const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || !signedIn) return;
 
     const userMessage = input.trim();
     setInput("");
@@ -68,7 +89,20 @@ export const AIChatModal = ({ open, onOpenChange }: AIChatModalProps) => {
         </DialogHeader>
         
         <div className="flex-1 overflow-y-auto space-y-4 py-4">
-          {messages.length === 0 ? (
+          {signedIn === false ? (
+            <div className="text-center text-muted-foreground py-8 space-y-4">
+              <p className="mb-2">Hi! I'm Faculty AI 👋</p>
+              <p className="text-sm">
+                Sign in (it's free and takes a few seconds with Google) and I'll recommend the best courses for your goals.
+              </p>
+              <Button asChild>
+                <a href="/login?next=/">
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Sign in to chat
+                </a>
+              </Button>
+            </div>
+          ) : messages.length === 0 ? (
             <div className="text-center text-muted-foreground py-8">
               <p className="mb-2">Hi! I'm Faculty AI 👋</p>
               <p className="text-sm">Tell me about your interests, goals, or what you'd like to learn, and I'll recommend the best courses for you!</p>
@@ -107,11 +141,11 @@ export const AIChatModal = ({ open, onOpenChange }: AIChatModalProps) => {
             onKeyPress={handleKeyPress}
             placeholder="Tell me about yourself and what you want to learn..."
             className="min-h-[60px] resize-none"
-            disabled={isLoading}
+            disabled={isLoading || !signedIn}
           />
           <Button
             onClick={handleSend}
-            disabled={!input.trim() || isLoading}
+            disabled={!input.trim() || isLoading || !signedIn}
             size="icon"
             className="h-[60px] w-[60px] shrink-0"
           >

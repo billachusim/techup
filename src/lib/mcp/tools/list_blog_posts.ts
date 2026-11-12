@@ -9,11 +9,11 @@ async function fetchLikeCounts(slugs: string[]): Promise<Record<string, number>>
   const key = env.SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key || slugs.length === 0) return {};
   const supabase = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
-  const { data, error } = await supabase.from("blog_post_likes").select("post_slug").in("post_slug", slugs);
+  const { data, error } = await supabase.rpc("blog_like_counts", { _slugs: slugs });
   if (error || !data) return {};
   const counts: Record<string, number> = {};
-  for (const row of data as Array<{ post_slug: string }>) {
-    counts[row.post_slug] = (counts[row.post_slug] ?? 0) + 1;
+  for (const row of data as Array<{ post_slug: string; likes: number }>) {
+    counts[row.post_slug] = Number(row.likes) || 0;
   }
   return counts;
 }

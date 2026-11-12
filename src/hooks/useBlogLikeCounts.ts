@@ -8,13 +8,12 @@ export function useBlogLikeCounts() {
     let cancelled = false;
     (async () => {
       const supabase = await getSupabase();
-      const { data, error } = await supabase
-        .from("blog_post_likes")
-        .select("post_slug");
+      // Totals only; who liked what stays private.
+      const { data, error } = await supabase.rpc("blog_like_counts", {});
       if (cancelled || error || !data) return;
       const tally: Record<string, number> = {};
-      for (const row of data as { post_slug: string }[]) {
-        tally[row.post_slug] = (tally[row.post_slug] ?? 0) + 1;
+      for (const row of data as { post_slug: string; likes: number }[]) {
+        tally[row.post_slug] = Number(row.likes) || 0;
       }
       setCounts(tally);
     })();

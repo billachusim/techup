@@ -1,4 +1,4 @@
-// Runs every 30 minutes from pg_cron. Card payments are normally confirmed by
+// Runs Mondays and Thursdays from pg_cron (with the "recover-checkouts" x-cron-secret). Card payments are normally confirmed by
 // verify-payment when Flutterwave sends the student back to the site, so a
 // student who closes the tab stays pending. This re-checks recent pending card
 // checkouts with Flutterwave's verify API and activates the paid ones (and
@@ -13,6 +13,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { triggerPaymentFollowups } from "../_shared/payment-followups.ts";
 import { confirmOrderPayment, confirmPayment } from "../_shared/flutterwave.ts";
 import { chaseManualPayments } from "../_shared/manual-payments.ts";
+import { requireCronOrAdmin } from "../_shared/scheduled-auth.ts";
 
 const MINUTE = 60 * 1000;
 const DAY = 24 * 60 * MINUTE;
@@ -23,14 +24,18 @@ const CHECK_FOR = 7 * DAY;
 const json = (body: Record<string, unknown>, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
 
-serve(async () => {
+serve(async (req) => {
   try {
-    const secretKey = Deno.env.get("FLUTTERWAVE_SECRET_KEY");
-    if (!secretKey) return json({ error: "Flutterwave is not configured" }, 500);
-
     const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
       auth: { persistSession: false },
     });
+
+    // Only the pg_cron schedule (x-cron-secret) or a signed-in admin may run this.
+    const denied = await requireCronOrAdmin(req, admin, "recover-checkouts", {});
+    if (denied) return denied;
+
+    const secretKey = Deno.env.get("FLUTTERWAVE_SECRET_KEY");
+    if (!secretKey) return json({ error: "Flutterwave is not configured" }, 500);
 
     const now = Date.now();
     const { data: pending, error } = await admin

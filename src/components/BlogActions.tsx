@@ -37,18 +37,11 @@ const BlogActions = ({ slug, title, description }: BlogActionsProps) => {
     let cancelled = false;
     (async () => {
       const visitorId = getVisitorId();
-      const { count: c } = await supabase
-        .from("blog_post_likes")
-        .select("*", { count: "exact", head: true })
-        .eq("post_slug", slug);
-      if (!cancelled && typeof c === "number") setCount(c);
+      const { data: rows } = await supabase.rpc("blog_like_counts", { _slugs: [slug] });
+      const c = Number((rows as { likes: number }[] | null)?.[0]?.likes ?? 0);
+      if (!cancelled) setCount(c);
 
-      const { data } = await supabase
-        .from("blog_post_likes")
-        .select("id")
-        .eq("post_slug", slug)
-        .eq("visitor_id", visitorId)
-        .maybeSingle();
+      const { data } = await supabase.rpc("blog_visitor_liked", { _slug: slug, _visitor_id: visitorId });
       if (!cancelled) setLiked(!!data);
     })();
     return () => {

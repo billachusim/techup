@@ -323,6 +323,13 @@
       "when": 1794380096130,
       "tag": "0045_class_tasks_enrolled_read",
       "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1794489263231,
+      "tag": "0046_security_fixes_likes_talent_claim_cron",
+      "breakpoints": true
     }
   ]
 }

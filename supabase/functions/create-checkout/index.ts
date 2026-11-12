@@ -80,6 +80,29 @@ async function paymentLink(
 
 type BalancePlan = { id: string; faculty_id: string; plan_name: string; status: string; balance_due: number | null; currency: string | null };
 
+/**
+ * Where Flutterwave sends the student after paying. Only our own sites are
+ * allowed, and always to /payment-success; anything else falls back to the main site.
+ */
+function safeSuccessUrl(raw: unknown): string {
+  const fallback = `${(Deno.env.get('SITE_URL') ?? 'https://techfaculty.ng').replace(/\/+$/, '')}/payment-success`;
+  if (typeof raw !== 'string' || raw.length > 500) return fallback;
+  let url: URL;
+  try {
+    url = new URL(raw);
+  } catch {
+    return fallback;
+  }
+  const host = url.hostname.toLowerCase();
+  const ours =
+    url.protocol === 'https:' &&
+    (host === 'techfaculty.ng' ||
+      host === 'www.techfaculty.ng' ||
+      host.endsWith('.lovable.app') ||
+      host.endsWith('.lovableproject.com'));
+  return ours ? `${url.origin}/payment-success` : fallback;
+}
+
 /** A Flutterwave checkout for what is left to pay on an instalment plan. */
 async function balanceCheckout(
   admin: ReturnType<typeof createClient>,
@@ -172,9 +195,10 @@ serve(async (req) => {
       currencyCode: rawCurrencyCode,
       discountCode,
       refCode,
-      successUrl,
+      successUrl: rawSuccessUrl,
       payInInstalments,
     } = body;
+    const successUrl = safeSuccessUrl(rawSuccessUrl);
 
     const currencyCode = (rawCurrencyCode || 'NGN').toUpperCase();
 

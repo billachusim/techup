@@ -5,13 +5,32 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const MAX_TEXT = 2000;
+const MAX_TURNS = 20;
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { message, conversationHistory } = await req.json();
+    const body = await req.json().catch(() => ({}));
+    const message = typeof body?.message === "string" ? body.message.trim().slice(0, MAX_TEXT) : "";
+    if (!message) {
+      return new Response(JSON.stringify({ error: "Please type a message" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    // Only plain user/assistant turns are accepted from the browser; the
+    // system instructions are always ours.
+    const history = (Array.isArray(body?.conversationHistory) ? body.conversationHistory : [])
+      .filter((m: unknown): m is { role: string; content: string } =>
+        !!m && typeof m === "object" &&
+        ((m as { role?: unknown }).role === "user" || (m as { role?: unknown }).role === "assistant") &&
+        typeof (m as { content?: unknown }).content === "string")
+      .slice(-MAX_TURNS)
+      .map((m: { role: string; content: string }) => ({ role: m.role, content: m.content.slice(0, MAX_TEXT) }));
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
@@ -119,11 +138,9 @@ Students can mix and match individual courses from any department to create a pe
 
     const messages = [
       { role: "system", content: systemPrompt },
-      ...(conversationHistory || []),
+      ...history,
       { role: "user", content: message }
     ];
-
-    console.log("Calling Lovable AI with message:", message);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -160,8 +177,6 @@ Students can mix and match individual courses from any department to create a pe
     const data = await response.json();
     const aiResponse = data.choices?.[0]?.message?.content;
     
-    console.log("AI Response:", aiResponse);
-
     if (!aiResponse) {
       throw new Error("No response from AI");
     }
@@ -176,9 +191,7 @@ Students can mix and match individual courses from any department to create a pe
   } catch (error) {
     console.error("Error in faculty-ai-chat function:", error);
     return new Response(
-      JSON.stringify({ 
-        error: error instanceof Error ? error.message : "Unknown error"
-      }),
+      JSON.stringify({ error: "The assistant is unavailable right now. Please try again." }),
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

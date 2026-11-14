@@ -166,3 +166,61 @@ export const openClassVideos = createServerFn({ method: "POST" })
     const granted = await openDriveVideosUpTo({ email: profile.email, courseId: data.courseId, currentClass });
     return { granted };
   });
+
+/**
+ * Student: everything for one class they have reached (past or current):
+ * its saved videos, its task and the written handout. Later classes are
+ * refused here, so their links never reach the browser. The current class
+ * comes from course_progress in the database, not from the browser.
+ */
+export const getClassPack = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ courseId: z.string().uuid(), classNumber: z.number().int().min(1).max(52) }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { canOpenClass } = await import("@/lib/class-access");
+    const [{ data: profile }, { data: staff }] = await Promise.all([
+      supabaseAdmin.from("profiles").select("faculty_id").eq("id", context.userId).maybeSingle(),
+      supabaseAdmin.rpc("is_staff", { _user_id: context.userId }),
+    ]);
+    const facultyId = profile?.faculty_id;
+    if (!facultyId && staff !== true) return { locked: true as const };
+    if (staff !== true) {
+      const [{ data: enrolment }, { data: progress }] = await Promise.all([
+        supabaseAdmin.from("course_enrollments").select("id")
+          .eq("faculty_id", facultyId!).eq("course_id", data.courseId).neq("status", "cancelled").limit(1).maybeSingle(),
+        supabaseAdmin.from("course_progress").select("classes_completed")
+          .eq("faculty_id", facultyId!).eq("course_id", data.courseId).maybeSingle(),
+      ]);
+      if (!enrolment || !canOpenClass(data.classNumber, progress?.classes_completed ?? 0)) return { locked: true as const };
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const db = supabaseAdmin as unknown as { from: (t: string) => any };
+    const [{ data: course }, { data: lecture }, { data: cached }, { data: taskRow }] = await Promise.all([
+      db.from("courses").select("name").eq("id", data.courseId).maybeSingle(),
+      db.from("lectures").select("title, description, duration_minutes").eq("course_id", data.courseId)
+        .order("scheduled_at", { ascending: true }).order("id", { ascending: true })
+        .range(data.classNumber - 1, data.classNumber - 1).maybeSingle(),
+      db.from("ai_class_content").select("title, summary, description, handout_content")
+        .eq("course_id", data.courseId).eq("class_number", data.classNumber).maybeSingle(),
+      db.from("class_tasks").select("task").eq("course_id", data.courseId).eq("class_number", data.classNumber).maybeSingle(),
+    ]);
+    const classTitle = String(cached?.title || lecture?.title || `Class ${data.classNumber}`).replace(/\s*-?\s*(Session|Class)\s+\d+/gi, "");
+    const { classResourcesFor } = await import("@/lib/class-videos.server");
+    const resources = await classResourcesFor({ courseId: data.courseId, classNumber: data.classNumber, classTitle, courseName: course?.name });
+    const isVideo = (t: string) => t === "youtube" || t === "drive" || t === "video";
+    return {
+      locked: false as const,
+      classNumber: data.classNumber,
+      courseName: (course?.name as string) ?? "",
+      title: classTitle,
+      summary: (cached?.summary as string) ?? null,
+      description: (cached?.description as string) ?? (lecture?.description as string) ?? null,
+      durationMinutes: (lecture?.duration_minutes as number) ?? 90,
+      handoutContent: (cached?.handout_content as string) ?? null,
+      task: (taskRow?.task as string) ?? null,
+      videos: resources.filter((r) => isVideo(r.type)),
+      reading: resources.filter((r) => !isVideo(r.type)),
+    };
+  });

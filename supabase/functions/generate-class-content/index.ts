@@ -74,6 +74,12 @@ serve(async (req) => {
     if (!caller) return deny(401, "Please sign in");
     if (!courseId || !classNumber) return deny(400, "courseId and classNumber are required");
     if (!(await canUseCourse(authClient, caller, courseId))) return deny(403, "You are not enrolled in this course");
+    // Students only get classes they have reached; later classes' videos stay hidden.
+    if (!caller.isStaff) {
+      const { data: prog } = await authClient.from("course_progress").select("classes_completed")
+        .eq("faculty_id", caller.facultyId).eq("course_id", courseId).maybeSingle();
+      if (classNumber > (prog?.classes_completed ?? 0) + 1) return deny(403, "This class is not open yet");
+    }
 
     const { data: courseRow } = await authClient.from("courses").select("name, level").eq("id", courseId).maybeSingle();
     if (!courseRow) return deny(404, "Course not found");

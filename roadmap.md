@@ -14,3 +14,4 @@
 - [x] Add admin navigation to the WhatsApp inbox page (no way to leave it today)
 
 - [x] Dashboard: past classes open with videos, handout and the student's own read-only submission
+- [ ] Class recordings: fix wrong/mixed videos per class (lessons repeated across classes, other months mixed in, topic videos in alphabetical order)

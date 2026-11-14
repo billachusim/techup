@@ -4,13 +4,13 @@ import { COMMUNITY_WHATSAPP_URL } from "@/lib/whatsapp";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LogOut, Calendar, Users, BookOpen, ExternalLink, MessageCircle, CheckCircle2, Circle, FileText, BadgeCheck, RefreshCw, PlayCircle } from "lucide-react";
+import { LogOut, Lock, Calendar, Users, BookOpen, ExternalLink, MessageCircle, CheckCircle2, Circle, FileText, BadgeCheck, RefreshCw, PlayCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 import { Progress } from "@/components/ui/progress";
 import { useUser } from "@/contexts/UserContext";
-import { HandoutModal } from "@/components/HandoutModal";
+import { HandoutModal, type ClassPack } from "@/components/HandoutModal";
 import { CertificateCard } from "@/components/CertificateCard";
 import { StudentClassroom } from "@/components/student/StudentClassroom";
 import { ReferralCard } from "@/components/student/ReferralCard";
@@ -19,7 +19,7 @@ import { LocationPrompt } from "@/components/student/LocationPrompt";
 import { isFreePlan } from "../../supabase/functions/_shared/enrollment-access.ts";
 
 import { useServerFn } from "@tanstack/react-start";
-import { briefNextClass, openClassVideos } from "@/lib/student-review.functions";
+import { briefNextClass, openClassVideos, getClassPack } from "@/lib/student-review.functions";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Link, useNavigate } from "@/lib/router-compat";
@@ -68,6 +68,13 @@ const Dashboard = () => {
   const [nextClassNumber, setNextClassNumber] = useState<number>(1);
   const [showAllCourses, setShowAllCourses] = useState(false);
   const [handoutModalOpen, setHandoutModalOpen] = useState(false);
+  // The current class's videos/task/notes, and whichever class the handout shows.
+  const [currentPack, setCurrentPack] = useState<ClassPack | null>(null);
+  const [viewPack, setViewPack] = useState<ClassPack | null>(null);
+  const [viewLoading, setViewLoading] = useState(false);
+  const [viewLocked, setViewLocked] = useState(false);
+  const [viewIsCurrent, setViewIsCurrent] = useState(true);
+  const [startVideo, setStartVideo] = useState(0);
   const [aiGeneratedContent, setAiGeneratedContent] = useState<ClassContent | null>(null);
   const [isLoadingAiContent, setIsLoadingAiContent] = useState(false);
   const [certificates, setCertificates] = useState<Tables<"certificates">[]>([]);
@@ -311,6 +318,58 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nextLecture?.course_id, nextClassNumber, facultyId]);
 
+  const runClassPack = useServerFn(getClassPack);
+  useEffect(() => {
+    if (!nextLecture?.course_id || !facultyId || nextLecture.isAiGenerated) { setCurrentPack(null); return; }
+    let live = true;
+    runClassPack({ data: { courseId: nextLecture.course_id, classNumber: nextClassNumber } })
+      .then((r) => { if (live) setCurrentPack(r.locked ? null : r); })
+      .catch(() => { /* best effort */ });
+    return () => { live = false; };
+    // Reload once the AI notes exist so the handout carries them
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nextLecture?.course_id, nextClassNumber, facultyId, aiGeneratedContent?.handoutContent]);
+
+  // The current class, filled from the freshly generated notes where the saved copy is missing
+  const currentView: ClassPack | null = currentPack
+    ? {
+        ...currentPack,
+        description: currentPack.description || aiGeneratedContent?.description || null,
+        summary: currentPack.summary || aiGeneratedContent?.summary || null,
+        handoutContent: currentPack.handoutContent || aiGeneratedContent?.handoutContent || null,
+        task: currentPack.task || aiGeneratedContent?.assignment || null,
+      }
+    : null;
+
+  const openCurrentClass = (videoIndex = 0) => {
+    setStartVideo(videoIndex);
+    setViewIsCurrent(true);
+    setViewLocked(false);
+    setViewPack(currentView);
+    setViewLoading(!currentView);
+    setHandoutModalOpen(true);
+    if (!currentView && nextLecture?.course_id) {
+      runClassPack({ data: { courseId: nextLecture.course_id, classNumber: nextClassNumber } })
+        .then((r) => { if (r.locked) setViewLocked(true); else { setCurrentPack(r); setViewPack(r); } })
+        .catch(() => setViewLocked(true))
+        .finally(() => setViewLoading(false));
+    }
+  };
+
+  // Past classes can be revised; the server refuses classes not yet reached.
+  const openPastClass = (courseId: string, classNumber: number) => {
+    setStartVideo(0);
+    setViewIsCurrent(false);
+    setViewLocked(false);
+    setViewPack(null);
+    setViewLoading(true);
+    setHandoutModalOpen(true);
+    runClassPack({ data: { courseId, classNumber } })
+      .then((r) => { if (r.locked) setViewLocked(true); else setViewPack(r); })
+      .catch(() => setViewLocked(true))
+      .finally(() => setViewLoading(false));
+  };
+
   const handleRefreshContent = async () => {
     if (!nextLecture?.course_id || !facultyId) return;
     setIsRefreshingContent(true);
@@ -470,24 +529,24 @@ const Dashboard = () => {
                           <div><span className="text-muted-foreground">Time:</span> <span className="font-medium">{new Date(nextLecture.scheduled_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span></div>
                         )}
                       </div>
-                      {(() => {
-                        const videos = (aiGeneratedContent?.resources || []).filter((r) => ["youtube", "drive", "video"].includes(r.type));
-                        if (!videos.length) return null;
-                        return (
-                          <div className="space-y-1">
-                            <p className="text-sm font-medium flex items-center gap-1.5"><PlayCircle className="text-primary" size={16} />Class videos</p>
-                            <ul className="space-y-1">
-                              {videos.slice(0, 5).map((v) => (
-                                <li key={v.url}>
-                                  <a href={v.url} target="_blank" rel="noopener noreferrer" className="text-sm text-link hover:underline break-words">{v.title}</a>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        );
-                      })()}
-                      <Button size="sm" variant="outline" className="w-full" onClick={() => setHandoutModalOpen(true)}>
-                        <FileText className="mr-2" size={16} />View Class Handout
+                      {currentView && currentView.videos.length > 0 && (
+                        <div className="space-y-1.5">
+                          <p className="text-sm font-medium flex items-center gap-1.5"><PlayCircle className="text-primary" size={16} />Class videos</p>
+                          <ul className="space-y-1.5">
+                            {currentView.videos.slice(0, 5).map((v, i) => (
+                              <li key={v.url}>
+                                <button type="button" onClick={() => openCurrentClass(i)} className="flex w-full items-center gap-2 rounded-md border border-border px-3 py-2 text-left text-sm min-h-[44px] hover:bg-accent transition-colors">
+                                  <PlayCircle className="text-primary shrink-0" size={16} />
+                                  <span className="flex-1 min-w-0 break-words">{v.title}</span>
+                                  <span className="shrink-0 text-xs font-medium text-link">Watch</span>
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      <Button size="sm" variant="outline" className="w-full" onClick={() => openCurrentClass(0)}>
+                        <FileText className="mr-2" size={16} />Open Class Handout & Videos
                       </Button>
                       <Button size="sm" variant="ghost" className="w-full" onClick={handleRefreshContent} disabled={isRefreshingContent}>
                         <RefreshCw className={`mr-2 ${isRefreshingContent ? 'animate-spin' : ''}`} size={16} />
@@ -562,18 +621,26 @@ const Dashboard = () => {
                                   const isNext = checkpoint === classesCompleted + 1;
                                   // Classes are marked done automatically when the task for them passes.
                                   return (
-                                    <div
+                                    <button
+                                      type="button"
                                       key={checkpoint}
-                                      className={`flex-1 h-8 rounded-md border-2 flex items-center justify-center ${
+                                      disabled={!isCourseActive || !(isCompleted || isNext)}
+                                      onClick={() => {
+                                        if (isNext && enrollment.course_id === nextLecture?.course_id) openCurrentClass(0);
+                                        else openPastClass(enrollment.course_id, checkpoint);
+                                      }}
+                                      className={`flex-1 h-8 rounded-md border-2 flex items-center justify-center gap-1 transition-colors disabled:cursor-not-allowed ${
                                         !isCourseActive ? "bg-background border-muted-foreground/20 opacity-40"
-                                          : isCompleted ? "bg-primary border-primary text-primary-foreground"
-                                          : isNext ? "bg-background border-primary/50"
+                                          : isCompleted ? "bg-primary border-primary text-primary-foreground hover:opacity-90"
+                                          : isNext ? "bg-background border-primary/50 hover:bg-accent"
                                           : "bg-background border-muted-foreground/20 opacity-50"
                                       }`}
-                                      title={!isCourseActive ? "Finish the previous course first" : isCompleted ? "Done: your task passed" : isNext ? "Current class: submit its task to finish it" : "Locked until the class before it is done"}
+                                      aria-label={isCompleted ? `Revise class ${checkpoint}` : isNext ? `Open class ${checkpoint}` : `Class ${checkpoint} locked`}
+                                      title={!isCourseActive ? "Finish the previous course first" : isCompleted ? "Done: tap to revise this class" : isNext ? "Current class: tap to open it" : "Locked until the class before it is done"}
                                     >
+                                      {!isCompleted && !isNext && <Lock size={10} />}
                                       <span className="text-xs font-medium">{checkpoint}</span>
-                                    </div>
+                                    </button>
                                   );
                                 })}
                               </div>
@@ -662,12 +729,16 @@ const Dashboard = () => {
       <HandoutModal
         open={handoutModalOpen}
         onOpenChange={setHandoutModalOpen}
-        classTitle={(aiGeneratedContent?.title || nextLecture?.title || '').replace(/\s*-?\s*(Session|Class)\s+\d+/gi, '')}
-        classNumber={nextClassNumber}
-        course={nextLecture?.courses?.name || ''}
-        resources={aiGeneratedContent?.resources || []}
-        handoutContent={aiGeneratedContent?.handoutContent || 'No handout content available yet. Check back later or contact your instructor.'}
-        description={aiGeneratedContent?.description || nextLecture?.description || undefined}
+        pack={viewIsCurrent ? currentView ?? viewPack : viewPack}
+        loading={viewLoading && !(viewIsCurrent && currentView)}
+        locked={viewLocked}
+        isCurrent={viewIsCurrent}
+        startVideo={startVideo}
+        scheduledAt={viewIsCurrent ? nextLecture?.scheduled_at : null}
+        onSubmitTask={() => {
+          setHandoutModalOpen(false);
+          setTimeout(() => document.getElementById("work-link")?.scrollIntoView({ behavior: "smooth", block: "center" }), 200);
+        }}
       />
     </div>
   );

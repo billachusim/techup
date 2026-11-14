@@ -1,225 +1,185 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Download, ExternalLink, Youtube, Globe, FileText, PlayCircle } from "lucide-react";
-import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Download, ExternalLink, FileText, Loader2, Lock, Pencil, PlayCircle, BookOpen, Calendar } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import { ClassVideoPlayer, type ClassVideo } from "@/components/ClassVideoPlayer";
 
-interface Resource {
-  type: string;
+export interface ClassPack {
+  classNumber: number;
+  courseName: string;
   title: string;
-  url: string;
+  summary: string | null;
+  description: string | null;
+  durationMinutes: number;
+  handoutContent: string | null;
+  task: string | null;
+  videos: ClassVideo[];
+  reading: ClassVideo[];
+  submissions?: { title: string; proofUrl: string | null; status: string; score: number | null; note: string | null; createdAt: string }[];
 }
+
+const STATUS: Record<string, string> = { submitted: "Awaiting review", reviewed: "Accepted", needs_changes: "Needs changes" };
 
 interface HandoutModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  classTitle: string;
-  classNumber: number;
-  course: string;
-  resources: Resource[];
-  handoutContent: string;
-  description?: string;
+  pack: ClassPack | null;
+  loading?: boolean;
+  locked?: boolean;
+  scheduledAt?: string | null;
+  isCurrent?: boolean;
+  startVideo?: number;
+  onSubmitTask?: () => void;
 }
 
-export const HandoutModal = ({
-  open,
-  onOpenChange,
-  classTitle,
-  classNumber,
-  course,
-  resources,
-  handoutContent,
-  description,
-}: HandoutModalProps) => {
-  const [showFullHandout, setShowFullHandout] = useState(false);
+const stripMd = (s: string) => s.replace(/[#*`>_]/g, "").replace(/\[(.*?)\]\((.*?)\)/g, "$1 ($2)");
 
-  const getResourceIcon = (type: string) => {
-    switch (type.toLowerCase()) {
-      case "youtube":
-        return <Youtube className="h-4 w-4" />;
-      case "website":
-        return <Globe className="h-4 w-4" />;
-      case "drive":
-      case "video":
-        return <PlayCircle className="h-4 w-4" />;
-      default:
-        return <FileText className="h-4 w-4" />;
-    }
-  };
+export const HandoutModal = ({ open, onOpenChange, pack, loading, locked, scheduledAt, isCurrent, startVideo = 0, onSubmitTask }: HandoutModalProps) => {
+  const when = scheduledAt ? new Date(scheduledAt) : null;
 
   const generatePDF = async () => {
+    if (!pack) return;
     const { default: jsPDF } = await import("jspdf");
     const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const margin = 20;
-    const maxWidth = pageWidth - 2 * margin;
-    
-    // Header
-    doc.setFontSize(20);
-    doc.text(`Class ${classNumber} Handout`, margin, 20);
-    
-    doc.setFontSize(14);
-    doc.text(course, margin, 30);
-    
-    doc.setFontSize(16);
-    doc.text(classTitle, margin, 40);
-    
-    // Content
-    doc.setFontSize(11);
-    
-    let yPosition = 50;
-    
-    // Add description if available
-    if (description) {
-      doc.setFontSize(12);
-      doc.text("Description:", margin, yPosition);
-      yPosition += 8;
-      doc.setFontSize(11);
-      const descLines = doc.splitTextToSize(description, maxWidth);
-      descLines.forEach((line: string) => {
-        if (yPosition > 280) {
-          doc.addPage();
-          yPosition = 20;
-        }
-        doc.text(line, margin, yPosition);
-        yPosition += 7;
-      });
-      yPosition += 10;
-    }
-    
-    const lines = doc.splitTextToSize(handoutContent.replace(/[#*]/g, ''), maxWidth);
-    
-    lines.forEach((line: string) => {
-      if (yPosition > 280) {
-        doc.addPage();
-        yPosition = 20;
+    const margin = 18;
+    const width = doc.internal.pageSize.getWidth() - margin * 2;
+    let y = 20;
+    const write = (text: string, size = 11, gap = 6) => {
+      doc.setFontSize(size);
+      for (const line of doc.splitTextToSize(text, width) as string[]) {
+        if (y > 280) { doc.addPage(); y = 20; }
+        doc.text(line, margin, y);
+        y += gap;
       }
-      doc.text(line, margin, yPosition);
-      yPosition += 7;
-    });
-    
-    // Resources section
-    if (resources && resources.length > 0) {
-      if (yPosition > 250) {
-        doc.addPage();
-        yPosition = 20;
-      }
-      
-      yPosition += 10;
-      doc.setFontSize(14);
-      doc.text("Resources", margin, yPosition);
-      yPosition += 10;
-      
-      doc.setFontSize(10);
-      resources.forEach((resource) => {
-        if (yPosition > 280) {
-          doc.addPage();
-          yPosition = 20;
-        }
-        doc.text(`• ${resource.title}: ${resource.url}`, margin, yPosition);
-        yPosition += 7;
-      });
-    }
-    
-    doc.save(`${course}-Class-${classNumber}-Handout.pdf`);
+    };
+    write(`Tech Faculty NG · ${pack.courseName}`, 10);
+    write(`Class ${pack.classNumber}: ${pack.title}`, 17, 8);
+    if (when) write(`${when.toDateString()} · ${when.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} · ${pack.durationMinutes} minutes`, 10);
+    y += 4;
+    if (pack.description) { write("Overview", 13, 7); write(stripMd(pack.description)); y += 4; }
+    if (pack.videos.length) { write("Class videos", 13, 7); pack.videos.forEach((v) => write(`• ${v.title}: ${v.url}`, 10)); y += 4; }
+    if (pack.task) { write("Your task", 13, 7); write(pack.task); y += 4; }
+    if (pack.handoutContent) { write("Class notes", 13, 7); write(stripMd(pack.handoutContent)); y += 4; }
+    if (pack.reading.length) { write("Further reading", 13, 7); pack.reading.forEach((r) => write(`• ${r.title}: ${r.url}`, 10)); }
+    doc.save(`${pack.courseName}-Class-${pack.classNumber}-Handout.pdf`);
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl w-[95vw] max-h-[90vh] sm:max-h-[80vh] flex flex-col min-h-0">
-        <DialogHeader>
-          <DialogTitle className="text-lg sm:text-2xl leading-tight">
-            Class {classNumber} - {classTitle}
-          </DialogTitle>
-          <p className="text-xs sm:text-sm text-muted-foreground">{course}</p>
-        </DialogHeader>
-        
-        <ScrollArea className="flex-1 min-h-0 pr-2 sm:pr-4">
-          {!showFullHandout ? (
-            <div className="space-y-4 sm:space-y-6">
-              <div>
-                <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
-                  <ExternalLink className="h-4 w-4 sm:h-5 sm:w-5" />
-                  Resources
-                </h3>
-                <div className="space-y-2 sm:space-y-3">
-                  {resources && resources.length > 0 ? (
-                    resources.map((resource, index) => (
-                      <a
-                        key={index}
-                        href={resource.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 sm:gap-3 p-3 sm:p-3 rounded-lg border border-border hover:bg-accent transition-colors active:bg-accent min-h-[44px]"
-                      >
-                        {getResourceIcon(resource.type)}
-                        <span className="flex-1 text-sm sm:text-base break-words">{resource.title}</span>
-                        <ExternalLink className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                      </a>
-                    ))
-                  ) : (
-                    <p className="text-muted-foreground text-sm">No resources available</p>
-                  )}
-                </div>
+      <DialogContent className="max-w-3xl w-[96vw] max-h-[92vh] overflow-y-auto p-4 sm:p-6">
+        {loading ? (
+          <div className="flex items-center justify-center gap-2 py-16 text-muted-foreground">
+            <DialogTitle className="sr-only">Loading class handout</DialogTitle>
+            <Loader2 className="h-5 w-5 animate-spin" />Loading your class…
+          </div>
+        ) : locked || !pack ? (
+          <div className="py-12 text-center space-y-2">
+            <Lock className="mx-auto h-8 w-8 text-muted-foreground" />
+            <DialogTitle>This class is locked</DialogTitle>
+            <DialogDescription>It opens when the task for the class before it passes.</DialogDescription>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            <DialogHeader className="space-y-2 text-left">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="outline">Class {pack.classNumber}</Badge>
+                {isCurrent ? <Badge>Current class</Badge> : <Badge variant="secondary">Completed</Badge>}
               </div>
-              
-              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                <Button
-                  onClick={() => setShowFullHandout(true)}
-                  className="w-full sm:flex-1"
-                  variant="outline"
-                  size="lg"
-                >
-                  <FileText className="h-4 w-4 mr-2" />
-                  <span className="text-sm sm:text-base">Show Full Handout</span>
-                </Button>
-                <Button
-                  onClick={generatePDF}
-                  className="w-full sm:flex-1"
-                  size="lg"
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  <span className="text-sm sm:text-base">Download PDF</span>
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-3 sm:space-y-4 h-full flex flex-col">
-              <Button
-                onClick={() => setShowFullHandout(false)}
-                variant="outline"
-                size="default"
-                className="min-h-[44px]"
-              >
-                ← Back to Resources
-              </Button>
-              
-              <div className="prose prose-sm max-w-none space-y-4 overflow-y-auto flex-1 pr-2">
-                {description && (
-                  <div className="space-y-2">
-                    <h3 className="text-base font-semibold">Description</h3>
-                    <div className="whitespace-pre-wrap text-xs sm:text-sm leading-relaxed text-muted-foreground">
-                      {description}
-                    </div>
-                  </div>
+              <DialogTitle className="text-xl sm:text-2xl leading-tight">{pack.title}</DialogTitle>
+              <DialogDescription className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span>{pack.courseName}</span>
+                {when && isCurrent && (
+                  <span className="inline-flex items-center gap-1">
+                    <Calendar className="h-3.5 w-3.5" />
+                    {when.toDateString()}, {when.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} · {pack.durationMinutes} min
+                  </span>
                 )}
-                
-                <div className="whitespace-pre-wrap text-xs sm:text-sm leading-relaxed">
-                  {handoutContent}
+              </DialogDescription>
+            </DialogHeader>
+
+            {pack.videos.length > 0 && (
+              <section className="space-y-3">
+                <h3 className="flex items-center gap-2 font-semibold"><PlayCircle className="h-5 w-5 text-primary" />Class videos</h3>
+                <ClassVideoPlayer videos={pack.videos} startIndex={startVideo} />
+              </section>
+            )}
+
+            {(pack.description || pack.summary) && (
+              <section className="space-y-2">
+                <h3 className="flex items-center gap-2 font-semibold"><BookOpen className="h-5 w-5 text-primary" />Overview</h3>
+                <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">{pack.description || pack.summary}</p>
+              </section>
+            )}
+
+            {pack.task && (
+              <section className="space-y-2 rounded-lg border border-primary/40 bg-primary/5 p-4">
+                <h3 className="flex items-center gap-2 font-semibold"><Pencil className="h-5 w-5 text-primary" />Your task</h3>
+                <p className="text-sm leading-relaxed whitespace-pre-wrap">{pack.task}</p>
+                {isCurrent && onSubmitTask && (
+                  <Button size="sm" onClick={onSubmitTask} className="mt-1">Submit your work</Button>
+                )}
+              </section>
+            )}
+
+            {(pack.submissions?.length ?? 0) > 0 && (
+              <section className="space-y-2">
+                <h3 className="font-semibold">Your submission{pack.submissions!.length > 1 ? "s" : ""}</h3>
+                <ul className="space-y-2">
+                  {pack.submissions!.map((w) => (
+                    <li key={w.createdAt} className="rounded-lg border border-border p-3 space-y-1">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <span className="text-sm font-medium break-words">{w.title}</span>
+                        <Badge variant={w.status === "reviewed" ? "default" : "outline"}>
+                          {STATUS[w.status] ?? w.status}{w.score != null ? ` · ${w.score}%` : ""}
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground">{new Date(w.createdAt).toLocaleDateString()}</p>
+                      {w.proofUrl && (
+                        <a href={w.proofUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm text-link hover:underline break-all">
+                          <ExternalLink className="h-3.5 w-3.5 shrink-0" />View your work
+                        </a>
+                      )}
+                      {w.note && <p className="text-sm text-muted-foreground whitespace-pre-wrap">{w.note}</p>}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {pack.handoutContent && (
+              <section className="space-y-2">
+                <h3 className="flex items-center gap-2 font-semibold"><FileText className="h-5 w-5 text-primary" />Class notes</h3>
+                <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:text-foreground prose-headings:font-semibold prose-h1:text-lg prose-h2:text-base prose-h3:text-sm text-foreground">
+                  <ReactMarkdown>{pack.handoutContent}</ReactMarkdown>
                 </div>
-              </div>
-              
-              <Button
-                onClick={generatePDF}
-                className="w-full"
-                size="lg"
-              >
-                <Download className="h-4 w-4 mr-2" />
-                <span className="text-sm sm:text-base">Download PDF</span>
-              </Button>
-            </div>
-          )}
-        </ScrollArea>
+              </section>
+            )}
+
+            {pack.reading.length > 0 && (
+              <section className="space-y-2">
+                <h3 className="font-semibold">Further reading</h3>
+                <ul className="space-y-1.5">
+                  {pack.reading.map((r) => (
+                    <li key={r.url}>
+                      <a href={r.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm text-link hover:underline break-words">
+                        <ExternalLink className="h-3.5 w-3.5 shrink-0" />{r.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {!pack.videos.length && !pack.handoutContent && !pack.task && (
+              <p className="text-sm text-muted-foreground">The notes for this class are being prepared. Check back soon.</p>
+            )}
+
+            <Button onClick={generatePDF} className="w-full" variant="outline">
+              <Download className="mr-2 h-4 w-4" />Download handout (PDF)
+            </Button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

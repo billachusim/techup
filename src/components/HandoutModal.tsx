@@ -16,7 +16,10 @@ export interface ClassPack {
   task: string | null;
   videos: ClassVideo[];
   reading: ClassVideo[];
+  submissions?: { title: string; proofUrl: string | null; status: string; score: number | null; note: string | null; createdAt: string }[];
 }
+
+const STATUS: Record<string, string> = { submitted: "Awaiting review", reviewed: "Accepted", needs_changes: "Needs changes" };
 
 interface HandoutModalProps {
   open: boolean;
@@ -116,6 +119,31 @@ export const HandoutModal = ({ open, onOpenChange, pack, loading, locked, schedu
                 {isCurrent && onSubmitTask && (
                   <Button size="sm" onClick={onSubmitTask} className="mt-1">Submit your work</Button>
                 )}
+              </section>
+            )}
+
+            {(pack.submissions?.length ?? 0) > 0 && (
+              <section className="space-y-2">
+                <h3 className="font-semibold">Your submission{pack.submissions!.length > 1 ? "s" : ""}</h3>
+                <ul className="space-y-2">
+                  {pack.submissions!.map((w) => (
+                    <li key={w.createdAt} className="rounded-lg border border-border p-3 space-y-1">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <span className="text-sm font-medium break-words">{w.title}</span>
+                        <Badge variant={w.status === "reviewed" ? "default" : "outline"}>
+                          {STATUS[w.status] ?? w.status}{w.score != null ? ` · ${w.score}%` : ""}
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground">{new Date(w.createdAt).toLocaleDateString()}</p>
+                      {w.proofUrl && (
+                        <a href={w.proofUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm text-link hover:underline break-all">
+                          <ExternalLink className="h-3.5 w-3.5 shrink-0" />View your work
+                        </a>
+                      )}
+                      {w.note && <p className="text-sm text-muted-foreground whitespace-pre-wrap">{w.note}</p>}
+                    </li>
+                  ))}
+                </ul>
               </section>
             )}
 

@@ -206,6 +206,10 @@ export const getClassPack = createServerFn({ method: "POST" })
         .eq("course_id", data.courseId).eq("class_number", data.classNumber).maybeSingle(),
       db.from("class_tasks").select("task").eq("course_id", data.courseId).eq("class_number", data.classNumber).maybeSingle(),
     ]);
+    const { data: work } = await supabaseAdmin.from("student_deliverables")
+      .select("title, proof_url, status, score, reviewer_note, created_at")
+      .eq("user_id", context.userId).eq("course_id", data.courseId).eq("class_number", data.classNumber)
+      .order("created_at", { ascending: false }).limit(5);
     const classTitle = String(cached?.title || lecture?.title || `Class ${data.classNumber}`).replace(/\s*-?\s*(Session|Class)\s+\d+/gi, "");
     const { classResourcesFor } = await import("@/lib/class-videos.server");
     const resources = await classResourcesFor({ courseId: data.courseId, classNumber: data.classNumber, classTitle, courseName: course?.name });
@@ -222,5 +226,9 @@ export const getClassPack = createServerFn({ method: "POST" })
       task: (taskRow?.task as string) ?? null,
       videos: resources.filter((r) => isVideo(r.type)),
       reading: resources.filter((r) => !isVideo(r.type)),
+      submissions: (work ?? []).map((w) => ({
+        title: w.title as string, proofUrl: (w.proof_url as string | null) ?? null, status: w.status as string,
+        score: (w.score as number | null) ?? null, note: (w.reviewer_note as string | null) ?? null, createdAt: w.created_at as string,
+      })),
     };
   });

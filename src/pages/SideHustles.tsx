@@ -87,10 +87,7 @@ const HustleDetail = ({ slug }: { slug: string }) => {
           <ul className="space-y-1.5">
             {svc.deliverables.map((d) => (
               <li key={d} className="flex gap-2 text-sm">
-                <CheckCircle2
-                  size={18}
-                  className="mt-0.5 shrink-0 text-link"
-                />{" "}
+                <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-link" />{" "}
                 {d}
               </li>
             ))}

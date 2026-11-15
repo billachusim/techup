@@ -48,6 +48,8 @@ const Footer = () => {
           <div className="space-y-3">
             <h4 className="text-sm font-semibold">Services</h4>
             <nav className="flex flex-col gap-2 text-sm text-muted-foreground">
+              <Link to="/services" className="hover:text-link transition-colors">Pay-per-Task Services</Link>
+              <Link to="/side-hustles" className="hover:text-link transition-colors">Side Hustles</Link>
               <Link to="/business-partnerships" className="hover:text-link transition-colors">Business Partnerships</Link>
               <Link to="/school-collaborations" className="hover:text-link transition-colors">School Collaborations</Link>
               <Link to="/events" className="hover:text-link transition-colors">Events</Link>

@@ -42,6 +42,7 @@ const navGroups = [
     icon: Compass,
     items: [
       { label: "Careers", href: "/careers" },
+      { label: "Side hustles (pay per task)", href: "/side-hustles" },
       
       { label: "Events", href: "/events" },
       { label: "Tech hubs directory", href: "/hubs" },
@@ -54,6 +55,7 @@ const navGroups = [
       { label: "Blog", href: "/blog" },
       { label: "Products", href: "/products" },
       { label: "Tech Store", href: "/tech-store" },
+      { label: "Services for businesses", href: "/services" },
       { label: "Business partnerships", href: "/business-partnerships" },
       { label: "School collaborations", href: "/school-collaborations" },
     ],

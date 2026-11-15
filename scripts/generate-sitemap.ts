@@ -20,6 +20,7 @@ import { jobPlatforms } from "../src/data/jobPlatforms";
 import { siwesCourses } from "../src/data/siwesCourses";
 import { techHubs } from "../src/data/techHubs";
 import { apps } from "../src/data/apps";
+import { SERVICES, SERVICE_CATEGORIES } from "../src/data/services";
 
 const BASE_URL = "https://techfaculty.ng";
 const ROUTES_DIR = resolve("src/routes");
@@ -151,6 +152,18 @@ const DYNAMIC: Record<string, Resolver | null> = {
   "/siwes/courses/$slug": (file) => {
     const lastmod = gitDate(pageFiles(file));
     return siwesCourses.map((c) => ({ path: `/siwes/courses/${c.slug}`, lastmod }));
+  },
+  "/services/$slug": (file) => {
+    const lastmod = gitDate(pageFiles(file));
+    return SERVICES.map((x) => ({ path: `/services/${x.slug}`, lastmod }));
+  },
+  "/services/category/$slug": (file) => {
+    const lastmod = gitDate(pageFiles(file));
+    return SERVICE_CATEGORIES.map((c) => ({ path: `/services/category/${c.slug}`, lastmod }));
+  },
+  "/side-hustles/$slug": (file) => {
+    const lastmod = gitDate(pageFiles(file));
+    return SERVICES.map((x) => ({ path: `/side-hustles/${x.slug}`, lastmod }));
   },
   "/careers/platforms/$platformSlug": (file) => {
     const lastmod = gitDate(pageFiles(file));

@@ -1,8 +1,10 @@
 import type { BlogPost } from '@/types/blog';
 import cityBlogPosts from './cityBlogPosts';
+import servicesBlogPosts from './servicesBlogPosts';
 
 const blogPosts: BlogPost[] = [
   ...cityBlogPosts,
+  ...servicesBlogPosts,
   {
     slug: "tech-course-fees-nigeria-2026",
     title: "How Much Do Tech Courses Cost in Nigeria in 2026? Real Naira Prices",

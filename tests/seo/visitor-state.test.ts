@@ -17,3 +17,16 @@ describe("nigerianState", () => {
     expect(nigerianState("NG", "Somewhere")).toBeNull();
   });
 });
+
+describe("foreignCountry and countryName", () => {
+  it("keeps real foreign countries only", async () => {
+    const { foreignCountry, countryName } =
+      await import("../../src/lib/visitor-state");
+    expect(foreignCountry("US")).toBe("US");
+    expect(foreignCountry("NG")).toBeNull();
+    expect(foreignCountry("XX")).toBeNull();
+    expect(foreignCountry("T1")).toBeNull();
+    expect(countryName("US")).toBe("the United States");
+    expect(countryName("GH")).toBe("Ghana");
+  });
+});

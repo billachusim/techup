@@ -3,7 +3,7 @@ import { workerCtx } from "./lib/worker-ctx";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
-import { nigerianState } from "./lib/visitor-state";
+import { foreignCountry, nigerianState } from "./lib/visitor-state";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -50,7 +50,7 @@ function isH3SwallowedErrorBody(body: string): boolean {
 // Answered here, before the app, so it costs no SSR work and is never cached.
 function visitorStateResponse(request: Request): Response {
   const cf = (request as Request & { cf?: { country?: unknown; region?: unknown } }).cf;
-  return new Response(JSON.stringify({ state: nigerianState(cf?.country, cf?.region) }), {
+  return new Response(JSON.stringify({ state: nigerianState(cf?.country, cf?.region), country: foreignCountry(cf?.country) }), {
     headers: { "content-type": "application/json", "cache-control": "private, no-store" },
   });
 }

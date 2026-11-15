@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import NotFound from "@/pages/NotFound";
 import ServiceBriefForm from "@/components/services/ServiceBriefForm";
+import VisitorStateLine from "@/components/VisitorStateLine";
 import { Input } from "@/components/ui/input";
 import { HOW_IT_WORKS } from "@/components/services/serviceCopy";
 import { SITE_URL } from "@/lib/seo";
@@ -95,6 +96,9 @@ const Services = () => {
                   </>
                 )}
               </h1>
+              {cat?.slug === "field-sales" && (
+                <VisitorStateLine>{(st) => `Field reps available in ${st}`}</VisitorStateLine>
+              )}
               <p className="text-lg leading-relaxed text-muted-foreground">
                 {cat
                   ? cat.intro

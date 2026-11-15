@@ -50,7 +50,11 @@ function isH3SwallowedErrorBody(body: string): boolean {
 // Answered here, before the app, so it costs no SSR work and is never cached.
 function visitorStateResponse(request: Request): Response {
   const cf = (request as Request & { cf?: { country?: unknown; region?: unknown } }).cf;
-  return new Response(JSON.stringify({ state: nigerianState(cf?.country, cf?.region), country: foreignCountry(cf?.country) }), {
+  return new Response(JSON.stringify({
+      state: nigerianState(cf?.country, cf?.region),
+      country: foreignCountry(cf?.country),
+      cc: typeof cf?.country === "string" ? cf.country : null,
+    }), {
     headers: { "content-type": "application/json", "cache-control": "private, no-store" },
   });
 }

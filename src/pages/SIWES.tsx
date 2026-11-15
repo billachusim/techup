@@ -1,3 +1,4 @@
+import VisitorStateLine from "@/components/VisitorStateLine";
 import { Link } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -142,6 +143,7 @@ const SIWES = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               Do Your <span className="text-gradient">IT</span> With Tech Faculty NG
             </h1>
+            <VisitorStateLine className="-mt-3 mb-6">{(st) => `SIWES placements for students in ${st}`}</VisitorStateLine>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
               Over 120 university students have completed their SIWES/IT placement with us since 2022.
               Our program is regulated under Federal Ministry of Education policies.

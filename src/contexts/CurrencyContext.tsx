@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { NGN_TO_USD_RATE } from "@/lib/fees";
+import { fetchVisitorLocation } from "@/hooks/use-visitor-location";
 
 interface CurrencyContextType {
   symbol: string;
@@ -27,6 +28,12 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (manualOverride) return;
     const detectCountry = async () => {
+      // Cloudflare's lookup first: instant and not rate-limited.
+      const { cc } = await fetchVisitorLocation();
+      if (cc) {
+        if (cc !== "NG") setIsNigeria(false);
+        return;
+      }
       try {
         const res = await fetch("https://ipapi.co/json/", { signal: AbortSignal.timeout(5000) });
         const data = await res.json();

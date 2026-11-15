@@ -316,8 +316,11 @@ export const apps: AppProduct[] = [
       { q: "Is Plant Care Cards free?", a: "Yes. One plant with a full care card, share link and QR code is free. A one-time $4.99 payment unlocks unlimited plants, PDF export, reminders and unlimited voice fill." },
       { q: "Do I need an account?", a: "No. Your plants are saved in your browser. An optional account backup is available." },
     ],
-    platforms: ["web"],
-    links: { web: "https://plantcarecard.lovable.app" },
+    platforms: ["web", "playstore"],
+    links: {
+      web: "https://plantcarecard.lovable.app",
+      playstore: "https://play.google.com/store/apps/details?id=com.techfaculty.plantcarecard",
+    },
     category: "LifestyleApplication",
     accent: "from-emerald-500 to-green-700",
     previewImage: "/products/plant-care-cards-cover.jpg",

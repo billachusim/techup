@@ -89,7 +89,7 @@ const HustleDetail = ({ slug }: { slug: string }) => {
               <li key={d} className="flex gap-2 text-sm">
                 <CheckCircle2
                   size={18}
-                  className="mt-0.5 shrink-0 text-primary"
+                  className="mt-0.5 shrink-0 text-link"
                 />{" "}
                 {d}
               </li>
@@ -173,10 +173,10 @@ const HustleIndex = () => (
               <Link
                 key={s.slug}
                 to={`/side-hustles/${s.slug}`}
-                className="rounded-lg border border-border bg-card p-4 hover:border-primary"
+                className="rounded-lg border border-border bg-card p-4 hover:border-link"
               >
-                <div className="font-medium">{s.hustleTitle}</div>
-                <div className="text-sm text-primary">
+                <div className="font-medium text-link">{s.hustleTitle}</div>
+                <div className="text-sm text-foreground">
                   Earn {naira(talentPay(s))} per task · paid weekly
                 </div>
               </Link>

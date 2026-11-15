@@ -21,13 +21,13 @@ import {
 const ServiceCard = ({ s }: { s: Service }) => (
   <Link
     to={`/services/${s.slug}`}
-    className="flex flex-col rounded-lg border border-border bg-card p-4 transition-colors hover:border-primary"
+    className="flex flex-col rounded-lg border border-border bg-card p-4 transition-colors hover:border-link"
   >
-    <span className="font-medium">{s.name}</span>
+    <span className="font-medium text-link">{s.name}</span>
     <span className="mt-1 line-clamp-2 text-sm text-muted-foreground">
       {s.summary}
     </span>
-    <span className="mt-2 text-sm font-semibold text-primary">
+    <span className="mt-2 text-sm font-semibold text-foreground">
       From {naira(businessPrice(s))} {s.unit}
     </span>
   </Link>
@@ -108,7 +108,7 @@ const Services = () => {
                   >
                     <CheckCircle2
                       size={18}
-                      className="mt-0.5 shrink-0 text-primary"
+                      className="mt-0.5 shrink-0 text-link"
                     />{" "}
                     {step}
                   </li>

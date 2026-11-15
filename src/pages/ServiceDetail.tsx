@@ -125,7 +125,7 @@ const ServiceDetail = () => {
                     <li key={d} className="flex gap-2 text-sm">
                       <CheckCircle2
                         size={18}
-                        className="mt-0.5 shrink-0 text-primary"
+                        className="mt-0.5 shrink-0 text-link"
                       />{" "}
                       {d}
                     </li>
@@ -195,9 +195,9 @@ const ServiceDetail = () => {
                   <Link
                     key={r.slug}
                     to={`/services/${r.slug}`}
-                    className="rounded-lg border border-border p-4 hover:border-primary"
+                    className="rounded-lg border border-border p-4 hover:border-link"
                   >
-                    <div className="font-medium">{r.name}</div>
+                    <div className="font-medium text-link">{r.name}</div>
                     <div className="text-sm text-muted-foreground">
                       From {naira(businessPrice(r))} {r.unit}
                     </div>

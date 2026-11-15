@@ -105,7 +105,7 @@ const ServiceBriefForm = ({ serviceName, priceFrom, unit }: Props) => {
   if (done) {
     return (
       <div className="space-y-4 rounded-lg border border-border bg-card p-6 text-center">
-        <CheckCircle2 className="mx-auto text-primary" size={40} />
+        <CheckCircle2 className="mx-auto text-link" size={40} />
         <h2 className="text-xl font-semibold">Brief received</h2>
         <p className="text-sm text-muted-foreground">
           We confirm the price and start date within one working day. For a

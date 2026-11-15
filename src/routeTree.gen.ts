@@ -68,6 +68,10 @@ import { Route as ProductsIndexRouteImport } from './routes/products.index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as RCodeRouteImport } from './routes/r.$code'
 import { Route as ReportsNigeriaTechSalariesRouteImport } from './routes/reports.nigeria-tech-salaries'
+import { Route as ServicesIndexRouteImport } from './routes/services.index'
+import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
+import { Route as SideHustlesIndexRouteImport } from './routes/side-hustles.index'
+import { Route as SideHustlesSlugRouteImport } from './routes/side-hustles.$slug'
 import { Route as SiwesIndexRouteImport } from './routes/siwes.index'
 import { Route as TagSplatRouteImport } from './routes/tag.$'
 import { Route as TalentIndexRouteImport } from './routes/talent.index'
@@ -81,6 +85,7 @@ import { Route as ApiPublicOgRouteImport } from './routes/api/public/og'
 import { Route as BlogCategorySlugRouteImport } from './routes/blog.category.$slug'
 import { Route as CareersJobsSlugRouteImport } from './routes/careers.jobs.$slug'
 import { Route as CareersPlatformsPlatformSlugRouteImport } from './routes/careers.platforms.$platformSlug'
+import { Route as ServicesCategorySlugRouteImport } from './routes/services.category.$slug'
 import { Route as SiwesCoursesIndexRouteImport } from './routes/siwes.courses.index'
 import { Route as SiwesCoursesSlugRouteImport } from './routes/siwes.courses.$slug'
 import { Route as TalentPoolIndexRouteImport } from './routes/talent.pool.index'
@@ -392,6 +397,26 @@ const ReportsNigeriaTechSalariesRoute =
     path: '/reports/nigeria-tech-salaries',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ServicesIndexRoute = ServicesIndexRouteImport.update({
+  id: '/services/',
+  path: '/services/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesSlugRoute = ServicesSlugRouteImport.update({
+  id: '/services/$slug',
+  path: '/services/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SideHustlesIndexRoute = SideHustlesIndexRouteImport.update({
+  id: '/side-hustles/',
+  path: '/side-hustles/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SideHustlesSlugRoute = SideHustlesSlugRouteImport.update({
+  id: '/side-hustles/$slug',
+  path: '/side-hustles/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SiwesIndexRoute = SiwesIndexRouteImport.update({
   id: '/siwes/',
   path: '/siwes/',
@@ -458,6 +483,11 @@ const CareersPlatformsPlatformSlugRoute =
     path: '/careers/platforms/$platformSlug',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ServicesCategorySlugRoute = ServicesCategorySlugRouteImport.update({
+  id: '/services/category/$slug',
+  path: '/services/category/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SiwesCoursesIndexRoute = SiwesCoursesIndexRouteImport.update({
   id: '/siwes/courses/',
   path: '/siwes/courses/',
@@ -579,6 +609,8 @@ export interface FileRoutesByFullPath {
   '/products/$slug': typeof ProductsSlugRoute
   '/r/$code': typeof RCodeRoute
   '/reports/nigeria-tech-salaries': typeof ReportsNigeriaTechSalariesRoute
+  '/services/$slug': typeof ServicesSlugRoute
+  '/side-hustles/$slug': typeof SideHustlesSlugRoute
   '/tag/$': typeof TagSplatRoute
   '/talent/dashboard': typeof TalentDashboardRoute
   '/talent/profile': typeof TalentProfileRoute
@@ -592,6 +624,8 @@ export interface FileRoutesByFullPath {
   '/hubs/': typeof HubsIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/products/': typeof ProductsIndexRoute
+  '/services/': typeof ServicesIndexRoute
+  '/side-hustles/': typeof SideHustlesIndexRoute
   '/siwes/': typeof SiwesIndexRoute
   '/talent/': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -600,6 +634,7 @@ export interface FileRoutesByFullPath {
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/careers/jobs/$slug': typeof CareersJobsSlugRoute
   '/careers/platforms/$platformSlug': typeof CareersPlatformsPlatformSlugRoute
+  '/services/category/$slug': typeof ServicesCategorySlugRoute
   '/siwes/courses/$slug': typeof SiwesCoursesSlugRoute
   '/talent/pool/$id': typeof TalentPoolIdRoute
   '/talent/roles/$slug': typeof TalentRolesSlugRoute
@@ -666,6 +701,8 @@ export interface FileRoutesByTo {
   '/products/$slug': typeof ProductsSlugRoute
   '/r/$code': typeof RCodeRoute
   '/reports/nigeria-tech-salaries': typeof ReportsNigeriaTechSalariesRoute
+  '/services/$slug': typeof ServicesSlugRoute
+  '/side-hustles/$slug': typeof SideHustlesSlugRoute
   '/tag/$': typeof TagSplatRoute
   '/talent/dashboard': typeof TalentDashboardRoute
   '/talent/profile': typeof TalentProfileRoute
@@ -679,6 +716,8 @@ export interface FileRoutesByTo {
   '/hubs': typeof HubsIndexRoute
   '/locations': typeof LocationsIndexRoute
   '/products': typeof ProductsIndexRoute
+  '/services': typeof ServicesIndexRoute
+  '/side-hustles': typeof SideHustlesIndexRoute
   '/siwes': typeof SiwesIndexRoute
   '/talent': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -687,6 +726,7 @@ export interface FileRoutesByTo {
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/careers/jobs/$slug': typeof CareersJobsSlugRoute
   '/careers/platforms/$platformSlug': typeof CareersPlatformsPlatformSlugRoute
+  '/services/category/$slug': typeof ServicesCategorySlugRoute
   '/siwes/courses/$slug': typeof SiwesCoursesSlugRoute
   '/talent/pool/$id': typeof TalentPoolIdRoute
   '/talent/roles/$slug': typeof TalentRolesSlugRoute
@@ -754,6 +794,8 @@ export interface FileRoutesById {
   '/products/$slug': typeof ProductsSlugRoute
   '/r/$code': typeof RCodeRoute
   '/reports/nigeria-tech-salaries': typeof ReportsNigeriaTechSalariesRoute
+  '/services/$slug': typeof ServicesSlugRoute
+  '/side-hustles/$slug': typeof SideHustlesSlugRoute
   '/tag/$': typeof TagSplatRoute
   '/talent/dashboard': typeof TalentDashboardRoute
   '/talent/profile': typeof TalentProfileRoute
@@ -767,6 +809,8 @@ export interface FileRoutesById {
   '/hubs/': typeof HubsIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/products/': typeof ProductsIndexRoute
+  '/services/': typeof ServicesIndexRoute
+  '/side-hustles/': typeof SideHustlesIndexRoute
   '/siwes/': typeof SiwesIndexRoute
   '/talent/': typeof TalentIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -775,6 +819,7 @@ export interface FileRoutesById {
   '/blog/category/$slug': typeof BlogCategorySlugRoute
   '/careers/jobs/$slug': typeof CareersJobsSlugRoute
   '/careers/platforms/$platformSlug': typeof CareersPlatformsPlatformSlugRoute
+  '/services/category/$slug': typeof ServicesCategorySlugRoute
   '/siwes/courses/$slug': typeof SiwesCoursesSlugRoute
   '/talent/pool/$id': typeof TalentPoolIdRoute
   '/talent/roles/$slug': typeof TalentRolesSlugRoute
@@ -843,6 +888,8 @@ export interface FileRouteTypes {
     | '/products/$slug'
     | '/r/$code'
     | '/reports/nigeria-tech-salaries'
+    | '/services/$slug'
+    | '/side-hustles/$slug'
     | '/tag/$'
     | '/talent/dashboard'
     | '/talent/profile'
@@ -856,6 +903,8 @@ export interface FileRouteTypes {
     | '/hubs/'
     | '/locations/'
     | '/products/'
+    | '/services/'
+    | '/side-hustles/'
     | '/siwes/'
     | '/talent/'
     | '/.lovable/oauth/consent'
@@ -864,6 +913,7 @@ export interface FileRouteTypes {
     | '/blog/category/$slug'
     | '/careers/jobs/$slug'
     | '/careers/platforms/$platformSlug'
+    | '/services/category/$slug'
     | '/siwes/courses/$slug'
     | '/talent/pool/$id'
     | '/talent/roles/$slug'
@@ -930,6 +980,8 @@ export interface FileRouteTypes {
     | '/products/$slug'
     | '/r/$code'
     | '/reports/nigeria-tech-salaries'
+    | '/services/$slug'
+    | '/side-hustles/$slug'
     | '/tag/$'
     | '/talent/dashboard'
     | '/talent/profile'
@@ -943,6 +995,8 @@ export interface FileRouteTypes {
     | '/hubs'
     | '/locations'
     | '/products'
+    | '/services'
+    | '/side-hustles'
     | '/siwes'
     | '/talent'
     | '/.lovable/oauth/consent'
@@ -951,6 +1005,7 @@ export interface FileRouteTypes {
     | '/blog/category/$slug'
     | '/careers/jobs/$slug'
     | '/careers/platforms/$platformSlug'
+    | '/services/category/$slug'
     | '/siwes/courses/$slug'
     | '/talent/pool/$id'
     | '/talent/roles/$slug'
@@ -1017,6 +1072,8 @@ export interface FileRouteTypes {
     | '/products/$slug'
     | '/r/$code'
     | '/reports/nigeria-tech-salaries'
+    | '/services/$slug'
+    | '/side-hustles/$slug'
     | '/tag/$'
     | '/talent/dashboard'
     | '/talent/profile'
@@ -1030,6 +1087,8 @@ export interface FileRouteTypes {
     | '/hubs/'
     | '/locations/'
     | '/products/'
+    | '/services/'
+    | '/side-hustles/'
     | '/siwes/'
     | '/talent/'
     | '/.lovable/oauth/consent'
@@ -1038,6 +1097,7 @@ export interface FileRouteTypes {
     | '/blog/category/$slug'
     | '/careers/jobs/$slug'
     | '/careers/platforms/$platformSlug'
+    | '/services/category/$slug'
     | '/siwes/courses/$slug'
     | '/talent/pool/$id'
     | '/talent/roles/$slug'
@@ -1105,6 +1165,8 @@ export interface RootRouteChildren {
   ProductsSlugRoute: typeof ProductsSlugRoute
   RCodeRoute: typeof RCodeRoute
   ReportsNigeriaTechSalariesRoute: typeof ReportsNigeriaTechSalariesRoute
+  ServicesSlugRoute: typeof ServicesSlugRoute
+  SideHustlesSlugRoute: typeof SideHustlesSlugRoute
   TagSplatRoute: typeof TagSplatRoute
   TalentDashboardRoute: typeof TalentDashboardRoute
   TalentProfileRoute: typeof TalentProfileRoute
@@ -1118,6 +1180,8 @@ export interface RootRouteChildren {
   HubsIndexRoute: typeof HubsIndexRoute
   LocationsIndexRoute: typeof LocationsIndexRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
+  ServicesIndexRoute: typeof ServicesIndexRoute
+  SideHustlesIndexRoute: typeof SideHustlesIndexRoute
   SiwesIndexRoute: typeof SiwesIndexRoute
   TalentIndexRoute: typeof TalentIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
@@ -1126,6 +1190,7 @@ export interface RootRouteChildren {
   BlogCategorySlugRoute: typeof BlogCategorySlugRoute
   CareersJobsSlugRoute: typeof CareersJobsSlugRoute
   CareersPlatformsPlatformSlugRoute: typeof CareersPlatformsPlatformSlugRoute
+  ServicesCategorySlugRoute: typeof ServicesCategorySlugRoute
   SiwesCoursesSlugRoute: typeof SiwesCoursesSlugRoute
   TalentPoolIdRoute: typeof TalentPoolIdRoute
   TalentRolesSlugRoute: typeof TalentRolesSlugRoute
@@ -1553,6 +1618,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportsNigeriaTechSalariesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/services/': {
+      id: '/services/'
+      path: '/services'
+      fullPath: '/services/'
+      preLoaderRoute: typeof ServicesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/$slug': {
+      id: '/services/$slug'
+      path: '/services/$slug'
+      fullPath: '/services/$slug'
+      preLoaderRoute: typeof ServicesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/side-hustles/': {
+      id: '/side-hustles/'
+      path: '/side-hustles'
+      fullPath: '/side-hustles/'
+      preLoaderRoute: typeof SideHustlesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/side-hustles/$slug': {
+      id: '/side-hustles/$slug'
+      path: '/side-hustles/$slug'
+      fullPath: '/side-hustles/$slug'
+      preLoaderRoute: typeof SideHustlesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/siwes/': {
       id: '/siwes/'
       path: '/siwes'
@@ -1642,6 +1735,13 @@ declare module '@tanstack/react-router' {
       path: '/careers/platforms/$platformSlug'
       fullPath: '/careers/platforms/$platformSlug'
       preLoaderRoute: typeof CareersPlatformsPlatformSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services/category/$slug': {
+      id: '/services/category/$slug'
+      path: '/services/category/$slug'
+      fullPath: '/services/category/$slug'
+      preLoaderRoute: typeof ServicesCategorySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/siwes/courses/': {
@@ -1806,6 +1906,8 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsSlugRoute: ProductsSlugRoute,
   RCodeRoute: RCodeRoute,
   ReportsNigeriaTechSalariesRoute: ReportsNigeriaTechSalariesRoute,
+  ServicesSlugRoute: ServicesSlugRoute,
+  SideHustlesSlugRoute: SideHustlesSlugRoute,
   TagSplatRoute: TagSplatRoute,
   TalentDashboardRoute: TalentDashboardRoute,
   TalentProfileRoute: TalentProfileRoute,
@@ -1819,6 +1921,8 @@ const rootRouteChildren: RootRouteChildren = {
   HubsIndexRoute: HubsIndexRoute,
   LocationsIndexRoute: LocationsIndexRoute,
   ProductsIndexRoute: ProductsIndexRoute,
+  ServicesIndexRoute: ServicesIndexRoute,
+  SideHustlesIndexRoute: SideHustlesIndexRoute,
   SiwesIndexRoute: SiwesIndexRoute,
   TalentIndexRoute: TalentIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
@@ -1827,6 +1931,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogCategorySlugRoute: BlogCategorySlugRoute,
   CareersJobsSlugRoute: CareersJobsSlugRoute,
   CareersPlatformsPlatformSlugRoute: CareersPlatformsPlatformSlugRoute,
+  ServicesCategorySlugRoute: ServicesCategorySlugRoute,
   SiwesCoursesSlugRoute: SiwesCoursesSlugRoute,
   TalentPoolIdRoute: TalentPoolIdRoute,
   TalentRolesSlugRoute: TalentRolesSlugRoute,

@@ -6,6 +6,7 @@ import JoinWhatsAppButton from "@/components/JoinWhatsAppButton";
 import { COMMUNITY_WHATSAPP_URL } from "@/lib/whatsapp";
 import { departments } from "@/data/departments";
 import { AFRICAN_COUNTRIES, countryName } from "@/lib/visitor-state";
+import { useVisitorLocation } from "@/hooks/use-visitor-location";
 
 const taglines = [
   "Learn Today. Earn Tomorrow.",
@@ -17,25 +18,8 @@ const taglines = [
 
 const Hero = () => {
   const [currentTagline, setCurrentTagline] = useState(0);
-  // Nigerian state from Cloudflare's IP lookup; empty until known, and stays empty elsewhere.
-  const [visitorState, setVisitorState] = useState<string | null>(null);
-  // Visitors outside Nigeria get an "online from <country>" line instead.
-  const [visitorCountry, setVisitorCountry] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/api/public/visitor-state")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d: { state?: string | null; country?: string | null } | null) => {
-        if (cancelled || !d) return;
-        if (d.state) setVisitorState(d.state);
-        else if (d.country) setVisitorCountry(d.country);
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  // Nigerian state (or foreign country) from Cloudflare's IP lookup; empty until known.
+  const { state: visitorState, country: visitorCountry } = useVisitorLocation();
 
   useEffect(() => {
     const interval = setInterval(() => {

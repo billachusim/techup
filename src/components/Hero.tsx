@@ -16,6 +16,21 @@ const taglines = [
 
 const Hero = () => {
   const [currentTagline, setCurrentTagline] = useState(0);
+  // Nigerian state from Cloudflare's IP lookup; empty until known, and stays empty elsewhere.
+  const [visitorState, setVisitorState] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/public/visitor-state")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { state?: string | null } | null) => {
+        if (!cancelled && d?.state) setVisitorState(d.state);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -66,7 +81,8 @@ const Hero = () => {
           </span>
         </h1>
 
-        <p className="text-sm md:text-base text-muted-foreground font-medium">
+        <p className="text-sm md:text-base text-muted-foreground font-medium min-h-[1.5em]">
+          {visitorState ? `Tech training in ${visitorState}` : ""}
         </p>
 
         {/* Animated taglines */}

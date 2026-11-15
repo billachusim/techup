@@ -3,6 +3,7 @@ import { workerCtx } from "./lib/worker-ctx";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+import { nigerianState } from "./lib/visitor-state";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -45,8 +46,20 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+// Visitor's Nigerian state for the homepage hero line, from Cloudflare's IP lookup.
+// Answered here, before the app, so it costs no SSR work and is never cached.
+function visitorStateResponse(request: Request): Response {
+  const cf = (request as Request & { cf?: { country?: unknown; region?: unknown } }).cf;
+  return new Response(JSON.stringify({ state: nigerianState(cf?.country, cf?.region) }), {
+    headers: { "content-type": "application/json", "cache-control": "private, no-store" },
+  });
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    if (new URL(request.url).pathname === "/api/public/visitor-state") {
+      return visitorStateResponse(request);
+    }
     try {
       const handler = await getServerEntry();
       const response = await workerCtx.run(ctx as { waitUntil?: (p: Promise<unknown>) => void }, () =>

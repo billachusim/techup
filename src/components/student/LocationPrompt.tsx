@@ -3,7 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { MapPin } from "lucide-react";
+import { LocateFixed, MapPin } from "lucide-react";
+import { locateVisitor } from "@/hooks/use-device-location";
 
 const SKIP_KEY = "tf_location_prompt_skipped";
 
@@ -38,6 +39,16 @@ export const LocationPrompt = () => {
     if (!error) setShow(false);
   };
 
+  // Fills the box from the device location; the profile is saved by locateVisitor.
+  const useMyLocation = async () => {
+    setSaving(true);
+    const res = await locateVisitor();
+    setSaving(false);
+    if (res.ok) {
+      setValue([res.location.city, res.location.state].filter(Boolean).join(", "));
+    }
+  };
+
   const skip = () => {
     localStorage.setItem(SKIP_KEY, "1");
     setShow(false);
@@ -58,6 +69,9 @@ export const LocationPrompt = () => {
           aria-label="City / State"
         />
         <div className="flex gap-2">
+          <Button size="sm" variant="outline" onClick={useMyLocation} disabled={saving}>
+            <LocateFixed size={14} className="mr-1" /> Use my location
+          </Button>
           <Button size="sm" onClick={save} disabled={saving || !value.trim()}>Save</Button>
           <Button size="sm" variant="ghost" onClick={skip}>Skip</Button>
         </div>

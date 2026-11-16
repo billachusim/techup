@@ -4,7 +4,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import NotFound from "@/pages/NotFound";
 import { Button } from "@/components/ui/button";
-import VisitorStateLine from "@/components/VisitorStateLine";
 import { Badge } from "@/components/ui/badge";
 import { HUSTLE_STEPS } from "@/components/services/serviceCopy";
 import { SITE_URL } from "@/lib/seo";
@@ -65,7 +64,6 @@ const HustleDetail = ({ slug }: { slug: string }) => {
         <h1 className="text-3xl font-bold md:text-4xl">
           {svc.hustleTitle}: pay-per-task side hustle in Nigeria
         </h1>
-        <VisitorStateLine>{(st) => `Open to talent in ${st}: remote tasks plus field work in your area`}</VisitorStateLine>
         <div className="flex flex-wrap gap-3">
           <Badge className="text-base">Earn {naira(pay)} per task</Badge>
           <Badge variant="outline">Paid weekly</Badge>
@@ -150,7 +148,6 @@ const HustleIndex = () => (
           Pay-per-task <span className="text-gradient">side hustles</span> in
           Nigeria
         </h1>
-        <VisitorStateLine>{(st) => `Open to talent in ${st}: remote tasks plus field work in your area`}</VisitorStateLine>
         <p className="text-lg leading-relaxed text-muted-foreground">
           {SERVICES.length} ways to earn from small tasks for real businesses:
           video editing, social media, flyer distribution, app testing, data

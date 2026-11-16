@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { foreignCountry, nigerianState } from "@/lib/visitor-state";
+import { foreignCountry } from "@/lib/visitor-state";
 
 /**
  * Visitor location from Cloudflare's IP lookup, answered by the worker at
@@ -20,10 +20,9 @@ const EMPTY: VisitorLocation = { state: null, country: null, cc: null };
 let pending: Promise<VisitorLocation> | null = null;
 
 /**
- * The host passes the visitor's country (cf-ipcountry) but not their state, so for
- * visitors in Nigeria (or when the country is unknown) the state comes from a
- * browser-side GeoJS lookup (free, no key). It runs from the visitor's own connection, so the
- * free limit applies per visitor, and it is skipped for everyone outside Nigeria.
+ * The host passes the visitor's country (cf-ipcountry). When it is missing, a
+ * browser-side GeoJS lookup (free, no key) supplies it. It runs from the visitor's
+ * own connection, so the free limit applies per visitor.
  */
 async function lookupInBrowser(): Promise<{
   country?: string;
@@ -45,20 +44,17 @@ async function resolveLocation(): Promise<VisitorLocation> {
   const base: VisitorLocation = await fetch("/api/public/visitor-state")
     .then((r) => (r.ok ? r.json() : EMPTY))
     .then((d: Partial<VisitorLocation>) => ({
-      state: d.state ?? null,
+      state: null,
       country: d.country ?? null,
       cc: d.cc ?? null,
     }))
     .catch(() => EMPTY);
-  if (base.state || (base.cc && base.cc !== "NG")) return base;
+  // State-level IP lookups proved unreliable in Nigeria (Anambra showing as Rivers),
+  // so only the country is used. GeoJS is asked only when the host gave no country.
+  if (base.cc) return base;
   const ext = await lookupInBrowser();
-  if (!ext) return base;
-  const cc = base.cc ?? ext.country ?? null;
-  return {
-    state: nigerianState(cc, ext.region),
-    country: foreignCountry(cc),
-    cc,
-  };
+  const cc = ext?.country ?? null;
+  return { state: null, country: foreignCountry(cc), cc };
 }
 
 export function fetchVisitorLocation(): Promise<VisitorLocation> {

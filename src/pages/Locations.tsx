@@ -10,6 +10,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import CampusMap from "@/components/locations/CampusMap";
 import { campuses, zones, directionsUrl, type CampusZone } from "@/data/campuses";
+import FindNearestCentre from "@/components/FindNearestCentre";
+import { useDeviceLocation } from "@/hooks/use-device-location";
 
 const Locations = () => {
   const [query, setQuery] = useState("");
@@ -31,6 +33,10 @@ const Locations = () => {
   }, [query, zone]);
 
   const hq = campuses.find((c) => c.isHeadquarters)!;
+  // After the visitor shares their location, their state's centres are shown first.
+  const device = useDeviceLocation();
+  const stateName = device?.state === "Abuja" ? "Federal Capital Territory" : device?.state;
+  const inYourState = stateName ? campuses.filter((c) => c.state === stateName) : [];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -78,6 +84,25 @@ const Locations = () => {
               students in-person labs, mentors and exam venues in their own city, not just online.
             </p>
           </div>
+        </section>
+
+        <section className="container mx-auto px-4 mt-8">
+          <FindNearestCentre className="max-w-2xl" />
+          {inYourState.length > 0 && (
+            <div className="mt-6">
+              <h2 className="text-lg font-semibold mb-3">
+                {inYourState.length === 1 ? "Our centre" : "Our centres"} in {device?.state}
+              </h2>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {inYourState.map((c) => (
+                  <Link key={c.slug} to={`/locations/${c.slug}`} className="rounded-lg border border-border bg-card p-4 hover:border-link">
+                    <div className="font-medium text-link">{c.name}</div>
+                    <div className="text-sm text-muted-foreground">{c.address}</div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
 
         {/* HQ callout */}

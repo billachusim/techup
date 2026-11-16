@@ -7,6 +7,7 @@ import { COMMUNITY_WHATSAPP_URL } from "@/lib/whatsapp";
 import { departments } from "@/data/departments";
 import { AFRICAN_COUNTRIES, countryName } from "@/lib/visitor-state";
 import { useVisitorLocation } from "@/hooks/use-visitor-location";
+import { useDeviceLocation } from "@/hooks/use-device-location";
 
 const taglines = [
   "Learn Today. Earn Tomorrow.",
@@ -20,6 +21,8 @@ const Hero = () => {
   const [currentTagline, setCurrentTagline] = useState(0);
   // Visitors outside Nigeria get an "online from <country>" line; Nigeria sees none.
   const { country: visitorCountry } = useVisitorLocation();
+  // State only after the visitor shared their location ("Find my nearest centre").
+  const device = useDeviceLocation();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -71,7 +74,9 @@ const Hero = () => {
         </h1>
 
         <p className="text-sm md:text-base text-muted-foreground font-medium min-h-[1.5em]">
-          {visitorCountry && countryName(visitorCountry) ? (
+          {device ? (
+            `Tech training in ${device.state}`
+          ) : visitorCountry && countryName(visitorCountry) ? (
             <Link
               to={AFRICAN_COUNTRIES.has(visitorCountry) ? "/study-online-africa" : "/departments"}
               className="text-link hover:underline"

@@ -1,3 +1,5 @@
+import VisitorStateLine from "@/components/VisitorStateLine";
+import FindNearestCentre from "@/components/FindNearestCentre";
 import { Link } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -142,12 +144,14 @@ const SIWES = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               Do Your <span className="text-gradient">IT</span> With Tech Faculty NG
             </h1>
+            <VisitorStateLine className="-mt-3 mb-6">{(st) => `SIWES placements for students in ${st}`}</VisitorStateLine>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
               Over 120 university students have completed their SIWES/IT placement with us since 2022.
               Our program is regulated under Federal Ministry of Education policies.
               No separate placement fee on site. Choose Learn &amp; Pay or Tutor &amp; Earn — either way, you leave with real skills, a certificate, and industry connections.
             </p>
             <LastUpdated date={SIWES_UPDATED} className="-mt-4 mb-8" />
+            <FindNearestCentre className="mx-auto mb-8 max-w-xl text-left" />
             <Button size="lg" className="bg-gradient-to-r from-primary to-[hsl(180,100%,45%)] text-background font-semibold" asChild>
               <a href="https://wa.me/2348068597140?text=Hello%2C%20I'm%20a%20student%20interested%20in%20doing%20my%20SIWES%2FIT%20with%20Tech%20Faculty%20NG" target="_blank" rel="noopener noreferrer">
                 <MessageCircle className="mr-2" size={20} />

@@ -28,14 +28,14 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (manualOverride) return;
     const detectCountry = async () => {
-      // Cloudflare's lookup first: instant and not rate-limited.
+      // Cloudflare country first (instant); GeoJS (free, no key) only when it is missing.
       const { cc } = await fetchVisitorLocation();
       if (cc) {
         if (cc !== "NG") setIsNigeria(false);
         return;
       }
       try {
-        const res = await fetch("https://ipapi.co/json/", { signal: AbortSignal.timeout(5000) });
+        const res = await fetch("https://get.geojs.io/v1/ip/geo.json", { signal: AbortSignal.timeout(5000) });
         const data = await res.json();
         if (data.country_code && data.country_code !== "NG") {
           setIsNigeria(false);

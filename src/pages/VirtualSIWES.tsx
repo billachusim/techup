@@ -1,4 +1,3 @@
-import VisitorStateLine from "@/components/VisitorStateLine";
 import { Link } from "@/lib/router-compat";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -144,7 +143,6 @@ const VirtualSIWES = () => {
               Virtual SIWES in Nigeria — do your IT online, and we sign, stamp and{" "}
               <span className="text-gradient">waybill your logbook back</span>
             </h1>
-            <VisitorStateLine>{(st) => `Open to students in ${st} and every state`}</VisitorStateLine>
             <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               You should not lose a session because there is no approved IT host in your town.
               Complete your industrial training online with a licensed technology institute, do real

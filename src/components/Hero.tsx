@@ -18,8 +18,8 @@ const taglines = [
 
 const Hero = () => {
   const [currentTagline, setCurrentTagline] = useState(0);
-  // Nigerian state (or foreign country) from Cloudflare's IP lookup; empty until known.
-  const { state: visitorState, country: visitorCountry } = useVisitorLocation();
+  // Visitors outside Nigeria get an "online from <country>" line; Nigeria sees none.
+  const { country: visitorCountry } = useVisitorLocation();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -71,9 +71,7 @@ const Hero = () => {
         </h1>
 
         <p className="text-sm md:text-base text-muted-foreground font-medium min-h-[1.5em]">
-          {visitorState ? (
-            `Tech training in ${visitorState}`
-          ) : visitorCountry && countryName(visitorCountry) ? (
+          {visitorCountry && countryName(visitorCountry) ? (
             <Link
               to={AFRICAN_COUNTRIES.has(visitorCountry) ? "/study-online-africa" : "/departments"}
               className="text-link hover:underline"

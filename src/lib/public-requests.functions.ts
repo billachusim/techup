@@ -65,12 +65,18 @@ export const notifyHiringRequest = createServerFn({ method: "POST" })
     if (!brief || Date.now() - new Date(brief.created_at).getTime() > RECENT_MS) return { ok: false };
 
     if (isEmail(brief.email)) {
-      await sendSafely(
-        "hiring-request-received",
-        brief.email,
-        { contactName: brief.contact_name, company: brief.company, projectTitle: brief.project_title },
-        brief.id,
-      );
+      // Orders from /services are titled "Service order: <service>" and get their own email.
+      const service = brief.project_title.startsWith("Service order: ") ? brief.project_title.slice(15) : null;
+      if (service) {
+        await sendSafely("service-order-received", brief.email, { contactName: brief.contact_name, company: brief.company, service }, brief.id);
+      } else {
+        await sendSafely(
+          "hiring-request-received",
+          brief.email,
+          { contactName: brief.contact_name, company: brief.company, projectTitle: brief.project_title },
+          brief.id,
+        );
+      }
     }
     await sendSafely(
       "hiring-request-admin",

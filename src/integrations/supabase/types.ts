@@ -277,6 +277,15 @@ export type Database = {
           created_at: string
           description: string
           email: string | null
+          followup_count: number
+          last_followup_at: string | null
+          paid_at: string | null
+          pay_link_url: string | null
+          pay_tx_ref: string | null
+          payment_reference: string | null
+          quote_amount: number | null
+          quote_note: string | null
+          quote_sent_at: string | null
           engagement: string
           id: string
           phone: string
@@ -296,6 +305,15 @@ export type Database = {
           created_at?: string
           description: string
           email?: string | null
+          followup_count?: number
+          last_followup_at?: string | null
+          paid_at?: string | null
+          pay_link_url?: string | null
+          pay_tx_ref?: string | null
+          payment_reference?: string | null
+          quote_amount?: number | null
+          quote_note?: string | null
+          quote_sent_at?: string | null
           engagement?: string
           id?: string
           phone: string
@@ -315,6 +333,15 @@ export type Database = {
           created_at?: string
           description?: string
           email?: string | null
+          followup_count?: number
+          last_followup_at?: string | null
+          paid_at?: string | null
+          pay_link_url?: string | null
+          pay_tx_ref?: string | null
+          payment_reference?: string | null
+          quote_amount?: number | null
+          quote_note?: string | null
+          quote_sent_at?: string | null
           engagement?: string
           id?: string
           phone?: string

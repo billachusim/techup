@@ -9,6 +9,7 @@ import { Loader2, Sparkles, Download, Check, X, Plus, MessageCircle, Wallet } fr
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AdminNav from "@/components/admin/AdminNav";
+import BriefQuote from "@/components/admin/BriefQuote";
 import TalentNav from "@/components/talent/TalentNav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -1165,6 +1166,7 @@ const AdminTalent = () => {
                         <p className="mt-2 text-xs text-muted-foreground">
                           {b.skills_needed.join(", ")}{b.budget_text ? ` · budget ${b.budget_text}` : ""}{b.timeline ? ` · ${b.timeline}` : ""} · {SELECTION_PROCESS_LABEL[b.selection_process] ?? b.selection_process}
                         </p>
+                        {b.status !== "rejected" && <BriefQuote brief={b} onDone={load} />}
                       </div>
                       <Select value={b.status} onValueChange={(v) => setBriefStatus(b.id, v)}>
                         <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>

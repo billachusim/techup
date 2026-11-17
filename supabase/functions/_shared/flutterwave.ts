@@ -183,3 +183,31 @@ export async function confirmOrderPayment(
   }
   return done;
 }
+
+export type BriefConfirmResult =
+  | { status: "paid"; briefId: string }
+  | { status: "pending" | "failed" | "not_found"; reason: string };
+
+/** Same check for a client brief quote (business_briefs.pay_tx_ref, "brief-…"): marks it paid and approved. */
+export async function confirmBriefPayment(admin: SupabaseClient, secretKey: string, txRef: string): Promise<BriefConfirmResult> {
+  const { data: brief, error } = await admin
+    .from("business_briefs")
+    .select("id, quote_amount, paid_at")
+    .eq("pay_tx_ref", txRef)
+    .maybeSingle();
+  if (error) throw error;
+  if (!brief) return { status: "not_found", reason: "No brief for this payment reference" };
+  if (brief.paid_at) return { status: "paid", briefId: brief.id };
+  if (!brief.quote_amount) return { status: "failed", reason: "Brief has no quote" };
+
+  const check = await checkTransaction(secretKey, txRef, brief.quote_amount, "NGN");
+  if (!check.ok) return { status: check.status, reason: check.reason };
+
+  const { error: updateErr } = await admin
+    .from("business_briefs")
+    .update({ paid_at: new Date().toISOString(), payment_reference: String(check.tx.id), status: "approved" })
+    .eq("id", brief.id)
+    .is("paid_at", null);
+  if (updateErr) throw updateErr;
+  return { status: "paid", briefId: brief.id };
+}

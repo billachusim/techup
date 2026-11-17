@@ -41,7 +41,7 @@ serve(async (req) => {
     if (!secretKey) return reply({ error: "Payments are not configured" }, 500);
     const siteUrl = Deno.env.get("SITE_URL") ?? "https://techfaculty.ng";
     const txRef = `brief-${brief.id.slice(0, 8)}-${Date.now()}`;
-    const title = String(brief.project_title).replace(/^Service order: /, "");
+    const title = String(brief.project_title).replace(/^(Service order|Custom request): /, "");
 
     const res = await fetch("https://api.flutterwave.com/v3/payments", {
       method: "POST",

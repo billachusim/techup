@@ -6,36 +6,66 @@ import { z } from "zod";
 // record must have been created in the last few minutes.
 
 const RECENT_MS = 10 * 60 * 1000;
-const isEmail = (v?: string | null) => !!v && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
+const isEmail = (v?: string | null) =>
+  !!v && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
 
-async function sendSafely(template: string, to: string | null | undefined, templateData: Record<string, unknown>, key: string) {
+async function sendSafely(
+  template: string,
+  to: string | null | undefined,
+  templateData: Record<string, unknown>,
+  key: string,
+) {
   if (!to) return;
   try {
-    const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
-    await sendTemplateEmail(template, to, { templateData, idempotencyKey: `${template}-${key}` });
+    const { sendTemplateEmail } =
+      await import("@/lib/email-templates/send-email");
+    await sendTemplateEmail(template, to, {
+      templateData,
+      idempotencyKey: `${template}-${key}`,
+    });
   } catch (e) {
-    console.error("public request email failed", template, (e as Error).message);
+    console.error(
+      "public request email failed",
+      template,
+      (e as Error).message,
+    );
   }
 }
 
 /** Confirms a client's "introduce me to this talent" request and alerts staff. */
 export const notifyIntroRequest = createServerFn({ method: "POST" })
-  .inputValidator((d) => z.object({ talentId: z.string().uuid(), contact: z.string().min(5).max(160) }).parse(d))
+  .inputValidator((d) =>
+    z
+      .object({
+        talentId: z.string().uuid(),
+        contact: z.string().min(5).max(160),
+      })
+      .parse(d),
+  )
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { supabaseAdmin } =
+      await import("@/integrations/supabase/client.server");
     const { data: req } = await supabaseAdmin
       .from("talent_interest_requests")
-      .select("id, created_at, requester_name, requester_org, requester_contact, message, talent_profiles(full_name)")
+      .select(
+        "id, created_at, requester_name, requester_org, requester_contact, message, talent_profiles(full_name)",
+      )
       .eq("talent_profile_id", data.talentId)
       .eq("requester_contact", data.contact.trim())
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
-    if (!req || Date.now() - new Date(req.created_at).getTime() > RECENT_MS) return { ok: false };
+    if (!req || Date.now() - new Date(req.created_at).getTime() > RECENT_MS)
+      return { ok: false };
 
     const talentName = req.talent_profiles?.full_name as string | undefined;
     if (isEmail(req.requester_contact)) {
-      await sendSafely("intro-request-received", req.requester_contact, { requesterName: req.requester_name, talentName }, req.id);
+      await sendSafely(
+        "intro-request-received",
+        req.requester_contact,
+        { requesterName: req.requester_name, talentName },
+        req.id,
+      );
     }
     await sendSafely(
       "intro-request-admin",
@@ -56,24 +86,48 @@ export const notifyIntroRequest = createServerFn({ method: "POST" })
 export const notifyHiringRequest = createServerFn({ method: "POST" })
   .inputValidator((d) => z.object({ briefId: z.string().uuid() }).parse(d))
   .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { supabaseAdmin } =
+      await import("@/integrations/supabase/client.server");
     const { data: brief } = await supabaseAdmin
       .from("business_briefs")
-      .select("id, created_at, company, contact_name, email, phone, project_title")
+      .select(
+        "id, created_at, company, contact_name, email, phone, project_title, quote_amount, pay_link_url",
+      )
       .eq("id", data.briefId)
       .maybeSingle();
-    if (!brief || Date.now() - new Date(brief.created_at).getTime() > RECENT_MS) return { ok: false };
+    if (!brief || Date.now() - new Date(brief.created_at).getTime() > RECENT_MS)
+      return { ok: false };
 
     if (isEmail(brief.email)) {
-      // Orders from /services are titled "Service order: <service>" and get their own email.
-      const service = brief.project_title.startsWith("Service order: ") ? brief.project_title.slice(15) : null;
-      if (service) {
-        await sendSafely("service-order-received", brief.email, { contactName: brief.contact_name, company: brief.company, service }, brief.id);
+      // /services orders ("Service order: …" priced automatically, "Custom request: …" quoted
+      // by staff) get their own email, with the pay link when the order already has one.
+      const m = brief.project_title.match(
+        /^(Service order|Custom request): (.+)$/,
+      );
+      if (m) {
+        await sendSafely(
+          "service-order-received",
+          brief.email,
+          {
+            contactName: brief.contact_name,
+            company: brief.company,
+            service: m[2],
+            amount: brief.quote_amount
+              ? `₦${brief.quote_amount.toLocaleString("en-NG")}`
+              : undefined,
+            payUrl: brief.pay_link_url ?? undefined,
+          },
+          brief.id,
+        );
       } else {
         await sendSafely(
           "hiring-request-received",
           brief.email,
-          { contactName: brief.contact_name, company: brief.company, projectTitle: brief.project_title },
+          {
+            contactName: brief.contact_name,
+            company: brief.company,
+            projectTitle: brief.project_title,
+          },
           brief.id,
         );
       }
@@ -81,7 +135,13 @@ export const notifyHiringRequest = createServerFn({ method: "POST" })
     await sendSafely(
       "hiring-request-admin",
       "staff",
-      { contactName: brief.contact_name, company: brief.company, projectTitle: brief.project_title, phone: brief.phone, email: brief.email },
+      {
+        contactName: brief.contact_name,
+        company: brief.company,
+        projectTitle: brief.project_title,
+        phone: brief.phone,
+        email: brief.email,
+      },
       brief.id,
     );
     return { ok: true };

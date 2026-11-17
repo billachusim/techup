@@ -157,13 +157,25 @@ const TalentSlackInvite = ({ name, email, slackUrl, reminder }: { name?: string;
 )
 
 // 6c. Client: service order received (/services)
-const ServiceOrderReceived = ({ contactName, company, service }: { contactName?: string; company?: string; service?: string }) => (
-  <Layout preview="We received your service order" title="Your order is in" cta="See all services" href={`${SITE}/services`}>
+const ServiceOrderReceived = ({ contactName, company, service, amount, payUrl }: { contactName?: string; company?: string; service?: string; amount?: string; payUrl?: string }) => (
+  <Layout
+    preview="We received your service order"
+    title="Your order is in"
+    cta={payUrl ? `Pay ${amount ?? 'now'}` : 'See all services'}
+    href={payUrl ?? `${SITE}/services`}
+  >
     <Text style={text}>{hi(contactName)}</Text>
     <Text style={text}>
-      Thank you for ordering <b>{service ?? 'a service'}</b>{company ? <> for {company}</> : ''} from Tech Faculty. We will reply within one working day with a few quick questions and a clear price.
+      Thank you for ordering <b>{service ?? 'a service'}</b>{company ? <> for {company}</> : ''} from Tech Faculty.
     </Text>
-    <Text style={text}>You only pay once you have agreed the price, and you pay per task delivered. Reply to this email or message us on WhatsApp if anything is urgent.</Text>
+    {payUrl ? (
+      <Text style={text}>
+        Your price is <b>{amount}</b>. If you have not paid yet, use the button below (card, bank transfer or USSD). As soon as payment lands, we assign the work and keep you updated until it is delivered.
+      </Text>
+    ) : (
+      <Text style={text}>We will reply within one working day with a few quick questions and a clear price. You only pay once you have agreed the price.</Text>
+    )}
+    <Text style={muted}>Reply to this email or message us on WhatsApp if anything is urgent.</Text>
   </Layout>
 )
 
@@ -262,7 +274,7 @@ export const newApplicationAdmin = { component: NewApplicationAdmin, subject: (d
 export const matchUpdate = { component: MatchUpdate, subject: (d) => `${(STATUS_COPY[d.status as string] ?? STATUS_COPY.approved).title}: ${d.roleTitle ?? 'project'}`, displayName: 'Match / selection update', previewData: { name: 'Ada Obi', roleTitle: 'Tech Faculty Store', company: 'Tech Faculty', status: 'accepted' } } satisfies TemplateEntry
 export const deliverableReviewed = { component: DeliverableReviewed, subject: (d) => (d.status === 'needs_changes' ? 'Changes requested on your work' : 'Your work was reviewed'), displayName: 'Trial work reviewed', previewData: { name: 'Ada Obi', title: 'Product page UI', roleTitle: 'Tech Faculty Store', status: 'reviewed', note: 'Great work.' } } satisfies TemplateEntry
 export const talentSlackInvite = { component: TalentSlackInvite, subject: (d) => (d.reminder ? 'Reminder: join the Tech Faculty talent Slack' : 'Join the Tech Faculty talent Slack'), displayName: 'Talent: join Slack', previewData: { name: 'Ada Obi', email: 'ada@example.com', reminder: false } } satisfies TemplateEntry
-export const serviceOrderReceived = { component: ServiceOrderReceived, subject: (d) => `We received your order: ${d.service ?? 'service'}`, displayName: 'Service order received (client)', previewData: { contactName: 'Chidi Okeke', company: 'Okeke Stores', service: 'AI Video Creation' } } satisfies TemplateEntry
+export const serviceOrderReceived = { component: ServiceOrderReceived, subject: (d) => `We received your order: ${d.service ?? 'service'}`, displayName: 'Service order received (client)', previewData: { contactName: 'Chidi Okeke', company: 'Okeke Stores', service: 'AI Video Creation', amount: '₦22,500', payUrl: 'https://techfaculty.ng' } } satisfies TemplateEntry
 export const briefFollowup = { component: BriefFollowup, subject: (d) => (d.quoted ? `Your quote is waiting: ${d.title ?? 'your request'}` : `Following up: ${d.title ?? 'your request'}`), displayName: 'Brief / quote follow-up (client)', previewData: { contactName: 'Chidi Okeke', title: 'Online ordering website', quoted: true, amount: '₦20,000', payUrl: 'https://techfaculty.ng' } } satisfies TemplateEntry
 export const serviceQuote = { component: ServiceQuote, subject: (d) => `Your quote: ${d.title ?? 'your request'} (${d.amount ?? ''})`, displayName: 'Service quote with pay link (client)', previewData: { contactName: 'Chidi Okeke', title: 'Online ordering website', amount: '₦20,000', note: 'Includes up to 20 products and WhatsApp ordering.', payUrl: 'https://techfaculty.ng' } } satisfies TemplateEntry
 export const talentApproved = { component: TalentApproved, subject: "You're an approved Tech Faculty talent", displayName: 'Talent approved', previewData: { name: 'Ada Obi', facultyId: 'TF-WD-OL-0926-0001' } } satisfies TemplateEntry

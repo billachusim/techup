@@ -64,7 +64,7 @@ export async function runBriefFollowups(): Promise<BriefFollowupResult> {
       .maybeSingle();
     if (!claimed) continue;
     const quoted = Boolean(b.quote_sent_at);
-    const title = b.project_title.replace(/^Service order: /, "");
+    const title = b.project_title.replace(/^(Service order|Custom request): /, "");
     try {
       await sendTemplateEmail("brief-followup", b.email!, {
         templateData: {

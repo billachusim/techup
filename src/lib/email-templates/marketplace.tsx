@@ -1,8 +1,10 @@
 import React from 'react'
 import { Body, Button, Container, Head, Heading, Hr, Html, Preview, Text } from '@react-email/components'
 import type { TemplateEntry } from './registry'
+import { SLACK_JOIN_URL } from '@/data/coursePrograms'
 
 const SITE = 'https://techfaculty.ng'
+const SLACK_JOIN = SLACK_JOIN_URL
 
 const Layout = ({ preview, title, children, cta, href }: { preview: string; title: string; children: React.ReactNode; cta?: string; href?: string }) => (
   <Html lang="en" dir="ltr">
@@ -132,7 +134,25 @@ const ProfileSubmitted = ({ name, strength, facultyId }: { name?: string; streng
     ) : (
       <Text style={text}>Profiles at 70% or more are approved automatically, so add your CV, skills, experience and availability. Taking a Tech Faculty course gets you a Faculty ID and priority matching for roles in your field.</Text>
     )}
+    <Text style={text}>
+      Join the Tech Faculty talent Slack with this same email address. It is where we share updates, assessments and new paid tasks:{' '}
+      <a href={SLACK_JOIN}>join Slack</a>.
+    </Text>
     <Text style={muted}>Next: browse open roles and apply with your profile.</Text>
+  </Layout>
+)
+
+// 6b. Talent: join the talent Slack (daily sync, at most three reminders)
+const TalentSlackInvite = ({ name, email, slackUrl, reminder }: { name?: string; email?: string; slackUrl?: string; reminder?: boolean }) => (
+  <Layout preview="Join the Tech Faculty talent Slack" title={reminder ? 'Reminder: join the talent Slack' : 'Join the Tech Faculty talent Slack'} cta="Join Slack" href={slackUrl ?? SLACK_JOIN}>
+    <Text style={text}>{hi(name)}</Text>
+    <Text style={text}>
+      Thanks for joining the Tech Faculty talent pool. Updates, assessments and new paid tasks, including our pay-per-task side hustles, are shared in our talent Slack.
+    </Text>
+    <Text style={text}>
+      Please join with <b>{email ?? 'the email on your profile'}</b>, the same address you used on Tech Faculty, so we can add you to the talent channel automatically.
+    </Text>
+    <Text style={muted}>Already joined with another email? Reply to this email and we will link it.</Text>
   </Layout>
 )
 
@@ -195,6 +215,7 @@ export const applicationReceived = { component: ApplicationReceived, subject: (d
 export const newApplicationAdmin = { component: NewApplicationAdmin, subject: (d) => `New application: ${d.roleTitle ?? 'role'}`, displayName: 'New application (staff)', to: 'nachusim@gmail.com', previewData: { talentName: 'Ada Obi', roleTitle: 'Frontend Developer', company: 'Tech Faculty' } } satisfies TemplateEntry
 export const matchUpdate = { component: MatchUpdate, subject: (d) => `${(STATUS_COPY[d.status as string] ?? STATUS_COPY.approved).title}: ${d.roleTitle ?? 'project'}`, displayName: 'Match / selection update', previewData: { name: 'Ada Obi', roleTitle: 'Tech Faculty Store', company: 'Tech Faculty', status: 'accepted' } } satisfies TemplateEntry
 export const deliverableReviewed = { component: DeliverableReviewed, subject: (d) => (d.status === 'needs_changes' ? 'Changes requested on your work' : 'Your work was reviewed'), displayName: 'Trial work reviewed', previewData: { name: 'Ada Obi', title: 'Product page UI', roleTitle: 'Tech Faculty Store', status: 'reviewed', note: 'Great work.' } } satisfies TemplateEntry
+export const talentSlackInvite = { component: TalentSlackInvite, subject: (d) => (d.reminder ? 'Reminder: join the Tech Faculty talent Slack' : 'Join the Tech Faculty talent Slack'), displayName: 'Talent: join Slack', previewData: { name: 'Ada Obi', email: 'ada@example.com', reminder: false } } satisfies TemplateEntry
 export const talentApproved = { component: TalentApproved, subject: "You're an approved Tech Faculty talent", displayName: 'Talent approved', previewData: { name: 'Ada Obi', facultyId: 'TF-WD-OL-0926-0001' } } satisfies TemplateEntry
 
 const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, Helvetica, sans-serif' }

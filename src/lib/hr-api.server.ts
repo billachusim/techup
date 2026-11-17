@@ -25,6 +25,7 @@ const EmailBody = z.object({
   role_id: UUID.optional(),
 });
 const ManagerBody = z.object({ manager_user_id: UUID });
+const BriefStatusBody = z.object({ status: z.enum(["new", "reviewing", "approved", "rejected"]) });
 const ReviewBody = z.object({ status: z.enum(["reviewed", "needs_changes"]), note: z.string().trim().max(2000).optional() });
 const NoteBody = z.object({ talent_id: UUID, role_id: UUID.nullable().optional(), text: z.string().trim().min(1).max(8000) });
 
@@ -160,6 +161,11 @@ async function route(admin: Admin, request: Request, method: string, path: strin
   if (method === "POST" && parts[0] === "roles" && parts[2] === "match" && parts.length === 3) return rematchRole(admin, UUID.parse(parts[1]));
   if (method === "POST" && path === "/matches") return createMatch(admin, MatchCreateBody.parse(await body()));
   // Field reps, for the manager's weekly sheet: per-rep totals, and one rep's sign-ups.
+  // Client briefs and service orders (/hire, /services): list by status, move status.
+  if (method === "GET" && path === "/briefs") return listBriefs(admin, url);
+  if (method === "POST" && parts[0] === "briefs" && parts[2] === "status" && parts.length === 3) {
+    return setBriefStatus(admin, UUID.parse(parts[1]), BriefStatusBody.parse(await body()));
+  }
   if (method === "GET" && path === "/field-reps") return fieldReps(admin, url);
   if (method === "GET" && parts[0] === "field-reps" && parts.length === 2) return fieldRepActivity(admin, url, parts[1]);
 
@@ -496,6 +502,25 @@ const daysParam = (url: URL, fallback: number) => {
   const n = Number(url.searchParams.get("days"));
   return Number.isFinite(n) && n > 0 ? Math.min(3650, Math.floor(n)) : fallback;
 };
+
+async function listBriefs(admin: Admin, url: URL) {
+  const status = url.searchParams.get("status") ?? "new";
+  const { data, error } = await admin
+    .from("business_briefs")
+    .select("id, created_at, status, company, contact_name, phone, email, city, project_title, description, budget_text, timeline, engagement, skills_needed")
+    .eq("status", status)
+    .order("created_at", { ascending: true })
+    .limit(100);
+  if (error) throw new Error(error.message);
+  return { status: 200, body: { data: data ?? [] } };
+}
+
+async function setBriefStatus(admin: Admin, id: string, b: { status: string }) {
+  const { data, error } = await admin.from("business_briefs").update({ status: b.status }).eq("id", id).select("id, status").maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) return { status: 404, body: { error: "Brief not found" } };
+  return { status: 200, body: data, changes: { brief: id, status: b.status } };
+}
 
 async function fieldReps(admin: Admin, url: URL) {
   const { data, error } = await admin.rpc("field_rep_summary", { _days: daysParam(url, 7) });

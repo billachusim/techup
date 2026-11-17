@@ -3,7 +3,7 @@
 // enrolment is activated, so a forged or replayed call grants nothing.
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { confirmPayment } from "../_shared/flutterwave.ts";
+import { confirmBriefPayment, confirmPayment } from "../_shared/flutterwave.ts";
 
 function sameSecret(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
@@ -33,7 +33,10 @@ serve(async (req) => {
     const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
       auth: { persistSession: false },
     });
-    const result = await confirmPayment(admin, secretKey, txRef);
+    // Client brief quotes (create-brief-quote) use "brief-" references.
+    const result = txRef.startsWith("brief-")
+      ? await confirmBriefPayment(admin, secretKey, txRef)
+      : await confirmPayment(admin, secretKey, txRef);
     console.log("flutterwave-webhook", txRef, result.status);
     return new Response("ok");
   } catch (e) {

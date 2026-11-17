@@ -1,4 +1,7 @@
-import type { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
+// Functions import different supabase-js 2.x builds, whose client types don't match,
+// so accept any service-role client by the few methods used here.
+// deno-lint-ignore no-explicit-any
+type Db = { from(table: string): any; rpc(fn: string, args?: Record<string, unknown>): any; auth: { getUser(jwt: string): Promise<any> } };
 
 // Scrapers spend Firecrawl credits on every run, so only two callers may start one:
 // the pg_cron schedule, which sends the secret stored in public.cron_secrets, and a
@@ -19,7 +22,7 @@ function sameSecret(a: string, b: string): boolean {
  */
 export async function requireCronOrAdmin(
   req: Request,
-  supabase: SupabaseClient,
+  supabase: Db,
   job: string,
   headers: Record<string, string>,
 ): Promise<Response | null> {

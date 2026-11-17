@@ -1,4 +1,7 @@
-import type { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
+// Functions import different supabase-js 2.x builds, whose client types don't match,
+// so accept any service-role client by the few methods used here.
+// deno-lint-ignore no-explicit-any
+type Db = { from(table: string): any; rpc(fn: string, args?: Record<string, unknown>): any; auth: { getUser(jwt: string): Promise<any> } };
 
 // Works out who is calling an edge function from their sign-in token, using a
 // service-role client. Never trust a faculty ID or course ID the browser sends
@@ -10,7 +13,7 @@ export interface Caller {
   isStaff: boolean;
 }
 
-export async function getCaller(req: Request, admin: SupabaseClient): Promise<Caller | null> {
+export async function getCaller(req: Request, admin: Db): Promise<Caller | null> {
   const token = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "");
   if (!token) return null;
   const { data } = await admin.auth.getUser(token);
@@ -24,7 +27,7 @@ export async function getCaller(req: Request, admin: SupabaseClient): Promise<Ca
 }
 
 /** True when the caller is staff or is enrolled in the course. */
-export async function canUseCourse(admin: SupabaseClient, caller: Caller, courseId: string): Promise<boolean> {
+export async function canUseCourse(admin: Db, caller: Caller, courseId: string): Promise<boolean> {
   if (caller.isStaff) return true;
   if (!caller.facultyId || !courseId) return false;
   const { data } = await admin

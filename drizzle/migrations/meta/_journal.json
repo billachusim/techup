@@ -337,6 +337,20 @@
       "when": 1794501647928,
       "tag": "0047_ai_chat_free_first_message",
       "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1794925269396,
+      "tag": "0048_talent_slack_sync",
+      "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "7",
+      "when": 1794925307092,
+      "tag": "0049_side_hustle_category_roles",
+      "breakpoints": true
     }
   ]
 }

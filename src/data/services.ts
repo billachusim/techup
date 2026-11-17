@@ -9,7 +9,8 @@
  * order is a bundle of several tasks (e.g. a pen test). Weekly earning caps are
  * internal and deliberately not shown on any page.
  *
- * To change prices, edit PRICE_TIERS or a service's `businessFrom`.
+ * To change prices, edit PRICE_TIERS or a service's `businessFrom`, then run
+ * `bunx tsx scripts/generate-service-prices.ts` so pay-now checkout charges the same.
  * To add a service, append to SERVICES with a unique slug and an existing category.
  */
 

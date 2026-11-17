@@ -176,6 +176,7 @@ const ServiceDetail = () => {
 
             <div className="lg:sticky lg:top-24 lg:self-start">
               <ServiceBriefForm
+                slug={svc.slug}
                 serviceName={svc.name}
                 priceFrom={price}
                 unit={svc.unit}

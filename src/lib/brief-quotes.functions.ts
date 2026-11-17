@@ -36,7 +36,7 @@ export const sendBriefQuote = createServerFn({ method: "POST" })
     await sendTemplateEmail("service-quote", b.email, {
       templateData: {
         contactName: b.contact_name,
-        title: b.project_title.replace(/^Service order: /, ""),
+        title: b.project_title.replace(/^(Service order|Custom request): /, ""),
         amount: `₦${b.quote_amount.toLocaleString("en-NG")}`,
         note: b.quote_note,
         payUrl: b.pay_link_url,

@@ -52,6 +52,7 @@ import { Route as ApiLeadUnsubscribeRouteImport } from './routes/api.lead-unsubs
 import { Route as ApiPaymentFollowupsRouteImport } from './routes/api.payment-followups'
 import { Route as ApiSlackCommunityUpdateRouteImport } from './routes/api.slack-community-update'
 import { Route as ApiSuccessKitRouteImport } from './routes/api.success-kit'
+import { Route as ApiTalentSlackSyncRouteImport } from './routes/api.talent-slack-sync'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as CareersIndexRouteImport } from './routes/careers.index'
@@ -314,6 +315,11 @@ const ApiSlackCommunityUpdateRoute = ApiSlackCommunityUpdateRouteImport.update({
 const ApiSuccessKitRoute = ApiSuccessKitRouteImport.update({
   id: '/api/success-kit',
   path: '/api/success-kit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTalentSlackSyncRoute = ApiTalentSlackSyncRouteImport.update({
+  id: '/api/talent-slack-sync',
+  path: '/api/talent-slack-sync',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -600,6 +606,7 @@ export interface FileRoutesByFullPath {
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/api/slack-community-update': typeof ApiSlackCommunityUpdateRoute
   '/api/success-kit': typeof ApiSuccessKitRoute
+  '/api/talent-slack-sync': typeof ApiTalentSlackSyncRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
@@ -692,6 +699,7 @@ export interface FileRoutesByTo {
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/api/slack-community-update': typeof ApiSlackCommunityUpdateRoute
   '/api/success-kit': typeof ApiSuccessKitRoute
+  '/api/talent-slack-sync': typeof ApiTalentSlackSyncRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
@@ -785,6 +793,7 @@ export interface FileRoutesById {
   '/api/payment-followups': typeof ApiPaymentFollowupsRoute
   '/api/slack-community-update': typeof ApiSlackCommunityUpdateRoute
   '/api/success-kit': typeof ApiSuccessKitRoute
+  '/api/talent-slack-sync': typeof ApiTalentSlackSyncRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/category/$': typeof CategorySplatRoute
   '/departments/$slug': typeof DepartmentsSlugRoute
@@ -879,6 +888,7 @@ export interface FileRouteTypes {
     | '/api/payment-followups'
     | '/api/slack-community-update'
     | '/api/success-kit'
+    | '/api/talent-slack-sync'
     | '/blog/$slug'
     | '/category/$'
     | '/departments/$slug'
@@ -971,6 +981,7 @@ export interface FileRouteTypes {
     | '/api/payment-followups'
     | '/api/slack-community-update'
     | '/api/success-kit'
+    | '/api/talent-slack-sync'
     | '/blog/$slug'
     | '/category/$'
     | '/departments/$slug'
@@ -1063,6 +1074,7 @@ export interface FileRouteTypes {
     | '/api/payment-followups'
     | '/api/slack-community-update'
     | '/api/success-kit'
+    | '/api/talent-slack-sync'
     | '/blog/$slug'
     | '/category/$'
     | '/departments/$slug'
@@ -1156,6 +1168,7 @@ export interface RootRouteChildren {
   ApiPaymentFollowupsRoute: typeof ApiPaymentFollowupsRoute
   ApiSlackCommunityUpdateRoute: typeof ApiSlackCommunityUpdateRoute
   ApiSuccessKitRoute: typeof ApiSuccessKitRoute
+  ApiTalentSlackSyncRoute: typeof ApiTalentSlackSyncRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CategorySplatRoute: typeof CategorySplatRoute
   DepartmentsSlugRoute: typeof DepartmentsSlugRoute
@@ -1504,6 +1517,13 @@ declare module '@tanstack/react-router' {
       path: '/api/success-kit'
       fullPath: '/api/success-kit'
       preLoaderRoute: typeof ApiSuccessKitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/talent-slack-sync': {
+      id: '/api/talent-slack-sync'
+      path: '/api/talent-slack-sync'
+      fullPath: '/api/talent-slack-sync'
+      preLoaderRoute: typeof ApiTalentSlackSyncRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -1897,6 +1917,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPaymentFollowupsRoute: ApiPaymentFollowupsRoute,
   ApiSlackCommunityUpdateRoute: ApiSlackCommunityUpdateRoute,
   ApiSuccessKitRoute: ApiSuccessKitRoute,
+  ApiTalentSlackSyncRoute: ApiTalentSlackSyncRoute,
   BlogSlugRoute: BlogSlugRoute,
   CategorySplatRoute: CategorySplatRoute,
   DepartmentsSlugRoute: DepartmentsSlugRoute,

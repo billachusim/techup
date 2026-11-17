@@ -2313,6 +2313,8 @@ export type Database = {
           skill_details: Json
           skills: string[]
           slack_general_joined_at: string | null
+          slack_invite_count: number
+          slack_invite_sent_at: string | null
           slack_user_id: string | null
           source: string
           tools: string[]
@@ -2357,6 +2359,8 @@ export type Database = {
           skill_details?: Json
           skills?: string[]
           slack_general_joined_at?: string | null
+          slack_invite_count?: number
+          slack_invite_sent_at?: string | null
           slack_user_id?: string | null
           source?: string
           tools?: string[]
@@ -2401,6 +2405,8 @@ export type Database = {
           skill_details?: Json
           skills?: string[]
           slack_general_joined_at?: string | null
+          slack_invite_count?: number
+          slack_invite_sent_at?: string | null
           slack_user_id?: string | null
           source?: string
           tools?: string[]

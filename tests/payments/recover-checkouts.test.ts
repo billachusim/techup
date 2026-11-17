@@ -24,10 +24,10 @@ const checkout = (id: string, createdAt: string, over: Record<string, unknown> =
   ...over,
 });
 const row = (id: string) => db.tables.enrollments.find((r) => r.id === id)!;
-const run = async () => (await servedHandler()(new Request("https://fn.test/recover-checkouts", { method: "POST" }))).json();
+const run = async () => (await servedHandler()(new Request("https://fn.test/recover-checkouts", { method: "POST", headers: { "x-cron-secret": "run-key" } }))).json();
 
 beforeEach(() => {
-  db = { users: {}, tables: { enrollments: [], product_orders: [], cron_secrets: [{ job: "payment-followups", secret: "s3cret" }] } };
+  db = { users: {}, tables: { enrollments: [], product_orders: [], cron_secrets: [{ job: "payment-followups", secret: "s3cret" }, { job: "recover-checkouts", secret: "run-key" }] } };
   useFakeDb(db);
   flutterwave = {};
   fetchMock = vi.fn(async (url: string) => {
@@ -40,6 +40,11 @@ beforeEach(() => {
 });
 
 describe("recover-checkouts", () => {
+  it("refuses a caller without the schedule key", async () => {
+    const res = await servedHandler()(new Request("https://fn.test/recover-checkouts", { method: "POST", headers: { "x-cron-secret": "wrong" } }));
+    expect(res.status).toBe(401);
+  });
+
   it("activates a paid checkout the student left before the payment page confirmed it", async () => {
     db.tables.enrollments.push(checkout("a", ago(40 * MINUTE)));
     flutterwave["TF-TF001-a"] = { id: 555, tx_ref: "TF-TF001-a", status: "successful", amount: 82500, currency: "NGN" };

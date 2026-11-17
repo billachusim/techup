@@ -278,9 +278,18 @@ export type Database = {
           description: string
           email: string | null
           engagement: string
+          followup_count: number
           id: string
+          last_followup_at: string | null
+          paid_at: string | null
+          pay_link_url: string | null
+          pay_tx_ref: string | null
+          payment_reference: string | null
           phone: string
           project_title: string
+          quote_amount: number | null
+          quote_note: string | null
+          quote_sent_at: string | null
           selection_process: string
           skills_needed: string[]
           status: string
@@ -297,9 +306,18 @@ export type Database = {
           description: string
           email?: string | null
           engagement?: string
+          followup_count?: number
           id?: string
+          last_followup_at?: string | null
+          paid_at?: string | null
+          pay_link_url?: string | null
+          pay_tx_ref?: string | null
+          payment_reference?: string | null
           phone: string
           project_title: string
+          quote_amount?: number | null
+          quote_note?: string | null
+          quote_sent_at?: string | null
           selection_process?: string
           skills_needed?: string[]
           status?: string
@@ -316,9 +334,18 @@ export type Database = {
           description?: string
           email?: string | null
           engagement?: string
+          followup_count?: number
           id?: string
+          last_followup_at?: string | null
+          paid_at?: string | null
+          pay_link_url?: string | null
+          pay_tx_ref?: string | null
+          payment_reference?: string | null
           phone?: string
           project_title?: string
+          quote_amount?: number | null
+          quote_note?: string | null
+          quote_sent_at?: string | null
           selection_process?: string
           skills_needed?: string[]
           status?: string

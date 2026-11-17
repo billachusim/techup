@@ -351,6 +351,13 @@
       "when": 1794925307092,
       "tag": "0049_side_hustle_category_roles",
       "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1794925972888,
+      "tag": "0050_brief_quotes_followups",
+      "breakpoints": true
     }
   ]
 }

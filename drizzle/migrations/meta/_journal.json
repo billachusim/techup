@@ -372,6 +372,13 @@
       "when": 1795158618363,
       "tag": "0052_faculty_ids_students_only_signup_links",
       "breakpoints": true
+    },
+    {
+      "idx": 53,
+      "version": "7",
+      "when": 1795158713745,
+      "tag": "0053_testing_pay_and_account_setup_type",
+      "breakpoints": true
     }
   ]
 }

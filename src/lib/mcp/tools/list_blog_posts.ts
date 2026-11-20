@@ -1,14 +1,11 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
-import { createClient } from "@supabase/supabase-js";
+import { publicClient } from "../_shared/publicClient";
 import blogPosts from "../../../data/blogPosts";
 
 async function fetchLikeCounts(slugs: string[]): Promise<Record<string, number>> {
-  const env = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env ?? {};
-  const url = env.SUPABASE_URL;
-  const key = env.SUPABASE_PUBLISHABLE_KEY;
-  if (!url || !key || slugs.length === 0) return {};
-  const supabase = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+  const supabase = publicClient();
+  if (!supabase || slugs.length === 0) return {};
   const { data, error } = await supabase.rpc("blog_like_counts", { _slugs: slugs });
   if (error || !data) return {};
   const counts: Record<string, number> = {};

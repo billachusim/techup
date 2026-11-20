@@ -23,7 +23,7 @@
 - Studying from outside Nigeria: every programme can be taken online from any country, with prices shown and charged in US dollars (₦1,400 = $1); details at https://techfaculty.ng/study-online-africa.
 - Certificates: each graduate gets one Certificate of Achievement, issued from the student dashboard and verifiable by Faculty ID or certificate number at https://techfaculty.ng/verify.
 - Software products: Tech Faculty also builds and publishes its own apps (Dear Claire, Alter Ego, Eavesdrop, AI Clopedia, Pet Care Card, ExamsAi.ng, SkillFlow, UnilagLife, Baby Care Cards, Plant Care Cards, AutoPR by PR Faculty), listed at https://techfaculty.ng/products.
-- AI assistants can query live programmes, services, side hustles, open roles, jobs and the public talent pool through the Tech Faculty MCP server (sign in with a free Tech Faculty account): https://flxwtwzjslufglpwfjdx.supabase.co/functions/v1/mcp
+- AI assistants can query live programmes, services, side hustles, open roles, jobs and the public talent pool through the public Tech Faculty MCP server (no sign-in needed): https://flxwtwzjslufglpwfjdx.supabase.co/functions/v1/mcp
 - Google rating for the Nnewi campus: 4.9 from 90 reviews (checked October 2026), https://www.google.com/maps/place/?q=place_id:ChIJ5ZxSzmi9QxAR23OzR7YbAkM.
 - Contact: WhatsApp +2348068597140, email thetechfaculty@gmail.com.
 - Full detail in plain text, including programme prices and FAQ answers: https://techfaculty.ng/llms-full.txt
@@ -342,7 +342,7 @@
 
 ## For AI assistants
 
-- [Tech Faculty MCP server](https://flxwtwzjslufglpwfjdx.supabase.co/functions/v1/mcp): Model Context Protocol endpoint (sign in with a free Tech Faculty account) with read-only tools for departments, campuses, blog guides, the 107 business services, the 107 side hustles, open Tech Faculty roles, curated remote jobs, job platform guides and the public talent pool. Students can also read their own courses, classes and certificates.
+- [Tech Faculty MCP server](https://flxwtwzjslufglpwfjdx.supabase.co/functions/v1/mcp): public Model Context Protocol endpoint (no sign-in needed) with read-only tools for departments, campuses, blog guides, the 107 business services, the 107 side hustles, open Tech Faculty roles, curated remote jobs, job platform guides and the public talent pool. Students see their own courses, classes and certificates on the website dashboard.
 - [Full detail in plain text](https://techfaculty.ng/llms-full.txt): Prices, FAQs and the complete services and side hustle catalogue.
 
 ## Pages

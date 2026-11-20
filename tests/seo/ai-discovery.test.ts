@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { SERVICES } from "@/data/services";
 import listSideHustles from "@/lib/mcp/tools/list_side_hustles";
 import listBusinessServices from "@/lib/mcp/tools/list_business_services";
+import mcp from "@/lib/mcp/index";
 
 const read = (p: string) => readFileSync(resolve(process.cwd(), p), "utf8");
 
@@ -75,5 +76,21 @@ describe("AI tools", () => {
     const out = call(listBusinessServices, { limit: 107 }) as { services: { priceFromNGN: number }[] };
     expect(out.services).toHaveLength(107);
     expect(Math.min(...out.services.map((s) => s.priceFromNGN))).toBe(7500);
+  });
+});
+
+describe("public AI tools server", () => {
+  const server = mcp as unknown as { auth?: unknown; tools: { name: string; annotations?: { readOnlyHint?: boolean } }[] };
+
+  it("needs no sign-in", () => {
+    expect(server.auth).toBeUndefined();
+  });
+
+  it("only offers read-only tools", () => {
+    expect(server.tools.filter((t) => t.annotations?.readOnlyHint !== true).map((t) => t.name)).toEqual([]);
+  });
+
+  it("offers no student account tools", () => {
+    expect(server.tools.map((t) => t.name).filter((n) => /my_|like_blog/.test(n))).toEqual([]);
   });
 });

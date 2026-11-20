@@ -174,7 +174,7 @@ const facts = [
   `Studying from outside Nigeria: every programme can be taken online from any country, with prices shown and charged in US dollars (₦${NGN_TO_USD_RATE.toLocaleString("en-NG")} = $1); details at ${url("/study-online-africa")}.`,
   `Certificates: each graduate gets one Certificate of Achievement, issued from the student dashboard and verifiable by Faculty ID or certificate number at ${url("/verify")}.`,
   `Software products: Tech Faculty also builds and publishes its own apps (${apps.map((a) => a.name).join(", ")}), listed at ${url("/products")}.`,
-  `AI assistants can query live programmes, services, side hustles, open roles, jobs and the public talent pool through the Tech Faculty MCP server (sign in with a free Tech Faculty account): ${MCP_URL}`,
+  `AI assistants can query live programmes, services, side hustles, open roles, jobs and the public talent pool through the public Tech Faculty MCP server (no sign-in needed): ${MCP_URL}`,
   `Google rating for the Nnewi campus: ${GOOGLE_RATING.rating} from ${GOOGLE_RATING.count} reviews (checked ${GOOGLE_RATING.checked}), ${GOOGLE_REVIEWS_URL}.`,
   `Contact: WhatsApp +${VIRTUAL_SIWES.whatsappNumber}, email ${VIRTUAL_SIWES.email}.`,
 ];
@@ -243,7 +243,7 @@ const llms = [
   "",
   "## For AI assistants",
   "",
-  `- [Tech Faculty MCP server](${MCP_URL}): Model Context Protocol endpoint (sign in with a free Tech Faculty account) with read-only tools for departments, campuses, blog guides, the ${SERVICES.length} business services, the ${SERVICES.length} side hustles, open Tech Faculty roles, curated remote jobs, job platform guides and the public talent pool. Students can also read their own courses, classes and certificates.`,
+  `- [Tech Faculty MCP server](${MCP_URL}): public Model Context Protocol endpoint (no sign-in needed) with read-only tools for departments, campuses, blog guides, the ${SERVICES.length} business services, the ${SERVICES.length} side hustles, open Tech Faculty roles, curated remote jobs, job platform guides and the public talent pool. Students see their own courses, classes and certificates on the website dashboard.`,
   `- [Full detail in plain text](${url("/llms-full.txt")}): Prices, FAQs and the complete services and side hustle catalogue.`,
   "",
   "## Pages",
@@ -391,8 +391,8 @@ const productsFull = [
 const assistantsFull = [
   "## For AI assistants",
   "",
-  `MCP server (Model Context Protocol, streamable HTTP): ${MCP_URL}. Callers sign in with a free Tech Faculty account (OAuth).`,
-  "Read-only catalogue tools: list_departments, list_campuses, list_services, list_business_services, list_side_hustles, list_open_roles, search_jobs, list_job_platforms, search_talent_pool, list_blog_categories, list_blog_posts, get_blog_post, search_blog. Signed-in students can also read their own profile, enrolments, courses, upcoming classes and certificates.",
+  `MCP server (Model Context Protocol, streamable HTTP): ${MCP_URL}. Public: no sign-in or API key needed. All tools are read-only.`,
+  "Tools: list_departments, list_campuses, list_services, list_business_services, list_side_hustles, list_open_roles, search_jobs, list_job_platforms, search_talent_pool (first names only), list_blog_categories, list_blog_posts, get_blog_post, search_blog. Student accounts (courses, classes, certificates) stay on the website dashboard.",
   "",
 ];
 

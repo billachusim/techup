@@ -3,7 +3,7 @@
 // supabase function: mcp
 // Bundled from src/lib/mcp/index.ts by @lovable.dev/mcp-js.
 // src/lib/mcp/index.ts
-import { auth, defineMcp } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { defineMcp } from "npm:@lovable.dev/mcp-js@0.22.2";
 
 // src/lib/mcp/tools/list_departments.ts
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.22.2";
@@ -258,7 +258,46 @@ var list_blog_categories_default = defineTool4({
 // src/lib/mcp/tools/list_blog_posts.ts
 import { defineTool as defineTool5 } from "npm:@lovable.dev/mcp-js@0.22.2";
 import { z } from "npm:zod@^3.25.76";
+
+// src/lib/mcp/_shared/publicClient.ts
 import { createClient } from "npm:@supabase/supabase-js@^2.79.0";
+function env(name) {
+  const g = globalThis;
+  const value = g.Deno?.env?.get?.(name) ?? g.process?.env?.[name];
+  return value?.trim() || void 0;
+}
+function publishableKey() {
+  const direct = env("SUPABASE_PUBLISHABLE_KEY") ?? env("VITE_SUPABASE_PUBLISHABLE_KEY");
+  if (direct) return direct;
+  const keyset = env("SUPABASE_PUBLISHABLE_KEYS");
+  if (keyset) {
+    try {
+      const parsed = JSON.parse(keyset);
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        const keys = parsed;
+        const key = [keys["default"], ...Object.values(keys)].find(
+          (v) => typeof v === "string" && v.trim().startsWith("sb_publishable_")
+        );
+        if (key) return key.trim();
+      }
+    } catch {
+    }
+  }
+  return env("SUPABASE_ANON_KEY") ?? env("VITE_SUPABASE_ANON_KEY");
+}
+function publicClient() {
+  const url = env("SUPABASE_URL") ?? env("VITE_SUPABASE_URL");
+  const key = publishableKey();
+  if (!url || !key) return null;
+  return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+}
+var SITE = "https://techfaculty.ng";
+var matches = (query, ...fields) => {
+  if (!query?.trim()) return true;
+  const hay = fields.flat().filter(Boolean).join(" ").toLowerCase();
+  return query.toLowerCase().split(/\s+/).filter(Boolean).every((w) => hay.includes(w));
+};
+var toolError = (text) => ({ content: [{ type: "text", text }], isError: true });
 
 // src/data/techHubs.ts
 var COURSE_AREA_DEPARTMENT = {
@@ -7872,11 +7911,8 @@ var blogPosts_default = blogPosts;
 
 // src/lib/mcp/tools/list_blog_posts.ts
 async function fetchLikeCounts(slugs) {
-  const env2 = globalThis.process?.env ?? {};
-  const url = env2.SUPABASE_URL;
-  const key = env2.SUPABASE_PUBLISHABLE_KEY;
-  if (!url || !key || slugs.length === 0) return {};
-  const supabase = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+  const supabase = publicClient();
+  if (!supabase || slugs.length === 0) return {};
   const { data, error } = await supabase.rpc("blog_like_counts", { _slugs: slugs });
   if (error || !data) return {};
   const counts = {};
@@ -7926,13 +7962,9 @@ var list_blog_posts_default = defineTool5({
 // src/lib/mcp/tools/get_blog_post.ts
 import { defineTool as defineTool6 } from "npm:@lovable.dev/mcp-js@0.22.2";
 import { z as z2 } from "npm:zod@^3.25.76";
-import { createClient as createClient2 } from "npm:@supabase/supabase-js@^2.79.0";
 async function fetchLikeCount(slug) {
-  const env2 = globalThis.process?.env ?? {};
-  const url = env2.SUPABASE_URL;
-  const key = env2.SUPABASE_PUBLISHABLE_KEY;
-  if (!url || !key) return 0;
-  const supabase = createClient2(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+  const supabase = publicClient();
+  if (!supabase) return 0;
   const { data } = await supabase.rpc("blog_like_counts", { _slugs: [slug] });
   return Number(data?.[0]?.likes ?? 0);
 }
@@ -7989,269 +8021,18 @@ var search_blog_default = defineTool7({
   }
 });
 
-// src/lib/mcp/tools/like_blog_post.ts
+// src/lib/mcp/tools/list_business_services.ts
 import { defineTool as defineTool8 } from "npm:@lovable.dev/mcp-js@0.22.2";
 import { z as z4 } from "npm:zod@^3.25.76";
-
-// src/lib/mcp/_shared/supabaseForUser.ts
-import { createClient as createClient3 } from "npm:@supabase/supabase-js@^2.79.0";
-function env() {
-  return globalThis.process?.env ?? {};
-}
-function supabaseForUser(ctx) {
-  const e = env();
-  return createClient3(e.SUPABASE_URL, e.SUPABASE_PUBLISHABLE_KEY, {
-    global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
-    auth: { persistSession: false, autoRefreshToken: false }
-  });
-}
-function requireAuth(ctx) {
-  if (!ctx.isAuthenticated()) {
-    return {
-      error: {
-        content: [{ type: "text", text: "Not authenticated. Sign in to your Tech Faculty account to use this tool." }],
-        isError: true
-      }
-    };
-  }
-  return { error: null };
-}
-
-// src/lib/mcp/tools/like_blog_post.ts
-var like_blog_post_default = defineTool8({
-  name: "like_blog_post",
-  title: "Like blog post",
-  description: "Like a Tech Faculty blog post as the signed-in user. Idempotent: safe to call if already liked.",
-  inputSchema: {
-    slug: z4.string().min(1).describe("Post slug from list_blog_posts.")
-  },
-  annotations: { readOnlyHint: false, idempotentHint: true, openWorldHint: false },
-  handler: async ({ slug }, ctx) => {
-    const auth2 = requireAuth(ctx);
-    if (auth2.error) return auth2.error;
-    const supabase = supabaseForUser(ctx);
-    const userId = ctx.getUserId();
-    const { data: existing } = await supabase.from("blog_post_likes").select("id").eq("post_slug", slug).eq("user_id", userId).maybeSingle();
-    if (existing) {
-      return { content: [{ type: "text", text: `Already liked ${slug}` }], structuredContent: { slug, liked: true, alreadyLiked: true } };
-    }
-    const { error } = await supabase.from("blog_post_likes").insert({
-      post_slug: slug,
-      user_id: userId,
-      visitor_id: userId
-    });
-    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
-    return { content: [{ type: "text", text: `Liked ${slug}` }], structuredContent: { slug, liked: true, alreadyLiked: false } };
-  }
-});
-
-// src/lib/mcp/tools/unlike_blog_post.ts
-import { defineTool as defineTool9 } from "npm:@lovable.dev/mcp-js@0.22.2";
-import { z as z5 } from "npm:zod@^3.25.76";
-var unlike_blog_post_default = defineTool9({
-  name: "unlike_blog_post",
-  title: "Unlike blog post",
-  description: "Remove the signed-in user's like from a Tech Faculty blog post.",
-  inputSchema: { slug: z5.string().min(1).describe("Post slug.") },
-  annotations: { readOnlyHint: false, idempotentHint: true, openWorldHint: false },
-  handler: async ({ slug }, ctx) => {
-    const auth2 = requireAuth(ctx);
-    if (auth2.error) return auth2.error;
-    const supabase = supabaseForUser(ctx);
-    const { error } = await supabase.from("blog_post_likes").delete().eq("post_slug", slug).eq("user_id", ctx.getUserId());
-    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
-    return { content: [{ type: "text", text: `Unliked ${slug}` }], structuredContent: { slug, liked: false } };
-  }
-});
-
-// src/lib/mcp/tools/get_my_profile.ts
-import { defineTool as defineTool10 } from "npm:@lovable.dev/mcp-js@0.22.2";
-var get_my_profile_default = defineTool10({
-  name: "get_my_profile",
-  title: "Get my profile",
-  description: "Return the signed-in Tech Faculty user's profile.",
-  inputSchema: {},
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: async (_input, ctx) => {
-    const auth2 = requireAuth(ctx);
-    if (auth2.error) return auth2.error;
-    const supabase = supabaseForUser(ctx);
-    const { data, error } = await supabase.from("profiles").select("faculty_id,name,email,phone,department,learning_mode,cohort_month,cohort_year").eq("id", ctx.getUserId()).maybeSingle();
-    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
-    return { content: [{ type: "text", text: JSON.stringify(data ?? null, null, 2) }], structuredContent: { profile: data ?? null } };
-  }
-});
-
-// src/lib/mcp/tools/update_my_profile.ts
-import { defineTool as defineTool11 } from "npm:@lovable.dev/mcp-js@0.22.2";
-import { z as z6 } from "npm:zod@^3.25.76";
-var update_my_profile_default = defineTool11({
-  name: "update_my_profile",
-  title: "Update my profile",
-  description: "Update the signed-in user's own name and/or phone. Faculty ID and email cannot be changed.",
-  inputSchema: {
-    name: z6.string().trim().min(1).max(100).optional(),
-    phone: z6.string().trim().min(3).max(20).optional()
-  },
-  annotations: { readOnlyHint: false, idempotentHint: true, openWorldHint: false },
-  handler: async ({ name, phone }, ctx) => {
-    const auth2 = requireAuth(ctx);
-    if (auth2.error) return auth2.error;
-    const patch = {};
-    if (name) patch.name = name;
-    if (phone) patch.phone = phone;
-    if (Object.keys(patch).length === 0) {
-      return { content: [{ type: "text", text: "Nothing to update. Provide name or phone." }], isError: true };
-    }
-    const supabase = supabaseForUser(ctx);
-    const { data, error } = await supabase.from("profiles").update(patch).eq("id", ctx.getUserId()).select("faculty_id,name,email,phone").maybeSingle();
-    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
-    return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }], structuredContent: { profile: data } };
-  }
-});
-
-// src/lib/mcp/tools/list_my_enrollments.ts
-import { defineTool as defineTool12 } from "npm:@lovable.dev/mcp-js@0.22.2";
-var list_my_enrollments_default = defineTool12({
-  name: "list_my_enrollments",
-  title: "List my plan enrollments",
-  description: "List the signed-in user's Tech Faculty plan enrollments (Starter/Pro/Enterprise) with status.",
-  inputSchema: {},
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: async (_input, ctx) => {
-    const auth2 = requireAuth(ctx);
-    if (auth2.error) return auth2.error;
-    const supabase = supabaseForUser(ctx);
-    const { data, error } = await supabase.from("enrollments").select("plan_name,status,learning_mode,coupon_code,enrollment_date").order("enrollment_date", { ascending: false });
-    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
-    return { content: [{ type: "text", text: JSON.stringify(data ?? [], null, 2) }], structuredContent: { enrollments: data ?? [] } };
-  }
-});
-
-// src/lib/mcp/tools/list_my_courses.ts
-import { defineTool as defineTool13 } from "npm:@lovable.dev/mcp-js@0.22.2";
-var list_my_courses_default = defineTool13({
-  name: "list_my_courses",
-  title: "List my courses",
-  description: "List the signed-in user's course enrollments with course name and progress percentage.",
-  inputSchema: {},
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: async (_input, ctx) => {
-    const auth2 = requireAuth(ctx);
-    if (auth2.error) return auth2.error;
-    const supabase = supabaseForUser(ctx);
-    const { data: enrolls, error } = await supabase.from("course_enrollments").select("course_id,status,enrollment_date,courses(name,department,duration)").order("enrollment_date", { ascending: false });
-    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
-    const courseIds = (enrolls ?? []).map((e) => e.course_id);
-    const progressMap = {};
-    if (courseIds.length) {
-      const { data: prog } = await supabase.from("course_progress").select("course_id,progress_percentage").in("course_id", courseIds);
-      for (const p of prog ?? []) {
-        progressMap[p.course_id] = p.progress_percentage;
-      }
-    }
-    const items = (enrolls ?? []).map((e) => {
-      const course = Array.isArray(e.courses) ? e.courses[0] : e.courses;
-      return {
-        courseId: e.course_id,
-        name: course?.name ?? null,
-        department: course?.department ?? null,
-        duration: course?.duration ?? null,
-        status: e.status,
-        enrolledAt: e.enrollment_date,
-        progressPercentage: progressMap[e.course_id] ?? 0
-      };
-    });
-    return { content: [{ type: "text", text: JSON.stringify(items, null, 2) }], structuredContent: { courses: items } };
-  }
-});
-
-// src/lib/mcp/tools/list_my_certificates.ts
-import { defineTool as defineTool14 } from "npm:@lovable.dev/mcp-js@0.22.2";
-var list_my_certificates_default = defineTool14({
-  name: "list_my_certificates",
-  title: "List my certificates",
-  description: "List certificates issued to the signed-in Tech Faculty user.",
-  inputSchema: {},
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: async (_input, ctx) => {
-    const auth2 = requireAuth(ctx);
-    if (auth2.error) return auth2.error;
-    const supabase = supabaseForUser(ctx);
-    const { data, error } = await supabase.from("certificates").select("certificate_number,course_name,certificate_type,issued_by,date_issued,issued_at").order("issued_at", { ascending: false });
-    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
-    const items = (data ?? []).map((c) => ({
-      ...c,
-      verifyUrl: `https://techfaculty.ng/verify/${c.certificate_number}`
-    }));
-    return { content: [{ type: "text", text: JSON.stringify(items, null, 2) }], structuredContent: { certificates: items } };
-  }
-});
-
-// src/lib/mcp/tools/list_my_upcoming_classes.ts
-import { defineTool as defineTool15 } from "npm:@lovable.dev/mcp-js@0.22.2";
-var list_my_upcoming_classes_default = defineTool15({
-  name: "list_my_upcoming_classes",
-  title: "List my upcoming classes",
-  description: "List upcoming scheduled lectures for courses the signed-in user is enrolled in.",
-  inputSchema: {},
-  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: async (_input, ctx) => {
-    const auth2 = requireAuth(ctx);
-    if (auth2.error) return auth2.error;
-    const supabase = supabaseForUser(ctx);
-    const nowIso = (/* @__PURE__ */ new Date()).toISOString();
-    const { data: u } = await supabase.auth.getUser();
-    const { data: me } = await supabase.from("profiles").select("faculty_id").eq("id", u.user?.id ?? "").maybeSingle();
-    if (!me?.faculty_id) return { content: [{ type: "text", text: "[]" }], structuredContent: { classes: [] } };
-    const { data, error } = await supabase.rpc("student_timetable", { _faculty_id: me.faculty_id });
-    if (error) return { content: [{ type: "text", text: error.message }], isError: true };
-    const items = (data ?? []).filter((l) => l.scheduled_at >= nowIso).slice(0, 50).map((l) => ({
-      id: l.lecture_id,
-      title: l.title,
-      description: l.description,
-      scheduledAt: l.scheduled_at,
-      durationMinutes: l.duration_minutes,
-      status: "scheduled",
-      courseId: l.course_id,
-      courseName: l.course_name ?? null
-    }));
-    return { content: [{ type: "text", text: JSON.stringify(items, null, 2) }], structuredContent: { classes: items } };
-  }
-});
-
-// src/lib/mcp/tools/list_business_services.ts
-import { defineTool as defineTool16 } from "npm:@lovable.dev/mcp-js@0.22.2";
-import { z as z7 } from "npm:zod@^3.25.76";
-
-// src/lib/mcp/_shared/publicClient.ts
-import { createClient as createClient4 } from "npm:@supabase/supabase-js@^2.79.0";
-function publicClient() {
-  const g = globalThis;
-  const get = (k) => g.process?.env?.[k] ?? g.Deno?.env.get(k);
-  const url = get("SUPABASE_URL");
-  const key = get("SUPABASE_PUBLISHABLE_KEY") ?? get("SUPABASE_ANON_KEY");
-  if (!url || !key) return null;
-  return createClient4(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
-}
-var SITE = "https://techfaculty.ng";
-var matches = (query, ...fields) => {
-  if (!query?.trim()) return true;
-  const hay = fields.flat().filter(Boolean).join(" ").toLowerCase();
-  return query.toLowerCase().split(/\s+/).filter(Boolean).every((w) => hay.includes(w));
-};
-var toolError = (text) => ({ content: [{ type: "text", text }], isError: true });
-
-// src/lib/mcp/tools/list_business_services.ts
 var categorySlugs = SERVICE_CATEGORIES.map((c) => c.slug);
-var list_business_services_default = defineTool16({
+var list_business_services_default = defineTool8({
   name: "list_business_services",
   title: "List pay-per-task business services",
   description: "List Tech Faculty's fixed-price, pay-per-task services for businesses in Nigeria (video editing, social media, field sales reps, website fixes, app testing, cybersecurity, AI automation, virtual assistance), with starting price in NGN, turnaround and order link.",
   inputSchema: {
-    category: z7.enum(categorySlugs).optional().describe("Category slug, e.g. testing-qa or field-sales."),
-    query: z7.string().max(100).optional().describe("Words to match in the service name, summary or keywords, e.g. 'instagram' or 'logo'."),
-    limit: z7.number().int().min(1).max(107).optional().describe("Max services to return (default 30).")
+    category: z4.enum(categorySlugs).optional().describe("Category slug, e.g. testing-qa or field-sales."),
+    query: z4.string().max(100).optional().describe("Words to match in the service name, summary or keywords, e.g. 'instagram' or 'logo'."),
+    limit: z4.number().int().min(1).max(107).optional().describe("Max services to return (default 30).")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: ({ category, query, limit }) => {
@@ -8289,18 +8070,18 @@ var list_business_services_default = defineTool16({
 });
 
 // src/lib/mcp/tools/list_side_hustles.ts
-import { defineTool as defineTool17 } from "npm:@lovable.dev/mcp-js@0.22.2";
-import { z as z8 } from "npm:zod@^3.25.76";
+import { defineTool as defineTool9 } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { z as z5 } from "npm:zod@^3.25.76";
 var categorySlugs2 = SERVICE_CATEGORIES.map((c) => c.slug);
-var list_side_hustles_default = defineTool17({
+var list_side_hustles_default = defineTool9({
   name: "list_side_hustles",
   title: "List paid side hustles",
   description: "List Tech Faculty's pay-per-task side hustles for people in Nigeria (\u20A65,000 or \u20A610,000 per approved task, paid weekly every Friday), with what each task needs and how to apply.",
   inputSchema: {
-    category: z8.enum(categorySlugs2).optional().describe("Category slug, e.g. content-creative or field-sales."),
-    query: z8.string().max(100).optional().describe("Words to match in the side hustle title, requirements or keywords, e.g. 'video' or 'tester'."),
-    pay: z8.union([z8.literal(5e3), z8.literal(1e4)]).optional().describe("Only side hustles paying this many naira per task."),
-    limit: z8.number().int().min(1).max(107).optional().describe("Max side hustles to return (default 30).")
+    category: z5.enum(categorySlugs2).optional().describe("Category slug, e.g. content-creative or field-sales."),
+    query: z5.string().max(100).optional().describe("Words to match in the side hustle title, requirements or keywords, e.g. 'video' or 'tester'."),
+    pay: z5.union([z5.literal(5e3), z5.literal(1e4)]).optional().describe("Only side hustles paying this many naira per task."),
+    limit: z5.number().int().min(1).max(107).optional().describe("Max side hustles to return (default 30).")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: ({ category, query, pay, limit }) => {
@@ -8330,8 +8111,8 @@ var list_side_hustles_default = defineTool17({
 });
 
 // src/lib/mcp/tools/list_open_roles.ts
-import { defineTool as defineTool18 } from "npm:@lovable.dev/mcp-js@0.22.2";
-import { z as z9 } from "npm:zod@^3.25.76";
+import { defineTool as defineTool10 } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { z as z6 } from "npm:zod@^3.25.76";
 var money = (n, cur) => `${cur === "NGN" ? "\u20A6" : cur === "USD" ? "$" : `${cur} `}${Math.round(n).toLocaleString("en-NG")}`;
 var payLabel = (r) => {
   if (r.pay_text?.trim()) return r.pay_text.trim();
@@ -8341,14 +8122,14 @@ var payLabel = (r) => {
   if (r.budget_max) return `Up to ${money(r.budget_max, r.budget_currency)} / ${unit}`;
   return "Pay discussed on shortlist";
 };
-var list_open_roles_default = defineTool18({
+var list_open_roles_default = defineTool10({
   name: "list_open_roles",
   title: "List open Tech Faculty roles",
   description: "List open roles on the Tech Faculty jobs marketplace: Tech Faculty team roles, tutors, field reps and client projects in Nigeria (remote and on-site), with pay and the apply link.",
   inputSchema: {
-    query: z9.string().max(100).optional().describe("Words to match in the title, summary, skills or city, e.g. 'tutor' or 'Nnewi'."),
-    remoteOnly: z9.boolean().optional().describe("Only roles that can be done remotely."),
-    limit: z9.number().int().min(1).max(50).optional().describe("Max roles to return (default 20).")
+    query: z6.string().max(100).optional().describe("Words to match in the title, summary, skills or city, e.g. 'tutor' or 'Nnewi'."),
+    remoteOnly: z6.boolean().optional().describe("Only roles that can be done remotely."),
+    limit: z6.number().int().min(1).max(50).optional().describe("Max roles to return (default 20).")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ query, remoteOnly, limit }) => {
@@ -8387,8 +8168,8 @@ var list_open_roles_default = defineTool18({
 });
 
 // src/lib/mcp/tools/search_jobs.ts
-import { defineTool as defineTool19 } from "npm:@lovable.dev/mcp-js@0.22.2";
-import { z as z10 } from "npm:zod@^3.25.76";
+import { defineTool as defineTool11 } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { z as z7 } from "npm:zod@^3.25.76";
 var salary = (j) => {
   if (!j.salary_min && !j.salary_max) return "";
   const unit = j.salary_unit ? `/${j.salary_unit.toLowerCase()}` : "";
@@ -8396,14 +8177,14 @@ var salary = (j) => {
   const n = (x) => x.toLocaleString("en-NG");
   return j.salary_min && j.salary_max ? `${cur} ${n(j.salary_min)} \u2013 ${n(j.salary_max)}${unit}` : `${cur} ${n(j.salary_min ?? j.salary_max)}${unit}`;
 };
-var search_jobs_default = defineTool19({
+var search_jobs_default = defineTool11({
   name: "search_jobs",
   title: "Search remote tech jobs",
   description: "Search curated remote tech, AI-training and Nigerian jobs listed on the Tech Faculty careers board (refreshed twice a month), with salary where known and the job page link.",
   inputSchema: {
-    query: z10.string().max(100).optional().describe("Words to match in the job title, company, platform or tags, e.g. 'data annotation' or 'python'."),
-    remoteOnly: z10.boolean().optional().describe("Only remote jobs."),
-    limit: z10.number().int().min(1).max(50).optional().describe("Max jobs to return (default 20).")
+    query: z7.string().max(100).optional().describe("Words to match in the job title, company, platform or tags, e.g. 'data annotation' or 'python'."),
+    remoteOnly: z7.boolean().optional().describe("Only remote jobs."),
+    limit: z7.number().int().min(1).max(50).optional().describe("Max jobs to return (default 20).")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ query, remoteOnly, limit }) => {
@@ -8437,7 +8218,7 @@ var search_jobs_default = defineTool19({
 });
 
 // src/lib/mcp/tools/list_job_platforms.ts
-import { defineTool as defineTool20 } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { defineTool as defineTool12 } from "npm:@lovable.dev/mcp-js@0.22.2";
 
 // src/data/jobPlatforms.ts
 var nigeriaFaq = (name) => ({
@@ -8576,7 +8357,7 @@ var jobPlatforms = [
 ];
 
 // src/lib/mcp/tools/list_job_platforms.ts
-var list_job_platforms_default = defineTool20({
+var list_job_platforms_default = defineTool12({
   name: "list_job_platforms",
   title: "List remote job platforms",
   description: "List the remote work and AI-training platforms (Micro1, Mercor, Outlier, Alignerr and others) Tech Faculty guides Nigerians and Africans to, with what each pays for and the guide page.",
@@ -8596,16 +8377,16 @@ var list_job_platforms_default = defineTool20({
 });
 
 // src/lib/mcp/tools/search_talent_pool.ts
-import { defineTool as defineTool21 } from "npm:@lovable.dev/mcp-js@0.22.2";
-import { z as z11 } from "npm:zod@^3.25.76";
-var search_talent_pool_default = defineTool21({
+import { defineTool as defineTool13 } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { z as z8 } from "npm:zod@^3.25.76";
+var search_talent_pool_default = defineTool13({
   name: "search_talent_pool",
   title: "Search the talent pool",
   description: "Search Tech Faculty's public talent pool of Nigerian and African tech talent by skill, tool or city, for businesses looking to hire. Returns first names, skills and profile links only; introductions go through Tech Faculty.",
   inputSchema: {
-    query: z11.string().max(100).optional().describe("Skills, tools, role or city to match, e.g. 'react developer' or 'video editing Lagos'."),
-    vettedOnly: z11.boolean().optional().describe("Only talent with a Vetted badge (passed a Tech Faculty assessment or work trial, or a Tech Faculty student/graduate)."),
-    limit: z11.number().int().min(1).max(30).optional().describe("Max profiles to return (default 10).")
+    query: z8.string().max(100).optional().describe("Skills, tools, role or city to match, e.g. 'react developer' or 'video editing Lagos'."),
+    vettedOnly: z8.boolean().optional().describe("Only talent with a Vetted badge (passed a Tech Faculty assessment or work trial, or a Tech Faculty student/graduate)."),
+    limit: z8.number().int().min(1).max(30).optional().describe("Max profiles to return (default 10).")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ query, vettedOnly, limit }) => {
@@ -8640,16 +8421,11 @@ var search_talent_pool_default = defineTool21({
 });
 
 // src/lib/mcp/index.ts
-var projectRef = "flxwtwzjslufglpwfjdx";
 var mcp_default = defineMcp({
-  name: "tech-faculty-mcp",
-  title: "Tech Faculty",
-  version: "0.2.0",
-  instructions: "Tools for Tech Faculty NG (techfaculty.ng), a licensed Nigerian tech training institute, jobs marketplace and pay-per-task services provider. Callers sign in with a free Tech Faculty account. Read-only catalogue tools: list_departments, list_campuses, list_services, list_business_services (107 fixed-price tasks for businesses), list_side_hustles (the matching 107 paid side hustles, \u20A65,000 or \u20A610,000 per task, paid weekly), list_open_roles (Tech Faculty roles and client projects; show these first for job seekers), search_jobs (curated remote and AI-training jobs), list_job_platforms, search_talent_pool (for businesses hiring), list_blog_categories, list_blog_posts, get_blog_post, search_blog. Account tools: like_blog_post, unlike_blog_post, get_my_profile, update_my_profile, list_my_enrollments, list_my_courses, list_my_certificates, list_my_upcoming_classes. All user-scoped tools act as the caller under Tech Faculty's row-level security.",
-  auth: auth.oauth.issuer({
-    issuer: `https://${projectRef}.supabase.co/auth/v1`,
-    acceptedAudiences: "authenticated"
-  }),
+  name: "tech-faculty-ng",
+  title: "Tech Faculty NG",
+  version: "0.3.0",
+  instructions: "Public, read-only tools for Tech Faculty NG (techfaculty.ng), a licensed Nigerian tech training institute, jobs marketplace and pay-per-task services provider. No sign-in needed. list_departments and list_campuses: programmes, fees and campuses. list_business_services: 107 fixed-price tasks businesses can order. list_side_hustles: the matching 107 paid side hustles (\u20A65,000 or \u20A610,000 per task, paid weekly). list_open_roles: Tech Faculty roles and client projects; show these first to job seekers. search_jobs: curated remote and AI-training jobs. list_job_platforms: partner platform guides. search_talent_pool: talent for businesses hiring (first names only; introductions go through Tech Faculty). list_services, list_blog_categories, list_blog_posts, get_blog_post, search_blog: services overview and guides. Students manage courses, classes and certificates on the website dashboard.",
   tools: [
     list_departments_default,
     list_services_default,
@@ -8658,14 +8434,6 @@ var mcp_default = defineMcp({
     list_blog_posts_default,
     get_blog_post_default,
     search_blog_default,
-    like_blog_post_default,
-    unlike_blog_post_default,
-    get_my_profile_default,
-    update_my_profile_default,
-    list_my_enrollments_default,
-    list_my_courses_default,
-    list_my_certificates_default,
-    list_my_upcoming_classes_default,
     list_business_services_default,
     list_side_hustles_default,
     list_open_roles_default,

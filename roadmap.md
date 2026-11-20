@@ -31,4 +31,5 @@
 - [x] Named AI crawlers welcomed in robots.txt, general allow-all kept
 - [x] llms.txt / llms-full.txt: 107 business services, 107 side hustles, jobs, hiring, products, AI tools
 - [x] AI tools: business services, side hustles, open roles, jobs, job platforms, talent pool (deployed)
-- [ ] Decide whether the AI tools need sign-in (asked Bill); site files need publishing
+- [x] AI tools server made public (no sign-in, read-only tools only; Bill chose Public)
+- [ ] Publish so the crawler rules, summary files and site wording go live

@@ -400,6 +400,13 @@
       "when": 1795205609022,
       "tag": "0056_lock_class_tasks_and_profile_identity",
       "breakpoints": true
+    },
+    {
+      "idx": 57,
+      "version": "7",
+      "when": 1795206003498,
+      "tag": "0057_faculty_id_generator_enrolment_only",
+      "breakpoints": true
     }
   ]
 }

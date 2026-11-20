@@ -10,12 +10,11 @@ const ROUTES_DIR = resolve(process.cwd(), "src/routes");
 /** Route files that exist, e.g. "virtual-siwes.tsx", "siwes.courses.index.tsx". */
 const ROUTE_FILES = new Set(readdirSync(ROUTES_DIR).filter((f) => f.endsWith(".tsx")));
 
-/** Maps a URL path to the route file that must exist for it to resolve. */
-function routeFileFor(path: string): string {
+/** Route files that could serve a URL path, e.g. "careers.tsx" or "careers.index.tsx". */
+function routeFilesFor(path: string): string[] {
   const segs = path.split("/").filter(Boolean);
-  if (segs.length === 0) return "index.tsx";
-  if (segs.length === 1) return `${segs[0]}.tsx`;
-  return `${segs.join(".")}.index.tsx`;
+  if (segs.length === 0) return ["index.tsx"];
+  return [`${segs.join(".")}.tsx`, `${segs.join(".")}.index.tsx`];
 }
 
 describe("handoff preset links", () => {
@@ -30,7 +29,7 @@ describe("handoff preset links", () => {
           expect(page, url).toBe("");
           expect(["free-bootcamp", "pricing"], url).toContain(hash);
         } else {
-          expect(ROUTE_FILES.has(routeFileFor(page)), `${kind} -> ${url}`).toBe(true);
+          expect(routeFilesFor(page).some((f) => ROUTE_FILES.has(f)), `${kind} -> ${url}`).toBe(true);
         }
       }
     }
@@ -47,6 +46,19 @@ describe("handoff presets", () => {
   it("founder line is the official number", () => {
     expect(FOUNDER_WHATSAPP_NUMBER).toBe("2348068597140");
     expect(handoffMessage("official")).toContain("wa.me/2348068597140");
+  });
+  it("find-work preset sends job-seekers to the talent profile, careers and side hustles", () => {
+    const m = handoffMessage("jobs", { name: "abdul" });
+    expect(m).toMatch(/^Hi Abdul/);
+    expect(m).toContain("https://techfaculty.ng/talent/profile");
+    expect(m).toContain("https://techfaculty.ng/careers");
+    expect(m).toContain("https://techfaculty.ng/side-hustles");
+  });
+  it("hire-us preset sends businesses to services and a custom brief", () => {
+    const m = handoffMessage("services");
+    expect(m).toContain("https://techfaculty.ng/services");
+    expect(m).toContain("https://techfaculty.ng/hire");
+    expect(m).toContain("₦7,500");
   });
   it("intro names Ms. Claire as the automated assistant", () => {
     expect(handoffMessage("intro", { name: "ADA obi" })).toMatch(/^Hi Ada, this is Ms\. Claire.*automated admissions assistant/);

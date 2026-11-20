@@ -84,3 +84,58 @@ describe("decideAutoAnswer", () => {
     handoff("x".repeat(500));
   });
 });
+
+describe("jobs and business services", () => {
+  it("sends people looking for work to the talent profile, careers and side hustles", () => {
+    for (const q of [
+      "Hw can I get a job from your plartgorm.im a full stack developer and also an ai developer",
+      "I want graphic design, data analysis and research jobs. I'm very skilled and can deliver nicely",
+      "Are you hiring?",
+      "Any vacancy for a data analyst",
+      "I need freelance work",
+    ]) {
+      const d = answer(q);
+      expect(d.intents, q).toContain("jobs");
+      expect(d.reply).toContain("https://techfaculty.ng/talent/profile");
+      expect(d.reply).toContain("https://techfaculty.ng/careers");
+    }
+  });
+
+  it("quotes side-hustle pay of ₦5,000 to ₦10,000 per task", () => {
+    expect(answer("any side hustle?").reply).toContain("₦5,000 to ₦10,000 per task");
+  });
+
+  it("answers a job-seeker asking about pay with jobs, not course fees", () => {
+    const d = answer("How much do you pay for the job?");
+    expect(d.intents).toEqual(["jobs"]);
+  });
+
+  it("treats 'hire me' as a job-seeker", () => {
+    expect(answer("I'm a designer, you can hire me for jobs").intents).toEqual(["jobs"]);
+  });
+
+  it("sends businesses to services and the custom brief page", () => {
+    const d = answer("I want to hire someone to build a website for my business");
+    expect(d.intents).toEqual(["services"]);
+    expect(d.reply).toContain("https://techfaculty.ng/services");
+    expect(d.reply).toContain("https://techfaculty.ng/hire");
+    expect(d.reply).toContain("₦7,500");
+  });
+
+  it("answers Tutor & Earn as a SIWES question", () => {
+    expect(answer("I want to tutor and earn during my IT").intents).toEqual(["siwes"]);
+  });
+
+  it("still hands partnerships to staff", () => {
+    handoff("We want a partnership to hire your graduates");
+  });
+
+  it("lets Ms. Claire try greetings and unrecognised questions, never staff-only ones", () => {
+    const hello = decideAutoAnswer("Good evening I'll like to proceed");
+    expect(hello.kind === "handoff" && hello.canTryAi).toBe(true);
+    const paid = decideAutoAnswer("I have paid, here is my receipt");
+    expect(paid.kind === "handoff" && paid.canTryAi).toBeFalsy();
+    const media = decideAutoAnswer("[image]");
+    expect(media.kind === "handoff" && media.canTryAi).toBeFalsy();
+  });
+});

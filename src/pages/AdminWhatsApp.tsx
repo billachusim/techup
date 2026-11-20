@@ -212,7 +212,7 @@ export default function AdminWhatsApp() {
         </div>
         {autoOn !== null && (
           <p className="text-sm text-muted-foreground">
-            Questions about prices, campus locations and SIWES are answered automatically. Everything else is marked "Needs reply" for you, and the sender is told someone will reply shortly. Auto-answers stay quiet for {AUTO_ANSWER_RULES.staffActiveHours} hours after you reply in a chat.
+            Questions about prices, campus locations, SIWES, finding work and hiring us are answered automatically. Ms. Claire (AI) answers greetings and other general questions from the same facts. Payments, discounts, complaints, certificates and anything she isn't sure about are marked "Needs reply" for you, and the sender is told someone will reply shortly. Auto-answers stay quiet for {AUTO_ANSWER_RULES.staffActiveHours} hours after you reply in a chat.
           </p>
         )}
         {paused && <p className="rounded border border-destructive p-3 text-sm text-destructive">Sending is paused because WhatsApp reported "{paused}". Reconnect WhatsApp in Connectors.</p>}

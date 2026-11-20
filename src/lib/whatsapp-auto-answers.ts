@@ -1,5 +1,5 @@
-// Automatic answers for common WhatsApp inbox questions: prices, locations and
-// SIWES. Everything else (payments, discounts, complaints, anything unclear) is
+// Automatic answers for common WhatsApp inbox questions: prices, locations,
+// SIWES, finding work and hiring us for a task. Everything else (payments, discounts, complaints, anything unclear) is
 // handed to staff. Answers are built from the same data as the site, so a
 // price or address change updates them too. Pure functions, no I/O.
 import { campuses } from "@/data/campuses";
@@ -7,14 +7,18 @@ import { departments } from "@/data/departments";
 import { HYBRID_FEE, PHYSICAL_FEE, naira, planMinimum } from "@/lib/fees";
 import { CAMPUS_COUNT, CITY_COUNT, VIRTUAL_SIWES } from "@/data/virtualSiwes";
 import { INSTALMENTS } from "../../supabase/functions/_shared/pricing.ts";
+import { PRICE_TIERS, SERVICE_CATEGORIES } from "@/data/services";
+import { SLACK_JOIN_URL } from "@/data/coursePrograms";
 
-export type AutoAnswerIntent = "prices" | "location" | "siwes" | "virtual_siwes";
+export type AutoAnswerIntent = "prices" | "location" | "siwes" | "virtual_siwes" | "jobs" | "services";
 
 export const AUTO_ANSWER_LABEL: Record<AutoAnswerIntent | "other", string> = {
   prices: "Prices",
   location: "Location",
   siwes: "SIWES",
   virtual_siwes: "Virtual SIWES",
+  jobs: "Jobs & talent",
+  services: "Business services",
   other: "Handed to staff",
 };
 
@@ -25,7 +29,7 @@ export const AUTO_ANSWER_FOOTER =
 
 export const HANDOFF_ACK =
   "Thanks for your message. Someone from our team will reply here shortly.\n\n" +
-  "If you want prices, campus locations or SIWES details, just ask and you'll get an answer straight away.";
+  "If you want prices, campus locations, SIWES details or ways to find work with us, just ask and you'll get an answer straight away.";
 
 /** Messages that always go to a person, even if they also mention a price or SIWES. */
 const STAFF_ONLY = [
@@ -36,12 +40,16 @@ const STAFF_ONLY = [
   /\b(complain|complaint|not happy|disappointed|scam|fraud|cheat)\w*\b/,
   /\b(call me|speak (to|with)|talk (to|with)|human|real person|agent|manager|founder|mr\.? bill)\b/,
   /\b(certificate|result|transcript|my (account|dashboard|login|password))\b/,
-  /\b(partner|partnership|collaborat\w*|hire|hiring|recruit\w*|vacanc\w*)\b/,
+  /\b(partner|partnership|collaborat\w*)\b/,
 ];
 
 const PRICE = /\b(price|prices|pricing|cost|costs|how much|fee|fees|tuition|charge|charges|amount|naira|instal+ments?|payment plan|afford\w*)\b|₦|\bngn\b/;
 const LOCATION = /\b(where (are|is) (you|your|the|una)|location|located|locate|address|direction|directions|campus|campuses|branch|branches|centre|center|office|come (to|over)|visit)\b/;
-const SIWES = /\b(siwes|s\.i\.w\.e\.s|industrial (training|attachment)|i\.?t\.? (placement|letter|programme|program|students?)|placement|attachment|logbook|log book|itf)\b/;
+const SIWES = /\b(siwes|s\.i\.w\.e\.s|industrial (training|attachment)|i\.?t\.? (placement|letter|programme|program|students?)|placement|attachment|logbook|log book|itf|tutor (and|&|n) earn)\b/;
+/** People looking for work: jobs, freelance, side hustles, "are you hiring". */
+const JOBS = /\b(jobs?|vacanc\w*|freelanc\w*|gigs?|side ?hustles?|employment|are (you|una) hiring|(any|open) (roles?|openings?|positions?)|looking for (work|a role|remote work)|(find|get|need|want|apply for) (some |a )?(work|role|remote work|remote role)|work (opportunit\w*|with you)|talent (pool|profile))\b/;
+/** Businesses that want our talent to do a task for them. "Hire me" is a job-seeker. */
+const SERVICES = /\b(hire\b(?! me\b)|hiring (a|an|someone|people|talent)\b|recruit (a|an|someone|talent)\b|for my (business|company|brand|shop|store|startup|organi[sz]ation)\b|(build|design|make|create|develop|set ?up) (me|us|my|our)\b|your services\b|services you offer\b|business services\b|get a quote\b|quotation\b)/;
 const VIRTUAL = /\b(virtual|online|remote|remotely|from home|waybill|courier|logbook|log book)\b/;
 
 /** Words people use for each department, matched against the message. */
@@ -144,9 +152,31 @@ function virtualSiwesAnswer(): string {
   ].join("\n\n");
 }
 
+const SITE_TALENT = `${SITE}/talent/profile`;
+
+/** How to find work with us. Shared with the "Find work" quick reply. */
+export function jobsAnswer(): string {
+  return [
+    "Tech Faculty NG connects skilled people with paid remote tech roles and pay-per-task side hustles. Here's how to start:",
+    `1. Create your free talent profile (a few minutes): ${SITE_TALENT}\n2. See open roles and apply: ${SITE}/careers\n3. Side hustles paid ${naira(PRICE_TIERS.small.talentPay)} to ${naira(PRICE_TIERS.big.talentPay)} per task: ${SITE}/side-hustles`,
+    "Applications are matched to roles automatically. A fuller profile ranks higher, and passing an assessment earns a Vetted badge.",
+    `Join our Slack with the same email as your profile. New roles and assessments are posted there: ${SLACK_JOIN_URL}`,
+  ].join("\n\n");
+}
+
+/** What businesses can hire us for. Shared with the "Hire us" quick reply. */
+export function servicesAnswer(): string {
+  const names = SERVICE_CATEGORIES.map((c) => c.name).join(", ");
+  return [
+    `Our vetted talent take on tasks for businesses: ${names}.`,
+    `Standard tasks start from ${naira(PRICE_TIERS.small.businessFrom)} and you can pay online when you order: ${SITE}/services`,
+    `Need something custom? Send a short brief and we'll reply with a quote: ${SITE}/hire`,
+  ].join("\n\n");
+}
+
 export type AutoAnswerDecision =
   | { kind: "answer"; intents: AutoAnswerIntent[]; reply: string }
-  | { kind: "handoff"; intent: AutoAnswerIntent | "other"; reason: string };
+  | { kind: "handoff"; intent: AutoAnswerIntent | "other"; reason: string; canTryAi?: boolean };
 
 /** Decides whether a message gets an automatic answer, and builds it. */
 export function decideAutoAnswer(rawText: string): AutoAnswerDecision {
@@ -157,18 +187,24 @@ export function decideAutoAnswer(rawText: string): AutoAnswerDecision {
 
   const intents: AutoAnswerIntent[] = [];
   const siwes = SIWES.test(t);
+  const jobs = JOBS.test(t);
+  const services = !jobs && SERVICES.test(t);
   if (siwes && VIRTUAL.test(t)) intents.push("virtual_siwes");
   else if (siwes) intents.push("siwes");
-  // SIWES answers already quote their own fees.
-  if (PRICE.test(t) && !siwes) intents.push("prices");
+  if (jobs) intents.push("jobs");
+  if (services) intents.push("services");
+  // SIWES answers quote their own fees; "how much do you pay" from a job-seeker is about pay, not fees.
+  if (PRICE.test(t) && !siwes && !jobs && !services) intents.push("prices");
   if (LOCATION.test(t) || (mentionedCampuses(t).length && /\b(where|near|nearest|in)\b/.test(t))) intents.push("location");
-  if (!intents.length) return { kind: "handoff", intent: "other", reason: "No common question recognised" };
+  if (!intents.length) return { kind: "handoff", intent: "other", reason: "No common question recognised", canTryAi: true };
 
   const parts: string[] = [];
   for (const intent of intents) {
     const part = intent === "prices" ? pricesAnswer(t)
       : intent === "location" ? locationAnswer(t)
       : intent === "siwes" ? siwesAnswer()
+      : intent === "jobs" ? jobsAnswer()
+      : intent === "services" ? servicesAnswer()
       : virtualSiwesAnswer();
     if (!part) return { kind: "handoff", intent, reason: "Fee is quoted by staff for this course" };
     parts.push(part);

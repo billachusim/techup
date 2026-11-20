@@ -319,7 +319,16 @@ export async function queueNextClass(
     courseId: next.course_id,
     courseName: next.course_name,
   });
-  if (profile?.email) {
+  // Drive videos open only while the student is still enrolled in that course.
+  const { data: enrolment } = await supabaseAdmin
+    .from("course_enrollments")
+    .select("id")
+    .eq("faculty_id", facultyId)
+    .eq("course_id", next.course_id)
+    .neq("status", "cancelled")
+    .limit(1)
+    .maybeSingle();
+  if (profile?.email && enrolment) {
     try {
       await openDriveVideosUpTo({
         email: profile.email,

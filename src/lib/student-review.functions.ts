@@ -175,7 +175,7 @@ export const openClassVideos = createServerFn({ method: "POST" })
 
     const [{ data: enrolment }, { data: progress }] = await Promise.all([
       supabaseAdmin.from("course_enrollments").select("id")
-        .eq("faculty_id", profile.faculty_id).eq("course_id", data.courseId).limit(1).maybeSingle(),
+        .eq("faculty_id", profile.faculty_id).eq("course_id", data.courseId).neq("status", "cancelled").limit(1).maybeSingle(),
       supabaseAdmin.from("course_progress").select("classes_completed")
         .eq("faculty_id", profile.faculty_id).eq("course_id", data.courseId).maybeSingle(),
     ]);

@@ -393,6 +393,13 @@
       "when": 1795191834684,
       "tag": "0055_lock_staff_checks_intros_and_lecture_seeding",
       "breakpoints": true
+    },
+    {
+      "idx": 56,
+      "version": "7",
+      "when": 1795205609022,
+      "tag": "0056_lock_class_tasks_and_profile_identity",
+      "breakpoints": true
     }
   ]
 }

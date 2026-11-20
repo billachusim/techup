@@ -275,43 +275,17 @@ export const EnrolProvider = ({
         LEARNING_MODES.find((m) => m.id === current.learningModeId)?.name ||
         "online-only";
 
-      // Generate a new faculty ID and save it. Two students enrolling at the
-      // same moment can be handed the same ID, so on a duplicate (Postgres
-      // 23505) ask for a fresh one and try again.
-      let newFacultyId = "";
-      for (let attempt = 1; ; attempt++) {
-        const { data: generatedId, error: idError } = await supabase.rpc(
-          "generate_faculty_id",
-          {
-            dept_name: planName,
-            learn_mode: selectedMode,
-            cohort_mo: new Date().getMonth() + 1,
-            cohort_yr: new Date().getFullYear(),
-          },
-        );
-        if (idError || !generatedId) {
-          console.error("Error generating new faculty ID:", idError);
-          throw new Error("Failed to generate faculty ID");
-        }
-
-        const { error: updateError } = await supabase
-          .from("profiles")
-          .update({
-            faculty_id: generatedId,
-            department: planName,
-            learning_mode: selectedMode,
-            cohort_month: new Date().getMonth() + 1,
-            cohort_year: new Date().getFullYear(),
-          })
-          .eq("id", user.id);
-        if (!updateError) {
-          newFacultyId = generatedId;
-          break;
-        }
-        if (updateError.code === "23505" && attempt < 3) continue;
-        console.error("Error updating profile:", updateError);
-        throw new Error("Failed to update profile");
+      // The system creates the new Faculty ID and saves it on the profile in
+      // one step (students can't write their own Faculty ID directly).
+      const { data: generatedId, error: idError } = await supabase.rpc(
+        "assign_my_faculty_id",
+        { _department: planName, _learning_mode: selectedMode },
+      );
+      if (idError || !generatedId) {
+        console.error("Error creating faculty ID:", idError);
+        throw new Error("Failed to generate faculty ID");
       }
+      const newFacultyId = generatedId;
 
       // Record the Faculty ID itself via a secure function (direct writes are blocked)
       const { error: recordError } = await supabase.rpc(

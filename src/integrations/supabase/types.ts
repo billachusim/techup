@@ -3005,6 +3005,10 @@ export type Database = {
       approve_talent: { Args: { _talent_id: string }; Returns: string }
       archive_silent_leads: { Args: { _days?: number }; Returns: number }
       archive_stale_listings: { Args: never; Returns: undefined }
+      assign_my_faculty_id: {
+        Args: { _department: string; _learning_mode: string }
+        Returns: string
+      }
       auto_convert_student_leads: {
         Args: {
           _before?: string

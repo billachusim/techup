@@ -379,6 +379,13 @@
       "when": 1795158713745,
       "tag": "0053_testing_pay_and_account_setup_type",
       "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1795166402513,
+      "tag": "0054_lock_class_progress_and_signup_id_links",
+      "breakpoints": true
     }
   ]
 }

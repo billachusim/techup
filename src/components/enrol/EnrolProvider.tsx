@@ -338,10 +338,6 @@ export const EnrolProvider = ({
             .from("course_enrollments")
             .update({ faculty_id: newFacultyId })
             .eq("faculty_id", currentFacultyId),
-          supabase
-            .from("course_progress")
-            .update({ faculty_id: newFacultyId })
-            .eq("faculty_id", currentFacultyId),
         ]);
       }
 

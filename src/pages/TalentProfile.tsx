@@ -287,7 +287,7 @@ const TalentProfile = () => {
         const { data: issued } = await supabase.rpc("claim_talent_faculty_id");
         if (issued) {
           setFacultyId(issued);
-          toast({ title: "Faculty ID linked", description: `${issued}: you get priority matching as a Tech Faculty student.` });
+          toast({ title: "Faculty ID linked", description: `${issued}: as a Tech Faculty student you are vetted and get priority matching.` });
         }
       }
 

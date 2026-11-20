@@ -361,11 +361,12 @@ const AdminTalent = () => {
     const { data, error } = await supabase.rpc("approve_talent", { _talent_id: talent.id });
     if (error) { toast({ title: "Could not approve", description: error.message, variant: "destructive" }); return; }
     notifyMarketplaceEvent({ data: { event: "talent_approved", id: talent.id } }).catch(() => {});
-    toast({ title: "Approved as talent", description: data ? `Linked to Faculty ID ${data}` : "No Faculty ID: they haven't studied with us." });
+    toast({ title: "Approved", description: data ? `Tech Faculty student: linked Faculty ID ${data} and marked vetted.` : "Listed as approved talent. Mark them vetted once they pass an assessment or work trial." });
     load();
   };
 
   const issueFacultyId = async (talent: TalentProfile) => {
+    if (!window.confirm(`Give ${talent.full_name} a Faculty ID by hand? Faculty IDs are for Tech Faculty students and alumni.`)) return;
     const { data, error } = await supabase.rpc("issue_talent_faculty_id", { _talent_id: talent.id });
     if (error) { toast({ title: "Could not issue a Faculty ID", description: error.message, variant: "destructive" }); return; }
     toast({ title: "Faculty ID issued", description: String(data ?? "") });
@@ -990,11 +991,11 @@ const AdminTalent = () => {
                             <Button size="sm" variant="outline"><MessageCircle size={14} className="mr-1.5" /> Message</Button>
                           </a>
                         )}
-                        {!t.is_vetted && (
+                        {!t.approved_at && (
                           <Button size="sm" onClick={() => approveTalent(t)}>Approve</Button>
                         )}
-                        {!t.faculty_id && t.is_vetted && (
-                          <Button size="sm" variant="outline" onClick={() => issueFacultyId(t)}>Issue Faculty ID only</Button>
+                        {!t.faculty_id && (
+                          <Button size="sm" variant="outline" onClick={() => issueFacultyId(t)}>Issue Faculty ID (by hand)</Button>
                         )}
                         <Button size="sm" variant={t.is_vetted ? "ghost" : "default"} onClick={() => toggleVetted(t)}>
                           {t.is_vetted ? "Remove vetted" : "Mark vetted"}

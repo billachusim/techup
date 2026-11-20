@@ -1,7 +1,9 @@
 // Server-only: approves strong talent profiles without waiting for staff.
 // Rules (Bill, 2026-10-29): profile strength 70% or more, or a Tech Faculty student
-// or alumnus (Faculty ID from a course) at any strength. Approval never mints a
-// Faculty ID; a student's existing ID is linked.
+// or alumnus (Faculty ID from a course) at any strength. Approval only approves and
+// lists the talent: it never mints a Faculty ID and never gives the Vetted badge
+// (that comes from passing an assessment/work trial). A student's existing ID is
+// linked and students are vetted (rules in public.approve_talent).
 
 export const AUTO_APPROVE_MIN_STRENGTH = 70;
 
@@ -15,7 +17,7 @@ export async function autoApproveStrongProfiles(talentIds?: string[]): Promise<{
   let q = supabaseAdmin
     .from("talent_profiles")
     .select("id, full_name, email, profile_strength, user_id, faculty_id")
-    .eq("is_vetted", false)
+    .is("approved_at", null)
     .or(`profile_strength.gte.${AUTO_APPROVE_MIN_STRENGTH},user_id.not.is.null,faculty_id.not.is.null`)
     .limit(300);
   if (talentIds?.length) q = q.in("id", talentIds);

@@ -245,7 +245,7 @@ const TalentDashboard = () => {
                   <p className="mt-3 text-xs text-muted-foreground">
                     {profile.is_vetted
                       ? "You are prioritised for client projects."
-                      : "Our team reviews profiles as roles come in."}
+                      : "Pass an assessment or work trial for your main skill to get the Vetted badge. Tech Faculty students and alumni are vetted automatically."}
                   </p>
                 </div>
               </div>

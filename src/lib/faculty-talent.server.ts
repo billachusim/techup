@@ -2,6 +2,8 @@
 // A Faculty ID counts when it came from registering for a course, not from the old
 // talent-board rule that minted IDs for complete profiles (hear_about_us 'talent_marketplace').
 
+import { isStudentFacultyId } from "@/lib/faculty-id-rules";
+
 export type FacultyTalent = { facultyId: string; field: string | null };
 
 export async function loadFacultyTalent(
@@ -24,7 +26,7 @@ export async function loadFacultyTalent(
     .from("faculty_ids")
     .select("faculty_id, hear_about_us, department, course_interest")
     .in("faculty_id", ids);
-  const byId = new Map((rows ?? []).filter((r) => r.hear_about_us !== "talent_marketplace").map((r) => [r.faculty_id, r]));
+  const byId = new Map((rows ?? []).filter((r) => isStudentFacultyId(r.hear_about_us)).map((r) => [r.faculty_id, r]));
 
   for (const t of talents) {
     const fid = idFor(t);

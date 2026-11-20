@@ -15,3 +15,8 @@
 
 - [x] Dashboard: past classes open with videos, handout and the student's own read-only submission
 - [x] Class recordings: fix wrong/mixed videos per class (lessons repeated across classes, other months mixed in, topic videos in alphabetical order)
+
+## Faculty IDs for students only (Nov 2026)
+- [x] Approve = approved/listed only; no Faculty ID; vetted only via assessment/trial or student ID
+- [x] Complete profile no longer mints an ID; students' existing ID linked + vetted
+- [x] Remove the talent-page Faculty IDs (keep anyone who enrolled with theirs); keep all existing Vetted badges

@@ -2308,6 +2308,7 @@ export type Database = {
       talent_profiles: {
         Row: {
           admin_notes: string | null
+          approved_at: string | null
           availability: string
           bio: string | null
           certifications: Json
@@ -2354,6 +2355,7 @@ export type Database = {
         }
         Insert: {
           admin_notes?: string | null
+          approved_at?: string | null
           availability?: string
           bio?: string | null
           certifications?: Json
@@ -2400,6 +2402,7 @@ export type Database = {
         }
         Update: {
           admin_notes?: string | null
+          approved_at?: string | null
           availability?: string
           bio?: string | null
           certifications?: Json
@@ -3147,6 +3150,7 @@ export type Database = {
       }
       is_referral_eligible: { Args: { _user_id: string }; Returns: boolean }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      is_student_faculty_id: { Args: { _fid: string }; Returns: boolean }
       issue_talent_faculty_id: { Args: { _talent_id: string }; Returns: string }
       lead_email_key: {
         Args: { _contact: string; _email: string }

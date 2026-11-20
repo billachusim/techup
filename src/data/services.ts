@@ -4,7 +4,9 @@
  *
  * Every service is one of two task sizes (Bill, 12 Nov 2026):
  * - small: talent earns ₦5,000 per task
- * - big:   talent earns ₦10,000 per task
+ * - big:   talent earns ₦10,000 per task (genuinely big tasks only)
+ * Testing & QA is always small: ₦5,000 per tester task, 3 days of use plus
+ * screenshots and a written report (Bill, 20 Nov 2026).
  * The business price is set per tier below; a service can override it when one
  * order is a bundle of several tasks (e.g. a pen test). Weekly earning caps are
  * internal and deliberately not shown on any page.
@@ -909,17 +911,17 @@ export const SERVICES: Service[] = [
     name: "Mobile App Testing",
     category: "testing-qa",
     size: "small",
-    unit: "per test session",
+    unit: "per tester (3 days of use)",
     summary:
-      "A tester uses your Android or iPhone app like a real customer and reports every crash, bug and confusing screen with screenshots.",
+      "A tester uses your Android or iPhone app like a real customer for 3 days, then sends screenshots and a written report of every crash, bug and confusing screen.",
     forWho: "Startups and businesses launching or updating an app.",
     deliverables: [
-      "One 60-minute test session",
-      "Bug list with steps and screenshots",
+      "3 days of real use on a Nigerian phone",
+      "Screenshots and a written report of what they found",
       "Device and network details",
       "Top 3 user-experience notes",
     ],
-    turnaround: "1 working day",
+    turnaround: "3 to 4 days",
     keywords: [
       "app testing services Nigeria",
       "mobile app tester",
@@ -943,7 +945,8 @@ export const SERVICES: Service[] = [
     slug: "website-usability-testing",
     name: "Website Usability Testing",
     category: "testing-qa",
-    size: "big",
+    size: "small",
+    businessFrom: 22500,
     unit: "per round of 3 testers",
     summary:
       "Three people try to complete real tasks on your website (sign up, buy, book) and tell you where they got stuck.",
@@ -975,7 +978,8 @@ export const SERVICES: Service[] = [
     slug: "release-regression-testing",
     name: "Release Regression Testing",
     category: "testing-qa",
-    size: "big",
+    size: "small",
+    businessFrom: 15000,
     unit: "per release",
     summary:
       "Before you ship an update, testers run through your key flows to make sure nothing that worked before is now broken.",
@@ -1004,7 +1008,8 @@ export const SERVICES: Service[] = [
     slug: "user-feedback-interviews",
     name: "User Feedback Interviews",
     category: "testing-qa",
-    size: "big",
+    size: "small",
+    businessFrom: 22500,
     unit: "per 3 interviews",
     summary:
       "Short private interviews with people who match your customer, to hear what they really think of your product, price or idea.",
@@ -2051,7 +2056,7 @@ const ROWS: Record<string, Row[]> = {
     [
       "accessibility-check",
       "Website Accessibility Check",
-      "big",
+      "small",
       "per website",
       "Check that people with poor sight, older users and screen reader users can use your website, with fixes listed.",
       "Schools, government suppliers and serious brands.",
@@ -2060,11 +2065,12 @@ const ROWS: Record<string, Row[]> = {
       ["website accessibility audit", "WCAG check Nigeria"],
       "Accessibility Tester",
       ["Knows WCAG basics", "Screen reader experience"],
+      15000,
     ],
     [
       "device-compatibility-testing",
       "Device Compatibility Testing",
-      "big",
+      "small",
       "per 5 devices",
       "Your app or site tested on 5 popular phones and browsers in Nigeria (Tecno, Infinix, Samsung, iPhone).",
       "App and website owners.",
@@ -2073,11 +2079,12 @@ const ROWS: Record<string, Row[]> = {
       ["Tecno Infinix app testing", "device testing Nigeria"],
       "Device Tester",
       ["Access to several phones", "Detail-minded"],
+      15000,
     ],
     [
       "beta-tester-group",
       "Beta Tester Group",
-      "big",
+      "small",
       "per 10 testers for 1 week",
       "Ten real users try your new app or feature for a week and send structured feedback.",
       "Startups before launch.",

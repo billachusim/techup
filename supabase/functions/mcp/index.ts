@@ -42,7 +42,7 @@ var services = [
 var list_services_default = defineTool2({
   name: "list_services",
   title: "List services",
-  description: "List Tech Faculty services beyond training: business partnerships, school collaborations, events, and SIWES.",
+  description: "List Tech Faculty service areas beyond courses: business partnerships, school collaborations, events and SIWES. For the 107 pay-per-task business services use list_business_services.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: () => ({
@@ -2125,6 +2125,7 @@ var SERVICES = [
   })
 ];
 var businessPrice = (svc) => svc.businessFrom ?? PRICE_TIERS[svc.size].businessFrom;
+var talentPay = (svc) => PRICE_TIERS[svc.size].talentPay;
 var servicesInCategory = (slug) => SERVICES.filter((x) => x.category === slug);
 var ROWS = {
   "content-creative": [
@@ -7971,7 +7972,7 @@ var search_blog_default = defineTool7({
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: ({ query, limit }) => {
     const q = query.toLowerCase();
-    const matches = blogPosts_default.filter(
+    const matches2 = blogPosts_default.filter(
       (p) => p.title.toLowerCase().includes(q) || p.description.toLowerCase().includes(q) || p.tags.some((t) => t.toLowerCase().includes(q))
     ).slice(0, limit ?? 10).map((p) => ({
       slug: p.slug,
@@ -7982,8 +7983,8 @@ var search_blog_default = defineTool7({
       url: `https://techfaculty.ng/blog/${p.slug}`
     }));
     return {
-      content: [{ type: "text", text: JSON.stringify({ matches }, null, 2) }],
-      structuredContent: { matches }
+      content: [{ type: "text", text: JSON.stringify({ matches: matches2 }, null, 2) }],
+      structuredContent: { matches: matches2 }
     };
   }
 });
@@ -8219,13 +8220,432 @@ var list_my_upcoming_classes_default = defineTool15({
   }
 });
 
+// src/lib/mcp/tools/list_business_services.ts
+import { defineTool as defineTool16 } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { z as z7 } from "npm:zod@^3.25.76";
+
+// src/lib/mcp/_shared/publicClient.ts
+import { createClient as createClient4 } from "npm:@supabase/supabase-js@^2.79.0";
+function publicClient() {
+  const g = globalThis;
+  const get = (k) => g.process?.env?.[k] ?? g.Deno?.env.get(k);
+  const url = get("SUPABASE_URL");
+  const key = get("SUPABASE_PUBLISHABLE_KEY") ?? get("SUPABASE_ANON_KEY");
+  if (!url || !key) return null;
+  return createClient4(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+}
+var SITE = "https://techfaculty.ng";
+var matches = (query, ...fields) => {
+  if (!query?.trim()) return true;
+  const hay = fields.flat().filter(Boolean).join(" ").toLowerCase();
+  return query.toLowerCase().split(/\s+/).filter(Boolean).every((w) => hay.includes(w));
+};
+var toolError = (text) => ({ content: [{ type: "text", text }], isError: true });
+
+// src/lib/mcp/tools/list_business_services.ts
+var categorySlugs = SERVICE_CATEGORIES.map((c) => c.slug);
+var list_business_services_default = defineTool16({
+  name: "list_business_services",
+  title: "List pay-per-task business services",
+  description: "List Tech Faculty's fixed-price, pay-per-task services for businesses in Nigeria (video editing, social media, field sales reps, website fixes, app testing, cybersecurity, AI automation, virtual assistance), with starting price in NGN, turnaround and order link.",
+  inputSchema: {
+    category: z7.enum(categorySlugs).optional().describe("Category slug, e.g. testing-qa or field-sales."),
+    query: z7.string().max(100).optional().describe("Words to match in the service name, summary or keywords, e.g. 'instagram' or 'logo'."),
+    limit: z7.number().int().min(1).max(107).optional().describe("Max services to return (default 30).")
+  },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: ({ category, query, limit }) => {
+    const found = SERVICES.filter(
+      (s2) => (!category || s2.category === category) && matches(query, s2.name, s2.summary, s2.keywords, s2.unit)
+    );
+    const services2 = found.slice(0, limit ?? 30).map((s2) => ({
+      slug: s2.slug,
+      name: s2.name,
+      category: SERVICE_CATEGORIES.find((c) => c.slug === s2.category)?.name ?? s2.category,
+      priceFromNGN: businessPrice(s2),
+      unit: s2.unit,
+      turnaround: s2.turnaround,
+      summary: s2.summary,
+      forWho: s2.forWho,
+      deliverables: [...s2.deliverables],
+      url: `${SITE}/services/${s2.slug}`
+    }));
+    const categories = SERVICE_CATEGORIES.map((c) => ({
+      slug: c.slug,
+      name: c.name,
+      count: SERVICES.filter((s2) => s2.category === c.slug).length,
+      url: `${SITE}/services/category/${c.slug}`
+    }));
+    const result = {
+      total: SERVICES.length,
+      matched: found.length,
+      returned: services2.length,
+      howToOrder: "Open the service page and send a brief. Standard orders can be paid online immediately; custom or bulk work gets a quote with a pay link.",
+      categories,
+      services: services2
+    };
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }], structuredContent: result };
+  }
+});
+
+// src/lib/mcp/tools/list_side_hustles.ts
+import { defineTool as defineTool17 } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { z as z8 } from "npm:zod@^3.25.76";
+var categorySlugs2 = SERVICE_CATEGORIES.map((c) => c.slug);
+var list_side_hustles_default = defineTool17({
+  name: "list_side_hustles",
+  title: "List paid side hustles",
+  description: "List Tech Faculty's pay-per-task side hustles for people in Nigeria (\u20A65,000 or \u20A610,000 per approved task, paid weekly every Friday), with what each task needs and how to apply.",
+  inputSchema: {
+    category: z8.enum(categorySlugs2).optional().describe("Category slug, e.g. content-creative or field-sales."),
+    query: z8.string().max(100).optional().describe("Words to match in the side hustle title, requirements or keywords, e.g. 'video' or 'tester'."),
+    pay: z8.union([z8.literal(5e3), z8.literal(1e4)]).optional().describe("Only side hustles paying this many naira per task."),
+    limit: z8.number().int().min(1).max(107).optional().describe("Max side hustles to return (default 30).")
+  },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: ({ category, query, pay, limit }) => {
+    const found = SERVICES.filter(
+      (s2) => (!category || s2.category === category) && (!pay || talentPay(s2) === pay) && matches(query, s2.hustleTitle, s2.name, s2.hustleNeeds, s2.keywords)
+    );
+    const sideHustles = found.slice(0, limit ?? 30).map((s2) => ({
+      slug: s2.slug,
+      title: s2.hustleTitle,
+      category: SERVICE_CATEGORIES.find((c) => c.slug === s2.category)?.name ?? s2.category,
+      payPerTaskNGN: talentPay(s2),
+      task: `${s2.name} (${s2.unit})`,
+      needs: [...s2.hustleNeeds],
+      openings: OPENINGS_PER_SERVICE,
+      url: `${SITE}/side-hustles/${s2.slug}`
+    }));
+    const result = {
+      total: SERVICES.length,
+      matched: found.length,
+      returned: sideHustles.length,
+      payment: "Paid weekly, every Friday, for every task a Tech Faculty manager approves.",
+      howToApply: `Join the free talent pool at ${SITE}/talent and mention the side hustle, then pass a short skills check or sample task.`,
+      sideHustles
+    };
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }], structuredContent: result };
+  }
+});
+
+// src/lib/mcp/tools/list_open_roles.ts
+import { defineTool as defineTool18 } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { z as z9 } from "npm:zod@^3.25.76";
+var money = (n, cur) => `${cur === "NGN" ? "\u20A6" : cur === "USD" ? "$" : `${cur} `}${Math.round(n).toLocaleString("en-NG")}`;
+var payLabel = (r) => {
+  if (r.pay_text?.trim()) return r.pay_text.trim();
+  const unit = r.budget_unit.toLowerCase();
+  if (r.budget_min && r.budget_max) return `${money(r.budget_min, r.budget_currency)} \u2013 ${money(r.budget_max, r.budget_currency)} / ${unit}`;
+  if (r.budget_min) return `From ${money(r.budget_min, r.budget_currency)} / ${unit}`;
+  if (r.budget_max) return `Up to ${money(r.budget_max, r.budget_currency)} / ${unit}`;
+  return "Pay discussed on shortlist";
+};
+var list_open_roles_default = defineTool18({
+  name: "list_open_roles",
+  title: "List open Tech Faculty roles",
+  description: "List open roles on the Tech Faculty jobs marketplace: Tech Faculty team roles, tutors, field reps and client projects in Nigeria (remote and on-site), with pay and the apply link.",
+  inputSchema: {
+    query: z9.string().max(100).optional().describe("Words to match in the title, summary, skills or city, e.g. 'tutor' or 'Nnewi'."),
+    remoteOnly: z9.boolean().optional().describe("Only roles that can be done remotely."),
+    limit: z9.number().int().min(1).max(50).optional().describe("Max roles to return (default 20).")
+  },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async ({ query, remoteOnly, limit }) => {
+    const supabase = publicClient();
+    if (!supabase) return toolError("Roles are unavailable right now. See https://techfaculty.ng/careers.");
+    let q = supabase.from("talent_roles").select("slug,title,company,category,employment_type,seniority,city,country,is_remote,openings,pay_text,budget_min,budget_max,budget_currency,budget_unit,summary,required_skills,apply_deadline,is_paid_training").eq("status", "published").eq("applications_closed", false).order("is_featured", { ascending: false }).order("created_at", { ascending: false }).limit(200);
+    if (remoteOnly) q = q.eq("is_remote", true);
+    const { data, error } = await q;
+    if (error) return toolError("Could not load roles. See https://techfaculty.ng/careers.");
+    const found = (data ?? []).filter(
+      (r) => matches(query, r.title, r.summary, r.category, r.city, r.company, r.required_skills ?? [])
+    );
+    const roles = found.slice(0, limit ?? 20).map((r) => ({
+      title: r.title,
+      company: r.company,
+      category: r.category ?? "",
+      employmentType: r.employment_type,
+      seniority: r.seniority,
+      location: r.is_remote ? r.city ? `${r.city}, ${r.country} (remote friendly)` : `Remote (${r.country})` : [r.city, r.country].filter(Boolean).join(", "),
+      openings: r.openings,
+      pay: payLabel(r),
+      paidTraining: r.is_paid_training,
+      summary: r.summary,
+      requiredSkills: r.required_skills ?? [],
+      applyDeadline: r.apply_deadline ?? "",
+      applyUrl: `${SITE}/talent/roles/${r.slug}`
+    }));
+    const result = {
+      matched: found.length,
+      returned: roles.length,
+      howToApply: `Open the role and apply with a free Tech Faculty talent profile (${SITE}/talent).`,
+      roles
+    };
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }], structuredContent: result };
+  }
+});
+
+// src/lib/mcp/tools/search_jobs.ts
+import { defineTool as defineTool19 } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { z as z10 } from "npm:zod@^3.25.76";
+var salary = (j) => {
+  if (!j.salary_min && !j.salary_max) return "";
+  const unit = j.salary_unit ? `/${j.salary_unit.toLowerCase()}` : "";
+  const cur = j.salary_currency ?? "";
+  const n = (x) => x.toLocaleString("en-NG");
+  return j.salary_min && j.salary_max ? `${cur} ${n(j.salary_min)} \u2013 ${n(j.salary_max)}${unit}` : `${cur} ${n(j.salary_min ?? j.salary_max)}${unit}`;
+};
+var search_jobs_default = defineTool19({
+  name: "search_jobs",
+  title: "Search remote tech jobs",
+  description: "Search curated remote tech, AI-training and Nigerian jobs listed on the Tech Faculty careers board (refreshed twice a month), with salary where known and the job page link.",
+  inputSchema: {
+    query: z10.string().max(100).optional().describe("Words to match in the job title, company, platform or tags, e.g. 'data annotation' or 'python'."),
+    remoteOnly: z10.boolean().optional().describe("Only remote jobs."),
+    limit: z10.number().int().min(1).max(50).optional().describe("Max jobs to return (default 20).")
+  },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async ({ query, remoteOnly, limit }) => {
+    const supabase = publicClient();
+    if (!supabase) return toolError("Jobs are unavailable right now. See https://techfaculty.ng/careers.");
+    let q = supabase.from("jobs").select("slug,title,company,source_platform,employment_type,is_remote,location,country,salary_min,salary_max,salary_currency,salary_unit,tags,last_seen_at").eq("is_expired", false).order("last_seen_at", { ascending: false }).limit(300);
+    if (remoteOnly) q = q.eq("is_remote", true);
+    const { data, error } = await q;
+    if (error) return toolError("Could not load jobs. See https://techfaculty.ng/careers.");
+    const found = (data ?? []).filter((j) => matches(query, j.title, j.company, j.source_platform, j.location, j.tags ?? []));
+    const jobs = found.slice(0, limit ?? 20).map((j) => ({
+      title: j.title,
+      company: j.company,
+      platform: j.source_platform,
+      employmentType: j.employment_type,
+      remote: j.is_remote,
+      location: [j.location, j.country].filter(Boolean).join(", "),
+      salary: salary(j),
+      tags: j.tags ?? [],
+      lastSeen: j.last_seen_at,
+      url: `${SITE}/careers/jobs/${j.slug}`
+    }));
+    const result = {
+      matched: found.length,
+      returned: jobs.length,
+      note: `Tech Faculty's own roles and client projects are listed by list_open_roles; pay-per-task work by list_side_hustles. Full board: ${SITE}/careers`,
+      jobs
+    };
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }], structuredContent: result };
+  }
+});
+
+// src/lib/mcp/tools/list_job_platforms.ts
+import { defineTool as defineTool20 } from "npm:@lovable.dev/mcp-js@0.22.2";
+
+// src/data/jobPlatforms.ts
+var nigeriaFaq = (name) => ({
+  q: `Can Nigerians apply to ${name}?`,
+  a: `Yes. ${name} accepts remote contributors from many countries, including Nigeria. Availability varies by project, so create your account and check which roles are open to your country.`
+});
+var jobPlatforms = [
+  {
+    slug: "micro1",
+    seoTitle: "Micro1 Jobs 2026: Remote Roles Paid in USD",
+    seoDescription: "See open Micro1 jobs Nigerians and Africans can apply for: remote engineering and AI expert roles paid hourly in USD. How the AI interview works and how to get hired.",
+    name: "Micro1",
+    keyword: "Micro1 Jobs",
+    match: ["Micro1"],
+    signupUrl: "https://refer.micro1.ai/referral/jobs?referralCode=5df297a6-4ec0-45fa-b144-1ace3ec277ef&utm_source=referral&utm_medium=share&utm_campaign=job_referral",
+    blurb: "Vetted remote engineering roles with US and global companies.",
+    about: "Micro1 uses an AI interviewer to vet engineers and experts, then matches them to remote contracts and AI training projects. Pay is typically hourly in USD and depends on skill and seniority.",
+    faqs: [
+      { q: "Is Micro1 legit?", a: "Yes. Micro1 is an established AI recruiting company that places vetted talent on remote contracts and AI data projects." },
+      { q: "How much does Micro1 pay?", a: "Rates vary by role. Engineering and expert roles are usually paid hourly in USD, often well above local market rates." },
+      nigeriaFaq("Micro1")
+    ]
+  },
+  {
+    slug: "ask-ethos",
+    name: "Ask Ethos",
+    keyword: "Ask Ethos Jobs",
+    match: ["Ask Ethos", "AskEthos", "Askitos", "Ask Etos"],
+    signupUrl: "https://agent.askethos.com/refer/copbdvcud51e",
+    blurb: "AI agent work and expert tasks you can take on remotely.",
+    about: "Ask Ethos offers expert and AI agent tasks you can complete remotely. Work is project-based and paid per task or per hour.",
+    faqs: [
+      { q: "Is Ask Ethos legit?", a: "Ask Ethos is an AI work platform that pays contributors for expert tasks. As with any platform, read the project terms before starting." },
+      nigeriaFaq("Ask Ethos")
+    ]
+  },
+  {
+    slug: "atlas-capture",
+    name: "Atlas Capture",
+    keyword: "Atlas Capture Jobs",
+    match: ["Atlas Capture", "Atlas Audit", "AtlasCapture"],
+    signupUrl: "https://audit.atlascapture.io/?ref_id=6a7e58a8de1a75582251a347",
+    blurb: "Paid data capture and audit projects, done from your phone or laptop.",
+    about: "Atlas Capture pays contributors to capture and audit data for AI systems. Tasks can be done from a phone or laptop and suit beginners.",
+    faqs: [
+      { q: "Is Atlas Capture legit?", a: "Atlas Capture runs paid data capture and audit projects for AI. Pay is per task and project terms are shown before you start." },
+      nigeriaFaq("Atlas Capture")
+    ]
+  },
+  {
+    slug: "mercor",
+    name: "Mercor",
+    keyword: "Mercor Jobs",
+    match: ["Mercor"],
+    signupUrl: "https://work.mercor.com/",
+    blurb: "Expert AI training and remote contract roles with top AI labs.",
+    about: "Mercor hires domain experts, engineers and professionals to train and evaluate frontier AI models. Roles are remote, mostly contract, and paid hourly in USD. Applicants complete a short AI interview.",
+    faqs: [
+      { q: "Is Mercor legit?", a: "Yes. Mercor is a well-funded AI hiring platform that works with leading AI labs on model training and evaluation." },
+      { q: "How much does Mercor pay?", a: "Most Mercor roles pay hourly in USD. Expert roles in law, medicine, finance and engineering often pay more than general roles." },
+      nigeriaFaq("Mercor")
+    ]
+  },
+  {
+    slug: "outlier",
+    seoTitle: "Outlier AI Jobs Nigeria 2026: Pay, Roles & How to Join",
+    seoDescription: "Outlier AI jobs for Nigerians: paid hourly to train AI as a writer, coder or maths/science expert. See live roles and pay, plus free AI training to qualify.",
+    name: "Outlier",
+    keyword: "Outlier AI Jobs",
+    match: ["Outlier", "Outlier AI"],
+    signupUrl: "https://outlier.ai/",
+    blurb: "Flexible AI training tasks for writers, coders and subject experts.",
+    about: "Outlier pays people to improve AI models by writing, reviewing and rating responses. There are generalist projects and expert tracks in coding, maths, biology, chemistry and other subjects. Work is flexible and paid per hour.",
+    faqs: [
+      { q: "Is Outlier AI legit?", a: "Yes. Outlier is run by Scale AI and pays contributors to train AI models. Projects come and go, so availability changes." },
+      { q: "How much does Outlier pay?", a: "Pay is hourly and depends on the project and your location. Expert tracks such as coding, maths and biology usually pay more." },
+      { q: "What are Outlier expert jobs?", a: "Expert jobs need a degree or strong experience in a field such as biology, chemistry, physics, law or software. You help AI answer hard questions in that field." },
+      nigeriaFaq("Outlier")
+    ]
+  },
+  {
+    slug: "handshake-ai",
+    seoTitle: "Handshake AI Jobs: Paid Remote Fellowships",
+    seoDescription: "Handshake AI jobs open to Nigerian students, graduates and PhD experts: remote AI training fellowships paid hourly in USD. See open roles and how to apply today.",
+    name: "Handshake AI",
+    keyword: "Handshake AI Jobs",
+    match: ["Handshake AI", "Handshake"],
+    signupUrl: "https://joinhandshake.com/fellowship-program/",
+    blurb: "AI training fellowships for students, graduates and PhD experts.",
+    about: "Handshake AI connects students, graduates and subject experts with paid AI training projects. Work is remote and flexible, and expert fellowships pay hourly in USD.",
+    faqs: [
+      { q: "Is Handshake AI legit?", a: "Yes. Handshake is a large careers network for students, and Handshake AI is its paid AI training programme." },
+      { q: "How much does Handshake AI pay?", a: "Pay is hourly and depends on your field and level of study. Graduate and PhD experts usually earn the most." },
+      nigeriaFaq("Handshake AI")
+    ]
+  },
+  {
+    slug: "alignerr",
+    name: "Alignerr",
+    keyword: "Alignerr Jobs",
+    match: ["Alignerr"],
+    signupUrl: "https://www.alignerr.com/",
+    blurb: "Remote AI training work for experts across many subjects.",
+    about: "Alignerr, run by Labelbox, hires experts to train and evaluate AI models. Projects cover coding, writing, maths, science and languages, and pay hourly.",
+    faqs: [
+      { q: "Is Alignerr legit?", a: "Yes. Alignerr is operated by Labelbox, an established AI data company." },
+      nigeriaFaq("Alignerr")
+    ]
+  },
+  {
+    slug: "toloka",
+    name: "Toloka",
+    keyword: "Toloka Jobs",
+    match: ["Toloka"],
+    signupUrl: "https://toloka.ai/",
+    blurb: "Data labelling and AI tasks, from simple micro-tasks to expert projects.",
+    about: "Toloka offers data labelling and AI evaluation tasks. Beginners can start with simple tasks, while experts can join higher-paying projects.",
+    faqs: [
+      { q: "Is Toloka legit?", a: "Yes. Toloka is a long-running data labelling platform used by AI companies worldwide." },
+      nigeriaFaq("Toloka")
+    ]
+  },
+  {
+    slug: "turing",
+    name: "Turing",
+    keyword: "Turing Remote Jobs",
+    match: ["Turing"],
+    signupUrl: "https://www.turing.com/jobs",
+    blurb: "Remote software engineering and AI training roles with US companies.",
+    about: "Turing vets software engineers and matches them to long-term remote roles with US companies. It also runs AI coding and training projects for frontier labs.",
+    faqs: [
+      { q: "Is Turing legit?", a: "Yes. Turing is a well-known platform that places remote developers with US companies." },
+      nigeriaFaq("Turing")
+    ]
+  }
+];
+
+// src/lib/mcp/tools/list_job_platforms.ts
+var list_job_platforms_default = defineTool20({
+  name: "list_job_platforms",
+  title: "List remote job platforms",
+  description: "List the remote work and AI-training platforms (Micro1, Mercor, Outlier, Alignerr and others) Tech Faculty guides Nigerians and Africans to, with what each pays for and the guide page.",
+  inputSchema: {},
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: () => {
+    const platforms = jobPlatforms.map((p) => ({
+      slug: p.slug,
+      name: p.name,
+      summary: p.blurb,
+      about: p.about,
+      guideUrl: `${SITE}/careers/platforms/${p.slug}`,
+      signupUrl: p.signupUrl
+    }));
+    return { content: [{ type: "text", text: JSON.stringify({ platforms }, null, 2) }], structuredContent: { platforms } };
+  }
+});
+
+// src/lib/mcp/tools/search_talent_pool.ts
+import { defineTool as defineTool21 } from "npm:@lovable.dev/mcp-js@0.22.2";
+import { z as z11 } from "npm:zod@^3.25.76";
+var search_talent_pool_default = defineTool21({
+  name: "search_talent_pool",
+  title: "Search the talent pool",
+  description: "Search Tech Faculty's public talent pool of Nigerian and African tech talent by skill, tool or city, for businesses looking to hire. Returns first names, skills and profile links only; introductions go through Tech Faculty.",
+  inputSchema: {
+    query: z11.string().max(100).optional().describe("Skills, tools, role or city to match, e.g. 'react developer' or 'video editing Lagos'."),
+    vettedOnly: z11.boolean().optional().describe("Only talent with a Vetted badge (passed a Tech Faculty assessment or work trial, or a Tech Faculty student/graduate)."),
+    limit: z11.number().int().min(1).max(30).optional().describe("Max profiles to return (default 10).")
+  },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async ({ query, vettedOnly, limit }) => {
+    const supabase = publicClient();
+    if (!supabase) return toolError("The talent pool is unavailable right now. See https://techfaculty.ng/talent/pool.");
+    const { data, error } = await supabase.rpc("list_public_talent");
+    if (error) return toolError("Could not load the talent pool. See https://techfaculty.ng/talent/pool.");
+    const found = (data ?? []).filter(
+      (t) => (!vettedOnly || t.is_vetted) && matches(query, t.headline, t.city, t.country, t.skills ?? [], t.tools ?? [])
+    );
+    const talent = found.slice(0, limit ?? 10).map((t) => ({
+      firstName: (t.full_name ?? "").trim().split(/\s+/)[0] ?? "",
+      headline: t.headline ?? "",
+      location: [t.city, t.country].filter(Boolean).join(", "),
+      skills: t.skills ?? [],
+      tools: t.tools ?? [],
+      yearsExperience: t.years_experience ?? 0,
+      hoursPerWeek: t.hours_per_week ?? 0,
+      workMode: t.work_mode ?? "",
+      availability: t.availability ?? "",
+      vetted: Boolean(t.is_vetted),
+      profileUrl: `${SITE}/talent/pool/${t.id}`
+    }));
+    const result = {
+      matched: found.length,
+      returned: talent.length,
+      howToHire: `Open a profile to request an introduction, or send a brief at ${SITE}/hire.`,
+      talent
+    };
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }], structuredContent: result };
+  }
+});
+
 // src/lib/mcp/index.ts
 var projectRef = "flxwtwzjslufglpwfjdx";
 var mcp_default = defineMcp({
   name: "tech-faculty-mcp",
   title: "Tech Faculty",
-  version: "0.1.0",
-  instructions: "Tools for Tech Faculty NG (techfaculty.ng). Public (no login): list_departments, list_services, list_campuses, list_blog_categories, list_blog_posts, get_blog_post, search_blog. Signed-in user tools (require OAuth): like_blog_post, unlike_blog_post, get_my_profile, update_my_profile, list_my_enrollments, list_my_courses, list_my_certificates, list_my_upcoming_classes. All user-scoped tools act as the caller under Tech Faculty's row-level security.",
+  version: "0.2.0",
+  instructions: "Tools for Tech Faculty NG (techfaculty.ng), a licensed Nigerian tech training institute, jobs marketplace and pay-per-task services provider. Callers sign in with a free Tech Faculty account. Read-only catalogue tools: list_departments, list_campuses, list_services, list_business_services (107 fixed-price tasks for businesses), list_side_hustles (the matching 107 paid side hustles, \u20A65,000 or \u20A610,000 per task, paid weekly), list_open_roles (Tech Faculty roles and client projects; show these first for job seekers), search_jobs (curated remote and AI-training jobs), list_job_platforms, search_talent_pool (for businesses hiring), list_blog_categories, list_blog_posts, get_blog_post, search_blog. Account tools: like_blog_post, unlike_blog_post, get_my_profile, update_my_profile, list_my_enrollments, list_my_courses, list_my_certificates, list_my_upcoming_classes. All user-scoped tools act as the caller under Tech Faculty's row-level security.",
   auth: auth.oauth.issuer({
     issuer: `https://${projectRef}.supabase.co/auth/v1`,
     acceptedAudiences: "authenticated"
@@ -8245,7 +8665,13 @@ var mcp_default = defineMcp({
     list_my_enrollments_default,
     list_my_courses_default,
     list_my_certificates_default,
-    list_my_upcoming_classes_default
+    list_my_upcoming_classes_default,
+    list_business_services_default,
+    list_side_hustles_default,
+    list_open_roles_default,
+    search_jobs_default,
+    list_job_platforms_default,
+    search_talent_pool_default
   ]
 });
 

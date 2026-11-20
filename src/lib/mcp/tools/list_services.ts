@@ -10,7 +10,7 @@ const services = [
 export default defineTool({
   name: "list_services",
   title: "List services",
-  description: "List Tech Faculty services beyond training: business partnerships, school collaborations, events, and SIWES.",
+  description: "List Tech Faculty service areas beyond courses: business partnerships, school collaborations, events and SIWES. For the 107 pay-per-task business services use list_business_services.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: () => ({

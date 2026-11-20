@@ -12,7 +12,7 @@
   "mcp": {
     "server": {
       "name": "tech-faculty-mcp",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "title": "Tech Faculty"
     },
     "tools": [
@@ -35,7 +35,7 @@
       {
         "name": "list_services",
         "title": "List services",
-        "description": "List Tech Faculty services beyond training: business partnerships, school collaborations, events, and SIWES.",
+        "description": "List Tech Faculty service areas beyond courses: business partnerships, school collaborations, events and SIWES. For the 107 pay-per-task business services use list_business_services.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -328,6 +328,215 @@
           "$schema": "http://json-schema.org/draft-07/schema#",
           "type": "object",
           "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_business_services",
+        "title": "List pay-per-task business services",
+        "description": "List Tech Faculty's fixed-price, pay-per-task services for businesses in Nigeria (video editing, social media, field sales reps, website fixes, app testing, cybersecurity, AI automation, virtual assistance), with starting price in NGN, turnaround and order link.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string",
+              "enum": [
+                "content-creative",
+                "marketing-social-media",
+                "field-sales",
+                "web-development",
+                "testing-qa",
+                "cybersecurity",
+                "ai-automation",
+                "admin-support"
+              ],
+              "description": "Category slug, e.g. testing-qa or field-sales."
+            },
+            "query": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Words to match in the service name, summary or keywords, e.g. 'instagram' or 'logo'."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 107,
+              "description": "Max services to return (default 30)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_side_hustles",
+        "title": "List paid side hustles",
+        "description": "List Tech Faculty's pay-per-task side hustles for people in Nigeria (₦5,000 or ₦10,000 per approved task, paid weekly every Friday), with what each task needs and how to apply.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string",
+              "enum": [
+                "content-creative",
+                "marketing-social-media",
+                "field-sales",
+                "web-development",
+                "testing-qa",
+                "cybersecurity",
+                "ai-automation",
+                "admin-support"
+              ],
+              "description": "Category slug, e.g. content-creative or field-sales."
+            },
+            "query": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Words to match in the side hustle title, requirements or keywords, e.g. 'video' or 'tester'."
+            },
+            "pay": {
+              "type": "number",
+              "enum": [
+                5000,
+                10000
+              ],
+              "description": "Only side hustles paying this many naira per task."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 107,
+              "description": "Max side hustles to return (default 30)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_open_roles",
+        "title": "List open Tech Faculty roles",
+        "description": "List open roles on the Tech Faculty jobs marketplace: Tech Faculty team roles, tutors, field reps and client projects in Nigeria (remote and on-site), with pay and the apply link.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Words to match in the title, summary, skills or city, e.g. 'tutor' or 'Nnewi'."
+            },
+            "remoteOnly": {
+              "type": "boolean",
+              "description": "Only roles that can be done remotely."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "description": "Max roles to return (default 20)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_jobs",
+        "title": "Search remote tech jobs",
+        "description": "Search curated remote tech, AI-training and Nigerian jobs listed on the Tech Faculty careers board (refreshed twice a month), with salary where known and the job page link.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Words to match in the job title, company, platform or tags, e.g. 'data annotation' or 'python'."
+            },
+            "remoteOnly": {
+              "type": "boolean",
+              "description": "Only remote jobs."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "description": "Max jobs to return (default 20)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_job_platforms",
+        "title": "List remote job platforms",
+        "description": "List the remote work and AI-training platforms (Micro1, Mercor, Outlier, Alignerr and others) Tech Faculty guides Nigerians and Africans to, with what each pays for and the guide page.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_talent_pool",
+        "title": "Search the talent pool",
+        "description": "Search Tech Faculty's public talent pool of Nigerian and African tech talent by skill, tool or city, for businesses looking to hire. Returns first names, skills and profile links only; introductions go through Tech Faculty.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Skills, tools, role or city to match, e.g. 'react developer' or 'video editing Lagos'."
+            },
+            "vettedOnly": {
+              "type": "boolean",
+              "description": "Only talent with a Vetted badge (passed a Tech Faculty assessment or work trial, or a Tech Faculty student/graduate)."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30,
+              "description": "Max profiles to return (default 10)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
         },
         "outputSchema": null
       }

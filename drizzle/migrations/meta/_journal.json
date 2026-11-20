@@ -386,6 +386,13 @@
       "when": 1795166402513,
       "tag": "0054_lock_class_progress_and_signup_id_links",
       "breakpoints": true
+    },
+    {
+      "idx": 55,
+      "version": "7",
+      "when": 1795191834684,
+      "tag": "0055_lock_staff_checks_intros_and_lecture_seeding",
+      "breakpoints": true
     }
   ]
 }

@@ -132,6 +132,25 @@ export const briefNextClass = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => BriefInput.parse(d))
   .handler(async ({ data, context }) => {
+    // Class videos and the task are only sent for a course the student is enrolled in,
+    // and only for a class they have reached (read from the database, not the browser).
+    if (data.courseId || data.classNumber) {
+      if (!data.courseId || !data.classNumber) return { ok: false as const, alreadySent: false };
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { canOpenClass } = await import("@/lib/class-access");
+      const { data: profile } = await supabaseAdmin
+        .from("profiles").select("faculty_id").eq("id", context.userId).maybeSingle();
+      if (!profile?.faculty_id) return { ok: false as const, alreadySent: false };
+      const [{ data: enrolment }, { data: progress }] = await Promise.all([
+        supabaseAdmin.from("course_enrollments").select("id")
+          .eq("faculty_id", profile.faculty_id).eq("course_id", data.courseId).neq("status", "cancelled").limit(1).maybeSingle(),
+        supabaseAdmin.from("course_progress").select("classes_completed")
+          .eq("faculty_id", profile.faculty_id).eq("course_id", data.courseId).maybeSingle(),
+      ]);
+      if (!enrolment || !canOpenClass(data.classNumber, progress?.classes_completed ?? 0)) {
+        return { ok: false as const, alreadySent: false };
+      }
+    }
     const { sendClassBriefing } = await import("@/lib/class-progress.server");
     const { alreadySent } = await sendClassBriefing(context.userId, data);
     return { ok: true as const, alreadySent };

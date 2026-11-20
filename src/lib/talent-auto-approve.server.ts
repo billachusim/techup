@@ -1,41 +1,32 @@
-// Server-only: approves strong talent profiles without waiting for staff.
-// Rules (Bill, 2026-10-29): profile strength 70% or more, or a Tech Faculty student
-// or alumnus (Faculty ID from a course) at any strength. Approval only approves and
-// lists the talent: it never mints a Faculty ID and never gives the Vetted badge
-// (that comes from passing an assessment/work trial). A student's existing ID is
+// Server-only: approves every new talent profile without waiting for staff.
+// Rule in src/lib/talent-approval-rules.ts. Approval only approves and lists the
+// talent: it never mints a Faculty ID and never gives the Vetted badge (that
+// comes from passing an assessment/work trial). A student's existing ID is
 // linked and students are vetted (rules in public.approve_talent).
+// No "approved" email: the "profile received" email is the only one they get.
 
-export const AUTO_APPROVE_MIN_STRENGTH = 70;
+import { profilesToAutoApprove } from "@/lib/talent-approval-rules";
 
-/**
- * Approves unapproved profiles at or above the bar, once per profile: if staff
- * later un-vet someone, the automation doesn't approve them again.
- */
 export async function autoApproveStrongProfiles(talentIds?: string[]): Promise<{ approved: number }> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
   let q = supabaseAdmin
     .from("talent_profiles")
-    .select("id, full_name, email, profile_strength, user_id, faculty_id")
+    .select("id, full_name, approved_at")
     .is("approved_at", null)
-    .or(`profile_strength.gte.${AUTO_APPROVE_MIN_STRENGTH},user_id.not.is.null,faculty_id.not.is.null`)
     .limit(300);
   if (talentIds?.length) q = q.in("id", talentIds);
   const { data: candidates } = await q;
-  const { loadFacultyTalent } = await import("@/lib/faculty-talent.server");
-  const students = await loadFacultyTalent(candidates ?? []);
-  const profiles = (candidates ?? []).filter((t) => t.profile_strength >= AUTO_APPROVE_MIN_STRENGTH || students.has(t.id));
-  if (!profiles.length) return { approved: 0 };
+  if (!candidates?.length) return { approved: 0 };
 
   const { data: done } = await supabaseAdmin
     .from("admin_audit_log")
     .select("target_id")
     .eq("action", "talent.auto_approved")
-    .in("target_id", profiles.map((t) => t.id));
-  const approvedBefore = new Set((done ?? []).map((r) => r.target_id));
+    .in("target_id", candidates.map((t) => t.id));
+  const approvedBefore = new Set((done ?? []).map((r) => String(r.target_id)));
 
   let approved = 0;
-  for (const t of profiles.filter((p) => !approvedBefore.has(p.id))) {
+  for (const t of profilesToAutoApprove(candidates, approvedBefore)) {
     const { data: facultyId, error } = await supabaseAdmin.rpc("approve_talent", { _talent_id: t.id });
     if (error) {
       console.error("auto-approve failed", t.id, error.message);
@@ -49,14 +40,8 @@ export async function autoApproveStrongProfiles(talentIds?: string[]): Promise<{
       target_id: t.id,
       faculty_id: facultyId ? String(facultyId) : null,
       subject: t.full_name,
-      details: { rule: students.has(t.id) ? "Tech Faculty student or alumnus" : `profile strength ${AUTO_APPROVE_MIN_STRENGTH}%+` },
+      details: { rule: "every saved talent profile is approved" },
     });
-    if (t.email) {
-      await sendTemplateEmail("talent-approved", t.email, {
-        templateData: { name: t.full_name, facultyId: facultyId ?? undefined },
-        idempotencyKey: `talent-approved-${t.id}`,
-      }).catch((e) => console.error("talent-approved email failed", (e as Error).message));
-    }
   }
   return { approved };
 }

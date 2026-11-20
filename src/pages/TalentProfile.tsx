@@ -347,7 +347,7 @@ const TalentProfile = () => {
               </p>
             ) : (
               <p className="mt-3 text-xs text-muted-foreground">
-                Profiles at 70% or more are approved automatically. Tech Faculty students and alumni get their Faculty ID linked here, plus priority matching.
+                Your profile is approved and listed as soon as you save it. A fuller profile ranks higher in matches. You get the Vetted badge by passing an assessment or work trial; Tech Faculty students and alumni are vetted automatically and get their Faculty ID linked here.
               </p>
             )}
           </div>

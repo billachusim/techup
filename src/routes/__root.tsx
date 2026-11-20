@@ -13,6 +13,7 @@ import { Suspense, lazy, useEffect, useState, type ReactNode } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import { UserProvider } from "@/contexts/UserContext";
+import { WelcomeChooserGate } from "@/components/WelcomeChooserGate";
 import { installWhatsAppClickTracking } from "@/lib/analytics";
 import { captureRefFromUrl } from "@/lib/ref-code";
 import { reportLovableError } from "@/lib/lovable-error-reporting";
@@ -205,6 +206,7 @@ function RootComponent() {
           <TooltipProvider>
             <DeferredToasters />
             <Outlet />
+            <WelcomeChooserGate />
           </TooltipProvider>
         </CurrencyProvider>
       </UserProvider>

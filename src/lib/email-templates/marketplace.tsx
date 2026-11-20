@@ -127,12 +127,12 @@ const ProfileSubmitted = ({ name, strength, facultyId }: { name?: string; streng
   <Layout preview="Your talent profile is in" title="Your profile is in" cta="Open your profile" href={`${SITE}/talent/profile`}>
     <Text style={text}>{hi(name)}</Text>
     <Text style={text}>
-      Thanks for building your Tech Faculty talent profile{typeof strength === 'number' ? <> — it is <b>{strength}% complete</b></> : ''}. Our team reviews new profiles and matches them to open projects on skills, availability and profile strength.
+      Thanks for building your Tech Faculty talent profile{typeof strength === 'number' ? <> — it is <b>{strength}% complete</b></> : ''}. Your profile is approved and listed, and we match it to open projects on skills, availability and profile strength.
     </Text>
     {facultyId ? (
       <Text style={text}>Your Faculty ID is <b>{facultyId}</b>. Keep it for applications and certificates.</Text>
     ) : (
-      <Text style={text}>Profiles at 70% or more are approved automatically, so add your CV, skills, experience and availability. Taking a Tech Faculty course gets you a Faculty ID and priority matching for roles in your field.</Text>
+      <Text style={text}>Add your CV, skills, experience and availability: a fuller profile ranks higher in matches. You earn the Vetted badge by passing an assessment or work trial for your skill. Tech Faculty students and alumni are vetted automatically and get priority matching in their field.</Text>
     )}
     <Text style={text}>
       Join the Tech Faculty talent Slack with this same email address. It is where we share updates, assessments and new paid tasks:{' '}

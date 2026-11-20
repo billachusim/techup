@@ -130,7 +130,7 @@ export async function buildWeeklyReport(now = new Date()) {
       path: "/admin/students",
     },
     { label: "AI match suggestions below the threshold to review", count: suggested, path: "/admin/talent" },
-    { label: "Talent profiles not approved yet (under 70% strength, waiting for staff)", count: unvetted, path: "/admin/talent" },
+    { label: "Talent profiles not approved yet (new profiles are approved when saved; these were held back by staff or are still pending)", count: unvetted, path: "/admin/talent" },
     {
       label: "Open roles without a WhatsApp group link",
       count: noWhatsApp.data?.length ?? 0,

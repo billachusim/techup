@@ -32,7 +32,7 @@ export function AutoMatchPauseSwitch() {
       <div>
         <p className="font-medium">Automatic matching</p>
         <p className="text-xs text-muted-foreground">
-          Matches talent at or above each role's threshold when a role is published, a profile is saved, and every Monday and Thursday at 02:00. AI suggestions that clear the threshold are approved too, each published role gets its own #proj- Slack channel, and profiles at 70%+ strength are approved automatically.
+          Matches talent at or above each role's threshold when a role is published, a profile is saved, and every Monday and Thursday at 02:00. AI suggestions that clear the threshold are approved too, each published role gets its own #proj- Slack channel, and every talent profile is approved as soon as it is saved (approval only lists them; vetting comes from an assessment or work trial).
         </p>
       </div>
       <div className="flex items-center gap-2 text-sm">

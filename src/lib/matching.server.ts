@@ -99,7 +99,7 @@ export type AutoMatchResult = {
   /** "Run AI matching" suggestions that cleared the role threshold and were approved. */
   promoted: number;
   channelsCreated: number;
-  /** Talent profiles approved automatically (strength 70%+). */
+  /** Talent profiles approved automatically (every saved profile). */
   talentApproved: number;
   skipped: Record<string, string>;
 };

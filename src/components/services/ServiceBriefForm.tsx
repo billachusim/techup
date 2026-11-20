@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { CheckCircle2, CreditCard, MessageCircle } from "lucide-react";
+import { AlertCircle, CheckCircle2, CreditCard, MessageCircle } from "lucide-react";
+import { paymentReturnState } from "@/lib/service-payment-return";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,7 +33,9 @@ const ServiceBriefForm = ({ slug, serviceName, priceFrom, unit }: Props) => {
   const canPayNow = Boolean(slug && serviceName && priceFrom);
   const [mode, setMode] = useState<Mode>(canPayNow ? "pay" : "custom");
   const [submitting, setSubmitting] = useState(false);
-  const [done, setDone] = useState<"brief" | "paid" | null>(null);
+  const [done, setDone] = useState<"brief" | "paid" | "unpaid" | null>(
+    null,
+  );
   const [form, setForm] = useState({
     company: "",
     contact_name: "",
@@ -46,13 +49,11 @@ const ServiceBriefForm = ({ slug, serviceName, priceFrom, unit }: Props) => {
   const set = (k: keyof typeof form, v: string) =>
     setForm((f) => ({ ...f, [k]: v }));
 
-  // Back from Flutterwave: /services/<slug>?paid=1
+  // Back from Flutterwave: /services/<slug>?paid=1&status=successful|cancelled|failed
   useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      new URLSearchParams(window.location.search).get("paid") === "1"
-    )
-      setDone("paid");
+    if (typeof window === "undefined") return;
+    const back = paymentReturnState(window.location.search);
+    if (back) setDone(back);
   }, []);
 
   const qty = Math.min(
@@ -162,14 +163,24 @@ const ServiceBriefForm = ({ slug, serviceName, priceFrom, unit }: Props) => {
   if (done) {
     return (
       <div className="space-y-4 rounded-lg border border-border bg-card p-6 text-center">
-        <CheckCircle2 className="mx-auto text-link" size={40} />
+        {done === "unpaid" ? (
+          <AlertCircle className="mx-auto text-destructive" size={40} />
+        ) : (
+          <CheckCircle2 className="mx-auto text-link" size={40} />
+        )}
         <h2 className="text-xl font-semibold">
-          {done === "paid" ? "Payment received, thank you" : "Order received"}
+          {done === "paid"
+            ? "Payment received, thank you"
+            : done === "unpaid"
+              ? "Payment not completed"
+              : "Order received"}
         </h2>
         <p className="text-sm text-muted-foreground">
           {done === "paid"
             ? "We are assigning your task now and will update you by email and WhatsApp until it is delivered."
-            : "We reply within one working day with a few quick questions and a clear price. For a faster reply, send the same details on WhatsApp."}
+            : done === "unpaid"
+              ? "Your payment was cancelled or did not go through. Your order is saved: use the pay link in your order email to try again, or message us on WhatsApp."
+              : "We reply within one working day with a few quick questions and a clear price. For a faster reply, send the same details on WhatsApp."}
         </p>
         <a
           href={talentWhatsAppUrl(waMessage)}

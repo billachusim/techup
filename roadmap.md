@@ -20,3 +20,9 @@
 - [x] Approve = approved/listed only; no Faculty ID; vetted only via assessment/trial or student ID
 - [x] Complete profile no longer mints an ID; students' existing ID linked + vetted
 - [x] Remove the talent-page Faculty IDs (keep anyone who enrolled with theirs); keep all existing Vetted badges
+
+## WhatsApp automation (Nov 2026)
+- [x] Jobs & talent auto-answer (talent profile, careers, side hustles, Slack)
+- [x] "Find work" and "Hire us" quick replies in the inbox
+- [x] Ms. Claire AI replies for greetings and general questions (payments/complaints still to staff)
+- [x] Submit job-seeker and business-services templates to Meta — waiting for Meta approval

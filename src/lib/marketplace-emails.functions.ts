@@ -131,10 +131,11 @@ export const notifyMarketplaceEvent = createServerFn({ method: "POST" })
 
     const { data: t } = await supabaseAdmin
       .from("talent_profiles")
-      .select("id, full_name, email, faculty_id, is_vetted")
+      .select("id, full_name, email, faculty_id, approved_at")
       .eq("id", data.id)
       .maybeSingle();
-    if (!t?.is_vetted) return { ok: false };
+    // Approval (not vetting) triggers this email; only student/alumni IDs are ever on the profile.
+    if (!t?.approved_at) return { ok: false };
     await send("talent-approved", t.email, { name: t.full_name, facultyId: t.faculty_id }, t.id);
     return { ok: true };
   });

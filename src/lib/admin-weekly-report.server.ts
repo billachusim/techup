@@ -90,7 +90,7 @@ export async function buildWeeklyReport(now = new Date()) {
   const [needs, suggested, unvetted, noWhatsApp, noSlack, notInSlack, certificates, unchased, awaitingPayLink, overdueBalances] = await Promise.all([
     supabaseAdmin.rpc("needs_you_today_counts"),
     count(supabaseAdmin.from("role_matches").select("id", head).eq("status", "suggested")),
-    count(supabaseAdmin.from("talent_profiles").select("id", head).eq("is_vetted", false)),
+    count(supabaseAdmin.from("talent_profiles").select("id", head).is("approved_at", null)),
     supabaseAdmin.from("talent_roles").select("title").eq("status", "published").is("whatsapp_group_url", null),
     supabaseAdmin.from("talent_roles").select("title").eq("status", "published").is("slack_channel_id", null).is("slack_channel_url", null),
     supabaseAdmin
@@ -130,7 +130,7 @@ export async function buildWeeklyReport(now = new Date()) {
       path: "/admin/students",
     },
     { label: "AI match suggestions below the threshold to review", count: suggested, path: "/admin/talent" },
-    { label: "Talent profiles not approved yet (under 70% strength or un-vetted by staff)", count: unvetted, path: "/admin/talent" },
+    { label: "Talent profiles not approved yet (under 70% strength, waiting for staff)", count: unvetted, path: "/admin/talent" },
     {
       label: "Open roles without a WhatsApp group link",
       count: noWhatsApp.data?.length ?? 0,

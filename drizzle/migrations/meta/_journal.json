@@ -365,6 +365,13 @@
       "when": 1795158343311,
       "tag": "0051_faculty_ids_students_only",
       "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1795158618363,
+      "tag": "0052_faculty_ids_students_only_signup_links",
+      "breakpoints": true
     }
   ]
 }

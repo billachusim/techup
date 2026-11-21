@@ -240,7 +240,8 @@ export const StudentClassroom = ({ facultyId, department, courseName, classNumbe
             <div className="rounded-lg border bg-muted/40 p-3 text-sm whitespace-pre-line">{classTask}</div>
           )}
           <p className="text-xs text-muted-foreground">
-            Do the task, put your work in a shareable link and submit it below. The AI tutor marks it in a few minutes. A pass (50% or more) finishes this class and unlocks the next one; otherwise you get feedback and can submit again.
+            Do the task, put your work in a shareable link and submit it below. The AI tutor marks it in a few minutes. A pass (50% or more) finishes this class and unlocks the next one; otherwise you get feedback and can submit again. Then share it to grow your portfolio:{" "}
+            <a href="/build-in-public" className="text-link underline">build-in-public guide</a>.
           </p>
           <div className="grid gap-3">
             <div className="space-y-1.5">

@@ -8,14 +8,14 @@ import {
   instalmentSplit,
 } from "../../supabase/functions/_shared/pricing.ts";
 
-/** The free plan the Free Tech Bootcamp enrols students in. */
+/** The free plan the Free AI Course enrols students in. */
 export const FREE_PLAN_ID = "bootcamp-starter";
 /** The plan where students pick any courses from every department. */
 export const CUSTOM_PLAN_ID = "custom-builder";
 
 /** The programme name each plan is sold under (sent to checkout and GA4). */
 export const PLAN_TITLES: Record<string, string> = {
-  "bootcamp-starter": "Free Tech Bootcamp",
+  "bootcamp-starter": "Free AI Course",
   "developer-pro": "AI for Full-Stack Web Development",
   "data-wizard": "AI for Data Analytics & Business Intelligence",
   "ai-innovator": "AI & Autonomous Agents Engineering",

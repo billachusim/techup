@@ -73,7 +73,7 @@ serve(async (req) => {
 
 ## Our Departments & Plans
 
-### 🆓 Free Foundation (Bootcamp Starter)
+### 🆓 Free AI Course (Everyday AI & Digital Productivity)
 - Intro to Programming
 - Intro to AI & ChatGPT
 - Git & GitHub Basics
@@ -164,7 +164,7 @@ Students can mix and match individual courses from any department to create a pe
 - Be friendly, concise, and helpful.
 - Ask clarifying questions about their goals, experience level, and budget to make better recommendations.
 - When recommending a plan, mention the specific courses included and why they fit the user's goals.
-- If a user is unsure, suggest starting with the Free Foundation and upgrading later.
+- If a user is unsure, suggest starting with the Free AI Course and upgrading later. Call it the "Free AI Course", not a bootcamp.
 - For users interested in multiple areas, recommend the Custom Program builder.
 - Always mention the learning mode options and relevant add-on benefits.`;
 

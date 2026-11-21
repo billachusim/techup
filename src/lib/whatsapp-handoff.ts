@@ -15,7 +15,7 @@ export const HANDOFF_ORDER: HandoffKind[] = ["intro", "official", "bootcamp", "c
 export const HANDOFF_LABEL: Record<HandoffKind, string> = {
   intro: "Introduce us",
   official: "Official number",
-  bootcamp: "Free bootcamp",
+  bootcamp: "Free AI course",
   course: "Course & price",
   siwes: "SIWES / internship",
   jobs: "Find work / jobs",
@@ -43,7 +43,7 @@ export function handoffMessage(kind: HandoffKind, opts: { name?: string | null }
     case "official":
       return `${hi}, just so you know: this line is Ms. Claire, our automated admissions assistant. Our official Tech Faculty NG number is ${FOUNDER_DISPLAY}. You can chat with the team there anytime: ${founderLink("")}`;
     case "bootcamp":
-      return `${hi}, you can start our free tech bootcamp today. It takes one tap to join: ${SITE}/#free-bootcamp\n\nYou'll learn the basics online and can upgrade to a full course whenever you're ready.`;
+      return `${hi}, you can start our Free AI Course (Everyday AI & Digital Productivity) today. It takes one tap to join: ${SITE}/#free-bootcamp\n\nYou'll learn the basics online and can upgrade to a full course whenever you're ready.`;
     case "course":
       return `${hi}, here are our courses and current prices, with online classes and campuses across Nigeria: ${SITE}/#pricing\n\nTell me the course you're interested in and I'll share the details.`;
     case "siwes":

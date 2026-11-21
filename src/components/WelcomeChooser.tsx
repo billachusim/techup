@@ -13,7 +13,7 @@ const CHOICES = [
     to: "/dashboard" as const,
     icon: GraduationCap,
     title: "I want to learn tech",
-    text: "Start the free bootcamp or pick a course in your student area.",
+    text: "Start the free AI course or pick a course in your student area.",
   },
   {
     to: "/talent/profile" as const,

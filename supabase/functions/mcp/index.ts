@@ -8,7 +8,7 @@ import { defineMcp } from "npm:@lovable.dev/mcp-js@0.22.2";
 // src/lib/mcp/tools/list_departments.ts
 import { defineTool } from "npm:@lovable.dev/mcp-js@0.22.2";
 var departments = [
-  { code: "free-foundation", name: "Free Foundation (Bootcamp Starter)", startingPriceNGN: 0, description: "Intro to Programming, AI & ChatGPT, Git & GitHub, Tech Career Guidance. Online, free for everyone." },
+  { code: "free-foundation", name: "Free AI Course (Everyday AI & Digital Productivity)", startingPriceNGN: 0, description: "Intro to Programming, AI & ChatGPT, Git & GitHub, Tech Career Guidance. Online, free for everyone." },
   { code: "web-development", name: "Developer Pro \u2014 Web Development", startingPriceNGN: 5e4, description: "HTML/CSS, JavaScript, React, Node.js, databases, full-stack projects." },
   { code: "mobile-development", name: "Mobile App Developer", startingPriceNGN: 8e4, description: "React Native, Flutter, iOS Swift, Android Kotlin, cross-platform projects." },
   { code: "cloud-devops", name: "Cloud Architect \u2014 Cloud & DevOps", startingPriceNGN: 13e4, description: "AWS, Azure, GCP, Kubernetes, Docker, CI/CD, cloud certifications." },

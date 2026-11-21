@@ -48,7 +48,7 @@ export function buildWeeklyUpdate(roles: OpenRole[], events: UpcomingEvent[], ma
     roleLines.length
       ? `:briefcase: *Open roles. Apply now; we match applicants automatically:*\n${roleLines.join("\n")}\nAll openings: <${LINKS.careers}|techfaculty.ng/careers>`
       : "",
-    `:mortar_board: *Learn:* <${LINKS.freeBootcamp}|Free bootcamp> for beginners, plus <${LINKS.courses}|affordable online courses> with instalments. Online anywhere, or at our campuses across Nigeria (<${LINKS.locations}|locations>).`,
+    `:mortar_board: *Learn:* <${LINKS.freeBootcamp}|Free AI Course> for beginners, plus <${LINKS.courses}|affordable online courses> with instalments. Online anywhere, or at our campuses across Nigeria (<${LINKS.locations}|locations>).`,
     `:school: *SIWES:* on-site at our campuses or <${LINKS.virtualSiwes}|Virtual SIWES> online.`,
     eventLines.length ? `:calendar: *Upcoming tech events:*\n${eventLines.join("\n")}\nMore: <${LINKS.events}|techfaculty.ng/events>` : "",
     ":speech_balloon: Got a question? Ask in this channel and we'll answer.",

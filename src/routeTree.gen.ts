@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as BuildInPublicRouteImport } from './routes/build-in-public'
 import { Route as BusinessPartnershipsRouteImport } from './routes/business-partnerships'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as FeedDotxmlRouteImport } from './routes/feed[.]xml'
@@ -110,6 +111,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BuildInPublicRoute = BuildInPublicRouteImport.update({
+  id: '/build-in-public',
+  path: '/build-in-public',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BusinessPartnershipsRoute = BusinessPartnershipsRouteImport.update({
@@ -572,6 +578,7 @@ const LovableEmailTransactionalPreviewRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/build-in-public': typeof BuildInPublicRoute
   '/business-partnerships': typeof BusinessPartnershipsRoute
   '/dashboard': typeof DashboardRoute
   '/feed.xml': typeof FeedDotxmlRoute
@@ -666,6 +673,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/build-in-public': typeof BuildInPublicRoute
   '/business-partnerships': typeof BusinessPartnershipsRoute
   '/dashboard': typeof DashboardRoute
   '/feed.xml': typeof FeedDotxmlRoute
@@ -761,6 +769,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/build-in-public': typeof BuildInPublicRoute
   '/business-partnerships': typeof BusinessPartnershipsRoute
   '/dashboard': typeof DashboardRoute
   '/feed.xml': typeof FeedDotxmlRoute
@@ -857,6 +866,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/build-in-public'
     | '/business-partnerships'
     | '/dashboard'
     | '/feed.xml'
@@ -951,6 +961,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/build-in-public'
     | '/business-partnerships'
     | '/dashboard'
     | '/feed.xml'
@@ -1045,6 +1056,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/build-in-public'
     | '/business-partnerships'
     | '/dashboard'
     | '/feed.xml'
@@ -1140,6 +1152,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  BuildInPublicRoute: typeof BuildInPublicRoute
   BusinessPartnershipsRoute: typeof BusinessPartnershipsRoute
   DashboardRoute: typeof DashboardRoute
   FeedDotxmlRoute: typeof FeedDotxmlRoute
@@ -1243,6 +1256,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/build-in-public': {
+      id: '/build-in-public'
+      path: '/build-in-public'
+      fullPath: '/build-in-public'
+      preLoaderRoute: typeof BuildInPublicRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/business-partnerships': {
@@ -1896,6 +1916,7 @@ const LovableRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  BuildInPublicRoute: BuildInPublicRoute,
   BusinessPartnershipsRoute: BusinessPartnershipsRoute,
   DashboardRoute: DashboardRoute,
   FeedDotxmlRoute: FeedDotxmlRoute,

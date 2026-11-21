@@ -223,7 +223,7 @@ export const EnrolProvider = ({
       enrollments?.some((e) => isFreePlan(e.plan_name) && grantsAccess(e))
     ) {
       toast({
-        title: "You're already in the Free Tech Bootcamp",
+        title: "You're already in the Free AI Course",
         description: "Your lessons are on your dashboard.",
       });
       window.location.assign("/dashboard");
@@ -356,7 +356,7 @@ export const EnrolProvider = ({
       if (isFree) {
         trackEvent("join_free_bootcamp", { item_id: current.planId });
         toast({
-          title: "You're in the Free Tech Bootcamp!",
+          title: "You're in the Free AI Course!",
           description: `Your Faculty ID is ${newFacultyId}. Opening your dashboard…`,
         });
         setTimeout(() => window.location.assign("/dashboard"), 1500);
@@ -483,7 +483,7 @@ Please share the payment details so I can complete my enrollment. Thank you!`;
   const continueSignedIn = async (current: EnrolDraft) => {
     if (!(await mayEnrol(current.planId))) return;
     if (current.planId === FREE_PLAN_ID) {
-      toast({ title: "Setting up your Free Tech Bootcamp…" });
+      toast({ title: "Setting up your Free AI Course…" });
       await submit(current, "free");
       return;
     }

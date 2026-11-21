@@ -33,3 +33,7 @@
 - [x] AI tools: business services, side hustles, open roles, jobs, job platforms, talent pool (deployed)
 - [x] AI tools server made public (no sign-in, read-only tools only; Bill chose Public)
 - [ ] Publish so the crawler rules, summary files and site wording go live
+
+## AI-first wording (Nov 2026)
+- [x] Rename visible "Free Bootcamp" copy to "Free AI Course" (keep links, blogs, Meta templates)
+- [x] Build-in-public portfolio guide for students

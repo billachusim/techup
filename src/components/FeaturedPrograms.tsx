@@ -153,10 +153,10 @@ const BootcampCard = () => (
     </span>
 
     <h3 className="mt-5 max-w-xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-      Free Tech <span className="text-gradient">Bootcamp</span>
+      Free AI <span className="text-gradient">Course</span>
     </h3>
     <p className="mt-3 max-w-xl text-base text-white/70 sm:text-lg">
-      Three weeks of hands-on tech training at any Tech Faculty NG campus, at no cost. Top performers
+      Three weeks of Everyday AI & Digital Productivity, online or at any Tech Faculty NG campus, at no cost. Top performers
       qualify for up to 50% off any of our department courses.
     </p>
 
@@ -178,7 +178,7 @@ const BootcampCard = () => (
         onClick={startFreeBootcamp}
         className="group/cta h-12 rounded-full bg-primary px-6 text-base font-semibold text-primary-foreground hover:bg-primary/90"
       >
-        Join the free bootcamp
+        Start the free AI course
         <ArrowUpRight className="ml-1 transition-transform duration-300 group-hover/cta:-translate-y-0.5 group-hover/cta:translate-x-0.5" />
       </Button>
       <p className="text-sm text-white/55">Create your free account and start today.</p>

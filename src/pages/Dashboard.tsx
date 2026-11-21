@@ -467,7 +467,7 @@ const Dashboard = () => {
                       </div>
                       <div>
                         <Badge variant={enrollmentData?.plan_name === "Developer Pro" ? "default" : "secondary"} className="text-xs">
-                          {enrollmentData?.plan_name || "Free Bootcamp"}
+                          {!enrollmentData?.plan_name || ["Bootcamp Starter", "Free Bootcamp"].includes(enrollmentData.plan_name) ? "Free AI Course" : enrollmentData.plan_name}
                         </Badge>
                         <p className="text-xs text-muted-foreground mt-1">Plan</p>
                         {enrollmentData?.status === "pending" && !isFreePlan(enrollmentData.plan_name) && (

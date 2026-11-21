@@ -74,6 +74,7 @@ const Footer = () => {
               <Link to="/outcomes" className="hover:text-link transition-colors">Student Outcomes</Link>
               <Link to="/reports/nigeria-tech-salaries" className="hover:text-link transition-colors">Tech Salary Report</Link>
               <Link to="/blog" className="hover:text-link transition-colors">Blog</Link>
+              <Link to="/build-in-public" className="hover:text-link transition-colors">Build in Public Guide</Link>
               <Link to="/careers" className="hover:text-link transition-colors">Careers</Link>
               <Link to="/products" className="hover:text-link transition-colors">Products</Link>
               <a href="/verify" className="hover:text-link transition-colors">Verify Certificate</a>

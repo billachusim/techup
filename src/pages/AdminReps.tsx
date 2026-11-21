@@ -175,7 +175,7 @@ export default function AdminReps() {
         <div>
           <h1 className="text-2xl font-bold">Field reps</h1>
           <p className="text-sm text-muted-foreground">
-            Each rep shares their own link. Leads, free-bootcamp sign-ups and
+            Each rep shares their own link. Leads, free AI course sign-ups and
             enrolments that come through it are credited to them, and they earn{" "}
             {FIELD_REP_COMMISSION_PERCENT}% of what their recruits pay
             (instalments included). The student gets no discount. Visit pay and

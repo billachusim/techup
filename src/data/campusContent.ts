@@ -11,8 +11,8 @@ export interface CampusFaq {
 export function campusProgrammes(c: Campus) {
   return [
     {
-      title: "Free Foundation Bootcamp",
-      body: `A no-fee starter programme in ${c.city} covering computer confidence, internet skills and practical AI tools. It is how most of our students begin, and it runs continuously with rolling intakes.`,
+      title: "Free AI Course",
+      body: `Everyday AI & Digital Productivity, a no-fee starter course in ${c.city} covering computer confidence, internet skills and practical AI tools. It is how most of our students begin, and it runs continuously with rolling intakes.`,
       href: "/departments/basic-internet-ai-studies",
     },
     {

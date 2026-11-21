@@ -250,7 +250,7 @@ const HubDetail = () => {
                 ))}
               </div>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>Free foundation bootcamp online, open to any city.</li>
+                <li>Free AI course online, open to any city.</li>
                 <li>Hybrid and in-person cohorts at our campuses nationwide.</li>
                 <li>SIWES and industrial training placement, including a virtual option.</li>
                 <li>Verifiable certificates and routing into remote roles.</li>

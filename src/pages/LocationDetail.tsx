@@ -280,7 +280,7 @@ const LocationDetail = () => {
           </div>
         </section>
 
-        {/* Teens + free bootcamp */}
+        {/* Teens + free AI course */}
         <section className="container mx-auto px-4 mt-14">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
             Holiday tech bootcamps for kids and teenagers in {campus.city}
@@ -298,7 +298,7 @@ const LocationDetail = () => {
             </Card>
             <Card>
               <CardContent className="p-6">
-                <h3 className="font-bold mb-2">Free foundation bootcamp</h3>
+                <h3 className="font-bold mb-2">Free AI Course</h3>
                 <p className="text-sm text-muted-foreground">
                   Our no-fee starter programme is open to everyone in {campus.city} — students, traders, teachers,
                   civil servants and career switchers. It covers computer confidence, internet safety and practical AI

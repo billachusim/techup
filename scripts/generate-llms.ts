@@ -182,7 +182,7 @@ const facts = [
 const header = [
   `# ${BRAND}`,
   "",
-  `> ${BRAND} trains, certifies and places Nigerians in tech careers: ${departments.length} departments online or at ${campuses.length} campuses across Nigeria, a free foundation bootcamp, SIWES industrial training placements, ${SERVICES.length} pay-per-task services for businesses and the matching ${SERVICES.length} paid side hustles for talent, and a jobs and talent marketplace. ${CREDENTIAL}.`,
+  `> ${BRAND} trains, certifies and places Nigerians in tech careers: ${departments.length} departments online or at ${campuses.length} campuses across Nigeria, a Free AI Course (Everyday AI & Digital Productivity), SIWES industrial training placements, ${SERVICES.length} pay-per-task services for businesses and the matching ${SERVICES.length} paid side hustles for talent, and a jobs and talent marketplace. ${CREDENTIAL}.`,
   "",
 ];
 
@@ -209,6 +209,7 @@ const llms = [
   `- [SIWES and IT placement](${url("/siwes")}): On site at our campuses with no separate placement fee: Learn & Pay (regular course fee, up to ${SIWES_MAX_DISCOUNT_PCT}% off for SIWES students) or Tutor & Earn (paid).`,
   `- [Virtual SIWES](${url("/virtual-siwes")}): Online IT placement for ${naira(VIRTUAL_SIWES.placementPriceNGN)}, plus logbook review, signing, stamping and two-way delivery for ${naira(VIRTUAL_SIWES.logbookPriceNGN)}.`,
   `- [${SUCCESS_KIT.name}](${url("/siwes-success-kit")}): ${SUCCESS_KIT.tagline} ${naira(SUCCESS_KIT.priceNGN)}, with a free placement checklist.`,
+  `- [Build in Public guide](${url("/build-in-public")}): How students turn each class task into a public portfolio on LinkedIn, X and WhatsApp.`,
   `- [SIWES by course of study](${url("/siwes/courses")}): What a tech SIWES placement involves for students outside computer science, with projects, logbook examples and what to confirm with the SIWES coordinator.`,
   ...siwesCourses.map((c) => `- [${c.h1}](${url(`/siwes/courses/${c.slug}`)}): ${c.metaDescription}`),
   "",

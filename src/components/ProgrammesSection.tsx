@@ -176,10 +176,10 @@ const FreeBootcampCard = () => {
           free
         </span>
         <h3 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">
-          Free Tech Bootcamp
+          Free AI Course
         </h3>
         <p className="mt-2 text-white/70">
-          Three weeks of hands-on tech and everyday AI, free at every campus.
+          Three weeks of Everyday AI & Digital Productivity, free online or at every campus.
           Top performers qualify for up to 50% off any department below.
         </p>
       </div>

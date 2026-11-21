@@ -182,7 +182,7 @@ const facts = [
 const header = [
   `# ${BRAND}`,
   "",
-  `> ${BRAND} trains, certifies and places Nigerians in tech careers: ${departments.length} departments online or at ${campuses.length} campuses across Nigeria, a Free AI Course (Everyday AI & Digital Productivity), SIWES industrial training placements, ${SERVICES.length} pay-per-task services for businesses and the matching ${SERVICES.length} paid side hustles for talent, and a jobs and talent marketplace. ${CREDENTIAL}.`,
+  `> ${BRAND} trains, certifies and places Nigerians in tech careers: ${departments.length} departments online or at ${campuses.length} campuses across Nigeria, a Free AI Course (Everyday AI & Digital Productivity) with a free Certificate of Completion, SIWES industrial training placements, ${SERVICES.length} pay-per-task services for businesses and the matching ${SERVICES.length} paid side hustles for talent, and a jobs and talent marketplace. ${CREDENTIAL}.`,
   "",
 ];
 

@@ -1,7 +1,7 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 
 const departments = [
-  { code: "free-foundation", name: "Free AI Course (Everyday AI & Digital Productivity)", startingPriceNGN: 0, description: "Intro to Programming, AI & ChatGPT, Git & GitHub, Tech Career Guidance. Online, free for everyone." },
+  { code: "free-foundation", name: "Free AI Course (Everyday AI & Digital Productivity)", startingPriceNGN: 0, description: "Intro to Programming, AI & ChatGPT, Git & GitHub, Tech Career Guidance. Online, free for everyone, with a free Certificate of Completion (paid courses give a Certificate of Achievement)." },
   { code: "web-development", name: "Developer Pro — Web Development", startingPriceNGN: 50000, description: "HTML/CSS, JavaScript, React, Node.js, databases, full-stack projects." },
   { code: "mobile-development", name: "Mobile App Developer", startingPriceNGN: 80000, description: "React Native, Flutter, iOS Swift, Android Kotlin, cross-platform projects." },
   { code: "cloud-devops", name: "Cloud Architect — Cloud & DevOps", startingPriceNGN: 130000, description: "AWS, Azure, GCP, Kubernetes, Docker, CI/CD, cloud certifications." },

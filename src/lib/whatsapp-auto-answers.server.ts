@@ -129,7 +129,7 @@ export async function claireFacts(db: SupabaseClient): Promise<string> {
     return d.kind === "answer" ? d.reply.replace(/\n\nThis is an automatic answer[\s\S]*$/, "") : "";
   };
   return [
-    `Free AI Course (Everyday AI & Digital Productivity, online, free, one tap to join): ${SITE}/#free-bootcamp`,
+    `Free AI Course (Everyday AI & Digital Productivity, online, free, with a free Certificate of Completion, one tap to join): ${SITE}/#free-bootcamp`,
     `Courses and fees: ${SITE}/#pricing ; all departments: ${SITE}/departments ; events: ${SITE}/events ; check a certificate: ${SITE}/verify`,
     "Online classes run at 6pm Lagos time, 1-3 times a week depending on level; each student starts from class 1 on their own timetable. Every class has a task, and passing it unlocks the next class. Graduates get a verifiable Certificate of Achievement.",
     "Course fees:", fixed("how much are your course prices"),

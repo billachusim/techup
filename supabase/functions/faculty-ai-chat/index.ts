@@ -78,7 +78,7 @@ serve(async (req) => {
 - Intro to AI & ChatGPT
 - Git & GitHub Basics
 - Tech Career Guidance
-*Online only. Free for everyone.*
+*Online only. Free for everyone, with a free Certificate of Completion. Paid courses give a Certificate of Achievement.*
 
 ### 💻 Developer Pro — Web Development (from ₦50,000)
 - HTML/CSS Fundamentals

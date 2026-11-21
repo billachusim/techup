@@ -302,7 +302,7 @@ const LocationDetail = () => {
                 <p className="text-sm text-muted-foreground">
                   Our no-fee starter programme is open to everyone in {campus.city} — students, traders, teachers,
                   civil servants and career switchers. It covers computer confidence, internet safety and practical AI
-                  tools, and it is the entry point to every paid department.
+                  tools, comes with a free Certificate of Completion, and it is the entry point to every paid department.
                 </p>
               </CardContent>
             </Card>

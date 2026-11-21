@@ -1,6 +1,6 @@
 import { useEffect, useRef, type CSSProperties } from "react";
 import { Link } from "@/lib/router-compat";
-import { ArrowUpRight, CalendarDays, MapPin, Percent, Sparkles } from "lucide-react";
+import { ArrowUpRight, Award, CalendarDays, MapPin, Percent, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import JoinWhatsAppButton from "@/components/JoinWhatsAppButton";
 import { AI_FELLOWSHIP_WHATSAPP_URL } from "@/lib/whatsapp";
@@ -68,6 +68,7 @@ const programs: Program[] = [
 const bootcampFacts = [
   { icon: CalendarDays, label: "3 weeks, hands-on" },
   { icon: MapPin, label: "Free at every campus" },
+  { icon: Award, label: "Free Certificate of Completion" },
   { icon: Percent, label: "Up to 50% off a full course" },
 ];
 
@@ -156,7 +157,7 @@ const BootcampCard = () => (
       Free AI <span className="text-gradient">Course</span>
     </h3>
     <p className="mt-3 max-w-xl text-base text-white/70 sm:text-lg">
-      Three weeks of Everyday AI & Digital Productivity, online or at any Tech Faculty NG campus, at no cost. Top performers
+      Three weeks of Everyday AI & Digital Productivity, online or at any Tech Faculty NG campus, at no cost, with a free Certificate of Completion. Top performers
       qualify for up to 50% off any of our department courses.
     </p>
 

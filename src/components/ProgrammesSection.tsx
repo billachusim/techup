@@ -179,7 +179,7 @@ const FreeBootcampCard = () => {
           Free AI Course
         </h3>
         <p className="mt-2 text-white/70">
-          Three weeks of Everyday AI & Digital Productivity, free online or at every campus.
+          Three weeks of Everyday AI & Digital Productivity, free online or at every campus, with a free Certificate of Completion.
           Top performers qualify for up to 50% off any department below.
         </p>
       </div>
